@@ -1,0 +1,56 @@
+<resources>
+  
+    <string name="license_description">تاسکی کۆد و سەرمایەکانی تێدایە لەم پڕۆژە کراوەی سەرچاوە:</string>
+  
+  
+    <string name="restart_emoji">تۆ پێویستە توسکی دەستپێبکەیتەوە بۆ ئەوەی ئەم گۆڕانکاریانە جێبەجێ بکەیت</string>
+  
+  
+    <string name="about_tusky_account">پرۆفایلی تاسکی</string>
+  
+  
+    <string name="about_tusky_license">توسکی سۆفتوێری ئازاد و سەرچاوەی کراوەیە مۆڵەتدراوە بە پێ نامەی گشتی GNU Public Version 3. دەتوانیت لێرە مۆڵەتەکە نیشان بدەی: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_powered_by_tusky">لەلایەن تاسکیەوە دەست کراوە بە</string>
+  
+  
+    <string name="about_tusky_version">توسکی %s</string>
+  
+
+
+
+  
+    <string name="about_project_site">وێبسایتی پڕۆژە:
+\nhttps://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">ڕاپۆرتەکانی هەڵەکان و داواکاریەکانی تایبەتمەندی:
+\nhttps://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="action_login">چوونەژوورەوە لەگەڵ ماستۆدۆن</string>
+  
+  
+    <string name="warning_scheduling_interval">ماستۆدۆن کەمترین ماوەی خشتەی هەیە لە ٥ خولەک.</string>
+  
+  
+    <string name="add_account_description">زیادکردنی ئەژمێری ماتۆدۆنی نوێ</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">ناونیشان یان دۆمەینی هەر نمونەیەک دەکرێت لێرە تێبنووسرێت، وەک <a href="https://fediverse.network/pleroma?count=peers">فرەتر!</a> 
+\n
+\nئەگەر هێشتا ئەژمێرێکت نیە، دەتوانیت ناوی ئەو نمونەیە داخڵ بکەیت کە دەتەوێت بیبەستیت و ئەژمێرێک دروست بکەیت لەوێ.
+\n
+\nنموونەیەک تاکە شوێنە کە ئەژمێرەکەت میوانداری کراوە، بەڵام دەتوانیت بە ئاسانی پەیوەندی لەگەڵ بکەیت و دوای ئەو خەڵکانە بکەویت لە نمونەکانی تر وەک ئەوەی تۆ لە هەمان سایت دابیت. 
+\n
+\nزانیاری زیاتر دەتوانرێت بدۆزرێتەوە لە <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
+  
+
+</resources>

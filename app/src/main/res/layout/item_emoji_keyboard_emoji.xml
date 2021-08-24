@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- not a best way but I'm lazy to do proper button -->
+<androidx.emoji.widget.EmojiAppCompatButton
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/emoji_keyboard_emoji"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_marginRight="0dp"
+	android:layout_marginBottom="0dp"
+	android:layout_marginLeft="0dp"
+	android:layout_marginTop="0dp"
+	android:minWidth="0dp"
+	android:lines="1"
+	android:textAlignment="viewStart"
+	android:textColor="?android:attr/textColorPrimary"
+	android:textSize="?attr/status_text_medium"
+	app:backgroundTint="@color/emoji_reaction_button"
+	tools:text="A" />

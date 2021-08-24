@@ -1,0 +1,59 @@
+<resources>
+  
+    <string name="about_tusky_license">Husky ist freie und quelloffene Software. Es ist lizenziert unter der GNU General Public License Version 3. Du kannst dir die Lizenz hier anschauen: https://www.gnu.org/licenses/gpl-3.0.de.html</string>
+  
+  
+    <string name="about_tusky_account">Huskys Profil</string>
+  
+  
+    <string name="restart_emoji">Du musst Husky neustarten um die Änderungen anzuwenden</string>
+  
+  
+    <string name="license_description">Husky enthält Code und Inhalte von den folgenden Open-Source-Projekten:</string>
+  
+  
+    <string name="about_tusky_version">test %s</string>
+  
+  
+    <string name="about_powered_by_tusky">Angetrieben durch Husky</string>
+  
+
+
+
+  
+    <string name="about_project_site">Website des Projekts: 
+\n https://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">        Fehlermeldungen &amp; Verbesserungsvorschläge:\n
+        https://git.mentality.rip/FWGS/Husky/issues
+    </string>
+  
+
+
+  
+    <string name="action_login">Anmelden mit Pleroma</string>
+  
+  
+    <string name="add_account_description">Neues Pleroma-Konto hinzufügen</string>
+  
+  
+    <string name="warning_scheduling_interval">Das Datum des geplanten Toots muss mindestens 5 Minuten in der Zukunft liegen.</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">Die Adresse einer Instanz oder Domain kann
+        hier eingegeben werden, wie z.B. shitposter.club, blob.cat, expired.mentality.rip, und
+        <a href="https://fediverse.network/pleroma?count=peers">mehr!</a>
+        \n\nWenn du bis jetzt kein Konto hast, kannst du hier den Namen einer Instanz eingeben
+        und dort ein Konto einrichten.\n\nEine Instanz ist ein einziger Ort, wo dein Konto
+        gehostet ist, aber du kannst dennoch mit anderen Leuten reden und mit ihnen interagieren, als
+        wärt ihr alle auf einer Webseite.
+        \n\nWeitere Informationen gibt es auf <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
+  
+
+</resources>

@@ -1,0 +1,56 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_account">Huskys Mastodon-profil</string>
+  
+  
+    <string name="about_tusky_license">Husky er fri og åpen kildekode. Applikasjonen er lisensiert under GNU General Public License versjon 3. Du kan se lisensen her: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="restart_emoji">Du må starte Husky på nytt for at endringene skal bli aktive</string>
+  
+  
+    <string name="license_description">Husky inneholder programkode og elementer fra følgende åpen kildekode-prosjekter:</string>
+  
+  
+    <string name="about_powered_by_tusky">Drevet av Husky</string>
+  
+
+
+
+  
+    <string name="about_project_site">Hjemmeside: 
+\n https://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">Rapporter feil og ønsker om funksjonalitet her: 
+\n https://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="action_login">Logg inn med Pleroma</string>
+  
+  
+    <string name="add_account_description">Legg til ny Pleroma-konto</string>
+  
+  
+    <string name="warning_scheduling_interval">Pleroma har et minimums planleggingsinterval på 5 minutter.</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance"><a href="https://fediverse.network/pleroma?count=peers">more!</a> 
+\n
+\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to join and create an account there.
+\n
+\nAn instance is a single place where your account is hosted, but you can easily communicate with and follow folks on other instances as though you were on the same site. 
+\n
+\nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
+  
+
+</resources>

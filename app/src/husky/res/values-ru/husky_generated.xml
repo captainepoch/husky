@@ -1,0 +1,58 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_license">Husky – это бесплатное приложение с открытым исходным кодом.
+        Выпускается по лицензии GNU General Public License Version 3.
+        Вы можете прочитать текст лицензии по ссылке: https://www.gnu.org/licenses/gpl-3.0.ru.html</string>
+  
+  
+    <string name="about_tusky_account">Профиль Husky</string>
+  
+  
+    <string name="restart_emoji">Вам нужно перезапустить Husky для применения изменений</string>
+  
+  
+    <string name="license_description">Husky содержит код и элементы из следующих приложений с открытым исходным кодом:</string>
+  
+  
+    <string name="about_powered_by_tusky">Под управлением Husky</string>
+  
+
+
+
+  
+    <string name="about_project_site">
+           Веб-сайт проекта:\n
+           https://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">
+            Отчеты об ошибках и пожелания:\n
+            https://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="action_login">Войти</string>
+  
+  
+    <string name="add_account_description">Добавить новый акканут Pleroma</string>
+  
+  
+    <string name="warning_scheduling_interval">Минимальный интервал планирования в Pleroma составляет 5 минут.</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, shitposter.club, blob.cat, expired.mentality.rip и <a href="https://fediverse.network/pleroma?count=peers/">других</a>!\n\nЕсли у вас еще нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.\n\n
+  Узел - это то место, где размещен ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.\n
+  \n
+  Чтобы получить больше информации посетите <a href="https://joinmastodon.org">joinmastodon.org</a>.
+  </string>
+  
+
+</resources>

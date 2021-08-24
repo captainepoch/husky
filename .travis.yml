@@ -1,0 +1,35 @@
+language: android
+dist: xenial
+# Disable building on tags
+if: tag IS blank
+android:
+  components:
+    - android-29
+    - build-tools-28.0.3
+before_script:
+  - yes | sdkmanager "ndk-bundle"
+  - export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk-bundle
+  - export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+  - sed -i "s/blue/\/\/blue/" app/build.gradle
+  - sed -i "s/\/\/abortOnError/abortOnError/" app/build.gradle
+#  - sed -i "s/debug {}//" app/build.gradle
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+script:
+  - ./gradlew build
+after_success:
+  - $ANDROID_HOME/build-tools/28.0.3/apksigner sign --ks debug.keystore --ks-key-alias androiddebugkey --ks-pass "pass:android" --key-pass "pass:android" --in $(find -name "*-green-debug.apk") --out husky-green-debug.apk
+  - $ANDROID_HOME/build-tools/28.0.3/apksigner sign --ks debug.keystore --ks-key-alias androiddebugkey --ks-pass "pass:android" --key-pass "pass:android" --in $(find -name "*-green-release-unsigned.apk") --out husky-green-release.apk
+  - wget https://raw.githubusercontent.com/FWGS/uploadtool/master/upload.sh
+  - chmod +x upload.sh
+  - GITHUB_TOKEN=$GH_TOKEN ./upload.sh husky-green-debug.apk husky-green-release.apk
+branches:
+  except:
+# Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)/

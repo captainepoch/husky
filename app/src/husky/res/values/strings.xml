@@ -1,0 +1,166 @@
+<resources>
+    <!-- HUSKY SPECIFIC STRINGS -->
+    <string name="chats">Chats</string>
+    <string name="chat_our_last_message"><b>You</b></string>
+
+    <string name="error_chat_recipient_unavailable">Recipient does not support Chats</string>
+
+    <string name="action_mark_as_read">Mark as read</string>
+    <string name="action_reply_to">Reply to</string>
+    <string name="action_emoji_react">React</string>
+    <string name="action_emoji_unreact">Remove reaction</string>
+    <string name="action_emoji_reacted_by">Who reacted</string>
+    <string name="action_enable_formatting_syntax">Enable %s</string>
+    <string name="action_disable_formatting_syntax">Disable %s</string>
+    <string name="action_sticker">Stickers</string>
+    <string name="action_open_in_external_app">Open in external app</string>
+    <string name="action_chat">Open chat</string>
+    <string name="action_expand_menu">Expand menu</string>
+
+    <string name="title_emoji_reacted_by">%s reacted by</string>
+    
+    <string name="hint_appname">Application name</string>
+    <string name="hint_website">Application website</string>
+
+    <string name="admin">Admin</string>
+    <string name="moderator">Moderator</string>
+
+    <string name="error_media_upload_size">File size exceeds instance limits</string>
+    <string name="error_sticker_fetch">An error occurred while fetching sticker</string>
+
+    <string name="notification_emoji_format">%s reacted with %s to your post</string>
+    <string name="notification_emoji_name">Emoji Reactions</string>
+    <string name="notification_emoji_description">Notifications about new emoji reactions</string>
+    <string name="notification_chat_message_format">%s sent you a message</string>
+    <string name="notification_chat_message_name">Chat Messages</string>
+    <string name="notification_chat_message_description">Notifications about new chat messages</string>
+    <string name="notification_subscription_format">%s just posted</string>
+    <string name="notification_subscription_name">Subscriptions</string>
+    <string name="notification_subscription_description">Notifications when somebody you\'re subscribed to published a new post</string>
+    <string name="notification_move_format">%s migrated to</string>
+    <string name="notification_move_name">Move</string>
+    <string name="notification_move_description">Notifications when somebody you\'re following migrated to another profile</string>
+
+    <string name="pref_title_other">Other</string>
+    <string name="pref_title_privacy">Privacy</string>
+
+    <string name="pref_title_anonymize_upload_filenames">Anonymize uploaded file names</string>
+    <string name="pref_title_live_notifications">Live notifications</string>
+    <string name="pref_summary_live_notifications">May slightly increase power consumption</string>
+    <string name="pref_title_default_formatting">Default formatting syntax(if supported by instance)</string>
+    <string name="pref_title_notification_filter_emoji">my posts are reacted with emojis</string>
+    <string name="pref_title_notification_filter_chat_messages">received a chat message</string>
+    <string name="pref_title_notification_filter_subscriptions">somebody I\'m subscribed to published a new post</string>
+    <string name="pref_title_notification_filter_move">somebody I\'m following migrated to another profile</string>
+    <string name="pref_title_hide_muted_users">Hide muted users</string>
+    <string name="pref_title_enable_big_emojis">Enable bigger custom emojis</string>
+    <string name="pref_title_enable_experimental_stickers">Enable experimental Pleroma-FE stickers(if available)</string>
+    <string name="pref_title_animate_custom_emojis">Animate custom emojis</string>
+    <string name="pref_title_render_subscriptions_as_statuses">Render subscriptions as normal posts</string>
+
+    <string name="attachment_type_image">Image</string>
+    <string name="attachment_type_video">Video</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_unknown">Attachment</string>
+
+    <string name="link">Link</string> <!-- Web Link -->
+
+    <string name="streaming_notification_name">Live notifications</string>
+    <string name="streaming_notification_description">Running live notifications for: </string>
+    
+    <!-- REPLACEMENT FOR TUSKY STRINGS -->
+    <string name="action_toggle_visibility">Post visibility</string>
+    <string name="action_schedule_toot">Schedule post</string>
+    <string name="action_reblog">Repeat</string>
+    <string name="action_unreblog">Remove repeat</string>
+    <string name="action_hide_reblogs">Hide repeats</string>
+    <string name="action_show_reblogs">Show repeats</string>
+    <string name="action_send">POST</string>
+    <string name="action_send_public">POST!</string>
+    <string name="action_open_reblogger">Open repeat author</string>
+    <string name="action_open_reblogged_by">Show repeats</string>
+    <string name="action_access_scheduled_toot">Scheduled posts</string>
+    <string name="reblog_private">Repeat to original audience</string>
+    <string name="unreblog_private">Remove repeat</string>
+    <string name="action_open_toot">Open post</string>
+        
+    <string name="compose_shortcut_long_label">Compose Post</string>
+    
+    <string name="description_status_reblogged">
+        Repeated
+    </string>
+    <string name="dialog_delete_toot_warning">Delete this post?</string>
+    <string name="dialog_redraft_toot_warning">Delete and re-draft this post?</string>
+    
+    <string name="error_sender_account_gone">Error sending post.</string>
+        
+    <string name="notification_reblog_format">%s repeated your post</string>
+    <string name="notification_favourite_format">%s favorited your post</string>
+    <string name="notification_boost_name">Repeats</string>
+    <string name="notification_boost_description">Notifications when your posts get repeated</string>
+    <string name="notification_favourite_description">Notifications when your posts get marked as favorite</string>
+    
+    <string name="pref_title_confirm_reblogs">Show confirmation dialog before repeating</string>
+    <string name="pref_title_notification_filter_reblogs">my posts are repeated</string>
+    <string name="pref_title_show_boosts">Show repeats</string>
+    <string name="pref_title_alway_open_spoiler">Always expand posts marked with content warnings</string>
+    
+    <plurals name="reblogs">
+        <item quantity="one">&lt;b>%s&lt;/b> Repeat</item>
+        <item quantity="other">&lt;b>%s&lt;/b> Repeats</item>
+    </plurals>    
+    <string name="send_status_link_to">Share post URL to…</string>
+    <string name="send_status_content_to">Share post to…</string>
+    <string name="send_toot_notification_title">Sending post…</string>
+    <string name="send_toot_notification_error_title">Error sending post</string>
+    <string name="send_toot_notification_channel_name">Sending posts</string>
+    <string name="send_toot_notification_saved_content">A copy of the post has been saved to your drafts</string>
+    
+    <string name="status_share_content">Share content of post</string>
+    <string name="status_share_link">Share link to post</string>
+    <string name="status_boosted_format">%s repeated</string>
+    <string name="status_replied_to_format">Reply to %s</string>
+    
+    <string name="title_scheduled_toot">Scheduled posts</string>
+    <string name="title_reblogged_by">Repeated by</string>
+    <string name="title_view_thread">Post</string>
+
+    <!-- 
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_powered_by_tusky">Powered by Husky</string>
+    <string name="about_tusky_license">Husky is free and open-source software.
+        It is licensed under the GNU General Public License Version 3.
+    You can view the license here: https://www.gnu.org/licenses/gpl-3.0.en.html</string> -->
+    <!-- note to translators:
+    * you should think of “free” as in “free speech,” not as in “free beer”.
+    We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
+    to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
+    * the url can be changed to link to the localized version of the license.
+    --> <!-- 
+    <string name="about_project_site">
+        Project website:\n
+        https://husky.fwgs.ru
+    </string>
+    <string name="about_bug_feature_request_site">
+        Bug reports &amp; feature requests:\n
+        https://git.mentality.rip/FWGS/Husky/issues
+    </string>
+    <string name="about_tusky_account">Husky\'s Profile</string>
+    <string name="restart_emoji">You\'ll need to restart Husky in order to apply these changes</string>
+    <string name="license_description">Husky contains code and assets from the following open source projects:</string>
+    <string name="add_account_description">Add new Fediverse Account</string>
+    <string name="action_login">Login!</string>
+    
+    <string name="dialog_whats_an_instance">The address or domain of any instance can be entered
+    here, such as shitposter.club, blob.cat, fedi.absturztau.be, expired.mentality.rip, and
+    <a href="https://instances.social">more!</a>
+    \n\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to
+    join and create an account there.\n\nAn instance is a single place where your account is
+    hosted, but you can easily communicate with and follow folks on other instances as though
+    you were on the same site.
+    \n\nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
+    
+    <string name="warning_scheduling_interval">Mastodon/Pleroma has a minimum scheduling interval of 5 minutes.</string> -->
+</resources>
+        

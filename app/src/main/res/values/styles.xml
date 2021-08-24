@@ -1,0 +1,190 @@
+<resources>
+
+    <style name="TextSizeSmallest">
+        <item name="status_text_small">10sp</item>
+        <item name="status_text_medium">12sp</item>
+        <item name="status_text_large">14sp</item>
+    </style>
+
+    <style name="TextSizeSmall">
+        <item name="status_text_small">12sp</item>
+        <item name="status_text_medium">14sp</item>
+        <item name="status_text_large">16sp</item>
+    </style>
+
+    <style name="TextSizeMedium">
+        <item name="status_text_small">14sp</item>
+        <item name="status_text_medium">16sp</item>
+        <item name="status_text_large">18sp</item>
+    </style>
+
+    <style name="TextSizeLarge">
+        <item name="status_text_small">16sp</item>
+        <item name="status_text_medium">18sp</item>
+        <item name="status_text_large">20sp</item>
+    </style>
+
+    <style name="TextSizeLargest">
+        <item name="status_text_small">18sp</item>
+        <item name="status_text_medium">20sp</item>
+        <item name="status_text_large">22sp</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+        <item name="colorPrimary">@color/tusky_grey_10</item>
+        <item name="colorPrimaryDark">@color/tusky_grey_10</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="TuskyTheme" parent="TuskyBaseTheme" />
+
+    <style name="TuskyDialogActivityTheme" parent="@style/TuskyTheme" />
+
+    <style name="TuskyBaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/tusky_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/tusky_blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorSurface">@color/colorSurface</item>
+
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorBackgroundAccent">@color/colorBackgroundAccent</item>
+        <item name="windowBackgroundColor">@color/windowBackground</item>
+
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorTertiary">@color/textColorTertiary</item>
+
+        <item name="iconColor">@color/iconColor</item>
+
+        <item name="android:listDivider">@drawable/status_divider</item>
+        <item name="dividerColor">@color/dividerColor</item>
+
+        <item name="textColorDisabled">@color/textColorDisabled</item>
+
+        <item name="materialDrawerStyle">@style/TuskyDrawerStyle</item>
+        <item name="materialDrawerHeaderStyle">@style/TuskyDrawerHeaderStyle</item>
+
+        <item name="alertDialogTheme">@style/TuskyDialog</item>
+        <item name="snackbarButtonStyle">@style/TuskyButton.TextButton</item>
+        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
+
+        <item name="minTouchTargetSize">32dp</item> <!-- this affects RadioButton size -->
+        <item name="elevationOverlayEnabled">false</item> <!-- disable the automatic tinting of surfaces with elevation in dark mode -->
+
+        <item name="swipeRefreshLayoutProgressSpinnerBackgroundColor">?attr/colorSurface</item>
+
+        <item name="chat_me_color">@color/tusky_blue</item>
+        <item name="chat_me_text_color">@color/textColorPrimary</item>
+        <item name="chat_other_color">@color/colorPrimaryDark</item>
+        <item name="chat_other_text_color">@color/textColorPrimary</item>
+        <item name="chat_date_text_color">@color/textColorSecondary</item>
+
+        <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Choice</item>
+
+        <item name="preferenceTheme">@style/TuskyPreferenceTheme</item>
+    </style>
+
+    <style name="ViewMediaActivity.AppBarLayout" parent="ThemeOverlay.AppCompat">
+        <item name="android:colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="TuskyDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:letterSpacing">0</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:background">@color/colorBackground</item>
+    </style>
+
+    <style name="TuskyDialogFragmentStyle" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:backgroundTint">@color/colorBackground</item>
+    </style>
+
+    <style name="TuskyTabAppearance" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:textSize">?attr/status_text_medium</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="tabIndicatorHeight">3dp</item>
+    </style>
+
+    <style name="TuskyPreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:tint">?iconColor</item>
+    </style>
+
+    <style name="TuskyImageButton" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:tint">?android:attr/textColorTertiary</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="TuskyButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TuskyButton.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">?attr/colorBackgroundAccent</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TuskyButton.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TuskyTextInput" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/text_input_layout_box_stroke_color</item>
+        <item name="android:textColorHint">?android:attr/textColorTertiary</item>
+    </style>
+
+    <!--Black Application Theme Styles-->
+    <style name="TuskyBlackThemeBase" parent="TuskyBaseTheme">
+        <item name="colorPrimaryDark">@color/tusky_grey_05</item>
+
+        <item name="android:colorBackground">@color/black</item>
+        <item name="windowBackgroundColor">@color/black</item>
+
+        <item name="colorSurface">@color/tusky_grey_10</item>
+
+        <item name="iconColor">@color/tusky_grey_40</item>
+        <item name="colorBackgroundAccent">@color/tusky_grey_40</item>
+
+        <item name="dividerColor">@color/tusky_grey_40</item>
+    </style>
+
+    <style name="TuskyBlackTheme" parent="TuskyBlackThemeBase" />
+
+    <style name="TuskyDrawerStyle" parent ="Widget.MaterialDrawerStyle">
+        <item name="materialDrawerBackground">?android:colorBackground</item>
+        <item name="materialDrawerPrimaryIcon">?iconColor</item>
+        <item name="materialDrawerSecondaryIcon">?iconColor</item>
+        <item name="materialDrawerDividerColor">?dividerColor</item>
+    </style>
+
+    <style name="TuskyDrawerHeaderStyle" parent ="Widget.MaterialDrawerHeaderStyle">
+        <item name="materialDrawerHeaderSelectionText">?android:textColorPrimary</item>
+        <item name="materialDrawerHeaderSelectionSubtext">?android:textColorPrimary</item>
+    </style>
+
+    <!-- customize the shape of the avatars in account selection list -->
+    <style name="BezelImageView">
+        <item name="materialDrawerMaskDrawable">@drawable/materialdrawer_shape_small</item>
+        <item name="materialDrawerDrawCircularShadow">false</item>
+    </style>
+
+    <style name="TextAppearance.Chat" parent="TextAppearance.AppCompat" />
+    <style name="TextAppearance.Chat.Date">
+        <item name="android:textSize">?attr/status_text_small</item>
+        <item name="android:textColor">?attr/chat_date_text_color</item>
+    </style>
+    <style name="TextAppearance.Chat.Content">
+        <item name="android:textSize">?attr/status_text_medium</item>
+    </style>
+    <style name="TextAppearance.Chat.Content.Me">
+        <item name="android:textColor">@color/textColorPrimary</item>
+    </style>
+    <style name="TextAppearance.Chat.Content.Other">
+        <item name="android:textColor">@color/textColorPrimary</item>
+    </style>
+</resources>

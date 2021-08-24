@@ -1,0 +1,19 @@
+<resources>
+	<string name="action_plaintext">Plaintext</string>
+	<string name="action_markdown">Markdown</string>
+	<string name="action_bbcode">BBCode</string>
+	<string name="action_html">HTML</string>
+	
+	<string-array name="formatting_syntax_values">
+		<item>@string/action_plaintext</item>
+		<item>@string/action_markdown</item>
+		<item>@string/action_bbcode</item>
+		<item>@string/action_html</item>
+	</string-array>
+
+	<string name="description_muted_status" translatable="false">
+		<!-- Display name, relative date, username -->
+		%1$s; %2$s; %3$s
+	</string>
+
+</resources>

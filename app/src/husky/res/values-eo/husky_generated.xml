@@ -1,0 +1,58 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_license">Husky estas libera kaj malfermitkoda programo.
+        Ĝi estas publikigita laŭ la permesilo «GNU General Public License Version 3».
+        Vi povas vidi la permesilon ĉi tie: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_tusky_account">Profilo de Husky</string>
+  
+  
+    <string name="restart_emoji">Vi devos restartigi Husky por apliki ĉi tiujn ŝanĝojn</string>
+  
+  
+    <string name="license_description">Husky enhavas kodon kaj risurcojn el la sekvantaj malfermitkodaj projetkoj:</string>
+  
+  
+    <string name="about_powered_by_tusky">Funkciigita de Husky</string>
+  
+
+
+
+  
+    <string name="about_project_site">        Paĝaro de projekto:\n
+        https://huskyapp.dev
+    </string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">        Raportoj de cimo kaj petoj de funkcio:\n
+        https://git.mentality.rip/FWGS/Husky/issues
+    </string>
+  
+
+
+  
+    <string name="action_login">Ensaluti al Pleroma</string>
+  
+  
+    <string name="add_account_description">Aldoni novan Pleroma konton</string>
+  
+  
+    <string name="warning_scheduling_interval">Pleroma havas minimuman intervalon de planado de 5 minutoj.</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">La adreso aŭ domajno de iu ajn nodo povas esti enmetitaĉi tie, kiel shitposter.club, blob.cat, expired.mentality.rip, kaj
+        <a href="https://fediverse.network/pleroma?count=peers">pli!</a>
+        \n\nSe vi ne ankoraŭ havas konton, vi povas enmeti la nomon de la nodo ke vi volas aliĝi kaj krei konton tie.\n\nNodo estas unika loko kie via konto estas gastigita, sed vi povas facile komuniki kun kaj sekvi homojn ĉe aliaj nodoj kiel vi estus ĉe la sama retejo.
+        \n\nPliaj informoj troviĝas ĉe <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
+  
+
+</resources>

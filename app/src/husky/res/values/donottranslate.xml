@@ -1,0 +1,9 @@
+<resources>
+	<!-- HUSKY SPECIFIC STRINGS -->
+	 
+	<!-- REPLACEMENT FOR TUSKY STRINGS -->
+	<string name="tusky_website" translatable="false">https://huskyapp.dev</string>
+	
+</resources>
+ 
+ 

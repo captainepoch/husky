@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+        android:id="@+id/emoji_react"
+        android:title="@string/action_emoji_react" />
+    <item
+        android:id="@+id/emoji_unreact"
+        android:title="@string/action_emoji_unreact" />
+    <item
+        android:id="@+id/emoji_reacted_by"
+        android:title="@string/action_emoji_reacted_by" />
+</menu>
+ 

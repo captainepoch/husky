@@ -1,0 +1,59 @@
+package com.keylesspalace.tusky.appstore
+
+import com.google.gson.Gson
+import com.keylesspalace.tusky.db.AccountManager
+import com.keylesspalace.tusky.db.AppDatabase
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+
+class CacheUpdater @Inject constructor(
+        eventHub: EventHub,
+        accountManager: AccountManager,
+        private val appDatabase: AppDatabase,
+        gson: Gson
+) {
+
+    private val disposable: Disposable
+
+    init {
+        val timelineDao = appDatabase.timelineDao()
+        disposable = eventHub.events.subscribe { event ->
+            val accountId = accountManager.activeAccount?.id ?: return@subscribe
+            when (event) {
+                is FavoriteEvent ->
+                    timelineDao.setFavourited(accountId, event.statusId, event.favourite)
+                is ReblogEvent ->
+                    timelineDao.setReblogged(accountId, event.statusId, event.reblog)
+                is BookmarkEvent ->
+                    timelineDao.setBookmarked(accountId, event.statusId, event.bookmark)
+                is UnfollowEvent ->
+                    timelineDao.removeAllByUser(accountId, event.accountId)
+                is StatusDeletedEvent ->
+                    timelineDao.delete(accountId, event.statusId)
+                is EmojiReactEvent -> {
+                    val pleromaString = gson.toJson(event.newStatus.pleroma)
+                    timelineDao.setPleroma(accountId, event.newStatus.id, pleromaString)
+                }
+                is PollVoteEvent -> {
+                    val pollString = gson.toJson(event.poll)
+                    timelineDao.setVoted(accountId, event.statusId, pollString)
+                }
+            }
+        }
+    }
+
+    fun stop() {
+        this.disposable.dispose()
+    }
+
+    fun clearForUser(accountId: Long) {
+        Single.fromCallable {
+            appDatabase.timelineDao().removeAllForAccount(accountId)
+            appDatabase.timelineDao().removeAllUsersForAccount(accountId)
+        }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+    }
+}

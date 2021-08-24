@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeToRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/accountCoordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:textDirection="anyRtl">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/accountAppBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/actionbar_elevation">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentScrim="?attr/colorSurface"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:statusBarScrim="?attr/colorSurface"
+                app:titleEnabled="false">
+
+                <ImageView
+                    android:id="@+id/accountHeaderImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_alignTop="@+id/account_header_info"
+                    android:background="?attr/colorPrimaryDark"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:background="#000" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/accountHeaderInfoContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="180dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideAvatar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/account_activity_avatar_size" />
+
+                    <Button
+                        android:id="@+id/accountFollowButton"
+                        style="@style/TuskyButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="?attr/status_text_medium"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toEndOf="@id/accountMuteButton"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Follow Requested" />
+                    
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/accountSubscribeButton"
+                        style="@style/TuskyButton.Outlined"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="6dp"
+                        android:minWidth="0dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="4dp"
+                        android:scaleType="centerInside"
+                        app:icon="@drawable/ic_notifications_24dp"
+                        app:layout_constrainedHeight="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/accountFollowButton"
+                        app:layout_constraintEnd_toStartOf="@id/accountFollowButton"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="@id/accountMuteButton"
+                        app:layout_constraintTop_toTopOf="@+id/accountFollowButton" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/accountMuteButton"
+                        style="@style/TuskyButton.Outlined"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="6dp"
+                        android:minWidth="0dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:scaleType="centerInside"
+                        app:icon="@drawable/ic_unmute_24dp"
+                        app:layout_constrainedHeight="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/accountFollowButton"
+                        app:layout_constraintEnd_toStartOf="@id/accountSubscribeButton"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="@id/guideAvatar"
+                        app:layout_constraintTop_toTopOf="@+id/accountFollowButton" />
+
+                    <androidx.emoji.widget.EmojiTextView
+                        android:id="@+id/accountDisplayNameTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="62dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="?attr/status_text_large"
+                        android:textStyle="normal|bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Tusky Mastodon Client " />
+
+                    <TextView
+                        android:id="@+id/accountUsernameTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="?attr/status_text_medium"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/accountDisplayNameTextView"
+                        tools:text="\@Tusky" />
+
+                    <ImageView
+                        android:id="@+id/accountLockedImageView"
+                        android:layout_width="16sp"
+                        android:layout_height="16sp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="@string/description_account_locked"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/accountUsernameTextView"
+                        app:layout_constraintStart_toEndOf="@+id/accountUsernameTextView"
+                        app:layout_constraintTop_toTopOf="@+id/accountUsernameTextView"
+                        app:srcCompat="@drawable/ic_reblog_private_24dp"
+                        app:tint="?android:textColorSecondary"
+                        tools:visibility="visible" />
+                    
+                    <TextView
+                        android:id="@+id/accountAdminTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/profile_badge_background"
+                        android:text="@string/admin"
+                        android:textSize="?attr/status_text_small"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/accountUsernameTextView"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/accountModeratorTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/profile_badge_background"
+                        android:text="@string/moderator"
+                        android:textSize="?attr/status_text_small"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toEndOf="@id/accountAdminTextView"
+                        app:layout_constraintTop_toBottomOf="@id/accountUsernameTextView"
+                        app:layout_goneMarginStart="0dp"
+                        tools:visibility="visible" />
+                    
+                    <TextView
+                        android:id="@+id/accountFollowsYouTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"                        
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/profile_badge_background"
+                        android:text="@string/follows_you"
+                        android:textSize="?attr/status_text_small"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toEndOf="@id/accountModeratorTextView"
+                        app:layout_constraintTop_toBottomOf="@id/accountUsernameTextView"
+                        app:layout_goneMarginStart="0dp"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/accountBadgeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/profile_badge_background"
+                        android:text="@string/profile_badge_bot_text"
+                        android:textSize="?attr/status_text_small"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toEndOf="@id/accountFollowsYouTextView"
+                        app:layout_constraintTop_toBottomOf="@id/accountUsernameTextView"
+                        app:layout_goneMarginStart="0dp"
+                        tools:visibility="visible" />
+                    
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/labelBarrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="accountAdminTextView,accountModeratorTextView,accountFollowsYouTextView,accountBadgeTextView" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/accountNoteTextInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/labelBarrier"
+                        tools:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/account_note_hint" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/saveNoteInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/account_note_saved"
+                        android:textColor="@color/tusky_blue"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/accountNoteTextInputLayout" />
+
+                    <androidx.emoji.widget.EmojiTextView
+                        android:id="@+id/accountNoteTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hyphenationFrequency="full"
+                        android:lineSpacingMultiplier="1.1"
+                        android:paddingTop="2dp"
+                        android:textColor="?android:textColorTertiary"
+                        android:textSize="?attr/status_text_medium"
+                        app:layout_constraintTop_toBottomOf="@id/saveNoteInfo"
+                        tools:text="This is a test description. Descriptions can be quite looooong." />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/accountFieldList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/accountNoteTextView"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_account_field" />
+
+                    <TextView
+                        android:id="@+id/accountRemoveView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:hyphenationFrequency="full"
+                        android:lineSpacingMultiplier="1.1"
+                        android:text="@string/label_remote_account"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/accountFieldList"
+                        tools:visibility="visible" />
+
+                    <ViewStub
+                        android:id="@+id/accountMovedView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inflatedId="@+id/accountMovedViewLayout"
+                        android:layout="@layout/view_account_moved"
+                        app:layout_constraintTop_toBottomOf="@id/accountRemoveView" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrierRemote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="accountMovedView,accountMovedViewLayout" />
+
+                    <LinearLayout
+                        android:id="@+id/accountStatuses"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toStartOf="@id/accountFollowing"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/barrierRemote">
+
+                        <TextView
+                            android:id="@+id/accountStatusesTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textColor="@color/account_tab_font_color"
+                            android:textSize="?attr/status_text_medium"
+                            tools:text="3000" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="6dp"
+                            android:text="@string/title_statuses"
+                            android:textColor="@color/account_tab_font_color"
+                            android:textSize="?attr/status_text_medium" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/accountFollowing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toStartOf="@id/accountFollowers"
+                        app:layout_constraintStart_toEndOf="@id/accountStatuses"
+                        app:layout_constraintTop_toBottomOf="@id/barrierRemote">
+
+                        <TextView
+                            android:id="@+id/accountFollowingTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textColor="@color/account_tab_font_color"
+                            android:textSize="?attr/status_text_medium"
+                            tools:text="500" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="6dp"
+                            android:text="@string/title_follows"
+                            android:textColor="@color/account_tab_font_color"
+                            android:textSize="?attr/status_text_medium" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/accountFollowers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/accountFollowing"
+                        app:layout_constraintTop_toBottomOf="@id/barrierRemote">
+
+                        <TextView
+                            android:id="@+id/accountFollowersTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textColor="@color/account_tab_font_color"
+                            android:textSize="?attr/status_text_medium"
+                            tools:text="1234" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="6dp"
+                            android:text="@string/title_followers"
+                            android:textColor="@color/account_tab_font_color"
+                            android:textSize="?attr/status_text_medium" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- top margin equal to statusbar size will be set programmatically -->
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/accountToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:background="@android:color/transparent"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/accountTabLayout"
+                style="@style/TuskyTabAppearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorSurface"
+                app:tabGravity="center"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/TuskyTabAppearance" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/accountFragmentViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:windowBackground"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/accountFloatingActionButtonChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="128dp"
+            android:contentDescription="@string/action_chat"
+            android:visibility="gone"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_email_24dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/accountFloatingActionButtonMention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:contentDescription="@string/action_mention"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="80dp"
+            android:visibility="gone"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_create_24dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/accountFloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/action_expand_menu"
+            app:srcCompat="@drawable/ic_plus_24dp" />
+
+        <include layout="@layout/item_status_bottom_sheet" />
+
+        <ImageView
+            android:id="@+id/accountAvatarImageView"
+            android:layout_width="@dimen/account_activity_avatar_size"
+            android:layout_height="@dimen/account_activity_avatar_size"
+            android:layout_marginStart="16dp"
+            android:padding="3dp"
+            app:layout_anchor="@+id/accountHeaderInfoContainer"
+            app:layout_anchorGravity="top"
+            app:layout_scrollFlags="scroll"
+            app:srcCompat="@drawable/avatar_default" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

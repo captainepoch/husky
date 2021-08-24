@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:id="@+id/blocked_user_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/action_view_profile" />
+
+    <ImageButton
+        android:id="@+id/blocked_user_unblock"
+        style="@style/TuskyImageButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_unblock"
+        android:padding="4dp"
+        app:srcCompat="@drawable/ic_clear_24dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@id/blocked_user_avatar"
+        android:layout_toStartOf="@id/blocked_user_unblock"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <androidx.emoji.widget.EmojiTextView
+            android:id="@+id/blocked_user_display_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="?attr/status_text_large"
+            android:textStyle="normal|bold"
+            tools:text="Display name" />
+
+        <TextView
+            android:id="@+id/blocked_user_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="?attr/status_text_medium"
+            tools:text="\@username" />
+
+    </LinearLayout>
+
+</RelativeLayout>

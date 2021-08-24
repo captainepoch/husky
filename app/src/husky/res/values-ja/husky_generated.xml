@@ -1,0 +1,57 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_license">Huskyは無料のオープンソースソフトウェアです。<!--
+     -->GNU General Public License Version 3 の下で使用許諾されています。<!--
+     -->ライセンスはここからご覧いただけます： https://www.gnu.org/licenses/gpl-3.0.ja.html</string>
+  
+  
+    <string name="about_tusky_account">Husky公式アカウント</string>
+  
+  
+    <string name="restart_emoji">これらの変更を適用するには、Huskyの再起動が必要になります</string>
+  
+  
+    <string name="license_description">Huskyは、以下のオープンソース プロジェクトからのコードとアセットを含んでいます:</string>
+  
+
+
+
+  
+    <string name="about_project_site">        プロジェクトのWebサイト（英語）：\n
+        https://huskyapp.dev
+    </string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">        バグ報告 &amp; 機能リクエスト（英語）：\n
+        https://git.mentality.rip/FWGS/Husky/issues
+    </string>
+  
+
+
+  
+    <string name="action_login">Pleromaでログイン</string>
+  
+  
+    <string name="add_account_description">新しいPleromaアカウントを追加</string>
+  
+  
+    <string name="warning_scheduling_interval">Pleromaにおける予約までの最小間隔は5分です。</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">shitposter.club, blob.cat, expired.mentality.ripや<a href="https://fediverse.network/pleroma?count=peers">その他</a> のような、あらゆるインスタンスのアドレスやドメインを入力できます。 
+\n 
+\nまだアカウントをお持ちでない場合は、参加したいインスタンスの名前を入力することで そのインスタンスにアカウントを作成できます。 
+\n 
+\nインスタンスはあなたのアカウントが提供される単独の場所ですが、他のインスタンスのユーザーとあたかも同じ場所にいるように簡単にコミュニケーションをとったりフォローしたりできます。 
+\n 
+\nさらに詳しい情報は<a href="https://joinmastodon.org">joinmastodon.org</a>でご覧いただけます。 </string>
+  
+
+</resources>

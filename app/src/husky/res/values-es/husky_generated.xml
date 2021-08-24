@@ -1,0 +1,62 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_license">Husky es un software libre y de código abierto.
+        Está licenciado bajo la licencia \"GNU General Public License Version 3\".
+        Puedes leer sobre la misma en: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_tusky_account">Perfil de Husky</string>
+  
+  
+    <string name="restart_emoji">Tendrás que reiniciar la aplicación para aplicar estos cambios</string>
+  
+  
+    <string name="license_description">Husky contiene código y recursos de los siguientes proyectos:</string>
+  
+  
+    <string name="about_powered_by_tusky">Potenciado por Husky</string>
+  
+
+
+
+  
+    <string name="about_project_site">        Sitio del proyecto:\n
+        https://huskyapp.dev
+    </string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">        Reporte de errores y peticiones de características:\n
+        https://git.mentality.rip/FWGS/Husky/issues
+    </string>
+  
+
+
+  
+    <string name="action_login">Iniciar sesión</string>
+  
+  
+    <string name="add_account_description">Añadir cuenta de Pleroma</string>
+  
+  
+    <string name="warning_scheduling_interval">Pleroma tiene un intervalo de programación mínimo de 5 minutos.</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">Introduzca aquí dirección o dominio de cualquier instancia,
+        como shitposter.club, blob.cat, expired.mentality.rip y
+        <a href="https://fediverse.network/pleroma?count=peers">más!</a>
+        \n\nSi todavia no tiene una cuenta, puede indicar el nombre de la instancia a la que quiere
+        unirse y crear una cuenta allí.\n\nUna instancia es el sitio único donde su cuenta
+        está alojada, pero puede comunicarse y seguir usuarios de otras instancias como si
+        estuvieran en la misma.
+        \n\nPuede consultar más información en <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
+  
+
+</resources>

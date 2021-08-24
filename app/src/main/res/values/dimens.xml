@@ -1,0 +1,68 @@
+<resources>
+    <dimen name="status_display_name_padding_end">4dp</dimen>
+    <dimen name="status_reblogged_bar_padding_top">8dp</dimen>
+    <dimen name="status_media_preview_margin_top">8dp</dimen>
+    <dimen name="status_media_preview_height">100dp</dimen>
+    <dimen name="status_detail_media_preview_height">130dp</dimen>
+    <dimen name="compose_media_preview_margin">8dp</dimen>
+    <dimen name="compose_media_preview_margin_bottom">0dp</dimen>
+    <dimen name="compose_media_preview_size">120dp</dimen>
+    <dimen name="account_avatar_margin">14dp</dimen>
+    <dimen name="tab_page_margin">16dp</dimen>
+    <dimen name="status_line_margin_start">36dp</dimen>
+    <dimen name="text_content_margin">16dp</dimen>
+    <dimen name="status_sensitive_media_button_padding">5dp</dimen>
+
+    <dimen name="card_image_vertical_height">210dp</dimen>
+    <dimen name="card_image_horizontal_width">100dp</dimen>
+
+    <dimen name="compose_activity_snackbar_elevation">16dp</dimen>
+    <dimen name="compose_activity_bottom_bar_height">60dp</dimen>
+
+    <dimen name="account_activity_scroll_title_visible_height">200dp</dimen>
+    <dimen name="account_activity_avatar_size">100dp</dimen>
+
+    <dimen name="compose_activity_scrollview_height">-1px</dimen> <!-- match_parent -->
+    <dimen name="timeline_width">-1px</dimen> <!-- match_parent -->
+
+    <dimen name="actionbar_elevation">4dp</dimen>
+
+    <item name="wrap_content" format="integer" type="dimen">-2</item>
+
+    <dimen name="preference_icon_size">20dp</dimen>
+
+    <dimen name="selected_drag_item_elevation">12dp</dimen>
+
+    <dimen name="avatar_radius_94dp">11.75dp</dimen> <!-- 1/8 of 100dp - 2 * 3dp padding -->
+    <dimen name="avatar_radius_80dp">10dp</dimen> <!-- 1/8 of 80dp -->
+    <dimen name="avatar_radius_48dp">6dp</dimen> <!-- 1/8 of 48dp -->
+    <dimen name="avatar_radius_42dp">5.25dp</dimen> <!-- 1/8 of 42dp -->
+    <dimen name="avatar_radius_36dp">4.5dp</dimen> <!-- 1/8 of 36dp -->
+    <dimen name="avatar_radius_24dp">3dp</dimen> <!-- 1/8 of 24dp -->
+    <dimen name="min_report_button_width">160dp</dimen>
+    <dimen name="account_avatar_background_radius">14dp</dimen>
+
+
+    <dimen name="card_radius">5dp</dimen>
+
+    <dimen name="poll_preview_padding">12dp</dimen>
+    <dimen name="poll_preview_min_width">120dp</dimen>
+
+    <dimen name="adaptive_bitmap_inner_size">72dp</dimen>
+    <dimen name="adaptive_bitmap_outer_size">108dp</dimen>
+
+    <dimen name="fabMargin">16dp</dimen>
+
+    <dimen name="chat_base_padding">16dp</dimen>
+    <dimen name="chat_large_padding">64dp</dimen>
+    <dimen name="chat_between_messages_padding">4dp</dimen>
+    <dimen name="chat_message_v_padding">8dp</dimen>
+    <dimen name="chat_radius">10dp</dimen>
+    <dimen name="chat_message_h_padding">10dp</dimen>
+    <dimen name="chat_avatar_size">36dp</dimen>
+    <dimen name="chat_small_padding">8dp</dimen>
+    <dimen name="chat_radius_fix">12dp</dimen>
+    <dimen name="chat_media_preview_item_height">160dp</dimen>
+    <dimen name="chat_message_max_width">300dp</dimen>
+    <dimen name="avatar_toolbar_nav_icon_size">36dp</dimen>
+</resources>

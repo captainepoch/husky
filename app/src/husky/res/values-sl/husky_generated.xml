@@ -1,0 +1,53 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_license">Husky je prosta in odprtokodna programska oprema. Licencirana je pod licenco GNU General Public License različice 3. Licenco si lahko ogledate tukaj: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_tusky_account">Profil Husky</string>
+  
+  
+    <string name="restart_emoji">Če želite uveljaviti te spremembe, morate znova zagnati Husky</string>
+  
+  
+    <string name="license_description">Husky vsebuje kodo in sredstva iz naslednjih odprtokodnih projektov:</string>
+  
+  
+    <string name="about_powered_by_tusky">Poganja ga Husky</string>
+  
+
+
+
+  
+    <string name="about_project_site">Spletna stran projekta:
+\nhttps://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">Poročila o napakah in želje za nove funkcije:
+\nhttps://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="action_login">Prijavite se z Pleromaom</string>
+  
+  
+    <string name="add_account_description">Dodaj nov Pleroma račun</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">Tu lahko vnesete naslov ali domeno katerega koli vozlišča, na primer shitposter.club, blob.cat, expired.mentality.rip in <a href="https://fediverse.network/pleroma?count=peers"> več! </a>
+\n
+\nČe še nimate računa, lahko vnesete ime vozlišča, kateremu bi se radi pridružili, in tam ustvarite račun.
+\n
+\nVozlišče je ena lokacija, kjer je gostovanje vašega računa, vendar lahko preprosto komunicirate in sledite ljudem na drugih vozliščih, kot da bi bili na isti lokaciji.
+\n
+\nVeč informacij najdete na naslovu <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
+  
+
+</resources>

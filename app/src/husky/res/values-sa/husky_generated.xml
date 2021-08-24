@@ -1,0 +1,56 @@
+<resources>
+  
+    <string name="about_tusky_account">टस्कीवर्यस्य व्यक्तिगतविवरणम्</string>
+  
+  
+    <string name="about_tusky_license">टस्कीत्यनावृतस्रोतो निःशुल्कतन्त्रांशः। GNU General Public License Version 3 इत्यनेनाऽनुज्ञापितः। अत्राऽनुज्ञापत्रं द्रष्टुं शक्यते:-https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_powered_by_tusky">टस्कीत्यनेनाऽऽश्रितः</string>
+  
+  
+    <string name="about_tusky_version">टस्की %s</string>
+  
+  
+    <string name="restart_emoji">पुनश्च टस्कीप्रारम्भोऽपेक्षितो वर्तते परिवर्तनानुसरेण चलितुम्</string>
+  
+  
+    <string name="license_description">टस्कीत्यस्मिन्निम्नलिखितेभ्योऽनावृतस्रोतःप्रकल्पेभ्यो विध्यादेशाः सन्ति:</string>
+  
+
+
+
+  
+    <string name="about_project_site">प्रकल्पस्य जालसूत्रम् :
+\n https://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">अशुद्धीनामावेदनं वैशिष्ट्यनिवेदनञ्च
+\n https://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="action_login">मास्टुडोनमाध्यमेन सम्प्रविश्यताम्</string>
+  
+  
+    <string name="add_account_description">नवमास्टोडोनलेखा युज्यताम्</string>
+  
+  
+    <string name="warning_scheduling_interval">मास्टोडोने पञ्चनिमेषपरिमितो न्यूनतमः कालबद्धसमयः ।</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">कस्याऽपि विशिष्टस्थलस्य सङ्केतसूत्रमत्र टङ्कयितुं शक्यते shitposter.club, blob.cat, expired.mentality.rip, तथेैव<a href="https://fediverse.network/pleroma?count=peers">अधिकम्</a> 
+\n
+\nयदि युष्माकं व्यक्तिगतलेखाऽत्र न वर्तते तर्हि तस्य विशिष्टस्थलस्य नाम टङ्कयित्वा तत्र निर्मातुं शक्नुथ ।
+\n
+\nविशिष्टस्थलमित्युक्ते स्थलमेकं यत्र युष्माकं लेखाः आश्रिताः, किन्तु साफल्येनैवाऽन्यविशिष्टस्थलीयैः सह सम्पर्कयितुं शक्यते । 
+\n
+\nअधिकमत्र प्राप्यते <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
+  
+
+</resources>

@@ -1,0 +1,56 @@
+<resources>
+  
+    <string name="about_tusky_license">Husky là phần mềm mã nguồn mở, được phân phối với giấy phép GNU General Public License Version 3. Bạn có thể tham khảo thêm tại: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_powered_by_tusky">Powered by Husky</string>
+  
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_tusky_account">Trang cá nhân Husky</string>
+  
+  
+    <string name="license_description">Husky có sử dụng mã nguồn từ những dự án mã nguồn mở sau:</string>
+  
+  
+    <string name="restart_emoji">Bạn cần khởi động lại Husky để áp dụng các thiết lập</string>
+  
+
+
+
+  
+    <string name="about_project_site">Trang chủ
+\nhttps://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">Báo lỗi và đề xuất tính năng
+\nhttps://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="action_login">Đăng nhập Pleroma</string>
+  
+  
+    <string name="warning_scheduling_interval">Pleroma giới hạn tối thiểu 5 phút.</string>
+  
+  
+    <string name="add_account_description">Thêm tài khoản Pleroma</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">Bạn phải nhập một tên miền, ví dụ shitposter.club, blob.cat, expired.mentality.rip, và <a href="https://fediverse.network/pleroma?count=peers">nhiều hơn nữa!</a> 
+\n 
+\nNếu chưa có tài khoản, bạn phải tạo tài khoản trước ở đó. 
+\n 
+\nMáy chủ, nói cách khác là một cộng đồng nơi mà tài khoản của bạn lưu trữ trên đó, nhưng bạn vẫn có thể giao tiếp và theo dõi mọi người trên các máy chủ khác một cách dễ dàng. 
+\n 
+\nTham khảo thêm tại <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
+  
+
+</resources>

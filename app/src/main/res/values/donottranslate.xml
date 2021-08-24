@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tusky_website" translatable="false">https://tusky.app</string>
+    <string name="about_app_version">%1$s %2$s</string>
+
+    <string name="oauth_scheme" translatable="false">oauth2redirect</string>
+    <string name="preferences_file_key" translatable="false">com.keylesspalace.tusky.PREFERENCES</string>
+
+    <string name="at_symbol" translatable="false">\@</string>
+    <string name="hash_symbol" translatable="false">#</string>
+    <string name="title_tag" translatable="false">#%s</string>
+
+    <string name="emoji_shortcode_format" translatable="false">:%s:</string>
+
+    <string-array name="post_privacy_values">
+        <item>public</item>
+        <item>unlisted</item>
+        <item>private</item>
+    </string-array>
+
+    <string-array name="status_text_size_values">
+        <item>smallest</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>largest</item>
+    </string-array>
+
+    <string-array name="app_theme_values">
+        <item>night</item>
+        <item>day</item>
+        <item>black</item>
+        <item>auto</item>
+        <item>auto_system</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>@string/system_default</item>
+        <item>Català</item>
+        <item>Čeština</item>
+        <item>Cymraeg</item>
+        <item>Deutsch</item>
+        <item>English (UK)</item>
+        <item>English (US)</item>
+        <item>Esperanto</item>
+        <item>Español</item>
+        <item>Euskara</item>
+        <item>Français</item>
+        <item>Gaeilge</item>
+        <item>íslenska</item>
+        <item>Italiano</item>
+        <item>Magyar</item>
+        <item>Nederlands</item>
+        <item>Norsk</item>
+        <item>Occitan</item>
+        <item>Polski</item>
+        <item>Português (Brasil)</item>
+        <item>Slovenščina</item>
+        <item>Svenska</item>
+        <item>Taqbaylit</item>
+        <item>Tiếng Việt</item>
+        <item>Türkçe</item>
+        <item>Русский</item>
+        <item>العربية</item>
+        <item>বাংলা (বাংলাদেশ)</item>
+        <item>বাংলা (ভারত)</item>
+        <item>فارسی</item>
+        <item>हिंदी</item>
+        <item>தமிழ்</item>
+        <item>ภาษาไทย</item>
+        <item>한국어</item>
+        <item>中文(台灣)</item>
+        <item>中文(新加坡)</item>
+        <item>中文(澳門)</item>
+        <item>中文(简体)</item>
+        <item>中文(香港)</item>
+        <item>日本語</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>default</item>
+        <item>ca</item>
+        <item>cs</item>
+        <item>cy</item>
+        <item>de</item>
+        <item>en-gb</item>
+        <item>en</item>
+        <item>eo</item>
+        <item>es</item>
+        <item>eu</item>
+        <item>fr</item>
+        <item>ga</item>
+        <item>is</item>
+        <item>it</item>
+        <item>hu</item>
+        <item>nl</item>
+        <item>no-nb</item>
+        <item>oc</item>
+        <item>pl</item>
+        <item>pt-BR</item>
+        <item>sl</item>
+        <item>sv</item>
+        <item>kab</item>
+        <item>vi</item>
+        <item>tr</item>
+        <item>ru</item>
+        <item>ar</item>
+        <item>bn-bd</item>
+        <item>bn-in</item>
+        <item>fa</item>
+        <item>hi</item>
+        <item>ta</item>
+        <item>th</item>
+        <item>ko</item>
+        <item>zh-TW</item>
+        <item>zh-SG</item>
+        <item>zh-MO</item>
+        <item>zh-CN</item>
+        <item>zh-HK</item>
+        <item>ja</item>
+    </string-array>
+
+    <string-array name="pref_main_nav_position_options">
+        <item>@string/pref_main_nav_position_option_top</item>
+        <item>@string/pref_main_nav_position_option_bottom</item>
+    </string-array>
+
+    <string-array name="pref_main_nav_position_values">
+        <item>top</item>
+        <item>bottom</item>
+    </string-array>
+
+    <string name="description_status" translatable="false">
+        <!-- Display name, cw?, content?, poll? relative date, reposted by?, reposted?, favorited?, bookmarked?, username, media?; visibility, fav number?, reblog number?-->
+        %1$s; %2$s; %3$s, %14$s %4$s, %5$s; %6$s, %7$s, %8$s, %9$s, %10$s; %11$s, %12$s, %13$s
+    </string>
+
+    <string-array name="rick_roll_domains" translatable="false">
+        <item>gab.com</item>
+        <item>gab.ai</item>
+        <item>spinster.xyz</item>
+    </string-array>
+
+    <string name="rick_roll_url">https://www.youtube.com/watch?v=dQw4w9WgXcQ</string>
+
+
+    <string-array name="poll_duration_names">
+        <item>@string/duration_5_min</item>
+        <item>@string/duration_30_min</item>
+        <item>@string/duration_1_hour</item>
+        <item>@string/duration_6_hours</item>
+        <item>@string/duration_1_day</item>
+        <item>@string/duration_3_days</item>
+        <item>@string/duration_7_days</item>
+    </string-array>
+
+    <integer-array name="poll_duration_values"> <!-- values in seconds, corresponding to poll_duration_names -->
+        <item>300</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>21600</item>
+        <item>86400</item>
+        <item>259200</item>
+        <item>604800</item>
+    </integer-array>
+
+    <string-array name="mute_duration_names">
+        <item>@string/duration_indefinite</item>
+        <item>@string/duration_5_min</item>
+        <item>@string/duration_30_min</item>
+        <item>@string/duration_1_hour</item>
+        <item>@string/duration_6_hours</item>
+        <item>@string/duration_1_day</item>
+        <item>@string/duration_3_days</item>
+        <item>@string/duration_7_days</item>
+    </string-array>
+
+    <integer-array name="mute_duration_values"> <!-- values in seconds, corresponding to mute_duration_names -->
+        <item>0</item>
+        <item>300</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>21600</item>
+        <item>86400</item>
+        <item>259200</item>
+        <item>604800</item>
+    </integer-array>
+
+    <string name="poll_percent_format"><!-- 15% --> &lt;b>%1$d%%&lt;/b></string>
+</resources>

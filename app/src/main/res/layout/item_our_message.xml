@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/chat_message_h_padding"
+    android:layout_marginBottom="@dimen/chat_message_v_padding">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/message_background"
+        android:backgroundTint="@color/colorBackgroundAccent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_max="wrap"
+        app:layout_constraintWidth_percent="0.8"
+        >
+
+        <FrameLayout
+            android:id="@+id/attachmentLayout"
+            android:layout_width="@dimen/chat_message_max_width"
+            android:layout_height="@dimen/chat_media_preview_item_height"
+            android:layout_marginTop="@dimen/chat_message_h_padding"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <com.keylesspalace.tusky.view.MediaPreviewImageView
+                android:id="@+id/attachment"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/chat_media_preview_item_height"
+                tools:src="@drawable/elephant_friend_empty" />
+
+            <ImageView
+                android:id="@+id/mediaOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/chat_media_preview_item_height"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_play_indicator"
+                tools:ignore="ContentDescription" />
+        </FrameLayout>
+
+        <com.keylesspalace.tusky.view.CustomEmojiTextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/chat_message_v_padding"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="?attr/status_text_large"
+            android:breakStrategy="simple"
+            android:paddingStart="@dimen/chat_message_h_padding"
+            android:paddingEnd="50dp"
+            android:paddingBottom="@dimen/chat_message_v_padding"
+            app:layout_constraintTop_toBottomOf="@id/attachmentLayout"
+            app:layout_constraintBottom_toBottomOf="@id/datetime"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="MeowMeowMeow" />
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingStart="@dimen/chat_message_h_padding"
+            android:paddingEnd="@dimen/chat_message_h_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="12:39"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

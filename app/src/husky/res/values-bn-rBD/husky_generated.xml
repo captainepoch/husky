@@ -1,0 +1,62 @@
+<resources>
+  
+    <string name="license_description">টাস্কি নিম্নলিখিত ওপেন সোর্স প্রকল্প থেকে কোড এবং সম্পদ রয়েছে:</string>
+  
+  
+    <string name="restart_emoji">এই পরিবর্তনগুলি প্রয়োগ করার জন্য আপনাকে টাস্কি পুনরায় চালু করতে হবে</string>
+  
+  
+    <string name="about_tusky_account">টাস্কির প্রোফাইল</string>
+  
+  
+    <string name="about_tusky_license">টাস্কি মুক্ত এবং ওপেন সোর্স সফ্টওয়্যার। এটি GNU জেনারেল পাবলিক লাইসেন্স সংস্করণ 3 এর অধীনে লাইসেন্সযুক্ত। আপনি এখানে লাইসেন্স দেখতে পারেন: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_tusky_version">টাস্কি %s</string>
+  
+  
+    <string name="about_powered_by_tusky">টাস্কি দ্বারা চালিত</string>
+  
+
+
+
+  
+    <string name="about_project_site">প্রকল্প ওয়েবসাইট: 
+\nhttps://huskyapp.dev</string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">বাগ রিপোর্ট এবং বৈশিষ্ট্য অনুরোধ: 
+\nhttps://git.mentality.rip/FWGS/Husky/issues</string>
+  
+
+
+  
+    <string name="add_account_description">নতুন ম্যাস্টোডোন অ্যাকাউন্ট যোগ করুন</string>
+  
+  
+    <string name="action_login">মাস্টোডনের সঙ্গে লগইন করো</string>
+  
+  
+    <string name="warning_scheduling_interval">মাস্টোডনের সর্বনিম্ন ৫ মিনিটের সময়সূচীর বিরতি আছে।</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">"কোনও উদাহরণের ঠিকানা বা ডোমেন এখানে প্রবেশ করা যেতে পারে যেমন shitposter.club, blob.cat, expired.mentality.rip, এবং &lt;a href=\"https://fediverse.network/pleroma?count=peers\"&gt; আরও! &lt;/a&gt; 
+\n 
+\nআপনার যদি এখনো অ্যাকাউন্ট না থাকে তবে আপনি যে ইনস্ট্যান্সটিতে যোগ দিতে চান সেটির নামটি প্রবেশ করতে এবং সেখানে একটি অ্যাকাউন্ট তৈরি করতে পারেন। 
+\n 
+\nএকটি ইনস্ট্যান্স একটি একক স্থান যেখানে আপনার অ্যাকাউন্ট হোস্ট করা হয়, তবে আপনি সহজেই যোগাযোগ করতে পারেন এবং অন্যান্য ক্ষেত্রে যেমন আপনি একই সাইটে ছিলেন তা অনুসরণ করতে পারেন। 
+\n 
+\nআরো তথ্য &lt;a href=\"https://joinmastodon.org\"&gt; joinmastodon.org &lt;/a&gt; এ পাওয়া যেতে পারে। "<a href="https://fediverse.network/pleroma?count=peers">more!</a>
+        \n\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to
+        join and create an account there.\n\nAn instance is a single place where your account is
+        hosted, but you can easily communicate with and follow folks on other instances as though
+        you were on the same site.
+        \n\nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
+  
+
+</resources>

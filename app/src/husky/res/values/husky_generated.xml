@@ -1,0 +1,64 @@
+<resources>
+  
+    <string name="about_tusky_version">Husky %s</string>
+  
+  
+    <string name="about_powered_by_tusky">Powered by Husky</string>
+  
+  
+    <string name="about_tusky_license">Husky is free and open-source software.
+        It is licensed under the GNU General Public License Version 3.
+        You can view the license here: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+  
+  
+    <string name="about_tusky_account">Husky\'s Profile</string>
+  
+  
+    <string name="restart_emoji">You\'ll need to restart Husky in order to apply these changes</string>
+  
+  
+    <string name="license_description">Husky contains code and assets from the following open source projects:</string>
+  
+
+
+
+  
+    <string name="about_project_site">
+        Project website:\n
+        https://huskyapp.dev
+    </string>
+  
+
+
+  
+    <string name="about_bug_feature_request_site">
+        Bug reports &amp; feature requests:\n
+        https://git.mentality.rip/FWGS/Husky/issues
+    </string>
+  
+
+
+  
+    <string name="action_login">Login with Pleroma</string>
+  
+  
+    <string name="add_account_description">Add new Pleroma Account</string>
+  
+  
+    <string name="warning_scheduling_interval">Pleroma has a minimum scheduling interval of 5 minutes.</string>
+  
+
+
+  
+    <string name="dialog_whats_an_instance">The address or domain of any instance can be entered
+        here, such as shitposter.club, blob.cat, expired.mentality.rip, and
+        <a href="https://fediverse.network/pleroma?count=peers">more!</a>
+        \n\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to
+        join and create an account there.\n\nAn instance is a single place where your account is
+        hosted, but you can easily communicate with and follow folks on other instances as though
+        you were on the same site.
+        \n\nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
+  
+
+</resources>

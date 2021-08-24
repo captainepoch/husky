@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/status_share"
+        android:title="@string/action_share">
+        <menu>
+            <item
+                android:id="@+id/status_share_link"
+                android:title="@string/status_share_link" />
+            <item
+                android:id="@+id/status_share_content"
+                android:title="@string/status_share_content" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/status_copy_link"
+        android:title="@string/action_copy_link" />
+    <item
+        android:id="@+id/status_open_as"
+        android:title="@string/action_open_as" />
+    <item
+        android:id="@+id/status_open_in_web"
+        android:title="@string/action_open_in_web" />
+    <item
+        android:id="@+id/status_mute_conversation"
+        android:title="@string/action_mute_conversation"
+        android:visible="false" />
+    <item
+        android:id="@+id/status_unmute_conversation"
+        android:title="@string/action_unmute_conversation"
+        android:visible="false" />
+    <item
+        android:id="@+id/status_reblog_private"
+        android:title="@string/reblog_private"
+        android:visible="false" />
+    <item
+        android:id="@+id/status_unreblog_private"
+        android:title="@string/unreblog_private"
+        android:visible="false" />
+    <item
+        android:id="@+id/status_delete"
+        android:title="@string/action_delete" />
+</menu>
