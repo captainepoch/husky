@@ -1,0 +1,77 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+release/
+debug/
+/app/libs/
+/app/build/
+
+# Gradle files
+.gradle/
+/build/
+buildSrc/build
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log Files
+*.log
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+# IntelliJ
+*.iml
+/*.iml
+/.idea/assetWizardSettings.xml
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
+/.idea/misc.xml
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/runConfigurations.xml
+/.idea/dictionaries
+/.idea/libraries
+/.idea/modules
+# Android Studio 3 in .gitignore file.
+/.idea/caches
+/.idea/modules.xml
+# Comment next line if keeping position of elements in Navigation Editor is relevant for you
+/.idea/navEditor.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild
+.cxx/
+
+# Version control
+vcs.xml
+
+# lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+lint/reports/
+
+# MacOS useless files
+.DS_Store

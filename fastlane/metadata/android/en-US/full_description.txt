@@ -1,6 +1,0 @@
-Husky is a lightweight and fast client for Pleroma, Mastodon and other social networks that implement Mastodon API.
-It has support for Pleroma-specific extensions like emoji reactions, unlimited attachments, stickers and so on.
-
-Husky is a Free and Open Source software licensed under GNU General Public License v3. It's based on Tusky source code.
-
-Source code: https://git.mentality.rip/FWGS/Husky

@@ -1,5 +1,0 @@
-Husky v1.0.1
-
-This is a hotfix for v1.0 release.
-Changelog:
-* Fixed any image being resized and converted to JPG.

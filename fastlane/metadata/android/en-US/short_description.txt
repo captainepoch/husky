@@ -1,1 +1,0 @@
-Husky is a client for Pleroma and Mastodon social networks
