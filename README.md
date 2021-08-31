@@ -1,37 +1,69 @@
 # Husky
-[![Build Status](https://api.travis-ci.org/FWGS/Husky.svg?branch=develop)](https://travis-ci.org/FWGS/Husky)\
-[![Download F-Droid](https://img.shields.io/badge/download-fdroid-blue)](https://f-droid.org/repository/browse/?fdid=su.xash.husky)\
-[![Download Google Play](https://img.shields.io/badge/download-googleplay-blue)](https://play.google.com/store/apps/details?id=su.xash.husky)\
-[![Download Testing](https://img.shields.io/badge/downloads-testing-green)](https://github.com/FWGS/Husky/releases/tag/continuous)
 
-![icon](https://git.mentality.rip/FWGS/Husky/raw/branch/develop/assets/splash.xcf)
+[![Download F-Droid](https://img.shields.io/badge/Download-F--Droid-blue)][husky_fdroid]
+[![Download Google Play](https://img.shields.io/badge/Download-Play-blue)][husky_playstore]
 
-Husky is a fork of [Tusky](https://github.com/tuskyapp/Tusky) that aimed to support [Pleroma's Mastodon API extensions](https://git.pleroma.social/pleroma/pleroma/blob/develop/docs/API/differences_in_mastoapi_responses.md) and some ideas that I may come up with.
+Husky is a fork of [Tusky][tusky_github] that aimed to support [Pleroma's
+Mastodon API extensions][mastodon_api_extensions] and whatever could add value
+to the application.
 
-Tusky is quote, unquote, `... a beautiful Android client for [Mastodon](https://github.com/tootsuite/mastodon). Mastodon is an ActivityPub federated social network. That means no single entity controls the whole network, rather, like e-mail, volunteers and organisations operate their own independent servers, users from which can all interact with each other seamlessly.`
+# Main changes so far
 
-## Main changes so far
-- Emoji reactions support
-- Removed attachment limits for Pleroma
-- Support for attaching anything on Pleroma
-- Support for changing OAuth application name
-- Markdown support with WYSIWYG editor
-- Support for extended accounts fields, so you can see who is admin or moderator on your instance
-- Subscribing support to annoy you with incoming notification from every post (upstreamed to Tusky)
-- Support for seen notifications to less annoy you
-- "Reply to" feature that allows to jump to replied status, useful for hellthreading ;)
-- Bigger emojis!
-- "Preview" feature on Pleroma
+  - Emoji reactions support.
+  - Removed attachment limits for Pleroma.
+  - Support for attaching anything on Pleroma.
+  - Support for changing OAuth application name.
+  - Markdown support with WYSIWYG editor.
+  - Support for extended accounts fields, so you can see who is admin or
+    moderator.
+    on your instance.
+  - Subscribing support to annoy you with incoming notification from every post.
+    (upstreamed to Tusky).
+  - Support for seen notifications to less annoy you.
+  - "Reply to" feature that allows to jump to replied status, useful for
+    hellthreading.
+  - Bigger emojis!.
+  - "Preview" feature on Pleroma.
 
-### Support
+# Support
 
-If you have any bug reports, feature requests or questions please open an issue or send us a post at [husky@huskyapp.dev](https://huskyapp.dev/users/husky)!
+Please take a look at [Husky doc.][husky_man] to contribute to the project:
 
-For translating Tusky into your language, visit https://weblate.tusky.app.
-For translating Husky, visit https://l10n.mentality.rip.
+  - See [Contributing][husky_man_contributing] to send emails and see the
+    discussion about issues and new stuff in the project.
+  - See [Bug reports][husky_man_bugreport] to report bugs and see TODOs.
 
-### Head of development
+Original tracker with issues is at
+[git.mentality.rip/FWGS/Husky/issues][husky_original_issues]. Issues to fix will
+be taken from there.
 
-This app was developed by [Vavassor@mastodon.social](https://mastodon.social/@Vavassor).
-The Tusky's maintainer is [ConnyDuck@chaos.social](https://chaos.social/@ConnyDuck).
-The fork main developer is [a1batross@expired.mentality.rip](https://expired.mentality.rip/users/a1batross).
+# Acknowledgements
+
+The current maintainer is [captainepoch@stereophonic.space][husky_maintainer].
+The previous maintainer is
+[a1batross@expired.mentality.rip][husky_previous_maintainer].
+
+The original app was developed by
+[Vavassor@mastodon.social][tusky_original_dev].
+Tusky's maintainer is [ConnyDuck@chaos.social][tusky_maintainer].
+
+# License
+
+[GNU GPL v3][copying].
+
+
+[copying]: https://git.sr.ht/~captainepoch/husky/tree/master/item/COPYING
+[husky_fdroid]: https://f-droid.org/repository/browse/?fdid=su.xash.husky
+[husky_maintainer]: https://stereophonic.space/captainepoch
+[husky_man]: https://man.sr.ht/~captainepoch/husky-man/
+[husky_man_bugreport]:
+https://man.sr.ht/~captainepoch/husky-man/contributing.md#bug-reports-and-todos
+[husky_man_contributing]:
+https://man.sr.ht/~captainepoch/husky-man/contributing.md
+[husky_original_issues]: https://git.mentality.rip/FWGS/Husky/issues
+[husky_playstore]: https://play.google.com/store/apps/details?id=su.xash.husky
+[husky_previous_maintainer]: https://expired.mentality.rip/users/a1batross
+[mastodon_api_extensions]: https://docs-develop.pleroma.social/backend/development/API/differences_in_mastoapi_responses/
+[tusky_github]: https://github.com/tuskyapp/Tusky
+[tusky_maintainer]: https://chaos.social/@ConnyDuck
+[tusky_original_dev]: https://mastodon.social/@Vavassor
