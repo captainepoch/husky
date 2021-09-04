@@ -39,6 +39,8 @@ import io.reactivex.plugins.RxJavaPlugins
 import org.conscrypt.Conscrypt
 import java.security.Security
 import javax.inject.Inject
+import timber.log.Timber
+import timber.log.Timber.DebugTree
 
 class TuskyApplication : Application(), HasAndroidInjector {
 
@@ -93,6 +95,8 @@ class TuskyApplication : Application(), HasAndroidInjector {
                         .setWorkerFactory(notificationWorkerFactory)
                         .build()
         )
+
+        Timber.plant(DebugTree())
     }
 
     override fun attachBaseContext(base: Context) {

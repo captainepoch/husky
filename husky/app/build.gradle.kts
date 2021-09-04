@@ -172,7 +172,8 @@ dependencies {
 	implementation(ApplicationLibs.Glide.glideOkhttp)
 	kapt(ApplicationLibs.Glide.glideCompiler)
 
-	implementation(ApplicationLibs.Google.flexBox)
+	implementation(ApplicationLibs.Google.flexbox)
+	implementation(ApplicationLibs.Google.exoplayer)
 	implementation(ApplicationLibs.Google.materialDesign)
 
 	implementation(ApplicationLibs.RxJava.rxAndroid)

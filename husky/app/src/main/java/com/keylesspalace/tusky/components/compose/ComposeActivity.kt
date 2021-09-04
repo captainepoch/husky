@@ -109,7 +109,7 @@ class ComposeActivity : BaseActivity(),
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    
+
     @Inject
     lateinit var eventHub: EventHub
 
@@ -177,12 +177,12 @@ class ComposeActivity : BaseActivity(),
 
         val composeOptions = intent.getParcelableExtra<ComposeOptions?>(COMPOSE_OPTIONS_EXTRA)
 
-        if (!composeOptions?.formattingSyntax.isNullOrEmpty()) {
-            suggestFormattingSyntax = composeOptions?.formattingSyntax!!
+        suggestFormattingSyntax = if (!composeOptions?.formattingSyntax.isNullOrEmpty()) {
+            composeOptions?.formattingSyntax!!
         } else {
-            suggestFormattingSyntax = activeAccount.defaultFormattingSyntax
+            activeAccount.defaultFormattingSyntax
         }
-        
+
         viewModel.setup(composeOptions)
         setupReplyViews(composeOptions?.replyingStatusAuthor, composeOptions?.replyingStatusContent)
         val tootText = composeOptions?.tootText
@@ -210,7 +210,7 @@ class ComposeActivity : BaseActivity(),
                     }
                 }
     }
-    
+
     private fun applyShareIntent(intent: Intent, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             /* Get incoming images being sent through a share action from another app. Only do this
@@ -314,7 +314,7 @@ class ComposeActivity : BaseActivity(),
             composeEditField.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
     }
-    
+
     private fun reenableAttachments() {
         // in case of we already had disabled attachments
         // but got information about extension later
@@ -336,20 +336,20 @@ class ComposeActivity : BaseActivity(),
                 if(instanceData.supportsMarkdown) {
                     supportedFormattingSyntax.add("text/markdown")
                 }
-                
+
                 if(instanceData.supportsBBcode) {
                     supportedFormattingSyntax.add("text/bbcode")
                 }
-                
+
                 if(instanceData.supportsHTML) {
                     supportedFormattingSyntax.add("text/html")
                 }
-                
+
                 if(supportedFormattingSyntax.size != 0) {
                     composeFormattingSyntax.visible(true)
-                    
+
                     val supportsPrefferedSyntax = supportedFormattingSyntax.contains(viewModel.formattingSyntax.value!!)
-                                        
+
                     if(!supportsPrefferedSyntax) {
                         suggestFormattingSyntax = if(supportedFormattingSyntax.contains(activeAccount.defaultFormattingSyntax))
                             activeAccount.defaultFormattingSyntax
@@ -358,7 +358,7 @@ class ComposeActivity : BaseActivity(),
                         viewModel.formattingSyntax.value = ""
                     }
                 }
-                
+
                 if(instanceData.software == "pleroma") {
                     composePreviewButton.visibility = View.VISIBLE
                     reenableAttachments()
@@ -528,37 +528,37 @@ class ComposeActivity : BaseActivity(),
         // Set the cursor after the inserted text
         composeEditField.setSelection(start + text.length)
     }
-    
+
     private fun enableFormattingSyntaxButton(syntax: String, enable: Boolean) {
         val stringId = when(syntax) {
             "text/html" -> R.string.action_html
             "text/bbcode" -> R.string.action_bbcode
             else -> R.string.action_markdown
         }
-                
+
         val actionStringId = if(enable) R.string.action_disable_formatting_syntax else R.string.action_enable_formatting_syntax
         val tooltipText = getString(actionStringId).format(stringId)
-     
+
         composeFormattingSyntax.contentDescription = tooltipText
-        
+
         @ColorInt val color = ThemeUtils.getColor(this, if(enable) R.attr.colorPrimary else android.R.attr.textColorTertiary);
         composeFormattingSyntax.drawable.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
-        
+
         enableMarkdownWYSIWYGButtons(enable);
     }
-    
+
     private fun setIconForSyntax(syntax: String, enable: Boolean) {
         val drawableId = when(syntax) {
             "text/html" -> R.drawable.ic_html_24dp
             "text/bbcode" -> R.drawable.ic_bbcode_24dp
             else -> R.drawable.ic_markdown
         }
-        
+
         suggestFormattingSyntax = if(drawableId == R.drawable.ic_markdown) "text/markdown" else syntax
         composeFormattingSyntax.setImageResource(drawableId)
         enableFormattingSyntaxButton(syntax, enable)
     }
-        
+
     private fun toggleFormattingMode() {
         if(viewModel.formattingSyntax.value!! == suggestFormattingSyntax) {
             viewModel.formattingSyntax.value = ""
@@ -566,7 +566,7 @@ class ComposeActivity : BaseActivity(),
             viewModel.formattingSyntax.value = suggestFormattingSyntax
         }
     }
-    
+
     private fun selectFormattingSyntax() : Boolean {
         val menu = PopupMenu(this, composeFormattingSyntax)
         val plaintextId = 0
@@ -582,7 +582,7 @@ class ComposeActivity : BaseActivity(),
 
         if(viewModel.instanceMetadata.value?.supportsHTML ?: false)
             menu.menu.add(0, htmlId, 0, R.string.action_html)
-        
+
         menu.setOnMenuItemClickListener { menuItem ->
             val choose = when (menuItem.itemId) {
                 markdownId -> "text/markdown"
@@ -595,10 +595,10 @@ class ComposeActivity : BaseActivity(),
             true
         }
         menu.show()
-        
+
         return true
     }
-    
+
     private fun enableMarkdownWYSIWYGButtons(visible: Boolean) {
         val visibility = if(visible) View.VISIBLE else View.GONE
         codeButton.visibility = visibility
@@ -656,7 +656,7 @@ class ComposeActivity : BaseActivity(),
     private fun hashButtonClicked() {
         prependSelectedWordsWith("#")
     }
-    
+
     private fun codeButtonClicked() {
         when(viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addCode(composeEditField)
@@ -664,7 +664,7 @@ class ComposeActivity : BaseActivity(),
             "text/html" -> HTMLEdit.addCode(composeEditField)
         }
     }
-    
+
     private fun linkButtonClicked() {
         when(viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addLink(composeEditField)
@@ -672,7 +672,7 @@ class ComposeActivity : BaseActivity(),
             "text/html" -> HTMLEdit.addLink(composeEditField)
         }
     }
-    
+
     private fun strikethroughButtonClicked() {
         when(viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addStrikeThrough(composeEditField)
@@ -680,7 +680,7 @@ class ComposeActivity : BaseActivity(),
             "text/html" -> HTMLEdit.addStrikeThrough(composeEditField)
         }
     }
-    
+
     private fun italicButtonClicked() {
         when(viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addItalic(composeEditField)
@@ -688,7 +688,7 @@ class ComposeActivity : BaseActivity(),
             "text/html" -> HTMLEdit.addItalic(composeEditField)
         }
     }
-    
+
     private fun boldButtonClicked() {
         when(viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addBold(composeEditField)
@@ -945,14 +945,14 @@ class ComposeActivity : BaseActivity(),
         if(preview && previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
-        
+
         if (verifyScheduledTime()) {
             sendStatus(preview)
         } else {
             showScheduleView()
         }
     }
-    
+
     private fun onStatusPreviewReady(status: Status) {
         enableButtons(true)
         previewView.setupWithStatus(status)
@@ -1060,7 +1060,6 @@ class ComposeActivity : BaseActivity(),
 
     private fun initiateMediaPicking() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
 
         if(!viewModel.hasNoAttachmentLimits) {
             val mimeTypes = arrayOf("image/*", "video/*", "audio/*")
@@ -1068,6 +1067,7 @@ class ComposeActivity : BaseActivity(),
         }
         intent.type = "*/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
         startActivityForResult(intent, MEDIA_PICK_RESULT)
     }
 
