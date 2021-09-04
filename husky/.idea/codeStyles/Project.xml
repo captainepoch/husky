@@ -1,11 +1,5 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <option name="OTHER_INDENT_OPTIONS">
-      <value>
-        <option name="USE_TAB_CHARACTER" value="true" />
-        <option name="SMART_TABS" value="true" />
-      </value>
-    </option>
     <option name="LINE_SEPARATOR" value="&#10;" />
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
     <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
@@ -91,7 +85,6 @@
       <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
@@ -104,13 +97,11 @@
       <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_SYNCHRONIZED_PARENTHESES" value="false" />
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="HTML">
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
@@ -123,7 +114,6 @@
       <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_SYNCHRONIZED_PARENTHESES" value="false" />
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
@@ -131,7 +121,6 @@
       <option name="SPACE_AFTER_COMMA" value="false" />
       <indentOptions>
         <option name="INDENT_SIZE" value="4" />
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
@@ -142,7 +131,6 @@
       <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
@@ -155,7 +143,6 @@
     <codeStyleSettings language="XML">
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
       <arrangement>
@@ -273,7 +260,6 @@
       <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
       <indentOptions>
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />
       </indentOptions>
     </codeStyleSettings>
