@@ -21,8 +21,8 @@ object DefaultConfig {
 	const val applicationID = "su.xash.husky"
 	const val minSdk = 23
 	const val targetSdk = 30
-	const val versionCodeRel = 168
-	const val versionNameRel = "1.0.1"
+	const val versionCodeRel = 169
+	const val versionNameRel = "1.0.2"
 
 	val javaVersion = JavaVersion.VERSION_1_8
 
@@ -47,7 +47,7 @@ object BuildTasks {
 
 object GradlePlugins {
 	object Versions {
-		const val gradle = "7.0.1"
+		const val gradle = "7.0.2"
 		const val gradleVersions = "0.38.0"
 	}
 
