@@ -10,7 +10,7 @@ object ApplicationLibs {
 		const val conscryptAndroid = "2.5.1"
 		const val constraintlayout = "2.1.0"
 		const val coreKtx = "1.3.2"
-		const val dagger = "2.30.1"
+		const val dagger = "2.38.1"
 		const val emoji = "1.1.0"
 		const val exifInterface = "1.3.2"
 		const val exoplayer = "2.15.0"

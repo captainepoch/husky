@@ -56,7 +56,7 @@ class LoginActivity : BaseActivity(), Injectable {
             val host = BuildConfig.APPLICATION_ID
             return "$scheme://$host/"
         }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,7 +69,7 @@ class LoginActivity : BaseActivity(), Injectable {
             }
             appNameEditText.setText(getString(R.string.app_name))
             appNameEditText.setSelection(getString(R.string.app_name).length)
-            
+
             websiteEditText.setText(getString(R.string.tusky_website))
             websiteEditText.setSelection(getString(R.string.tusky_website).length)
         }
@@ -124,7 +124,7 @@ class LoginActivity : BaseActivity(), Injectable {
         }
         return super.onOptionsItemSelected(item)
     }
-    
+
     private fun onSettingsButtonClick() {
         if(extendedSettings.visibility == View.GONE) {
             extendedSettings.visibility = View.VISIBLE
@@ -183,14 +183,14 @@ class LoginActivity : BaseActivity(), Injectable {
                 Log.e(TAG, Log.getStackTraceString(t))
             }
         }
-        
+
         var appname = getString(R.string.app_name)
         var website = getString(R.string.tusky_website)
         if(extendedSettings.visibility == View.VISIBLE) {
             appname = appNameEditText.text.toString()
             website = websiteEditText.text.toString()
         }
-        
+
         mastodonApi
                 .authenticateApp(domain, appname, oauthRedirectUri,
                         OAUTH_SCOPES, website)

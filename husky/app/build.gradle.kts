@@ -176,6 +176,9 @@ dependencies {
 	implementation(ApplicationLibs.Google.exoplayer)
 	implementation(ApplicationLibs.Google.materialDesign)
 
+	implementation(ApplicationLibs.Kotlin.stdlib)
+	implementation(ApplicationLibs.Kotlin.stdlibJdk)
+
 	implementation(ApplicationLibs.RxJava.rxAndroid)
 	implementation(ApplicationLibs.RxJava.rxJava)
 	implementation(ApplicationLibs.RxJava.rxKotlin)
@@ -186,8 +189,6 @@ dependencies {
 	implementation(ApplicationLibs.Square.logginInterceptor)
 	implementation(ApplicationLibs.Square.okhttp)
 	implementation(ApplicationLibs.Square.okhttpBrotli)
-
-	implementation(ApplicationLibs.Kotlin.stdlibJdk)
 
 	implementation(ApplicationLibs.androidImageCropper)
 	implementation(ApplicationLibs.autodispose)
