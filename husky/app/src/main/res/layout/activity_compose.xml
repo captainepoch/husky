@@ -21,7 +21,7 @@
             android:padding="8dp"
             tools:ignore="ContentDescription" />
         <!--content description will be set in code -->
-      
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/atButton"
             style="@style/TuskyImageButton"
@@ -30,10 +30,9 @@
             android:layout_gravity="end"
             android:padding="8dp"
             android:text="@string/at_symbol"
-            android:textStyle="bold"
             android:textColor="?android:textColorTertiary"
             android:textSize="?attr/status_text_large"
-            />
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/hashButton"
@@ -43,11 +42,10 @@
             android:layout_gravity="end"
             android:padding="8dp"
             android:text="@string/hash_symbol"
-            android:textStyle="bold"
             android:textColor="?android:textColorTertiary"
             android:textSize="?attr/status_text_large"
-            />
-        
+            android:textStyle="bold" />
+
         <ImageButton
             android:id="@+id/codeButton"
             style="@style/TuskyImageButton"
@@ -55,10 +53,9 @@
             android:layout_height="40dp"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:visibility="gone"
             android:src="@drawable/md_code"
-            />
-        
+            android:visibility="gone" />
+
         <ImageButton
             android:id="@+id/linkButton"
             style="@style/TuskyImageButton"
@@ -66,10 +63,9 @@
             android:layout_height="40dp"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:visibility="gone"
             android:src="@drawable/md_link"
-            />
-        
+            android:visibility="gone" />
+
         <ImageButton
             android:id="@+id/strikethroughButton"
             style="@style/TuskyImageButton"
@@ -77,10 +73,9 @@
             android:layout_height="40dp"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:visibility="gone"
             android:src="@drawable/md_strikethrough"
-            />
-        
+            android:visibility="gone" />
+
         <ImageButton
             android:id="@+id/italicButton"
             style="@style/TuskyImageButton"
@@ -88,10 +83,9 @@
             android:layout_height="40dp"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:visibility="gone"
             android:src="@drawable/md_italic"
-            />
-        
+            android:visibility="gone" />
+
         <ImageButton
             android:id="@+id/boldButton"
             style="@style/TuskyImageButton"
@@ -99,9 +93,8 @@
             android:layout_height="40dp"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:visibility="gone"
             android:src="@drawable/md_bold"
-            />
+            android:visibility="gone" />
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.core.widget.NestedScrollView
@@ -305,7 +298,7 @@
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
-    
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/previewScroll"
         android:layout_width="match_parent"
@@ -314,16 +307,16 @@
         android:elevation="12dp"
         android:paddingBottom="@dimen/compose_activity_bottom_bar_height"
         app:behavior_hideable="true"
-        app:behavior_skipCollapsed="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        >
+        app:behavior_skipCollapsed="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
         <com.keylesspalace.tusky.view.StatusView
             android:id="@+id/previewView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSurface"
-            />
+            android:background="?attr/colorSurface" />
+
     </androidx.core.widget.NestedScrollView>
 
     <RelativeLayout
@@ -346,7 +339,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/composeCharactersLeftView"
             android:requiresFadingEdge="horizontal">
-            
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -448,35 +441,35 @@
             android:id="@+id/composeCharactersLeftView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/composePreviewButton"
             android:textColor="?android:textColorTertiary"
             android:textSize="?attr/status_text_medium"
-            android:layout_toLeftOf="@+id/composePreviewButton"
-            android:layout_centerVertical="true"
             android:textStyle="bold"
             tools:text="500" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/composePreviewButton"
             style="@style/TuskyButton"
-            android:padding="4dp"
             android:layout_width="32dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            app:icon="@drawable/ic_preview_24dp"
+            android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:visibility="gone"
             android:layout_toLeftOf="@+id/composeTootButton"
-            android:layout_centerVertical="true"/>
+            android:gravity="center"
+            android:padding="4dp"
+            android:visibility="gone"
+            app:icon="@drawable/ic_preview_24dp" />
 
         <com.keylesspalace.tusky.components.compose.view.TootButton
             android:id="@+id/composeTootButton"
             style="@style/TuskyButton"
             android:layout_width="@dimen/toot_button_width"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textSize="?attr/status_text_medium"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:layout_marginStart="4dp"
+            android:textSize="?attr/status_text_medium" />
 
     </RelativeLayout>
 
