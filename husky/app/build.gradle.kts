@@ -158,6 +158,7 @@ dependencies {
 	implementation(ApplicationLibs.AndroidX.swipeRefreshLayout)
 	implementation(ApplicationLibs.AndroidX.viewpager2)
 	implementation(ApplicationLibs.AndroidX.workRuntime)
+	implementation(ApplicationLibs.AndroidX.Lifecycle.commonJava)
 	implementation(ApplicationLibs.AndroidX.Lifecycle.liveDataKtx)
 	implementation(ApplicationLibs.AndroidX.Lifecycle.reactiveStreamsKtx)
 	implementation(ApplicationLibs.AndroidX.Lifecycle.viewmodelKtx)

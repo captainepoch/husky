@@ -38,7 +38,7 @@ object ApplicationLibs {
 		const val simplestackExt = "2.2.2"
 		const val sparkButton = "4.1.0"
 		const val swipeRefreshLayout = "1.1.0"
-		const val timber = "4.7.1"
+		const val timber = "5.0.1"
 		const val viewpager2 = "1.0.0"
 		const val workRuntime = "2.4.0"
 	}
@@ -69,6 +69,7 @@ object ApplicationLibs {
 		const val workRuntime = "androidx.work:work-runtime:${Versions.workRuntime}"
 
 		object Lifecycle {
+			const val commonJava = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
 			const val liveDataKtx =
 				"androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
 			const val reactiveStreamsKtx =
