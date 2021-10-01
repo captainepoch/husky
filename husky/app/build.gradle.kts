@@ -1,219 +1,240 @@
 plugins {
-	id("com.android.application")
+    id("com.android.application")
 
-	kotlin("android")
-	id("kotlin-android-extensions")
-	kotlin("kapt")
+    kotlin("android")
+    id("kotlin-android-extensions")
+    kotlin("kapt")
 
-	//id("kotlin-parcelize")
-	id("com.github.ben-manes.versions")
+    //id("kotlin-parcelize")
+    id("com.github.ben-manes.versions")
 }
 
 android {
-	compileSdk = AndroidSDK.compileSdk
-	buildToolsVersion = AndroidSDK.buildTools
+    compileSdk = AndroidSDK.compileSdk
+    buildToolsVersion = AndroidSDK.buildTools
 
-	defaultConfig {
-		applicationId = DefaultConfig.applicationID
+    defaultConfig {
+        applicationId = DefaultConfig.applicationID
 
-		minSdk = DefaultConfig.minSdk
-		targetSdk = DefaultConfig.targetSdk
+        minSdk = DefaultConfig.minSdk
+        targetSdk = DefaultConfig.targetSdk
 
-		versionCode = DefaultConfig.versionCodeRel
-		versionName = DefaultConfig.versionNameRel
+        versionCode = DefaultConfig.versionCodeRel
+        versionName = DefaultConfig.versionNameRel
 
-		testInstrumentationRunner = DefaultConfig.instrumentationRunner
+        testInstrumentationRunner = DefaultConfig.instrumentationRunner
 
-		vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true
 
-		kapt {
-			arguments {
-				arg("room.schemaLocation", "$projectDir/schemas")
-				arg("room.incremental", true)
-			}
-		}
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+                arg("room.incremental", true)
+            }
+        }
 
-		// TODO: remove, just for compiling
-		resValue("string", "app_name", "\"${CustomHuskyBuild.applicationName}\"")
-		buildConfigField("String", "APPLICATION_NAME", "\"${CustomHuskyBuild.applicationName}\"")
-		buildConfigField("String", "CUSTOM_LOGO_URL", "\"${CustomHuskyBuild.customLogo}\"")
-		buildConfigField("String", "CUSTOM_INSTANCE", "\"${CustomHuskyBuild.customInstance}\"")
-		buildConfigField("String", "SUPPORT_ACCOUNT_URL", "\"${CustomHuskyBuild.supportAccountUrl}\"")
-	}
+        // TODO: remove, just for compiling
+        buildConfigField(
+            "String", "APPLICATION_NAME",
+            "\"${CustomHuskyBuild.applicationName}\""
+        )
+        buildConfigField(
+            "String", "CUSTOM_LOGO_URL",
+            "\"${CustomHuskyBuild.customLogo}\""
+        )
+        buildConfigField(
+            "String", "CUSTOM_INSTANCE",
+            "\"${CustomHuskyBuild.customInstance}\""
+        )
+        buildConfigField(
+            "String", "SUPPORT_ACCOUNT_URL",
+            "\"${CustomHuskyBuild.supportAccountUrl}\""
+        )
+    }
 
-	buildTypes {
-		getByName(BuildTypes.debug) {
-			isDebuggable = true
-			isMinifyEnabled = false
-			isShrinkResources = false
-		}
+    buildTypes {
+        getByName(BuildTypes.debug) {
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
 
-		getByName(BuildTypes.release) {
-			isDebuggable = false
-			isMinifyEnabled = false
-			isShrinkResources = false
+        getByName(BuildTypes.release) {
+            isDebuggable = false
+            isMinifyEnabled = false
+            isShrinkResources = false
 
-			proguardFiles(
-				getDefaultProguardFile(ProguardFile.defaultFile),
-				ProguardFile.defaultRules
-			)
-		}
+            proguardFiles(
+                getDefaultProguardFile(ProguardFile.defaultFile),
+                ProguardFile.defaultRules
+            )
+        }
 
-		flavorDimensions.addAll(
-			listOf(
-				"husky",
-				"color"
-			)
-		)
-		productFlavors {
-			create("husky") {
-				dimension = "husky"
-			}
+        flavorDimensions.addAll(
+            listOf(
+                Flavors.Dimensions.husky,
+                Flavors.Dimensions.release
+            )
+        )
+        productFlavors {
+            create(Flavors.husky) {
+                dimension = Flavors.Dimensions.husky
+            }
 
-			create("blue") {
-				dimension = "color"
-			}
+            create(Flavors.beta) {
+                dimension = Flavors.Dimensions.release
 
-			create("green") {
-				dimension = "color"
-				applicationIdSuffix = ".test"
-				versionNameSuffix = "-beta"
-			}
-		}
+                versionCode = BetaConfig.versionCodeBeta
+                versionName = BetaConfig.versionNameBeta
 
-		lint {
-			// isAbortOnError = true
-			disable("MissingTranslation")
-			disable("ExtraTranslation")
-			disable("AppCompatCustomView")
-			disable("UseRequireInsteadOfGet")
-		}
+                applicationIdSuffix = BetaConfig.betaSufix
+                versionNameSuffix = "-${BetaConfig.betaSufix}${BetaConfig.betaSufixVersion}"
 
-		compileOptions {
-			sourceCompatibility = DefaultConfig.javaVersion
-			targetCompatibility = DefaultConfig.javaVersion
-		}
+                buildConfigField(
+                    "String",
+                    "APPLICATION_NAME",
+                    "\"${CustomHuskyBuild.applicationName} Beta\""
+                )
+            }
 
-		kotlinOptions {
-			jvmTarget = DefaultConfig.javaVersion.toString()
-		}
+            create(Flavors.stable) {
+                dimension = Flavors.Dimensions.release
+            }
+        }
 
-		buildFeatures {
-			viewBinding = true
-		}
+        lint {
+            // isAbortOnError = true
+            disable("MissingTranslation")
+            disable("ExtraTranslation")
+            disable("AppCompatCustomView")
+            disable("UseRequireInsteadOfGet")
+        }
 
-		// TODO: remove this, only for compiling
-		androidExtensions {
-			isExperimental = true
-		}
+        compileOptions {
+            sourceCompatibility = DefaultConfig.javaVersion
+            targetCompatibility = DefaultConfig.javaVersion
+        }
 
-		testOptions {
-			unitTests {
-				isReturnDefaultValues = true
-				isIncludeAndroidResources = true
-			}
-		}
+        kotlinOptions {
+            jvmTarget = DefaultConfig.javaVersion.toString()
+        }
 
-		sourceSets {
-			getByName("androidTest").assets.srcDirs("$projectDir/schemas")
-		}
+        buildFeatures {
+            viewBinding = true
+        }
 
-		packagingOptions {
-			resources.excludes.addAll(
-				listOf(
-					"LICENSE_OFL",
-					"LICENSE_UNICODE"
-				)
-			)
-		}
+        // TODO: remove this, only for compiling
+        androidExtensions {
+            isExperimental = true
+        }
 
-		bundle {
-			language {
-				enableSplit = true
-			}
-		}
-	}
+        testOptions {
+            unitTests {
+                isReturnDefaultValues = true
+                isIncludeAndroidResources = true
+            }
+        }
+
+        sourceSets {
+            getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+        }
+
+        packagingOptions {
+            resources.excludes.addAll(
+                listOf(
+                    "LICENSE_OFL",
+                    "LICENSE_UNICODE"
+                )
+            )
+        }
+
+        bundle {
+            language {
+                enableSplit = true
+            }
+        }
+    }
 }
 
 dependencies {
-	implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 
-	implementation(ApplicationLibs.AndroidX.appCompat)
-	implementation(ApplicationLibs.AndroidX.browser)
-	implementation(ApplicationLibs.AndroidX.cardView)
-	implementation(ApplicationLibs.AndroidX.constraintLayout)
-	implementation(ApplicationLibs.AndroidX.coreKtx)
-	implementation(ApplicationLibs.AndroidX.emoji)
-	implementation(ApplicationLibs.AndroidX.emojiAppCompat)
-	implementation(ApplicationLibs.AndroidX.emojiBundled)
-	implementation(ApplicationLibs.AndroidX.exifInterface)
-	implementation(ApplicationLibs.AndroidX.fragmentKtx)
-	implementation(ApplicationLibs.AndroidX.pagingRuntimeKtx)
-	implementation(ApplicationLibs.AndroidX.preferenceKtx)
-	implementation(ApplicationLibs.AndroidX.recyclerView)
-	kapt(ApplicationLibs.AndroidX.roomCompiler)
-	implementation(ApplicationLibs.AndroidX.roomRuntime)
-	implementation(ApplicationLibs.AndroidX.roomRxJava)
-	implementation(ApplicationLibs.AndroidX.shareTarget)
-	implementation(ApplicationLibs.AndroidX.swipeRefreshLayout)
-	implementation(ApplicationLibs.AndroidX.viewpager2)
-	implementation(ApplicationLibs.AndroidX.workRuntime)
-	implementation(ApplicationLibs.AndroidX.Lifecycle.commonJava)
-	implementation(ApplicationLibs.AndroidX.Lifecycle.liveDataKtx)
-	implementation(ApplicationLibs.AndroidX.Lifecycle.reactiveStreamsKtx)
-	implementation(ApplicationLibs.AndroidX.Lifecycle.viewmodelKtx)
+    implementation(ApplicationLibs.AndroidX.appCompat)
+    implementation(ApplicationLibs.AndroidX.browser)
+    implementation(ApplicationLibs.AndroidX.cardView)
+    implementation(ApplicationLibs.AndroidX.constraintLayout)
+    implementation(ApplicationLibs.AndroidX.coreKtx)
+    implementation(ApplicationLibs.AndroidX.emoji)
+    implementation(ApplicationLibs.AndroidX.emojiAppCompat)
+    implementation(ApplicationLibs.AndroidX.emojiBundled)
+    implementation(ApplicationLibs.AndroidX.exifInterface)
+    implementation(ApplicationLibs.AndroidX.fragmentKtx)
+    implementation(ApplicationLibs.AndroidX.pagingRuntimeKtx)
+    implementation(ApplicationLibs.AndroidX.preferenceKtx)
+    implementation(ApplicationLibs.AndroidX.recyclerView)
+    kapt(ApplicationLibs.AndroidX.roomCompiler)
+    implementation(ApplicationLibs.AndroidX.roomRuntime)
+    implementation(ApplicationLibs.AndroidX.roomRxJava)
+    implementation(ApplicationLibs.AndroidX.shareTarget)
+    implementation(ApplicationLibs.AndroidX.swipeRefreshLayout)
+    implementation(ApplicationLibs.AndroidX.viewpager2)
+    implementation(ApplicationLibs.AndroidX.workRuntime)
+    implementation(ApplicationLibs.AndroidX.Lifecycle.commonJava)
+    implementation(ApplicationLibs.AndroidX.Lifecycle.liveDataKtx)
+    implementation(ApplicationLibs.AndroidX.Lifecycle.reactiveStreamsKtx)
+    implementation(ApplicationLibs.AndroidX.Lifecycle.viewmodelKtx)
 
-	implementation(ApplicationLibs.Dagger.dagger)
-	implementation(ApplicationLibs.Dagger.daggerAndroid)
-	kapt(ApplicationLibs.Dagger.daggerCompiler)
-	kapt(ApplicationLibs.Dagger.daggerProcessor)
-	implementation(ApplicationLibs.Dagger.daggerSupport)
+    implementation(ApplicationLibs.Dagger.dagger)
+    implementation(ApplicationLibs.Dagger.daggerAndroid)
+    kapt(ApplicationLibs.Dagger.daggerCompiler)
+    kapt(ApplicationLibs.Dagger.daggerProcessor)
+    implementation(ApplicationLibs.Dagger.daggerSupport)
 
-	implementation(ApplicationLibs.Glide.glide)
-	implementation(ApplicationLibs.Glide.glideOkhttp)
-	kapt(ApplicationLibs.Glide.glideCompiler)
+    implementation(ApplicationLibs.Glide.glide)
+    implementation(ApplicationLibs.Glide.glideOkhttp)
+    kapt(ApplicationLibs.Glide.glideCompiler)
 
-	implementation(ApplicationLibs.Google.flexbox)
-	implementation(ApplicationLibs.Google.exoplayer)
-	implementation(ApplicationLibs.Google.materialDesign)
+    implementation(ApplicationLibs.Google.flexbox)
+    implementation(ApplicationLibs.Google.exoplayer)
+    implementation(ApplicationLibs.Google.materialDesign)
 
-	implementation(ApplicationLibs.Kotlin.stdlib)
-	implementation(ApplicationLibs.Kotlin.stdlibJdk)
+    implementation(ApplicationLibs.Kotlin.stdlib)
+    implementation(ApplicationLibs.Kotlin.stdlibJdk)
 
-	implementation(ApplicationLibs.RxJava.rxAndroid)
-	implementation(ApplicationLibs.RxJava.rxJava)
-	implementation(ApplicationLibs.RxJava.rxKotlin)
+    implementation(ApplicationLibs.RxJava.rxAndroid)
+    implementation(ApplicationLibs.RxJava.rxJava)
+    implementation(ApplicationLibs.RxJava.rxKotlin)
 
-	implementation(ApplicationLibs.Square.retrofit)
-	implementation(ApplicationLibs.Square.retrofitAdapterRxJ2)
-	implementation(ApplicationLibs.Square.retrofitConvGson)
-	implementation(ApplicationLibs.Square.logginInterceptor)
-	implementation(ApplicationLibs.Square.okhttp)
-	implementation(ApplicationLibs.Square.okhttpBrotli)
+    implementation(ApplicationLibs.Square.retrofit)
+    implementation(ApplicationLibs.Square.retrofitAdapterRxJ2)
+    implementation(ApplicationLibs.Square.retrofitConvGson)
+    implementation(ApplicationLibs.Square.logginInterceptor)
+    implementation(ApplicationLibs.Square.okhttp)
+    implementation(ApplicationLibs.Square.okhttpBrotli)
 
-	implementation(ApplicationLibs.androidImageCropper)
-	implementation(ApplicationLibs.autodispose)
-	implementation(ApplicationLibs.autodisposeAndroidArchComp)
-	implementation(ApplicationLibs.bigImageViewer)
-	implementation(ApplicationLibs.conscryptAndroid)
-	implementation(ApplicationLibs.filemojiCompat)
-	implementation(ApplicationLibs.glideImage)
-	implementation(ApplicationLibs.glideImageViewFactory)
-	implementation(ApplicationLibs.markdownEdit)
-	implementation(ApplicationLibs.materialDrawer)
-	implementation(ApplicationLibs.materialDrawerIconics)
-	implementation(ApplicationLibs.materialDrawerTypeface)
-	implementation(ApplicationLibs.filemojiCompat)
-	implementation(ApplicationLibs.sparkButton)
-	implementation(ApplicationLibs.timber)
+    implementation(ApplicationLibs.androidImageCropper)
+    implementation(ApplicationLibs.autodispose)
+    implementation(ApplicationLibs.autodisposeAndroidArchComp)
+    implementation(ApplicationLibs.bigImageViewer)
+    implementation(ApplicationLibs.conscryptAndroid)
+    implementation(ApplicationLibs.filemojiCompat)
+    implementation(ApplicationLibs.glideImage)
+    implementation(ApplicationLibs.glideImageViewFactory)
+    implementation(ApplicationLibs.markdownEdit)
+    implementation(ApplicationLibs.materialDrawer)
+    implementation(ApplicationLibs.materialDrawerIconics)
+    implementation(ApplicationLibs.materialDrawerTypeface)
+    implementation(ApplicationLibs.filemojiCompat)
+    implementation(ApplicationLibs.sparkButton)
+    implementation(ApplicationLibs.timber)
 
-	testImplementation(TestLibs.extJunit)
-	testImplementation(TestLibs.junit)
-	testImplementation(TestLibs.mockitoInline)
-	testImplementation(TestLibs.mockitoKotlin)
-	testImplementation(TestLibs.roboelectric)
+    testImplementation(TestLibs.extJunit)
+    testImplementation(TestLibs.junit)
+    testImplementation(TestLibs.mockitoInline)
+    testImplementation(TestLibs.mockitoKotlin)
+    testImplementation(TestLibs.roboelectric)
 
-	androidTestImplementation(TestLibs.espresso)
-	androidTestImplementation(TestLibs.junit)
-	androidTestImplementation(TestLibs.roomTesting)
+    androidTestImplementation(TestLibs.espresso)
+    androidTestImplementation(TestLibs.junit)
+    androidTestImplementation(TestLibs.roomTesting)
 }
