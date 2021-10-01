@@ -44,6 +44,7 @@ import com.keylesspalace.tusky.util.visible
 import kotlinx.android.synthetic.main.activity_view_media.toolbar
 import kotlinx.android.synthetic.main.fragment_view_video.mediaDescription
 import kotlinx.android.synthetic.main.fragment_view_video.progressBar
+import kotlinx.android.synthetic.main.fragment_view_video.videoControls
 import kotlinx.android.synthetic.main.fragment_view_video.videoView
 import timber.log.Timber
 
@@ -141,7 +142,8 @@ class ViewVideoFragment : ViewMediaFragment() {
                 player.prepare()
             }
 
-        videoView.requestFocus()
+        videoControls.player = videoView.player
+        //videoView.requestFocus()
 
         if(arguments!!.getBoolean(ARG_START_POSTPONED_TRANSITION)) {
             mediaActivity.onBringUp()
@@ -237,6 +239,8 @@ class ViewVideoFragment : ViewMediaFragment() {
                 Player.STATE_READY,
                 Player.STATE_ENDED -> {
                     progressBar.visibility = View.GONE
+                    videoControls.show()
+                    videoControls.visibility = View.VISIBLE
                 }
                 else -> {
                 }
