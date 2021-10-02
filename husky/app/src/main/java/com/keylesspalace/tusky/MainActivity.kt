@@ -1,24 +1,28 @@
-/* Copyright 2020 Tusky Contributors
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2021  The Husky Developers
+ * Copyright (C) 2020  Tusky Contributors
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky
 
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -59,10 +63,10 @@ import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.components.preference.PreferencesActivity
 import com.keylesspalace.tusky.components.scheduled.ScheduledTootActivity
 import com.keylesspalace.tusky.components.search.SearchActivity
+import com.keylesspalace.tusky.core.utils.ApplicationUtils
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Account
-import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.fragment.SFragment
 import com.keylesspalace.tusky.interfaces.AccountSelectionListener
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
@@ -88,14 +92,12 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInjector {
+
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
@@ -124,7 +126,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
     private val emojiInitCallback = object : InitCallback() {
         override fun onInitialized() {
-            if (!isDestroyed) {
+            if(!isDestroyed) {
                 updateProfiles()
             }
         }
@@ -134,54 +136,58 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         super.onCreate(savedInstanceState)
 
         val activeAccount = accountManager.activeAccount
-        if (activeAccount == null) {
+        if(activeAccount == null) {
             // will be redirected to LoginActivity by BaseActivity
             return
         }
         var showNotificationTab = false
-        if (intent != null) {
+        if(intent != null) {
             /** there are two possibilities the accountId can be passed to MainActivity:
              * - from our code as long 'account_id'
              * - from share shortcuts as String 'android.intent.extra.shortcut.ID'
              */
             var accountId = intent.getLongExtra(NotificationHelper.ACCOUNT_ID, -1)
-            if (accountId == -1L) {
+            if(accountId == -1L) {
                 val accountIdString = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID)
-                if (accountIdString != null) {
+                if(accountIdString != null) {
                     accountId = accountIdString.toLong()
                 }
             }
             val accountRequested = accountId != -1L
-            if (accountRequested && accountId != activeAccount.id) {
+            if(accountRequested && accountId != activeAccount.id) {
                 accountManager.setActiveAccount(accountId)
             }
-            if (canHandleMimeType(intent.type)) {
+            if(canHandleMimeType(intent.type)) {
                 // Sharing to Tusky from an external app
-                if (accountRequested) {
+                if(accountRequested) {
                     // The correct account is already active
                     forwardShare(intent)
                 } else {
                     // No account was provided, show the chooser
-                    showAccountChooserDialog(getString(R.string.action_share_as), true, object : AccountSelectionListener {
-                        override fun onAccountSelected(account: AccountEntity) {
-                            val requestedId = account.id
-                            if (requestedId == activeAccount.id) {
-                                // The correct account is already active
-                                forwardShare(intent)
-                            } else {
-                                // A different account was requested, restart the activity
-                                intent.putExtra(NotificationHelper.ACCOUNT_ID, requestedId)
-                                changeAccount(requestedId, intent)
+                    showAccountChooserDialog(
+                        getString(R.string.action_share_as),
+                        true,
+                        object : AccountSelectionListener {
+                            override fun onAccountSelected(account: AccountEntity) {
+                                val requestedId = account.id
+                                if(requestedId == activeAccount.id) {
+                                    // The correct account is already active
+                                    forwardShare(intent)
+                                } else {
+                                    // A different account was requested, restart the activity
+                                    intent.putExtra(NotificationHelper.ACCOUNT_ID, requestedId)
+                                    changeAccount(requestedId, intent)
+                                }
                             }
-                        }
-                    })
+                        })
                 }
-            } else if (accountRequested) {
+            } else if(accountRequested) {
                 // user clicked a notification, show notification tab and switch user if necessary
                 showNotificationTab = true
             }
         }
-        window.statusBarColor = Color.TRANSPARENT // don't draw a status bar, the DrawerLayout and the MaterialDrawerLayout have their own
+        window.statusBarColor =
+            Color.TRANSPARENT // don't draw a status bar, the DrawerLayout and the MaterialDrawerLayout have their own
         setContentView(R.layout.activity_main)
         ViewPager2Fix.reduceVelocity(viewPager, 2.0f);
 
@@ -220,25 +226,25 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         setupTabs(showNotificationTab)
 
         eventHub.events
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe { event: Event? ->
-                    when (event) {
-                        is ProfileEditedEvent -> onFetchUserInfoSuccess(event.newProfileData)
-                        is MainTabsChangedEvent -> setupTabs(false)
-                        is PreferenceChangedEvent -> {
-                            when (event.preferenceKey) {
-                                PrefKeys.LIVE_NOTIFICATIONS -> {
-                                    initPullNotifications()
-                                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe { event: Event? ->
+                when(event) {
+                    is ProfileEditedEvent -> onFetchUserInfoSuccess(event.newProfileData)
+                    is MainTabsChangedEvent -> setupTabs(false)
+                    is PreferenceChangedEvent -> {
+                        when(event.preferenceKey) {
+                            PrefKeys.LIVE_NOTIFICATIONS -> {
+                                initPullNotifications()
                             }
                         }
-                        is AnnouncementReadEvent -> {
-                            unreadAnnouncementsCount--
-                            updateAnnouncementsBadge()
-                        }
+                    }
+                    is AnnouncementReadEvent -> {
+                        unreadAnnouncementsCount--
+                        updateAnnouncementsBadge()
                     }
                 }
+            }
 
         Schedulers.io().scheduleDirect {
             // Flush old media that was cached for sharing
@@ -247,7 +253,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     private fun initPullNotifications() {
-        if (NotificationHelper.areNotificationsEnabled(this, accountManager)) {
+        if(NotificationHelper.areNotificationsEnabled(this, accountManager)) {
             if(accountManager.areNotificationsStreamingEnabled()) {
                 StreamingService.startStreaming(this)
                 NotificationHelper.disablePullNotifications(this)
@@ -282,9 +288,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        when (keyCode) {
+        when(keyCode) {
             KeyEvent.KEYCODE_MENU -> {
-                if (mainDrawerLayout.isOpen) {
+                if(mainDrawerLayout.isOpen) {
                     mainDrawerLayout.close()
                 } else {
                     mainDrawerLayout.open()
@@ -296,9 +302,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 return true
             }
         }
-        if (event.isCtrlPressed || event.isShiftPressed) {
+        if(event.isCtrlPressed || event.isShiftPressed) {
             // FIXME: blackberry keyONE raises SHIFT key event even CTRL IS PRESSED
-            when (keyCode) {
+            when(keyCode) {
                 KeyEvent.KEYCODE_N -> {
 
                     // open compose activity by pressing SHIFT + N (or CTRL + N)
@@ -314,9 +320,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     public override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        if (intent != null) {
+        if(intent != null) {
             val statusUrl = intent.getStringExtra(STATUS_URL)
-            if (statusUrl != null) {
+            if(statusUrl != null) {
                 viewUrl(statusUrl, PostLookupFallbackBehavior.DISPLAY_ERROR)
             }
         }
@@ -346,7 +352,12 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         header = AccountHeaderView(this).apply {
             headerBackgroundScaleType = ImageView.ScaleType.CENTER_CROP
             currentHiddenInList = true
-            onAccountHeaderListener = { _: View?, profile: IProfile, current: Boolean -> handleProfileClick(profile, current) }
+            onAccountHeaderListener = { _: View?, profile: IProfile, current: Boolean ->
+                handleProfileClick(
+                    profile,
+                    current
+                )
+            }
             addProfile(ProfileSettingDrawerItem().apply {
                 identifier = DRAWER_ITEM_ADD_ACCOUNT
                 nameRes = R.string.add_account_name
@@ -358,21 +369,31 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             closeDrawerOnProfileListClick = true
         }
 
-        header.accountHeaderBackground.setColorFilter(ContextCompat.getColor(this, R.color.headerBackgroundFilter))
-        header.accountHeaderBackground.setBackgroundColor(ThemeUtils.getColor(this, R.attr.colorBackgroundAccent))
+        header.accountHeaderBackground.setColorFilter(
+            ContextCompat.getColor(
+                this,
+                R.color.headerBackgroundFilter
+            )
+        )
+        header.accountHeaderBackground.setBackgroundColor(
+            ThemeUtils.getColor(
+                this,
+                R.attr.colorBackgroundAccent
+            )
+        )
         val animateAvatars = preferences.getBoolean("animateGifAvatars", false)
 
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable, tag: String?) {
-                if (animateAvatars) {
+                if(animateAvatars) {
                     glide.load(uri)
-                            .placeholder(placeholder)
-                            .into(imageView)
+                        .placeholder(placeholder)
+                        .into(imageView)
                 } else {
                     glide.asBitmap()
-                            .load(uri)
-                            .placeholder(placeholder)
-                            .into(imageView)
+                        .load(uri)
+                        .placeholder(placeholder)
+                        .into(imageView)
                 }
             }
 
@@ -381,7 +402,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             }
 
             override fun placeholder(ctx: Context, tag: String?): Drawable {
-                if (tag == DrawerImageLoader.Tags.PROFILE.name || tag == DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name) {
+                if(tag == DrawerImageLoader.Tags.PROFILE.name || tag == DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name) {
                     return ctx.getDrawable(R.drawable.avatar_default)!!
                 }
 
@@ -392,118 +413,135 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         mainDrawer.apply {
             tintStatusBar = true
             addItems(
-                    primaryDrawerItem {
-                        nameRes = R.string.action_edit_profile
-                        iconicsIcon = GoogleMaterial.Icon.gmd_person
-                        onClick = {
-                            val intent = Intent(context, EditProfileActivity::class.java)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    primaryDrawerItem {
-                        nameRes = R.string.action_view_favourites
-                        isSelectable = false
-                        iconicsIcon = GoogleMaterial.Icon.gmd_star
-                        onClick = {
-                            val intent = StatusListActivity.newFavouritesIntent(context)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    primaryDrawerItem {
-                        nameRes = R.string.action_view_bookmarks
-                        iconicsIcon = GoogleMaterial.Icon.gmd_bookmark
-                        onClick = {
-                            val intent = StatusListActivity.newBookmarksIntent(context)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    primaryDrawerItem {
-                        nameRes = R.string.action_lists
-                        iconicsIcon = GoogleMaterial.Icon.gmd_list
-                        onClick = {
-                            startActivityWithSlideInAnimation(ListsActivity.newIntent(context))
-                        }
-                    },
-                    primaryDrawerItem {
-                        nameRes = R.string.action_access_saved_toot
-                        iconRes = R.drawable.ic_notebook
-                        onClick = {
-                            val intent = DraftsActivity.newIntent(context)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    primaryDrawerItem {
-                        nameRes = R.string.action_access_scheduled_toot
-                        iconRes = R.drawable.ic_access_time
-                        onClick = {
-                            startActivityWithSlideInAnimation(ScheduledTootActivity.newIntent(context))
-                        }
-                    },
-                    primaryDrawerItem {
-                        identifier = DRAWER_ITEM_ANNOUNCEMENTS
-                        nameRes = R.string.title_announcements
-                        iconRes = R.drawable.ic_bullhorn_24dp
-                        onClick = {
-                            startActivityWithSlideInAnimation(AnnouncementsActivity.newIntent(context))
-                        }
-                        badgeStyle = BadgeStyle().apply {
-                            textColor = ColorHolder.fromColor(ThemeUtils.getColor(this@MainActivity, R.attr.colorOnPrimary))
-                            color = ColorHolder.fromColor(ThemeUtils.getColor(this@MainActivity, R.attr.colorPrimary))
-                        }
-                    },
-                    DividerDrawerItem(),
-                    secondaryDrawerItem {
-                        nameRes = R.string.action_view_account_preferences
-                        iconRes = R.drawable.ic_account_settings
-                        onClick = {
-                            val intent = PreferencesActivity.newIntent(context, PreferencesActivity.ACCOUNT_PREFERENCES)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    secondaryDrawerItem {
-                        nameRes = R.string.action_view_preferences
-                        iconicsIcon = GoogleMaterial.Icon.gmd_settings
-                        onClick = {
-                            val intent = PreferencesActivity.newIntent(context, PreferencesActivity.GENERAL_PREFERENCES)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    secondaryDrawerItem {
-                        nameRes = R.string.about_title_activity
-                        iconicsIcon = GoogleMaterial.Icon.gmd_info
-                        onClick = {
-                            val intent = Intent(context, AboutActivity::class.java)
-                            startActivityWithSlideInAnimation(intent)
-                        }
-                    },
-                    secondaryDrawerItem {
-                        nameRes = R.string.action_logout
-                        iconRes = R.drawable.ic_logout
-                        onClick = ::logout
+                primaryDrawerItem {
+                    nameRes = R.string.action_edit_profile
+                    iconicsIcon = GoogleMaterial.Icon.gmd_person
+                    onClick = {
+                        val intent = Intent(context, EditProfileActivity::class.java)
+                        startActivityWithSlideInAnimation(intent)
                     }
+                },
+                primaryDrawerItem {
+                    nameRes = R.string.action_view_favourites
+                    isSelectable = false
+                    iconicsIcon = GoogleMaterial.Icon.gmd_star
+                    onClick = {
+                        val intent = StatusListActivity.newFavouritesIntent(context)
+                        startActivityWithSlideInAnimation(intent)
+                    }
+                },
+                primaryDrawerItem {
+                    nameRes = R.string.action_view_bookmarks
+                    iconicsIcon = GoogleMaterial.Icon.gmd_bookmark
+                    onClick = {
+                        val intent = StatusListActivity.newBookmarksIntent(context)
+                        startActivityWithSlideInAnimation(intent)
+                    }
+                },
+                primaryDrawerItem {
+                    nameRes = R.string.action_lists
+                    iconicsIcon = GoogleMaterial.Icon.gmd_list
+                    onClick = {
+                        startActivityWithSlideInAnimation(ListsActivity.newIntent(context))
+                    }
+                },
+                primaryDrawerItem {
+                    nameRes = R.string.action_access_saved_toot
+                    iconRes = R.drawable.ic_notebook
+                    onClick = {
+                        val intent = DraftsActivity.newIntent(context)
+                        startActivityWithSlideInAnimation(intent)
+                    }
+                },
+                primaryDrawerItem {
+                    nameRes = R.string.action_access_scheduled_toot
+                    iconRes = R.drawable.ic_access_time
+                    onClick = {
+                        startActivityWithSlideInAnimation(ScheduledTootActivity.newIntent(context))
+                    }
+                },
+                primaryDrawerItem {
+                    identifier = DRAWER_ITEM_ANNOUNCEMENTS
+                    nameRes = R.string.title_announcements
+                    iconRes = R.drawable.ic_bullhorn_24dp
+                    onClick = {
+                        startActivityWithSlideInAnimation(AnnouncementsActivity.newIntent(context))
+                    }
+                    badgeStyle = BadgeStyle().apply {
+                        textColor = ColorHolder.fromColor(
+                            ThemeUtils.getColor(
+                                this@MainActivity,
+                                R.attr.colorOnPrimary
+                            )
+                        )
+                        color = ColorHolder.fromColor(
+                            ThemeUtils.getColor(
+                                this@MainActivity,
+                                R.attr.colorPrimary
+                            )
+                        )
+                    }
+                },
+                DividerDrawerItem(),
+                secondaryDrawerItem {
+                    nameRes = R.string.action_view_account_preferences
+                    iconRes = R.drawable.ic_account_settings
+                    onClick = {
+                        val intent = PreferencesActivity.newIntent(
+                            context,
+                            PreferencesActivity.ACCOUNT_PREFERENCES
+                        )
+                        startActivityWithSlideInAnimation(intent)
+                    }
+                },
+                secondaryDrawerItem {
+                    nameRes = R.string.action_view_preferences
+                    iconicsIcon = GoogleMaterial.Icon.gmd_settings
+                    onClick = {
+                        val intent = PreferencesActivity.newIntent(
+                            context,
+                            PreferencesActivity.GENERAL_PREFERENCES
+                        )
+                        startActivityWithSlideInAnimation(intent)
+                    }
+                },
+                secondaryDrawerItem {
+                    nameRes = R.string.about_title_activity
+                    iconicsIcon = GoogleMaterial.Icon.gmd_info
+                    onClick = {
+                        val intent = Intent(context, AboutActivity::class.java)
+                        startActivityWithSlideInAnimation(intent)
+                    }
+                },
+                secondaryDrawerItem {
+                    nameRes = R.string.action_logout
+                    iconRes = R.drawable.ic_logout
+                    onClick = ::logout
+                }
             )
 
-            if (addSearchButton) {
+            if(addSearchButton) {
                 mainDrawer.addItemsAtPosition(4,
-                        primaryDrawerItem {
-                            nameRes = R.string.action_search
-                            iconicsIcon = GoogleMaterial.Icon.gmd_search
-                            onClick = {
-                                startActivityWithSlideInAnimation(SearchActivity.getIntent(context))
-                            }
-                        })
+                    primaryDrawerItem {
+                        nameRes = R.string.action_search
+                        iconicsIcon = GoogleMaterial.Icon.gmd_search
+                        onClick = {
+                            startActivityWithSlideInAnimation(SearchActivity.getIntent(context))
+                        }
+                    })
             }
 
             setSavedInstance(savedInstanceState)
         }
 
-        if (BuildConfig.DEBUG) {
+        if(ApplicationUtils.isDebug()) {
+            Timber.d("Flavor: ${BuildConfig.FLAVOR}")
+
             mainDrawer.addItems(
-                    secondaryDrawerItem {
-                        nameText = "debug"
-                        isEnabled = false
-                        textColor = ColorStateList.valueOf(Color.GREEN)
-                    }
+                secondaryDrawerItem {
+                    nameText = getString(R.string.debug_status)
+                    isEnabled = false
+                }
             )
         }
         EmojiCompat.get().registerInitCallback(emojiInitCallback)
@@ -514,11 +552,11 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     private fun setupTabs(selectNotificationTab: Boolean) {
-
-        val activeTabLayout = if (preferences.getString("mainNavPosition", "top") == "bottom") {
+        val activeTabLayout = if(preferences.getString("mainNavPosition", "top") == "bottom") {
             val actionBarSize = ThemeUtils.getDimension(this, R.attr.actionBarSize)
             val fabMargin = resources.getDimensionPixelSize(R.dimen.fabMargin)
-            (composeButton.layoutParams as CoordinatorLayout.LayoutParams).bottomMargin = actionBarSize + fabMargin
+            (composeButton.layoutParams as CoordinatorLayout.LayoutParams).bottomMargin =
+                actionBarSize + fabMargin
             tabLayout.hide()
             bottomTabLayout
         } else {
@@ -532,21 +570,24 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
         val adapter = MainPagerAdapter(tabs, this)
         viewPager.adapter = adapter
-        TabLayoutMediator(activeTabLayout, viewPager, TabConfigurationStrategy { _: TabLayout.Tab?, _: Int -> }).attach()
+        TabLayoutMediator(
+            activeTabLayout,
+            viewPager,
+            TabConfigurationStrategy { _: TabLayout.Tab?, _: Int -> }).attach()
         activeTabLayout.removeAllTabs()
-        for (i in tabs.indices) {
+        for(i in tabs.indices) {
             val tab = activeTabLayout.newTab()
-                    .setIcon(tabs[i].icon)
-            if (tabs[i].id == LIST) {
+                .setIcon(tabs[i].icon)
+            if(tabs[i].id == LIST) {
                 tab.contentDescription = tabs[i].arguments[1]
             } else {
                 tab.setContentDescription(tabs[i].text)
             }
             activeTabLayout.addTab(tab)
 
-            if (tabs[i].id == NOTIFICATIONS) {
+            if(tabs[i].id == NOTIFICATIONS) {
                 notificationTabPosition = i
-                if (selectNotificationTab) {
+                if(selectNotificationTab) {
                     tab.select()
                 }
             }
@@ -564,8 +605,11 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
         onTabSelectedListener = object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                if (tab.position == notificationTabPosition) {
-                    NotificationHelper.clearNotificationsForActiveAccount(this@MainActivity, accountManager)
+                if(tab.position == notificationTabPosition) {
+                    NotificationHelper.clearNotificationsForActiveAccount(
+                        this@MainActivity,
+                        accountManager
+                    )
                 }
 
                 mainToolbar.title = tabs[tab.position].title(this@MainActivity)
@@ -575,7 +619,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
             override fun onTabReselected(tab: TabLayout.Tab) {
                 val fragment = adapter.getFragment(tab.position)
-                if (fragment is ReselectableFragment) {
+                if(fragment is ReselectableFragment) {
                     (fragment as ReselectableFragment).onReselect()
                 }
             }
@@ -583,7 +627,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             activeTabLayout.addOnTabSelectedListener(it)
         }
 
-        val activeTabPosition = if (selectNotificationTab) notificationTabPosition else 0
+        val activeTabPosition = if(selectNotificationTab) notificationTabPosition else 0
         mainToolbar.title = tabs[activeTabPosition].title(this@MainActivity)
         mainToolbar.setOnClickListener {
             (adapter.getFragment(activeTabLayout.selectedTabPosition) as? ReselectableFragment)?.onReselect()
@@ -595,13 +639,13 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         val activeAccount = accountManager.activeAccount
 
         //open profile when active image was clicked
-        if (current && activeAccount != null) {
+        if(current && activeAccount != null) {
             val intent = AccountActivity.getIntent(this, activeAccount.accountId)
             startActivityWithSlideInAnimation(intent)
             return false
         }
         //open LoginActivity to add new account
-        if (profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
+        if(profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
             startActivityWithSlideInAnimation(LoginActivity.getIntent(this, true))
             return false
         }
@@ -616,7 +660,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         accountManager.setActiveAccount(newSelectedId)
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        if (forward != null) {
+        if(forward != null) {
             intent.type = forward.type
             intent.action = forward.action
             intent.putExtras(forward)
@@ -629,56 +673,59 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     private fun logout() {
         accountManager.activeAccount?.let { activeAccount ->
             AlertDialog.Builder(this)
-                    .setTitle(R.string.action_logout)
-                    .setMessage(getString(R.string.action_logout_confirm, activeAccount.fullName))
-                    .setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int ->
-                        NotificationHelper.deleteNotificationChannelsForAccount(activeAccount, this)
-                        cacheUpdater.clearForUser(activeAccount.id)
-                        conversationRepository.deleteCacheForAccount(activeAccount.id)
-                        removeShortcut(this, activeAccount)
-                        val newAccount = accountManager.logActiveAccountOut()
-                        initPullNotifications()
-                        val intent = if (newAccount == null) {
-                            LoginActivity.getIntent(this, false)
-                        } else {
-                            Intent(this, MainActivity::class.java)
-                        }
-                        startActivity(intent)
-                        finishWithoutSlideOutAnimation()
+                .setTitle(R.string.action_logout)
+                .setMessage(getString(R.string.action_logout_confirm, activeAccount.fullName))
+                .setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int ->
+                    NotificationHelper.deleteNotificationChannelsForAccount(activeAccount, this)
+                    cacheUpdater.clearForUser(activeAccount.id)
+                    conversationRepository.deleteCacheForAccount(activeAccount.id)
+                    removeShortcut(this, activeAccount)
+                    val newAccount = accountManager.logActiveAccountOut()
+                    initPullNotifications()
+                    val intent = if(newAccount == null) {
+                        LoginActivity.getIntent(this, false)
+                    } else {
+                        Intent(this, MainActivity::class.java)
                     }
-                    .setNegativeButton(android.R.string.no, null)
-                    .show()
+                    startActivity(intent)
+                    finishWithoutSlideOutAnimation()
+                }
+                .setNegativeButton(android.R.string.no, null)
+                .show()
         }
     }
 
     private fun fetchUserInfo() {
         mastodonApi.accountVerifyCredentials()
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe(
-                        { userInfo ->
-                            onFetchUserInfoSuccess(userInfo)
-                        },
-                        { throwable ->
-                            Log.e(TAG, "Failed to fetch user info. " + throwable.message)
-                        }
-                )
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe(
+                { userInfo ->
+                    onFetchUserInfoSuccess(userInfo)
+                },
+                { throwable ->
+                    Log.e(TAG, "Failed to fetch user info. " + throwable.message)
+                }
+            )
     }
 
     private fun onFetchUserInfoSuccess(me: Account) {
         glide.asBitmap()
-                .load(me.header)
-                .into(header.accountHeaderBackground)
+            .load(me.header)
+            .into(header.accountHeaderBackground)
 
         loadDrawerAvatar(me.avatar, false)
 
         accountManager.updateActiveAccount(me)
-        NotificationHelper.createNotificationChannelsForAccount(accountManager.activeAccount!!, this)
+        NotificationHelper.createNotificationChannelsForAccount(
+            accountManager.activeAccount!!,
+            this
+        )
 
         initPullNotifications()
 
         // Show follow requests in the menu, if this is a locked account.
-        if (me.locked && mainDrawer.getDrawerItem(DRAWER_ITEM_FOLLOW_REQUESTS) == null) {
+        if(me.locked && mainDrawer.getDrawerItem(DRAWER_ITEM_FOLLOW_REQUESTS) == null) {
             val followRequestsItem = primaryDrawerItem {
                 identifier = DRAWER_ITEM_FOLLOW_REQUESTS
                 nameRes = R.string.action_view_follow_requests
@@ -690,7 +737,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 }
             }
             mainDrawer.addItemAtPosition(4, followRequestsItem)
-        } else if (!me.locked) {
+        } else if(!me.locked) {
             mainDrawer.removeItems(DRAWER_ITEM_FOLLOW_REQUESTS)
         }
         updateProfiles()
@@ -706,7 +753,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 RoundedCorners(resources.getDimensionPixelSize(R.dimen.avatar_radius_36dp))
             )
             .apply {
-                if (showPlaceholder) {
+                if(showPlaceholder) {
                     placeholder(R.drawable.avatar_default)
                 }
             }
@@ -714,10 +761,15 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
                 override fun onLoadStarted(placeholder: Drawable?) {
                     if(placeholder != null) {
-                        mainToolbar.navigationIcon = FixedSizeDrawable(placeholder, navIconSize, navIconSize)
+                        mainToolbar.navigationIcon =
+                            FixedSizeDrawable(placeholder, navIconSize, navIconSize)
                     }
                 }
-                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
                     mainToolbar.navigationIcon = resource
                 }
 
@@ -729,40 +781,45 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
     private fun fetchAnnouncements() {
         mastodonApi.listAnnouncements(false)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe(
-                        { announcements ->
-                            unreadAnnouncementsCount = announcements.count { !it.read }
-                            updateAnnouncementsBadge()
-                        },
-                        {
-                            Log.w(TAG, "Failed to fetch announcements.", it)
-                        }
-                )
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe(
+                { announcements ->
+                    unreadAnnouncementsCount = announcements.count { !it.read }
+                    updateAnnouncementsBadge()
+                },
+                {
+                    Log.w(TAG, "Failed to fetch announcements.", it)
+                }
+            )
     }
 
     private fun updateAnnouncementsBadge() {
-        mainDrawer.updateBadge(DRAWER_ITEM_ANNOUNCEMENTS, StringHolder(if (unreadAnnouncementsCount <= 0) null else unreadAnnouncementsCount.toString()))
+        mainDrawer.updateBadge(
+            DRAWER_ITEM_ANNOUNCEMENTS,
+            StringHolder(if(unreadAnnouncementsCount <= 0) null else unreadAnnouncementsCount.toString())
+        )
     }
 
     private fun updateProfiles() {
-        val profiles: MutableList<IProfile> = accountManager.getAllAccountsOrderedByActive().map { acc ->
-            val emojifiedName = EmojiCompat.get().process(acc.displayName.emojify(acc.emojis, header, true))
+        val profiles: MutableList<IProfile> =
+            accountManager.getAllAccountsOrderedByActive().map { acc ->
+                val emojifiedName =
+                    EmojiCompat.get().process(acc.displayName.emojify(acc.emojis, header, true))
 
-            ProfileDrawerItem().apply {
-                isSelected = acc.isActive
-                nameText = emojifiedName
-                iconUrl = acc.profilePictureUrl
-                isNameShown = true
-                identifier = acc.id
-                descriptionText = acc.fullName
-            }
-        }.toMutableList()
+                ProfileDrawerItem().apply {
+                    isSelected = acc.isActive
+                    nameText = emojifiedName
+                    iconUrl = acc.profilePictureUrl
+                    isNameShown = true
+                    identifier = acc.id
+                    descriptionText = acc.fullName
+                }
+            }.toMutableList()
 
         // reuse the already existing "add account" item
-        for (profile in header.profiles.orEmpty()) {
-            if (profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
+        for(profile in header.profiles.orEmpty()) {
+            if(profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
                 profiles.add(profile)
                 break
             }
@@ -775,23 +832,23 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     private fun draftWarning() {
         val sharedPrefsKey = "show_draft_warning"
         appDb.tootDao().savedTootCount()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe { draftCount ->
-                    val showDraftWarning = preferences.getBoolean(sharedPrefsKey, true)
-                    if (draftCount > 0 && showDraftWarning) {
-                        AlertDialog.Builder(this)
-                                .setMessage(R.string.new_drafts_warning)
-                                .setNegativeButton("Don't show again") { _, _ ->
-                                    preferences.edit(commit = true) {
-                                        putBoolean(sharedPrefsKey, false)
-                                    }
-                                }
-                                .setPositiveButton(android.R.string.ok, null)
-                                .show()
-                    }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe { draftCount ->
+                val showDraftWarning = preferences.getBoolean(sharedPrefsKey, true)
+                if(draftCount > 0 && showDraftWarning) {
+                    AlertDialog.Builder(this)
+                        .setMessage(R.string.new_drafts_warning)
+                        .setNegativeButton("Don't show again") { _, _ ->
+                            preferences.edit(commit = true) {
+                                putBoolean(sharedPrefsKey, false)
+                            }
+                        }
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show()
                 }
+            }
 
     }
 
@@ -810,20 +867,20 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
 private inline fun primaryDrawerItem(block: PrimaryDrawerItem.() -> Unit): PrimaryDrawerItem {
     return PrimaryDrawerItem()
-            .apply {
-                isSelectable = false
-                isIconTinted = true
-            }
-            .apply(block)
+        .apply {
+            isSelectable = false
+            isIconTinted = true
+        }
+        .apply(block)
 }
 
 private inline fun secondaryDrawerItem(block: SecondaryDrawerItem.() -> Unit): SecondaryDrawerItem {
     return SecondaryDrawerItem()
-            .apply {
-                isSelectable = false
-                isIconTinted = true
-            }
-            .apply(block)
+        .apply {
+            isSelectable = false
+            isIconTinted = true
+        }
+        .apply(block)
 }
 
 private var AbstractDrawerItem<*, *>.onClick: () -> Unit

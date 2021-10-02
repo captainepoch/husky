@@ -612,4 +612,9 @@
     <string name="drafts_failed_loading_reply">Failed loading Reply information</string>
     <string name="draft_deleted">Draft deleted</string>
     <string name="drafts_toot_reply_removed">The Toot you drafted a reply to has been removed</string>
+
+    <!-- Debug strings -->
+    <string name="debug_status">Debug build</string>
+    <string name="debug_status_message">A debug build has enabled logs and debugging information for the application. Information might leak. Please use it carefully.</string>
+    <string name="debug_status_message_close">Close</string>
 </resources>
