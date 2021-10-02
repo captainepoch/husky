@@ -657,11 +657,11 @@ class ComposeActivity : BaseActivity(),
         @ColorInt val color = ThemeUtils.getColor(
             this,
             if(enable) R.attr.colorPrimary else android.R.attr.textColorTertiary
-        );
+        )
         binding.composeFormattingSyntax.drawable.colorFilter =
-            PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
+            PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
 
-        enableMarkdownWYSIWYGButtons(enable);
+        enableMarkdownWYSIWYGButtons(enable)
     }
 
     private fun setIconForSyntax(syntax: String, enable: Boolean) {
@@ -691,15 +691,19 @@ class ComposeActivity : BaseActivity(),
         val markdownId = 1
         val bbcodeId = 2
         val htmlId = 3
+
         menu.menu.add(0, plaintextId, 0, R.string.action_plaintext)
-        if(viewModel.instanceMetadata.value?.supportsMarkdown ?: false)
+        if(viewModel.instanceMetadata.value?.supportsMarkdown == true) {
             menu.menu.add(0, markdownId, 0, R.string.action_markdown)
+        }
 
-        if(viewModel.instanceMetadata.value?.supportsBBcode ?: false)
+        if(viewModel.instanceMetadata.value?.supportsBBcode == true) {
             menu.menu.add(0, bbcodeId, 0, R.string.action_bbcode)
+        }
 
-        if(viewModel.instanceMetadata.value?.supportsHTML ?: false)
+        if(viewModel.instanceMetadata.value?.supportsHTML == true) {
             menu.menu.add(0, htmlId, 0, R.string.action_html)
+        }
 
         menu.setOnMenuItemClickListener { menuItem ->
             val choose = when(menuItem.itemId) {
@@ -1060,7 +1064,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun updateVisibleCharactersLeft() {
-        val remainingLength = maximumTootCharacters - calculateTextLength();
+        val remainingLength = maximumTootCharacters - calculateTextLength()
         binding.composeCharactersLeftView.text =
             String.format(Locale.getDefault(), "%d", remainingLength)
 
@@ -1279,7 +1283,7 @@ class ComposeActivity : BaseActivity(),
                 } else {
                     // if not grater then 4, upload all multiple media.
                     for(i in 0 until count) {
-                        val imageUri = clipData.getItemAt(i).getUri()
+                        val imageUri = clipData.getItemAt(i).uri
                         pickMedia(imageUri)
                     }
                 }
@@ -1297,7 +1301,6 @@ class ComposeActivity : BaseActivity(),
         withLifecycleContext {
             viewModel.pickMedia(uri, filename ?: uri.toFileName(contentResolver))
                 .observe { exceptionOrItem ->
-
                     contentInfoCompat?.releasePermission()
 
                     exceptionOrItem.asLeftOrNull()?.let {
@@ -1321,7 +1324,6 @@ class ComposeActivity : BaseActivity(),
                         }
                         displayTransientError(errorId)
                     }
-
                 }
         }
     }
@@ -1359,7 +1361,7 @@ class ComposeActivity : BaseActivity(),
             emojiBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
             scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
             stickerBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-            previewBehavior.state == BottomSheetBehavior.STATE_HIDDEN
+            previewBehavior.state == BottomSheetBehavior.STATE_EXPANDED
         ) {
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -1367,15 +1369,19 @@ class ComposeActivity : BaseActivity(),
             scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
             return
         }
 
         handleCloseButton()
+
+        super.onBackPressed()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Timber.d(event.toString())
-        if(event.action == KeyEvent.ACTION_DOWN) {
+
+        if(event.action == KeyEvent.ACTION_UP) {
             if(event.isCtrlPressed) {
                 if(keyCode == KeyEvent.KEYCODE_ENTER) {
                     // send toot by pressing CTRL + ENTER
@@ -1476,10 +1482,10 @@ class ComposeActivity : BaseActivity(),
         val description: String? = null
     ) {
         companion object Type {
-            public const val IMAGE: Int = 0
-            public const val VIDEO: Int = 1
-            public const val AUDIO: Int = 2
-            public const val UNKNOWN: Int = 3
+            const val IMAGE: Int = 0
+            const val VIDEO: Int = 1
+            const val AUDIO: Int = 2
+            const val UNKNOWN: Int = 3
         }
     }
 
@@ -1524,7 +1530,6 @@ class ComposeActivity : BaseActivity(),
     ) : Parcelable
 
     companion object {
-        private const val TAG = "ComposeActivity" // logging tag
         private const val MEDIA_PICK_RESULT = 1
         private const val MEDIA_TAKE_PHOTO_RESULT = 2
         private const val PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
