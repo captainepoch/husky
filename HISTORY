@@ -1,0 +1,7 @@
+Husky 1.0.2-beta1 - 2021-10-18
+ - Fix: Videoplayer now plays videos correctly.
+ - Fix: Preview shows and hides the toot instead just showing it.
+ - Fix: Show video controls always at the bottom.
+ - Fix: Back button when no media is selected.
+ - UI: Debug text in the menu is changed.
+ - Updated: License notices, dependencies, flavors, Gradle files to Kotlin DSL.
