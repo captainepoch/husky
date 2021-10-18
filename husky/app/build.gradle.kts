@@ -84,10 +84,12 @@ android {
             create(Flavors.beta) {
                 dimension = Flavors.Dimensions.release
 
+                /*
                 versionCode = BetaConfig.versionCodeBeta
                 versionName = BetaConfig.versionNameBeta
 
                 applicationIdSuffix = BetaConfig.betaSufix
+                */
                 versionNameSuffix = "-${BetaConfig.betaSufix}${BetaConfig.betaSufixVersion}"
 
                 buildConfigField(

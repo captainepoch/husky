@@ -25,6 +25,7 @@ object DefaultConfig {
     const val versionNameRel = "1.0.2"
 
     val javaVersion = JavaVersion.VERSION_1_8
+    val jvmTarget = javaVersion.toString()
 
     const val instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
