@@ -23,6 +23,7 @@ debug/
 .gradle/
 /build/
 buildSrc/build
+.builds/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -40,6 +41,7 @@ captures/
 *.iml
 /*.iml
 /.idea/assetWizardSettings.xml
+/.idea/compiler.xml
 /.idea/gradle.xml
 /.idea/jarRepositories.xml
 /.idea/misc.xml
