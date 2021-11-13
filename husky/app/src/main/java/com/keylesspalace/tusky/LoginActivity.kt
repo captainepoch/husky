@@ -42,6 +42,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
+import timber.log.Timber
+import timber.log.Timber.Forest
 
 class LoginActivity : BaseActivity(), Injectable {
 
@@ -62,7 +64,7 @@ class LoginActivity : BaseActivity(), Injectable {
 
         setContentView(R.layout.activity_login)
 
-        if(savedInstanceState == null ) {
+        if(savedInstanceState == null) {
             if(BuildConfig.CUSTOM_INSTANCE.isNotBlank() && !isAdditionalLogin()) {
                 domainEditText.setText(BuildConfig.CUSTOM_INSTANCE)
                 domainEditText.setSelection(BuildConfig.CUSTOM_INSTANCE.length)
@@ -76,27 +78,28 @@ class LoginActivity : BaseActivity(), Injectable {
 
         if(BuildConfig.CUSTOM_LOGO_URL.isNotBlank()) {
             Glide.with(loginLogo)
-                    .load(BuildConfig.CUSTOM_LOGO_URL)
-                    .placeholder(null)
-                    .into(loginLogo)
+                .load(BuildConfig.CUSTOM_LOGO_URL)
+                .placeholder(null)
+                .into(loginLogo)
         }
 
         preferences = getSharedPreferences(
-                getString(R.string.preferences_file_key), Context.MODE_PRIVATE)
+            getString(R.string.preferences_file_key), Context.MODE_PRIVATE
+        )
 
         loginButton.setOnClickListener { onButtonClick() }
         settingsButton.setOnClickListener { onSettingsButtonClick() }
 
         whatsAnInstanceTextView.setOnClickListener {
             val dialog = AlertDialog.Builder(this)
-                    .setMessage(R.string.dialog_whats_an_instance)
-                    .setPositiveButton(R.string.action_close, null)
-                    .show()
+                .setMessage(R.string.dialog_whats_an_instance)
+                .setPositiveButton(R.string.action_close, null)
+                .show()
             val textView = dialog.findViewById<TextView>(android.R.id.message)
             textView?.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        if (isAdditionalLogin()) {
+        if(isAdditionalLogin()) {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -118,7 +121,7 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+        if(item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }
@@ -147,16 +150,18 @@ class LoginActivity : BaseActivity(), Injectable {
 
         try {
             HttpUrl.Builder().host(domain).scheme("https").build()
-        } catch (e: IllegalArgumentException) {
+        } catch(e: IllegalArgumentException) {
             setLoading(false)
             domainTextInputLayout.error = getString(R.string.error_invalid_domain)
             return
         }
 
         val callback = object : Callback<AppCredentials> {
-            override fun onResponse(call: Call<AppCredentials>,
-                                    response: Response<AppCredentials>) {
-                if (!response.isSuccessful) {
+            override fun onResponse(
+                call: Call<AppCredentials>,
+                response: Response<AppCredentials>
+            ) {
+                if(!response.isSuccessful) {
                     loginButton.isEnabled = true
                     domainTextInputLayout.error = getString(R.string.error_failed_app_registration)
                     setLoading(false)
@@ -168,10 +173,10 @@ class LoginActivity : BaseActivity(), Injectable {
                 val clientSecret = credentials.clientSecret
 
                 preferences.edit()
-                        .putString("domain", domain)
-                        .putString("clientId", clientId)
-                        .putString("clientSecret", clientSecret)
-                        .apply()
+                    .putString("domain", domain)
+                    .putString("clientId", clientId)
+                    .putString("clientSecret", clientSecret)
+                    .apply()
 
                 redirectUserToAuthorizeAndLogin(domain, clientId)
             }
@@ -192,9 +197,11 @@ class LoginActivity : BaseActivity(), Injectable {
         }
 
         mastodonApi
-                .authenticateApp(domain, appname, oauthRedirectUri,
-                        OAUTH_SCOPES, website)
-                .enqueue(callback)
+            .authenticateApp(
+                domain, appname, oauthRedirectUri,
+                OAUTH_SCOPES, website
+            )
+            .enqueue(callback)
         setLoading(true)
 
     }
@@ -204,16 +211,16 @@ class LoginActivity : BaseActivity(), Injectable {
          * login there, and the server will redirect back to the app with its response. */
         val endpoint = MastodonApi.ENDPOINT_AUTHORIZE
         val parameters = mapOf(
-                "client_id" to clientId,
-                "redirect_uri" to oauthRedirectUri,
-                "response_type" to "code",
-                "scope" to OAUTH_SCOPES
+            "client_id" to clientId,
+            "redirect_uri" to oauthRedirectUri,
+            "response_type" to "code",
+            "scope" to OAUTH_SCOPES
         )
         val url = "https://" + domain + endpoint + "?" + toQueryString(parameters)
         val uri = Uri.parse(url)
-        if (!openInCustomTab(uri, this)) {
+        if(!openInCustomTab(uri, this)) {
             val viewIntent = Intent(Intent.ACTION_VIEW, uri)
-            if (viewIntent.resolveActivity(packageManager) != null) {
+            if(viewIntent.resolveActivity(packageManager) != null) {
                 startActivity(viewIntent)
             } else {
                 domainEditText.error = getString(R.string.error_no_web_browser_found)
@@ -229,7 +236,7 @@ class LoginActivity : BaseActivity(), Injectable {
         val uri = intent.data
         val redirectUri = oauthRedirectUri
 
-        if (uri != null && uri.toString().startsWith(redirectUri)) {
+        if(uri != null && uri.toString().startsWith(redirectUri)) {
             // This should either have returned an authorization code or an error.
             val code = uri.getQueryParameter("code")
             val error = uri.getQueryParameter("error")
@@ -239,43 +246,62 @@ class LoginActivity : BaseActivity(), Injectable {
             val clientId = preferences.getNonNullString(CLIENT_ID, "")
             val clientSecret = preferences.getNonNullString(CLIENT_SECRET, "")
 
-            if (code != null && domain.isNotEmpty() && clientId.isNotEmpty() && clientSecret.isNotEmpty()) {
+            if(code != null && domain.isNotEmpty() && clientId.isNotEmpty() && clientSecret.isNotEmpty()) {
 
                 setLoading(true)
                 /* Since authorization has succeeded, the final step to log in is to exchange
                  * the authorization code for an access token. */
                 val callback = object : Callback<AccessToken> {
-                    override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
-                        if (response.isSuccessful) {
+                    override fun onResponse(
+                        call: Call<AccessToken>,
+                        response: Response<AccessToken>
+                    ) {
+                        if(response.isSuccessful) {
                             onLoginSuccess(response.body()!!.accessToken, domain)
                         } else {
                             setLoading(false)
-                            domainTextInputLayout.error = getString(R.string.error_retrieving_oauth_token)
-                            Log.e(TAG, String.format("%s %s",
+                            domainTextInputLayout.error =
+                                getString(R.string.error_retrieving_oauth_token)
+                            Log.e(
+                                TAG, String.format(
+                                    "%s %s",
                                     getString(R.string.error_retrieving_oauth_token),
-                                    response.message()))
+                                    response.message()
+                                )
+                            )
                         }
                     }
 
                     override fun onFailure(call: Call<AccessToken>, t: Throwable) {
                         setLoading(false)
-                        domainTextInputLayout.error = getString(R.string.error_retrieving_oauth_token)
-                        Log.e(TAG, String.format("%s %s",
+                        domainTextInputLayout.error =
+                            getString(R.string.error_retrieving_oauth_token)
+                        Log.e(
+                            TAG, String.format(
+                                "%s %s",
                                 getString(R.string.error_retrieving_oauth_token),
-                                t.message))
+                                t.message
+                            )
+                        )
                     }
                 }
 
-                mastodonApi.fetchOAuthToken(domain, clientId, clientSecret, redirectUri, code,
-                        "authorization_code").enqueue(callback)
-            } else if (error != null) {
+                mastodonApi.fetchOAuthToken(
+                    domain, clientId, clientSecret, redirectUri, code,
+                    "authorization_code"
+                ).enqueue(callback)
+            } else if(error != null) {
                 /* Authorization failed. Put the error response where the user can read it and they
                  * can try again. */
                 setLoading(false)
                 domainTextInputLayout.error = getString(R.string.error_authorization_denied)
-                Log.e(TAG, String.format("%s %s",
+                Log.e(
+                    TAG, String.format(
+                        "%s %s",
                         getString(R.string.error_authorization_denied),
-                        error))
+                        error
+                    )
+                )
             } else {
                 // This case means a junk response was received somehow.
                 setLoading(false)
@@ -288,7 +314,7 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     private fun setLoading(loadingState: Boolean) {
-        if (loadingState) {
+        if(loadingState) {
             loginLoadingLayout.visibility = View.VISIBLE
             loginInputLayout.visibility = View.GONE
         } else {
@@ -337,7 +363,7 @@ class LoginActivity : BaseActivity(), Injectable {
             s = s.replaceFirst("https://", "")
             // If a username was included (e.g. username@example.com), just take what's after the '@'.
             val at = s.lastIndexOf('@')
-            if (at != -1) {
+            if(at != -1) {
                 s = s.substring(at + 1)
             }
             return s.trim { it <= ' ' }
@@ -350,7 +376,7 @@ class LoginActivity : BaseActivity(), Injectable {
         private fun toQueryString(parameters: Map<String, String>): String {
             val s = StringBuilder()
             var between = ""
-            for ((key, value) in parameters) {
+            for((key, value) in parameters) {
                 s.append(between)
                 s.append(Uri.encode(key))
                 s.append("=")
@@ -367,18 +393,18 @@ class LoginActivity : BaseActivity(), Injectable {
             val navigationbarDividerColor = ThemeUtils.getColor(context, R.attr.dividerColor)
 
             val colorSchemeParams = CustomTabColorSchemeParams.Builder()
-                    .setToolbarColor(toolbarColor)
-                    .setNavigationBarColor(navigationbarColor)
-                    .setNavigationBarDividerColor(navigationbarDividerColor)
-                    .build()
+                .setToolbarColor(toolbarColor)
+                .setNavigationBarColor(navigationbarColor)
+                .setNavigationBarDividerColor(navigationbarDividerColor)
+                .build()
 
             val customTabsIntent = CustomTabsIntent.Builder()
-                    .setDefaultColorSchemeParams(colorSchemeParams)
-                    .build()
+                .setDefaultColorSchemeParams(colorSchemeParams)
+                .build()
 
             try {
                 customTabsIntent.launchUrl(context, uri)
-            } catch (e: ActivityNotFoundException) {
+            } catch(e: ActivityNotFoundException) {
                 Log.w(TAG, "Activity was not found for intent $customTabsIntent")
                 return false
             }

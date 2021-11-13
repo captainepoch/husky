@@ -2,7 +2,7 @@
 
 # turn on all optimizations except those that are known to cause problems on Android
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
--optimizationpasses 6
+-optimizationpasses 7
 -allowaccessmodification
 -dontpreverify
 
@@ -53,12 +53,27 @@
 
 # remove all logging from production apk
 -assumenosideeffects class android.util.Log {
-    public static *** getStackTraceString(...);
+    public static boolean isLoggable(java.lang.String, int);
+    public static int d(...);
+    public static int w(...);
+    public static int v(...);
+    public static int i(...);
+    public static int e(...);
+}
+
+-assumenosideeffects class timber.log.Timber* {
     public static *** d(...);
     public static *** w(...);
     public static *** v(...);
     public static *** i(...);
+    public static *** e(...);
+    public static *** plant(...);
 }
+
+-assumenosideeffects class java.lang.Exception* {
+public void printStackTrace();
+}
+
 -assumenosideeffects class java.lang.String {
     public static java.lang.String format(...);
 }

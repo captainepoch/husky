@@ -199,6 +199,9 @@ dependencies {
     implementation(ApplicationLibs.RxJava.rxJava)
     implementation(ApplicationLibs.RxJava.rxKotlin)
 
+    implementation(ApplicationLibs.SimpleStack.ext)
+    implementation(ApplicationLibs.SimpleStack.lib)
+
     implementation(ApplicationLibs.Square.retrofit)
     implementation(ApplicationLibs.Square.retrofitAdapterRxJ2)
     implementation(ApplicationLibs.Square.retrofitConvGson)
@@ -219,7 +222,6 @@ dependencies {
     implementation(ApplicationLibs.materialDrawer)
     implementation(ApplicationLibs.materialDrawerIconics)
     implementation(ApplicationLibs.materialDrawerTypeface)
-    implementation(ApplicationLibs.filemojiCompat)
     implementation(ApplicationLibs.sparkButton)
     implementation(ApplicationLibs.timber)
 
