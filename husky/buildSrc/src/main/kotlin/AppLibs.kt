@@ -5,7 +5,6 @@ object AppPlugins {
     const val kotlinExtensions = "kotlin-android-extensions"
     const val kotlinParcelize = "kotlin-parcelize"
     const val manesVersions = "com.github.ben-manes.versions"
-    const val spotless = "com.diffplug.gradle.spotless"
 }
 
 object ApplicationLibs {

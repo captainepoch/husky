@@ -10,7 +10,6 @@ buildscript {
 
 		// Plugins
 		classpath(GradlePlugins.gradleVersions)
-		classpath(GradlePlugins.spotless)
 	}
 }
 
@@ -28,7 +27,9 @@ allprojects {
 		)
 	}
 
-	apply(plugin = AppPlugins.manesVersions)
+	apply {
+		plugin(AppPlugins.manesVersions)
+	}
 
 	tasks.withType<DependencyUpdatesTask> {
 		gradleReleaseChannel = "current"
