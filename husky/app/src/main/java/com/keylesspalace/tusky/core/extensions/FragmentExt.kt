@@ -22,7 +22,7 @@ package com.keylesspalace.tusky.core.extensions
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.keylesspalace.tusky.core.ui.fragment.FragmentViewBindingDelegate
+import com.zhuinden.fragmentviewbindingdelegatekt.FragmentViewBindingDelegate
 
 fun <VB : ViewBinding> Fragment.viewBinding(viewBindingFactory: (View) -> VB) =
     FragmentViewBindingDelegate(this, viewBindingFactory)

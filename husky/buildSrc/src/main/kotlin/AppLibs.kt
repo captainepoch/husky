@@ -25,9 +25,10 @@ object ApplicationLibs {
         const val filemojiCompat = "1.0.17"
         const val flexbox = "2.0.1"
         const val fragmentKtx = "1.2.5"
+        const val fragmentviewbindingdelegateKt = "1.0.0"
         const val glide = "4.12.0"
         const val glideImage = "1.8.0"
-        const val lifecycle = "2.4.0"
+        const val lifecycle = "2.3.1"
         const val markdownEdit = "1.0.0"
         const val materialDesign = "1.4.0"
         const val materialDrawer = "8.2.0"
@@ -144,6 +145,8 @@ object ApplicationLibs {
     const val bigImageViewer = "com.github.piasy:BigImageViewer:${Versions.bigImageViewer}"
     const val conscryptAndroid = "org.conscrypt:conscrypt-android:${Versions.conscryptAndroid}"
     const val filemojiCompat = "de.c1710:filemojicompat:${Versions.filemojiCompat}"
+    const val fragmentviewbindingdelegateKt =
+        "com.github.Zhuinden:fragmentviewbindingdelegate-kt:${Versions.fragmentviewbindingdelegateKt}"
     const val glideImage = "com.github.piasy:GlideImageLoader:${Versions.glideImage}"
     const val glideImageViewFactory =
         "com.github.piasy:GlideImageViewFactory:${Versions.glideImage}"

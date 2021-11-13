@@ -212,6 +212,7 @@ dependencies {
     implementation(ApplicationLibs.bigImageViewer)
     implementation(ApplicationLibs.conscryptAndroid)
     implementation(ApplicationLibs.filemojiCompat)
+    implementation(ApplicationLibs.fragmentviewbindingdelegateKt)
     implementation(ApplicationLibs.glideImage)
     implementation(ApplicationLibs.glideImageViewFactory)
     implementation(ApplicationLibs.markdownEdit)
