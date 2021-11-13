@@ -168,6 +168,4 @@ object GradlePlugins {
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
     const val gradleVersions =
         "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersions}"
-    const val spotless =
-        "com.diffplug.spotless:spotless-plugin-gradle:${Versions.spotless}"
 }
