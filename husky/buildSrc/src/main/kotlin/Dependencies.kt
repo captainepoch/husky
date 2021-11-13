@@ -35,8 +35,6 @@ object DefaultConfig {
 object BetaConfig {
     const val betaSufix = "beta"
     const val betaSufixVersion = "1"
-    const val versionCodeBeta = 1
-    const val versionNameBeta = "1.0.2"
 }
 
 object BuildTypes {
@@ -64,28 +62,17 @@ object BuildTasks {
     const val taskTypeClean = "clean"
 }
 
-object GradlePlugins {
-    object Versions {
-        const val gradle = "7.0.2"
-        const val gradleVersions = "0.38.0"
-    }
-
-    const val android = "com.android.tools.build:gradle:${Versions.gradle}"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
-    const val gradleVersions =
-        "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersions}"
-}
-
 // Function to add repositories to the project.
 fun addRepos(handler: RepositoryHandler) {
     handler.google()
-    handler.maven(url = "https://jitpack.io")
     handler.gradlePluginPortal()
+    handler.maven(url = "https://jitpack.io")
+    handler.maven(url = "https://plugins.gradle.org/m2/")
 }
 
 // Function to check stable versions
 fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("alpha", "beta", "final", "ga", "m", "release", "rc")
+    val stableKeyword = listOf("a", "alpha", "beta", "final", "ga", "m", "release", "rc")
         .any { version.toLowerCase(Locale.ROOT).contains(it) }
     return stableKeyword.not()
 }

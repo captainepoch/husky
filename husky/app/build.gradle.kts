@@ -1,12 +1,10 @@
 plugins {
-    id("com.android.application")
+    id(AppPlugins.androidApplication)
 
-    kotlin("android")
-    id("kotlin-android-extensions")
-    kotlin("kapt")
-
-    //id("kotlin-parcelize")
-    id("com.github.ben-manes.versions")
+    kotlin(AppPlugins.androidBase)
+    kotlin(AppPlugins.kapt)
+    id(AppPlugins.kotlinExtensions)
+    // id(AppPlugins.kotlinParcelize)
 }
 
 android {
@@ -69,91 +67,85 @@ android {
                 ProguardFile.defaultRules
             )
         }
+    }
 
-        flavorDimensions.addAll(
+    flavorDimensions.addAll(
+        listOf(
+            Flavors.Dimensions.husky,
+            Flavors.Dimensions.release
+        )
+    )
+    productFlavors {
+        create(Flavors.husky) {
+            dimension = Flavors.Dimensions.husky
+        }
+
+        create(Flavors.beta) {
+            dimension = Flavors.Dimensions.release
+
+            versionNameSuffix = "-${BetaConfig.betaSufix}${BetaConfig.betaSufixVersion}"
+
+            buildConfigField(
+                "String",
+                "APPLICATION_NAME",
+                "\"${CustomHuskyBuild.applicationName} Beta\""
+            )
+        }
+
+        create(Flavors.stable) {
+            dimension = Flavors.Dimensions.release
+        }
+    }
+
+    lint {
+        // isAbortOnError = true
+        disable("MissingTranslation")
+        disable("ExtraTranslation")
+        disable("AppCompatCustomView")
+        disable("UseRequireInsteadOfGet")
+    }
+
+    compileOptions {
+        sourceCompatibility = DefaultConfig.javaVersion
+        targetCompatibility = DefaultConfig.javaVersion
+    }
+
+    kotlinOptions {
+        jvmTarget = DefaultConfig.javaVersion.toString()
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    // TODO: remove this, only for compiling
+    androidExtensions {
+        isExperimental = true
+    }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+        }
+    }
+
+    sourceSets {
+        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+    }
+
+    packagingOptions {
+        resources.excludes.addAll(
             listOf(
-                Flavors.Dimensions.husky,
-                Flavors.Dimensions.release
+                "LICENSE_OFL",
+                "LICENSE_UNICODE"
             )
         )
-        productFlavors {
-            create(Flavors.husky) {
-                dimension = Flavors.Dimensions.husky
-            }
+    }
 
-            create(Flavors.beta) {
-                dimension = Flavors.Dimensions.release
-
-                /*
-                versionCode = BetaConfig.versionCodeBeta
-                versionName = BetaConfig.versionNameBeta
-
-                applicationIdSuffix = BetaConfig.betaSufix
-                */
-                versionNameSuffix = "-${BetaConfig.betaSufix}${BetaConfig.betaSufixVersion}"
-
-                buildConfigField(
-                    "String",
-                    "APPLICATION_NAME",
-                    "\"${CustomHuskyBuild.applicationName} Beta\""
-                )
-            }
-
-            create(Flavors.stable) {
-                dimension = Flavors.Dimensions.release
-            }
-        }
-
-        lint {
-            // isAbortOnError = true
-            disable("MissingTranslation")
-            disable("ExtraTranslation")
-            disable("AppCompatCustomView")
-            disable("UseRequireInsteadOfGet")
-        }
-
-        compileOptions {
-            sourceCompatibility = DefaultConfig.javaVersion
-            targetCompatibility = DefaultConfig.javaVersion
-        }
-
-        kotlinOptions {
-            jvmTarget = DefaultConfig.javaVersion.toString()
-        }
-
-        buildFeatures {
-            viewBinding = true
-        }
-
-        // TODO: remove this, only for compiling
-        androidExtensions {
-            isExperimental = true
-        }
-
-        testOptions {
-            unitTests {
-                isReturnDefaultValues = true
-                isIncludeAndroidResources = true
-            }
-        }
-
-        sourceSets {
-            getByName("androidTest").assets.srcDirs("$projectDir/schemas")
-        }
-
-        packagingOptions {
-            resources.excludes.addAll(
-                listOf(
-                    "LICENSE_OFL",
-                    "LICENSE_UNICODE"
-                )
-            )
-        }
-
-        bundle {
-            language {
-                enableSplit = true
-            }
+    bundle {
+        language {
+            enableSplit = true
         }
     }
 }

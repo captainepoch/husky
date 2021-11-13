@@ -10,6 +10,7 @@ buildscript {
 
 		// Plugins
 		classpath(GradlePlugins.gradleVersions)
+		classpath(GradlePlugins.spotless)
 	}
 }
 
@@ -27,6 +28,8 @@ allprojects {
 		)
 	}
 
+	apply(plugin = AppPlugins.manesVersions)
+
 	tasks.withType<DependencyUpdatesTask> {
 		gradleReleaseChannel = "current"
 
@@ -37,8 +40,6 @@ allprojects {
 }
 
 tasks.register<Delete>(BuildTasks.taskTypeClean) {
-	delete(rootProject.buildDir)
-	delete(project.buildDir)
 	delete(buildDir)
 	delete("${projectDir}/buildSrc/build")
 }
