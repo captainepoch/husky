@@ -10,10 +10,10 @@ object AppPlugins {
 object ApplicationLibs {
     private object Versions {
         const val androidImageCropper = "2.8.0"
-        const val appcompat = "1.4.0"
+        const val appcompat = "1.3.1"
         const val autodispose = "1.4.0"
         const val bigImageViewer = "1.7.0"
-        const val browser = "1.4.0"
+        const val browser = "1.3.0"
         const val cardView = "1.0.0"
         const val conscryptAndroid = "2.5.2"
         const val constraintlayout = "2.1.1"
