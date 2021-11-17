@@ -20,7 +20,6 @@
 package com.keylesspalace.tusky.core.utils
 
 import com.keylesspalace.tusky.BuildConfig
-import com.keylesspalace.tusky.core.utils.Flavor.DEV
 
 /**
  * Utils for getting application details.

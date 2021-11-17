@@ -23,7 +23,5 @@ import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
 
 abstract class BaseServiceKey : BaseKey(), DefaultServiceProvider.HasServices {
 
-    override fun getScopeTag(): String {
-        return this.javaClass.simpleName
-    }
+    override fun getScopeTag(): String = this.javaClass.simpleName
 }

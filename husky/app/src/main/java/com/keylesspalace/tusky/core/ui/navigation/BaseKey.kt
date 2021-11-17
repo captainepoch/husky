@@ -23,7 +23,5 @@ import com.zhuinden.simplestackextensions.fragments.DefaultFragmentKey
 
 abstract class BaseKey : DefaultFragmentKey() {
 
-    override fun getFragmentTag(): String {
-        return this.javaClass.simpleName
-    }
+    override fun getFragmentTag(): String = this.javaClass.simpleName
 }

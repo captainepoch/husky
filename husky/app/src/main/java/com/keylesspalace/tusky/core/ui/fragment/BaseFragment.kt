@@ -19,5 +19,7 @@
 
 package com.keylesspalace.tusky.core.ui.fragment
 
-class BaseFragment {
+import com.zhuinden.simplestackextensions.fragments.KeyedFragment
+
+open class BaseFragment(layoutRes: Int) : KeyedFragment(layoutRes) {
 }
