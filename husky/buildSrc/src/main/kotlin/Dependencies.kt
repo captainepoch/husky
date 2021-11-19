@@ -24,7 +24,7 @@ object DefaultConfig {
     const val versionCodeRel = 169
     const val versionNameRel = "1.0.2"
 
-    val javaVersion = JavaVersion.VERSION_1_8
+    val javaVersion = JavaVersion.VERSION_11
     val jvmTarget = javaVersion.toString()
 
     const val instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -33,8 +33,8 @@ object DefaultConfig {
 }
 
 object BetaConfig {
-    const val betaSufix = "beta"
-    const val betaSufixVersion = "1"
+    const val betaSuffix = "beta"
+    const val betaSuffixVersion = "1"
 }
 
 object BuildTypes {

@@ -83,7 +83,7 @@ android {
         create(Flavors.beta) {
             dimension = Flavors.Dimensions.release
 
-            versionNameSuffix = "-${BetaConfig.betaSufix}${BetaConfig.betaSufixVersion}"
+            versionNameSuffix = "-${BetaConfig.betaSuffix}${BetaConfig.betaSuffixVersion}"
 
             buildConfigField(
                 "String",
@@ -111,7 +111,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = DefaultConfig.javaVersion.toString()
+        jvmTarget = DefaultConfig.jvmTarget
     }
 
     buildFeatures {
