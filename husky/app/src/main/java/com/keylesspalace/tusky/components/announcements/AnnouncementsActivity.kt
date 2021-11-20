@@ -34,13 +34,21 @@ import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.Error
+import com.keylesspalace.tusky.util.Loading
+import com.keylesspalace.tusky.util.Success
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.EmojiPicker
-import kotlinx.android.synthetic.main.activity_announcements.*
-import kotlinx.android.synthetic.main.toolbar_basic.*
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_announcements.announcementsList
+import kotlinx.android.synthetic.main.activity_announcements.errorMessageView
+import kotlinx.android.synthetic.main.activity_announcements.progressBar
+import kotlinx.android.synthetic.main.activity_announcements.swipeRefreshLayout
+import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 
-class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener, OnEmojiSelectedListener, Injectable {
+class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
+    OnEmojiSelectedListener, Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -52,13 +60,13 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
     private val picker by lazy { EmojiPicker(this) }
     private val pickerDialog by lazy {
         PopupWindow(this)
-                .apply {
-                    contentView = picker
-                    isFocusable = true
-                    setOnDismissListener {
-                        currentAnnouncementId = null
-                    }
+            .apply {
+                contentView = picker
+                isFocusable = true
+                setOnDismissListener {
+                    currentAnnouncementId = null
                 }
+            }
     }
     private var currentAnnouncementId: String? = null
 
@@ -89,12 +97,15 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
         announcementsList.adapter = adapter
 
         viewModel.announcements.observe(this) {
-            when (it) {
+            when(it) {
                 is Success -> {
                     progressBar.hide()
                     swipeRefreshLayout.isRefreshing = false
-                    if (it.data.isNullOrEmpty()) {
-                        errorMessageView.setup(R.drawable.elephant_friend_empty, R.string.no_announcements)
+                    if(it.data.isNullOrEmpty()) {
+                        errorMessageView.setup(
+                            R.drawable.elephant_friend_empty,
+                            R.string.no_announcements
+                        )
                         errorMessageView.show()
                     } else {
                         errorMessageView.hide()
@@ -116,7 +127,9 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
         }
 
         viewModel.emojis.observe(this) {
-            picker.adapter = EmojiAdapter(it, this)
+            it?.let { list ->
+                picker.adapter = EmojiAdapter(list, this)
+            }
         }
 
         viewModel.load()
@@ -124,7 +137,7 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        when(item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -163,13 +176,13 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
     }
 
     override fun onViewAccount(id: String?) {
-        if (id != null) {
+        if(id != null) {
             viewAccount(id)
         }
     }
 
     override fun onViewUrl(url: String?) {
-        if (url != null) {
+        if(url != null) {
             viewUrl(url)
         }
     }
