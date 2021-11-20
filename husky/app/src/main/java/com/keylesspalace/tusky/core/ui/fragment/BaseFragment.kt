@@ -21,5 +21,4 @@ package com.keylesspalace.tusky.core.ui.fragment
 
 import com.zhuinden.simplestackextensions.fragments.KeyedFragment
 
-open class BaseFragment(layoutRes: Int) : KeyedFragment(layoutRes) {
-}
+open class BaseFragment(layoutRes: Int) : KeyedFragment(layoutRes)

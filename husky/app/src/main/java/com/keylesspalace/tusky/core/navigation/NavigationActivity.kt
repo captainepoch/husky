@@ -22,12 +22,17 @@ package com.keylesspalace.tusky.core.navigation
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
+import com.keylesspalace.tusky.core.di.HuskyServices
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityNavigationBinding
+import com.keylesspalace.tusky.refactor_features.splash.view.navigation.SplashKey
+import com.zhuinden.simplestack.History
 import com.zhuinden.simplestack.SimpleStateChanger
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.navigator.Navigator
 import com.zhuinden.simplestackextensions.fragments.DefaultFragmentStateChanger
+import com.zhuinden.simplestackextensions.navigatorktx.backstack
+import com.zhuinden.simplestackextensions.services.DefaultServiceProvider
 import timber.log.Timber
 
 class NavigationActivity : AppCompatActivity(), SimpleStateChanger.NavigationHandler {
@@ -43,8 +48,8 @@ class NavigationActivity : AppCompatActivity(), SimpleStateChanger.NavigationHan
     }
 
     override fun onBackPressed() {
-        if(!Navigator.onBackPressed(this)) {
-            Timber.i("No keys found, exiting the application.")
+        if(!backstack.goBack()) {
+            Timber.i("No keys found, exiting the application...")
 
             this.finishAndRemoveTask()
         }
@@ -55,25 +60,23 @@ class NavigationActivity : AppCompatActivity(), SimpleStateChanger.NavigationHan
     }
 
     private fun initNavigation() {
+        Timber.d("Init setup navigation")
+
         fragmentStateChanger = DefaultFragmentStateChanger(
             supportFragmentManager,
             binding.fragmentContainer.id
         )
 
-        /*
         Navigator.configure()
             .setStateChanger(SimpleStateChanger(this))
             .setScopedServices(DefaultServiceProvider())
-            //.setGlobalServices(GlobalServices(applicationContext).getGlobalServices())
+            .setGlobalServices(HuskyServices(applicationContext).getGlobalServices())
             .install(
                 this,
                 binding.fragmentContainer,
-                getHistoryKeys()
+                History.single(SplashKey())
             )
-        */
-        Timber.d("Navigation setup completely")
-    }
 
-    private fun getHistoryKeys() {
+        Timber.d("Navigation setup completely")
     }
 }

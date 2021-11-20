@@ -19,4 +19,6 @@
 
 package com.keylesspalace.tusky.core.ui.viewmodel
 
-abstract class BaseViewModel
+import com.zhuinden.simplestack.Bundleable
+
+abstract class BaseViewModel : Bundleable

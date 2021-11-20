@@ -20,6 +20,19 @@
         android:supportsRtl="true"
         android:theme="@style/TuskyTheme"
         android:usesCleartextTraffic="false">
+
+        <!--
+        <activity
+            android:name=".core.navigation.NavigationActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        -->
+
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -108,7 +121,7 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".components.chat.ChatActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ViewThreadActivity"
             android:configChanges="orientation|screenSize" />
@@ -182,7 +195,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- disable automatic WorkManager initialization -->
+        <!-- Disable automatic WorkManager initialization -->
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"
             android:authorities="${applicationId}.workmanager-init"
