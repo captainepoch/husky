@@ -18,7 +18,7 @@
     <string name="action_expand_menu">Expand menu</string>
 
     <string name="title_emoji_reacted_by">%s reacted by</string>
-    
+
     <string name="hint_appname">Application name</string>
     <string name="hint_website">Application website</string>
 
@@ -44,6 +44,9 @@
     <string name="pref_title_other">Other</string>
     <string name="pref_title_privacy">Privacy</string>
 
+    <string name="pref_title_composing">Composing</string>
+    <string name="pref_title_composing_title">Composing using zero-width space characters in emojis</string>
+
     <string name="pref_title_anonymize_upload_filenames">Anonymize uploaded file names</string>
     <string name="pref_title_live_notifications">Live notifications</string>
     <string name="pref_summary_live_notifications">May slightly increase power consumption</string>
@@ -67,7 +70,7 @@
 
     <string name="streaming_notification_name">Live notifications</string>
     <string name="streaming_notification_description">Running live notifications for: </string>
-    
+
     <!-- REPLACEMENT FOR TUSKY STRINGS -->
     <string name="action_toggle_visibility">Post visibility</string>
     <string name="action_schedule_toot">Schedule post</string>
@@ -83,49 +86,49 @@
     <string name="reblog_private">Repeat to original audience</string>
     <string name="unreblog_private">Remove repeat</string>
     <string name="action_open_toot">Open post</string>
-        
+
     <string name="compose_shortcut_long_label">Compose Post</string>
-    
+
     <string name="description_status_reblogged">
         Repeated
     </string>
     <string name="dialog_delete_toot_warning">Delete this post?</string>
     <string name="dialog_redraft_toot_warning">Delete and re-draft this post?</string>
-    
+
     <string name="error_sender_account_gone">Error sending post.</string>
-        
+
     <string name="notification_reblog_format">%s repeated your post</string>
     <string name="notification_favourite_format">%s favorited your post</string>
     <string name="notification_boost_name">Repeats</string>
     <string name="notification_boost_description">Notifications when your posts get repeated</string>
     <string name="notification_favourite_description">Notifications when your posts get marked as favorite</string>
-    
+
     <string name="pref_title_confirm_reblogs">Show confirmation dialog before repeating</string>
     <string name="pref_title_notification_filter_reblogs">my posts are repeated</string>
     <string name="pref_title_show_boosts">Show repeats</string>
     <string name="pref_title_alway_open_spoiler">Always expand posts marked with content warnings</string>
-    
+
     <plurals name="reblogs">
         <item quantity="one">&lt;b>%s&lt;/b> Repeat</item>
         <item quantity="other">&lt;b>%s&lt;/b> Repeats</item>
-    </plurals>    
+    </plurals>
     <string name="send_status_link_to">Share post URL to…</string>
     <string name="send_status_content_to">Share post to…</string>
     <string name="send_toot_notification_title">Sending post…</string>
     <string name="send_toot_notification_error_title">Error sending post</string>
     <string name="send_toot_notification_channel_name">Sending posts</string>
     <string name="send_toot_notification_saved_content">A copy of the post has been saved to your drafts</string>
-    
+
     <string name="status_share_content">Share content of post</string>
     <string name="status_share_link">Share link to post</string>
     <string name="status_boosted_format">%s repeated</string>
     <string name="status_replied_to_format">Reply to %s</string>
-    
+
     <string name="title_scheduled_toot">Scheduled posts</string>
     <string name="title_reblogged_by">Repeated by</string>
     <string name="title_view_thread">Post</string>
 
-    <!-- 
+    <!--
     <string name="about_tusky_version">Husky %s</string>
     <string name="about_powered_by_tusky">Powered by Husky</string>
     <string name="about_tusky_license">Husky is free and open-source software.
@@ -136,7 +139,7 @@
     We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
     to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
     * the url can be changed to link to the localized version of the license.
-    --> <!-- 
+    --> <!--
     <string name="about_project_site">
         Project website:\n
         https://husky.fwgs.ru
@@ -150,7 +153,7 @@
     <string name="license_description">Husky contains code and assets from the following open source projects:</string>
     <string name="add_account_description">Add new Fediverse Account</string>
     <string name="action_login">Login!</string>
-    
+
     <string name="dialog_whats_an_instance">The address or domain of any instance can be entered
     here, such as shitposter.club, blob.cat, fedi.absturztau.be, expired.mentality.rip, and
     <a href="https://instances.social">more!</a>
@@ -160,7 +163,7 @@
     you were on the same site.
     \n\nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>.
     </string>
-    
+
     <string name="warning_scheduling_interval">Mastodon/Pleroma has a minimum scheduling interval of 5 minutes.</string> -->
 </resources>
-        
+

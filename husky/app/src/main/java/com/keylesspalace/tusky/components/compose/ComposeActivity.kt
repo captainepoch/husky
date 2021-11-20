@@ -85,6 +85,7 @@ import com.keylesspalace.tusky.components.common.toFileName
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.components.compose.dialog.showAddPollDialog
 import com.keylesspalace.tusky.components.compose.view.ComposeOptionsListener
+import com.keylesspalace.tusky.core.extensions.composeWithZwsp
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityComposeBinding
 import com.keylesspalace.tusky.db.AccountEntity
@@ -226,6 +227,9 @@ class ComposeActivity : BaseActivity(),
             binding.composeScheduleView.setDateTime(composeOptions?.scheduledAt)
         }
 
+        viewModel.composeWithZwsp.value =
+            preferences.getBoolean(PrefKeys.COMPOSING_ZWSP_CHAR, false)
+
         setupComposeField(viewModel.startingText)
         setupContentWarningField(composeOptions?.contentWarning)
         setupPollView()
@@ -264,7 +268,6 @@ class ComposeActivity : BaseActivity(),
                         }
                     }
                 } else if(type == "text/plain" && intent.action == Intent.ACTION_SEND) {
-
                     val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
                     val text = intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
                     val shareBody = if(!subject.isNullOrBlank() && subject !in text) {
@@ -446,7 +449,11 @@ class ComposeActivity : BaseActivity(),
             viewModel.instanceStickers.observe { stickers ->
                 if(stickers.isNotEmpty()) {
                     binding.composeStickerButton.visibility = View.VISIBLE
-                    enableButton(binding.composeStickerButton, true, true)
+                    enableButton(
+                        binding.composeStickerButton,
+                        clickable = true,
+                        colorActive = true
+                    )
                     binding.stickerKeyboard.setupStickerKeyboard(this@ComposeActivity, stickers)
                 }
             }
@@ -1146,7 +1153,13 @@ class ComposeActivity : BaseActivity(),
 
     private fun sendStatus(preview: Boolean) {
         enableButtons(false)
-        val contentText = binding.composeEditField.text.toString()
+        val tempText = binding.composeEditField.text.toString()
+        val contentText = if(viewModel.composeWithZwsp.value == true) {
+            tempText.composeWithZwsp()
+        } else {
+            tempText
+        }
+
         var spoilerText = ""
         if(viewModel.showContentWarning.value!!) {
             spoilerText = binding.composeContentWarningField.text.toString()

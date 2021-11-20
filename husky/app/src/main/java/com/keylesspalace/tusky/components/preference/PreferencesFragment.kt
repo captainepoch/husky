@@ -1,17 +1,22 @@
-/* Copyright 2018 Conny Duck
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2021  The Husky Developers
+ * Copyright (C) 2018  Conny Duck
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.preference
 
@@ -22,7 +27,14 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Notification
-import com.keylesspalace.tusky.settings.*
+import com.keylesspalace.tusky.settings.AppTheme
+import com.keylesspalace.tusky.settings.PrefKeys
+import com.keylesspalace.tusky.settings.emojiPreference
+import com.keylesspalace.tusky.settings.listPreference
+import com.keylesspalace.tusky.settings.makePreferenceScreen
+import com.keylesspalace.tusky.settings.preference
+import com.keylesspalace.tusky.settings.preferenceCategory
+import com.keylesspalace.tusky.settings.switchPreference
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.deserialize
 import com.keylesspalace.tusky.util.getNonNullString
@@ -31,8 +43,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizePx
-import okhttp3.OkHttpClient
 import javax.inject.Inject
+import okhttp3.OkHttpClient
 
 class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
@@ -153,9 +165,15 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     isSingleLineTitle = false
                     setOnPreferenceClickListener {
                         activity?.let { activity ->
-                            val intent = PreferencesActivity.newIntent(activity, PreferencesActivity.TAB_FILTER_PREFERENCES)
+                            val intent = PreferencesActivity.newIntent(
+                                activity,
+                                PreferencesActivity.TAB_FILTER_PREFERENCES
+                            )
                             activity.startActivity(intent)
-                            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                            activity.overridePendingTransition(
+                                R.anim.slide_from_right,
+                                R.anim.slide_to_left
+                            )
                         }
                         true
                     }
@@ -181,14 +199,14 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setTitle(R.string.pref_title_enable_swipe_for_tabs)
                     isSingleLineTitle = false
                 }
-                
+
                 switchPreference {
                     setDefaultValue(true)
                     key = PrefKeys.BIG_EMOJIS
                     setTitle(R.string.pref_title_enable_big_emojis)
                     isSingleLineTitle = false
                 }
-                
+
                 switchPreference {
                     setDefaultValue(false)
                     key = PrefKeys.STICKERS
@@ -208,6 +226,15 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     key = PrefKeys.RENDER_STATUS_AS_MENTION
                     setTitle(R.string.pref_title_render_subscriptions_as_statuses)
                     isSingleLineTitle = true
+                }
+            }
+
+            preferenceCategory(R.string.pref_title_composing) {
+                switchPreference {
+                    setDefaultValue(false)
+                    key = PrefKeys.COMPOSING_ZWSP_CHAR
+                    setTitle(R.string.pref_title_composing_title)
+                    isSingleLineTitle = false
                 }
             }
 
@@ -234,9 +261,15 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setTitle(R.string.pref_title_status_tabs)
                     setOnPreferenceClickListener {
                         activity?.let { activity ->
-                            val intent = PreferencesActivity.newIntent(activity, PreferencesActivity.TAB_FILTER_PREFERENCES)
+                            val intent = PreferencesActivity.newIntent(
+                                activity,
+                                PreferencesActivity.TAB_FILTER_PREFERENCES
+                            )
                             activity.startActivity(intent)
-                            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                            activity.overridePendingTransition(
+                                R.anim.slide_from_right,
+                                R.anim.slide_to_left
+                            )
                         }
                         true
                     }
@@ -249,10 +282,11 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setDefaultValue(false)
                     key = PrefKeys.WELLBEING_LIMITED_NOTIFICATIONS
                     setOnPreferenceChangeListener { _, value ->
-                        for (account in accountManager.accounts) {
-                            val notificationFilter = deserialize(account.notificationsFilter).toMutableSet()
+                        for(account in accountManager.accounts) {
+                            val notificationFilter =
+                                deserialize(account.notificationsFilter).toMutableSet()
 
-                            if (value == true) {
+                            if(value == true) {
                                 notificationFilter.add(Notification.Type.FAVOURITE)
                                 notificationFilter.add(Notification.Type.FOLLOW)
                                 notificationFilter.add(Notification.Type.REBLOG)
@@ -287,9 +321,15 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setTitle(R.string.pref_title_http_proxy_settings)
                     setOnPreferenceClickListener {
                         activity?.let { activity ->
-                            val intent = PreferencesActivity.newIntent(activity, PreferencesActivity.PROXY_PREFERENCES)
+                            val intent = PreferencesActivity.newIntent(
+                                activity,
+                                PreferencesActivity.PROXY_PREFERENCES
+                            )
                             activity.startActivity(intent)
-                            activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                            activity.overridePendingTransition(
+                                R.anim.slide_from_right,
+                                R.anim.slide_to_left
+                            )
                         }
                         true
                     }
@@ -319,13 +359,13 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
         try {
             val httpPort = sharedPreferences.getNonNullString(PrefKeys.HTTP_PROXY_PORT, "-1")
-                    .toInt()
+                .toInt()
 
-            if (httpProxyEnabled && httpServer.isNotBlank() && httpPort > 0 && httpPort < 65535) {
+            if(httpProxyEnabled && httpServer.isNotBlank() && httpPort > 0 && httpPort < 65535) {
                 httpProxyPref?.summary = "$httpServer:$httpPort"
                 return
             }
-        } catch (e: NumberFormatException) {
+        } catch(e: NumberFormatException) {
             // user has entered wrong port, fall back to empty summary
         }
 
