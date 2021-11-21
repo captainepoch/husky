@@ -22,6 +22,30 @@ package com.keylesspalace.tusky.core.extensions
 import java.util.regex.Pattern
 
 /**
+ * Returns an empty String.
+ *
+ * @return An empty string.
+ */
+fun String.Companion.empty(): String {
+    return ""
+}
+
+/**
+ * Add https protocol to the URL.
+ *
+ * @return The url with https:// in front, null otherwise.
+ */
+fun String?.addHttpsProtocolUrl(): String {
+    if(this != null) {
+        if(!this.contains("https", true)) {
+            return ("https://$this")
+        }
+    }
+
+    return String.empty()
+}
+
+/**
  * Returns the text with emojis and zero-width space characters at the start and end positions.
  *
  * @return String with zero-width space characters at start and end positions for emojis.
