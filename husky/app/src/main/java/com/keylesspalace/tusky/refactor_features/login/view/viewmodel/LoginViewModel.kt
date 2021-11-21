@@ -1,36 +1,39 @@
 package com.keylesspalace.tusky.refactor_features.login.view.viewmodel
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.keylesspalace.tusky.core.ui.viewmodel.BaseViewModel
+import com.keylesspalace.tusky.core.extensions.orEmpty
+import com.keylesspalace.tusky.core.ui.viewmodel.RegisteredViewModel
 import com.zhuinden.statebundle.StateBundle
-import timber.log.Timber
 
-class LoginViewModel : BaseViewModel() {
+class LoginViewModel : RegisteredViewModel() {
 
     private val mVerifyUrl = MutableLiveData<Boolean>()
     val verifyUrl: LiveData<Boolean>
         get() = mVerifyUrl
 
-    override fun toBundle(): StateBundle {
-        val stateBundle = StateBundle()
-
-        stateBundle.putBoolean(LoginViewModelKeys.Bundle.VERIFY_URL, mVerifyUrl.value ?: false)
-
-        Timber.d("TO BUNDLE")
-
-        return stateBundle
+    override fun toBundle(): StateBundle = StateBundle().apply {
+        putBoolean(
+            LoginViewModelKeys.Bundle.VERIFY_URL,
+            mVerifyUrl.value.orEmpty()
+        )
     }
 
     override fun fromBundle(bundle: StateBundle?) {
-        bundle?.let {
-            mVerifyUrl.value = it.getBoolean(LoginViewModelKeys.Bundle.VERIFY_URL)
-
-            Timber.d("FROM BUNDLE")
+        bundle?.run {
+            mVerifyUrl.value = getBoolean(LoginViewModelKeys.Bundle.VERIFY_URL)
         }
     }
 
-    fun verifyUrl(url: String?) {
-        mVerifyUrl.value = false
+    override fun onServiceRegistered() {
+    }
+
+    override fun onServiceUnregistered() {
+        super.onServiceUnregistered()
+    }
+
+    fun verifyUrl(url: String) {
+        mVerifyUrl.value = Patterns.WEB_URL.matcher(url).matches()
     }
 }
