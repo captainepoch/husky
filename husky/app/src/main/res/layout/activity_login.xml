@@ -23,11 +23,11 @@
             android:padding="16dp">
 
             <ImageView
+                android:id="@+id/loginLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="@null"
-                android:id="@+id/loginLogo"
                 app:srcCompat="@drawable/elephant_friend" />
 
             <LinearLayout
@@ -52,21 +52,22 @@
                         android:ems="10"
                         android:inputType="textUri" />
                 </com.google.android.material.textfield.TextInputLayout>
-                
+
                 <LinearLayout
                     android:id="@+id/extendedSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/TuskyTextInput"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_appname"
                         android:layout_marginTop="8dp"
+                        android:hint="@string/hint_appname"
                         app:errorEnabled="true">
-                    
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/appNameEditText"
                             android:layout_width="match_parent"
@@ -74,15 +75,15 @@
                             android:ems="10"
                             android:inputType="textUri" />
                     </com.google.android.material.textfield.TextInputLayout>
-                    
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/TuskyTextInput"
                         android:layout_width="250dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_website"
                         android:layout_marginTop="8dp"
+                        android:hint="@string/hint_website"
                         app:errorEnabled="true">
-                        
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/websiteEditText"
                             android:layout_width="match_parent"
@@ -91,12 +92,13 @@
                             android:inputType="textUri" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-                
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal">
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/loginButton"
                         style="@style/TuskyButton"
@@ -109,13 +111,13 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/settingsButton"
                         style="@style/TuskyButton"
-                        android:padding="4dp"
                         android:layout_width="32dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:padding="4dp"
                         app:icon="@drawable/ic_settings" />
                 </LinearLayout>
-                
+
                 <TextView
                     android:id="@+id/whatsAnInstanceTextView"
                     android:layout_width="250dp"
@@ -146,6 +148,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
     <androidx.appcompat.widget.Toolbar

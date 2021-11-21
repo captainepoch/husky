@@ -20,7 +20,6 @@
 package com.keylesspalace.tusky.core.navigation
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.keylesspalace.tusky.core.di.HuskyServices
 import com.keylesspalace.tusky.core.extensions.viewBinding
@@ -40,8 +39,8 @@ class NavigationActivity : AppCompatActivity(), SimpleStateChanger.NavigationHan
     private val binding by viewBinding(ActivityNavigationBinding::inflate)
     private lateinit var fragmentStateChanger: DefaultFragmentStateChanger
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initNavigation()
@@ -60,8 +59,6 @@ class NavigationActivity : AppCompatActivity(), SimpleStateChanger.NavigationHan
     }
 
     private fun initNavigation() {
-        Timber.d("Init setup navigation")
-
         fragmentStateChanger = DefaultFragmentStateChanger(
             supportFragmentManager,
             binding.fragmentContainer.id
