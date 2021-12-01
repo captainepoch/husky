@@ -3,7 +3,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.kotlin.dsl.maven
 
-const val kotlinVersion = "1.5.31"
+const val kotlinVersion = "1.5.32"
 
 object AndroidSDK {
     const val compileSdk = 30

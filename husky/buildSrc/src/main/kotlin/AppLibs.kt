@@ -31,7 +31,7 @@ object ApplicationLibs {
         const val lifecycle = "2.3.1"
         const val markdownEdit = "1.0.0"
         const val materialDesign = "1.4.0"
-        const val materialDrawer = "8.2.0"
+        const val materialDrawer = "8.4.5"
         const val materialDrawerTypeface = "3.0.1.4.original-kotlin@aar"
         const val pagingRuntimeKtx = "2.1.2"
         const val preferenceKtx = "1.1.1"
