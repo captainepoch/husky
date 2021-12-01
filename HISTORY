@@ -1,3 +1,10 @@
+Husky 1.0.2-beta3 - 2021-12-01
+ - Gradle: Enable Minify and Shrink resources for release builds.
+
+ Updated dependencies:
+  - Kotlin (1.5.31 -> 1.5.32)
+  - materialDrawer (8.2.0 -> 8.4.5)
+
 Husky 1.0.2-beta2 - 2021-11-20
  - Added: ZWSP character support to non-spaced emojis.
  - App: Add fragmentviewbindingdelegate-kt library instead of the class.

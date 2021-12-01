@@ -21,7 +21,7 @@ object DefaultConfig {
     const val applicationID = "su.xash.husky"
     const val minSdk = 23
     const val targetSdk = 30
-    const val versionCodeRel = 170
+    const val versionCodeRel = 171
     const val versionNameRel = "1.0.2"
 
     val javaVersion = JavaVersion.VERSION_11
@@ -34,7 +34,7 @@ object DefaultConfig {
 
 object BetaConfig {
     const val betaSuffix = "beta"
-    const val betaSuffixVersion = "2"
+    const val betaSuffixVersion = "3"
 }
 
 object BuildTypes {
