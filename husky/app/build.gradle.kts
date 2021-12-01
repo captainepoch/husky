@@ -59,8 +59,8 @@ android {
 
         getByName(BuildTypes.release) {
             isDebuggable = false
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
 
             proguardFiles(
                 getDefaultProguardFile(ProguardFile.defaultFile),
