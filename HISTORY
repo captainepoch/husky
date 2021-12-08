@@ -1,3 +1,6 @@
+Husky 1.0.2 - 2021-12-08
+ - App: Update versions for the version 1.0.2 release.
+
 Husky 1.0.2-beta3 - 2021-12-01
  - Gradle: Enable Minify and Shrink resources for release builds.
 
