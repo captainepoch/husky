@@ -35,7 +35,7 @@ object ApplicationLibs {
         const val materialDrawerTypeface = "3.0.1.4.original-kotlin@aar"
         const val pagingRuntimeKtx = "2.1.2"
         const val preferenceKtx = "1.1.1"
-        const val okhttpVersion = "4.9.2"
+        const val okhttpVersion = "4.9.3"
         const val recyclerView = "1.2.1"
         const val retrofit = "2.9.0"
         const val room = "2.2.5"
@@ -162,7 +162,7 @@ object ApplicationLibs {
 
 object GradlePlugins {
     object Versions {
-        const val gradle = "7.0.3"
+        const val gradle = "7.0.4"
         const val gradleVersions = "0.39.0"
         const val spotless = "6.0.0"
     }
