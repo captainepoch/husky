@@ -335,6 +335,26 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     }
                 }
             }
+
+            preferenceCategory(R.string.pref_title_proxy_settings) {
+                httpProxyPref = preference {
+                    setTitle(R.string.pref_title_http_proxy_settings)
+                    setOnPreferenceClickListener {
+                        activity?.let { activity ->
+                            val intent = PreferencesActivity.newIntent(
+                                activity,
+                                PreferencesActivity.PROXY_PREFERENCES
+                            )
+                            activity.startActivity(intent)
+                            activity.overridePendingTransition(
+                                R.anim.slide_from_right,
+                                R.anim.slide_to_left
+                            )
+                        }
+                        true
+                    }
+                }
+            }
         }
     }
 

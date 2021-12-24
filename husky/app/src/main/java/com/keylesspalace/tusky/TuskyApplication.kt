@@ -24,6 +24,7 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import androidx.core.app.NotificationManagerCompat
 import androidx.emoji.text.EmojiCompat
 import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
@@ -44,6 +45,15 @@ import dagger.android.HasAndroidInjector
 import io.reactivex.plugins.RxJavaPlugins
 import java.security.Security
 import javax.inject.Inject
+import org.acra.ReportField.ANDROID_VERSION
+import org.acra.ReportField.APP_VERSION_CODE
+import org.acra.ReportField.APP_VERSION_NAME
+import org.acra.ReportField.BUILD_CONFIG
+import org.acra.ReportField.STACK_TRACE
+import org.acra.config.mailSender
+import org.acra.config.notification
+import org.acra.data.StringFormat
+import org.acra.ktx.initAcra
 import org.conscrypt.Conscrypt
 import timber.log.Timber
 
@@ -99,6 +109,8 @@ class TuskyApplication : Application(), HasAndroidInjector {
     override fun attachBaseContext(base: Context) {
         localeManager = LocaleManager(base)
         super.attachBaseContext(localeManager.setLocale(base))
+
+        setupAcra()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -111,5 +123,40 @@ class TuskyApplication : Application(), HasAndroidInjector {
     companion object {
         @JvmStatic
         lateinit var localeManager: LocaleManager
+    }
+
+    private fun setupAcra() {
+        initAcra {
+            buildConfigClass = BuildConfig::class.java
+            reportFormat = StringFormat.KEY_VALUE_LIST
+            reportContent = listOf(
+                ANDROID_VERSION,
+                APP_VERSION_NAME,
+                APP_VERSION_CODE,
+                BUILD_CONFIG,
+                STACK_TRACE
+            ).toTypedArray()
+
+            notification {
+                title = getString(R.string.acra_notification_title)
+                text = getString(R.string.acra_notification_body)
+                channelName = getString(R.string.acra_notification_channel_title)
+                channelDescription = getString(R.string.acra_notification_channel_body)
+                resChannelImportance = NotificationManagerCompat.IMPORTANCE_DEFAULT
+                //resIcon = R.drawable.notification_icon
+                sendButtonText = getString(R.string.acra_notification_report)
+                //resSendButtonIcon = R.drawable.notification_send
+                discardButtonText = getString(R.string.acra_notification_discard)
+                //resDiscardButtonIcon = R.drawable.notification_discard
+                sendOnClick = false
+            }
+
+            mailSender {
+                mailTo = getString(R.string.acra_email)
+                reportAsFile = false
+                reportFileName = getString(R.string.acra_email_report_filename)
+                subject = getString(R.string.acra_email_subject)
+            }
+        }
     }
 }

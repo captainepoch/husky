@@ -21,8 +21,8 @@ object DefaultConfig {
     const val applicationID = "su.xash.husky"
     const val minSdk = 23
     const val targetSdk = 30
-    const val versionCodeRel = 172
-    const val versionNameRel = "1.0.2"
+    const val versionCodeRel = 173
+    const val versionNameRel = "1.1.0"
 
     val javaVersion = JavaVersion.VERSION_11
     val jvmTarget = javaVersion.toString()

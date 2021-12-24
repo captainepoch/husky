@@ -209,6 +209,8 @@ dependencies {
     implementation(ApplicationLibs.Square.okhttp)
     implementation(ApplicationLibs.Square.okhttpBrotli)
 
+    implementation(ApplicationLibs.acraMail)
+    implementation(ApplicationLibs.acraNotification)
     implementation(ApplicationLibs.androidImageCropper)
     implementation(ApplicationLibs.autodispose)
     implementation(ApplicationLibs.autodisposeAndroidArchComp)

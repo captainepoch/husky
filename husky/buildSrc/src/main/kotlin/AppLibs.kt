@@ -9,6 +9,7 @@ object AppPlugins {
 
 object ApplicationLibs {
     private object Versions {
+        const val acra = "5.8.4"
         const val androidImageCropper = "2.8.0"
         const val appcompat = "1.3.1"
         const val autodispose = "1.4.0"
@@ -137,6 +138,8 @@ object ApplicationLibs {
         const val okhttpBrotli = "com.squareup.okhttp3:okhttp-brotli:${Versions.okhttpVersion}"
     }
 
+    const val acraMail = "ch.acra:acra-mail:${Versions.acra}"
+    const val acraNotification = "ch.acra:acra-notification:${Versions.acra}"
     const val androidImageCropper =
         "com.theartofdev.edmodo:android-image-cropper:${Versions.androidImageCropper}"
     const val autodispose = "com.uber.autodispose:autodispose:${Versions.autodispose}"
