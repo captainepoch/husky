@@ -22,7 +22,7 @@ object ApplicationLibs {
         const val dagger = "2.38.1"
         const val emoji = "1.1.0"
         const val exifInterface = "1.3.3"
-        const val exoplayer = "2.16.1"
+        const val exoplayer = "2.16.0"
         const val filemojiCompat = "1.0.17"
         const val flexbox = "2.0.1"
         const val fragmentKtx = "1.2.5"
