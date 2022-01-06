@@ -631,7 +631,7 @@ interface MastodonApi {
             @Path("message_id") messageId: String
     ): Single<ChatMessage>
 
-    @GET("api/v1/pleroma/chats")
+    @GET("api/v2/pleroma/chats")
     fun getChats(
             @Query("max_id") maxId: String?,
             @Query("min_id") minId: String?,

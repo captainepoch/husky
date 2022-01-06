@@ -59,24 +59,24 @@ class ChatRepositoryImpl(
             getChatMessagesFromNetwork(chatId, maxId, sinceId, sincedIdMinusOne, limit, accountId, requestMode)
         }*/
 
-        return getChatMessagesFromNetwork(chatId, maxId, sinceId, sincedIdMinusOne, limit, accountId, requestMode)
+        return getChatMessagesFromNetwork(chatId, maxId, null, null, limit, accountId, requestMode)
     }
 
     private fun getChatsFromNetwork(maxId: String?, sinceId: String?,
                                        sinceIdMinusOne: String?, limit: Int,
                                        accountId: Long, requestMode: TimelineRequestMode
     ): Single<out List<ChatStatus>> {
-        return mastodonApi.getChats(maxId, null, sinceIdMinusOne, 0, limit + 1)
-                .map { chats ->
-                    this.saveChatsToDb(accountId, chats, maxId, sinceId)
-                }
-                .flatMap { chats ->
-                    this.addFromDbIfNeeded(accountId, chats, maxId, sinceId, limit, requestMode)
-                }
-                .onErrorResumeNext { error ->
-                    if (error is IOException && requestMode != NETWORK) {
-                        this.getChatsFromDb(accountId, maxId, sinceId, limit)
-                    } else {
+        return mastodonApi.getChats(null, null, sinceIdMinusOne, 0, limit + 1)
+            .map { chats ->
+                this.saveChatsToDb(accountId, chats, maxId, sinceId)
+            }
+            .flatMap { chats ->
+                this.addFromDbIfNeeded(accountId, chats, maxId, sinceId, limit, requestMode)
+            }
+            .onErrorResumeNext { error ->
+                if (error is IOException && requestMode != NETWORK) {
+                    this.getChatsFromDb(accountId, maxId, sinceId, limit)
+                } else {
                         Single.error(error)
                     }
                 }
