@@ -17,7 +17,7 @@ object ApplicationLibs {
         const val browser = "1.3.0"
         const val cardView = "1.0.0"
         const val conscryptAndroid = "2.5.2"
-        const val constraintlayout = "2.1.2"
+        const val constraintlayout = "2.1.3"
         const val coreKtx = "1.3.2"
         const val dagger = "2.38.1"
         const val emoji = "1.1.0"
