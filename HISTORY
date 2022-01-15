@@ -1,5 +1,6 @@
 Husky 1.1.0-beta1 - 2022-01-15
  - App: Added ACRA support.
+ - Fix: Fix missing chats in app
 
  Update dependencies:
   - constraintlayout (2.1.2 -> 2.1.3)
