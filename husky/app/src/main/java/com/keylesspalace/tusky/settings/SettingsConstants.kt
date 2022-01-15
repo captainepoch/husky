@@ -92,6 +92,4 @@ object PrefKeys {
 
     const val TAB_FILTER_HOME_REPLIES = "tabFilterHomeReplies"
     const val TAB_FILTER_HOME_BOOSTS = "tabFilterHomeBoosts"
-
-    const val ACRA_ENABLE_REPORT = "acraEnable"
 }

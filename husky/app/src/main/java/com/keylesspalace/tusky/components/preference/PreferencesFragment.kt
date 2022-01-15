@@ -45,6 +45,7 @@ import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizePx
 import javax.inject.Inject
 import okhttp3.OkHttpClient
+import org.acra.ACRA.PREF_ENABLE_ACRA
 
 class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
@@ -336,23 +337,12 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                 }
             }
 
-            preferenceCategory(R.string.pref_title_proxy_settings) {
-                httpProxyPref = preference {
-                    setTitle(R.string.pref_title_http_proxy_settings)
-                    setOnPreferenceClickListener {
-                        activity?.let { activity ->
-                            val intent = PreferencesActivity.newIntent(
-                                activity,
-                                PreferencesActivity.PROXY_PREFERENCES
-                            )
-                            activity.startActivity(intent)
-                            activity.overridePendingTransition(
-                                R.anim.slide_from_right,
-                                R.anim.slide_to_left
-                            )
-                        }
-                        true
-                    }
+            preferenceCategory(R.string.pref_acra_category) {
+                switchPreference {
+                    setDefaultValue(false)
+                    key = PREF_ENABLE_ACRA
+                    setTitle(R.string.pref_acra_body)
+                    isSingleLineTitle = false
                 }
             }
         }

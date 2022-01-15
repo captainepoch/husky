@@ -22,6 +22,7 @@ package com.keylesspalace.tusky
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.core.app.NotificationManagerCompat

@@ -250,6 +250,13 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             // Flush old media that was cached for sharing
             deleteStaleCachedMedia(applicationContext.getExternalFilesDir("Husky"))
         }
+
+        // Load the default settings for the app but does not overwrite changed values
+        PreferenceManager.setDefaultValues(
+            this,
+            R.xml.app_preferences,
+            true
+        )
     }
 
     private fun initPullNotifications() {

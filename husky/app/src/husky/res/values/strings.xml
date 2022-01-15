@@ -47,6 +47,10 @@
     <string name="pref_title_composing">Composing</string>
     <string name="pref_title_composing_title">Composing using zero-width space characters in emojis</string>
 
+    <string name="pref_acra_category">ACRA Settings</string>
+    <string name="pref_acra_body">Enable ACRA reporting</string>
+    <string name="key_enable_acra">acra.enable</string>
+
     <string name="pref_title_anonymize_upload_filenames">Anonymize uploaded file names</string>
     <string name="pref_title_live_notifications">Live notifications</string>
     <string name="pref_summary_live_notifications">May slightly increase power consumption</string>
