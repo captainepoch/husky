@@ -1,7 +1,8 @@
 <resources>
     <!-- ACRA SPECIFIC STRINGS -->
-    <string name="acra_email">~captainepoch/husky-reports@lists.sr.ht</string>
-	<string name="acra_email_subject">Husky crashed</string>
+    <string name="acra_email">husky@nixnetmail.com</string>
+    <string name="acra_email_subject">Husky crashed</string>
+    <string name="acra_email_body">Please, explain the steps to reproduce the crash (english only):\n\n</string>
     <string name="acra_email_report_filename">husky_crash_report.txt</string>
     <string name="acra_notification_channel_title">ACRA</string>
     <string name="acra_notification_channel_body">This channel is used for push notifications related to crashes captured by ACRA.</string>

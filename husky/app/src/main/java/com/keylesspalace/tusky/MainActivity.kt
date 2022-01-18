@@ -194,8 +194,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         glide = Glide.with(this)
 
         composeButton.setOnClickListener {
-            val composeIntent = Intent(applicationContext, ComposeActivity::class.java)
-            startActivity(composeIntent)
+            val a = 1/0
+            /*val composeIntent = Intent(applicationContext, ComposeActivity::class.java)
+            startActivity(composeIntent)*/
         }
 
         val hideTopToolbar = preferences.getBoolean(PrefKeys.HIDE_TOP_TOOLBAR, false)

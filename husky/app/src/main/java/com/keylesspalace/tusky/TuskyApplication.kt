@@ -22,7 +22,6 @@ package com.keylesspalace.tusky
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.core.app.NotificationManagerCompat
@@ -154,9 +153,10 @@ class TuskyApplication : Application(), HasAndroidInjector {
 
             mailSender {
                 mailTo = getString(R.string.acra_email)
-                reportAsFile = false
-                reportFileName = getString(R.string.acra_email_report_filename)
                 subject = getString(R.string.acra_email_subject)
+                body = getString(R.string.acra_email_body)
+                reportAsFile = true
+                reportFileName = getString(R.string.acra_email_report_filename)
             }
         }
     }
