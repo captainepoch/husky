@@ -43,4 +43,6 @@ allprojects {
 tasks.register<Delete>(BuildTasks.taskTypeClean) {
 	delete(buildDir)
 	delete("${projectDir}/buildSrc/build")
+	delete("${projectDir}/app/huskyBeta")
+	delete("${projectDir}/app/huskyStable")
 }
