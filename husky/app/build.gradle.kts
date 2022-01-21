@@ -1,3 +1,6 @@
+import com.project.starter.easylauncher.filter.ColorRibbonFilter
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
 plugins {
     id(AppPlugins.androidApplication)
 
@@ -5,6 +8,8 @@ plugins {
     kotlin(AppPlugins.kapt)
     id(AppPlugins.kotlinExtensions)
     // id(AppPlugins.kotlinParcelize)
+
+    id(AppPlugins.easylauncher) version (AppPlugins.Versions.easylauncher)
 }
 
 android {
@@ -84,16 +89,19 @@ android {
             dimension = Flavors.Dimensions.release
 
             versionNameSuffix = "-${BetaConfig.betaSuffix}${BetaConfig.betaSuffixVersion}"
-
-            buildConfigField(
-                "String",
-                "APPLICATION_NAME",
-                "\"${CustomHuskyBuild.applicationName} Beta\""
-            )
         }
 
         create(Flavors.stable) {
             dimension = Flavors.Dimensions.release
+        }
+    }
+
+    applicationVariants.all {
+        outputs.forEach { output ->
+            if(output is BaseVariantOutputImpl) {
+                output.outputFileName =
+                    "husky_${versionName}.${output.outputFile.extension}"
+            }
         }
     }
 
@@ -236,4 +244,19 @@ dependencies {
     androidTestImplementation(TestLibs.espresso)
     androidTestImplementation(TestLibs.junit)
     androidTestImplementation(TestLibs.roomTesting)
+}
+
+easylauncher {
+    productFlavors {
+        register(Flavors.beta) {
+            filters(
+                customRibbon(
+                    label = "Beta",
+                    gravity = ColorRibbonFilter.Gravity.TOPRIGHT,
+                    ribbonColor = "#DCDCDC",
+                    labelColor = "#000000"
+                )
+            )
+        }
+    }
 }

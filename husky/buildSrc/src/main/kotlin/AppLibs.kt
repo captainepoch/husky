@@ -1,6 +1,11 @@
 object AppPlugins {
+    object Versions {
+        const val easylauncher = "5.0.0"
+    }
+
     const val androidApplication = "com.android.application"
     const val androidBase = "android"
+    const val easylauncher = "com.starter.easylauncher"
     const val kapt = "kapt"
     const val kotlinExtensions = "kotlin-android-extensions"
     const val kotlinParcelize = "kotlin-parcelize"
@@ -167,7 +172,6 @@ object GradlePlugins {
     object Versions {
         const val gradle = "7.0.4"
         const val gradleVersions = "0.39.0"
-        const val spotless = "6.0.0"
     }
 
     const val android = "com.android.tools.build:gradle:${Versions.gradle}"
