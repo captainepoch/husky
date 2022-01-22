@@ -22,20 +22,20 @@ package com.keylesspalace.tusky.core.utils
 enum class Flavor(private val flavor: String) {
 
     BETA("huskyBeta"),
-    DEV("huskyStable");
+    STABLE("huskyStable");
 
     companion object {
 
         /**
          * Get the flavor enum (recommended use: using <code>Flavor.<FLAVOR></code>
-         * (<FLAVOR>: DEV, PRE, PROD).
+         * (<FLAVOR>: BETA, STABLE).
          *
          * @param flavor The name of the Flavor.
          */
         fun getFlavor(flavor: String) =
             when(flavor) {
-                BETA.flavor -> DEV
-                else -> DEV
+                BETA.flavor -> BETA
+                else -> STABLE
             }
     }
 }
