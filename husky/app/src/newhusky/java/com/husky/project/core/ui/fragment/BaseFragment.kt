@@ -17,27 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.keylesspalace.tusky.core.utils
+package com.husky.project.core.ui.fragment
 
-enum class Flavor(private val flavor: String) {
+import com.zhuinden.simplestackextensions.fragments.KeyedFragment
 
-    BETA("huskyBeta"),
-    STABLE("huskyStable"),
-    NEW_HUSKY("huskyNewhusky");
-
-    companion object {
-
-        /**
-         * Get the flavor enum (recommended use: using <code>Flavor.<FLAVOR></code>
-         * (<FLAVOR>: BETA, STABLE).
-         *
-         * @param flavor The name of the Flavor.
-         */
-        fun getFlavor(flavor: String) =
-            when(flavor) {
-                BETA.flavor -> BETA
-                NEW_HUSKY.flavor -> NEW_HUSKY
-                else -> STABLE
-            }
-    }
-}
+open class BaseFragment(layoutRes: Int) : KeyedFragment(layoutRes)

@@ -30,6 +30,20 @@ object DefaultConfig {
     const val instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     const val encoding = "UTF-8"
+
+    object Dev {
+        const val applicationID = "su.xash.husky.dev"
+
+        const val versionCode = 1
+        const val versionName = "1.0.0"
+    }
+
+    object NewHusky {
+        const val applicationID = "su.xash.husky.alpha"
+
+        const val versionCode = 1
+        const val versionName = "2.0.0"
+    }
 }
 
 object BetaConfig {
@@ -49,8 +63,11 @@ object Flavors {
     }
 
     const val husky = "husky"
+    const val dev = "dev"
     const val beta = "beta"
     const val stable = "stable"
+
+    const val newhusky = "newhusky"
 }
 
 object ProguardFile {

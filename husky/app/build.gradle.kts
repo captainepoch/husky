@@ -1,5 +1,5 @@
-import com.project.starter.easylauncher.filter.ColorRibbonFilter
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.project.starter.easylauncher.filter.ColorRibbonFilter
 
 plugins {
     id(AppPlugins.androidApplication)
@@ -81,8 +81,32 @@ android {
         )
     )
     productFlavors {
+        create(Flavors.newhusky) {
+            dimension = Flavors.Dimensions.release
+
+            applicationId = DefaultConfig.NewHusky.applicationID
+
+            minSdk = DefaultConfig.minSdk
+            targetSdk = DefaultConfig.targetSdk
+
+            versionCode = DefaultConfig.NewHusky.versionCode
+            versionName = DefaultConfig.NewHusky.versionName
+        }
+
         create(Flavors.husky) {
             dimension = Flavors.Dimensions.husky
+        }
+
+        create(Flavors.dev) {
+            dimension = Flavors.Dimensions.release
+
+            applicationId = DefaultConfig.Dev.applicationID
+
+            minSdk = DefaultConfig.minSdk
+            targetSdk = DefaultConfig.targetSdk
+
+            versionCode = DefaultConfig.Dev.versionCode
+            versionName = DefaultConfig.Dev.versionName
         }
 
         create(Flavors.beta) {
@@ -252,6 +276,17 @@ easylauncher {
             filters(
                 customRibbon(
                     label = "Beta",
+                    gravity = ColorRibbonFilter.Gravity.TOPRIGHT,
+                    ribbonColor = "#DCDCDC",
+                    labelColor = "#000000"
+                )
+            )
+        }
+
+        register(Flavors.newhusky) {
+            filters(
+                customRibbon(
+                    label = "NEW",
                     gravity = ColorRibbonFilter.Gravity.TOPRIGHT,
                     ribbonColor = "#DCDCDC",
                     labelColor = "#000000"

@@ -1,48 +1,48 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 buildscript {
-	addRepos(repositories)
+    addRepos(repositories)
 
-	dependencies {
-		// Base
-		classpath(GradlePlugins.android)
-		classpath(GradlePlugins.kotlin)
+    dependencies {
+        // Base
+        classpath(GradlePlugins.android)
+        classpath(GradlePlugins.kotlin)
 
-		// Plugins
-		classpath(GradlePlugins.gradleVersions)
-	}
+        // Plugins
+        classpath(GradlePlugins.gradleVersions)
+    }
 }
 
 allprojects {
-	addRepos(repositories)
+    addRepos(repositories)
 
-	tasks.withType<JavaCompile> {
-		options.encoding = DefaultConfig.encoding
-		options.compilerArgs.addAll(
-			listOf(
-				"-Xlint:all",
-				"-Xlint:unchecked",
-				"-Xlint:-deprecation"
-			)
-		)
-	}
+    tasks.withType<JavaCompile> {
+        options.encoding = DefaultConfig.encoding
+        options.compilerArgs.addAll(
+            listOf(
+                "-Xlint:all",
+                "-Xlint:unchecked",
+                "-Xlint:-deprecation"
+            )
+        )
+    }
 
-	apply {
-		plugin(AppPlugins.manesVersions)
-	}
+    apply {
+        plugin(AppPlugins.manesVersions)
+    }
 
-	tasks.withType<DependencyUpdatesTask> {
-		gradleReleaseChannel = "current"
+    tasks.withType<DependencyUpdatesTask> {
+        gradleReleaseChannel = "current"
 
-		rejectVersionIf {
-			!isNonStable(candidate.version)
-		}
-	}
+        rejectVersionIf {
+            !isNonStable(candidate.version)
+        }
+    }
 }
 
 tasks.register<Delete>(BuildTasks.taskTypeClean) {
-	delete(buildDir)
-	delete("${projectDir}/buildSrc/build")
-	delete("${projectDir}/app/huskyBeta")
-	delete("${projectDir}/app/huskyStable")
+    delete(buildDir)
+    delete("${projectDir}/buildSrc/build")
+    delete("${projectDir}/app/huskyBeta")
+    delete("${projectDir}/app/huskyStable")
 }

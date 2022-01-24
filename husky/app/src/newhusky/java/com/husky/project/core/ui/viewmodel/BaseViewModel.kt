@@ -17,27 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.keylesspalace.tusky.core.utils
+package com.husky.project.core.ui.viewmodel
 
-enum class Flavor(private val flavor: String) {
+import com.zhuinden.simplestack.Bundleable
 
-    BETA("huskyBeta"),
-    STABLE("huskyStable"),
-    NEW_HUSKY("huskyNewhusky");
-
-    companion object {
-
-        /**
-         * Get the flavor enum (recommended use: using <code>Flavor.<FLAVOR></code>
-         * (<FLAVOR>: BETA, STABLE).
-         *
-         * @param flavor The name of the Flavor.
-         */
-        fun getFlavor(flavor: String) =
-            when(flavor) {
-                BETA.flavor -> BETA
-                NEW_HUSKY.flavor -> NEW_HUSKY
-                else -> STABLE
-            }
-    }
-}
+abstract class BaseViewModel : Bundleable
