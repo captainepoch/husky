@@ -21,6 +21,7 @@ package com.keylesspalace.tusky.core.utils
 
 enum class Flavor(private val flavor: String) {
 
+    DEV("huskyDev"),
     BETA("huskyBeta"),
     STABLE("huskyStable"),
     NEW_HUSKY("huskyNewhusky");
@@ -35,6 +36,7 @@ enum class Flavor(private val flavor: String) {
          */
         fun getFlavor(flavor: String) =
             when(flavor) {
+                DEV.flavor -> DEV
                 BETA.flavor -> BETA
                 NEW_HUSKY.flavor -> NEW_HUSKY
                 else -> STABLE
