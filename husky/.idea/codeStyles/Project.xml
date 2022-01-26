@@ -47,7 +47,6 @@
       <option name="SPACE_BEFORE_COLON" value="true" />
     </JSON>
     <JavaCodeStyleSettings>
-      <option name="USE_FQ_CLASS_NAMES" value="true" />
       <option name="INSERT_INNER_CLASS_IMPORTS" value="true" />
       <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99999" />
       <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99999" />
