@@ -49,8 +49,14 @@
     <JavaCodeStyleSettings>
       <option name="USE_FQ_CLASS_NAMES" value="true" />
       <option name="INSERT_INNER_CLASS_IMPORTS" value="true" />
-      <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
-      <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
+      <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99999" />
+      <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99999" />
+      <option name="IMPORT_LAYOUT_TABLE">
+        <value>
+          <package name="" withSubpackages="true" static="true" />
+          <package name="" withSubpackages="true" static="false" />
+        </value>
+      </option>
     </JavaCodeStyleSettings>
     <JetCodeStyleSettings>
       <option name="PACKAGES_TO_USE_STAR_IMPORTS">
@@ -74,9 +80,6 @@
     <Shell_Script>
       <option name="SWITCH_CASES_INDENTED" value="true" />
     </Shell_Script>
-    <XML>
-      <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
-    </XML>
     <editorconfig>
       <option name="ENABLED" value="false" />
     </editorconfig>
