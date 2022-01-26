@@ -5,7 +5,7 @@ object TestLibs {
 		const val extJunit = "1.1.3"
 		const val junit = "4.13.2"
 		const val mockitoInline = "3.6.28"
-		const val mockitoKotlin = "2.2.0"
+		const val mockitoKotlin = "2.1.0"
 		const val roboelectric = "4.4"
 		const val roomTesting = "2.2.5"
 	}
