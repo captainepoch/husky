@@ -16,6 +16,7 @@ object ApplicationLibs {
     private object Versions {
         const val acra = "5.8.4"
         const val androidImageCropper = "2.8.0"
+        const val androidSvg = "1.4"
         const val appcompat = "1.3.1"
         const val autodispose = "1.4.0"
         const val bigImageViewer = "1.7.0"
@@ -105,6 +106,9 @@ object ApplicationLibs {
     object Glide {
         const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
         const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
+        const val glideImage = "com.github.piasy:GlideImageLoader:${Versions.glideImage}"
+        const val glideImageViewFactory =
+            "com.github.piasy:GlideImageViewFactory:${Versions.glideImage}"
         const val glideOkhttp = "com.github.bumptech.glide:okhttp3-integration:${Versions.glide}"
     }
 
@@ -145,6 +149,7 @@ object ApplicationLibs {
 
     const val acraMail = "ch.acra:acra-mail:${Versions.acra}"
     const val acraNotification = "ch.acra:acra-notification:${Versions.acra}"
+    const val androidSvg = "com.caverock:androidsvg-aar:${Versions.androidSvg}"
     const val androidImageCropper =
         "com.theartofdev.edmodo:android-image-cropper:${Versions.androidImageCropper}"
     const val autodispose = "com.uber.autodispose:autodispose:${Versions.autodispose}"
@@ -155,9 +160,6 @@ object ApplicationLibs {
     const val filemojiCompat = "de.c1710:filemojicompat:${Versions.filemojiCompat}"
     const val fragmentviewbindingdelegateKt =
         "com.github.Zhuinden:fragmentviewbindingdelegate-kt:${Versions.fragmentviewbindingdelegateKt}"
-    const val glideImage = "com.github.piasy:GlideImageLoader:${Versions.glideImage}"
-    const val glideImageViewFactory =
-        "com.github.piasy:GlideImageViewFactory:${Versions.glideImage}"
     const val markdownEdit = "com.github.Tunous:MarkdownEdit:${Versions.markdownEdit}"
     const val materialDrawer = "com.mikepenz:materialdrawer:${Versions.materialDrawer}"
     const val materialDrawerIconics =

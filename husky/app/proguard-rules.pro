@@ -24,6 +24,7 @@
 -keepclassmembers class * extends android.app.Activity {
     public void *(android.view.View);
 }
+
 # For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
 -keepclassmembers enum * {
     public static **[] values();
