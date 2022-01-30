@@ -1,3 +1,15 @@
+Husky 1.1.0-beta3 - 2022-01-30
+ - App: Added beta ribbon.
+ - App: New flavors (dev and newhusky).
+ - App: Added SVG emoji support.
+ - Change: Body HTTP debug info.
+ - Remove: Remove unused beta stuff.
+
+ Update dependencies:
+  - buildTools (30.0.3 -> 32.0.0)
+  - gradle (7.0.4 -> 7.1.0)
+  - mockitoKotlin (2.2.0 -> 2.1.0)
+
 Husky 1.1.0-beta2 - 2022-01-18
  - Fix: Change ACRA email address.
 
