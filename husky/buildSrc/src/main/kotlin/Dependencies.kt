@@ -7,7 +7,7 @@ const val kotlinVersion = "1.5.32"
 
 object AndroidSDK {
     const val compileSdk = 30
-    const val buildTools = "30.0.3"
+    const val buildTools = "32.0.0"
 }
 
 object CustomHuskyBuild {

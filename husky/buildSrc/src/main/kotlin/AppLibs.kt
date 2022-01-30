@@ -172,7 +172,7 @@ object ApplicationLibs {
 
 object GradlePlugins {
     object Versions {
-        const val gradle = "7.0.4"
+        const val gradle = "7.1.0"
         const val gradleVersions = "0.39.0"
     }
 
