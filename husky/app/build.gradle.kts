@@ -129,14 +129,6 @@ android {
         }
     }
 
-    /*lint {
-        // isAbortOnError = true
-        disable("MissingTranslation")
-        disable("ExtraTranslation")
-        disable("AppCompatCustomView")
-        disable("UseRequireInsteadOfGet")
-    }*/
-
     lint {
         // abortOnError = true
         disable.addAll(
