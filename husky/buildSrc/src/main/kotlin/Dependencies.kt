@@ -31,6 +31,14 @@ object DefaultConfig {
 
     const val encoding = "UTF-8"
 
+    object DebugSign {
+        const val signingDebug = "debug"
+        const val keystoreFile = "debug.keystore"
+        const val keystorePassword = "android"
+        const val keyAlias = "androiddebugkey"
+        const val keyPassword = "android"
+    }
+
     object Dev {
         const val applicationID = "su.xash.husky.dev"
 

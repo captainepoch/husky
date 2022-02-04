@@ -55,11 +55,22 @@ android {
         )
     }
 
+    signingConfigs {
+        getByName(DefaultConfig.DebugSign.signingDebug) {
+            storeFile = file("$rootDir/${DefaultConfig.DebugSign.keystoreFile}")
+            storePassword = DefaultConfig.DebugSign.keystorePassword
+            keyAlias = DefaultConfig.DebugSign.keyAlias
+            keyPassword = DefaultConfig.DebugSign.keyPassword
+        }
+    }
+
     buildTypes {
         getByName(BuildTypes.debug) {
             isDebuggable = true
             isMinifyEnabled = false
             isShrinkResources = false
+
+            signingConfig = signingConfigs.getByName(DefaultConfig.DebugSign.signingDebug)
         }
 
         getByName(BuildTypes.release) {
