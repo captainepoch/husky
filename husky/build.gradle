@@ -1,0 +1,34 @@
+buildscript {
+    apply from: "versions.gradle"
+    apply from: "dependencies.gradle"
+
+    apply from: "instance.gradle"
+
+    addRepos(repositories)
+
+    dependencies {
+        classpath deps.androidGradlePlugin
+        classpath deps.kotlinGradlePlugin
+    }
+}
+
+allprojects {
+    addRepos(repositories)
+
+    tasks.withType(JavaCompile) {
+        options.encoding(buildVersions.encoding)
+        options.compilerArgs += [
+                "-Xlint:all",
+                "-Xlint:unchecked",
+                "-Xlint:-deprecation",
+        ]
+    }
+}
+
+task clean(type: Delete) {
+    delete(rootProject.buildDir)
+    delete("${rootProject.buildDir}/app/huskyBeta")
+    delete("${rootProject.buildDir}/app/huskyStable")
+    delete("${rootProject.buildDir}/app/huskyDev")
+    delete("${rootProject.buildDir}/app/huskyNewhusky")
+}

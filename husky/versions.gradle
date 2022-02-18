@@ -1,0 +1,80 @@
+ext.kotlin_version = "1.6.10"
+
+def buildVersions = [:]
+buildVersions.applicationId = "com.captainepoch.basemvvm"
+buildVersions.compileSdk = 30
+buildVersions.minSdk = 23
+buildVersions.targetSdk = 30
+buildVersions.buildTools = "30.0.3"
+buildVersions.javaCompat = JavaVersion.VERSION_11
+buildVersions.jdkVersion = 11
+
+buildVersions.encoding = "UTF-8"
+
+buildVersions.versionName = "1.0.0"
+buildVersions.versionCode = 1
+ext.buildVersions = buildVersions
+
+def versions = [:]
+
+def gradle = [:]
+gradle.androidGradlePlugin = "7.1.1"
+gradle.gradleVersions = "0.39.0"
+versions.gradle = gradle
+
+versions.acra = "5.8.4"
+versions.androidImageCropper = "2.8.0"
+versions.androidSvg = "1.4"
+versions.appcompat = "1.3.1"
+versions.autodispose = "1.4.0"
+versions.bigImageViewer = "1.7.0"
+versions.browser = "1.3.0"
+versions.cardView = "1.0.0"
+versions.conscryptAndroid = "2.5.2"
+versions.constraintlayout = "2.1.3"
+versions.coreKtx = "1.3.2"
+versions.dagger = "2.38.1"
+versions.emoji = "1.1.0"
+versions.exifInterface = "1.3.3"
+versions.exoplayer = "2.16.0"
+versions.filemojiCompat = "1.0.17"
+versions.flexbox = "2.0.1"
+versions.fragmentKtx = "1.2.5"
+versions.fragmentviewbindingdelegateKt = "1.0.0"
+versions.glide = "4.12.0"
+versions.glideImage = "1.8.1"
+versions.kotlin = "1.6.10"
+versions.lifecycle = "2.3.1"
+versions.markdownEdit = "1.0.0"
+versions.materialDesign = "1.4.0"
+versions.materialDrawer = "8.4.5"
+versions.materialDrawerTypeface = "3.0.1.4.original-kotlin@aar"
+versions.pagingRuntimeKtx = "2.1.2"
+versions.preferenceKtx = "1.1.1"
+versions.okhttpVersion = "4.9.3"
+versions.recyclerView = "1.2.1"
+versions.retrofit = "2.9.0"
+versions.room = "2.2.5"
+versions.rxAndroid = "2.1.1"
+versions.rxJava = "2.2.21"
+versions.rxKotlin = "2.4.0"
+versions.shareTarget = "1.0.0"
+versions.simplestack = "2.6.2"
+versions.simplestackext = "2.2.2"
+versions.sparkButton = "4.1.0"
+versions.swipeRefreshLayout = "1.1.0"
+versions.timber = "5.0.1"
+versions.viewpager2 = "1.0.0"
+versions.workRuntime = "2.4.0"
+
+def testing = [:]
+testing.espresso = "3.4.0"
+testing.extJunit = "1.1.3"
+testing.junit = "4.13.2"
+testing.mockitoInline = "3.6.28"
+testing.mockitoKotlin = "2.1.0"
+testing.roboelectric = "4.4"
+testing.roomTesting = "2.2.5"
+versions.testing = testing
+
+ext.versions = versions

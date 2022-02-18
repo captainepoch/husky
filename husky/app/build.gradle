@@ -1,0 +1,208 @@
+plugins {
+    id "com.android.application"
+
+    id "kotlin-android"
+    id "kotlin-kapt"
+
+    id "kotlin-android-extensions"
+    //id "kotlin-parcelize"
+}
+
+android {
+    compileSdkVersion buildVersions.compileSdk
+    buildToolsVersion buildVersions.buildTools
+
+    defaultConfig {
+        applicationId buildVersions.applicationId
+
+        minSdkVersion buildVersions.minSdk
+        targetSdkVersion buildVersions.targetSdk
+
+        versionCode buildVersions.versionCode
+        versionName buildVersions.versionName
+
+        testInstrumentationRunner deps.testinstrunner
+
+        buildConfigField("String", "APPLICATION_NAME", "\"$APP_NAME\"")
+        buildConfigField("String", "CUSTOM_LOGO_URL", "\"$CUSTOM_LOGO_URL\"")
+        buildConfigField("String", "CUSTOM_INSTANCE", "\"$CUSTOM_INSTANCE\"")
+        buildConfigField("String", "SUPPORT_ACCOUNT_URL", "\"$SUPPORT_ACCOUNT_URL\"")
+    }
+
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+            arg("room.incremental", "true")
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+
+            // TODO: signing debug key
+        }
+
+        release {
+            debuggable false
+
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    flavorDimensions "husky", "release"
+    productFlavors {
+        husky {
+            dimension "husky"
+        }
+
+        beta {
+            dimension "release"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = buildVersions.javaCompat
+        targetCompatibility = buildVersions.javaCompat
+    }
+
+    kotlinOptions {
+        jvmTarget = buildVersions.javaCompat.toString()
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    packagingOptions {
+        exclude "META-INF/DEPENDENCIES"
+        exclude "META-INF/LICENSE"
+        exclude "META-INF/LICENSE.txt"
+        exclude "META-INF/license.txt"
+        exclude "META-INF/NOTICE"
+        exclude "META-INF/NOTICE.txt"
+        exclude "META-INF/notice.txt"
+        exclude "META-INF/ASL2.0"
+        exclude "META-INF/*.kotlin_module"
+        exclude "LICENSE_OFL"
+        exclude "LICENSE_UNICODE"
+    }
+
+    bundle {
+        language {
+            // bundle all languages in every apk so the dynamic language switching works
+            enableSplit = false
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation deps.androidx.appCompat
+    implementation deps.androidx.browser
+    implementation deps.androidx.cardView
+    implementation deps.androidx.constraintLayout
+    implementation deps.androidx.coreKtx
+    implementation deps.androidx.emoji
+    implementation deps.androidx.emojiAppCompat
+    implementation deps.androidx.emojiBundled
+    implementation deps.androidx.exifInterface
+    implementation deps.androidx.fragmentKtx
+    implementation deps.androidx.pagingRuntimeKtx
+    implementation deps.androidx.preferenceKtx
+    implementation deps.androidx.recyclerView
+    kapt deps.androidx.roomCompiler
+    implementation deps.androidx.roomRuntime
+    implementation deps.androidx.roomRxJava
+    implementation deps.androidx.shareTarget
+    implementation deps.androidx.swipeRefreshLayout
+    implementation deps.androidx.viewpager2
+    implementation deps.androidx.workRuntime
+    implementation deps.androidx.lifecycle.commonJava
+    implementation deps.androidx.lifecycle.liveDataKtx
+    implementation deps.androidx.lifecycle.reactiveStreamsKtx
+    implementation deps.androidx.lifecycle.viewmodelKtx
+
+    implementation deps.dagger.dagger
+    implementation deps.dagger.daggerAndroid
+    kapt deps.dagger.daggerCompiler
+    kapt deps.dagger.daggerProcessor
+    implementation deps.dagger.daggerSupport
+
+    implementation deps.glide.glide
+    kapt deps.glide.glideCompiler
+    implementation deps.glide.glideImage
+    implementation deps.glide.glideImageViewFactory
+    implementation deps.glide.glideOkhttp
+
+    implementation deps.google.flexbox
+    implementation deps.google.exoplayer
+    implementation deps.google.materialDesign
+
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.stdlibJdk
+
+    implementation deps.rxjava.rxAndroid
+    implementation deps.rxjava.rxJava
+    implementation deps.rxjava.rxKotlin
+
+    implementation deps.simplestack.ext
+    implementation deps.simplestack.lib
+
+    implementation deps.square.retrofit
+    implementation deps.square.retrofitAdapterRxJ2
+    implementation deps.square.retrofitConvGson
+    implementation deps.square.logginInterceptor
+    implementation deps.square.okhttp
+    implementation deps.square.okhttpBrotli
+
+    implementation deps.acraMail
+    implementation deps.acraNotification
+    implementation deps.androidImageCropper
+    implementation deps.androidSvg
+    implementation deps.autodispose
+    implementation deps.autodisposeAndroidArchComp
+    implementation deps.bigImageViewer
+    implementation deps.conscryptAndroid
+    implementation deps.filemojiCompat
+    implementation deps.fragmentviewbindingdelegateKt
+    implementation deps.markdownEdit
+    implementation deps.materialDrawer
+    implementation deps.materialDrawerIconics
+    implementation deps.materialDrawerTypeface
+    implementation deps.sparkButton
+    implementation deps.timber
+
+    testImplementation deps.testing.extJunit
+    testImplementation deps.testing.junit
+    testImplementation deps.testing.mockitoInline
+    testImplementation deps.testing.mockitoKotlin
+    testImplementation deps.testing.roboelectric
+
+    androidTestImplementation deps.testing.espresso
+    androidTestImplementation deps.testing.junit
+    androidTestImplementation deps.testing.roomTesting
+}
