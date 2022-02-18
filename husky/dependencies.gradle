@@ -129,7 +129,7 @@ deps.timber = "com.jakewharton.timber:timber:${versions.timber}"
 // Repository handler
 static def addRepos(RepositoryHandler handler) {
     handler.google()
-    handler.jcenter()
+    handler.mavenCentral()
     handler.maven { url "https://jitpack.io" }
     handler.maven { url "https://plugins.gradle.org/m2/" }
 }
