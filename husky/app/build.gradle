@@ -36,6 +36,15 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("${rootDir}/${buildVersions.debugSign.keystoreFile}")
+            storePassword buildVersions.debugSign.keystorePassword
+            keyAlias buildVersions.debugSign.keyAlias
+            keyPassword buildVersions.debugSign.keyPassword
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -44,7 +53,7 @@ android {
             shrinkResources false
             zipAlignEnabled false
 
-            // TODO: signing debug key
+            signingConfig signingConfigs.debug
         }
 
         release {

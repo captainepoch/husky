@@ -50,7 +50,6 @@ buildVersions.flavorDimensions = flavorDimensions
 
 // Debug signing info
 def debugSign = [:]
-debugSign.signingDebug = "debug"
 debugSign.keystoreFile = "debug.keystore"
 debugSign.keystorePassword = "android"
 debugSign.keyAlias = "androiddebugkey"
