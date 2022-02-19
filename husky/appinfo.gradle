@@ -1,0 +1,60 @@
+def buildVersions = [:]
+buildVersions.applicationId = "su.xash.husky"
+buildVersions.compileSdk = 30
+buildVersions.minSdk = 23
+buildVersions.targetSdk = 30
+buildVersions.buildTools = "32.0.0"
+buildVersions.javaCompat = JavaVersion.VERSION_11
+buildVersions.jdkVersion = "${buildVersions.javaCompat}"
+
+buildVersions.encoding = "UTF-8"
+
+buildVersions.versionCode = 175
+buildVersions.versionName = "1.1.0"
+
+// Beta version info
+def beta = [:]
+beta.suffix = "beta"
+beta.versionSuffix = "3"
+buildVersions.beta = beta
+
+// Dev version info
+def dev = [:]
+dev.applicationId = "su.xash.husky.dev"
+
+dev.minSdk = 23
+dev.targetSdk = 30
+
+dev.versionCode = 1
+dev.versionName = "1.0.0"
+buildVersions.dev = dev
+
+// Husky refactor info
+def newHusky = [:]
+newHusky.applicationID = "su.xash.husky.alpha"
+
+newHusky.compileSdk = 30
+newHusky.minSdk = 23
+newHusky.targetSdk = 30
+
+newHusky.versionCode = 1
+newHusky.versionName = "2.0.0"
+buildVersions.newHusky = newHusky
+
+// Flavors dimensions
+def flavorDimensions = [:]
+flavorDimensions.husky = "husky"
+flavorDimensions.release = "release"
+buildVersions.flavorDimensions = flavorDimensions
+
+
+// Debug signing info
+def debugSign = [:]
+debugSign.signingDebug = "debug"
+debugSign.keystoreFile = "debug.keystore"
+debugSign.keystorePassword = "android"
+debugSign.keyAlias = "androiddebugkey"
+debugSign.keyPassword = "android"
+buildVersions.debugSign = debugSign
+
+ext.buildVersions = buildVersions

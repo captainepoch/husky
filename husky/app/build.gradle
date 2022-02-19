@@ -54,22 +54,50 @@ android {
             shrinkResources true
             zipAlignEnabled true
 
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
         }
     }
 
-    flavorDimensions "husky", "release"
+    flavorDimensions buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release
     productFlavors {
+        newHusky {
+            dimension buildVersions.flavorDimensions.release
+
+            applicationId buildVersions.newHusky.applicationId
+
+            compileSdkVersion buildVersions.newHusky.compileSdk
+            minSdkVersion buildVersions.newHusky.minSdk
+            targetSdkVersion buildVersions.newHusky.targetSdk
+
+            versionCode buildVersions.newHusky.versionCode
+            versionName buildVersions.newHusky.versionName
+        }
+
         husky {
-            dimension "husky"
+            dimension buildVersions.flavorDimensions.husky
+        }
+
+        dev {
+            dimension buildVersions.flavorDimensions.release
+
+            applicationId buildVersions.dev.applicationId
+
+            minSdkVersion buildVersions.dev.minSdk
+            targetSdkVersion buildVersions.dev.targetSdk
+
+            versionCode buildVersions.dev.versionCode
+            versionName buildVersions.dev.versionName
         }
 
         beta {
-            dimension "release"
+            dimension buildVersions.flavorDimensions.release
+
+            versionNameSuffix = "-${buildVersions.beta.suffix}${buildVersions.beta.versionSuffix}"
         }
 
         stable {
-            dimension "release"
+            dimension buildVersions.flavorDimensions.release
         }
     }
 
@@ -79,12 +107,13 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = buildVersions.javaCompat.toString()
+        jvmTarget = buildVersions.jdkVersion
     }
 
     androidExtensions {
         experimental = true
     }
+
     buildFeatures {
         viewBinding true
     }

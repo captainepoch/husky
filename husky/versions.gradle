@@ -1,20 +1,7 @@
+// Kotlin version
 ext.kotlin_version = "1.6.10"
 
-def buildVersions = [:]
-buildVersions.applicationId = "com.captainepoch.basemvvm"
-buildVersions.compileSdk = 30
-buildVersions.minSdk = 23
-buildVersions.targetSdk = 30
-buildVersions.buildTools = "30.0.3"
-buildVersions.javaCompat = JavaVersion.VERSION_11
-buildVersions.jdkVersion = 11
-
-buildVersions.encoding = "UTF-8"
-
-buildVersions.versionName = "1.0.0"
-buildVersions.versionCode = 1
-ext.buildVersions = buildVersions
-
+// Dependencies versions
 def versions = [:]
 
 def gradle = [:]
