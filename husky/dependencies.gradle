@@ -129,9 +129,16 @@ deps.timber = "com.jakewharton.timber:timber:${versions.timber}"
 // Repository handler
 static def addRepos(RepositoryHandler handler) {
     handler.google()
+    handler.gradlePluginPortal()
     handler.mavenCentral()
     handler.maven { url "https://jitpack.io" }
     handler.maven { url "https://plugins.gradle.org/m2/" }
 }
 
+static def isNonStable(String version) {
+    def stableKeyword = ["a", "alpha", "beta", "final", "ga", "m", "release", "rc"].any { it -> version.toLowerCase().contains(it) }
+    return stableKeyword
+}
+
+ext.isNonStable = this.&isNonStable
 ext.addRepos = this.&addRepos

@@ -1,3 +1,5 @@
+apply plugin: "com.github.ben-manes.versions"
+
 buildscript {
     apply from: "versions.gradle"
     apply from: "dependencies.gradle"
@@ -9,6 +11,8 @@ buildscript {
     dependencies {
         classpath deps.androidGradlePlugin
         classpath deps.kotlinGradlePlugin
+
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.42.0"
     }
 }
 
@@ -22,6 +26,16 @@ allprojects {
                 "-Xlint:unchecked",
                 "-Xlint:-deprecation",
         ]
+    }
+
+    apply plugin: com.github.benmanes.gradle.versions.VersionsPlugin
+
+    tasks.named("dependencyUpdates").configure {
+        gradleReleaseChannel = "current"
+
+        rejectVersionIf {
+            isNonStable(it.candidate.version)
+        }
     }
 }
 
