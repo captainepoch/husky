@@ -70,7 +70,7 @@ android {
 
     flavorDimensions buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release
     productFlavors {
-        newHusky {
+        newhusky {
             dimension buildVersions.flavorDimensions.release
 
             applicationId buildVersions.newHusky.applicationId
