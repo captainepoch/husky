@@ -20,7 +20,8 @@ buildVersions.beta = beta
 
 // Dev version info
 def dev = [:]
-dev.applicationId = "su.xash.husky.dev"
+dev.suffix = "dev"
+dev.applicationId = "su.xash.husky.${dev.suffix}"
 
 dev.minSdk = 23
 dev.targetSdk = 30
@@ -31,7 +32,8 @@ buildVersions.dev = dev
 
 // Husky refactor info
 def newHusky = [:]
-newHusky.applicationID = "su.xash.husky.alpha"
+newHusky.suffix = "newHusky"
+newHusky.applicationId = "su.xash.husky.${newHusky.suffix}"
 
 newHusky.compileSdk = 30
 newHusky.minSdk = 23
@@ -46,7 +48,6 @@ def flavorDimensions = [:]
 flavorDimensions.husky = "husky"
 flavorDimensions.release = "release"
 buildVersions.flavorDimensions = flavorDimensions
-
 
 // Debug signing info
 def debugSign = [:]

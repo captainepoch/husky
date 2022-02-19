@@ -81,6 +81,8 @@ android {
 
             versionCode buildVersions.newHusky.versionCode
             versionName buildVersions.newHusky.versionName
+
+            versionNameSuffix = "-${buildVersions.newHusky.suffix}"
         }
 
         husky {
@@ -97,6 +99,8 @@ android {
 
             versionCode buildVersions.dev.versionCode
             versionName buildVersions.dev.versionName
+
+            versionNameSuffix = "-${buildVersions.dev.suffix}"
         }
 
         beta {
@@ -108,6 +112,24 @@ android {
         stable {
             dimension buildVersions.flavorDimensions.release
         }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def filename = output.outputFileName.split("\\.")
+            if(filename.size() == 2) {
+                def extension = filename[1]
+                output.outputFileName = "husky_${versionName}.${extension}"
+            }
+        }
+    }
+
+    lintOptions {
+        //abortOnError false
+        disable "MissingTranslation"
+        disable "ExtraTranslation"
+        disable "AppCompatCustomView"
+        disable "UseRequireInsteadOfGet"
     }
 
     compileOptions {
