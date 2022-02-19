@@ -136,7 +136,7 @@ static def addRepos(RepositoryHandler handler) {
 }
 
 static def isNonStable(String version) {
-    def stableKeyword = ["a", "alpha", "beta", "final", "ga", "m", "release", "rc"].any { it -> version.toLowerCase().contains(it) }
+    def stableKeyword = ["a", "alpha", "b", "beta", "final", "ga", "m", "release", "rc"].any { it -> version.toLowerCase().contains(it) }
     return stableKeyword
 }
 
