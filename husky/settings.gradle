@@ -1,3 +1,4 @@
 rootProject.name = "husky"
 
 include ":app"
+include ':newhusky'

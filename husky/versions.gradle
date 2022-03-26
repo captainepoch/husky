@@ -5,8 +5,8 @@ ext.kotlin_version = "1.6.10"
 def versions = [:]
 
 def gradle = [:]
-gradle.androidGradlePlugin = "7.1.1"
-gradle.gradleVersions = "0.39.0"
+gradle.androidGradlePlugin = "7.1.2"
+gradle.gradleVersions = "0.42.0"
 versions.gradle = gradle
 
 versions.acra = "5.8.4"
@@ -28,7 +28,7 @@ versions.filemojiCompat = "1.0.17"
 versions.flexbox = "2.0.1"
 versions.fragmentKtx = "1.2.5"
 versions.fragmentviewbindingdelegateKt = "1.0.0"
-versions.glide = "4.12.0"
+versions.glide = "4.13.1"
 versions.glideImage = "1.8.1"
 versions.kotlin = "1.6.10"
 versions.lifecycle = "2.3.1"

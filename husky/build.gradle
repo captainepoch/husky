@@ -13,7 +13,7 @@ buildscript {
         classpath deps.androidGradlePlugin
         classpath deps.kotlinGradlePlugin
 
-        classpath "com.github.ben-manes:gradle-versions-plugin:0.42.0"
+        classpath deps.gradlePluginVersions
     }
 }
 
@@ -30,7 +30,6 @@ allprojects {
     }
 
     apply plugin: com.github.benmanes.gradle.versions.VersionsPlugin
-
     tasks.named("dependencyUpdates").configure {
         gradleReleaseChannel = "current"
 
