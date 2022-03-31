@@ -1,3 +1,14 @@
+Husky 1.1.0 - 2022-03-31
+ - New Husky: More code, not useful for now.
+ - Deps: Change jcenter to mavenCentral.
+
+ Update dependencies:
+  - AGP (7.1.1 -> 7.1.2)
+  - glide (4.12.0 -> 4.13.1)
+  - gradle (7.3.3 -> 7.4.1)
+  - gradle-versions (0.42.0)
+  - kotlinx (1.6.0)
+
 Husky 1.1.0-beta3 - 2022-01-30
  - App: Added beta ribbon.
  - App: New flavors (dev and newhusky).
