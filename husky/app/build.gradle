@@ -185,6 +185,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
+    // AndroidX dependencies
     implementation deps.androidx.appCompat
     implementation deps.androidx.browser
     implementation deps.androidx.cardView
@@ -210,32 +211,43 @@ dependencies {
     implementation deps.androidx.lifecycle.reactiveStreamsKtx
     implementation deps.androidx.lifecycle.viewmodelKtx
 
+    // Dagger dependencies
     implementation deps.dagger.dagger
     implementation deps.dagger.daggerAndroid
     kapt deps.dagger.daggerCompiler
     kapt deps.dagger.daggerProcessor
     implementation deps.dagger.daggerSupport
 
+    // Glide dependencies
     implementation deps.glide.glide
     kapt deps.glide.glideCompiler
     implementation deps.glide.glideImage
     implementation deps.glide.glideImageViewFactory
     implementation deps.glide.glideOkhttp
 
+    // Google dependencies
     implementation deps.google.flexbox
     implementation deps.google.exoplayer
     implementation deps.google.materialDesign
 
+    // Kotlin dependencies
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.stdlibJdk
 
+    // KotlinX dependencies
+    implementation deps.kotlinx.coroutinesCore
+    implementation deps.kotlinx.coroutinesAndroid
+
+    // RxJava dependencies
     implementation deps.rxjava.rxAndroid
     implementation deps.rxjava.rxJava
     implementation deps.rxjava.rxKotlin
 
+    // simple-stack dependencies
     implementation deps.simplestack.ext
     implementation deps.simplestack.lib
 
+    // Square dependencies
     implementation deps.square.retrofit
     implementation deps.square.retrofitAdapterRxJ2
     implementation deps.square.retrofitConvGson
@@ -243,6 +255,7 @@ dependencies {
     implementation deps.square.okhttp
     implementation deps.square.okhttpBrotli
 
+    // Other dependencies
     implementation deps.acraMail
     implementation deps.acraNotification
     implementation deps.androidImageCropper
@@ -260,6 +273,7 @@ dependencies {
     implementation deps.sparkButton
     implementation deps.timber
 
+    // Testing dependencies
     testImplementation deps.testing.extJunit
     testImplementation deps.testing.junit
     testImplementation deps.testing.mockitoInline

@@ -22,9 +22,11 @@ package com.husky.project.core.navigation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.husky.project.core.di.HuskyServices
+import com.husky.project.core.ui.fragment.BaseFragment
+import com.husky.project.core.ui.navigation.BaseKey
+import com.husky.project.features.splash.view.navigation.SplashKey
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityNavigationBinding
-import com.husky.project.features.splash.view.navigation.SplashKey
 import com.zhuinden.simplestack.History
 import com.zhuinden.simplestack.SimpleStateChanger
 import com.zhuinden.simplestack.StateChange
@@ -47,10 +49,16 @@ class NavigationActivity : AppCompatActivity(), SimpleStateChanger.NavigationHan
     }
 
     override fun onBackPressed() {
-        if(!backstack.goBack()) {
-            Timber.i("No keys found, exiting the application...")
+        val currentFragment = supportFragmentManager.findFragmentByTag(
+            backstack.top<BaseKey>().fragmentTag
+        )
+        if(currentFragment is BaseFragment && currentFragment.onHandleBack()) {
+            Timber.i("Handled back from Fragment[${currentFragment.tag}]")
+            if(!backstack.goBack()) {
+                Timber.i("No keys found, exiting the application...")
 
-            this.finishAndRemoveTask()
+                this.finish()
+            }
         }
     }
 

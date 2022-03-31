@@ -7,7 +7,7 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.core.extensions.addHttpsProtocolUrl
 import com.keylesspalace.tusky.core.extensions.dialogWithLink
 import com.keylesspalace.tusky.core.extensions.viewBinding
-import com.keylesspalace.tusky.core.extensions.viewObserve
+import com.husky.project.core.extensions.viewObserve
 import com.husky.project.core.ui.fragment.BaseFragment
 import com.keylesspalace.tusky.databinding.ActivityLoginBinding
 import com.husky.project.features.login.view.viewmodel.LoginViewModel

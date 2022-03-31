@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.keylesspalace.tusky.core.extensions
+package com.husky.project.core.extensions
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -26,7 +26,6 @@ import androidx.lifecycle.Observer
 fun <T : Any, L : LiveData<T>> Fragment.viewObserve(liveData: L, body: (T?) -> Unit) =
     liveData.observe(viewLifecycleOwner, Observer(body))
 
-// TODO: When Failure class is ready
 /*fun <L : LiveData<Failure>> Fragment.viewFailureObserve(
     liveData: L,
     body: (Failure?) -> Unit

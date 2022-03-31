@@ -20,5 +20,14 @@
 package com.husky.project.core.ui.viewmodel
 
 import com.zhuinden.simplestack.Bundleable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
-abstract class BaseViewModel : Bundleable
+abstract class BaseViewModel : Bundleable {
+
+    val viewModelScope: CoroutineScope
+        get() {
+            return CloseableCoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        }
+}

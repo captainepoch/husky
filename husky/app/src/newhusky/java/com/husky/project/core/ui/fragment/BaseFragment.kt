@@ -19,6 +19,12 @@
 
 package com.husky.project.core.ui.fragment
 
+import androidx.annotation.LayoutRes
 import com.zhuinden.simplestackextensions.fragments.KeyedFragment
 
-open class BaseFragment(layoutRes: Int) : KeyedFragment(layoutRes)
+open class BaseFragment(@LayoutRes layoutRes: Int) : KeyedFragment(layoutRes) {
+
+    fun onHandleBack(): Boolean {
+        return true
+    }
+}

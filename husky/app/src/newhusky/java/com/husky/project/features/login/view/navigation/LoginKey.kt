@@ -16,6 +16,8 @@ class LoginKey : BaseServiceKey() {
     }
 
     override fun bindServices(serviceBinder: ServiceBinder) {
-        serviceBinder.add(LoginViewModel())
+        with(serviceBinder) {
+            add(LoginViewModel())
+        }
     }
 }

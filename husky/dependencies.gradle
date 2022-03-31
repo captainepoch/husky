@@ -72,6 +72,12 @@ kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
 kotlin.stdlibJdk = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}"
 deps.kotlin = kotlin
 
+def kotlinx = [:]
+kotlinx.coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinx}"
+kotlinx.coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinx}"
+kotlinx.coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.kotlinx}"
+deps.kotlinx = kotlinx
+
 def rxjava = [:]
 rxjava.rxAndroid = "io.reactivex.rxjava2:rxandroid:${versions.rxAndroid}"
 rxjava.rxJava = "io.reactivex.rxjava2:rxjava:${versions.rxJava}"
