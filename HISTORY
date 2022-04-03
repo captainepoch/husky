@@ -1,3 +1,9 @@
+Husky 1.1.0 - 2022-04-03
+ - Fix: Getting the feed when opening the app.
+
+ Update dependencies:
+  - gradle (7.4.1 -> 7.4.2)
+
 Husky 1.1.0 - 2022-03-31
  - New Husky: More code, not useful for now.
  - Deps: Change jcenter to mavenCentral.
