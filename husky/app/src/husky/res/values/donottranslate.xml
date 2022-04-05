@@ -12,6 +12,6 @@
     <string name="acra_notification_discard">Discard</string>
 
     <!-- REPLACEMENT FOR TUSKY STRINGS -->
-    <string name="tusky_website" translatable="false">https://huskyapp.dev</string>
+    <string name="tusky_website" translatable="false">https://husky.adol.pw</string>
 
 </resources>
