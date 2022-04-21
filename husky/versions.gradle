@@ -1,11 +1,11 @@
 // Kotlin version
-ext.kotlin_version = "1.6.10"
+ext.kotlin_version = "1.6.21"
 
 // Dependencies versions
 def versions = [:]
 
 def gradle = [:]
-gradle.androidGradlePlugin = "7.1.2"
+gradle.androidGradlePlugin = "7.1.3"
 gradle.gradleVersions = "0.42.0"
 versions.gradle = gradle
 
@@ -30,7 +30,7 @@ versions.fragmentKtx = "1.2.5"
 versions.fragmentviewbindingdelegateKt = "1.0.0"
 versions.glide = "4.13.1"
 versions.glideImage = "1.8.1"
-versions.kotlinx = "1.6.0"
+versions.kotlinx = "1.6.1"
 versions.lifecycle = "2.3.1"
 versions.markdownEdit = "1.0.0"
 versions.materialDesign = "1.4.0"
@@ -46,7 +46,7 @@ versions.rxAndroid = "2.1.1"
 versions.rxJava = "2.2.21"
 versions.rxKotlin = "2.4.0"
 versions.shareTarget = "1.0.0"
-versions.simplestack = "2.6.2"
+versions.simplestack = "2.6.3"
 versions.simplestackext = "2.2.2"
 versions.sparkButton = "4.1.0"
 versions.swipeRefreshLayout = "1.1.0"
