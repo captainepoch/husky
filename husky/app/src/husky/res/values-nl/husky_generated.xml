@@ -1,56 +1,56 @@
 <resources>
-  
+
     <string name="about_tusky_version">Husky %s</string>
-  
-  
+
+
     <string name="about_tusky_license">Husky is opensource- en vrije software. De licentie valt onder de GNU Algemene Publieke Licentie versie 3. Je kunt de licentie hier bekijken: https://www.gnu.org/licenses/gpl-3.0.nl.html</string>
-  
-  
+
+
     <string name="about_tusky_account">Husky\'s profiel</string>
-  
-  
+
+
     <string name="restart_emoji">Je moet Husky herstarten om deze veranderingen te kunnen doorvoeren</string>
-  
-  
+
+
     <string name="license_description">Husky bevat broncode en onderdelen van de volgende opensourceprojecten:</string>
-  
-  
+
+
     <string name="about_powered_by_tusky">Powered by Husky</string>
-  
 
 
 
-  
+
+
     <string name="about_project_site">Projectwebsite:\n
                     https://husky.adol.pw</string>
-  
 
 
-  
+
+
     <string name="about_bug_feature_request_site">Foutmeldingen &amp; nieuwe functies aanvragen:\n
-                    https://https://todo.sr.ht/~captainepoch/husky/</string>
-  
+                    https://todo.sr.ht/~captainepoch/husky/</string>
 
 
-  
+
+
     <string name="action_login">Aanmelden</string>
-  
-  
+
+
     <string name="add_account_description">Een nieuw Pleromaaccount toevoegen</string>
-  
-  
+
+
     <string name="warning_scheduling_interval">Om in te plannen moet je in Pleroma een minimum interval van 5 minuten gebruiken.</string>
-  
 
 
-  
-    <string name="dialog_whats_an_instance">Het adres of domein van elke Mastodonserver kan hier worden ingevoerd, zoals shitposter.club, mastodon.nl, octodon.social en <a href="https://fediverse.network/pleroma?count=peers">nog veel meer!</a> 
-\n 
-\nWanneer je nog geen account hebt, kun je de naam van de Mastodonserver waar jij je graag wil registeren invoeren, waarna je daar een account kunt aanmaken. 
-\n 
-\nEen Mastodonserver (Engels: instance) is een computerserver waar jouw account zich bevindt (vergelijk het met een e-mailserver). Je kan eenvoudig mensen van andere servers volgen en met ze communiceren, alsof jullie met elkaar op dezelfde website zitten. 
-\n 
+
+
+    <string name="dialog_whats_an_instance">Het adres of domein van elke Mastodonserver kan hier worden ingevoerd, zoals shitposter.club, mastodon.nl, octodon.social en <a href="https://fediverse.network/pleroma?count=peers">nog veel meer!</a>
+\n
+\nWanneer je nog geen account hebt, kun je de naam van de Mastodonserver waar jij je graag wil registeren invoeren, waarna je daar een account kunt aanmaken.
+\n
+\nEen Mastodonserver (Engels: instance) is een computerserver waar jouw account zich bevindt (vergelijk het met een e-mailserver). Je kan eenvoudig mensen van andere servers volgen en met ze communiceren, alsof jullie met elkaar op dezelfde website zitten.
+\n
 \n Meer informatie kun je vinden op <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
-  
+
 
 </resources>

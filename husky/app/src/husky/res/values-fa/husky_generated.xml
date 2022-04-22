@@ -1,56 +1,56 @@
 <resources>
-  
+
     <string name="about_tusky_license">تاسکی نرم‌افزاری آزاد است که تحت نگارش ۳ از پروانهٔ جامع همگانی گنو منتشر شده است. پروانه را می‌توانید از این‌جا ببینید: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
-  
-  
+
+
     <string name="about_tusky_account">نمایهٔ تاسکی</string>
-  
-  
+
+
     <string name="restart_emoji">برای اعمال این تغییرات، نیاز به شروع دوبارهٔ تاسکی دارید</string>
-  
-  
+
+
     <string name="license_description">تاسکی کد و دارایی‌هایی از پروژه‌های نرم‌افزار آزاد زیر دارد:</string>
-  
-  
+
+
     <string name="about_tusky_version">تاسکی %s</string>
-  
-  
+
+
     <string name="about_powered_by_tusky">قدرت‌گرفته از تاسکی</string>
-  
 
 
 
-  
+
+
     <string name="about_project_site">پایگاه وب پروژه :
 \n https://husky.adol.pw</string>
-  
 
 
-  
-    <string name="about_bug_feature_request_site">گزارش مشکلات و درخواست ویژگی‌ها: 
-\n https://https://todo.sr.ht/~captainepoch/husky/</string>
-  
 
 
-  
+    <string name="about_bug_feature_request_site">گزارش مشکلات و درخواست ویژگی‌ها:
+\n https://todo.sr.ht/~captainepoch/husky/</string>
+
+
+
+
     <string name="action_login">ورود با ماستودون</string>
-  
-  
+
+
     <string name="add_account_description">افزودن حساب ماستودون جدید</string>
-  
-  
+
+
     <string name="warning_scheduling_interval">ماستودون، بازهٔ زمان‌بندی‌ای با کمینهٔ ۵ دقیقه دارد.</string>
-  
 
 
-  
+
+
     <string name="dialog_whats_an_instance">نشانی یا دامنهٔ هر نمونه‌ای می‌تواند وارد شود، مثل shitposter.club, blob.cat, expired.mentality.rip, و <a href="https://fediverse.network/pleroma?count=peers">بیش‌تر!</a>.
-\n 
-\n اگر هنوز حسابی ندارید، می‌توانید نام نمونه مورد نظر را وارد کرده و در آن حسابی بسازید. 
-\n 
+\n
+\n اگر هنوز حسابی ندارید، می‌توانید نام نمونه مورد نظر را وارد کرده و در آن حسابی بسازید.
+\n
 \n نمونه، جاییست که حسابتان رویش میزبانی می‌شود، ولی به راحتی می‌توانید با دیگر افراد روی نمونه‌های دیگر ارتباط داشته و دنبالشان کنید؛ انگار که روی یک پایگاه باشید.
-\n 
+\n
 \nاطّلاعات بیش‌تر می‌تواند در <a href="https://joinmastodon.org">joinmastodon.org</a> پیدا شود. </string>
-  
+
 
 </resources>

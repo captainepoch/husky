@@ -1,53 +1,53 @@
 <resources>
-  
+
     <string name="about_tusky_version">Husky %s</string>
-  
-  
+
+
     <string name="about_tusky_license">Husky je svobodný a otevřený software.
         Je dostupný pod licencí GNU General Public License, verze 3.
         Licenci můžete zobrazit zde: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
-  
-  
+
+
     <string name="about_tusky_account">Profil aplikace Husky</string>
-  
-  
+
+
     <string name="restart_emoji">Pro použití těchto změn musíte restartovat aplikaci Husky</string>
-  
-  
+
+
     <string name="license_description">Husky obsahuje kód a zdroje z následujících otevřených projektů:</string>
-  
-  
+
+
     <string name="about_powered_by_tusky">Powered by Husky</string>
-  
 
 
 
-  
+
+
     <string name="about_project_site">        Webová stránka projektu:\n
         https://husky.adol.pw
     </string>
-  
 
 
-  
+
+
     <string name="about_bug_feature_request_site">        Hlášení chyb a návrhy na nové vlastnosti:\n
-        https://https://todo.sr.ht/~captainepoch/husky/
+        https://todo.sr.ht/~captainepoch/husky/
     </string>
-  
 
 
-  
+
+
     <string name="action_login">Přihlásit účtem Pleroma</string>
-  
-  
+
+
     <string name="add_account_description">Přidat nový účet Pleroma</string>
-  
-  
+
+
     <string name="warning_scheduling_interval">Pleroma neumožňuje pracovat s intervalem menším než 5 minut.</string>
-  
 
 
-  
+
+
     <string name="dialog_whats_an_instance">Sem může být zadána adresa či doména jakéhokoliv
         serveru, například shitposter.club, blob.cat, expired.mentality.rip
         a <a href="https://fediverse.network/pleroma?count=peers">další!</a>
@@ -57,6 +57,6 @@
         byli na stejné stránce.
         \n\nDalší informace mohou být nalezeny na stránce <a href="https://joinmastodon.org">joinmastodon.org</a>.
     </string>
-  
+
 
 </resources>
