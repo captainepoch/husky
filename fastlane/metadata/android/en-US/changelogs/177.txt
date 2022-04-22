@@ -1,0 +1,14 @@
+Husky 1.1.1
+
+Changelog:
+
+ - Added: ZWSP character support to non-spaced emojis.
+ - Added: SVG emoji support.
+ - Added: ACRA support.
+ - Fix: Getting the feed when opening the app.
+ - Fix: Fix missing chats in app.
+ - Fix: Videoplayer now plays videos correctly.
+ - Fix: Preview shows and hides the toot instead just showing it.
+ - Fix: Show video controls always at the bottom.
+ - Fix: Back button when no media is selected.
+ - UI: Debug text in the menu is changed.
