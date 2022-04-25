@@ -1,3 +1,6 @@
+Husky 1.1.3 - 2022-04-25
+ - Fix: Crash when accessing to the Drafts section.
+
 Husky 1.1.2 - 2022-04-22
  - Fix: Change URLs to the new ones (thanks, a1batross).
 
