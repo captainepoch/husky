@@ -28,7 +28,8 @@ to the application.
 
 # Support
 
-Please take a look at [Husky doc.][husky_man] to contribute to the project:
+Please take a look at [Husky documentation][husky_man] to contribute to the
+project:
 
 - See [Contributing][husky_man_contributing] to send emails and see the
   discussion about issues and new stuff in the project.
@@ -37,8 +38,7 @@ Please take a look at [Husky doc.][husky_man] to contribute to the project:
 Current issue tracker is at [todo.sr.ht/~captainepoch/husky][husky_todo].
 
 Original tracker with issues is at
-[git.mentality.rip/FWGS/Husky/issues][husky_original_issues]. Issues to fix will
-be taken from there.
+[git.mentality.rip/FWGS/Husky/issues][husky_original_issues].
 
 # Acknowledgements
 
