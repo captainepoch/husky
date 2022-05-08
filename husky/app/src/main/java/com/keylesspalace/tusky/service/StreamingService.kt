@@ -7,10 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.appstore.ChatMessageReceivedEvent
@@ -22,12 +22,19 @@ import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.entity.StreamEvent
 import com.keylesspalace.tusky.network.MastodonApi
+import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.isLessThan
 import dagger.android.AndroidInjection
-import okhttp3.*
 import javax.inject.Inject
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
+import timber.log.Timber
 
-class StreamingService: Service(), Injectable {
+class StreamingService : Service(), Injectable {
+
     @Inject
     lateinit var api: MastodonApi
 
@@ -58,7 +65,7 @@ class StreamingService: Service(), Injectable {
 
     private fun stopStreamingForId(id: Long) {
         if(id in sockets) {
-            sockets[id]!!.close(1000, null)
+            sockets[id]?.close(1000, null)
             sockets.remove(id)
         }
     }
@@ -69,7 +76,7 @@ class StreamingService: Service(), Injectable {
         }
         sockets.clear()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
         }
 
@@ -87,7 +94,7 @@ class StreamingService: Service(), Injectable {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if(intent.getBooleanExtra(KEY_STOP_STREAMING, false)) {
-            Log.d(TAG, "Stream goes suya..")
+            Timber.d("Stream goes suya..")
             stopStreaming()
             stopSelfResult(startId)
             return START_NOT_STICKY
@@ -99,20 +106,22 @@ class StreamingService: Service(), Injectable {
         for(account in accounts) {
             stopStreamingForId(account.id)
 
-            if(!account.notificationsStreamingEnabled)
+            if(!account.notificationsStreamingEnabled) {
                 continue
+            }
 
-            val endpoint = "wss://${account.domain}/api/v1/streaming/?access_token=${account.accessToken}&stream=user:notification"
+            val endpoint =
+                "wss://${account.domain}/api/v1/streaming/?access_token=${account.accessToken}&stream=user:notification"
             val request = Request.Builder().url(endpoint).build()
 
-            Log.d(TAG, "Running stream for ${account.fullName}")
+            Timber.d("Running stream for ${account.fullName}")
 
             sockets[account.id] = client.newWebSocket(
-                    request,
-                    makeStreamingListener(
-                            "${account.fullName}/user:notification",
-                            account
-                    )
+                request,
+                makeStreamingListener(
+                    "${account.fullName}/user:notification",
+                    account
+                )
             )
 
             description += "\n" + account.fullName
@@ -120,27 +129,36 @@ class StreamingService: Service(), Injectable {
         }
 
         if(count <= 0) {
-            Log.d(TAG, "No accounts. Stopping stream")
+            Timber.d("No accounts. Stopping stream")
             stopStreaming()
             stopSelfResult(startId)
             return START_NOT_STICKY
         }
 
-        if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
-            val channel = NotificationChannel(CHANNEL_ID, getString(R.string.streaming_notification_name), NotificationManager.IMPORTANCE_LOW)
+        if(NotificationHelper.NOTIFICATION_USE_CHANNELS) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.streaming_notification_name),
+                NotificationManager.IMPORTANCE_LOW
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notify)
-                .setContentTitle(getString(R.string.streaming_notification_name))
-                .setContentText(description)
-                .setOngoing(true)
-                .setNotificationSilent()
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setColor(ContextCompat.getColor(this, R.color.tusky_blue))
+            .setSmallIcon(R.drawable.ic_notify)
+            .setContentTitle(getString(R.string.streaming_notification_name))
+            .setOngoing(true)
+            .setSilent(true)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setColor(ContextCompat.getColor(this, R.color.tusky_blue))
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val showDescription = PreferenceManager.getDefaultSharedPreferences(this)
+            .getBoolean(PrefKeys.HIDE_LIVE_NOTIFICATION_DESCRIPTION, false)
+        if(!showDescription) {
+            builder.setContentText(description)
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
             startForeground(1337, builder.build())
         } else {
@@ -155,9 +173,8 @@ class StreamingService: Service(), Injectable {
     }
 
     companion object {
-        val CHANNEL_ID = "streaming"
-        val KEY_STOP_STREAMING = "stop_streaming"
-        val TAG = "StreamingService"
+        const val CHANNEL_ID = "streaming"
+        const val KEY_STOP_STREAMING = "stop_streaming"
 
         @JvmStatic
         var serviceRunning = false
@@ -176,7 +193,7 @@ class StreamingService: Service(), Injectable {
             val intent = Intent(context, StreamingService::class.java)
             intent.putExtra(KEY_STOP_STREAMING, false)
 
-            Log.d(TAG, "Starting notifications streaming service...")
+            Timber.d("Starting notifications streaming service...")
 
             startForegroundService(context, intent)
         }
@@ -184,13 +201,14 @@ class StreamingService: Service(), Injectable {
         @JvmStatic
         fun stopStreaming(context: Context) {
             synchronized(serviceRunning) {
-                if(!serviceRunning)
+                if(!serviceRunning) {
                     return
+                }
 
                 val intent = Intent(context, StreamingService::class.java)
                 intent.putExtra(KEY_STOP_STREAMING, true)
 
-                Log.d(TAG, "Stopping notifications streaming service...")
+                Timber.d("Stopping notifications streaming service...")
 
                 serviceRunning = false
 
@@ -199,18 +217,20 @@ class StreamingService: Service(), Injectable {
         }
     }
 
-    private fun makeStreamingListener(tag: String, account: AccountEntity) : WebSocketListener {
+    private fun makeStreamingListener(tag: String, account: AccountEntity): WebSocketListener {
+
         return object : WebSocketListener() {
+
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                Log.d(TAG, "Stream connected to: $tag")
+                Timber.d("Stream connected to: $tag")
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                Log.d(TAG, "Stream closed for: $tag")
+                Timber.d("Stream closed for: $tag")
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                Log.d(TAG, "Stream failed for $tag", t)
+                Timber.e("Stream failed for $tag", t)
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -230,7 +250,7 @@ class StreamingService: Service(), Injectable {
                         }
                     }
                     else -> {
-                        Log.d(TAG, "Unknown event type: ${event.event}")
+                        Timber.w("Unknown event type: ${event.event}")
                     }
                 }
             }

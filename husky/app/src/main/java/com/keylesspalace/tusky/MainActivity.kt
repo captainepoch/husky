@@ -53,7 +53,13 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
-import com.keylesspalace.tusky.appstore.*
+import com.keylesspalace.tusky.appstore.AnnouncementReadEvent
+import com.keylesspalace.tusky.appstore.CacheUpdater
+import com.keylesspalace.tusky.appstore.Event
+import com.keylesspalace.tusky.appstore.EventHub
+import com.keylesspalace.tusky.appstore.MainTabsChangedEvent
+import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
+import com.keylesspalace.tusky.appstore.ProfileEditedEvent
 import com.keylesspalace.tusky.components.announcements.AnnouncementsActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity.Companion.canHandleMimeType
@@ -74,7 +80,14 @@ import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.pager.MainPagerAdapter
 import com.keylesspalace.tusky.service.StreamingService
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.ThemeUtils
+import com.keylesspalace.tusky.util.ViewPager2Fix
+import com.keylesspalace.tusky.util.deleteStaleCachedMedia
+import com.keylesspalace.tusky.util.emojify
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.removeShortcut
+import com.keylesspalace.tusky.util.updateShortcut
+import com.keylesspalace.tusky.util.visible
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
@@ -83,9 +96,27 @@ import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.holder.ColorHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.iconics.iconicsIcon
-import com.mikepenz.materialdrawer.model.*
-import com.mikepenz.materialdrawer.model.interfaces.*
-import com.mikepenz.materialdrawer.util.*
+import com.mikepenz.materialdrawer.model.AbstractDrawerItem
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.IProfile
+import com.mikepenz.materialdrawer.model.interfaces.descriptionRes
+import com.mikepenz.materialdrawer.model.interfaces.descriptionText
+import com.mikepenz.materialdrawer.model.interfaces.iconRes
+import com.mikepenz.materialdrawer.model.interfaces.iconUrl
+import com.mikepenz.materialdrawer.model.interfaces.nameRes
+import com.mikepenz.materialdrawer.model.interfaces.nameText
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
+import com.mikepenz.materialdrawer.util.addItemAtPosition
+import com.mikepenz.materialdrawer.util.addItems
+import com.mikepenz.materialdrawer.util.addItemsAtPosition
+import com.mikepenz.materialdrawer.util.getDrawerItem
+import com.mikepenz.materialdrawer.util.removeItems
+import com.mikepenz.materialdrawer.util.updateBadge
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.uber.autodispose.android.lifecycle.autoDispose
 import dagger.android.DispatchingAndroidInjector
@@ -93,7 +124,14 @@ import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.bottomNav
+import kotlinx.android.synthetic.main.activity_main.bottomTabLayout
+import kotlinx.android.synthetic.main.activity_main.composeButton
+import kotlinx.android.synthetic.main.activity_main.mainDrawer
+import kotlinx.android.synthetic.main.activity_main.mainDrawerLayout
+import kotlinx.android.synthetic.main.activity_main.mainToolbar
+import kotlinx.android.synthetic.main.activity_main.tabLayout
+import kotlinx.android.synthetic.main.activity_main.viewPager
 import timber.log.Timber
 
 class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInjector {
@@ -237,6 +275,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                             PrefKeys.LIVE_NOTIFICATIONS -> {
                                 initPullNotifications()
                             }
+                            PrefKeys.HIDE_LIVE_NOTIFICATION_DESCRIPTION -> {
+                                initPullNotifications(rebootPush = true)
+                            }
                         }
                     }
                     is AnnouncementReadEvent -> {
@@ -259,7 +300,11 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         )
     }
 
-    private fun initPullNotifications() {
+    private fun initPullNotifications(rebootPush: Boolean = false) {
+        if(rebootPush) {
+            disablePushNotifications()
+        }
+
         if(NotificationHelper.areNotificationsEnabled(this, accountManager)) {
             if(accountManager.areNotificationsStreamingEnabled()) {
                 StreamingService.startStreaming(this)
@@ -269,10 +314,14 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 NotificationHelper.enablePullNotifications(this)
             }
         } else {
-            StreamingService.stopStreaming(this)
-            NotificationHelper.disablePullNotifications(this)
+            disablePushNotifications()
         }
         draftWarning()
+    }
+
+    private fun disablePushNotifications() {
+        StreamingService.stopStreaming(this)
+        NotificationHelper.disablePullNotifications(this)
     }
 
     override fun onResume() {

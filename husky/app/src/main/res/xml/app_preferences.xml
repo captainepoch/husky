@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="@string/pref_title_privacy">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/key_hide_live_notification_desc"
+            android:title="@string/pref_title_hide_live_notification_description" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/pref_acra_category">
 
         <CheckBoxPreference

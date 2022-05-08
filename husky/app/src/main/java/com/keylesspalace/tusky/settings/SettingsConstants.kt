@@ -54,6 +54,7 @@ object PrefKeys {
     const val BIG_EMOJIS = "bigEmojis"
     const val STICKERS = "stickers"
     const val ANONYMIZE_FILENAMES = "anonymizeFilenames"
+    const val HIDE_LIVE_NOTIFICATION_DESCRIPTION = "hideLiveNotifDesc"
     const val HIDE_MUTED_USERS = "hideMutedUsers"
     const val ANIMATE_CUSTOM_EMOJIS = "animateCustomEmojis"
     const val RENDER_STATUS_AS_MENTION = "renderStatusAsMention"

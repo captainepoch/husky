@@ -21,12 +21,17 @@
 package com.keylesspalace.tusky.components.preference
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.appstore.EventHub
+import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
+import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Notification
+import com.keylesspalace.tusky.service.StreamingService
 import com.keylesspalace.tusky.settings.AppTheme
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.settings.emojiPreference
@@ -54,6 +59,9 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
     @Inject
     lateinit var accountManager: AccountManager
+
+    @Inject
+    lateinit var eventHub: EventHub
 
     private val iconSize by lazy { resources.getDimensionPixelSize(R.dimen.preference_icon_size) }
     private var httpProxyPref: Preference? = null
@@ -245,6 +253,24 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     key = PrefKeys.ANONYMIZE_FILENAMES
                     setTitle(R.string.pref_title_anonymize_upload_filenames)
                     isSingleLineTitle = false
+                }
+
+                switchPreference {
+                    setDefaultValue(false)
+                    key = PrefKeys.HIDE_LIVE_NOTIFICATION_DESCRIPTION
+                    setTitle(R.string.pref_title_hide_live_notification_description)
+                    isSingleLineTitle = false
+                    setOnPreferenceChangeListener { _, _ ->
+                        eventHub.dispatch(PreferenceChangedEvent(key))
+
+                        Toast.makeText(
+                            context,
+                            getString(R.string.pref_title_hide_live_notification_description_toast),
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        true
+                    }
                 }
             }
 

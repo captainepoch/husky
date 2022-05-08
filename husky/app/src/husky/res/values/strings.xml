@@ -44,6 +44,8 @@
     <string name="pref_title_other">Other</string>
     <string name="pref_title_privacy">Privacy</string>
 
+    <string name="key_hide_live_notification_desc">hideLiveNotifDesc</string>
+
     <string name="pref_title_composing">Composing</string>
     <string name="pref_title_composing_title">Composing using zero-width space characters in emojis</string>
 
@@ -52,6 +54,8 @@
     <string name="key_enable_acra">acra.enable</string>
 
     <string name="pref_title_anonymize_upload_filenames">Anonymize uploaded file names</string>
+    <string name="pref_title_hide_live_notification_description">Hide Live Notification username</string>
+    <string name="pref_title_hide_live_notification_description_toast">This will be changed once you go back to the timeline.</string>
     <string name="pref_title_live_notifications">Live notifications</string>
     <string name="pref_summary_live_notifications">May slightly increase power consumption</string>
     <string name="pref_title_default_formatting">Default formatting syntax(if supported by instance)</string>
