@@ -140,7 +140,7 @@ class FiltersActivity : BaseActivity() {
     }
 
     private fun createFilter(phrase: String, wholeWord: Boolean) {
-        api.createFilter(MastodonApi.PostFilter(phrase, listOf(context), false, wholeWord, ""))
+        api.createFilter(MastodonApi.PostFilter(phrase, listOf(context), false, wholeWord, null))
             .enqueue(object : Callback<Filter> {
                 override fun onResponse(call: Call<Filter>, response: Response<Filter>) {
                     val filterResponse = response.body()
@@ -193,7 +193,7 @@ class FiltersActivity : BaseActivity() {
         dialogBind.phraseWholeWord.isChecked = filter.wholeWord
         val dialog = AlertDialog.Builder(this@FiltersActivity)
             .setTitle(R.string.filter_edit_dialog_title)
-            .setView(R.layout.dialog_filter)
+            .setView(dialogBind.root)
             .setPositiveButton(R.string.filter_dialog_update_button) { _, _ ->
                 val oldFilter = filters[itemIndex]
                 val newFilter = Filter(
@@ -230,10 +230,10 @@ class FiltersActivity : BaseActivity() {
         binding.filterProgressBar.show()
 
         api.getFilters().enqueue(object : Callback<List<Filter>> {
+
             override fun onResponse(call: Call<List<Filter>>, response: Response<List<Filter>>) {
                 val filterResponse = response.body()
                 if(response.isSuccessful && filterResponse != null) {
-
                     filters = filterResponse.filter { filter -> filter.context.contains(context) }
                         .toMutableList()
                     refreshFilterDisplay()
