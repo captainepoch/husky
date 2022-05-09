@@ -1,3 +1,8 @@
+Husky 1.2.0 - 2022-05-09
+ - Add: Hide your full username in the "Live Notifications persistent" push.
+ - Fix: Creating filters.
+ - Migrated to ViewBinding more code.
+
 Husky 1.1.3 - 2022-04-25
  - Fix: Crash when accessing to the Drafts section.
 

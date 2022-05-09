@@ -1,0 +1,7 @@
+Husky 1.2.0
+
+Changelog:
+ - Added the posibility to hide your full username + instance in the "Live
+ Notifications persistent" push notification.
+ - Fix creating filters.
+ - Migrated to ViewBinding more code.
