@@ -30,19 +30,6 @@ dev.versionCode = 1
 dev.versionName = "1.0.0"
 buildVersions.dev = dev
 
-// Husky refactor info
-def newHusky = [:]
-newHusky.suffix = "newHusky"
-newHusky.applicationId = "su.xash.husky.${newHusky.suffix}"
-
-newHusky.compileSdk = 30
-newHusky.minSdk = 23
-newHusky.targetSdk = 30
-
-newHusky.versionCode = 1
-newHusky.versionName = "2.0.0"
-buildVersions.newHusky = newHusky
-
 // Flavors dimensions
 def flavorDimensions = [:]
 flavorDimensions.husky = "husky"

@@ -70,21 +70,6 @@ android {
 
     flavorDimensions buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release
     productFlavors {
-        newhusky {
-            dimension buildVersions.flavorDimensions.release
-
-            applicationId buildVersions.newHusky.applicationId
-
-            compileSdkVersion buildVersions.newHusky.compileSdk
-            minSdkVersion buildVersions.newHusky.minSdk
-            targetSdkVersion buildVersions.newHusky.targetSdk
-
-            versionCode buildVersions.newHusky.versionCode
-            versionName buildVersions.newHusky.versionName
-
-            versionNameSuffix = "-${buildVersions.newHusky.suffix}"
-        }
-
         husky {
             dimension buildVersions.flavorDimensions.husky
         }
