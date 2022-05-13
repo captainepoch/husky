@@ -58,6 +58,7 @@ glide.glideImage = "com.github.piasy:GlideImageLoader:${versions.glideImage}"
 glide.glideImageViewFactory =
         "com.github.piasy:GlideImageViewFactory:${versions.glideImage}"
 glide.glideOkhttp = "com.github.bumptech.glide:okhttp3-integration:${versions.glide}"
+glide.glidePluginAnimation = "com.github.penfeizhou.android.animation:glide-plugin:${versions.glidePluginAnimation}"
 deps.glide = glide
 
 def google = [:]
@@ -135,9 +136,9 @@ deps.timber = "com.jakewharton.timber:timber:${versions.timber}"
 
 // Repository handler
 static def addRepos(RepositoryHandler handler) {
+    handler.mavenCentral()
     handler.google()
     handler.gradlePluginPortal()
-    handler.mavenCentral()
     handler.maven { url "https://jitpack.io" }
     handler.maven { url "https://plugins.gradle.org/m2/" }
 }

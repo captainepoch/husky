@@ -209,6 +209,7 @@ dependencies {
     implementation deps.glide.glideImage
     implementation deps.glide.glideImageViewFactory
     implementation deps.glide.glideOkhttp
+    implementation deps.glide.glidePluginAnimation
 
     // Google dependencies
     implementation deps.google.flexbox

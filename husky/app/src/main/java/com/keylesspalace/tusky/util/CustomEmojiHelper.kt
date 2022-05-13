@@ -36,6 +36,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import com.github.penfeizhou.animation.glide.AnimationDecoderOption
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.settings.PrefKeys
 import java.lang.ref.WeakReference
@@ -78,6 +79,9 @@ fun CharSequence.emojify(
             builder.setSpan(span, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             var glideRequest = Glide.with(view).load(url)
+                .set(AnimationDecoderOption.DISABLE_ANIMATION_GIF_DECODER, !animate)
+                .set(AnimationDecoderOption.DISABLE_ANIMATION_WEBP_DECODER, !animate)
+                .set(AnimationDecoderOption.DISABLE_ANIMATION_APNG_DECODER, !animate)
             val mimetype = getMimeType(url)
             if(mimetype == MIME.SVG) {
                 glideRequest = glideRequest
