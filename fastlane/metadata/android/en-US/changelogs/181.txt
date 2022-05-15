@@ -1,0 +1,4 @@
+Husky 1.2.1
+
+Changelog:
+ - Animated emojis are working now.
