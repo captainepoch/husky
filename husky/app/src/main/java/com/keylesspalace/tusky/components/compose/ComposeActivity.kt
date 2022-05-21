@@ -1100,8 +1100,12 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun onSendClicked(preview: Boolean) {
-        if(preview && previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+        if(preview && previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+            && previewBehavior.state != BottomSheetBehavior.STATE_COLLAPSED
+        ) {
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            return
         }
 
         if(verifyScheduledTime()) {
@@ -1113,7 +1117,9 @@ class ComposeActivity : BaseActivity(),
 
     private fun onStatusPreviewReady(status: Status) {
         enableButtons(true)
-        if(previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+        if(previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+            && previewBehavior.state != BottomSheetBehavior.STATE_COLLAPSED
+        ) {
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
             binding.previewView.setupWithStatus(status)
