@@ -1389,8 +1389,6 @@ class ComposeActivity : BaseActivity(),
         }
 
         handleCloseButton()
-
-        super.onBackPressed()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
