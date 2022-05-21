@@ -1,0 +1,6 @@
+Husky 1.2.2
+
+Changelog:
+ - Fix animated emojis while composing a status.
+ - Attempt to fix the back action.
+ - Attempt to fix the Preview behavior.

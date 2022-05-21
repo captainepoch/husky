@@ -9,8 +9,8 @@ buildVersions.jdkVersion = "${buildVersions.javaCompat}"
 
 buildVersions.encoding = "UTF-8"
 
-buildVersions.versionCode = 181
-buildVersions.versionName = "1.2.1"
+buildVersions.versionCode = 182
+buildVersions.versionName = "1.2.2"
 
 // Beta version info
 def beta = [:]
