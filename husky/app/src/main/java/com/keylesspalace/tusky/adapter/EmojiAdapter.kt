@@ -15,38 +15,48 @@
 
 package com.keylesspalace.tusky.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.github.penfeizhou.animation.glide.AnimationDecoderOption
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.entity.Emoji
-import java.util.*
 
-class EmojiAdapter(emojiList: List<Emoji>, private val onEmojiSelectedListener: OnEmojiSelectedListener) : RecyclerView.Adapter<EmojiAdapter.EmojiHolder>() {
-    private val emojiList : List<Emoji>
+class EmojiAdapter(
+    emojiList: List<Emoji>,
+    private val onEmojiSelectedListener: OnEmojiSelectedListener,
+    private val animateEmojis: Boolean
+) : RecyclerView.Adapter<EmojiAdapter.EmojiHolder>() {
+
+    private val emojis: List<Emoji>
 
     init {
-        this.emojiList = emojiList.filter { emoji -> emoji.visibleInPicker == null || emoji.visibleInPicker }
-                .sortedBy { it.shortcode.toLowerCase(Locale.ROOT) }
+        this.emojis =
+            emojiList.filter { emoji -> emoji.visibleInPicker == null || emoji.visibleInPicker }
+                .sortedBy { it.shortcode.lowercase() }
     }
 
     override fun getItemCount(): Int {
-        return emojiList.size
+        return emojis.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmojiHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_emoji_button, parent, false) as ImageView
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_emoji_button, parent, false) as ImageView
         return EmojiHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: EmojiHolder, position: Int) {
-        val emoji = emojiList[position]
+        val emoji = emojis[position]
 
         Glide.with(viewHolder.emojiImageView)
-                .load(emoji.url)
-                .into(viewHolder.emojiImageView)
+            .load(emoji.url)
+            .set(AnimationDecoderOption.DISABLE_ANIMATION_GIF_DECODER, !animateEmojis)
+            .set(AnimationDecoderOption.DISABLE_ANIMATION_WEBP_DECODER, !animateEmojis)
+            .set(AnimationDecoderOption.DISABLE_ANIMATION_APNG_DECODER, !animateEmojis)
+            .into(viewHolder.emojiImageView)
 
         viewHolder.emojiImageView.setOnClickListener {
             onEmojiSelectedListener.onEmojiSelected(emoji.shortcode)

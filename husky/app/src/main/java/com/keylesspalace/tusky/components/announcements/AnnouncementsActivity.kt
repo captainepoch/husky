@@ -55,6 +55,7 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
 
     private val viewModel: AnnouncementsViewModel by viewModels { viewModelFactory }
 
+    private lateinit var preferences: SharedPreferences
     private lateinit var adapter: AnnouncementAdapter
 
     private val picker by lazy { EmojiPicker(this) }
@@ -89,7 +90,7 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         announcementsList.addItemDecoration(divider)
 
-        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val wellbeingEnabled = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
 
         adapter = AnnouncementAdapter(emptyList(), this, wellbeingEnabled)
@@ -128,7 +129,11 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
 
         viewModel.emojis.observe(this) {
             it?.let { list ->
-                picker.adapter = EmojiAdapter(list, this)
+                picker.adapter = EmojiAdapter(
+                    list,
+                    this,
+                    preferences.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
+                )
             }
         }
 

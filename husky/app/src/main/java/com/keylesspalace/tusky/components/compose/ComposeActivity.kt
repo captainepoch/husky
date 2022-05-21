@@ -167,9 +167,11 @@ class ComposeActivity : BaseActivity(),
     private val maxUploadMediaNumber = 4
     private var mediaCount = 0
 
+    private lateinit var preferences: SharedPreferences
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
         if(theme == "black") {
             setTheme(R.style.TuskyDialogActivityBlackTheme)
@@ -1447,7 +1449,11 @@ class ComposeActivity : BaseActivity(),
 
     private fun setEmojiList(emojiList: List<Emoji>?) {
         if(emojiList != null) {
-            binding.emojiView.adapter = EmojiAdapter(emojiList, this@ComposeActivity)
+            binding.emojiView.adapter = EmojiAdapter(
+                emojiList,
+                this@ComposeActivity,
+                preferences.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
+            )
             enableButton(binding.composeEmojiButton, true, emojiList.isNotEmpty())
         }
     }
