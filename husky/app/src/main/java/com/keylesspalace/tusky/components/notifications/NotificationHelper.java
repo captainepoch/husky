@@ -1,21 +1,28 @@
-/* Copyright 2018 Jeremiasz Nelz <remi6397(a)gmail.com>
- * Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2022  Conny Duck
+ * Copyright (C) 2018  Jeremiasz Nelz <remi6397(a)gmail.com>
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.notifications;
 
+import static com.keylesspalace.tusky.viewdata.PollViewDataKt.buildDescription;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
@@ -28,8 +35,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -42,7 +47,6 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.FutureTarget;
@@ -51,7 +55,6 @@ import com.keylesspalace.tusky.MainActivity;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.db.AccountEntity;
 import com.keylesspalace.tusky.db.AccountManager;
-import com.keylesspalace.tusky.entity.ChatMessage;
 import com.keylesspalace.tusky.entity.Notification;
 import com.keylesspalace.tusky.entity.Poll;
 import com.keylesspalace.tusky.entity.PollOption;
@@ -60,21 +63,17 @@ import com.keylesspalace.tusky.receiver.NotificationClearBroadcastReceiver;
 import com.keylesspalace.tusky.receiver.SendStatusBroadcastReceiver;
 import com.keylesspalace.tusky.util.StringUtils;
 import com.keylesspalace.tusky.viewdata.PollViewDataKt;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
-
-import static com.keylesspalace.tusky.viewdata.PollViewDataKt.buildDescription;
+import org.json.JSONArray;
+import org.json.JSONException;
+import timber.log.Timber;
 
 public class NotificationHelper {
 
@@ -154,18 +153,18 @@ public class NotificationHelper {
     public static void make(final Context context, Notification body, AccountEntity account, boolean isFirstOfBatch) {
         body = Notification.rewriteToStatusTypeIfNeeded(body, account.getAccountId());
 
-        if (!filterNotification(account, body, context)) {
+        if(!filterNotification(account, body, context)) {
             return;
         }
 
         // Pleroma extension: don't notify about seen notifications
-        if (body.getPleroma() != null && body.getPleroma().getSeen()) {
+        if(body.getPleroma() != null && body.getPleroma().getSeen()) {
             return;
         }
 
-        if (body.getStatus() != null &&
-            (body.getStatus().isUserMuted() ||
-             body.getStatus().isThreadMuted())) {
+        if(body.getStatus() != null &&
+                (body.getStatus().isUserMuted() ||
+                        body.getStatus().isThreadMuted())) {
             return;
         }
 
@@ -174,18 +173,18 @@ public class NotificationHelper {
 
         try {
             currentNotifications = new JSONArray(rawCurrentNotifications);
-        } catch (JSONException e) {
+        } catch(JSONException e) {
             currentNotifications = new JSONArray();
         }
 
-        for (int i = 0; i < currentNotifications.length(); i++) {
+        for(int i = 0; i < currentNotifications.length(); i++) {
             try {
-                if (currentNotifications.getString(i).equals(body.getAccount().getName())) {
+                if(currentNotifications.getString(i).equals(body.getAccount().getName())) {
                     currentNotifications.remove(i);
                     break;
                 }
-            } catch (JSONException e) {
-                Log.d(TAG, Log.getStackTraceString(e));
+            } catch(JSONException e) {
+                Timber.e(e);
             }
         }
 
@@ -202,7 +201,7 @@ public class NotificationHelper {
         builder.setContentTitle(titleForType(context, body, account))
                 .setContentText(bodyForType(body, context));
 
-        if (body.getType() == Notification.Type.MENTION || body.getType() == Notification.Type.POLL) {
+        if(body.getType() == Notification.Type.MENTION || body.getType() == Notification.Type.POLL) {
             builder.setStyle(new NotificationCompat.BigTextStyle()
                     .bigText(bodyForType(body, context)));
         }
@@ -217,8 +216,8 @@ public class NotificationHelper {
                     .submit();
 
             accountAvatar = target.get();
-        } catch (ExecutionException | InterruptedException e) {
-            Log.d(TAG, "error loading account avatar", e);
+        } catch(ExecutionException | InterruptedException e) {
+            Timber.e("Error loading account avatar %s", e);
             accountAvatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.avatar_default);
         }
 
@@ -280,14 +279,14 @@ public class NotificationHelper {
         // =======
         final NotificationCompat.Builder summaryBuilder = newNotification(context, body, account, true);
 
-        if (currentNotifications.length() != 1) {
+        if(currentNotifications.length() != 1) {
             try {
                 String title = context.getString(R.string.notification_title_summary, currentNotifications.length());
                 String text = joinNames(context, currentNotifications);
                 summaryBuilder.setContentTitle(title)
                         .setContentText(text);
-            } catch (JSONException e) {
-                Log.d(TAG, Log.getStackTraceString(e));
+            } catch(JSONException e) {
+                Timber.e(e);
             }
         }
 
@@ -300,7 +299,7 @@ public class NotificationHelper {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
         notificationManager.notify(notificationId, builder.build());
-        if (currentNotifications.length() == 1) {
+        if(currentNotifications.length() == 1) {
             notificationManager.notify((int) account.getId(), builder.setGroupSummary(true).build());
         } else {
             notificationManager.notify((int) account.getId(), summaryBuilder.build());
@@ -314,8 +313,10 @@ public class NotificationHelper {
         summaryStackBuilder.addParentStack(MainActivity.class);
         summaryStackBuilder.addNextIntent(summaryResultIntent);
 
-        PendingIntent summaryResultPendingIntent = summaryStackBuilder.getPendingIntent((int) (notificationId + account.getId() * 10000),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent summaryResultPendingIntent = summaryStackBuilder.getPendingIntent(
+                (int) (notificationId + account.getId() * 10000),
+                pendingIntentFlags(false)
+        );
 
         // we have to switch account here
         Intent eventResultIntent = new Intent(context, MainActivity.class);
@@ -324,13 +325,16 @@ public class NotificationHelper {
         eventStackBuilder.addParentStack(MainActivity.class);
         eventStackBuilder.addNextIntent(eventResultIntent);
 
-        PendingIntent eventResultPendingIntent = eventStackBuilder.getPendingIntent((int) account.getId(),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent eventResultPendingIntent = eventStackBuilder.getPendingIntent(
+                (int) account.getId(),
+                pendingIntentFlags(false));
 
         Intent deleteIntent = new Intent(context, NotificationClearBroadcastReceiver.class);
         deleteIntent.putExtra(ACCOUNT_ID, account.getId());
-        PendingIntent deletePendingIntent = PendingIntent.getBroadcast(context, summary ? (int) account.getId() : notificationId, deleteIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent deletePendingIntent = PendingIntent.getBroadcast(
+                context, summary ? (int) account.getId() : notificationId,
+                deleteIntent,
+                pendingIntentFlags(false));
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, getChannelId(account, body))
                 .setSmallIcon(R.drawable.ic_notify)
@@ -349,11 +353,11 @@ public class NotificationHelper {
 
     private static PendingIntent getStatusReplyIntent(String action, Context context, Notification body, AccountEntity account) {
         Intent replyIntent = new Intent(context, SendStatusBroadcastReceiver.class)
-            .setAction(action)
-            .putExtra(KEY_SENDER_ACCOUNT_ID, account.getId())
-            .putExtra(KEY_SENDER_ACCOUNT_IDENTIFIER, account.getIdentifier())
-            .putExtra(KEY_SENDER_ACCOUNT_FULL_NAME, account.getFullName())
-            .putExtra(KEY_NOTIFICATION_ID, notificationId);
+                .setAction(action)
+                .putExtra(KEY_SENDER_ACCOUNT_ID, account.getId())
+                .putExtra(KEY_SENDER_ACCOUNT_IDENTIFIER, account.getIdentifier())
+                .putExtra(KEY_SENDER_ACCOUNT_FULL_NAME, account.getFullName())
+                .putExtra(KEY_NOTIFICATION_ID, notificationId);
 
         if(action == CHAT_REPLY_ACTION) {
             replyIntent.putExtra(KEY_CHAT_ID, body.getChatMessage().getChatId());
@@ -369,7 +373,7 @@ public class NotificationHelper {
             Status.Mention[] mentions = actionableStatus.getMentions();
             List<String> mentionedUsernames = new ArrayList<>();
             mentionedUsernames.add(actionableStatus.getAccount().getUsername());
-            for (Status.Mention mention : mentions) {
+            for(Status.Mention mention : mentions) {
                 mentionedUsernames.add(mention.getUsername());
             }
             mentionedUsernames.removeAll(Collections.singleton(account.getUsername()));
@@ -386,12 +390,11 @@ public class NotificationHelper {
         return PendingIntent.getBroadcast(context.getApplicationContext(),
                 notificationId,
                 replyIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                pendingIntentFlags(true));
     }
 
     public static void createNotificationChannelsForAccount(@NonNull AccountEntity account, @NonNull Context context) {
-        if (NOTIFICATION_USE_CHANNELS) {
-
+        if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             String[] channelIds = new String[]{
@@ -406,6 +409,7 @@ public class NotificationHelper {
                     CHANNEL_SUBSCRIPTIONS + account.getIdentifier(),
                     CHANNEL_MOVE + account.getIdentifier()
             };
+
             int[] channelNames = {
                     R.string.notification_mention_name,
                     R.string.notification_follow_name,
@@ -418,6 +422,7 @@ public class NotificationHelper {
                     R.string.notification_subscription_name,
                     R.string.notification_move_name
             };
+
             int[] channelDescriptions = {
                     R.string.notification_mention_descriptions,
                     R.string.notification_follow_description,
@@ -438,7 +443,7 @@ public class NotificationHelper {
             //noinspection ConstantConditions
             notificationManager.createNotificationChannelGroup(channelGroup);
 
-            for (int i = 0; i < channelIds.length; i++) {
+            for(int i = 0; i < channelIds.length; i++) {
                 String id = channelIds[i];
                 String name = context.getString(channelNames[i]);
                 String description = context.getString(channelDescriptions[i]);
@@ -455,24 +460,20 @@ public class NotificationHelper {
             }
 
             notificationManager.createNotificationChannels(channels);
-
         }
     }
 
     public static void deleteNotificationChannelsForAccount(@NonNull AccountEntity account, @NonNull Context context) {
-        if (NOTIFICATION_USE_CHANNELS) {
-
+        if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             //noinspection ConstantConditions
             notificationManager.deleteNotificationChannelGroup(account.getIdentifier());
-
         }
     }
 
     public static void deleteLegacyNotificationChannels(@NonNull Context context, @NonNull AccountManager accountManager) {
-        if (NOTIFICATION_USE_CHANNELS) {
-
+        if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             // used until Tusky 1.4
@@ -483,36 +484,33 @@ public class NotificationHelper {
             notificationManager.deleteNotificationChannel(CHANNEL_FOLLOW);
 
             // used until Tusky 1.7
-            for(AccountEntity account: accountManager.getAllAccountsOrderedByActive()) {
-                notificationManager.deleteNotificationChannel(CHANNEL_FAVOURITE+" "+account.getIdentifier());
+            for(AccountEntity account : accountManager.getAllAccountsOrderedByActive()) {
+                notificationManager.deleteNotificationChannel(CHANNEL_FAVOURITE + " " + account.getIdentifier());
             }
         }
     }
 
     public static boolean areNotificationsEnabled(@NonNull Context context, @NonNull AccountManager accountManager) {
-        if (NOTIFICATION_USE_CHANNELS) {
-
+        if(NOTIFICATION_USE_CHANNELS) {
             // on Android >= O, notifications are enabled, if at least one channel is enabled
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             //noinspection ConstantConditions
-            if (notificationManager.areNotificationsEnabled()) {
-                for (NotificationChannel channel : notificationManager.getNotificationChannels()) {
-                    if (channel.getImportance() > NotificationManager.IMPORTANCE_NONE) {
-                        Log.d(TAG, "NotificationsEnabled");
+            if(notificationManager.areNotificationsEnabled()) {
+                for(NotificationChannel channel : notificationManager.getNotificationChannels()) {
+                    if(channel.getImportance() > NotificationManager.IMPORTANCE_NONE) {
+                        Timber.d("NotificationsEnabled");
                         return true;
                     }
                 }
             }
-            Log.d(TAG, "NotificationsDisabled");
+            Timber.d("NotificationsDisabled");
 
             return false;
-
         } else {
             // on Android < O, notifications are enabled, if at least one account has notification enabled
             return accountManager.areNotificationsEnabled();
         }
-
     }
 
     public static void enablePullNotifications(Context context) {
@@ -530,26 +528,26 @@ public class NotificationHelper {
 
         workManager.enqueue(workRequest);
 
-        Log.d(TAG, "enabled notification checks with "+ PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS + "ms interval");
+        Timber.d("enabled notification checks with ${PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS} ms interval");
     }
 
     public static void disablePullNotifications(Context context) {
         WorkManager.getInstance(context).cancelAllWorkByTag(NOTIFICATION_PULL_TAG);
-        Log.d(TAG, "disabled notification checks");
+        Timber.d("Disabled notification checks");
     }
 
     public static void clearNotificationsForActiveAccount(@NonNull Context context, @NonNull AccountManager accountManager) {
         AccountEntity account = accountManager.getActiveAccount();
-        if (account != null && !account.getActiveNotifications().equals("[]")) {
+        if(account != null && !account.getActiveNotifications().equals("[]")) {
             Single.fromCallable(() -> {
-                account.setActiveNotifications("[]");
-                accountManager.saveAccount(account);
+                        account.setActiveNotifications("[]");
+                        accountManager.saveAccount(account);
 
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                //noinspection ConstantConditions
-                notificationManager.cancel((int) account.getId());
-                return true;
-            })
+                        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        //noinspection ConstantConditions
+                        notificationManager.cancel((int) account.getId());
+                        return true;
+                    })
                     .subscribeOn(Schedulers.io())
                     .subscribe();
         }
@@ -557,8 +555,7 @@ public class NotificationHelper {
 
     private static boolean filterNotification(AccountEntity account, Notification notification,
                                               Context context) {
-
-        if (NOTIFICATION_USE_CHANNELS) {
+        if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             String channelId = getChannelId(account, notification);
@@ -571,7 +568,7 @@ public class NotificationHelper {
             return channel.getImportance() > NotificationManager.IMPORTANCE_NONE;
         }
 
-        switch (notification.getType()) {
+        switch(notification.getType()) {
             case MENTION:
                 return account.getNotificationsMentioned();
             case STATUS:
@@ -599,7 +596,7 @@ public class NotificationHelper {
 
     @Nullable
     private static String getChannelId(AccountEntity account, Notification notification) {
-        switch (notification.getType()) {
+        switch(notification.getType()) {
             case MENTION:
                 return CHANNEL_MENTION + account.getIdentifier();
             case STATUS:
@@ -623,25 +620,24 @@ public class NotificationHelper {
             default:
                 return null;
         }
-
     }
 
-    private static void setupPreferences(AccountEntity account,
-                                         NotificationCompat.Builder builder) {
-
-        if (NOTIFICATION_USE_CHANNELS) {
+    private static void setupPreferences(
+            AccountEntity account,
+            NotificationCompat.Builder builder) {
+        if(NOTIFICATION_USE_CHANNELS) {
             return;  //do nothing on Android O or newer, the system uses the channel settings anyway
         }
 
-        if (account.getNotificationSound()) {
+        if(account.getNotificationSound()) {
             builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
         }
 
-        if (account.getNotificationVibration()) {
+        if(account.getNotificationVibration()) {
             builder.setVibrate(new long[]{500, 500});
         }
 
-        if (account.getNotificationLight()) {
+        if(account.getNotificationLight()) {
             builder.setLights(0xFF2B90D9, 300, 1000);
         }
     }
@@ -652,19 +648,19 @@ public class NotificationHelper {
 
     @Nullable
     private static String joinNames(Context context, JSONArray array) throws JSONException {
-        if (array.length() > 3) {
+        if(array.length() > 3) {
             int length = array.length();
             return String.format(context.getString(R.string.notification_summary_large),
                     wrapItemAt(array, length - 1),
                     wrapItemAt(array, length - 2),
                     wrapItemAt(array, length - 3),
                     length - 3);
-        } else if (array.length() == 3) {
+        } else if(array.length() == 3) {
             return String.format(context.getString(R.string.notification_summary_medium),
                     wrapItemAt(array, 2),
                     wrapItemAt(array, 1),
                     wrapItemAt(array, 0));
-        } else if (array.length() == 2) {
+        } else if(array.length() == 2) {
             return String.format(context.getString(R.string.notification_summary_small),
                     wrapItemAt(array, 1),
                     wrapItemAt(array, 0));
@@ -676,7 +672,7 @@ public class NotificationHelper {
     @Nullable
     private static String titleForType(Context context, Notification notification, AccountEntity account) {
         String accountName = StringUtils.unicodeWrap(notification.getAccount().getName());
-        switch (notification.getType()) {
+        switch(notification.getType()) {
             case MENTION:
                 return String.format(context.getString(R.string.notification_mention_format),
                         accountName);
@@ -711,11 +707,12 @@ public class NotificationHelper {
                 return String.format(context.getString(R.string.notification_move_format), accountName);
             }
         }
+
         return null;
     }
 
     private static String bodyForType(Notification notification, Context context) {
-        switch (notification.getType()) {
+        switch(notification.getType()) {
             case MOVE:
                 return "@" + notification.getTarget().getUsername();
             case FOLLOW:
@@ -726,19 +723,19 @@ public class NotificationHelper {
             case REBLOG:
             case EMOJI_REACTION:
             case STATUS:
-                if (!TextUtils.isEmpty(notification.getStatus().getSpoilerText())) {
+                if(!TextUtils.isEmpty(notification.getStatus().getSpoilerText())) {
                     return notification.getStatus().getSpoilerText();
                 } else {
                     return notification.getStatus().getContent().toString();
                 }
             case POLL:
-                if (!TextUtils.isEmpty(notification.getStatus().getSpoilerText())) {
+                if(!TextUtils.isEmpty(notification.getStatus().getSpoilerText())) {
                     return notification.getStatus().getSpoilerText();
                 } else {
                     StringBuilder builder = new StringBuilder(notification.getStatus().getContent());
                     builder.append('\n');
                     Poll poll = notification.getStatus().getPoll();
-                    for(PollOption option: poll.getOptions()) {
+                    for(PollOption option : poll.getOptions()) {
                         builder.append(buildDescription(option.getTitle(),
                                 PollViewDataKt.calculatePercent(option.getVotesCount(), poll.getVotersCount(), poll.getVotesCount()),
                                 context));
@@ -747,7 +744,7 @@ public class NotificationHelper {
                     return builder.toString();
                 }
             case CHAT_MESSAGE:
-                if (!TextUtils.isEmpty(notification.getChatMessage().getContent())) {
+                if(!TextUtils.isEmpty(notification.getChatMessage().getContent())) {
                     return notification.getChatMessage().getContent().toString();
                 } else if(notification.getChatMessage().getAttachment() != null) {
                     return context.getString(notification.getChatMessage().getAttachment().describeAttachmentType());
@@ -760,4 +757,10 @@ public class NotificationHelper {
         return null;
     }
 
+    public static int pendingIntentFlags(boolean mutable) {
+        return (PendingIntent.FLAG_UPDATE_CURRENT
+                | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ?
+                (mutable ? PendingIntent.FLAG_MUTABLE : PendingIntent.FLAG_IMMUTABLE) : 0)
+        );
+    }
 }
