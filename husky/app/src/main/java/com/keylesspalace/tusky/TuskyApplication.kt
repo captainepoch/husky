@@ -135,14 +135,14 @@ class TuskyApplication : Application(), HasAndroidInjector {
                 APP_VERSION_CODE,
                 BUILD_CONFIG,
                 STACK_TRACE
-            ).toTypedArray()
+            )
 
             notification {
                 title = getString(R.string.acra_notification_title)
                 text = getString(R.string.acra_notification_body)
                 channelName = getString(R.string.acra_notification_channel_title)
                 channelDescription = getString(R.string.acra_notification_channel_body)
-                resChannelImportance = NotificationManagerCompat.IMPORTANCE_DEFAULT
+                channelImportance = NotificationManagerCompat.IMPORTANCE_DEFAULT
                 //resIcon = R.drawable.notification_icon
                 sendButtonText = getString(R.string.acra_notification_report)
                 //resSendButtonIcon = R.drawable.notification_send

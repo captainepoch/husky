@@ -1,34 +1,40 @@
-/* Copyright 2018 Conny Duck
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2021  The Husky Developers
+ * Copyright (C) 2018  Conny Duck
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.compose.view
 
 import android.content.Context
-import androidx.emoji.widget.EmojiEditTextHelper
-import androidx.core.view.inputmethod.EditorInfoCompat
-import androidx.core.view.inputmethod.InputConnectionCompat
-import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
 import android.text.InputType
 import android.text.method.KeyListener
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+import androidx.core.view.inputmethod.EditorInfoCompat
+import androidx.core.view.inputmethod.InputConnectionCompat
+import androidx.emoji.widget.EmojiEditTextHelper
 
-class EditTextTyped @JvmOverloads constructor(context: Context,
-                                              attributeSet: AttributeSet? = null)
-    : AppCompatMultiAutoCompleteTextView(context, attributeSet) {
+class EditTextTyped @JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null
+) : AppCompatMultiAutoCompleteTextView(context, attributeSet) {
 
     private var onCommitContentListener: InputConnectionCompat.OnCommitContentListener? = null
     private val emojiEditTextHelper: EmojiEditTextHelper = EmojiEditTextHelper(this)
@@ -40,8 +46,12 @@ class EditTextTyped @JvmOverloads constructor(context: Context,
         super.setKeyListener(getEmojiEditTextHelper().getKeyListener(keyListener))
     }
 
-    override fun setKeyListener(input: KeyListener) {
-        super.setKeyListener(getEmojiEditTextHelper().getKeyListener(input))
+    override fun setKeyListener(input: KeyListener?) {
+        if(input != null) {
+            super.setKeyListener(getEmojiEditTextHelper().getKeyListener(input))
+        } else {
+            super.setKeyListener(input)
+        }
     }
 
     fun setOnCommitContentListener(listener: InputConnectionCompat.OnCommitContentListener) {
@@ -50,10 +60,14 @@ class EditTextTyped @JvmOverloads constructor(context: Context,
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection {
         val connection = super.onCreateInputConnection(editorInfo)
-        return if (onCommitContentListener != null) {
+        return if(onCommitContentListener != null) {
             EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf("image/*"))
-            getEmojiEditTextHelper().onCreateInputConnection(InputConnectionCompat.createWrapper(connection, editorInfo,
-                    onCommitContentListener!!), editorInfo)!!
+            getEmojiEditTextHelper().onCreateInputConnection(
+                InputConnectionCompat.createWrapper(
+                    connection, editorInfo,
+                    onCommitContentListener!!
+                ), editorInfo
+            )!!
         } else {
             connection
         }
