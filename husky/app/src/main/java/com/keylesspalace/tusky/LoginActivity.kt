@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky
 
@@ -22,7 +27,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -30,22 +34,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import com.bumptech.glide.Glide
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityLoginBinding
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.AccessToken
 import com.keylesspalace.tusky.entity.AppCredentials
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.getNonNullString
-import kotlinx.android.synthetic.main.activity_login.*
+import javax.inject.Inject
 import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 import timber.log.Timber
-import timber.log.Timber.Forest
 
 class LoginActivity : BaseActivity(), Injectable {
+
+    private val binding by viewBinding(ActivityLoginBinding::inflate)
 
     @Inject
     lateinit var mastodonApi: MastodonApi
@@ -62,35 +68,36 @@ class LoginActivity : BaseActivity(), Injectable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_login)
+        setContentView(binding.root)
 
         if(savedInstanceState == null) {
             if(BuildConfig.CUSTOM_INSTANCE.isNotBlank() && !isAdditionalLogin()) {
-                domainEditText.setText(BuildConfig.CUSTOM_INSTANCE)
-                domainEditText.setSelection(BuildConfig.CUSTOM_INSTANCE.length)
+                binding.domainEditText.setText(BuildConfig.CUSTOM_INSTANCE)
+                binding.domainEditText.setSelection(BuildConfig.CUSTOM_INSTANCE.length)
             }
-            appNameEditText.setText(getString(R.string.app_name))
-            appNameEditText.setSelection(getString(R.string.app_name).length)
 
-            websiteEditText.setText(getString(R.string.tusky_website))
-            websiteEditText.setSelection(getString(R.string.tusky_website).length)
+            binding.appNameEditText.setText(getString(R.string.app_name))
+            binding.appNameEditText.setSelection(getString(R.string.app_name).length)
+
+            binding.websiteEditText.setText(getString(R.string.tusky_website))
+            binding.websiteEditText.setSelection(getString(R.string.tusky_website).length)
         }
 
         if(BuildConfig.CUSTOM_LOGO_URL.isNotBlank()) {
-            Glide.with(loginLogo)
+            Glide.with(this)
                 .load(BuildConfig.CUSTOM_LOGO_URL)
                 .placeholder(null)
-                .into(loginLogo)
+                .into(binding.loginLogo)
         }
 
         preferences = getSharedPreferences(
             getString(R.string.preferences_file_key), Context.MODE_PRIVATE
         )
 
-        loginButton.setOnClickListener { onButtonClick() }
-        settingsButton.setOnClickListener { onSettingsButtonClick() }
+        binding.loginButton.setOnClickListener { onButtonClick() }
+        binding.settingsButton.setOnClickListener { onSettingsButtonClick() }
 
-        whatsAnInstanceTextView.setOnClickListener {
+        binding.whatsAnInstanceTextView.setOnClickListener {
             val dialog = AlertDialog.Builder(this)
                 .setMessage(R.string.dialog_whats_an_instance)
                 .setPositiveButton(R.string.action_close, null)
@@ -100,11 +107,11 @@ class LoginActivity : BaseActivity(), Injectable {
         }
 
         if(isAdditionalLogin()) {
-            setSupportActionBar(toolbar)
+            setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
         } else {
-            toolbar.visibility = View.GONE
+            binding.toolbar.visibility = View.GONE
         }
 
     }
@@ -129,12 +136,11 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     private fun onSettingsButtonClick() {
-        if(extendedSettings.visibility == View.GONE) {
-            extendedSettings.visibility = View.VISIBLE
+        if(binding.extendedSettings.visibility == View.GONE) {
+            binding.extendedSettings.visibility = View.VISIBLE
         } else {
-            extendedSettings.visibility = View.GONE
+            binding.extendedSettings.visibility = View.GONE
         }
-
     }
 
     /**
@@ -143,16 +149,15 @@ class LoginActivity : BaseActivity(), Injectable {
      * saved in SharedPreferences and every subsequent run they are simply fetched from there.
      */
     private fun onButtonClick() {
+        binding.loginButton.isEnabled = false
 
-        loginButton.isEnabled = false
-
-        val domain = canonicalizeDomain(domainEditText.text.toString())
+        val domain = canonicalizeDomain(binding.domainEditText.text.toString())
 
         try {
             HttpUrl.Builder().host(domain).scheme("https").build()
         } catch(e: IllegalArgumentException) {
             setLoading(false)
-            domainTextInputLayout.error = getString(R.string.error_invalid_domain)
+            binding.domainTextInputLayout.error = getString(R.string.error_invalid_domain)
             return
         }
 
@@ -162,10 +167,11 @@ class LoginActivity : BaseActivity(), Injectable {
                 response: Response<AppCredentials>
             ) {
                 if(!response.isSuccessful) {
-                    loginButton.isEnabled = true
-                    domainTextInputLayout.error = getString(R.string.error_failed_app_registration)
+                    binding.loginButton.isEnabled = true
+                    binding.domainTextInputLayout.error =
+                        getString(R.string.error_failed_app_registration)
                     setLoading(false)
-                    Log.e(TAG, "App authentication failed. " + response.message())
+                    Timber.e("App authentication failed ${response.message()}")
                     return
                 }
                 val credentials = response.body()
@@ -182,18 +188,19 @@ class LoginActivity : BaseActivity(), Injectable {
             }
 
             override fun onFailure(call: Call<AppCredentials>, t: Throwable) {
-                loginButton.isEnabled = true
-                domainTextInputLayout.error = getString(R.string.error_failed_app_registration)
+                binding.loginButton.isEnabled = true
+                binding.domainTextInputLayout.error =
+                    getString(R.string.error_failed_app_registration)
                 setLoading(false)
-                Log.e(TAG, Log.getStackTraceString(t))
+                Timber.e(t.stackTraceToString())
             }
         }
 
         var appname = getString(R.string.app_name)
         var website = getString(R.string.tusky_website)
-        if(extendedSettings.visibility == View.VISIBLE) {
-            appname = appNameEditText.text.toString()
-            website = websiteEditText.text.toString()
+        if(binding.extendedSettings.visibility == View.VISIBLE) {
+            appname = binding.appNameEditText.text.toString()
+            website = binding.websiteEditText.text.toString()
         }
 
         mastodonApi
@@ -203,7 +210,6 @@ class LoginActivity : BaseActivity(), Injectable {
             )
             .enqueue(callback)
         setLoading(true)
-
     }
 
     private fun redirectUserToAuthorizeAndLogin(domain: String, clientId: String) {
@@ -223,7 +229,7 @@ class LoginActivity : BaseActivity(), Injectable {
             if(viewIntent.resolveActivity(packageManager) != null) {
                 startActivity(viewIntent)
             } else {
-                domainEditText.error = getString(R.string.error_no_web_browser_found)
+                binding.domainEditText.error = getString(R.string.error_no_web_browser_found)
                 setLoading(false)
             }
         }
@@ -260,10 +266,10 @@ class LoginActivity : BaseActivity(), Injectable {
                             onLoginSuccess(response.body()!!.accessToken, domain)
                         } else {
                             setLoading(false)
-                            domainTextInputLayout.error =
+                            binding.domainTextInputLayout.error =
                                 getString(R.string.error_retrieving_oauth_token)
-                            Log.e(
-                                TAG, String.format(
+                            Timber.e(
+                                String.format(
                                     "%s %s",
                                     getString(R.string.error_retrieving_oauth_token),
                                     response.message()
@@ -274,10 +280,10 @@ class LoginActivity : BaseActivity(), Injectable {
 
                     override fun onFailure(call: Call<AccessToken>, t: Throwable) {
                         setLoading(false)
-                        domainTextInputLayout.error =
+                        binding.domainTextInputLayout.error =
                             getString(R.string.error_retrieving_oauth_token)
-                        Log.e(
-                            TAG, String.format(
+                        Timber.e(
+                            String.format(
                                 "%s %s",
                                 getString(R.string.error_retrieving_oauth_token),
                                 t.message
@@ -294,9 +300,9 @@ class LoginActivity : BaseActivity(), Injectable {
                 /* Authorization failed. Put the error response where the user can read it and they
                  * can try again. */
                 setLoading(false)
-                domainTextInputLayout.error = getString(R.string.error_authorization_denied)
-                Log.e(
-                    TAG, String.format(
+                binding.domainTextInputLayout.error = getString(R.string.error_authorization_denied)
+                Timber.e(
+                    String.format(
                         "%s %s",
                         getString(R.string.error_authorization_denied),
                         error
@@ -305,7 +311,8 @@ class LoginActivity : BaseActivity(), Injectable {
             } else {
                 // This case means a junk response was received somehow.
                 setLoading(false)
-                domainTextInputLayout.error = getString(R.string.error_authorization_unknown)
+                binding.domainTextInputLayout.error =
+                    getString(R.string.error_authorization_unknown)
             }
         } else {
             // first show or user cancelled login
@@ -315,12 +322,12 @@ class LoginActivity : BaseActivity(), Injectable {
 
     private fun setLoading(loadingState: Boolean) {
         if(loadingState) {
-            loginLoadingLayout.visibility = View.VISIBLE
-            loginInputLayout.visibility = View.GONE
+            binding.loginLoadingLayout.visibility = View.VISIBLE
+            binding.loginInputLayout.visibility = View.GONE
         } else {
-            loginLoadingLayout.visibility = View.GONE
-            loginInputLayout.visibility = View.VISIBLE
-            loginButton.isEnabled = true
+            binding.loginLoadingLayout.visibility = View.GONE
+            binding.loginInputLayout.visibility = View.VISIBLE
+            binding.loginButton.isEnabled = true
         }
     }
 
@@ -329,7 +336,6 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     private fun onLoginSuccess(accessToken: String, domain: String) {
-
         setLoading(true)
 
         accountManager.addAccount(accessToken, domain)
@@ -342,7 +348,6 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     companion object {
-        private const val TAG = "LoginActivity" // logging tag
         private const val OAUTH_SCOPES = "read write follow"
         private const val LOGIN_MODE = "LOGIN_MODE"
         private const val DOMAIN = "domain"
@@ -405,7 +410,7 @@ class LoginActivity : BaseActivity(), Injectable {
             try {
                 customTabsIntent.launchUrl(context, uri)
             } catch(e: ActivityNotFoundException) {
-                Log.w(TAG, "Activity was not found for intent $customTabsIntent")
+                Timber.w("Activity was not found for intent $customTabsIntent")
                 return false
             }
 
