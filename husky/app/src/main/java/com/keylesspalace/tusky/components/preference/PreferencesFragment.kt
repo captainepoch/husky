@@ -50,7 +50,6 @@ import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizePx
 import javax.inject.Inject
 import okhttp3.OkHttpClient
-import org.acra.ACRA.PREF_ENABLE_ACRA
 
 class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
@@ -363,6 +362,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                 }
             }
 
+            /*
             preferenceCategory(R.string.pref_acra_category) {
                 switchPreference {
                     setDefaultValue(false)
@@ -370,7 +370,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setTitle(R.string.pref_acra_body)
                     isSingleLineTitle = false
                 }
-            }
+            }*/
         }
     }
 

@@ -57,7 +57,7 @@ android {
         }
 
         release {
-            debuggable false
+            // debuggable false
 
             minifyEnabled true
             shrinkResources true
@@ -242,8 +242,8 @@ dependencies {
     implementation deps.square.okhttpBrotli
 
     // Other dependencies
-    implementation deps.acraMail
-    implementation deps.acraNotification
+    //implementation deps.acraMail
+    //implementation deps.acraNotification
     implementation deps.androidImageCropper
     implementation deps.androidSvg
     implementation deps.autodispose

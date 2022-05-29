@@ -24,7 +24,6 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import androidx.core.app.NotificationManagerCompat
 import androidx.emoji.text.EmojiCompat
 import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
@@ -45,15 +44,6 @@ import dagger.android.HasAndroidInjector
 import io.reactivex.plugins.RxJavaPlugins
 import java.security.Security
 import javax.inject.Inject
-import org.acra.ReportField.ANDROID_VERSION
-import org.acra.ReportField.APP_VERSION_CODE
-import org.acra.ReportField.APP_VERSION_NAME
-import org.acra.ReportField.BUILD_CONFIG
-import org.acra.ReportField.STACK_TRACE
-import org.acra.config.mailSender
-import org.acra.config.notification
-import org.acra.data.StringFormat
-import org.acra.ktx.initAcra
 import org.conscrypt.Conscrypt
 import timber.log.Timber
 
@@ -110,7 +100,7 @@ class TuskyApplication : Application(), HasAndroidInjector {
         localeManager = LocaleManager(base)
         super.attachBaseContext(localeManager.setLocale(base))
 
-        setupAcra()
+        //setupAcra()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -125,6 +115,8 @@ class TuskyApplication : Application(), HasAndroidInjector {
         lateinit var localeManager: LocaleManager
     }
 
+    // TODO: Enable ACRA again after figuring out what's wrong.
+    /*
     private fun setupAcra() {
         initAcra {
             buildConfigClass = BuildConfig::class.java
@@ -159,5 +151,5 @@ class TuskyApplication : Application(), HasAndroidInjector {
                 reportFileName = getString(R.string.acra_email_report_filename)
             }
         }
-    }
+    }*/
 }
