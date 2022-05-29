@@ -40,22 +40,9 @@ captures/
 # IntelliJ
 *.iml
 /*.iml
-/.idea/assetWizardSettings.xml
-/.idea/compiler.xml
-/.idea/gradle.xml
-/.idea/jarRepositories.xml
-/.idea/misc.xml
-/.idea/workspace.xml
-/.idea/tasks.xml
-/.idea/runConfigurations.xml
-/.idea/dictionaries
-/.idea/libraries
-/.idea/modules
-# Android Studio 3 in .gitignore file.
-/.idea/caches
-/.idea/modules.xml
-# Comment next line if keeping position of elements in Navigation Editor is relevant for you
-/.idea/navEditor.xml
+/.idea
+!/.idea/codeStyles
+!/.idea/codeStyles/*
 
 # Keystore files
 *.jks
