@@ -32,5 +32,7 @@ data class EmojiReaction(
         val name: String,
         val count: Int,
         val me: Boolean,
+        val url: String?,
+        @SerializedName("static_url") val staticUrl: String?,
         val accounts: List<Account>? // only for emoji_reactions_by
 )
