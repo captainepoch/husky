@@ -32,10 +32,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
@@ -63,7 +63,7 @@ class ViewVideoFragment : ViewMediaFragment() {
     private lateinit var mediaController: MediaController
     private var isAudio = false
 
-    private var exoPlayer: SimpleExoPlayer? = null
+    private var exoPlayer: ExoPlayer? = null
     private val playbackStateListener: Player.Listener = playbackStateListener()
     private var playWhenReady = true
     private var currentWindow = 0
@@ -124,7 +124,7 @@ class ViewVideoFragment : ViewMediaFragment() {
             setParameters(buildUponParameters().setMaxVideoSizeSd())
         }
 
-        exoPlayer = SimpleExoPlayer.Builder(requireActivity())
+        exoPlayer = ExoPlayer.Builder(requireActivity())
             .setTrackSelector(trackSelector)
             .build()
             .also { player ->
@@ -143,7 +143,6 @@ class ViewVideoFragment : ViewMediaFragment() {
             }
 
         videoControls.player = videoView.player
-        //videoView.requestFocus()
 
         if(arguments!!.getBoolean(ARG_START_POSTPONED_TRANSITION)) {
             mediaActivity.onBringUp()
