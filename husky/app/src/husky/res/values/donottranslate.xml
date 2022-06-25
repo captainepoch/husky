@@ -4,8 +4,8 @@
     <string name="crashhandler_email_subject">Husky crashed</string>
     <string name="crashhandler_email_body">Please, explain the steps to reproduce the crash (english only):\n\n</string>
     <string name="crashhandler_email_report_filename">husky_crash.txt</string>
-    <string name="crashhandler_notification_channel_title">ACRA</string>
-    <string name="crashhandler_notification_channel_body">This channel is used for push notifications related to crashes captured by ACRA.</string>
+    <string name="crashhandler_notification_channel_title">CrashHandler Notifications</string>
+    <string name="crashhandler_notification_channel_body">This channel is used for push notifications related to crashes captured by the CrashHanlder.</string>
     <string name="crashhandler_notification_title">Husky crashed</string>
     <string name="crashhandler_notification_body">There was an error that crashed Husky. If you want, you can report via email this crash.</string>
     <string name="crashhandler_notification_report">Report</string>
