@@ -43,25 +43,25 @@ class CrashHandler @Inject constructor(
     private val huskyApp: Application
 ) : UncaughtExceptionHandler {
 
+    private val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+    private var activityCounter = 0
+    private var lastActivity: Activity? = null
+
     private val activityCallbacks = object : ActivityCallback() {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             lastActivity = activity
+            activityCounter++
             Timber.d("onActivityCreated[${activity::class.simpleName}]")
         }
 
-        override fun onActivityResumed(activity: Activity) {
-            lastActivity = activity
-            Timber.d("onActivityResumed[${activity::class.simpleName}]")
-        }
-
         override fun onActivityStopped(activity: Activity) {
-            lastActivity = null
+            activityCounter--
+            if(activityCounter <= 0) {
+                lastActivity = null
+            }
             Timber.d("onActivityStopped[${activity::class.simpleName}]")
         }
     }
-
-    private val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
-    private var lastActivity: Activity? = null
 
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         try {
