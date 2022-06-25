@@ -540,8 +540,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
             Notification.Type type = notificationViewData.getType();
 
             Context context = message.getContext();
-            String wholeMessage;
             Drawable icon;
+            SpannableStringBuilder builder = new SpannableStringBuilder();
             switch (type) {
                 default:
                 case FAVOURITE: {
@@ -552,7 +552,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
                     }
 
                     String format = context.getString(R.string.notification_favourite_format);
-                    wholeMessage = String.format(format, displayName);
+                    builder.append(String.format(format, displayName));
                     break;
                 }
                 case REBLOG: {
@@ -563,7 +563,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
                     }
 
                     String format = context.getString(R.string.notification_reblog_format);
-                    wholeMessage = String.format(format, displayName);
+                    builder.append(String.format(format, displayName));
                     break;
                 }
                 case STATUS: {
@@ -574,7 +574,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
                     }
 
                     String format = context.getString(R.string.notification_subscription_format);
-                    wholeMessage = String.format(format, displayName);
+                    builder.append(String.format(format, displayName));
                     break;
                 }
                 case EMOJI_REACTION: {
@@ -586,15 +586,26 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
 
                     String format = context.getString(R.string.notification_emoji_format);
                     String emojiCode = notificationViewData.getEmoji();
-                    wholeMessage = String.format(format, displayName, emojiCode);
+                    builder.append(String.format(format, displayName, emojiCode));
+
+                    final String emojiUrl = notificationViewData.getEmojiUrl();
+                    if(emojiUrl != null) {
+                        // terrible hack... ideally, there should be a CharSequence formatter
+                        final int emojiPosition = format.indexOf("%s", 1)
+                                - "%s".length() + displayName.length();
+
+                        var span = CustomEmojiHelper.createEmojiSpan(emojiUrl, message, true);
+                        builder.setSpan(span, emojiPosition, emojiPosition + emojiCode.length(),
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
                     break;
                 }
             }
             message.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
-            final SpannableString str = new SpannableString(wholeMessage);
-            str.setSpan(new StyleSpan(Typeface.BOLD), 0, displayName.length(),
+            builder.setSpan(new StyleSpan(Typeface.BOLD), 0, displayName.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            CharSequence emojifiedText = CustomEmojiHelper.emojify(str, notificationViewData.getAccount().getEmojis(), message, true);
+            CharSequence emojifiedText = CustomEmojiHelper.emojify(builder, notificationViewData.getAccount().getEmojis(), message, true);
             message.setText(emojifiedText);
 
             if (statusViewData != null) {

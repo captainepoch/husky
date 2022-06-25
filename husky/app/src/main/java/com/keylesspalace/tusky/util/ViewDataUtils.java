@@ -94,6 +94,7 @@ public final class ViewDataUtils {
                         alwaysOpenSpoiler
                 ),
                 notification.getEmoji(),
+                notification.getEmojiUrl(),
                 notification.getTarget()
         );
     }

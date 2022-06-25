@@ -50,16 +50,20 @@ public abstract class NotificationViewData {
         @Nullable
         private final String emoji;
         @Nullable
+        private final String emojiUrl;
+        @Nullable
         private final Account target; // move notification
 
         public Concrete(Notification.Type type, String id, Account account,
                         @Nullable StatusViewData.Concrete statusViewData,
-                        @Nullable String emoji, @Nullable Account target) {
+                        @Nullable String emoji, @Nullable String emojiUrl,
+                        @Nullable Account target) {
             this.type = type;
             this.id = id;
             this.account = account;
             this.statusViewData = statusViewData;
             this.emoji = emoji;
+            this.emojiUrl = emojiUrl;
             this.target = target;
         }
 
@@ -86,6 +90,11 @@ public abstract class NotificationViewData {
         }
 
         @Nullable
+        public String getEmojiUrl() {
+            return emojiUrl;
+        }
+
+        @Nullable
         public Account getTarget() {
             return target;
         }
@@ -104,6 +113,7 @@ public abstract class NotificationViewData {
                     Objects.equals(id, concrete.id) &&
                     account.getId().equals(concrete.account.getId()) &&
                     (emoji != null && concrete.emoji != null && emoji.equals(concrete.emoji)) &&
+                    (emojiUrl != null && concrete.emojiUrl != null && emojiUrl.equals(concrete.emojiUrl)) &&
                     (target != null && concrete.target != null && target.getId().equals(concrete.target.getId())) &&
                     (statusViewData == concrete.statusViewData ||
                             statusViewData != null &&

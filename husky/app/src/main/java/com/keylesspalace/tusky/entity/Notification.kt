@@ -31,6 +31,7 @@ data class Notification(
         val status: Status?,
         val pleroma: PleromaNotification? = null,
         val emoji: String? = null,
+        @SerializedName("emoji_url") val emojiUrl: String? = null,
         @SerializedName("chat_message") val chatMessage: ChatMessage? = null,
         @SerializedName("created_at") val createdAt: Date? = null,
         val target: Account? = null) {
