@@ -112,8 +112,6 @@ testing.roboelectric = "org.robolectric:robolectric:${versions.testing.roboelect
 testing.roomTesting = "androidx.room:room-testing:${versions.testing.roomTesting}"
 deps.testing = testing
 
-deps.acraMail = "ch.acra:acra-mail:${versions.acra}"
-deps.acraNotification = "ch.acra:acra-notification:${versions.acra}"
 deps.androidSvg = "com.caverock:androidsvg-aar:${versions.androidSvg}"
 deps.androidImageCropper =
         "com.theartofdev.edmodo:android-image-cropper:${versions.androidImageCropper}"
