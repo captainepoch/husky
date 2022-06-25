@@ -70,25 +70,8 @@ fun CharSequence.emojify(
             .matcher(this)
 
         while(matcher.find()) {
-            val span = if(smallEmojis) {
-                SmallEmojiSpan(WeakReference<View>(view))
-            } else {
-                EmojiSpan(WeakReference<View>(view))
-            }
-
+            val span = createEmojiSpan(url, view, smallEmojis, animate)
             builder.setSpan(span, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-            var glideRequest = Glide.with(view).load(url)
-                .set(AnimationDecoderOption.DISABLE_ANIMATION_GIF_DECODER, !animate)
-                .set(AnimationDecoderOption.DISABLE_ANIMATION_WEBP_DECODER, !animate)
-                .set(AnimationDecoderOption.DISABLE_ANIMATION_APNG_DECODER, !animate)
-            val mimetype = getMimeType(url)
-            if(mimetype == MIME.SVG) {
-                glideRequest = glideRequest
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .override(512, 512)
-            }
-            glideRequest.into(span.getTarget(animate))
         }
     }
 
@@ -97,6 +80,45 @@ fun CharSequence.emojify(
 
 fun CharSequence.emojify(emojis: List<Emoji>?, view: View): CharSequence {
     return this.emojify(emojis, view, false)
+}
+
+fun createEmojiSpan(
+    emoji_url: String,
+    view: View,
+    forceSmallEmoji: Boolean = false
+): EmojiSpan {
+    val pm = PreferenceManager.getDefaultSharedPreferences(view.context)
+    val smallEmojis = forceSmallEmoji || !pm.getBoolean(PrefKeys.BIG_EMOJIS, true)
+    val animate = pm.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
+
+    return createEmojiSpan(emoji_url, view, smallEmojis, animate);
+}
+
+private fun createEmojiSpan(
+    emoji_url: String,
+    view: View,
+    smallEmojis: Boolean = false,
+    animate: Boolean = false
+): EmojiSpan {
+    val span = if(smallEmojis) {
+        SmallEmojiSpan(WeakReference<View>(view))
+    } else {
+        EmojiSpan(WeakReference<View>(view))
+    }
+
+    var glideRequest = Glide.with(view).load(emoji_url)
+        .set(AnimationDecoderOption.DISABLE_ANIMATION_GIF_DECODER, !animate)
+        .set(AnimationDecoderOption.DISABLE_ANIMATION_WEBP_DECODER, !animate)
+        .set(AnimationDecoderOption.DISABLE_ANIMATION_APNG_DECODER, !animate)
+    val mimetype = getMimeType(emoji_url)
+    if(mimetype == MIME.SVG) {
+        glideRequest = glideRequest
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .override(512, 512)
+    }
+    glideRequest.into(span.getTarget(animate))
+
+    return span;
 }
 
 open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSpan() {

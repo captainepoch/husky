@@ -4,11 +4,14 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 import android.widget.Toast;
 import android.util.Log;
 
@@ -21,6 +24,7 @@ import com.keylesspalace.tusky.entity.Status;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.util.CardViewMode;
+import com.keylesspalace.tusky.util.CustomEmojiHelper;
 import com.keylesspalace.tusky.util.LinkHelper;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
@@ -51,12 +55,20 @@ public class EmojiReactionsAdapter extends RecyclerView.Adapter<SingleViewHolder
     @Override
     public void onBindViewHolder(SingleViewHolder holder, int position) {
         EmojiReaction reaction = reactions.get(position);
-        String str = reaction.getName() + " " + reaction.getCount();
-        
-        // no custom emoji yet!
+        SpannableStringBuilder builder = new SpannableStringBuilder(
+                reaction.getName() + " " + reaction.getCount());
+
         EmojiAppCompatButton btn = (EmojiAppCompatButton)holder.itemView;
-        
-        btn.setText(str);
+
+        var url = reaction.getUrl();
+        if (url != null) {
+            var span = CustomEmojiHelper.createEmojiSpan(url, btn, true);
+
+            builder.setSpan(span, 0, reaction.getName().length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        btn.setText(builder, BufferType.SPANNABLE);
         btn.setActivated(reaction.getMe());
         btn.setOnClickListener(v -> {
             listener.onEmojiReactMenu(v, reaction, statusId);
