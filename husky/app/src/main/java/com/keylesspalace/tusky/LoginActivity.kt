@@ -113,7 +113,7 @@ class LoginActivity : BaseActivity(), Injectable {
         } else {
             binding.toolbar.visibility = View.GONE
         }
-
+val a = 1/0
     }
 
     override fun requiresLogin(): Boolean {

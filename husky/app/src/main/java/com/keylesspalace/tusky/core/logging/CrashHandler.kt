@@ -32,44 +32,33 @@ import com.keylesspalace.tusky.core.ui.callbacks.ActivityCallback
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Thread.UncaughtExceptionHandler
+import javax.inject.Inject
 import timber.log.Timber
 
-class CrashHandler(
-    private val defaultHandler: Thread.UncaughtExceptionHandler,
+class CrashHandler @Inject constructor(
     private val huskyApp: Application
-) : Thread.UncaughtExceptionHandler {
+) : UncaughtExceptionHandler {
 
-    private var lastActivity: Activity? = null
+    private val activityCallbacks = object : ActivityCallback() {
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+            lastActivity = activity
+            Timber.d("onActivityCreated[${activity::class.simpleName}]")
+        }
 
-    companion object {
-        fun setAsDefaultHandler(application: Application) {
-            val handler = Thread.getDefaultUncaughtExceptionHandler()?.let {
-                CrashHandler(it, application)
-            }
-            Thread.setDefaultUncaughtExceptionHandler(handler)
+        override fun onActivityResumed(activity: Activity) {
+            lastActivity = activity
+            Timber.d("onActivityResumed[${activity::class.simpleName}]")
+        }
+
+        override fun onActivityStopped(activity: Activity) {
+            lastActivity = null
+            Timber.d("onActivityStopped[${activity::class.simpleName}]")
         }
     }
 
-    init {
-        huskyApp.registerActivityLifecycleCallbacks(
-            object : ActivityCallback() {
-                override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                    lastActivity = activity
-                    Timber.d("onActivityCreated[${activity::class.simpleName}]")
-                }
-
-                override fun onActivityResumed(activity: Activity) {
-                    lastActivity = activity
-                    Timber.d("onActivityResumed[${activity::class.simpleName}]")
-                }
-
-                override fun onActivityStopped(activity: Activity) {
-                    lastActivity = null
-                    Timber.d("onActivityStopped[${activity::class.simpleName}]")
-                }
-            }
-        )
-    }
+    private val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+    private var lastActivity: Activity? = null
 
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         try {
@@ -77,7 +66,7 @@ class CrashHandler(
         } catch(e: IOException) {
             Timber.e("CrashHandler Exception[${e.message}]")
         } finally {
-            lastActivity?.finish()
+            lastActivity?.finish() ?: defaultHandler?.uncaughtException(thread, throwable)
         }
     }
 
@@ -104,14 +93,17 @@ class CrashHandler(
                     .appendLine()
                     .appendLine("## Device details")
                     .appendLine(getDeviceInfo())
-                    //.appendLine("## Crash details")
-                    //.appendLine(stacktrace)
+                //.appendLine("## Crash details")
+                //.appendLine(stacktrace)
             }.toString()
             Timber.d(formattedLog)
 
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "message/rfc822"
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(activity.getString(R.string.crashhandler_email)))
+                putExtra(
+                    Intent.EXTRA_EMAIL,
+                    arrayOf(activity.getString(R.string.crashhandler_email))
+                )
                 putExtra(Intent.EXTRA_SUBJECT, "Husky ${BuildConfig.VERSION_NAME} crash")
                 putExtra(Intent.EXTRA_TEXT, formattedLog)
                 putExtra(Intent.EXTRA_STREAM, getCrashFileUri(activity, stacktrace))
@@ -129,7 +121,10 @@ class CrashHandler(
     }
 
     private fun getCrashFileUri(activity: Activity, stacktrace: String): Uri {
-        val file = File("${huskyApp.cacheDir}/crashes", activity.getString(R.string.crashhandler_email_report_filename))
+        val file = File(
+            "${huskyApp.cacheDir}/crashes",
+            activity.getString(R.string.crashhandler_email_report_filename)
+        )
         FileOutputStream(file).apply {
             write(stacktrace.toByteArray())
         }.also {
@@ -140,5 +135,22 @@ class CrashHandler(
             "${BuildConfig.APPLICATION_ID}.fileprovider",
             file
         )
+    }
+
+    fun setAsDefaultHandler() {
+        val handler = defaultHandler?.let {
+            this@CrashHandler
+        }
+        Thread.setDefaultUncaughtExceptionHandler(handler)
+        huskyApp.registerActivityLifecycleCallbacks(activityCallbacks)
+
+        Timber.d("Set default handler[${handler}]")
+    }
+
+    fun removeDefaultHandler() {
+        Thread.setDefaultUncaughtExceptionHandler(defaultHandler)
+        huskyApp.unregisterActivityLifecycleCallbacks(activityCallbacks)
+
+        Timber.d("Remove default handler")
     }
 }

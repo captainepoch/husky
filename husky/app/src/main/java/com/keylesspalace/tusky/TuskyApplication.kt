@@ -56,12 +56,19 @@ class TuskyApplication : Application(), HasAndroidInjector {
     @Inject
     lateinit var notificationWorkerFactory: NotificationWorkerFactory
 
+    @Inject
+    protected lateinit var crashHandler: CrashHandler
+
     override fun onCreate() {
         super.onCreate()
 
+        AppInjector.init(this)
+
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-        CrashHandler.setAsDefaultHandler(this)
+        if(preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
+            crashHandler.setAsDefaultHandler()
+        }
 
         if(ApplicationUtils.isDebug()) {
             Timber.plant(HyperlinkDebugTree())
@@ -70,9 +77,6 @@ class TuskyApplication : Application(), HasAndroidInjector {
         Security.insertProviderAt(Conscrypt.newProvider(), 1)
 
         AutoDisposePlugins.setHideProxies(false) // a small performance optimization
-
-        AppInjector.init(this)
-
 
         // init the custom emoji fonts
         val emojiSelection = preferences.getInt(PrefKeys.EMOJI, 0)

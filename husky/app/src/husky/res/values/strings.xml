@@ -49,9 +49,9 @@
     <string name="pref_title_composing">Composing</string>
     <string name="pref_title_composing_title">Composing using zero-width space characters in emojis</string>
 
-    <string name="pref_acra_category">ACRA Settings</string>
-    <string name="pref_acra_body">Enable ACRA reporting</string>
-    <string name="key_enable_acra">acra.enable</string>
+    <string name="pref_crashhandler_category">CrashHanlder Settings</string>
+    <string name="pref_crashhandler_body">Enable CrashHanlder email reporting</string>
+    <string name="pref_crashhandler_key">enableCrashHanlder</string>
 
     <string name="pref_title_anonymize_upload_filenames">Anonymize uploaded file names</string>
     <string name="pref_title_hide_live_notification_description">Hide Live Notification username</string>

@@ -10,12 +10,12 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_acra_category">
+    <PreferenceCategory android:title="@string/pref_crashhandler_category">
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="@string/key_enable_acra"
-            android:title="@string/pref_acra_body" />
+            android:key="@string/pref_crashhandler_key"
+            android:title="@string/pref_crashhandler_body" />
 
     </PreferenceCategory>
 

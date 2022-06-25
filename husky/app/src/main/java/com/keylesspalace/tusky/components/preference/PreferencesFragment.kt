@@ -27,11 +27,10 @@ import androidx.preference.PreferenceFragmentCompat
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
-import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Notification
-import com.keylesspalace.tusky.service.StreamingService
 import com.keylesspalace.tusky.settings.AppTheme
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.settings.emojiPreference
@@ -61,6 +60,9 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
     @Inject
     lateinit var eventHub: EventHub
+
+    @Inject
+    lateinit var crashHandler: CrashHandler
 
     private val iconSize by lazy { resources.getDimensionPixelSize(R.dimen.preference_icon_size) }
     private var httpProxyPref: Preference? = null
@@ -362,15 +364,25 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                 }
             }
 
-            /*
-            preferenceCategory(R.string.pref_acra_category) {
+            preferenceCategory(R.string.pref_crashhandler_category) {
                 switchPreference {
                     setDefaultValue(false)
-                    key = PREF_ENABLE_ACRA
-                    setTitle(R.string.pref_acra_body)
+                    key = PrefKeys.CRASH_HANDLER_ENABLE
+                    setTitle(R.string.pref_crashhandler_body)
                     isSingleLineTitle = false
+                    setOnPreferenceChangeListener { _, value ->
+                        with(value as Boolean) {
+                            if(this) {
+                                crashHandler.setAsDefaultHandler()
+                            } else {
+                                crashHandler.removeDefaultHandler()
+                            }
+                        }
+
+                        true
+                    }
                 }
-            }*/
+            }
         }
     }
 

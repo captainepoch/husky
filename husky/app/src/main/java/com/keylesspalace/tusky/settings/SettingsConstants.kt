@@ -93,4 +93,6 @@ object PrefKeys {
 
     const val TAB_FILTER_HOME_REPLIES = "tabFilterHomeReplies"
     const val TAB_FILTER_HOME_BOOSTS = "tabFilterHomeBoosts"
+
+    const val CRASH_HANDLER_ENABLE = "enableCrashHanlder"
 }
