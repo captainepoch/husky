@@ -25,6 +25,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Bundle
+import android.os.Process
+import android.os.Process.killProcess
 import androidx.core.content.FileProvider
 import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
@@ -34,6 +36,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Thread.UncaughtExceptionHandler
 import javax.inject.Inject
+import kotlin.system.exitProcess
 import timber.log.Timber
 
 class CrashHandler @Inject constructor(
@@ -66,7 +69,13 @@ class CrashHandler @Inject constructor(
         } catch(e: IOException) {
             Timber.e("CrashHandler Exception[${e.message}]")
         } finally {
-            lastActivity?.finish() ?: defaultHandler?.uncaughtException(thread, throwable)
+            lastActivity?.let { activity ->
+                killApp {
+                    activity.finish()
+                }
+            } ?: killApp {
+                defaultHandler?.uncaughtException(thread, throwable)
+            }
         }
     }
 
@@ -135,6 +144,13 @@ class CrashHandler @Inject constructor(
             "${BuildConfig.APPLICATION_ID}.fileprovider",
             file
         )
+    }
+
+    private fun killApp(listener: () -> Unit = {}) {
+        listener()
+
+        killProcess(Process.myPid())
+        exitProcess(10)
     }
 
     fun setAsDefaultHandler() {
