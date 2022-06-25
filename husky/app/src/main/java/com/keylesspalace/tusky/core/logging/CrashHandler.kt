@@ -150,6 +150,7 @@ class CrashHandler @Inject constructor(
     fun removeDefaultHandler() {
         Thread.setDefaultUncaughtExceptionHandler(defaultHandler)
         huskyApp.unregisterActivityLifecycleCallbacks(activityCallbacks)
+        lastActivity = null
 
         Timber.d("Remove default handler")
     }
