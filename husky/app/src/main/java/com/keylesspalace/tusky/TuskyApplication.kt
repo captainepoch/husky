@@ -31,6 +31,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideCustomImageLoader
 import com.keylesspalace.tusky.components.notifications.NotificationWorkerFactory
+import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.core.logging.HyperlinkDebugTree
 import com.keylesspalace.tusky.core.utils.ApplicationUtils
 import com.keylesspalace.tusky.di.AppInjector
@@ -58,6 +59,10 @@ class TuskyApplication : Application(), HasAndroidInjector {
     override fun onCreate() {
         super.onCreate()
 
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+
+        CrashHandler.setAsDefaultHandler(this)
+
         if(ApplicationUtils.isDebug()) {
             Timber.plant(HyperlinkDebugTree())
         }
@@ -68,7 +73,6 @@ class TuskyApplication : Application(), HasAndroidInjector {
 
         AppInjector.init(this)
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         // init the custom emoji fonts
         val emojiSelection = preferences.getInt(PrefKeys.EMOJI, 0)
@@ -99,8 +103,6 @@ class TuskyApplication : Application(), HasAndroidInjector {
     override fun attachBaseContext(base: Context) {
         localeManager = LocaleManager(base)
         super.attachBaseContext(localeManager.setLocale(base))
-
-        //setupAcra()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -114,42 +116,4 @@ class TuskyApplication : Application(), HasAndroidInjector {
         @JvmStatic
         lateinit var localeManager: LocaleManager
     }
-
-    // TODO: Enable ACRA again after figuring out what's wrong.
-    /*
-    private fun setupAcra() {
-        initAcra {
-            buildConfigClass = BuildConfig::class.java
-            reportFormat = StringFormat.KEY_VALUE_LIST
-            reportContent = listOf(
-                ANDROID_VERSION,
-                APP_VERSION_NAME,
-                APP_VERSION_CODE,
-                BUILD_CONFIG,
-                STACK_TRACE
-            )
-
-            notification {
-                title = getString(R.string.acra_notification_title)
-                text = getString(R.string.acra_notification_body)
-                channelName = getString(R.string.acra_notification_channel_title)
-                channelDescription = getString(R.string.acra_notification_channel_body)
-                channelImportance = NotificationManagerCompat.IMPORTANCE_DEFAULT
-                //resIcon = R.drawable.notification_icon
-                sendButtonText = getString(R.string.acra_notification_report)
-                //resSendButtonIcon = R.drawable.notification_send
-                discardButtonText = getString(R.string.acra_notification_discard)
-                //resDiscardButtonIcon = R.drawable.notification_discard
-                sendOnClick = false
-            }
-
-            mailSender {
-                mailTo = getString(R.string.acra_email)
-                subject = getString(R.string.acra_email_subject)
-                body = getString(R.string.acra_email_body)
-                reportAsFile = true
-                reportFileName = getString(R.string.acra_email_report_filename)
-            }
-        }
-    }*/
 }
