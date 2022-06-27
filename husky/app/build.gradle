@@ -91,6 +91,8 @@ android {
         beta {
             dimension buildVersions.flavorDimensions.release
 
+            //applicationId buildVersions.beta.applicationId
+
             versionNameSuffix = "-${buildVersions.beta.suffix}${buildVersions.beta.versionSuffix}"
         }
 

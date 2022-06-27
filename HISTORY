@@ -1,3 +1,26 @@
+Husky 1.3.0-beta1 - 2022-06-27
+ - App: Remove ACRA in favor of a custom CrashHandler.
+ - App: Update API level to 32 (Android 12L).
+ - Fix: Crashes and possible null values.
+
+ Update dependencies:
+  - androidGradlePlugin (7.2.0 -> 7.2.1)
+  - appcompat (1.3.1 -> 1.4.2)
+  - bigImageViewer (1.7.0 -> 1.8.1)
+  - browser (1.3.0 -> 1.4.0)
+  - constraintlayout (2.1.3 -> 2.1.4)
+  - coreKtx (1.3.2 -> 1.8.0)
+  - dagger (2.38.1 -> 2.42)
+  - exoplayer (2.16.0 -> 2.17.1)
+  - fragmentKtx (1.2.5 -> 1.4.1)
+  - glidePluginAnimation (2.21.0 -> 2.23.0)
+  - lifecycle (2.3.1 -> 2.4.1)
+  - kotlinx (1.6.1 -> 1.6.3)
+  - materialDesign (1.4.0 -> 1.6.1)
+  - okhttpVersion (4.9.3 -> 4.10.0)
+  - shareTarget (1.0.0 -> 1.2.0-rc01)
+  - workRuntime (2.4.0 -> 2.7.1)
+
 Husky 1.2.2 - 2022-05-22
  - Fix: Animated emojis while composing a status.
  - Fix: Attempt to fix the back action.
