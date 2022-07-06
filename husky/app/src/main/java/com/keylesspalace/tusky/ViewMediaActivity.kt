@@ -178,13 +178,14 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         return false
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.findItem(R.id.action_share_media)?.isEnabled = !isCreating
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_share_media)?.isEnabled = !isCreating
 
         if(attachments != null) {
             val isStatus = attachments!!.any { it.statusId != null && it.statusUrl != null }
-            menu?.findItem(R.id.action_open_status)?.isVisible = isStatus
+            menu.findItem(R.id.action_open_status)?.isVisible = isStatus
         }
+
         return true
     }
 

@@ -164,6 +164,7 @@ class EditProfileActivity : BaseActivity(), Injectable {
                     snackbar.show()
 
                 }
+                else -> {}
             }
         }
 
@@ -186,6 +187,7 @@ class EditProfileActivity : BaseActivity(), Injectable {
                         }
                     }
                 }
+                else -> {}
             }
         }
 

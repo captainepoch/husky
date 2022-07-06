@@ -105,7 +105,7 @@ class StickerAdapter(
             Glide.with(holder.itemView)
                 .load(( url ?: "" ) + stickers[position])
                 .thumbnail()
-                .into(holder.itemView)
+                .into(holder.itemView as AppCompatImageButton)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleViewHolder {

@@ -346,6 +346,7 @@ class AccountActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidI
                             .setAction(R.string.action_retry) { viewModel.refresh() }
                             .show()
                 }
+                else -> {}
             }
         }
         viewModel.relationshipData.observe(this) {

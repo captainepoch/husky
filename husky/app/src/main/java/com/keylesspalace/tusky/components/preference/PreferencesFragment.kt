@@ -402,12 +402,12 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
     private fun updateHttpProxySummary() {
         val sharedPreferences = preferenceManager.sharedPreferences
-        val httpProxyEnabled = sharedPreferences.getBoolean(PrefKeys.HTTP_PROXY_ENABLED, false)
-        val httpServer = sharedPreferences.getNonNullString(PrefKeys.HTTP_PROXY_SERVER, "")
+        val httpProxyEnabled = sharedPreferences?.getBoolean(PrefKeys.HTTP_PROXY_ENABLED, false) ?: false
+        val httpServer = sharedPreferences?.getNonNullString(PrefKeys.HTTP_PROXY_SERVER, "") ?: ""
 
         try {
-            val httpPort = sharedPreferences.getNonNullString(PrefKeys.HTTP_PROXY_PORT, "-1")
-                .toInt()
+            val httpPort = sharedPreferences?.getNonNullString(PrefKeys.HTTP_PROXY_PORT, "-1")
+                ?.toInt() ?: -1
 
             if(httpProxyEnabled && httpServer.isNotBlank() && httpPort > 0 && httpPort < 65535) {
                 httpProxyPref?.summary = "$httpServer:$httpPort"

@@ -159,7 +159,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         val statusDisplayOptions = StatusDisplayOptions(
                 animateAvatars = preferences.getBoolean(PrefKeys.ANIMATE_GIF_AVATARS, false),
@@ -325,7 +325,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
          * guaranteed to be set until then. */
         /* Use a modified scroll listener that both loads more statuses as it goes, and hides
          * the follow button on down-scroll. */
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         hideFab = preferences.getBoolean("fabHide", false)
         scrollListener = object : EndlessOnScrollListener(layoutManager) {
             override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
@@ -393,7 +393,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
     */
 
     private fun onPreferenceChanged(key: String) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         when (key) {
             "fabHide" -> {
                 hideFab = sharedPreferences.getBoolean("fabHide", false)
@@ -722,7 +722,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
      * Auto dispose observable on pause
      */
     private fun startUpdateTimestamp() {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false)
         if (!useAbsoluteTime) {
             Observable.interval(1, TimeUnit.MINUTES)

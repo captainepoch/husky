@@ -125,6 +125,7 @@ class ViewVideoFragment : ViewMediaFragment() {
         }
 
         exoPlayer = ExoPlayer.Builder(requireActivity())
+            .setUsePlatformDiagnostics(false)
             .setTrackSelector(trackSelector)
             .build()
             .also { player ->
