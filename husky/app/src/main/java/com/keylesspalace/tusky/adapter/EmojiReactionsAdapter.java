@@ -1,39 +1,39 @@
+/*
+ * Husky -- A Pleroma client for Android
+ *
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2020  Alibek Omarov
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.keylesspalace.tusky.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.TextView.BufferType;
-import android.widget.Toast;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 import androidx.emoji.widget.EmojiAppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.keylesspalace.tusky.R;
-import com.keylesspalace.tusky.entity.Status;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
-import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.CustomEmojiHelper;
-import com.keylesspalace.tusky.util.LinkHelper;
-import com.keylesspalace.tusky.util.StatusDisplayOptions;
-import com.keylesspalace.tusky.viewdata.StatusViewData;
-
-import java.text.DateFormat;
 import java.util.List;
-import java.util.Date;
 
-    
 public class EmojiReactionsAdapter extends RecyclerView.Adapter<SingleViewHolder> {
     private final List<EmojiReaction> reactions;
     private final StatusActionListener listener;
@@ -41,14 +41,14 @@ public class EmojiReactionsAdapter extends RecyclerView.Adapter<SingleViewHolder
 
     EmojiReactionsAdapter(final List<EmojiReaction> reactions, final StatusActionListener listener, final String statusId) {
         this.reactions = reactions;
-        this.listener  = listener;
+        this.listener = listener;
         this.statusId = statusId;
     }
-        
+
     @Override
     public SingleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item_emoji_reaction, parent, false);
+                .inflate(R.layout.item_emoji_reaction, parent, false);
         return new SingleViewHolder(view);
     }
 
@@ -58,10 +58,10 @@ public class EmojiReactionsAdapter extends RecyclerView.Adapter<SingleViewHolder
         SpannableStringBuilder builder = new SpannableStringBuilder(
                 reaction.getName() + " " + reaction.getCount());
 
-        EmojiAppCompatButton btn = (EmojiAppCompatButton)holder.itemView;
+        EmojiAppCompatButton btn = (EmojiAppCompatButton) holder.itemView;
 
         var url = reaction.getUrl();
-        if (url != null) {
+        if(url != null) {
             var span = CustomEmojiHelper.createEmojiSpan(url, btn, true);
 
             builder.setSpan(span, 0, reaction.getName().length(),

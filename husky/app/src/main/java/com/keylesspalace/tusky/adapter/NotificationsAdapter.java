@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.adapter;
 
@@ -416,8 +421,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
             itemView.setOnClickListener(v -> listener.onViewAccount(accountId));
         }
     }
-    
-    
+
+
     private static class StatusNotificationViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView message;
@@ -433,7 +438,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
         private final Button contentWarningButton;
         private final Button contentCollapseButton; // TODO: This code SHOULD be based on StatusBaseViewHolder
         private StatusDisplayOptions statusDisplayOptions;
-    
+
         private String accountId;
         private String notificationId;
         private NotificationActionListener notificationActionListener;
@@ -691,7 +696,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
             } else {
                 statusContent.setVisibility(View.VISIBLE);
             }
-    
+
             Spanned content = statusViewData.getContent();
             List<Emoji> emojis = statusViewData.getStatusEmojis();
 
@@ -702,7 +707,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
                         notificationActionListener.onNotificationContentCollapsedChange(!statusViewData.isCollapsed(), position);
                     }
                 });
-    
+
                 contentCollapseButton.setVisibility(View.VISIBLE);
                 if (statusViewData.isCollapsed()) {
                     contentCollapseButton.setText(R.string.status_content_warning_show_more);

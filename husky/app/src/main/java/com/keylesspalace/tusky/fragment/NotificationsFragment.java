@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.fragment;
 
@@ -339,14 +344,14 @@ public class NotificationsFragment extends SFragment implements
                 posAndNotification.second.getStatus(),
                 event.getReblog());
     }
-    
+
     private void handleMuteStatusEvent(MuteConversationEvent event) {
         Pair<Integer, Notification> posAndNotification = findReplyPosition(event.getStatusId());
         if (posAndNotification == null)
             return;
-        
+
         int conversationId = posAndNotification.second.getStatus().getConversationId();
-        
+
         if(conversationId == -1) { // invalid conversation ID
             if(withMuted) {
                 setMutedStatusForStatus(posAndNotification.first, posAndNotification.second.getStatus(), event.getMute(), event.getMute());
@@ -510,7 +515,7 @@ public class NotificationsFragment extends SFragment implements
         notifications.setPairedItem(position, newViewData);
         updateAdapter();
     }
-    
+
     @Override
     public void onFavourite(final boolean favourite, final int position) {
         final Notification notification = notifications.get(position).asRight();
@@ -674,7 +679,7 @@ public class NotificationsFragment extends SFragment implements
         notifications.setPairedItem(position, notificationViewData);
         updateAdapter();
     }
-    
+
     @Override
     public void onMute(int position, boolean isMuted) {
         NotificationViewData.Concrete old =
@@ -689,10 +694,10 @@ public class NotificationsFragment extends SFragment implements
         notifications.setPairedItem(position, notificationViewData);
         updateAdapter();
     }
-    
+
     private void setMutedStatusForStatus(int position, Status status, boolean muted, boolean threadMuted) {
         status.setThreadMuted(threadMuted);
-                
+
         NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
         StatusViewData.Builder viewDataBuilder = new StatusViewData.Builder(viewdata.getStatusViewData());
@@ -1447,7 +1452,7 @@ public class NotificationsFragment extends SFragment implements
     public void onReselect() {
         jumpToTop();
     }
-    
+
 	private void setEmojiReactForStatus(int position, Status newStatus) {
         NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
@@ -1474,7 +1479,7 @@ public class NotificationsFragment extends SFragment implements
         Pair<Integer, Notification> posAndNotification = findReplyPosition(statusId);
         if (posAndNotification == null)
             return;
-        
+
         timelineCases.react(emoji, statusId, react)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(autoDisposable(from(this)))
@@ -1485,7 +1490,7 @@ public class NotificationsFragment extends SFragment implements
                 );
 
     }
-    
+
     @Override
     public void onEmojiReactMenu(@NonNull View view, final EmojiReaction emoji, final String statusId) {
         super.emojiReactMenu(statusId, emoji, view, this);
