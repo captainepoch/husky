@@ -1,33 +1,35 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.viewdata;
 
 import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-
 import androidx.annotation.Nullable;
-
 import com.keylesspalace.tusky.entity.Attachment;
 import com.keylesspalace.tusky.entity.Card;
 import com.keylesspalace.tusky.entity.Emoji;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Poll;
 import com.keylesspalace.tusky.entity.Status;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,15 +38,14 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Created by charlag on 11/07/2017.
- * <p>
  * Class to represent data required to display either a notification or a placeholder.
  * It is either a {@link StatusViewData.Concrete} or a {@link StatusViewData.Placeholder}.
  */
 
 public abstract class StatusViewData {
 
-    private StatusViewData() { }
+    private StatusViewData() {
+    }
 
     public abstract long getViewDataId();
 
@@ -91,15 +92,21 @@ public abstract class StatusViewData {
         private final List<Emoji> rebloggedByAccountEmojis;
         @Nullable
         private final Card card;
-        private final boolean isCollapsible; /** Whether the status meets the requirement to be collapse */
-        final boolean isCollapsed; /** Whether the status is shown partially or fully */
+        private final boolean isCollapsible;
+        /**
+         * Whether the status meets the requirement to be collapse
+         */
+        final boolean isCollapsed;
+        /**
+         * Whether the status is shown partially or fully
+         */
         @Nullable
         private final PollViewData poll;
         private final boolean isBot;
         private final boolean isMuted; /* user toggle */
         private final boolean isThreadMuted; /* thread_muted state got from backend */
         private final boolean isUserMuted; /* muted state got from backend */
-        private final int conversationId;
+        private final String conversationId;
         @Nullable
         private final List<EmojiReaction> emojiReactions;
         private final boolean parentVisible;
@@ -112,10 +119,10 @@ public abstract class StatusViewData {
                         @Nullable String inReplyToAccountAcct, @Nullable Status.Mention[] mentions, String senderId, boolean rebloggingEnabled,
                         Status.Application application, List<Emoji> statusEmojis, List<Emoji> accountEmojis, List<Emoji> rebloggedByAccountEmojis, @Nullable Card card,
                         boolean isCollapsible, boolean isCollapsed, @Nullable PollViewData poll, boolean isBot, boolean isMuted, boolean isThreadMuted,
-                        boolean isUserMuted, int conversationId, @Nullable List<EmojiReaction> emojiReactions, boolean parentVisible) {
+                        boolean isUserMuted, String conversationId, @Nullable List<EmojiReaction> emojiReactions, boolean parentVisible) {
 
             this.id = id;
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
                 // https://github.com/tuskyapp/Tusky/issues/563
                 this.content = replaceCrashingCharacters(content);
                 this.spoilerText = spoilerText == null ? null : replaceCrashingCharacters(spoilerText).toString();
@@ -212,7 +219,9 @@ public abstract class StatusViewData {
             return isShowingContent;
         }
 
-        public boolean isBot(){ return isBot; }
+        public boolean isBot() {
+            return isBot;
+        }
 
         @Nullable
         public String getRebloggedAvatar() {
@@ -318,31 +327,32 @@ public abstract class StatusViewData {
             return poll;
         }
 
-        @Override public long getViewDataId() {
+        @Override
+        public long getViewDataId() {
             // Chance of collision is super low and impact of mistake is low as well
             return id.hashCode();
         }
-        
+
         public boolean isThreadMuted() {
             return isThreadMuted;
         }
-        
+
         public boolean isMuted() {
             return isMuted;
         }
-        
+
         public boolean isUserMuted() {
             return isUserMuted;
         }
-        
+
         @Nullable
         public List<EmojiReaction> getEmojiReactions() {
             return emojiReactions;
         }
 
         public boolean deepEquals(StatusViewData o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if(this == o) return true;
+            if(o == null || getClass() != o.getClass()) return false;
             Concrete concrete = (Concrete) o;
             return reblogged == concrete.reblogged &&
                     favourited == concrete.favourited &&
@@ -393,17 +403,17 @@ public abstract class StatusViewData {
             SpannableStringBuilder builder = null;
             int length = content.length();
 
-            for (int index = 0; index < length; ++index) {
+            for(int index = 0; index < length; ++index) {
                 char character = content.charAt(index);
 
                 // If there are more than one or two, switch to a map
-                if (character == SOFT_HYPHEN) {
-                    if (!replacing) {
+                if(character == SOFT_HYPHEN) {
+                    if(!replacing) {
                         replacing = true;
                         builder = new SpannableStringBuilder(content, 0, index);
                     }
                     builder.append(ASCII_HYPHEN);
-                } else if (replacing) {
+                } else if(replacing) {
                     builder.append(character);
                 }
             }
@@ -429,19 +439,22 @@ public abstract class StatusViewData {
             return id;
         }
 
-        @Override public long getViewDataId() {
+        @Override
+        public long getViewDataId() {
             return id.hashCode();
         }
 
-        @Override public boolean deepEquals(StatusViewData other) {
-            if (!(other instanceof Placeholder)) return false;
+        @Override
+        public boolean deepEquals(StatusViewData other) {
+            if(!(other instanceof Placeholder)) return false;
             Placeholder that = (Placeholder) other;
             return isLoading == that.isLoading && id.equals(that.id);
         }
 
-        @Override public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+        @Override
+        public boolean equals(Object o) {
+            if(this == o) return true;
+            if(o == null || getClass() != o.getClass()) return false;
 
             Placeholder that = (Placeholder) o;
 
@@ -486,14 +499,20 @@ public abstract class StatusViewData {
         private List<Emoji> accountEmojis;
         private List<Emoji> rebloggedByAccountEmojis;
         private Card card;
-        private boolean isCollapsible; /** Whether the status meets the requirement to be collapsed */
-        private boolean isCollapsed; /** Whether the status is shown partially or fully */
+        private boolean isCollapsible;
+        /**
+         * Whether the status meets the requirement to be collapsed
+         */
+        private boolean isCollapsed;
+        /**
+         * Whether the status is shown partially or fully
+         */
         private PollViewData poll;
         private boolean isBot;
         private boolean isMuted;
         private boolean isThreadMuted;
         private boolean isUserMuted;
-        private int conversationId;
+        private String conversationId;
         private List<EmojiReaction> emojiReactions;
         private boolean parentVisible;
 
@@ -694,7 +713,7 @@ public abstract class StatusViewData {
             this.card = card;
             return this;
         }
-        
+
         /**
          * Configure the {@link com.keylesspalace.tusky.viewdata.StatusViewData} to support collapsing
          * its content limiting the visible length when collapsed at 500 characters,
@@ -739,9 +758,9 @@ public abstract class StatusViewData {
             return this;
         }
 
-        public Builder setConversationId(int conversationId) {
-	        this.conversationId = conversationId;
-	        return this;
+        public Builder setConversationId(String conversationId) {
+            this.conversationId = conversationId;
+            return this;
         }
 
         public Builder setEmojiReactions(List<EmojiReaction> emojiReactions) {
@@ -750,9 +769,9 @@ public abstract class StatusViewData {
         }
 
         public StatusViewData.Concrete createStatusViewData() {
-            if (this.statusEmojis == null) statusEmojis = Collections.emptyList();
-            if (this.accountEmojis == null) accountEmojis = Collections.emptyList();
-            if (this.createdAt == null) createdAt = new Date();
+            if(this.statusEmojis == null) statusEmojis = Collections.emptyList();
+            if(this.accountEmojis == null) accountEmojis = Collections.emptyList();
+            if(this.createdAt == null) createdAt = new Date();
 
             return new StatusViewData.Concrete(id, content, reblogged, favourited, bookmarked, spoilerText,
                     visibility, attachments, rebloggedByUsername, rebloggedAvatar, isSensitive, isExpanded,

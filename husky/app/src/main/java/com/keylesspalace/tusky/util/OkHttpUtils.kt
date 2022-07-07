@@ -53,6 +53,7 @@ object OkHttpUtils {
 
         val builder = OkHttpClient.Builder()
             .addInterceptor(getUserAgentInterceptor())
+            //.addInterceptor(getDebugInformation())
             .addInterceptor(BrotliInterceptor)
             .readTimeout(60, SECONDS)
             .writeTimeout(60, SECONDS)

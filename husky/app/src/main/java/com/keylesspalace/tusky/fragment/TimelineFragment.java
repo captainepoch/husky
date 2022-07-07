@@ -1,17 +1,23 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 
 package com.keylesspalace.tusky.fragment;
 
@@ -22,7 +28,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,13 +113,13 @@ import kotlin.jvm.functions.Function1;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class TimelineFragment extends SFragment implements
         SwipeRefreshLayout.OnRefreshListener,
         StatusActionListener,
         Injectable, ReselectableFragment, RefreshableFragment {
 
-    private static final String TAG = "TimelineF"; // logging tag
     private static final String KIND_ARG = "kind";
     private static final String ID_ARG = "id";
     private static final String HASHTAGS_ARG = "hastags";
@@ -302,7 +307,7 @@ public class TimelineFragment extends SFragment implements
         // Request timeline from disk to make it quick, then replace it with timeline from
         // the server to update it
         timelineRepo.getStatuses(null, null, null, LOAD_AT_ONCE,
-                TimelineRequestMode.DISK)
+                        TimelineRequestMode.DISK)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
                 .subscribe(statuses -> {
@@ -334,7 +339,7 @@ public class TimelineFragment extends SFragment implements
         String topId = CollectionsKt.first(this.statuses, Either::isRight).asRight().getId();
 
         this.timelineRepo.getStatuses(topId, null, null, LOAD_AT_ONCE,
-                TimelineRequestMode.NETWORK)
+                        TimelineRequestMode.NETWORK)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
                 .subscribe(
@@ -475,7 +480,7 @@ public class TimelineFragment extends SFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         /* This is delayed until onActivityCreated solely because MainActivity.composeButton isn't
          * guaranteed to be set until then. */
@@ -623,7 +628,7 @@ public class TimelineFragment extends SFragment implements
                 .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
                 .subscribe(
                         (newStatus) -> setRebloggedForStatus(position, status, reblog),
-                        (err) -> Log.d(TAG, "Failed to reblog status " + status.getId(), err)
+                        (err) -> Timber.e("Failed to reblog status " + status.getId() + ", Error[" + err + "]")
                 );
     }
 
@@ -655,7 +660,7 @@ public class TimelineFragment extends SFragment implements
                 .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
                 .subscribe(
                         (newStatus) -> setFavouriteForStatus(position, newStatus, favourite),
-                        (err) -> Log.d(TAG, "Failed to favourite status " + status.getId(), err)
+                        (err) -> Timber.e("Failed to favourite status " + status.getId() + ", Error [" + err + "]")
                 );
     }
 
@@ -687,7 +692,7 @@ public class TimelineFragment extends SFragment implements
                 .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
                 .subscribe(
                         (newStatus) -> setBookmarkForStatus(position, newStatus, bookmark),
-                        (err) -> Log.d(TAG, "Failed to favourite status " + status.getId(), err)
+                        (err) -> Timber.e(err, "Failed to favourite status " + status.getId())
                 );
     }
 
@@ -743,8 +748,8 @@ public class TimelineFragment extends SFragment implements
                 .as(autoDisposable(from(this)))
                 .subscribe(
                         (newPoll) -> setVoteForPoll(position, status, newPoll),
-                        (t) -> Log.d(TAG,
-                                "Failed to vote in poll: " + status.getId(), t)
+                        (t) -> Timber.e(t,
+                                "Failed to vote in poll: " + status.getId())
                 );
     }
 
@@ -815,7 +820,7 @@ public class TimelineFragment extends SFragment implements
                             ? statuses.get(position + 1).asRight().getId()
                             : null;
             if(fromStatus == null || toStatus == null) {
-                Log.e(TAG, "Failed to load more at " + position + ", wrong placeholder position");
+                Timber.e("Failed to load more at " + position + ", wrong placeholder position");
                 return;
             }
             sendFetchTimelineRequest(fromStatus.getId(), toStatus.getId(), maxMinusOne,
@@ -826,14 +831,14 @@ public class TimelineFragment extends SFragment implements
             statuses.setPairedItem(position, newViewData);
             updateAdapter();
         } else {
-            Log.e(TAG, "error loading more");
+            Timber.e("error loading more");
         }
     }
 
     @Override
     public void onContentCollapsedChange(boolean isCollapsed, int position) {
         if(position < 0 || position >= statuses.size()) {
-            Log.e(TAG, String.format("Tried to access out of bounds status position: %d of %d", position, statuses.size() - 1));
+            Timber.e(String.format("Tried to access out of bounds status position: %d of %d", position, statuses.size() - 1));
             return;
         }
 
@@ -841,7 +846,7 @@ public class TimelineFragment extends SFragment implements
         if(!(status instanceof StatusViewData.Concrete)) {
             // Statuses PairedList contains a base type of StatusViewData.Concrete and also doesn't
             // check for null values when adding values to it although this doesn't seem to be an issue.
-            Log.e(TAG, String.format(
+            Timber.e(String.format(
                     "Expected StatusViewData.Concrete, got %s instead at position: %d of %d",
                     status == null ? "<null>" : status.getClass().getSimpleName(),
                     position,
@@ -960,13 +965,13 @@ public class TimelineFragment extends SFragment implements
         updateAdapter();
     }
 
-    private void removeAllByConversationId(int conversationId) {
+    private void removeAllByConversationId(String conversationId) {
         // using iterator to safely remove items while iterating
         Iterator<Either<Placeholder, Status>> iterator = statuses.iterator();
         while(iterator.hasNext()) {
             Status status = iterator.next().asRightOrNull();
             if(status != null &&
-                    (status.getConversationId() == conversationId) || status.getActionableStatus().getConversationId() == conversationId) {
+                    (status.getConversationId().equalsIgnoreCase(conversationId)) || status.getActionableStatus().getConversationId().equalsIgnoreCase(conversationId)) {
                 iterator.remove();
             }
         }
@@ -1249,7 +1254,7 @@ public class TimelineFragment extends SFragment implements
                 }
             }
 
-            Log.e(TAG, "Fetch Failure: " + exception.getMessage());
+            Timber.e("Fetch Failure: %s", exception.getMessage());
             updateBottomLoadingState(fetchEnd);
             progressBar.setVisibility(View.GONE);
         }
@@ -1453,9 +1458,9 @@ public class TimelineFragment extends SFragment implements
             return;
 
         Status eventStatus = statuses.get(pos).asRight();
-        int conversationId = eventStatus.getConversationId();
+        String conversationId = eventStatus.getConversationId();
 
-        if(conversationId == -1) { // invalid conversation ID
+        if(conversationId.isEmpty()) { // invalid conversation ID
             if(isFilteringMuted()) {
                 statuses.remove(pos);
             } else {
@@ -1650,12 +1655,11 @@ public class TimelineFragment extends SFragment implements
                 .as(autoDisposable(from(this)))
                 .subscribe(
                         (newStatus) -> setEmojiReactionForStatus(position, newStatus),
-                        (t) -> Log.d(TAG,
-                                "Failed to react with " + emoji + " on status: " + statusId, t)
+                        (t) -> Timber.e(t,
+                                "Failed to react with " + emoji + " on status: " + statusId)
                 );
 
     }
-
 
     @Override
     public void onEmojiReactMenu(@NonNull View view, final EmojiReaction emoji, final String statusId) {

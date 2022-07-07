@@ -350,9 +350,9 @@ public class NotificationsFragment extends SFragment implements
         if (posAndNotification == null)
             return;
 
-        int conversationId = posAndNotification.second.getStatus().getConversationId();
+        String conversationId = posAndNotification.second.getStatus().getConversationId();
 
-        if(conversationId == -1) { // invalid conversation ID
+        if(conversationId.isEmpty()) { // invalid conversation ID
             if(withMuted) {
                 setMutedStatusForStatus(posAndNotification.first, posAndNotification.second.getStatus(), event.getMute(), event.getMute());
             } else {
@@ -1016,7 +1016,7 @@ public class NotificationsFragment extends SFragment implements
         updateAdapter();
     }
 
-    private void removeAllByConversationId(int conversationId) {
+    private void removeAllByConversationId(String conversationId) {
         // using iterator to safely remove items while iterating
         Iterator<Either<Placeholder, Notification>> iterator = notifications.iterator();
         while (iterator.hasNext()) {
@@ -1024,7 +1024,7 @@ public class NotificationsFragment extends SFragment implements
             Notification notification = placeholderOrNotification.asRightOrNull();
             if (notification != null && notification.getStatus() != null
                     && notification.getType() == Notification.Type.MENTION &&
-                    notification.getStatus().getConversationId() == conversationId) {
+                    notification.getStatus().getConversationId().equalsIgnoreCase(conversationId)) {
                 iterator.remove();
             }
         }
