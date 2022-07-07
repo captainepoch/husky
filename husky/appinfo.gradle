@@ -9,7 +9,7 @@ buildVersions.jdkVersion = "${buildVersions.javaCompat}"
 
 buildVersions.encoding = "UTF-8"
 
-buildVersions.versionCode = 183
+buildVersions.versionCode = 184
 buildVersions.versionName = "1.3.0"
 
 // Beta version info
@@ -17,7 +17,7 @@ def beta = [:]
 beta.suffix = "beta"
 beta.applicationId = "su.xash.husky.${beta.suffix}"
 
-beta.versionSuffix = "1"
+beta.versionSuffix = "2"
 buildVersions.beta = beta
 
 // Dev version info

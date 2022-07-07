@@ -1,3 +1,14 @@
+Husky 1.3.0-beta2 - 2022-07-07
+ - Fix: Emoji reactions in Akkoma are visible (thanks to Helene).
+ - Fix: Parsing error for different back-ends.
+
+ Update dependencies:
+  - exoplayer (2.17.1 -> 2.18.0)
+  - fragmentKtx (1.4.1 -> 1.5.0)
+  - kotlin (1.6.21 -> 1.7.0)
+  - lifecycle (2.4.1 -> 2.5.0)
+  - preferenceKtx (1.1.1 -> 1.2.0)
+
 Husky 1.3.0-beta1 - 2022-06-27
  - App: Remove ACRA in favor of a custom CrashHandler.
  - App: Update API level to 32 (Android 12L).
