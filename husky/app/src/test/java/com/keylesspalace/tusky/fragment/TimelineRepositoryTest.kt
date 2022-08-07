@@ -32,7 +32,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-@Config(sdk = [28])
+@Config(sdk = [32])
 @RunWith(AndroidJUnit4::class)
 class TimelineRepositoryTest {
     @Mock

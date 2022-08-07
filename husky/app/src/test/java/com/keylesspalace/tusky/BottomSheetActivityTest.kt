@@ -17,6 +17,7 @@ package com.keylesspalace.tusky
 
 import android.text.SpannedString
 import android.widget.LinearLayout
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.SearchResult
@@ -33,10 +34,12 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
+import org.robolectric.annotation.Config
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
+@Config(sdk = [32])
+@RunWith(AndroidJUnit4::class)
 class BottomSheetActivityTest {
     private lateinit var activity : FakeBottomSheetActivity
     private lateinit var apiMock: MastodonApi

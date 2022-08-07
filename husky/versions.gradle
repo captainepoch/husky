@@ -60,7 +60,7 @@ testing.extJunit = "1.1.3"
 testing.junit = "4.13.2"
 testing.mockitoInline = "3.6.28"
 testing.mockitoKotlin = "2.1.0"
-testing.roboelectric = "4.4"
+testing.roboelectric = "4.8.1"
 testing.roomTesting = "2.2.5"
 versions.testing = testing
 

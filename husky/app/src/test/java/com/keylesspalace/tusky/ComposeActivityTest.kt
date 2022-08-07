@@ -19,6 +19,7 @@ import android.content.Intent
 import android.os.Looper.getMainLooper
 import android.text.SpannedString
 import android.widget.EditText
+import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.keylesspalace.tusky.appstore.*
 import com.keylesspalace.tusky.components.compose.ComposeActivity
@@ -33,6 +34,7 @@ import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.service.ServiceClient
 import com.keylesspalace.tusky.util.SaveTootHelper
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import org.junit.Assert.*
@@ -50,7 +52,7 @@ import org.robolectric.fakes.RoboMenuItem
  * Created by charlag on 3/7/18.
  */
 
-@Config(sdk = [28])
+@Config(sdk = [32])
 @RunWith(AndroidJUnit4::class)
 class ComposeActivityTest {
     private lateinit var activity: ComposeActivity
@@ -154,7 +156,8 @@ class ComposeActivityTest {
         }
 
         val viewModelFactoryMock = mock(ViewModelFactory::class.java)
-        `when`(viewModelFactoryMock.create(ComposeViewModel::class.java)).thenReturn(viewModel)
+        `when`(viewModelFactoryMock.create(eq(ComposeViewModel::class.java), any<MutableCreationExtras>()))
+            .thenReturn(viewModel)
 
         activity.accountManager = accountManagerMock
         activity.viewModelFactory = viewModelFactoryMock
