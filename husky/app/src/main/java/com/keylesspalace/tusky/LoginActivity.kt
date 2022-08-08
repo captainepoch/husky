@@ -28,13 +28,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import com.bumptech.glide.Glide
+import com.keylesspalace.tusky.core.extensions.gone
+import com.keylesspalace.tusky.core.extensions.isGone
+import com.keylesspalace.tusky.core.extensions.isVisible
 import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.core.extensions.visible
 import com.keylesspalace.tusky.databinding.ActivityLoginBinding
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.AccessToken
@@ -111,7 +114,7 @@ class LoginActivity : BaseActivity(), Injectable {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
         } else {
-            binding.toolbar.visibility = View.GONE
+            binding.toolbar.gone()
         }
     }
 
@@ -135,10 +138,10 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     private fun onSettingsButtonClick() {
-        if(binding.extendedSettings.visibility == View.GONE) {
-            binding.extendedSettings.visibility = View.VISIBLE
+        if(binding.extendedSettings.isGone()) {
+            binding.extendedSettings.visible()
         } else {
-            binding.extendedSettings.visibility = View.GONE
+            binding.extendedSettings.gone()
         }
     }
 
@@ -197,7 +200,7 @@ class LoginActivity : BaseActivity(), Injectable {
 
         var appname = getString(R.string.app_name)
         var website = getString(R.string.tusky_website)
-        if(binding.extendedSettings.visibility == View.VISIBLE) {
+        if(binding.extendedSettings.isVisible()) {
             appname = binding.appNameEditText.text.toString()
             website = binding.websiteEditText.text.toString()
         }
@@ -206,8 +209,8 @@ class LoginActivity : BaseActivity(), Injectable {
             .authenticateApp(
                 domain, appname, oauthRedirectUri,
                 OAUTH_SCOPES, website
-            )
-            .enqueue(callback)
+            ).enqueue(callback)
+
         setLoading(true)
     }
 
@@ -321,11 +324,11 @@ class LoginActivity : BaseActivity(), Injectable {
 
     private fun setLoading(loadingState: Boolean) {
         if(loadingState) {
-            binding.loginLoadingLayout.visibility = View.VISIBLE
-            binding.loginInputLayout.visibility = View.GONE
+            binding.loginLoadingLayout.visible()
+            binding.loginInputLayout.gone()
         } else {
-            binding.loginLoadingLayout.visibility = View.GONE
-            binding.loginInputLayout.visibility = View.VISIBLE
+            binding.loginLoadingLayout.gone()
+            binding.loginInputLayout.visible()
             binding.loginButton.isEnabled = true
         }
     }
@@ -391,7 +394,6 @@ class LoginActivity : BaseActivity(), Injectable {
         }
 
         private fun openInCustomTab(uri: Uri, context: Context): Boolean {
-
             val toolbarColor = ThemeUtils.getColor(context, R.attr.colorSurface)
             val navigationbarColor = ThemeUtils.getColor(context, android.R.attr.navigationBarColor)
             val navigationbarDividerColor = ThemeUtils.getColor(context, R.attr.dividerColor)

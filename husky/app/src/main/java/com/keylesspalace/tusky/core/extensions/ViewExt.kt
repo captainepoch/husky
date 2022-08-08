@@ -25,6 +25,14 @@ fun View.isVisible(): Boolean {
     return (this.visibility == View.VISIBLE)
 }
 
+fun View.isInvisible(): Boolean {
+    return (this.visibility == View.INVISIBLE)
+}
+
+fun View.isGone(): Boolean {
+    return (this.visibility == View.GONE)
+}
+
 fun View.visible() {
     this.visibility = View.VISIBLE
 }
