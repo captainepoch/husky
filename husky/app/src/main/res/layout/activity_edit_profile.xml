@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.keylesspalace.tusky.EditProfileActivity">
 
-    <include layout="@layout/toolbar_basic" />
+    <include
+        android:id="@+id/includedToolbar"
+        layout="@layout/toolbar_basic" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -110,8 +112,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/TuskyTextInput"
                     android:id="@+id/noteEditTextLayout"
+                    style="@style/TuskyTextInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
