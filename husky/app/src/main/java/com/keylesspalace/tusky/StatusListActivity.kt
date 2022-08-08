@@ -25,6 +25,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.commit
+import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityStatuslistBinding
 import com.keylesspalace.tusky.fragment.TimelineFragment
 import com.keylesspalace.tusky.fragment.TimelineFragment.Kind
@@ -34,22 +35,18 @@ import javax.inject.Inject
 
 class StatusListActivity : BottomSheetActivity(), HasAndroidInjector {
 
-    private lateinit var binding: ActivityStatuslistBinding
+    private val binding by viewBinding(ActivityStatuslistBinding::inflate)
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
-    private val kind: Kind
-        get() = Kind.valueOf(intent.getStringExtra(EXTRA_KIND)!!)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityStatuslistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.includedToolbar.toolbar)
 
+        val kind = getKind(intent.getStringExtra(EXTRA_KIND))
         val title = if(kind == Kind.FAVOURITES) {
             R.string.title_favourites
         } else {
@@ -78,6 +75,14 @@ class StatusListActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     override fun androidInjector() = dispatchingAndroidInjector
+
+    private fun getKind(kind: String?): Kind {
+        kind?.let { value ->
+            return Kind.valueOf(value)
+        }
+
+        return Kind.BOOKMARKS
+    }
 
     companion object {
 

@@ -43,6 +43,7 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.adapter.AccountFieldEditAdapter
+import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityEditProfileBinding
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
@@ -62,7 +63,7 @@ import javax.inject.Inject
 
 class EditProfileActivity : BaseActivity(), Injectable {
 
-    private lateinit var binding: ActivityEditProfileBinding
+    private val binding by viewBinding(ActivityEditProfileBinding::inflate)
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -87,7 +88,6 @@ class EditProfileActivity : BaseActivity(), Injectable {
             currentlyPicking = PickType.valueOf(it)
         }
 
-        binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.includedToolbar.toolbar)

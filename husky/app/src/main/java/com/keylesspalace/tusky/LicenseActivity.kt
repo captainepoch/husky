@@ -24,7 +24,9 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.annotation.RawRes
+import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityLicenseBinding
+import com.keylesspalace.tusky.databinding.ActivityLoginBinding
 import com.keylesspalace.tusky.util.IOUtils
 import java.io.BufferedReader
 import java.io.IOException
@@ -33,12 +35,10 @@ import timber.log.Timber
 
 class LicenseActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityLicenseBinding
+    private val binding by viewBinding(ActivityLicenseBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityLicenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.includedToolbar.toolbar)
