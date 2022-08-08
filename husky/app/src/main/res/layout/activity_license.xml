@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     tools:context="com.keylesspalace.tusky.AboutActivity">
 
-    <include layout="@layout/toolbar_basic" />
+    <include
+        android:id="@+id/includedToolbar"
+        layout="@layout/toolbar_basic" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,7 +33,7 @@
                 android:gravity="center_vertical"
                 android:lineSpacingMultiplier="1.1"
                 android:text="@string/license_description" />
-            
+
             <com.keylesspalace.tusky.view.LicenseCard
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +63,7 @@
                 license:license="@string/license_apache_2"
                 license:link="https://github.com/material-components/material-components-android"
                 license:name="Material Components for Android" />
-            
+
             <com.keylesspalace.tusky.view.LicenseCard
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -191,7 +193,7 @@
                 license:license="@string/license_apache_2"
                 license:link="https://github.com/C1710/FileMojiCompat"
                 license:name="FileMojiCompat" />
-            
+
             <com.keylesspalace.tusky.view.LicenseCard
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -201,7 +203,7 @@
                 license:license="@string/license_apache_2"
                 license:link="https://github.com/slapperwan/gh4a"
                 license:name="OctoDroid icons" />
-            
+
             <com.keylesspalace.tusky.view.LicenseCard
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -211,7 +213,7 @@
                 license:license="@string/license_apache_2"
                 license:link="https://github.com/Tunous/MarkdownEdit"
                 license:name="MarkdownEdit" />
-            
+
             <com.keylesspalace.tusky.view.LicenseCard
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
