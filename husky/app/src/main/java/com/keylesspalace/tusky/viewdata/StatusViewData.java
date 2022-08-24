@@ -41,7 +41,6 @@ import java.util.Objects;
  * Class to represent data required to display either a notification or a placeholder.
  * It is either a {@link StatusViewData.Concrete} or a {@link StatusViewData.Placeholder}.
  */
-
 public abstract class StatusViewData {
 
     private StatusViewData() {
@@ -229,7 +228,7 @@ public abstract class StatusViewData {
         }
 
         public String getUserFullName() {
-            return userFullName;
+            return Objects.requireNonNullElse(userFullName, "");
         }
 
         public String getNickname() {
