@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.keylesspalace.tusky.AboutActivity">
 
-    <include layout="@layout/toolbar_basic" />
+    <include
+        android:id="@+id/includedToolbar"
+        layout="@layout/toolbar_basic" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -48,10 +50,9 @@
                     android:layout_gravity="center_horizontal"
                     android:drawablePadding="16dp"
                     android:gravity="center_vertical"
-                    android:textSize="18sp"
                     android:text="@string/about_powered_by_tusky"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
-
 
                 <TextView
                     android:id="@+id/aboutLicenseInfoTextView"
@@ -119,6 +120,7 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
     </FrameLayout>
 
     <include layout="@layout/item_status_bottom_sheet" />
