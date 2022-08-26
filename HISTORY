@@ -1,3 +1,12 @@
+Husky 1.3.1 - 2022-08-26
+ - Fix: Null username crashing bookmarks (possibly more).
+ - Migrated more Activities to ViewBinding.
+
+ Update dependencies:
+  - fragmentviewbindingdelegateKt (1.0.0 -> 1.0.1)
+  - mockitoInline (4.6.1 -> 4.7.0)
+  - roboelectric (4.8.1 -> 4.8.2)
+
 Husky 1.3.0 - 2022-08-12
  - Update for Android 12.
  - Fix: Unit tests, bump Robolectric version (thanks to mr64bit).
