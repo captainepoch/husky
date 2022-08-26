@@ -1,0 +1,9 @@
+Husky 1.3.0
+
+Changelog:
+ - Update for Android 12.
+ - Fix: Unit tests, bump Robolectric version (thanks to mr64bit).
+ - Fix: Sharing from other apps.
+ - Migrated more Activities to ViewBinding.
+ - Remove some warnings.
+ - Update dependencies.

@@ -1,0 +1,6 @@
+Husky 1.3.1
+
+Changelog:
+ - Fix: Null username crashing bookmarks (possibly more).
+ - Migrated more Activities to ViewBinding.
+ - Update dependencies.
