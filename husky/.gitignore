@@ -40,7 +40,8 @@ captures/
 # IntelliJ
 *.iml
 /*.iml
-/.idea
+!/.idea
+/.idea/*
 !/.idea/codeStyles
 !/.idea/codeStyles/*
 
