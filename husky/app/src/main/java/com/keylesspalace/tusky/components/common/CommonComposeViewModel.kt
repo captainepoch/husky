@@ -62,7 +62,7 @@ open class CommonComposeViewModel(
     val instanceMetadata: LiveData<ComposeInstanceMetadata> = nodeinfo.map { nodeinfo ->
         val software = nodeinfo?.software?.name ?: "mastodon"
 
-        if(software.equals("pleroma")) {
+        if(software.equals("pleroma") || software.equals("akkoma")) {
             hasNoAttachmentLimits = true
             ComposeInstanceMetadata(
                     software = "pleroma",
