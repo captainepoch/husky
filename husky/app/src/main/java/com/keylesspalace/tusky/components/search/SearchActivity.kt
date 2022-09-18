@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2021  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.search
 
@@ -27,13 +32,18 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.keylesspalace.tusky.BottomSheetActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.search.adapter.SearchPagerAdapter
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivitySearchBinding
 import com.keylesspalace.tusky.di.ViewModelFactory
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
+import timber.log.Timber
 
 class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
+
+    private val binding by viewBinding(ActivitySearchBinding::inflate)
+
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
@@ -44,22 +54,25 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        setSupportActionBar(toolbar)
+        setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             setDisplayShowTitleEnabled(false)
         }
+
         setupPages()
         handleIntent(intent)
+
+        Timber.d("onCreate")
     }
 
     private fun setupPages() {
-        pages.adapter = SearchPagerAdapter(this)
+        binding.pages.adapter = SearchPagerAdapter(this)
 
-        TabLayoutMediator(tabs, pages) {
-            tab, position ->
+        TabLayoutMediator(binding.tabs, binding.pages) { tab, position ->
             tab.text = getPageTitle(position)
         }.attach()
     }
@@ -74,7 +87,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
 
         menuInflater.inflate(R.menu.search_toolbar, menu)
         val searchView = menu.findItem(R.id.action_search)
-                .actionView as SearchView
+            .actionView as SearchView
         setupSearchView(searchView)
 
         searchView.setQuery(viewModel.currentQuery, false)
@@ -83,7 +96,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        when(item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -93,7 +106,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     private fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
+        return when(position) {
             0 -> getString(R.string.title_statuses)
             1 -> getString(R.string.title_accounts)
             2 -> getString(R.string.title_hashtags_dialog)
@@ -102,7 +115,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     private fun handleIntent(intent: Intent) {
-        if (Intent.ACTION_SEARCH == intent.action) {
+        if(Intent.ACTION_SEARCH == intent.action) {
             viewModel.currentQuery = intent.getStringExtra(SearchManager.QUERY) ?: ""
             viewModel.search(viewModel.currentQuery)
         }
@@ -111,7 +124,11 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     private fun setupSearchView(searchView: SearchView) {
         searchView.setIconifiedByDefault(false)
 
-        searchView.setSearchableInfo((getSystemService(Context.SEARCH_SERVICE) as? SearchManager)?.getSearchableInfo(componentName))
+        searchView.setSearchableInfo(
+            (getSystemService(Context.SEARCH_SERVICE) as? SearchManager)?.getSearchableInfo(
+                componentName
+            )
+        )
 
         searchView.requestFocus()
 
