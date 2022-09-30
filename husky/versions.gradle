@@ -1,5 +1,5 @@
 // Kotlin version
-ext.kotlin_version = "1.7.10"
+ext.kotlin_version = "1.7.20"
 
 // Dependencies versions
 def versions = [:]
@@ -19,17 +19,17 @@ versions.cardView = "1.0.0"
 versions.conscryptAndroid = "2.5.2"
 versions.constraintlayout = "2.1.4"
 versions.coreKtx = "1.8.0"
-versions.dagger = "2.43.2"
+versions.dagger = "2.44"
 versions.emoji = "1.1.0"
 versions.exifInterface = "1.3.3"
 versions.exoplayer = "2.18.1"
 versions.filemojiCompat = "1.0.17"
 versions.flexbox = "2.0.1"
-versions.fragmentKtx = "1.5.2"
+versions.fragmentKtx = "1.5.3"
 versions.fragmentviewbindingdelegateKt = "1.0.1"
-versions.glide = "4.13.2"
+versions.glide = "4.14.1"
 versions.glideImage = "1.8.1"
-versions.glidePluginAnimation = "2.23.0"
+versions.glidePluginAnimation = "2.24.0"
 versions.kotlinx = "1.6.4"
 versions.lifecycle = "2.5.1"
 versions.markdownEdit = "1.0.0"
