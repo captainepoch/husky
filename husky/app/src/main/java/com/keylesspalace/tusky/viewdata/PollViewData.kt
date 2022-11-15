@@ -42,16 +42,16 @@ data class PollOptionViewData(
         var selected: Boolean
 )
 
-fun calculatePercent(fraction: Int, totalVoters: Int?, totalVotes: Int): Int {
+fun calculatePercent(fraction: Int, totalVotes: Int): Int {
     return if (fraction == 0) {
         0
     } else {
-        val total = totalVoters ?: totalVotes
-        (fraction / total.toDouble() * 100).roundToInt()
+        (fraction / totalVotes.toDouble() * 100).roundToInt()
     }
 }
 
 fun buildDescription(title: String, percent: Int, context: Context): Spanned {
+
     return SpannableStringBuilder(context.getString(R.string.poll_percent_format, percent).parseAsHtml())
         .append(" ")
         .append(title)

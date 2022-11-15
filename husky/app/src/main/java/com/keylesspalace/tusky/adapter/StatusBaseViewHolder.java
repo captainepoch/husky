@@ -113,7 +113,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     private int avatarRadius24dp;
 
     private final Drawable mediaPreviewUnloaded;
-    
+
     private RecyclerView emojiReactionsView;
 
     protected StatusBaseViewHolder(View itemView) {
@@ -141,7 +141,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         ViewExtensionsKt.increaseHitArea(favouriteButton, 0.0f, INCREASE_HORIZONTAL_HIT_AREA);
         ViewExtensionsKt.increaseHitArea(bookmarkButton, 0.0f, INCREASE_HORIZONTAL_HIT_AREA);
         ViewExtensionsKt.increaseHitArea(moreButton, 0.0f, INCREASE_HORIZONTAL_HIT_AREA); */
-        
+
         itemView.findViewById(R.id.status_media_preview_container).setClipToOutline(true);
 
         mediaPreviews = new MediaPreviewImageView[]{
@@ -702,7 +702,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 listener.onMore(v, position);
             }
         });
-        
+
         /* Even though the content TextView is a child of the container, it won't respond to clicks
          * if it contains URLSpans without also setting its listener. The surrounding spans will
          * just eat the clicks instead of deferring to the parent listener, but WILL respond to a
@@ -733,7 +733,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 })
                 .show();
     }
-    
+
     private void setEmojiReactions(@Nullable List<EmojiReaction> reactions, final StatusActionListener listener, final String statusId) {
         if(reactButton != null) {
             reactButton.setOnClickListener(v -> {
@@ -742,7 +742,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 });
             });
         }
-    
+
         if(emojiReactionsView != null ) {
             if(reactions != null && reactions.size() > 0) {
                 emojiReactionsView.setVisibility(View.VISIBLE);
@@ -821,7 +821,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             setSpoilerAndContent(status.isExpanded(), status.getContent(), status.getSpoilerText(), status.getMentions(), status.getStatusEmojis(), status.getPoll(), statusDisplayOptions, listener);
 
             setDescriptionForStatus(status, statusDisplayOptions);
-            
+
             setEmojiReactions(status.getEmojiReactions(), listener, status.getId());
 
             // Workaround for RecyclerView 1.0.0 / androidx.core 1.0.0
@@ -951,7 +951,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             List<PollOptionViewData> options = poll.getOptions();
             for (int i = 0; i < args.length; i++) {
                 if (i < options.size()) {
-                    int percent = PollViewDataKt.calculatePercent(options.get(i).getVotesCount(), poll.getVotersCount(), poll.getVotesCount());
+                    int percent = PollViewDataKt.calculatePercent(options.get(i).getVotesCount(), poll.getVotesCount());
                     args[i] = buildDescription(options.get(i).getTitle(), percent, context);
                 } else {
                     args[i] = "";
@@ -1038,8 +1038,9 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             String voters = numberFormat.format(poll.getVotesCount());
             votesText = context.getResources().getQuantityString(R.plurals.poll_info_votes, poll.getVotesCount(), voters);
         } else {
-            String voters = numberFormat.format(poll.getVotersCount());
-            votesText = context.getResources().getQuantityString(R.plurals.poll_info_people, poll.getVotersCount(), voters);
+            // TODO: Change back to getVotersCount when this class is migrated to Kotlin
+            String voters = numberFormat.format(poll.getVotesCount());
+            votesText = context.getResources().getQuantityString(R.plurals.poll_info_people, poll.getVotesCount(), voters);
         }
         CharSequence pollDurationInfo;
         if (poll.getExpired()) {
