@@ -544,7 +544,7 @@ class AccountActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidI
                     .translationY(height)
                     .alpha(0.0f)
                     .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator?) {
+                        override fun onAnimationEnd(animation: Animator) {
                             visibility = View.GONE
                             super.onAnimationEnd(animation)
                         }

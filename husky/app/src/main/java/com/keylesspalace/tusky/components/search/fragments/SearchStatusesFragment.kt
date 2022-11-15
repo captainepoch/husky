@@ -1,17 +1,22 @@
-/* Copyright 2019 Joel Pyska
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2019  Joel Pyska
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.search.fragments
 
@@ -24,11 +29,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.CheckBox
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
@@ -41,8 +43,12 @@ import androidx.paging.PagedListAdapter
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.keylesspalace.tusky.*
+import com.keylesspalace.tusky.AccountListActivity
 import com.keylesspalace.tusky.AccountListActivity.Companion.newIntent
+import com.keylesspalace.tusky.BaseActivity
+import com.keylesspalace.tusky.MainActivity
+import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions
 import com.keylesspalace.tusky.components.report.ReportActivity
@@ -65,7 +71,8 @@ import com.keylesspalace.tusky.viewdata.StatusViewData
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_search.searchRecyclerView
+import timber.log.Timber
 
 class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concrete>>(), StatusActionListener {
 
@@ -312,11 +319,14 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_open_in_web -> {
-                    LinkHelper.openLinkInBrowser(Uri.parse(statusUrl), context);
+                    LinkHelper.openLinkInBrowser(Uri.parse(statusUrl), context)
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_open_as -> {
-                    showOpenAsDialog(statusUrl!!, item.title)
+                    val title = item.title
+                    if(statusUrl != null && title != null) {
+                        showOpenAsDialog(statusUrl, title)
+                    }
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_download_media -> {
@@ -472,7 +482,7 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                                     ))
                                     startActivity(intent)
                                 }, { error ->
-                                    Log.w("SearchStatusesFragment", "error deleting status", error)
+                                    Timber.e(error, "Error deleting status")
                                     Toast.makeText(context, R.string.error_generic, Toast.LENGTH_SHORT).show()
                                 })
 
