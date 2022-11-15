@@ -1,7 +1,5 @@
 # Husky
 
-**This project is no longer maintained**
-
 [![builds.sr.ht status](https://builds.sr.ht/~captainepoch/husky/commits.svg)](https://builds.sr.ht/~captainepoch/husky)
 [![Download F-Droid](https://img.shields.io/badge/Download-F--Droid-blue)][husky_fdroid]
 [![Download Google Play](https://img.shields.io/badge/Download-Play-blue)][husky_playstore]
