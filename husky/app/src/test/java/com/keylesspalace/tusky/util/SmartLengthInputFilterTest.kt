@@ -7,8 +7,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.ConscryptMode
+import org.robolectric.annotation.ConscryptMode.Mode.OFF
 
-@Config(sdk = [32])
+@ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
 class SmartLengthInputFilterTest {
 

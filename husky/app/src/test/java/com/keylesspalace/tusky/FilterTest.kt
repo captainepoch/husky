@@ -24,8 +24,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import org.robolectric.annotation.ConscryptMode
+import org.robolectric.annotation.ConscryptMode.Mode.OFF
 
-@Config(sdk = [28])
+@ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
 class FilterTest {
 

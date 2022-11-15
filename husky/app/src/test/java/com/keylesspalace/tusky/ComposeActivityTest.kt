@@ -46,13 +46,15 @@ import org.mockito.Mockito.mock
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
+import org.robolectric.annotation.ConscryptMode
+import org.robolectric.annotation.ConscryptMode.Mode.OFF
 import org.robolectric.fakes.RoboMenuItem
 
 /**
  * Created by charlag on 3/7/18.
  */
 
-@Config(sdk = [32])
+@ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
 class ComposeActivityTest {
     private lateinit var activity: ComposeActivity
@@ -161,7 +163,7 @@ class ComposeActivityTest {
 
         activity.accountManager = accountManagerMock
         activity.viewModelFactory = viewModelFactoryMock
-        
+
         activity.eventHub = EventHubImpl
 
         controller.create().start()

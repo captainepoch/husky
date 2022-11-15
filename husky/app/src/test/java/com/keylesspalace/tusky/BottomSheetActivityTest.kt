@@ -37,8 +37,10 @@ import org.mockito.Mockito.*
 import org.robolectric.annotation.Config
 import java.util.*
 import java.util.concurrent.TimeUnit
+import org.robolectric.annotation.ConscryptMode
+import org.robolectric.annotation.ConscryptMode.Mode.OFF
 
-@Config(sdk = [32])
+@ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
 class BottomSheetActivityTest {
     private lateinit var activity : FakeBottomSheetActivity

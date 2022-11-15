@@ -31,8 +31,10 @@ import org.robolectric.annotation.Config
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+import org.robolectric.annotation.ConscryptMode
+import org.robolectric.annotation.ConscryptMode.Mode.OFF
 
-@Config(sdk = [32])
+@ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
 class TimelineRepositoryTest {
     @Mock
