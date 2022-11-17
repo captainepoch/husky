@@ -14,6 +14,8 @@ buildscript {
         classpath deps.kotlinGradlePlugin
 
         classpath deps.gradlePluginVersions
+
+        classpath deps.ktlintGradle
     }
 }
 
@@ -23,9 +25,9 @@ allprojects {
     tasks.withType(JavaCompile) {
         options.encoding(buildVersions.encoding)
         options.compilerArgs += [
-                "-Xlint:all",
-                "-Xlint:unchecked",
-                "-Xlint:-deprecation",
+            "-Xlint:all",
+            "-Xlint:unchecked",
+            "-Xlint:-deprecation",
         ]
     }
 
@@ -37,6 +39,8 @@ allprojects {
             isNonStable(it.candidate.version)
         }
     }
+
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
 }
 
 task clean(type: Delete) {
@@ -44,5 +48,4 @@ task clean(type: Delete) {
     delete("${rootProject.buildDir}/app/huskyBeta")
     delete("${rootProject.buildDir}/app/huskyStable")
     delete("${rootProject.buildDir}/app/huskyDev")
-    delete("${rootProject.buildDir}/app/huskyNewhusky")
 }
