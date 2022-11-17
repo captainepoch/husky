@@ -8,7 +8,6 @@ import com.keylesspalace.tusky.db.TimelineAccountEntity
 import com.keylesspalace.tusky.db.TimelineDao
 import com.keylesspalace.tusky.db.TimelineStatusEntity
 import com.keylesspalace.tusky.db.TimelineStatusWithAccount
-import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.entity.Status.Visibility.PRIVATE
 import com.keylesspalace.tusky.repository.TimelineRepository
 import org.junit.After
@@ -20,6 +19,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class TimelineDAOTest {
+
     private lateinit var timelineDao: TimelineDao
     private lateinit var db: AppDatabase
 
@@ -117,14 +117,22 @@ class TimelineDAOTest {
 
         assertEquals(
             listOf(recentThisAccount),
-            timelineDao.getStatusesForAccount(1, null, null, 100).blockingGet()
-                .map { it.toTriple() }
+            timelineDao.getStatusesForAccount(
+                1,
+                null,
+                null,
+                100
+            ).blockingGet().map { it.toTriple() }
         )
 
         assertEquals(
             listOf(recentAnotherAccount),
-            timelineDao.getStatusesForAccount(2, null, null, 100).blockingGet()
-                .map { it.toTriple() }
+            timelineDao.getStatusesForAccount(
+                2,
+                null,
+                null,
+                100
+            ).blockingGet().map { it.toTriple() }
         )
     }
 
@@ -163,12 +171,15 @@ class TimelineDAOTest {
             timelineDao.insertInTransaction(status, author, reblogAuthor)
         }
 
-        //make sure status 2 is no longer in db
-
+        // Make sure status 2 is no longer in db
         assertEquals(
             newStatuses,
-            timelineDao.getStatusesForAccount(1, null, null, 100).blockingGet()
-                .map { it.toTriple() }
+            timelineDao.getStatusesForAccount(
+                1,
+                null,
+                null,
+                100
+            ).blockingGet().map { it.toTriple() }
         )
     }
 

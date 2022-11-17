@@ -18,9 +18,9 @@ class MigrationsTest {
     @JvmField
     @Rule
     var helper: MigrationTestHelper = MigrationTestHelper(
-            InstrumentationRegistry.getInstrumentation(),
-            AppDatabase::class.java.canonicalName,
-            FrameworkSQLiteOpenHelperFactory()
+        InstrumentationRegistry.getInstrumentation(),
+        AppDatabase::class.java.canonicalName,
+        FrameworkSQLiteOpenHelperFactory()
     )
 
     @Test
@@ -33,12 +33,15 @@ class MigrationsTest {
         val active = true
         val accountId = "accountId"
         val username = "username"
-        val values = arrayOf(id, domain, token, active, accountId, username, "Display Name",
-                "https://picture.url", true, true, true, true, true, true, true,
-                true, "1000", "[]", "[{\"shortcode\": \"emoji\", \"url\": \"yes\"}]", 0, false,
-                false, true)
+        val values = arrayOf(
+            id, domain, token, active, accountId, username, "Display Name",
+            "https://picture.url", true, true, true, true, true, true, true,
+            true, "1000", "[]", "[{\"shortcode\": \"emoji\", \"url\": \"yes\"}]", 0, false,
+            false, true
+        )
 
-        db.execSQL("INSERT OR REPLACE INTO `AccountEntity`(`id`,`domain`,`accessToken`,`isActive`," +
+        db.execSQL(
+            "INSERT OR REPLACE INTO `AccountEntity`(`id`,`domain`,`accessToken`,`isActive`," +
                 "`accountId`,`username`,`displayName`,`profilePictureUrl`,`notificationsEnabled`," +
                 "`notificationsMentioned`,`notificationsFollowed`,`notificationsReblogged`," +
                 "`notificationsFavorited`,`notificationSound`,`notificationVibration`," +
@@ -46,11 +49,17 @@ class MigrationsTest {
                 "`defaultPostPrivacy`,`defaultMediaSensitivity`,`alwaysShowSensitiveMedia`," +
                 "`mediaPreviewEnabled`) " +
                 "VALUES (nullif(?, 0),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                values)
+            values
+        )
 
         db.close()
 
-        val newDb = helper.runMigrationsAndValidate(TEST_DB, 11, true, AppDatabase.MIGRATION_10_11)
+        val newDb = helper.runMigrationsAndValidate(
+            TEST_DB,
+            11,
+            true,
+            AppDatabase.MIGRATION_10_11
+        )
 
         val cursor = newDb.query("SELECT * FROM AccountEntity")
         cursor.moveToFirst()
