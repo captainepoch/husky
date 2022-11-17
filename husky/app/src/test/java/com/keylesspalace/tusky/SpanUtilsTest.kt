@@ -8,9 +8,12 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 class SpanUtilsTest {
+
     @Test
     fun matchesMixedSpans() {
-        val input = "one #one two: @two three : https://thr.ee/meh?foo=bar&wat=@at#hmm four #four five @five ろく#six"
+        val input =
+            "one #one two: @two three : https://thr.ee/meh?foo=bar&wat=@at#hmm four #four five " +
+                "@five ろく#six"
         val inputSpannable = FakeSpannable(input)
         highlightSpans(inputSpannable, 0xffffff)
         val spans = inputSpannable.spans
@@ -36,10 +39,10 @@ class SpanUtilsTest {
             @JvmStatic
             fun data(): Iterable<Any> {
                 return listOf(
-                        "@mention",
-                        "#tag",
-                        "https://thr.ee/meh?foo=bar&wat=@at#hmm",
-                        "http://thr.ee/meh?foo=bar&wat=@at#hmm"
+                    "@mention",
+                    "#tag",
+                    "https://thr.ee/meh?foo=bar&wat=@at#hmm",
+                    "http://thr.ee/meh?foo=bar&wat=@at#hmm"
                 )
             }
         }
@@ -87,28 +90,31 @@ class SpanUtilsTest {
             val spans = inputSpannable.spans
             Assert.assertEquals(3, spans.size)
 
-            val middleSpan = spans.single { span -> span.start > 0 && span.end < inputSpannable.lastIndex }
+            val middleSpan =
+                spans.single { span -> span.start > 0 && span.end < inputSpannable.lastIndex }
             Assert.assertEquals(begin.length + 1, middleSpan.start)
             Assert.assertEquals(inputSpannable.length - end.length - 1, middleSpan.end)
         }
     }
 
     @RunWith(Parameterized::class)
-    class HighlightingTestsForTag(private val text: String,
-                                private val expectedStartIndex: Int,
-                                private val expectedEndIndex: Int) {
+    class HighlightingTestsForTag(
+        private val text: String,
+        private val expectedStartIndex: Int,
+        private val expectedEndIndex: Int
+    ) {
         companion object {
             @Parameterized.Parameters(name = "{0}")
             @JvmStatic
             fun data(): Iterable<Any> {
                 return listOf(
-                        arrayOf("#test", 0, 5),
-                        arrayOf(" #AfterSpace", 1, 12),
-                        arrayOf("#BeforeSpace ", 0, 12),
-                        arrayOf("@#after_at", 1, 10),
-                        arrayOf("あいうえお#after_hiragana", 5, 20),
-                        arrayOf("##DoubleHash", 1, 12),
-                        arrayOf("###TripleHash", 2, 13)
+                    arrayOf("#test", 0, 5),
+                    arrayOf(" #AfterSpace", 1, 12),
+                    arrayOf("#BeforeSpace ", 0, 12),
+                    arrayOf("@#after_at", 1, 10),
+                    arrayOf("あいうえお#after_hiragana", 5, 20),
+                    arrayOf("##DoubleHash", 1, 12),
+                    arrayOf("###TripleHash", 2, 13)
                 )
             }
         }
@@ -133,13 +139,13 @@ class SpanUtilsTest {
         }
 
         override fun <T : Any> getSpans(start: Int, end: Int, type: Class<T>): Array<T> {
-            return spans.filter { it.start >= start && it.end <= end && type.isInstance(it)}
-                        .map { it.span }
-                        .toTypedArray() as Array<T>
+            return spans.filter { it.start >= start && it.end <= end && type.isInstance(it) }
+                .map { it.span }
+                .toTypedArray() as Array<T>
         }
 
         override fun removeSpan(what: Any?) {
-            spans.removeIf { span -> span.span == what}
+            spans.removeIf { span -> span.span == what }
         }
 
         override fun toString(): String {

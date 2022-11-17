@@ -22,10 +22,10 @@ import android.widget.EditText
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.keylesspalace.tusky.appstore.*
-import com.keylesspalace.tusky.components.compose.ComposeActivity
-import com.keylesspalace.tusky.components.compose.ComposeViewModel
 import com.keylesspalace.tusky.components.common.DEFAULT_CHARACTER_LIMIT
 import com.keylesspalace.tusky.components.common.MediaUploader
+import com.keylesspalace.tusky.components.compose.ComposeActivity
+import com.keylesspalace.tusky.components.compose.ComposeViewModel
 import com.keylesspalace.tusky.components.drafts.DraftHelper
 import com.keylesspalace.tusky.db.*
 import com.keylesspalace.tusky.di.ViewModelFactory
@@ -45,7 +45,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.annotation.Config
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.ConscryptMode.Mode.OFF
 import org.robolectric.fakes.RoboMenuItem
@@ -57,6 +56,7 @@ import org.robolectric.fakes.RoboMenuItem
 @ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
 class ComposeActivityTest {
+
     private lateinit var activity: ComposeActivity
     private lateinit var accountManagerMock: AccountManager
     private lateinit var apiMock: MastodonApi
@@ -64,26 +64,26 @@ class ComposeActivityTest {
     private val instanceDomain = "example.domain"
 
     private val account = AccountEntity(
-            id = 1,
-            domain = instanceDomain,
-            accessToken = "token",
-            isActive = true,
-            accountId = "1",
-            username = "username",
-            displayName = "Display Name",
-            profilePictureUrl = "",
-            notificationsEnabled = true,
-            notificationsMentioned = true,
-            notificationsFollowed = true,
-            notificationsFollowRequested = false,
-            notificationsReblogged = true,
-            notificationsFavorited = true,
-            notificationSound = true,
-            notificationVibration = true,
-            notificationLight = true
+        id = 1,
+        domain = instanceDomain,
+        accessToken = "token",
+        isActive = true,
+        accountId = "1",
+        username = "username",
+        displayName = "Display Name",
+        profilePictureUrl = "",
+        notificationsEnabled = true,
+        notificationsMentioned = true,
+        notificationsFollowed = true,
+        notificationsFollowRequested = false,
+        notificationsReblogged = true,
+        notificationsFavorited = true,
+        notificationSound = true,
+        notificationVibration = true,
+        notificationLight = true
     )
-    private var instanceResponseCallback: (()->Instance)? = null
-    private var nodeinfoResponseCallback: (()->NodeInfo)? = null
+    private var instanceResponseCallback: (() -> Instance)? = null
+    private var nodeinfoResponseCallback: (() -> NodeInfo)? = null
     private var composeOptions: ComposeActivity.ComposeOptions? = null
 
     @Before
@@ -96,31 +96,33 @@ class ComposeActivityTest {
 
         apiMock = mock(MastodonApi::class.java)
         `when`(apiMock.getCustomEmojis()).thenReturn(Single.just(emptyList()))
-        `when`(apiMock.getNodeinfoLinks()).thenReturn(object: Single<NodeInfoLinks>() {
+        `when`(apiMock.getNodeinfoLinks()).thenReturn(object : Single<NodeInfoLinks>() {
             override fun subscribeActual(observer: SingleObserver<in NodeInfoLinks>) {
-                if (nodeinfoResponseCallback == null) {
+                if(nodeinfoResponseCallback == null) {
                     observer.onError(Throwable())
                 } else {
-                    observer.onSuccess(NodeInfoLinks(
-                        listOf( NodeInfoLink( "", "" ) )
-                    ))
+                    observer.onSuccess(
+                        NodeInfoLinks(
+                            listOf(NodeInfoLink("", ""))
+                        )
+                    )
                 }
             }
         })
-        `when`(apiMock.getNodeinfo("")).thenReturn(object: Single<NodeInfo>() {
-            override fun subscribeActual(observer: SingleObserver< in NodeInfo>) {
+        `when`(apiMock.getNodeinfo("")).thenReturn(object : Single<NodeInfo>() {
+            override fun subscribeActual(observer: SingleObserver<in NodeInfo>) {
                 val nodeinfo = nodeinfoResponseCallback?.invoke()
-                if (nodeinfo == null) {
+                if(nodeinfo == null) {
                     observer.onError(Throwable())
                 } else {
                     observer.onSuccess(nodeinfo)
                 }
             }
         })
-        `when`(apiMock.getInstance()).thenReturn(object: Single<Instance>() {
+        `when`(apiMock.getInstance()).thenReturn(object : Single<Instance>() {
             override fun subscribeActual(observer: SingleObserver<in Instance>) {
                 val instance = instanceResponseCallback?.invoke()
-                if (instance == null) {
+                if(instance == null) {
                     observer.onError(Throwable())
                 } else {
                     observer.onSuccess(instance)
@@ -130,35 +132,42 @@ class ComposeActivityTest {
 
         val instanceDaoMock = mock(InstanceDao::class.java)
         `when`(instanceDaoMock.loadMetadataForInstance(any())).thenReturn(
-                Single.just(InstanceEntity(
-                        instanceDomain,
-                        emptyList(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                ))
+            Single.just(
+                InstanceEntity(
+                    instanceDomain,
+                    emptyList(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
         )
 
         val dbMock = mock(AppDatabase::class.java)
         `when`(dbMock.instanceDao()).thenReturn(instanceDaoMock)
 
         val viewModel = ComposeViewModel(
-                apiMock,
-                accountManagerMock,
-                mock(MediaUploader::class.java),
-                mock(ServiceClient::class.java),
-                mock(DraftHelper::class.java),
-                mock(SaveTootHelper::class.java),
-                dbMock
+            apiMock,
+            accountManagerMock,
+            mock(MediaUploader::class.java),
+            mock(ServiceClient::class.java),
+            mock(DraftHelper::class.java),
+            mock(SaveTootHelper::class.java),
+            dbMock
         )
         activity.intent = Intent(activity, ComposeActivity::class.java).apply {
             putExtra(ComposeActivity.COMPOSE_OPTIONS_EXTRA, composeOptions)
         }
 
         val viewModelFactoryMock = mock(ViewModelFactory::class.java)
-        `when`(viewModelFactoryMock.create(eq(ComposeViewModel::class.java), any<MutableCreationExtras>()))
+        `when`(
+            viewModelFactoryMock.create(
+                eq(ComposeViewModel::class.java),
+                any<MutableCreationExtras>()
+            )
+        )
             .thenReturn(viewModel)
 
         activity.accountManager = accountManagerMock
@@ -215,7 +224,9 @@ class ComposeActivityTest {
 
     @Test
     fun whenMaximumTootCharsIsNull_defaultLimitIsUsed() {
-        instanceResponseCallback = { getInstanceWithMaximumTootCharacters(null) }
+        instanceResponseCallback = {
+            getInstanceWithMaximumTootCharacters(null)
+        }
         setupActivity()
         assertEquals(DEFAULT_CHARACTER_LIMIT, activity.maximumTootCharacters)
     }
@@ -231,9 +242,11 @@ class ComposeActivityTest {
 
     @Test
     fun whenPleromaInNodeinfo_attachmentLimitsRemoved() {
-        nodeinfoResponseCallback = { getPleromaNodeinfo(
+        nodeinfoResponseCallback = {
+            getPleromaNodeinfo(
                 null,
-                NodeInfoPleromaUploadLimits( 100, 100, 100, 100 ))
+                NodeInfoPleromaUploadLimits(100, 100, 100, 100)
+            )
         }
         setupActivity()
         shadowOf(getMainLooper()).idle()
@@ -242,20 +255,32 @@ class ComposeActivityTest {
 
     @Test
     fun whenPleromaInNodeinfo_haveFormatting() {
-        nodeinfoResponseCallback = { getPleromaNodeinfo(
+        nodeinfoResponseCallback = {
+            getPleromaNodeinfo(
                 listOf("text/plain", "text/markdown", "text/bbcode"),
-                NodeInfoPleromaUploadLimits( 100, 100, 100, 100 ))
+                NodeInfoPleromaUploadLimits(100, 100, 100, 100)
+            )
         }
         setupActivity()
         shadowOf(getMainLooper()).idle()
-        assertArrayEquals(arrayOf("text/markdown", "text/bbcode"), activity.supportedFormattingSyntax.toTypedArray())
+        assertArrayEquals(
+            arrayOf("text/markdown", "text/bbcode"),
+            activity.supportedFormattingSyntax.toTypedArray()
+        )
     }
 
     @Test
     fun whenPleromaInNodeinfo_haveCustomUploadLimits() {
-        nodeinfoResponseCallback = { getPleromaNodeinfo(
+        nodeinfoResponseCallback = {
+            getPleromaNodeinfo(
                 null,
-                NodeInfoPleromaUploadLimits( Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE ))
+                NodeInfoPleromaUploadLimits(
+                    Long.MAX_VALUE,
+                    Long.MAX_VALUE,
+                    Long.MAX_VALUE,
+                    Long.MAX_VALUE
+                )
+            )
         }
         setupActivity()
         shadowOf(getMainLooper()).idle()
@@ -265,25 +290,37 @@ class ComposeActivityTest {
 
     @Test
     fun whenPixelfedInNodeInfo_haveCustomUploadLimits() {
-        nodeinfoResponseCallback = { getPixelfedNodeinfo( 1024 * 1024 ) }
+        nodeinfoResponseCallback = { getPixelfedNodeinfo(1024 * 1024) }
         setupActivity()
         shadowOf(getMainLooper()).idle()
-        assertEquals(1024 * 1024 * 1024, activity.viewModel.instanceMetadata.value!!.imageLimit)
-        assertEquals(1024 * 1024 * 1024, activity.viewModel.instanceMetadata.value!!.videoLimit)
-        assertArrayEquals(emptyArray(), activity.supportedFormattingSyntax.toTypedArray()) // pixelfed has no formatting
+        assertEquals(
+            1024 * 1024 * 1024,
+            activity.viewModel.instanceMetadata.value!!.imageLimit
+        )
+        assertEquals(
+            1024 * 1024 * 1024,
+            activity.viewModel.instanceMetadata.value!!.videoLimit
+        )
+        assertArrayEquals(
+            emptyArray(),
+            activity.supportedFormattingSyntax.toTypedArray()
+        ) // pixelfed has no formatting
     }
 
     @Test
     fun whenMastodonInNodeinfo_butItsAGlitch() {
-        nodeinfoResponseCallback = { getMastodonNodeinfo( "3.1.0+glitch" ) }
+        nodeinfoResponseCallback = { getMastodonNodeinfo("3.1.0+glitch") }
         setupActivity()
         shadowOf(getMainLooper()).idle()
-        assertArrayEquals(arrayOf("text/markdown", "text/html"), activity.supportedFormattingSyntax.toTypedArray())
+        assertArrayEquals(
+            arrayOf("text/markdown", "text/html"),
+            activity.supportedFormattingSyntax.toTypedArray()
+        )
     }
 
     @Test
     fun whenMastodonInNodeinfo_butItsBoringVanilla() {
-        nodeinfoResponseCallback = { getMastodonNodeinfo( "3.1.0" ) }
+        nodeinfoResponseCallback = { getMastodonNodeinfo("3.1.0") }
         setupActivity()
         shadowOf(getMainLooper()).idle()
         assertArrayEquals(emptyArray(), activity.supportedFormattingSyntax.toTypedArray())
@@ -298,27 +335,51 @@ class ComposeActivityTest {
 
     @Test
     fun whenTextContainsUrl_onlyEllipsizedURLIsCounted() {
-        val url = "https://www.google.dk/search?biw=1920&bih=990&tbm=isch&sa=1&ei=bmDrWuOoKMv6kwWOkIaoDQ&q=indiana+jones+i+hate+snakes+animated&oq=indiana+jones+i+hate+snakes+animated&gs_l=psy-ab.3...54174.55443.0.55553.9.7.0.0.0.0.255.333.1j0j1.2.0....0...1c.1.64.psy-ab..7.0.0....0.40G-kcDkC6A#imgdii=PSp15hQjN1JqvM:&imgrc=H0hyE2JW5wrpBM:"
+        val url =
+            "https://www.google.dk/search?biw=1920&bih=990&tbm=isch&sa=1&ei=bmDrWuOoKMv6kwWO" +
+                "kIaoDQ&q=indiana+jones+i+hate+snakes+animated&oq=indiana+jones+i+hate+snake" +
+                "s+animated&gs_l=psy-ab.3...54174.55443.0.55553.9.7.0.0.0.0.255.333.1j0j1.2." +
+                "0....0...1c.1.64.psy-ab..7.0.0....0.40G-kcDkC6A#imgdii=PSp15hQjN1JqvM:&imgr" +
+                "c=H0hyE2JW5wrpBM:"
         val additionalContent = "Check out this @image #search result: "
         insertSomeTextInContent(additionalContent + url)
-        assertEquals(activity.calculateTextLength(), additionalContent.length + ComposeActivity.MAXIMUM_URL_LENGTH)
+        assertEquals(
+            activity.calculateTextLength(),
+            additionalContent.length + ComposeActivity.MAXIMUM_URL_LENGTH
+        )
     }
 
     @Test
     fun whenTextContainsMultipleUrls_onlyEllipsizedURLIsCounted() {
         val shortUrl = "https://tusky.app"
-        val url = "https://www.google.dk/search?biw=1920&bih=990&tbm=isch&sa=1&ei=bmDrWuOoKMv6kwWOkIaoDQ&q=indiana+jones+i+hate+snakes+animated&oq=indiana+jones+i+hate+snakes+animated&gs_l=psy-ab.3...54174.55443.0.55553.9.7.0.0.0.0.255.333.1j0j1.2.0....0...1c.1.64.psy-ab..7.0.0....0.40G-kcDkC6A#imgdii=PSp15hQjN1JqvM:&imgrc=H0hyE2JW5wrpBM:"
+        val url =
+            "https://www.google.dk/search?biw=1920&bih=990&tbm=isch&sa=1&ei=bmDrWuOoKMv6kwWO" +
+                "kIaoDQ&q=indiana+jones+i+hate+snakes+animated&oq=indiana+jones+i+hate+snake" +
+                "s+animated&gs_l=psy-ab.3...54174.55443.0.55553.9.7.0.0.0.0.255.333.1j0j1.2." +
+                "0....0...1c.1.64.psy-ab..7.0.0....0.40G-kcDkC6A#imgdii=PSp15hQjN1JqvM:&imgr" +
+                "c=H0hyE2JW5wrpBM:"
         val additionalContent = " Check out this @image #search result: "
         insertSomeTextInContent(shortUrl + additionalContent + url)
-        assertEquals(activity.calculateTextLength(), additionalContent.length + shortUrl.length + ComposeActivity.MAXIMUM_URL_LENGTH)
+        assertEquals(
+            activity.calculateTextLength(),
+            additionalContent.length + shortUrl.length + ComposeActivity.MAXIMUM_URL_LENGTH
+        )
     }
 
     @Test
     fun whenTextContainsMultipleURLs_allURLsGetEllipsized() {
-        val url = "https://www.google.dk/search?biw=1920&bih=990&tbm=isch&sa=1&ei=bmDrWuOoKMv6kwWOkIaoDQ&q=indiana+jones+i+hate+snakes+animated&oq=indiana+jones+i+hate+snakes+animated&gs_l=psy-ab.3...54174.55443.0.55553.9.7.0.0.0.0.255.333.1j0j1.2.0....0...1c.1.64.psy-ab..7.0.0....0.40G-kcDkC6A#imgdii=PSp15hQjN1JqvM:&imgrc=H0hyE2JW5wrpBM:"
+        val url =
+            "https://www.google.dk/search?biw=1920&bih=990&tbm=isch&sa=1&ei=bmDrWuOoKMv6kwWO" +
+                "kIaoDQ&q=indiana+jones+i+hate+snakes+animated&oq=indiana+jones+i+hate+snake" +
+                "s+animated&gs_l=psy-ab.3...54174.55443.0.55553.9.7.0.0.0.0.255.333.1j0j1.2." +
+                "0....0...1c.1.64.psy-ab..7.0.0....0.40G-kcDkC6A#imgdii=PSp15hQjN1JqvM:&img" +
+                "rc=H0hyE2JW5wrpBM:"
         val additionalContent = " Check out this @image #search result: "
         insertSomeTextInContent(url + additionalContent + url)
-        assertEquals(activity.calculateTextLength(), additionalContent.length + (ComposeActivity.MAXIMUM_URL_LENGTH * 2))
+        assertEquals(
+            activity.calculateTextLength(),
+            additionalContent.length + (ComposeActivity.MAXIMUM_URL_LENGTH * 2)
+        )
     }
 
     @Test
@@ -327,11 +388,15 @@ class ComposeActivityTest {
         val insertText = "#"
         editor.setText("Some text")
 
-        for (caretIndex in listOf(9, 1, 0)) {
+        for(caretIndex in listOf(9, 1, 0)) {
             editor.setSelection(caretIndex)
             activity.prependSelectedWordsWith(insertText)
             // Text should be inserted at caret
-            assertEquals("Unexpected value at $caretIndex", insertText, editor.text.substring(caretIndex, caretIndex + insertText.length))
+            assertEquals(
+                "Unexpected value at $caretIndex",
+                insertText,
+                editor.text.substring(caretIndex, caretIndex + insertText.length)
+            )
 
             // Caret should be placed after inserted text
             assertEquals(caretIndex + insertText.length, editor.selectionStart)
@@ -480,8 +545,10 @@ class ComposeActivityTest {
         activity.findViewById<EditText>(R.id.composeEditField).setText(text ?: "Some text")
     }
 
-    private fun getPleromaNodeinfo(postFormats: List<String>?, limits: NodeInfoPleromaUploadLimits) : NodeInfo
-    {
+    private fun getPleromaNodeinfo(
+        postFormats: List<String>?,
+        limits: NodeInfoPleromaUploadLimits
+    ): NodeInfo {
         return NodeInfo(
             NodeInfoMetadata(
                 postFormats,
@@ -495,10 +562,11 @@ class ComposeActivityTest {
         )
     }
 
-    private fun getPixelfedNodeinfo(maxPhotoSize: Long) : NodeInfo {
+    private fun getPixelfedNodeinfo(maxPhotoSize: Long): NodeInfo {
         return NodeInfo(
             NodeInfoMetadata(
-                null, null, NodeInfoPixelfedConfig( NodeInfoPixelfedUploadLimits( maxPhotoSize ) )
+                null, null,
+                NodeInfoPixelfedConfig(NodeInfoPixelfedUploadLimits(maxPhotoSize))
             ),
             NodeInfoSoftware(
                 "pixelfed",
@@ -507,7 +575,7 @@ class ComposeActivityTest {
         )
     }
 
-    private fun getMastodonNodeinfo(version: String) : NodeInfo {
+    private fun getMastodonNodeinfo(version: String): NodeInfo {
         return NodeInfo(
             null,
             NodeInfoSoftware(
@@ -517,47 +585,44 @@ class ComposeActivityTest {
         )
     }
 
-    private fun getInstanceWithMaximumTootCharacters(maximumTootCharacters: Int?): Instance
-    {
+    private fun getInstanceWithMaximumTootCharacters(maximumTootCharacters: Int?): Instance {
         return Instance(
+            "https://example.token",
+            "Example dot Token",
+            "Example instance for testing",
+            "admin@example.token",
+            "2.6.3",
+            HashMap(),
+            null,
+            null,
+            listOf("en"),
+            Account(
+                "1",
+                "admin",
+                "admin",
+                "admin",
+                SpannedString(""),
                 "https://example.token",
-                "Example dot Token",
-                "Example instance for testing",
-                "admin@example.token",
-                "2.6.3",
-                HashMap(),
+                "",
+                "",
+                false,
+                0,
+                0,
+                0,
                 null,
-                null,
-                listOf("en"),
-                Account(
-                        "1",
-                        "admin",
-                        "admin",
-                        "admin",
-                        SpannedString(""),
-                        "https://example.token",
-                        "",
-                        "",
-                        false,
-                        0,
-                        0,
-                        0,
-                        null,
-                        false,
-                        emptyList(),
-                        emptyList()
-                ),
-                maximumTootCharacters,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                false,
+                emptyList(),
+                emptyList()
+            ),
+            maximumTootCharacters,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         )
     }
-
 }
-

@@ -18,19 +18,17 @@ package com.keylesspalace.tusky
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
-import android.util.Log
 import androidx.emoji.text.EmojiCompat
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.util.LocaleManager
 import com.keylesspalace.tusky.util.OmittedDomainAppModule
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import de.c1710.filemojicompat.FileEmojiCompatConfig
-import org.mockito.Mockito.*
-import org.mockito.stubbing.Answer
-import javax.inject.Inject
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.any
+import org.mockito.Mockito.mock
 
-// override TuskyApplication for Robolectric tests, only initialize the necessary stuff
+// Override TuskyApplication for Robolectric tests, only initialize the necessary stuff
 class TuskyApplication : Application() {
 
     override fun onCreate() {
@@ -48,11 +46,13 @@ class TuskyApplication : Application() {
         localeManager.setLocale(this)
     }
 
-    fun getAndroidInjector() : DispatchingAndroidInjector<Any> {
-        val mock = mock(DispatchingAndroidInjector::class.java) as DispatchingAndroidInjector<OmittedDomainAppModule>
+    fun getAndroidInjector(): DispatchingAndroidInjector<Any> {
+        val mock =mock(DispatchingAndroidInjector::class.java)
+                as DispatchingAndroidInjector<OmittedDomainAppModule>
 
         `when`(mock.inject(any())).then {
-            it.getArgument<OmittedDomainAppModule>(0).accountManager = mock(AccountManager::class.java)
+            it.getArgument<OmittedDomainAppModule>(0).accountManager =
+                mock(AccountManager::class.java)
             return@then Unit
         }
         return mock as DispatchingAndroidInjector<Any>
