@@ -24,12 +24,17 @@ tasks:
       sudo chown $USER:$USER -R ${ANDROID_HOME}
       yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses
       yes | sdkmanager --sdk_root=$ANDROID_HOME --update
-      yes | sdkmanager --sdk_root=$ANDROID_HOME "${BUILD_TOOLS}" "${BUILD_PLATFORMS}"
-  - tests-husky: |
+      yes | sdkmanager --sdk_root=$ANDROID_HOME "${BUILD_TOOLS}"
+      "${BUILD_PLATFORMS}"
+  - prepare-gradle: |
       cd ${PROJECT}
       chmod +x gradlew
+  - check-lint: |
+      cd ${PROJECT}
+      ./gradlew ktlintCheck
+  - tests-husky: |
+      cd ${PROJECT}
       ./gradlew testHuskyStableDebugUnitTest --rerun-tasks
   - build-husky: |
       cd ${PROJECT}
-      chmod +x gradlew
       ./gradlew assembleHuskyStableRelease --rerun-tasks
