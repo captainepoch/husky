@@ -40,14 +40,14 @@ class EditTextTyped @JvmOverloads constructor(
     private val emojiEditTextHelper: EmojiEditTextHelper = EmojiEditTextHelper(this)
 
     init {
-        //fix a bug with autocomplete and some keyboards
+        // fix a bug with autocomplete and some keyboards
         val newInputType = inputType and (inputType xor InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE)
         inputType = newInputType
         super.setKeyListener(getEmojiEditTextHelper().getKeyListener(keyListener))
     }
 
     override fun setKeyListener(input: KeyListener?) {
-        if(input != null) {
+        if (input != null) {
             super.setKeyListener(getEmojiEditTextHelper().getKeyListener(input))
         } else {
             super.setKeyListener(input)
@@ -60,13 +60,14 @@ class EditTextTyped @JvmOverloads constructor(
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection {
         val connection = super.onCreateInputConnection(editorInfo)
-        return if(onCommitContentListener != null) {
+        return if (onCommitContentListener != null) {
             EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf("image/*"))
             getEmojiEditTextHelper().onCreateInputConnection(
                 InputConnectionCompat.createWrapper(
                     connection, editorInfo,
                     onCommitContentListener!!
-                ), editorInfo
+                ),
+                editorInfo
             )!!
         } else {
             connection

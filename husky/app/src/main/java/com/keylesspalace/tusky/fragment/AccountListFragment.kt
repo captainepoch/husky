@@ -30,9 +30,15 @@ import com.keylesspalace.tusky.AccountActivity
 import com.keylesspalace.tusky.AccountListActivity.Type
 import com.keylesspalace.tusky.BaseActivity
 import com.keylesspalace.tusky.R
-import com.keylesspalace.tusky.adapter.*
+import com.keylesspalace.tusky.adapter.AccountAdapter
+import com.keylesspalace.tusky.adapter.BlocksAdapter
+import com.keylesspalace.tusky.adapter.FollowAdapter
+import com.keylesspalace.tusky.adapter.FollowRequestsAdapter
+import com.keylesspalace.tusky.adapter.MutesAdapter
 import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.entity.*
+import com.keylesspalace.tusky.entity.Account
+import com.keylesspalace.tusky.entity.EmojiReaction
+import com.keylesspalace.tusky.entity.Relationship
 import com.keylesspalace.tusky.interfaces.AccountActionListener
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.HttpHeaderLink
@@ -43,12 +49,12 @@ import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_account_list.*
+import kotlinx.android.synthetic.main.fragment_account_list.messageView
+import kotlinx.android.synthetic.main.fragment_account_list.recyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.util.*
 import javax.inject.Inject
 
 class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
@@ -72,7 +78,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         emojiReaction = arguments?.getString(ARG_EMOJI)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_account_list, container, false)
     }
 
@@ -84,7 +94,12 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         recyclerView.layoutManager = layoutManager
         (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        recyclerView.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL))
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                view.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         adapter = when (type) {
             Type.BLOCKS -> BlocksAdapter(this)
@@ -121,12 +136,12 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         } else {
             api.muteAccount(id, notifications)
         }
-                .autoDispose(from(this))
-                .subscribe({
-                    onMuteSuccess(mute, id, position, notifications)
-                }, {
-                    onMuteFailure(mute, id, notifications)
-                })
+            .autoDispose(from(this))
+            .subscribe({
+                onMuteSuccess(mute, id, position, notifications)
+            }, {
+                onMuteFailure(mute, id, notifications)
+            })
     }
 
     private fun onMuteSuccess(muted: Boolean, id: String, position: Int, notifications: Boolean) {
@@ -139,11 +154,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
 
         if (unmutedUser != null) {
             Snackbar.make(recyclerView, R.string.confirmation_unmuted, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.action_undo) {
-                        mutesAdapter.addItem(unmutedUser, position)
-                        onMute(true, id, position, notifications)
-                    }
-                    .show()
+                .setAction(R.string.action_undo) {
+                    mutesAdapter.addItem(unmutedUser, position)
+                    onMute(true, id, position, notifications)
+                }
+                .show()
         }
     }
 
@@ -166,12 +181,12 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         } else {
             api.blockAccount(id)
         }
-                .autoDispose(from(this))
-                .subscribe({
-                    onBlockSuccess(block, id, position)
-                }, {
-                    onBlockFailure(block, id)
-                })
+            .autoDispose(from(this))
+            .subscribe({
+                onBlockSuccess(block, id, position)
+            }, {
+                onBlockFailure(block, id)
+            })
     }
 
     private fun onBlockSuccess(blocked: Boolean, id: String, position: Int) {
@@ -183,11 +198,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
 
         if (unblockedUser != null) {
             Snackbar.make(recyclerView, R.string.confirmation_unblocked, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.action_undo) {
-                        blocksAdapter.addItem(unblockedUser, position)
-                        onBlock(true, id, position)
-                    }
-                    .show()
+                .setAction(R.string.action_undo) {
+                    blocksAdapter.addItem(unblockedUser, position)
+                    onBlock(true, id, position)
+                }
+                .show()
         }
     }
 
@@ -200,8 +215,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         Log.e(TAG, "Failed to $verb account accountId $accountId")
     }
 
-    override fun onRespondToFollowRequest(accept: Boolean, accountId: String,
-                                          position: Int) {
+    override fun onRespondToFollowRequest(
+        accept: Boolean,
+        accountId: String,
+        position: Int
+    ) {
 
         val callback = object : Callback<Relationship> {
             override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
@@ -268,11 +286,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
             }
         }
     }
-    
+
     private fun requireId(type: Type, id: String?, name: String = "id"): String {
-        return requireNotNull(id) { name+" must not be null for type "+type.name }
+        return requireNotNull(id) { name + " must not be null for type " + type.name }
     }
-    
+
     private fun getEmojiReactionFetchCall(): Single<Response<List<EmojiReaction>>> {
         val statusId = requireId(type, id)
         val emoji = requireId(type, emojiReaction, "emoji")
@@ -288,21 +306,25 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         if (fromId != null) {
             recyclerView.post { adapter.setBottomLoading(true) }
         }
-        
-        if(type == Type.REACTED) {
+
+        if (type == Type.REACTED) {
             getEmojiReactionFetchCall()
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))
                 .subscribe({ response ->
                     val emojiReaction = response.body()
 
-                    if (response.isSuccessful && emojiReaction != null && emojiReaction.size > 0 && emojiReaction.get(0).accounts != null) {
+                    if (response.isSuccessful &&
+                        emojiReaction != null &&
+                        emojiReaction.size > 0 &&
+                        emojiReaction.get(0).accounts != null
+                    ) {
                         val linkHeader = response.headers()["Link"]
                         onFetchAccountsSuccess(emojiReaction.get(0).accounts!!, linkHeader)
                     } else {
                         onFetchAccountsFailure(Exception(response.message()))
                     }
-                }, {throwable ->
+                }, { throwable ->
                     onFetchAccountsFailure(throwable)
                 })
         } else {
@@ -318,7 +340,7 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
                     } else {
                         onFetchAccountsFailure(Exception(response.message()))
                     }
-                }, {throwable ->
+                }, { throwable ->
                     onFetchAccountsFailure(throwable)
                 })
         }
@@ -348,9 +370,9 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         if (adapter.itemCount == 0) {
             messageView.show()
             messageView.setup(
-                    R.drawable.elephant_friend_empty,
-                    R.string.message_empty,
-                    null
+                R.drawable.elephant_friend_empty,
+                R.string.message_empty,
+                null
             )
         } else {
             messageView.hide()
@@ -359,11 +381,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
 
     private fun fetchRelationships(ids: List<String>) {
         api.relationships(ids)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(from(this))
-                .subscribe(::onFetchRelationshipsSuccess) {
-                    onFetchRelationshipsFailure(ids)
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(from(this))
+            .subscribe(::onFetchRelationshipsSuccess) {
+                onFetchRelationshipsFailure(ids)
+            }
     }
 
     private fun onFetchRelationshipsSuccess(relationships: List<Relationship>) {
@@ -403,7 +425,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
         private const val ARG_ID = "id"
         private const val ARG_EMOJI = "emoji"
 
-        fun newInstance(type: Type, id: String? = null, emoji: String? = null): AccountListFragment {
+        fun newInstance(
+            type: Type,
+            id: String? = null,
+            emoji: String? = null
+        ): AccountListFragment {
             return AccountListFragment().apply {
                 arguments = Bundle(3).apply {
                     putSerializable(ARG_TYPE, type)
@@ -413,5 +439,4 @@ class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
             }
         }
     }
-
 }

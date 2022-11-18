@@ -27,33 +27,33 @@ import com.keylesspalace.tusky.entity.NewPoll
 import kotlinx.android.synthetic.main.dialog_add_poll.view.*
 
 fun showAddPollDialog(
-        context: Context,
-        poll: NewPoll?,
-        maxOptionCount: Int,
-        maxOptionLength: Int,
-        onUpdatePoll: (NewPoll) -> Unit
+    context: Context,
+    poll: NewPoll?,
+    maxOptionCount: Int,
+    maxOptionLength: Int,
+    onUpdatePoll: (NewPoll) -> Unit
 ) {
 
     val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_poll, null)
 
     val dialog = AlertDialog.Builder(context)
-            .setIcon(R.drawable.ic_poll_24dp)
-            .setTitle(R.string.create_poll_title)
-            .setView(view)
-            .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton(android.R.string.ok, null)
-            .create()
+        .setIcon(R.drawable.ic_poll_24dp)
+        .setTitle(R.string.create_poll_title)
+        .setView(view)
+        .setNegativeButton(android.R.string.cancel, null)
+        .setPositiveButton(android.R.string.ok, null)
+        .create()
 
     val adapter = AddPollOptionsAdapter(
-            options = poll?.options?.toMutableList() ?: mutableListOf("", ""),
-            maxOptionLength = maxOptionLength,
-            onOptionRemoved = { valid ->
-                view.addChoiceButton.isEnabled = true
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = valid
-            },
-            onOptionChanged = { valid ->
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = valid
-            }
+        options = poll?.options?.toMutableList() ?: mutableListOf("", ""),
+        maxOptionLength = maxOptionLength,
+        onOptionRemoved = { valid ->
+            view.addChoiceButton.isEnabled = true
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = valid
+        },
+        onOptionChanged = { valid ->
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = valid
+        }
     )
 
     view.pollChoices.adapter = adapter
@@ -81,13 +81,15 @@ fun showAddPollDialog(
             val selectedPollDurationId = view.pollDurationSpinner.selectedItemPosition
 
             val pollDuration = context.resources
-                    .getIntArray(R.array.poll_duration_values)[selectedPollDurationId]
+                .getIntArray(R.array.poll_duration_values)[selectedPollDurationId]
 
-            onUpdatePoll(NewPoll(
+            onUpdatePoll(
+                NewPoll(
                     options = adapter.pollOptions,
                     expiresIn = pollDuration,
                     multiple = view.multipleChoicesCheckBox.isChecked
-            ))
+                )
+            )
 
             dialog.dismiss()
         }
@@ -97,5 +99,4 @@ fun showAddPollDialog(
 
     // make the dialog focusable so the keyboard does not stay behind it
     dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-
 }

@@ -36,8 +36,10 @@ import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.toolbar_basic.*
 import javax.inject.Inject
 
-class PreferencesActivity : BaseActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-        HasAndroidInjector {
+class PreferencesActivity :
+    BaseActivity(),
+    SharedPreferences.OnSharedPreferenceChangeListener,
+    HasAndroidInjector {
 
     @Inject
     lateinit var eventHub: EventHub
@@ -84,11 +86,10 @@ class PreferencesActivity : BaseActivity(), SharedPreferences.OnSharedPreference
         }
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
 
         restartActivitiesOnExit = intent.getBooleanExtra("restart", false)
-
     }
 
     override fun onResume() {
@@ -129,7 +130,6 @@ class PreferencesActivity : BaseActivity(), SharedPreferences.OnSharedPreference
 
                 restartActivitiesOnExit = true
                 this.restartCurrentActivity()
-
             }
             "statusTextSize", "absoluteTimeView", "showBotOverlay", "animateGifAvatars",
             "useBlurhash", "showCardsInTimelines", "confirmReblogs",
@@ -188,5 +188,4 @@ class PreferencesActivity : BaseActivity(), SharedPreferences.OnSharedPreference
             return intent
         }
     }
-
 }

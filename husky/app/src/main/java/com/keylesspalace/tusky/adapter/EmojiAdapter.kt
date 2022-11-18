@@ -66,7 +66,6 @@ class EmojiAdapter(
     }
 
     class EmojiHolder(val emojiImageView: ImageView) : RecyclerView.ViewHolder(emojiImageView)
-
 }
 
 interface OnEmojiSelectedListener {

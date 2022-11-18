@@ -36,8 +36,14 @@ import com.keylesspalace.tusky.fragment.SFragment
 import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.interfaces.StatusActionListener
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.util.*
-import kotlinx.android.synthetic.main.fragment_timeline.*
+import com.keylesspalace.tusky.util.CardViewMode
+import com.keylesspalace.tusky.util.NetworkState
+import com.keylesspalace.tusky.util.StatusDisplayOptions
+import com.keylesspalace.tusky.util.hide
+import kotlinx.android.synthetic.main.fragment_timeline.progressBar
+import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
+import kotlinx.android.synthetic.main.fragment_timeline.statusView
+import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
 import javax.inject.Inject
 
 class ConversationsFragment : SFragment(), StatusActionListener, Injectable, ReselectableFragment {
@@ -51,7 +57,11 @@ class ConversationsFragment : SFragment(), StatusActionListener, Injectable, Res
 
     private var layoutManager: LinearLayoutManager? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_timeline, container, false)
     }
 
@@ -59,20 +69,25 @@ class ConversationsFragment : SFragment(), StatusActionListener, Injectable, Res
         val preferences = PreferenceManager.getDefaultSharedPreferences(view.context)
 
         val statusDisplayOptions = StatusDisplayOptions(
-                animateAvatars = preferences.getBoolean("animateGifAvatars", false),
-                mediaPreviewEnabled = accountManager.activeAccount?.mediaPreviewEnabled ?: true,
-                useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
-                showBotOverlay = preferences.getBoolean("showBotOverlay", true),
-                useBlurhash = preferences.getBoolean("useBlurhash", true),
-                cardViewMode = CardViewMode.NONE,
-                confirmReblogs = preferences.getBoolean("confirmReblogs", true),
-                renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
+            animateAvatars = preferences.getBoolean("animateGifAvatars", false),
+            mediaPreviewEnabled = accountManager.activeAccount?.mediaPreviewEnabled ?: true,
+            useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
+            showBotOverlay = preferences.getBoolean("showBotOverlay", true),
+            useBlurhash = preferences.getBoolean("useBlurhash", true),
+            cardViewMode = CardViewMode.NONE,
+            confirmReblogs = preferences.getBoolean("confirmReblogs", true),
+            renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
+            hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
         )
 
         adapter = ConversationAdapter(statusDisplayOptions, this, ::onTopLoaded, viewModel::retry)
 
-        recyclerView.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL))
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                view.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         layoutManager = LinearLayoutManager(view.context)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
@@ -83,21 +98,29 @@ class ConversationsFragment : SFragment(), StatusActionListener, Injectable, Res
 
         initSwipeToRefresh()
 
-        viewModel.conversations.observe(viewLifecycleOwner, Observer<PagedList<ConversationEntity>> {
-            adapter.submitList(it)
-        })
-        viewModel.networkState.observe(viewLifecycleOwner, Observer {
-            adapter.setNetworkState(it)
-        })
+        viewModel.conversations.observe(
+            viewLifecycleOwner,
+            Observer<PagedList<ConversationEntity>> {
+                adapter.submitList(it)
+            }
+        )
+        viewModel.networkState.observe(
+            viewLifecycleOwner,
+            Observer {
+                adapter.setNetworkState(it)
+            }
+        )
 
         viewModel.load()
-
     }
 
     private fun initSwipeToRefresh() {
-        viewModel.refreshState.observe(viewLifecycleOwner, Observer {
-            swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING
-        })
+        viewModel.refreshState.observe(
+            viewLifecycleOwner,
+            Observer {
+                swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING
+            }
+        )
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }

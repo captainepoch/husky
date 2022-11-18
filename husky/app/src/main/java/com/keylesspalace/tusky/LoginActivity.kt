@@ -45,12 +45,12 @@ import com.keylesspalace.tusky.entity.AppCredentials
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.getNonNullString
-import javax.inject.Inject
 import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
 class LoginActivity : BaseActivity(), Injectable {
 
@@ -73,8 +73,8 @@ class LoginActivity : BaseActivity(), Injectable {
 
         setContentView(binding.root)
 
-        if(savedInstanceState == null) {
-            if(BuildConfig.CUSTOM_INSTANCE.isNotBlank() && !isAdditionalLogin()) {
+        if (savedInstanceState == null) {
+            if (BuildConfig.CUSTOM_INSTANCE.isNotBlank() && !isAdditionalLogin()) {
                 binding.domainEditText.setText(BuildConfig.CUSTOM_INSTANCE)
                 binding.domainEditText.setSelection(BuildConfig.CUSTOM_INSTANCE.length)
             }
@@ -86,7 +86,7 @@ class LoginActivity : BaseActivity(), Injectable {
             binding.websiteEditText.setSelection(getString(R.string.tusky_website).length)
         }
 
-        if(BuildConfig.CUSTOM_LOGO_URL.isNotBlank()) {
+        if (BuildConfig.CUSTOM_LOGO_URL.isNotBlank()) {
             Glide.with(this)
                 .load(BuildConfig.CUSTOM_LOGO_URL)
                 .placeholder(null)
@@ -109,7 +109,7 @@ class LoginActivity : BaseActivity(), Injectable {
             textView?.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        if(isAdditionalLogin()) {
+        if (isAdditionalLogin()) {
             setSupportActionBar(binding.toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -124,13 +124,13 @@ class LoginActivity : BaseActivity(), Injectable {
 
     override fun finish() {
         super.finish()
-        if(isAdditionalLogin()) {
+        if (isAdditionalLogin()) {
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }
@@ -138,7 +138,7 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     private fun onSettingsButtonClick() {
-        if(binding.extendedSettings.isGone()) {
+        if (binding.extendedSettings.isGone()) {
             binding.extendedSettings.visible()
         } else {
             binding.extendedSettings.gone()
@@ -157,7 +157,7 @@ class LoginActivity : BaseActivity(), Injectable {
 
         try {
             HttpUrl.Builder().host(domain).scheme("https").build()
-        } catch(e: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             setLoading(false)
             binding.domainTextInputLayout.error = getString(R.string.error_invalid_domain)
             return
@@ -168,7 +168,7 @@ class LoginActivity : BaseActivity(), Injectable {
                 call: Call<AppCredentials>,
                 response: Response<AppCredentials>
             ) {
-                if(!response.isSuccessful) {
+                if (!response.isSuccessful) {
                     binding.loginButton.isEnabled = true
                     binding.domainTextInputLayout.error =
                         getString(R.string.error_failed_app_registration)
@@ -200,7 +200,7 @@ class LoginActivity : BaseActivity(), Injectable {
 
         var appname = getString(R.string.app_name)
         var website = getString(R.string.tusky_website)
-        if(binding.extendedSettings.isVisible()) {
+        if (binding.extendedSettings.isVisible()) {
             appname = binding.appNameEditText.text.toString()
             website = binding.websiteEditText.text.toString()
         }
@@ -226,9 +226,9 @@ class LoginActivity : BaseActivity(), Injectable {
         )
         val url = "https://" + domain + endpoint + "?" + toQueryString(parameters)
         val uri = Uri.parse(url)
-        if(!openInCustomTab(uri, this)) {
+        if (!openInCustomTab(uri, this)) {
             val viewIntent = Intent(Intent.ACTION_VIEW, uri)
-            if(viewIntent.resolveActivity(packageManager) != null) {
+            if (viewIntent.resolveActivity(packageManager) != null) {
                 startActivity(viewIntent)
             } else {
                 binding.domainEditText.error = getString(R.string.error_no_web_browser_found)
@@ -244,7 +244,7 @@ class LoginActivity : BaseActivity(), Injectable {
         val uri = intent.data
         val redirectUri = oauthRedirectUri
 
-        if(uri != null && uri.toString().startsWith(redirectUri)) {
+        if (uri != null && uri.toString().startsWith(redirectUri)) {
             // This should either have returned an authorization code or an error.
             val code = uri.getQueryParameter("code")
             val error = uri.getQueryParameter("error")
@@ -254,7 +254,7 @@ class LoginActivity : BaseActivity(), Injectable {
             val clientId = preferences.getNonNullString(CLIENT_ID, "")
             val clientSecret = preferences.getNonNullString(CLIENT_SECRET, "")
 
-            if(code != null && domain.isNotEmpty() && clientId.isNotEmpty() && clientSecret.isNotEmpty()) {
+            if (code != null && domain.isNotEmpty() && clientId.isNotEmpty() && clientSecret.isNotEmpty()) {
 
                 setLoading(true)
                 /* Since authorization has succeeded, the final step to log in is to exchange
@@ -264,7 +264,7 @@ class LoginActivity : BaseActivity(), Injectable {
                         call: Call<AccessToken>,
                         response: Response<AccessToken>
                     ) {
-                        if(response.isSuccessful) {
+                        if (response.isSuccessful) {
                             onLoginSuccess(response.body()!!.accessToken, domain)
                         } else {
                             setLoading(false)
@@ -298,7 +298,7 @@ class LoginActivity : BaseActivity(), Injectable {
                     domain, clientId, clientSecret, redirectUri, code,
                     "authorization_code"
                 ).enqueue(callback)
-            } else if(error != null) {
+            } else if (error != null) {
                 /* Authorization failed. Put the error response where the user can read it and they
                  * can try again. */
                 setLoading(false)
@@ -323,7 +323,7 @@ class LoginActivity : BaseActivity(), Injectable {
     }
 
     private fun setLoading(loadingState: Boolean) {
-        if(loadingState) {
+        if (loadingState) {
             binding.loginLoadingLayout.visible()
             binding.loginInputLayout.gone()
         } else {
@@ -370,7 +370,7 @@ class LoginActivity : BaseActivity(), Injectable {
             s = s.replaceFirst("https://", "")
             // If a username was included (e.g. username@example.com), just take what's after the '@'.
             val at = s.lastIndexOf('@')
-            if(at != -1) {
+            if (at != -1) {
                 s = s.substring(at + 1)
             }
             return s.trim { it <= ' ' }
@@ -383,7 +383,7 @@ class LoginActivity : BaseActivity(), Injectable {
         private fun toQueryString(parameters: Map<String, String>): String {
             val s = StringBuilder()
             var between = ""
-            for((key, value) in parameters) {
+            for ((key, value) in parameters) {
                 s.append(between)
                 s.append(Uri.encode(key))
                 s.append("=")
@@ -410,7 +410,7 @@ class LoginActivity : BaseActivity(), Injectable {
 
             try {
                 customTabsIntent.launchUrl(context, uri)
-            } catch(e: ActivityNotFoundException) {
+            } catch (e: ActivityNotFoundException) {
                 Timber.w("Activity was not found for intent $customTabsIntent")
                 return false
             }

@@ -17,26 +17,26 @@ package com.keylesspalace.tusky.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class Instance (
-        val uri: String,
-        val title: String,
-        val description: String,
-        val email: String,
-        val version: String,
-        val urls: Map<String,String>,
-        val stats: Map<String,Int>?,
-        val thumbnail: String?,
-        val languages: List<String>,
-        @SerializedName("contact_account") val contactAccount: Account,
-        @SerializedName("max_toot_chars") val maxTootChars: Int?,
-        @SerializedName("max_bio_chars") val maxBioChars: Int?,
-        @SerializedName("poll_limits") val pollLimits: PollLimits?,
-        @SerializedName("chat_limit") val chatLimit: Int?,
-        @SerializedName("avatar_upload_limit") val avatarUploadLimit: Long?,
-        @SerializedName("banner_upload_limit") val bannerUploadLimit: Long?,
-        @SerializedName("description_limit") val descriptionLimit: Int?,
-        @SerializedName("upload_limit") val uploadLimit: Long?,
-        val pleroma: InstancePleroma?
+data class Instance(
+    val uri: String,
+    val title: String,
+    val description: String,
+    val email: String,
+    val version: String,
+    val urls: Map<String, String>,
+    val stats: Map<String, Int>?,
+    val thumbnail: String?,
+    val languages: List<String>,
+    @SerializedName("contact_account") val contactAccount: Account,
+    @SerializedName("max_toot_chars") val maxTootChars: Int?,
+    @SerializedName("max_bio_chars") val maxBioChars: Int?,
+    @SerializedName("poll_limits") val pollLimits: PollLimits?,
+    @SerializedName("chat_limit") val chatLimit: Int?,
+    @SerializedName("avatar_upload_limit") val avatarUploadLimit: Long?,
+    @SerializedName("banner_upload_limit") val bannerUploadLimit: Long?,
+    @SerializedName("description_limit") val descriptionLimit: Int?,
+    @SerializedName("upload_limit") val uploadLimit: Long?,
+    val pleroma: InstancePleroma?
 ) {
     override fun hashCode(): Int {
         return uri.hashCode()
@@ -51,11 +51,11 @@ data class Instance (
     }
 }
 
-data class InstancePleroma (
+data class InstancePleroma(
     val metadata: InstancePleromaMetadata
 )
 
-data class InstancePleromaMetadata (
+data class InstancePleromaMetadata(
     val features: List<String>,
     @SerializedName("fields_limits") val fieldsLimits: InstancePleromaMetadataFieldsLimits,
 )
@@ -64,7 +64,7 @@ data class InstancePleromaMetadataFieldsLimits(
     @SerializedName("max_fields") val maxFields: Int,
 )
 
-data class PollLimits (
+data class PollLimits(
     @SerializedName("max_options") val maxOptions: Int?,
     @SerializedName("max_option_chars") val maxOptionChars: Int?
 )

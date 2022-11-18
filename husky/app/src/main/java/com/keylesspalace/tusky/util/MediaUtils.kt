@@ -22,11 +22,13 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.annotation.Px
 import androidx.exifinterface.media.ExifInterface
-import android.util.Log
-import java.io.*
-
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -46,14 +48,16 @@ const val MEDIA_SIZE_UNKNOWN = -1L
  * @return the size of the media in bytes or {@link MediaUtils#MEDIA_SIZE_UNKNOWN}
  */
 fun getMediaSize(contentResolver: ContentResolver, uri: Uri?): Long {
-    if(uri == null) {
+    if (uri == null) {
         return MEDIA_SIZE_UNKNOWN
     }
 
     var mediaSize = MEDIA_SIZE_UNKNOWN
     val cursor: Cursor?
     try {
-        cursor = contentResolver.query(uri, null, null, null, null)
+        cursor = contentResolver.query(
+            uri, null, null, null, null
+        )
     } catch (e: SecurityException) {
         return MEDIA_SIZE_UNKNOWN
     }
@@ -66,7 +70,12 @@ fun getMediaSize(contentResolver: ContentResolver, uri: Uri?): Long {
     return mediaSize
 }
 
-fun getSampledBitmap(contentResolver: ContentResolver, uri: Uri, @Px reqWidth: Int, @Px reqHeight: Int): Bitmap? {
+fun getSampledBitmap(
+    contentResolver: ContentResolver,
+    uri: Uri,
+    @Px reqWidth: Int,
+    @Px reqHeight: Int
+): Bitmap? {
     // First decode with inJustDecodeBounds=true to check dimensions
     val options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
@@ -165,8 +174,10 @@ fun reorientBitmap(bitmap: Bitmap?, orientation: Int): Bitmap? {
     }
 
     return try {
-        val result = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width,
-                bitmap.height, matrix, true)
+        val result = Bitmap.createBitmap(
+            bitmap, 0, 0, bitmap.width,
+            bitmap.height, matrix, true
+        )
         if (!bitmap.sameAs(result)) {
             bitmap.recycle()
         }
@@ -195,7 +206,10 @@ fun getImageOrientation(uri: Uri, contentResolver: ContentResolver): Int {
         IOUtils.closeQuietly(inputStream)
         return ExifInterface.ORIENTATION_UNDEFINED
     }
-    val orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+    val orientation = exifInterface.getAttributeInt(
+        ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_NORMAL
+    )
     IOUtils.closeQuietly(inputStream)
     return orientation
 }
@@ -210,7 +224,9 @@ fun deleteStaleCachedMedia(mediaDirectory: File?) {
     twentyfourHoursAgo.add(Calendar.HOUR, -24)
     val unixTime = twentyfourHoursAgo.timeInMillis
 
-    val files = mediaDirectory.listFiles{ file -> unixTime > file.lastModified() && file.name.contains(MEDIA_TEMP_PREFIX) }
+    val files = mediaDirectory.listFiles { file ->
+        unixTime > file.lastModified() && file.name.contains(MEDIA_TEMP_PREFIX)
+    }
     if (files == null || files.isEmpty()) {
         // Nothing to do
         return
@@ -226,5 +242,10 @@ fun deleteStaleCachedMedia(mediaDirectory: File?) {
 }
 
 fun getTemporaryMediaFilename(extension: String): String {
-    return "${MEDIA_TEMP_PREFIX}_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}.$extension"
+    return "${MEDIA_TEMP_PREFIX}_${
+    SimpleDateFormat(
+        "yyyyMMdd_HHmmss",
+        Locale.US
+    ).format(Date())
+    }.$extension"
 }

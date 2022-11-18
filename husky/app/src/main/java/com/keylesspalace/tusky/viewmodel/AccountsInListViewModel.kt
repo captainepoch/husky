@@ -48,29 +48,33 @@ class AccountsInListViewModel @Inject constructor(private val api: MastodonApi) 
 
     fun addAccountToList(listId: String, account: Account) {
         api.addCountToList(listId, listOf(account.id))
-                .subscribe({
-                    updateState {
-                        copy(accounts = accounts.map { it + account })
-                    }
-                }, {
-                    Log.i(javaClass.simpleName,
-                            "Failed to add account to the list: ${account.username}")
-                })
-                .autoDispose()
+            .subscribe({
+                updateState {
+                    copy(accounts = accounts.map { it + account })
+                }
+            }, {
+                Log.i(
+                    javaClass.simpleName,
+                    "Failed to add account to the list: ${account.username}"
+                )
+            })
+            .autoDispose()
     }
 
     fun deleteAccountFromList(listId: String, accountId: String) {
         api.deleteAccountFromList(listId, listOf(accountId))
-                .subscribe({
-                    updateState {
-                        copy(accounts = accounts.map { accounts ->
+            .subscribe({
+                updateState {
+                    copy(
+                        accounts = accounts.map { accounts ->
                             accounts.withoutFirstWhich { it.id == accountId }
-                        })
-                    }
-                }, {
-                    Log.i(javaClass.simpleName, "Failed to remove account from thelist: $accountId")
-                })
-                .autoDispose()
+                        }
+                    )
+                }
+            }, {
+                Log.i(javaClass.simpleName, "Failed to remove account from thelist: $accountId")
+            })
+            .autoDispose()
     }
 
     fun search(query: String) {
@@ -78,11 +82,11 @@ class AccountsInListViewModel @Inject constructor(private val api: MastodonApi) 
             query.isEmpty() -> updateState { copy(searchResult = null) }
             query.isBlank() -> updateState { copy(searchResult = listOf()) }
             else -> api.searchAccounts(query, null, 10, true)
-                    .subscribe({ result ->
-                        updateState { copy(searchResult = result) }
-                    }, {
-                        updateState { copy(searchResult = listOf()) }
-                    }).autoDispose()
+                .subscribe({ result ->
+                    updateState { copy(searchResult = result) }
+                }, {
+                    updateState { copy(searchResult = listOf()) }
+                }).autoDispose()
         }
     }
 

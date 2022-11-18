@@ -1,21 +1,22 @@
 package com.keylesspalace.tusky.db
 
-import androidx.room.*
+import androidx.room.Embedded
+import androidx.room.Entity
 
 @Entity(
-        primaryKeys = ["localId", "chatId"]
+    primaryKeys = ["localId", "chatId"]
 )
-data class ChatEntity (
-        val localId: Long, /* our user account id */
-        val chatId: String,
-        val accountId: String,
-        val unread: Long,
-        val updatedAt: Long,
-        val lastMessageId: String?
+data class ChatEntity(
+    val localId: Long, /* our user account id */
+    val chatId: String,
+    val accountId: String,
+    val unread: Long,
+    val updatedAt: Long,
+    val lastMessageId: String?
 )
 
-data class ChatEntityWithAccount (
-        @Embedded val chat: ChatEntity,
-        @Embedded(prefix = "a_") val account: TimelineAccountEntity?,
-        @Embedded(prefix = "msg_") val lastMessage: ChatMessageEntity? = null
+data class ChatEntityWithAccount(
+    @Embedded val chat: ChatEntity,
+    @Embedded(prefix = "a_") val account: TimelineAccountEntity?,
+    @Embedded(prefix = "msg_") val lastMessage: ChatMessageEntity? = null
 )

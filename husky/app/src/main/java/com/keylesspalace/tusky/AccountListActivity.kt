@@ -66,9 +66,9 @@ class AccountListActivity : BaseActivity(), HasAndroidInjector {
         }
 
         supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, AccountListFragment.newInstance(type, id, emoji))
-                .commit()
+            .beginTransaction()
+            .replace(R.id.fragment_container, AccountListFragment.newInstance(type, id, emoji))
+            .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -96,7 +96,7 @@ class AccountListActivity : BaseActivity(), HasAndroidInjector {
                 putExtra(EXTRA_EMOJI, emoji)
             }
         }
-        
+
         @JvmStatic
         fun newIntent(context: Context, type: Type, id: String? = null): Intent {
             return newIntent(context, type, id, null)

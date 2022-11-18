@@ -16,15 +16,15 @@
 
 package com.keylesspalace.tusky.util
 
+import android.content.res.Resources
+import android.graphics.Rect
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
+import android.view.MotionEvent
+import android.view.TouchDelegate
 import android.view.View
 import android.widget.EditText
-import android.util.TypedValue
-import android.content.res.Resources
-import android.view.TouchDelegate
-import android.view.MotionEvent
-import android.graphics.Rect
 /*import java.util.List
 import java.util.ArrayList*/
 
@@ -41,25 +41,25 @@ fun View.visible(visible: Boolean, or: Int = View.GONE) {
 }
 
 class MultipleTouchDelegate : TouchDelegate {
-    
+
     var delegates = mutableListOf<TouchDelegate>()
-    
+
     constructor(v: View) : super(Rect(), v)
 
     public fun addDelegate(delegate: TouchDelegate) {
         delegates.add(delegate)
     }
-    
-    override fun onTouchEvent(event: MotionEvent) : Boolean {
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         var ret = false
         val x = event.x
         val y = event.y
-        
-        for(delegate in delegates) {
+
+        for (delegate in delegates) {
             event.setLocation(x, y)
             ret = delegate.onTouchEvent(event) || ret
         }
-        
+
         return ret
     }
 }
@@ -75,7 +75,7 @@ fun View.increaseHitArea(vdp: Float, hdp: Float) {
         rect.left -= hpixels
         rect.bottom += vpixels
         rect.right += hpixels
-        if(parent.touchDelegate != null && parent.touchDelegate is MultipleTouchDelegate) {
+        if (parent.touchDelegate != null && parent.touchDelegate is MultipleTouchDelegate) {
             (parent.touchDelegate as MultipleTouchDelegate).addDelegate(TouchDelegate(rect, this))
         } else {
             val mtd = MultipleTouchDelegate(this)
@@ -97,7 +97,8 @@ open class DefaultTextWatcher : TextWatcher {
 }
 
 inline fun EditText.onTextChanged(
-        crossinline callback: (s: CharSequence, start: Int, before: Int, count: Int) -> Unit) {
+    crossinline callback: (s: CharSequence, start: Int, before: Int, count: Int) -> Unit
+) {
     addTextChangedListener(object : DefaultTextWatcher() {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             callback(s, start, before, count)
@@ -106,7 +107,8 @@ inline fun EditText.onTextChanged(
 }
 
 inline fun EditText.afterTextChanged(
-        crossinline callback: (s: Editable) -> Unit) {
+    crossinline callback: (s: Editable) -> Unit
+) {
     addTextChangedListener(object : DefaultTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             callback(s)

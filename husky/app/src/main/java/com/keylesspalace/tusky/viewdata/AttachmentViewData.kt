@@ -7,9 +7,9 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AttachmentViewData(
-        val attachment: Attachment,
-        val statusId: String?,
-        val statusUrl: String?
+    val attachment: Attachment,
+    val statusId: String?,
+    val statusUrl: String?
 ) : Parcelable {
     companion object {
         @JvmStatic
@@ -25,6 +25,5 @@ data class AttachmentViewData(
                 AttachmentViewData(it, it.id, it.url)
             }
         }
-
     }
 }

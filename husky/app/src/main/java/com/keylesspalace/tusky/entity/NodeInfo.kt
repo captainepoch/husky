@@ -1,5 +1,5 @@
 /* Copyright 2020 Alibek Omarov
- * 
+ *
  * This file is a part of Husky.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
@@ -16,7 +16,6 @@
 package com.keylesspalace.tusky.entity
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 // .well-known/nodeinfo
 data class NodeInfoLink(
@@ -60,4 +59,3 @@ data class NodeInfoMetadata(
     val uploadLimits: NodeInfoPleromaUploadLimits?,
     val config: NodeInfoPixelfedConfig?
 )
-

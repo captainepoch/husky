@@ -24,9 +24,9 @@ import com.keylesspalace.tusky.util.LocaleManager
 import com.keylesspalace.tusky.util.OmittedDomainAppModule
 import dagger.android.DispatchingAndroidInjector
 import de.c1710.filemojicompat.FileEmojiCompatConfig
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 // Override TuskyApplication for Robolectric tests, only initialize the necessary stuff
 class TuskyApplication : Application() {
@@ -47,8 +47,8 @@ class TuskyApplication : Application() {
     }
 
     fun getAndroidInjector(): DispatchingAndroidInjector<Any> {
-        val mock =mock(DispatchingAndroidInjector::class.java)
-                as DispatchingAndroidInjector<OmittedDomainAppModule>
+        val mock = mock(DispatchingAndroidInjector::class.java)
+            as DispatchingAndroidInjector<OmittedDomainAppModule>
 
         `when`(mock.inject(any())).then {
             it.getArgument<OmittedDomainAppModule>(0).accountManager =

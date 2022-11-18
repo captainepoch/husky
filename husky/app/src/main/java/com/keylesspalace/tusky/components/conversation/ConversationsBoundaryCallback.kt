@@ -35,12 +35,13 @@ import java.util.concurrent.Executor
  * rate limiting using the PagingRequestHelper class.
  */
 class ConversationsBoundaryCallback(
-        private val accountId: Long,
-        private val mastodonApi: MastodonApi,
-        private val handleResponse: (Long, List<Conversation>?) -> Unit,
-        private val ioExecutor: Executor,
-        private val networkPageSize: Int)
-    : PagedList.BoundaryCallback<ConversationEntity>() {
+    private val accountId: Long,
+    private val mastodonApi: MastodonApi,
+    private val handleResponse: (Long, List<Conversation>?) -> Unit,
+    private val ioExecutor: Executor,
+    private val networkPageSize: Int
+) :
+    PagedList.BoundaryCallback<ConversationEntity>() {
 
     val helper = PagingRequestHelper(ioExecutor)
     val networkState = helper.createStatusLiveData()
@@ -52,7 +53,7 @@ class ConversationsBoundaryCallback(
     override fun onZeroItemsLoaded() {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
             mastodonApi.getConversations(null, networkPageSize)
-                    .enqueue(createWebserviceCallback(it))
+                .enqueue(createWebserviceCallback(it))
         }
     }
 
@@ -63,7 +64,7 @@ class ConversationsBoundaryCallback(
     override fun onItemAtEndLoaded(itemAtEnd: ConversationEntity) {
         helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
             mastodonApi.getConversations(itemAtEnd.lastStatus.id, networkPageSize)
-                    .enqueue(createWebserviceCallback(it))
+                .enqueue(createWebserviceCallback(it))
         }
     }
 
@@ -72,8 +73,9 @@ class ConversationsBoundaryCallback(
      * paging library takes care of refreshing the list if necessary.
      */
     private fun insertItemsIntoDb(
-            response: Response<List<Conversation>>,
-            it: PagingRequestHelper.Request.Callback) {
+        response: Response<List<Conversation>>,
+        it: PagingRequestHelper.Request.Callback
+    ) {
         ioExecutor.execute {
             handleResponse(accountId, response.body())
             it.recordSuccess()

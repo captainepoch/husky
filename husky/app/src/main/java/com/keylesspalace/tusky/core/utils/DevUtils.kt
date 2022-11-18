@@ -30,7 +30,7 @@ object DevUtils {
      * Enable StrictMode on the application.
      */
     fun enableStrictMode() {
-        if(ApplicationUtils.isDebug()) {
+        if (ApplicationUtils.isDebug()) {
             val threadPolicyBuilder =
                 StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -38,7 +38,7 @@ object DevUtils {
                     .detectNetwork()
                     .penaltyLog()
 
-            if(VERSION.SDK_INT >= VERSION_CODES.O) {
+            if (VERSION.SDK_INT >= VERSION_CODES.O) {
                 threadPolicyBuilder.detectUnbufferedIo()
             }
 

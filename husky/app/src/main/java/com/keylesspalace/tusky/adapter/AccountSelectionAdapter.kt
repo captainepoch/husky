@@ -23,15 +23,21 @@ import android.widget.ArrayAdapter
 import androidx.preference.PreferenceManager
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.db.AccountEntity
-import com.keylesspalace.tusky.util.*
-import kotlinx.android.synthetic.main.item_autocomplete_account.view.*
+import com.keylesspalace.tusky.util.emojify
+import com.keylesspalace.tusky.util.loadAvatar
+import kotlinx.android.synthetic.main.item_autocomplete_account.view.avatar
+import kotlinx.android.synthetic.main.item_autocomplete_account.view.display_name
+import kotlinx.android.synthetic.main.item_autocomplete_account.view.username
 
-class AccountSelectionAdapter(context: Context) : ArrayAdapter<AccountEntity>(context, R.layout.item_autocomplete_account) {
+class AccountSelectionAdapter(context: Context) :
+    ArrayAdapter<AccountEntity>(context, R.layout.item_autocomplete_account) {
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
 
         if (convertView == null) {
-            val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val layoutInflater =
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = layoutInflater.inflate(R.layout.item_autocomplete_account, parent, false)
         }
         view!!
@@ -44,12 +50,12 @@ class AccountSelectionAdapter(context: Context) : ArrayAdapter<AccountEntity>(co
             username.text = account.fullName
             displayName.text = account.displayName.emojify(account.emojis, displayName)
 
-            val avatarRadius = avatar.context.resources.getDimensionPixelSize(R.dimen.avatar_radius_42dp)
+            val avatarRadius =
+                avatar.context.resources.getDimensionPixelSize(R.dimen.avatar_radius_42dp)
             val animateAvatar = PreferenceManager.getDefaultSharedPreferences(avatar.context)
-                    .getBoolean("animateGifAvatars", false)
+                .getBoolean("animateGifAvatars", false)
 
             loadAvatar(account.profilePictureUrl, avatar, avatarRadius, animateAvatar)
-
         }
 
         return view

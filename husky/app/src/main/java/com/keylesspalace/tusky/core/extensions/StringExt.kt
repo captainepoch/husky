@@ -36,8 +36,8 @@ fun String.Companion.empty(): String {
  * @return The url with https:// in front, null otherwise.
  */
 fun String?.addHttpsProtocolUrl(): String {
-    if(this != null) {
-        if(!this.contains("https", true)) {
+    if (this != null) {
+        if (!this.contains("https", true)) {
             return ("https://$this")
         }
     }
@@ -57,14 +57,14 @@ fun String.composeWithZwsp(): String {
 
     var end: Int
     val originalString = StringBuilder(this)
-    while(matcher.find()) {
+    while (matcher.find()) {
         end = matcher.end()
 
-        if(end < originalString.length) {
+        if (end < originalString.length) {
             val endChar = originalString[end - 1]
 
-            if(endChar.isWhitespace()) {
-                if(!originalString[end].isLetterOrDigit() && !endChar.isBreakline()) {
+            if (endChar.isWhitespace()) {
+                if (!originalString[end].isLetterOrDigit() && !endChar.isBreakline()) {
                     originalString.setCharAt(end - 1, zwspChar)
                 }
             }

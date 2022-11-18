@@ -43,10 +43,10 @@ import com.uber.autodispose.AutoDisposePlugins
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.reactivex.plugins.RxJavaPlugins
-import java.security.Security
-import javax.inject.Inject
 import org.conscrypt.Conscrypt
 import timber.log.Timber
+import java.security.Security
+import javax.inject.Inject
 
 class TuskyApplication : Application(), HasAndroidInjector {
 
@@ -66,11 +66,11 @@ class TuskyApplication : Application(), HasAndroidInjector {
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-        if(preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
+        if (preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
             crashHandler.setAsDefaultHandler()
         }
 
-        if(ApplicationUtils.isDebug()) {
+        if (ApplicationUtils.isDebug()) {
             Timber.plant(HyperlinkDebugTree())
         }
 

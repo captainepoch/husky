@@ -35,7 +35,7 @@ enum class Flavor(private val flavor: String) {
          * @param flavor The name of the Flavor.
          */
         fun getFlavor(flavor: String) =
-            when(flavor) {
+            when (flavor) {
                 DEV.flavor -> DEV
                 BETA.flavor -> BETA
                 NEW_HUSKY.flavor -> NEW_HUSKY

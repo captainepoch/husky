@@ -73,12 +73,12 @@ class ViewVideoFragment : ViewMediaFragment() {
         // Start/pause/resume video playback as fragment is shown/hidden
         super.setUserVisibleHint(isVisibleToUser)
 
-        if(videoView == null) {
+        if (videoView == null) {
             return
         }
 
-        if(isVisibleToUser) {
-            if(mediaActivity.isToolbarVisible) {
+        if (isVisibleToUser) {
+            if (mediaActivity.isToolbarVisible) {
                 handler.postDelayed(hideToolbar, TOOLBAR_HIDE_DELAY_MS)
             }
             exoPlayer?.play()
@@ -109,8 +109,8 @@ class ViewVideoFragment : ViewMediaFragment() {
             }
 
             override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-                if(event?.keyCode == KeyEvent.KEYCODE_BACK) {
-                    if(event.action == KeyEvent.ACTION_UP) {
+                if (event?.keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (event.action == KeyEvent.ACTION_UP) {
                         hide()
                         activity?.supportFinishAfterTransition()
                     }
@@ -145,7 +145,7 @@ class ViewVideoFragment : ViewMediaFragment() {
 
         videoControls.player = videoView.player
 
-        if(arguments!!.getBoolean(ARG_START_POSTPONED_TRANSITION)) {
+        if (arguments!!.getBoolean(ARG_START_POSTPONED_TRANSITION)) {
             mediaActivity.onBringUp()
         }
     }
@@ -175,13 +175,13 @@ class ViewVideoFragment : ViewMediaFragment() {
     }
 
     override fun onToolbarVisibilityChange(visible: Boolean) {
-        if(videoView == null || mediaDescription == null || !userVisibleHint) {
+        if (videoView == null || mediaDescription == null || !userVisibleHint) {
             return
         }
 
         isDescriptionVisible = showingDescription && visible
-        val alpha = if(isDescriptionVisible) 1.0f else 0.0f
-        if(isDescriptionVisible) {
+        val alpha = if (isDescriptionVisible) 1.0f else 0.0f
+        if (isDescriptionVisible) {
             // If to be visible, need to make visible immediately and animate alpha
             mediaDescription.alpha = 0.0f
             mediaDescription.visible(isDescriptionVisible)
@@ -196,7 +196,7 @@ class ViewVideoFragment : ViewMediaFragment() {
             })
             .start()
 
-        if(visible && (videoView.player?.isPlaying == true) && !isAudio) {
+        if (visible && (videoView.player?.isPlaying == true) && !isAudio) {
             hideToolbarAfterDelay(TOOLBAR_HIDE_DELAY_MS)
         } else {
             handler.removeCallbacks(hideToolbar)
@@ -232,7 +232,7 @@ class ViewVideoFragment : ViewMediaFragment() {
     private fun playbackStateListener() = object : Player.Listener {
 
         override fun onPlaybackStateChanged(playbackState: Int) {
-            when(playbackState) {
+            when (playbackState) {
                 Player.STATE_BUFFERING -> {
                     progressBar.visibility = View.VISIBLE
                 }

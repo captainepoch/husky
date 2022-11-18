@@ -2,7 +2,7 @@ package com.keylesspalace.tusky.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class StreamEvent (
+data class StreamEvent(
     val event: EventType,
     val payload: String
 ) {

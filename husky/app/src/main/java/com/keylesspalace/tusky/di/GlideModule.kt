@@ -7,6 +7,5 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class GlideModule {
     @ContributesAndroidInjector
-    abstract fun provideOmittedDomainAppModule() : OmittedDomainAppModule
-
+    abstract fun provideOmittedDomainAppModule(): OmittedDomainAppModule
 }

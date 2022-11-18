@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.item_follow_request_notification.view.*
 internal class FollowRequestViewHolder(itemView: View, private val showHeader: Boolean) : RecyclerView.ViewHolder(itemView) {
     private var id: String? = null
     private val animateAvatar: Boolean = PreferenceManager.getDefaultSharedPreferences(itemView.context)
-            .getBoolean("animateGifAvatars", false)
+        .getBoolean("animateGifAvatars", false)
 
     fun setupWithAccount(account: Account) {
         id = account.id

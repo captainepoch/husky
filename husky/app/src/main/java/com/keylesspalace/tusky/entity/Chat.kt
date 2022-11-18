@@ -17,17 +17,17 @@ package com.keylesspalace.tusky.entity
 
 import android.text.Spanned
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import java.util.Date
 
 data class ChatMessage(
-        val id: String,
-        val content: Spanned?,
-        @SerializedName("chat_id") val chatId: String,
-        @SerializedName("account_id") val accountId: String,
-        @SerializedName("created_at") val createdAt: Date,
-        val attachment: Attachment?,
-        val emojis: List<Emoji>,
-        val card: Card?
+    val id: String,
+    val content: Spanned?,
+    @SerializedName("chat_id") val chatId: String,
+    @SerializedName("account_id") val accountId: String,
+    @SerializedName("created_at") val createdAt: Date,
+    val attachment: Attachment?,
+    val emojis: List<Emoji>,
+    val card: Card?
 )
 
 data class Chat(

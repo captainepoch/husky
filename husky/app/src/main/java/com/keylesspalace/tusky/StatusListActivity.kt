@@ -47,7 +47,7 @@ class StatusListActivity : BottomSheetActivity(), HasAndroidInjector {
         setSupportActionBar(binding.includedToolbar.toolbar)
 
         val kind = getKind(intent.getStringExtra(EXTRA_KIND))
-        val title = if(kind == Kind.FAVOURITES) {
+        val title = if (kind == Kind.FAVOURITES) {
             R.string.title_favourites
         } else {
             R.string.title_bookmarks
@@ -66,7 +66,7 @@ class StatusListActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             onBackPressed()
             return true
         }

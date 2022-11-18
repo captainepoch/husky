@@ -29,27 +29,33 @@ class SearchRepository<T>(private val mastodonApi: MastodonApi) {
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    fun getSearchData(searchType: SearchType, searchRequest: String, disposables: CompositeDisposable, pageSize: Int = 20,
-                      initialItems: List<T>? = null, parser: (SearchResult?) -> List<T>): Listing<T> {
+    fun getSearchData(
+        searchType: SearchType,
+        searchRequest: String,
+        disposables: CompositeDisposable,
+        pageSize: Int = 20,
+        initialItems: List<T>? = null,
+        parser: (SearchResult?) -> List<T>
+    ): Listing<T> {
         val sourceFactory = SearchDataSourceFactory(mastodonApi, searchType, searchRequest, disposables, executor, initialItems, parser)
         val livePagedList = sourceFactory.toLiveData(
-                config = Config(pageSize = pageSize, enablePlaceholders = false, initialLoadSizeHint = pageSize * 2),
-                fetchExecutor = executor
+            config = Config(pageSize = pageSize, enablePlaceholders = false, initialLoadSizeHint = pageSize * 2),
+            fetchExecutor = executor
         )
         return Listing(
-                pagedList = livePagedList,
-                networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                    it.networkState
-                },
-                retry = {
-                    sourceFactory.sourceLiveData.value?.retry()
-                },
-                refresh = {
-                    sourceFactory.sourceLiveData.value?.invalidate()
-                },
-                refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
-                    it.initialLoad
-                }
+            pagedList = livePagedList,
+            networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                it.networkState
+            },
+            retry = {
+                sourceFactory.sourceLiveData.value?.retry()
+            },
+            refresh = {
+                sourceFactory.sourceLiveData.value?.invalidate()
+            },
+            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+                it.initialLoad
+            }
 
         )
     }

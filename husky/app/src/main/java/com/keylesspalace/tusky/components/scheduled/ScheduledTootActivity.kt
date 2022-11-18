@@ -30,7 +30,6 @@ import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.ScheduledStatus
 import com.keylesspalace.tusky.util.Status
-import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import kotlinx.android.synthetic.main.activity_scheduled_toot.*
@@ -68,44 +67,48 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injec
 
         viewModel = ViewModelProvider(this, viewModelFactory)[ScheduledTootViewModel::class.java]
 
-        viewModel.data.observe(this, Observer {
-            adapter.submitList(it)
-        })
+        viewModel.data.observe(
+            this,
+            Observer {
+                adapter.submitList(it)
+            }
+        )
 
-        viewModel.networkState.observe(this, Observer { (status) ->
-            when(status) {
-                Status.SUCCESS -> {
-                    progressBar.hide()
-                    swipeRefreshLayout.isRefreshing = false
-                    if(viewModel.data.value?.loadedCount == 0) {
-                        errorMessageView.setup(R.drawable.elephant_friend_empty, R.string.no_scheduled_status)
-                        errorMessageView.show()
-                    } else {
-                        errorMessageView.hide()
-                    }
-                }
-                Status.RUNNING -> {
-                    errorMessageView.hide()
-                    if(viewModel.data.value?.loadedCount ?: 0 > 0) {
-                        swipeRefreshLayout.isRefreshing = true
-                    } else {
-                        progressBar.show()
-                    }
-                }
-                Status.FAILED -> {
-                    if(viewModel.data.value?.loadedCount ?: 0 >= 0) {
+        viewModel.networkState.observe(
+            this,
+            Observer { (status) ->
+                when (status) {
+                    Status.SUCCESS -> {
                         progressBar.hide()
                         swipeRefreshLayout.isRefreshing = false
-                        errorMessageView.setup(R.drawable.elephant_error, R.string.error_generic) {
-                            refreshStatuses()
+                        if (viewModel.data.value?.loadedCount == 0) {
+                            errorMessageView.setup(R.drawable.elephant_friend_empty, R.string.no_scheduled_status)
+                            errorMessageView.show()
+                        } else {
+                            errorMessageView.hide()
                         }
-                        errorMessageView.show()
+                    }
+                    Status.RUNNING -> {
+                        errorMessageView.hide()
+                        if (viewModel.data.value?.loadedCount ?: 0 > 0) {
+                            swipeRefreshLayout.isRefreshing = true
+                        } else {
+                            progressBar.show()
+                        }
+                    }
+                    Status.FAILED -> {
+                        if (viewModel.data.value?.loadedCount ?: 0 >= 0) {
+                            progressBar.hide()
+                            swipeRefreshLayout.isRefreshing = false
+                            errorMessageView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                                refreshStatuses()
+                            }
+                            errorMessageView.show()
+                        }
                     }
                 }
             }
-
-        })
-
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -123,7 +126,9 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injec
     }
 
     override fun edit(item: ScheduledStatus) {
-        val intent = ComposeActivity.startIntent(this, ComposeActivity.ComposeOptions(
+        val intent = ComposeActivity.startIntent(
+            this,
+            ComposeActivity.ComposeOptions(
                 scheduledTootId = item.id,
                 tootText = item.params.text,
                 contentWarning = item.params.spoilerText,
@@ -132,7 +137,8 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injec
                 visibility = item.params.visibility,
                 scheduledAt = item.scheduledAt,
                 sensitive = item.params.sensitive
-        ))
+            )
+        )
         startActivity(intent)
     }
 

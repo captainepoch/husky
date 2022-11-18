@@ -26,14 +26,15 @@ import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.Executor
 
 class SearchDataSource<T>(
-        private val mastodonApi: MastodonApi,
-        private val searchType: SearchType,
-        private val searchRequest: String,
-        private val disposables: CompositeDisposable,
-        private val retryExecutor: Executor,
-        private val initialItems: List<T>? = null,
-        private val parser: (SearchResult?) -> List<T>,
-        private val source: SearchDataSourceFactory<T>) : PositionalDataSource<T>() {
+    private val mastodonApi: MastodonApi,
+    private val searchType: SearchType,
+    private val searchRequest: String,
+    private val disposables: CompositeDisposable,
+    private val retryExecutor: Executor,
+    private val initialItems: List<T>? = null,
+    private val parser: (SearchResult?) -> List<T>,
+    private val source: SearchDataSourceFactory<T>
+) : PositionalDataSource<T>() {
 
     val networkState = MutableLiveData<NetworkState>()
 
@@ -57,28 +58,27 @@ class SearchDataSource<T>(
             retry = null
             initialLoad.postValue(NetworkState.LOADING)
             mastodonApi.searchObservable(
-                    query = searchRequest,
-                    type = searchType.apiParameter,
-                    resolve = true,
-                    limit = params.requestedLoadSize,
-                    offset = 0,
-                    following = false)
-                    .subscribe(
-                            { data ->
-                                val res = parser(data)
-                                callback.onResult(res, params.requestedStartPosition)
-                                initialLoad.postValue(NetworkState.LOADED)
-
-                            },
-                            { error ->
-                                retry = {
-                                    loadInitial(params, callback)
-                                }
-                                initialLoad.postValue(NetworkState.error(error.message))
-                            }
-                    ).addTo(disposables)
+                query = searchRequest,
+                type = searchType.apiParameter,
+                resolve = true,
+                limit = params.requestedLoadSize,
+                offset = 0,
+                following = false
+            )
+                .subscribe(
+                    { data ->
+                        val res = parser(data)
+                        callback.onResult(res, params.requestedStartPosition)
+                        initialLoad.postValue(NetworkState.LOADED)
+                    },
+                    { error ->
+                        retry = {
+                            loadInitial(params, callback)
+                        }
+                        initialLoad.postValue(NetworkState.error(error.message))
+                    }
+                ).addTo(disposables)
         }
-
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<T>) {
@@ -88,39 +88,39 @@ class SearchDataSource<T>(
             return callback.onResult(emptyList())
         }
         mastodonApi.searchObservable(
-                query = searchRequest,
-                type = searchType.apiParameter,
-                resolve = true,
-                limit = params.loadSize,
-                offset = params.startPosition,
-                following = false)
-                .subscribe(
-                        { data ->
-                            // Working around Mastodon bug where exact match is returned no matter
-                            // which offset is requested (so if we search for a full username, it's
-                            // infinite)
-                            // see https://github.com/tootsuite/mastodon/issues/11365
-                            // see https://github.com/tootsuite/mastodon/issues/13083
-                            val res = if ((data.accounts.size == 1 && data.accounts[0].username.equals(searchRequest, ignoreCase = true))
-                                    || (data.statuses.size == 1 && data.statuses[0].url.equals(searchRequest))) {
-                                listOf()
-                            } else {
-                                parser(data)
-                            }
-                            if (res.isEmpty()) {
-                                source.exhausted = true
-                            }
-                            callback.onResult(res)
-                            networkState.postValue(NetworkState.LOADED)
-                        },
-                        { error ->
-                            retry = {
-                                loadRange(params, callback)
-                            }
-                            networkState.postValue(NetworkState.error(error.message))
-                        }
-                ).addTo(disposables)
-
-
+            query = searchRequest,
+            type = searchType.apiParameter,
+            resolve = true,
+            limit = params.loadSize,
+            offset = params.startPosition,
+            following = false
+        )
+            .subscribe(
+                { data ->
+                    // Working around Mastodon bug where exact match is returned no matter
+                    // which offset is requested (so if we search for a full username, it's
+                    // infinite)
+                    // see https://github.com/tootsuite/mastodon/issues/11365
+                    // see https://github.com/tootsuite/mastodon/issues/13083
+                    val res = if ((data.accounts.size == 1 && data.accounts[0].username.equals(searchRequest, ignoreCase = true)) ||
+                        (data.statuses.size == 1 && data.statuses[0].url.equals(searchRequest))
+                    ) {
+                        listOf()
+                    } else {
+                        parser(data)
+                    }
+                    if (res.isEmpty()) {
+                        source.exhausted = true
+                    }
+                    callback.onResult(res)
+                    networkState.postValue(NetworkState.LOADED)
+                },
+                { error ->
+                    retry = {
+                        loadRange(params, callback)
+                    }
+                    networkState.postValue(NetworkState.error(error.message))
+                }
+            ).addTo(disposables)
     }
 }

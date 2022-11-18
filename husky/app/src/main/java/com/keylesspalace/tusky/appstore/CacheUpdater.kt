@@ -9,10 +9,10 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class CacheUpdater @Inject constructor(
-        eventHub: EventHub,
-        accountManager: AccountManager,
-        private val appDatabase: AppDatabase,
-        gson: Gson
+    eventHub: EventHub,
+    accountManager: AccountManager,
+    private val appDatabase: AppDatabase,
+    gson: Gson
 ) {
 
     private val disposable: Disposable
@@ -53,7 +53,7 @@ class CacheUpdater @Inject constructor(
             appDatabase.timelineDao().removeAllForAccount(accountId)
             appDatabase.timelineDao().removeAllUsersForAccount(accountId)
         }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 }

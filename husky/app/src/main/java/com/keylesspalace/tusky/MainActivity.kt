@@ -125,8 +125,8 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInjector {
 
@@ -160,7 +160,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
     private val emojiInitCallback = object : InitCallback() {
         override fun onInitialized() {
-            if(!isDestroyed) {
+            if (!isDestroyed) {
                 updateProfiles()
             }
         }
@@ -173,27 +173,27 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         val activeAccount = accountManager.activeAccount ?: return
 
         var showNotificationTab = false
-        if(intent != null) {
+        if (intent != null) {
             /** There are two possibilities the accountId can be passed to MainActivity:
              * - from our code as long 'account_id'.
              * - from share shortcuts as String 'android.intent.extra.shortcut.ID'.
              */
             var accountId = intent.getLongExtra(NotificationHelper.ACCOUNT_ID, -1)
-            if(accountId == -1L) {
+            if (accountId == -1L) {
                 val accountIdString = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID)
-                if(accountIdString != null) {
+                if (accountIdString != null) {
                     accountId = accountIdString.toLong()
                 }
             }
 
             val accountRequested = accountId != -1L
-            if(accountRequested && accountId != activeAccount.id) {
+            if (accountRequested && accountId != activeAccount.id) {
                 accountManager.setActiveAccount(accountId)
             }
 
-            if(canHandleMimeType(intent.type)) {
+            if (canHandleMimeType(intent.type)) {
                 // Sharing to Tusky from an external app
-                if(accountRequested) {
+                if (accountRequested) {
                     // The correct account is already active
                     forwardShare(intent)
                 } else {
@@ -204,7 +204,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                         object : AccountSelectionListener {
                             override fun onAccountSelected(account: AccountEntity) {
                                 val requestedId = account.id
-                                if(requestedId == activeAccount.id) {
+                                if (requestedId == activeAccount.id) {
                                     // The correct account is already active
                                     forwardShare(intent)
                                 } else {
@@ -213,9 +213,10 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                                     changeAccount(requestedId, intent)
                                 }
                             }
-                        })
+                        }
+                    )
                 }
-            } else if(accountRequested) {
+            } else if (accountRequested) {
                 // User clicked a notification, show notification tab and switch user if necessary
                 showNotificationTab = true
             }
@@ -266,11 +267,11 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this, Lifecycle.Event.ON_DESTROY)
             .subscribe { event: Event? ->
-                when(event) {
+                when (event) {
                     is ProfileEditedEvent -> onFetchUserInfoSuccess(event.newProfileData)
                     is MainTabsChangedEvent -> setupTabs(false)
                     is PreferenceChangedEvent -> {
-                        when(event.preferenceKey) {
+                        when (event.preferenceKey) {
                             PrefKeys.LIVE_NOTIFICATIONS -> {
                                 initPullNotifications()
                             }
@@ -300,12 +301,12 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     private fun initPullNotifications(rebootPush: Boolean = false) {
-        if(rebootPush) {
+        if (rebootPush) {
             disablePushNotifications()
         }
 
-        if(NotificationHelper.areNotificationsEnabled(this, accountManager)) {
-            if(accountManager.areNotificationsStreamingEnabled()) {
+        if (NotificationHelper.areNotificationsEnabled(this, accountManager)) {
+            if (accountManager.areNotificationsStreamingEnabled()) {
                 StreamingService.startStreaming(this)
                 NotificationHelper.disablePullNotifications(this)
             } else {
@@ -343,9 +344,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        when(keyCode) {
+        when (keyCode) {
             KeyEvent.KEYCODE_MENU -> {
-                if(binding.mainDrawerLayout.isOpen) {
+                if (binding.mainDrawerLayout.isOpen) {
                     binding.mainDrawerLayout.close()
                 } else {
                     binding.mainDrawerLayout.open()
@@ -358,9 +359,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             }
         }
 
-        if(event.isCtrlPressed || event.isShiftPressed) {
+        if (event.isCtrlPressed || event.isShiftPressed) {
             // FIXME: blackberry keyONE raises SHIFT key event even CTRL IS PRESSED
-            when(keyCode) {
+            when (keyCode) {
                 KeyEvent.KEYCODE_N -> {
                     // Open compose activity by pressing SHIFT + N (or CTRL + N)
                     val composeIntent = Intent(applicationContext, ComposeActivity::class.java)
@@ -375,9 +376,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     public override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        if(intent != null) {
+        if (intent != null) {
             val statusUrl = intent.getStringExtra(STATUS_URL)
-            if(statusUrl != null) {
+            if (statusUrl != null) {
                 viewUrl(statusUrl, PostLookupFallbackBehavior.DISPLAY_ERROR)
             }
         }
@@ -412,12 +413,15 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                     current
                 )
             }
-            addProfile(ProfileSettingDrawerItem().apply {
-                identifier = DRAWER_ITEM_ADD_ACCOUNT
-                nameRes = R.string.add_account_name
-                descriptionRes = R.string.add_account_description
-                iconicsIcon = GoogleMaterial.Icon.gmd_add
-            }, 0)
+            addProfile(
+                ProfileSettingDrawerItem().apply {
+                    identifier = DRAWER_ITEM_ADD_ACCOUNT
+                    nameRes = R.string.add_account_name
+                    descriptionRes = R.string.add_account_description
+                    iconicsIcon = GoogleMaterial.Icon.gmd_add
+                },
+                0
+            )
             attachToSliderView(binding.mainDrawer)
             dividerBelowHeader = false
             closeDrawerOnProfileListClick = true
@@ -439,7 +443,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable, tag: String?) {
-                if(animateAvatars) {
+                if (animateAvatars) {
                     glide.load(uri)
                         .placeholder(placeholder)
                         .into(imageView)
@@ -456,7 +460,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             }
 
             override fun placeholder(ctx: Context, tag: String?): Drawable {
-                if(tag == DrawerImageLoader.Tags.PROFILE.name || tag == DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name) {
+                if (tag == DrawerImageLoader.Tags.PROFILE.name || tag == DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name) {
                     AppCompatResources.getDrawable(ctx, R.drawable.avatar_default)
                         ?.let { drawable ->
                             return drawable
@@ -577,21 +581,23 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 }
             )
 
-            if(addSearchButton) {
-                binding.mainDrawer.addItemsAtPosition(4,
+            if (addSearchButton) {
+                binding.mainDrawer.addItemsAtPosition(
+                    4,
                     primaryDrawerItem {
                         nameRes = R.string.action_search
                         iconicsIcon = GoogleMaterial.Icon.gmd_search
                         onClick = {
                             startActivityWithSlideInAnimation(SearchActivity.getIntent(context))
                         }
-                    })
+                    }
+                )
             }
 
             setSavedInstance(savedInstanceState)
         }
 
-        if(ApplicationUtils.isDebug()) {
+        if (ApplicationUtils.isDebug()) {
             Timber.d("Flavor: ${BuildConfig.FLAVOR}")
 
             binding.mainDrawer.addItems(
@@ -609,7 +615,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     private fun setupTabs(selectNotificationTab: Boolean) {
-        val activeTabLayout = if(preferences.getString("mainNavPosition", "top") == "bottom") {
+        val activeTabLayout = if (preferences.getString("mainNavPosition", "top") == "bottom") {
             val actionBarSize = ThemeUtils.getDimension(this, R.attr.actionBarSize)
             val fabMargin = resources.getDimensionPixelSize(R.dimen.fabMargin)
             (binding.composeButton.layoutParams as CoordinatorLayout.LayoutParams).bottomMargin =
@@ -634,19 +640,19 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         ) { _: TabLayout.Tab?, _: Int -> }.attach()
         activeTabLayout.removeAllTabs()
 
-        for(i in tabs.indices) {
+        for (i in tabs.indices) {
             val tab = activeTabLayout.newTab().setIcon(tabs[i].icon)
 
-            if(tabs[i].id == LIST) {
+            if (tabs[i].id == LIST) {
                 tab.contentDescription = tabs[i].arguments[1]
             } else {
                 tab.setContentDescription(tabs[i].text)
             }
             activeTabLayout.addTab(tab)
 
-            if(tabs[i].id == NOTIFICATIONS) {
+            if (tabs[i].id == NOTIFICATIONS) {
                 notificationTabPosition = i
-                if(selectNotificationTab) {
+                if (selectNotificationTab) {
                     tab.select()
                 }
             }
@@ -664,7 +670,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
         onTabSelectedListener = object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                if(tab.position == notificationTabPosition) {
+                if (tab.position == notificationTabPosition) {
                     NotificationHelper.clearNotificationsForActiveAccount(
                         this@MainActivity,
                         accountManager
@@ -678,7 +684,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
             override fun onTabReselected(tab: TabLayout.Tab) {
                 val fragment = adapter.getFragment(tab.position)
-                if(fragment is ReselectableFragment) {
+                if (fragment is ReselectableFragment) {
                     (fragment as ReselectableFragment).onReselect()
                 }
             }
@@ -686,7 +692,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             activeTabLayout.addOnTabSelectedListener(it)
         }
 
-        val activeTabPosition = if(selectNotificationTab) notificationTabPosition else 0
+        val activeTabPosition = if (selectNotificationTab) notificationTabPosition else 0
         binding.mainToolbar.title = tabs[activeTabPosition].title(this@MainActivity)
         binding.mainToolbar.setOnClickListener {
             (adapter.getFragment(activeTabLayout.selectedTabPosition) as? ReselectableFragment)?.onReselect()
@@ -697,13 +703,13 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         val activeAccount = accountManager.activeAccount
 
         // Open profile when active image was clicked
-        if(current && activeAccount != null) {
+        if (current && activeAccount != null) {
             val intent = AccountActivity.getIntent(this, activeAccount.accountId)
             startActivityWithSlideInAnimation(intent)
             return false
         }
         // Open LoginActivity to add new account
-        if(profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
+        if (profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
             startActivityWithSlideInAnimation(LoginActivity.getIntent(this, true))
             return false
         }
@@ -718,7 +724,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         accountManager.setActiveAccount(newSelectedId)
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        if(forward != null) {
+        if (forward != null) {
             intent.type = forward.type
             intent.action = forward.action
             intent.putExtras(forward)
@@ -740,7 +746,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                     removeShortcut(this, activeAccount)
                     val newAccount = accountManager.logActiveAccountOut()
                     initPullNotifications()
-                    val intent = if(newAccount == null) {
+                    val intent = if (newAccount == null) {
                         LoginActivity.getIntent(this, false)
                     } else {
                         Intent(this, MainActivity::class.java)
@@ -783,7 +789,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         initPullNotifications()
 
         // Show follow requests in the menu, if this is a locked account.
-        if(me.locked && binding.mainDrawer.getDrawerItem(DRAWER_ITEM_FOLLOW_REQUESTS) == null) {
+        if (me.locked && binding.mainDrawer.getDrawerItem(DRAWER_ITEM_FOLLOW_REQUESTS) == null) {
             val followRequestsItem = primaryDrawerItem {
                 identifier = DRAWER_ITEM_FOLLOW_REQUESTS
                 nameRes = R.string.action_view_follow_requests
@@ -795,7 +801,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 }
             }
             binding.mainDrawer.addItemAtPosition(4, followRequestsItem)
-        } else if(!me.locked) {
+        } else if (!me.locked) {
             binding.mainDrawer.removeItems(DRAWER_ITEM_FOLLOW_REQUESTS)
         }
         updateProfiles()
@@ -810,13 +816,13 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             .load(avatarUrl)
             .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.avatar_radius_36dp)))
             .apply {
-                if(showPlaceholder) {
+                if (showPlaceholder) {
                     placeholder(R.drawable.avatar_default)
                 }
             }.into(object : CustomTarget<Drawable>(navIconSize, navIconSize) {
 
                 override fun onLoadStarted(placeholder: Drawable?) {
-                    if(placeholder != null) {
+                    if (placeholder != null) {
                         binding.mainToolbar.navigationIcon =
                             FixedSizeDrawable(placeholder, navIconSize, navIconSize)
                     }
@@ -853,7 +859,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     private fun updateAnnouncementsBadge() {
         binding.mainDrawer.updateBadge(
             DRAWER_ITEM_ANNOUNCEMENTS,
-            StringHolder(if(unreadAnnouncementsCount <= 0) null else unreadAnnouncementsCount.toString())
+            StringHolder(if (unreadAnnouncementsCount <= 0) null else unreadAnnouncementsCount.toString())
         )
     }
 
@@ -874,8 +880,8 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             }.toMutableList()
 
         // reuse the already existing "add account" item
-        for(profile in header.profiles.orEmpty()) {
-            if(profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
+        for (profile in header.profiles.orEmpty()) {
+            if (profile.identifier == DRAWER_ITEM_ADD_ACCOUNT) {
                 profiles.add(profile)
                 break
             }
@@ -893,7 +899,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             .autoDispose(this, Lifecycle.Event.ON_DESTROY)
             .subscribe { draftCount ->
                 val showDraftWarning = preferences.getBoolean(sharedPrefsKey, true)
-                if(draftCount > 0 && showDraftWarning) {
+                if (draftCount > 0 && showDraftWarning) {
                     AlertDialog.Builder(this)
                         .setMessage(R.string.new_drafts_warning)
                         .setNegativeButton("Don't show again") { _, _ ->
@@ -905,7 +911,6 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                         .show()
                 }
             }
-
     }
 
     override fun getActionButton(): FloatingActionButton = binding.composeButton

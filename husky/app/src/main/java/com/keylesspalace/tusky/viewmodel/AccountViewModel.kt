@@ -2,14 +2,25 @@ package com.keylesspalace.tusky.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.keylesspalace.tusky.appstore.*
+import com.keylesspalace.tusky.appstore.BlockEvent
+import com.keylesspalace.tusky.appstore.DomainMuteEvent
+import com.keylesspalace.tusky.appstore.EventHub
+import com.keylesspalace.tusky.appstore.MuteEvent
+import com.keylesspalace.tusky.appstore.ProfileEditedEvent
+import com.keylesspalace.tusky.appstore.UnfollowEvent
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Field
 import com.keylesspalace.tusky.entity.IdentityProof
 import com.keylesspalace.tusky.entity.Relationship
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.util.Error
+import com.keylesspalace.tusky.util.Loading
+import com.keylesspalace.tusky.util.Resource
+import com.keylesspalace.tusky.util.RxAwareViewModel
+import com.keylesspalace.tusky.util.Success
+import com.keylesspalace.tusky.util.combineOptionalLiveData
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import retrofit2.Call
@@ -19,9 +30,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
-        private val mastodonApi: MastodonApi,
-        private val eventHub: EventHub,
-        private val accountManager: AccountManager
+    private val mastodonApi: MastodonApi,
+    private val eventHub: EventHub,
+    private val accountManager: AccountManager
 ) : RxAwareViewModel() {
 
     val accountData = MutableLiveData<Resource<Account>>()
@@ -31,10 +42,11 @@ class AccountViewModel @Inject constructor(
 
     private val identityProofData = MutableLiveData<List<IdentityProof>>()
 
-    val accountFieldData = combineOptionalLiveData(accountData, identityProofData) { accountRes, identityProofs ->
-        identityProofs.orEmpty().map { Either.Left<IdentityProof, Field>(it) }
+    val accountFieldData =
+        combineOptionalLiveData(accountData, identityProofData) { accountRes, identityProofs ->
+            identityProofs.orEmpty().map { Either.Left<IdentityProof, Field>(it) }
                 .plus(accountRes?.data?.fields.orEmpty().map { Either.Right(it) })
-    }
+        }
 
     val isRefreshing = MutableLiveData<Boolean>().apply { value = false }
     private var isDataLoading = false
@@ -46,11 +58,13 @@ class AccountViewModel @Inject constructor(
 
     init {
         eventHub.events
-                .subscribe { event ->
-                    if (event is ProfileEditedEvent && event.newProfileData.id == accountData.value?.data?.id) {
-                        accountData.postValue(Success(event.newProfileData))
-                    }
-                }.autoDispose()
+            .subscribe { event ->
+                if (event is ProfileEditedEvent &&
+                    event.newProfileData.id == accountData.value?.data?.id
+                ) {
+                    accountData.postValue(Success(event.newProfileData))
+                }
+            }.autoDispose()
     }
 
     private fun obtainAccount(reload: Boolean = false) {
@@ -59,17 +73,17 @@ class AccountViewModel @Inject constructor(
             accountData.postValue(Loading())
 
             mastodonApi.account(accountId)
-                    .subscribe({ account ->
-                        accountData.postValue(Success(account))
-                        isDataLoading = false
-                        isRefreshing.postValue(false)
-                    }, {t ->
-                        Log.w(TAG, "failed obtaining account", t)
-                        accountData.postValue(Error())
-                        isDataLoading = false
-                        isRefreshing.postValue(false)
-                    })
-                    .autoDispose()
+                .subscribe({ account ->
+                    accountData.postValue(Success(account))
+                    isDataLoading = false
+                    isRefreshing.postValue(false)
+                }, { t ->
+                    Log.w(TAG, "failed obtaining account", t)
+                    accountData.postValue(Error())
+                    isDataLoading = false
+                    isRefreshing.postValue(false)
+                })
+                .autoDispose()
         }
     }
 
@@ -79,13 +93,13 @@ class AccountViewModel @Inject constructor(
             relationshipData.postValue(Loading())
 
             mastodonApi.relationships(listOf(accountId))
-                    .subscribe({ relationships ->
-                        relationshipData.postValue(Success(relationships[0]))
-                    }, { t ->
-                        Log.w(TAG, "failed obtaining relationships", t)
-                        relationshipData.postValue(Error())
-                    })
-                    .autoDispose()
+                .subscribe({ relationships ->
+                    relationshipData.postValue(Success(relationships[0]))
+                }, { t ->
+                    Log.w(TAG, "failed obtaining relationships", t)
+                    relationshipData.postValue(Error())
+                })
+                .autoDispose()
         }
     }
 
@@ -93,12 +107,12 @@ class AccountViewModel @Inject constructor(
         if (identityProofData.value == null || reload) {
 
             mastodonApi.identityProofs(accountId)
-                    .subscribe({ proofs ->
-                        identityProofData.postValue(proofs)
-                    }, { t ->
-                        Log.w(TAG, "failed obtaining identity proofs", t)
-                    })
-                    .autoDispose()
+                .subscribe({ proofs ->
+                    identityProofData.postValue(proofs)
+                }, { t ->
+                    Log.w(TAG, "failed obtaining identity proofs", t)
+                })
+                .autoDispose()
         }
     }
 
@@ -126,11 +140,12 @@ class AccountViewModel @Inject constructor(
     fun unmuteAccount() {
         changeRelationship(RelationShipAction.UNMUTE)
     }
-    
+
     fun changeSubscribingState() {
         val relationship = relationshipData.value?.data
-        if(relationship?.notifying == true /* Mastodon 3.3.0rc1 */
-            || relationship?.subscribing == true /* Pleroma */ ) {
+        if (relationship?.notifying == true || /* Mastodon 3.3.0rc1 */
+            relationship?.subscribing == true /* Pleroma */
+        ) {
             changeRelationship(RelationShipAction.UNSUBSCRIBE)
         } else {
             changeRelationship(RelationShipAction.SUBSCRIBE)
@@ -138,12 +153,12 @@ class AccountViewModel @Inject constructor(
     }
 
     fun blockDomain(instance: String) {
-        mastodonApi.blockDomain(instance).enqueue(object: Callback<Any> {
+        mastodonApi.blockDomain(instance).enqueue(object : Callback<Any> {
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
                 if (response.isSuccessful) {
                     eventHub.dispatch(DomainMuteEvent(instance))
                     val relation = relationshipData.value?.data
-                    if(relation != null) {
+                    if (relation != null) {
                         relationshipData.postValue(Success(relation.copy(blockingDomain = true)))
                     }
                 } else {
@@ -158,11 +173,11 @@ class AccountViewModel @Inject constructor(
     }
 
     fun unblockDomain(instance: String) {
-        mastodonApi.unblockDomain(instance).enqueue(object: Callback<Any> {
+        mastodonApi.unblockDomain(instance).enqueue(object : Callback<Any> {
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
                 if (response.isSuccessful) {
                     val relation = relationshipData.value?.data
-                    if(relation != null) {
+                    if (relation != null) {
                         relationshipData.postValue(Success(relation.copy(blockingDomain = false)))
                     }
                 } else {
@@ -187,7 +202,11 @@ class AccountViewModel @Inject constructor(
     /**
      * @param parameter showReblogs if RelationShipAction.FOLLOW, notifications if MUTE
      */
-    private fun changeRelationship(relationshipAction: RelationShipAction, parameter: Boolean? = null, duration: Int? = null) {
+    private fun changeRelationship(
+        relationshipAction: RelationShipAction,
+        parameter: Boolean? = null,
+        duration: Int? = null
+    ) {
         val relation = relationshipData.value?.data
         val account = accountData.value?.data
         val isMastodon = relationshipData.value?.data?.notifying != null
@@ -209,12 +228,12 @@ class AccountViewModel @Inject constructor(
                 RelationShipAction.MUTE -> relation.copy(muting = true)
                 RelationShipAction.UNMUTE -> relation.copy(muting = false)
                 RelationShipAction.SUBSCRIBE -> {
-                    if(isMastodon)
+                    if (isMastodon)
                         relation.copy(notifying = true)
                     else relation.copy(subscribing = true)
                 }
                 RelationShipAction.UNSUBSCRIBE -> {
-                    if(isMastodon)
+                    if (isMastodon)
                         relation.copy(notifying = false)
                     else relation.copy(subscribing = false)
                 }
@@ -223,58 +242,66 @@ class AccountViewModel @Inject constructor(
         }
 
         when (relationshipAction) {
-            RelationShipAction.FOLLOW -> mastodonApi.followAccount(accountId, showReblogs = parameter ?: true)
+            RelationShipAction.FOLLOW -> mastodonApi.followAccount(
+                accountId,
+                showReblogs = parameter ?: true
+            )
             RelationShipAction.UNFOLLOW -> mastodonApi.unfollowAccount(accountId)
             RelationShipAction.BLOCK -> mastodonApi.blockAccount(accountId)
             RelationShipAction.UNBLOCK -> mastodonApi.unblockAccount(accountId)
-            RelationShipAction.MUTE -> mastodonApi.muteAccount(accountId, parameter ?: true, duration)
+            RelationShipAction.MUTE -> mastodonApi.muteAccount(
+                accountId,
+                parameter ?: true,
+                duration
+            )
             RelationShipAction.UNMUTE -> mastodonApi.unmuteAccount(accountId)
             RelationShipAction.SUBSCRIBE -> {
-                if(isMastodon)
+                if (isMastodon)
                     mastodonApi.followAccount(accountId, notify = true)
                 else mastodonApi.subscribeAccount(accountId)
             }
             RelationShipAction.UNSUBSCRIBE -> {
-                if(isMastodon)
+                if (isMastodon)
                     mastodonApi.followAccount(accountId, notify = false)
                 else mastodonApi.unsubscribeAccount(accountId)
             }
         }.subscribe(
-                { relationship ->
-                    relationshipData.postValue(Success(relationship))
+            { relationship ->
+                relationshipData.postValue(Success(relationship))
 
-                    when (relationshipAction) {
-                        RelationShipAction.UNFOLLOW -> eventHub.dispatch(UnfollowEvent(accountId))
-                        RelationShipAction.BLOCK -> eventHub.dispatch(BlockEvent(accountId))
-                        RelationShipAction.MUTE -> eventHub.dispatch(MuteEvent(accountId, true))
-                        RelationShipAction.UNMUTE -> eventHub.dispatch(MuteEvent(accountId, false))
-                        else -> {
-                        }
+                when (relationshipAction) {
+                    RelationShipAction.UNFOLLOW -> eventHub.dispatch(UnfollowEvent(accountId))
+                    RelationShipAction.BLOCK -> eventHub.dispatch(BlockEvent(accountId))
+                    RelationShipAction.MUTE -> eventHub.dispatch(MuteEvent(accountId, true))
+                    RelationShipAction.UNMUTE -> {
+                        eventHub.dispatch(MuteEvent(accountId, false))
                     }
-                },
-                {
-                    relationshipData.postValue(Error(relation))
+                    else -> Unit
                 }
+            },
+            {
+                relationshipData.postValue(Error(relation))
+            }
         )
-                .autoDispose()
+            .autoDispose()
     }
 
     fun noteChanged(newNote: String) {
         noteSaved.postValue(false)
         noteDisposable?.dispose()
         noteDisposable = Single.timer(1500, TimeUnit.MILLISECONDS)
-                .flatMap {
-                    mastodonApi.updateAccountNote(accountId, newNote)
-                }
-                .doOnSuccess {
-                    noteSaved.postValue(true)
-                }
-                .delay(4, TimeUnit.SECONDS)
-                .subscribe({
-                    noteSaved.postValue(false)
-                }, {
-                    Log.e(TAG, "Error updating note", it)
-                })
+            .flatMap {
+                mastodonApi.updateAccountNote(accountId, newNote)
+            }
+            .doOnSuccess {
+                noteSaved.postValue(true)
+            }
+            .delay(4, TimeUnit.SECONDS)
+            .subscribe({
+                noteSaved.postValue(false)
+            }, {
+                Log.e(TAG, "Error updating note", it)
+            })
     }
 
     override fun onCleared() {

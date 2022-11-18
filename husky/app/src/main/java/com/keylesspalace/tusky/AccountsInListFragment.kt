@@ -28,18 +28,30 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.keylesspalace.tusky.R.string
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Account
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.util.emojify
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.loadAvatar
+import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.viewmodel.AccountsInListViewModel
 import com.keylesspalace.tusky.viewmodel.State
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_accounts_in_list.*
-import kotlinx.android.synthetic.main.item_follow_request.*
+import kotlinx.android.synthetic.main.fragment_accounts_in_list.accountsRecycler
+import kotlinx.android.synthetic.main.fragment_accounts_in_list.accountsSearchRecycler
+import kotlinx.android.synthetic.main.fragment_accounts_in_list.messageView
+import kotlinx.android.synthetic.main.fragment_accounts_in_list.searchView
+import kotlinx.android.synthetic.main.item_follow_request.acceptButton
+import kotlinx.android.synthetic.main.item_follow_request.avatar
+import kotlinx.android.synthetic.main.item_follow_request.displayNameTextView
+import kotlinx.android.synthetic.main.item_follow_request.rejectButton
+import kotlinx.android.synthetic.main.item_follow_request.usernameTextView
 import java.io.IOException
 import javax.inject.Inject
 
@@ -71,7 +83,10 @@ class AccountsInListFragment : DialogFragment(), Injectable {
     private val searchAdapter = SearchAdapter()
 
     private val radius by lazy { resources.getDimensionPixelSize(R.dimen.avatar_radius_48dp) }
-    private val animateAvatar by lazy { PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean("animateGifAvatars", false) }
+    private val animateAvatar by lazy {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .getBoolean("animateGifAvatars", false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,11 +103,18 @@ class AccountsInListFragment : DialogFragment(), Injectable {
         super.onStart()
         dialog?.apply {
             // Stretch dialog to the window
-            window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            window?.setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_accounts_in_list, container, false)
     }
 
@@ -105,18 +127,18 @@ class AccountsInListFragment : DialogFragment(), Injectable {
         accountsSearchRecycler.adapter = searchAdapter
 
         viewModel.state
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(from(this))
-                .subscribe { state ->
-                    adapter.submitList(state.accounts.asRightOrNull() ?: listOf())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(from(this))
+            .subscribe { state ->
+                adapter.submitList(state.accounts.asRightOrNull() ?: listOf())
 
-                    when (state.accounts) {
-                        is Either.Right -> messageView.hide()
-                        is Either.Left -> handleError(state.accounts.value)
-                    }
-
-                    setupSearchView(state)
+                when (state.accounts) {
+                    is Either.Right -> messageView.hide()
+                    is Either.Left -> handleError(state.accounts.value)
                 }
+
+                setupSearchView(state)
+            }
 
         searchView.isSubmitButtonEnabled = true
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -158,11 +180,15 @@ class AccountsInListFragment : DialogFragment(), Injectable {
             viewModel.load(listId)
         }
         if (error is IOException) {
-            messageView.setup(R.drawable.elephant_offline,
-                    R.string.error_network, retryAction)
+            messageView.setup(
+                R.drawable.elephant_offline,
+                R.string.error_network, retryAction
+            )
         } else {
-            messageView.setup(R.drawable.elephant_error,
-                    R.string.error_generic, retryAction)
+            messageView.setup(
+                R.drawable.elephant_error,
+                R.string.error_generic, retryAction
+            )
         }
     }
 
@@ -188,7 +214,7 @@ class AccountsInListFragment : DialogFragment(), Injectable {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_follow_request, parent, false)
+                .inflate(R.layout.item_follow_request, parent, false)
             return ViewHolder(view)
         }
 
@@ -196,8 +222,10 @@ class AccountsInListFragment : DialogFragment(), Injectable {
             holder.bind(getItem(position))
         }
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-                View.OnClickListener, LayoutContainer {
+        inner class ViewHolder(itemView: View) :
+            RecyclerView.ViewHolder(itemView),
+            View.OnClickListener,
+            LayoutContainer {
 
             override val containerView = itemView
 
@@ -205,7 +233,7 @@ class AccountsInListFragment : DialogFragment(), Injectable {
                 acceptButton.hide()
                 rejectButton.setOnClickListener(this)
                 rejectButton.contentDescription =
-                        itemView.context.getString(R.string.action_remove_from_list)
+                    itemView.context.getString(R.string.action_remove_from_list)
             }
 
             fun bind(account: Account) {
@@ -226,28 +254,28 @@ class AccountsInListFragment : DialogFragment(), Injectable {
         }
 
         override fun areContentsTheSame(oldItem: AccountInfo, newItem: AccountInfo): Boolean {
-            return oldItem.second == newItem.second
-                    && oldItem.first.deepEquals(newItem.first)
+            return oldItem.second == newItem.second &&
+                oldItem.first.deepEquals(newItem.first)
         }
-
     }
 
     inner class SearchAdapter : ListAdapter<AccountInfo, SearchAdapter.ViewHolder>(SearchDiffer) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_follow_request, parent, false)
+                .inflate(R.layout.item_follow_request, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val (account, inAList) = getItem(position)
             holder.bind(account, inAList)
-
         }
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-                View.OnClickListener, LayoutContainer {
+        inner class ViewHolder(itemView: View) :
+            RecyclerView.ViewHolder(itemView),
+            View.OnClickListener,
+            LayoutContainer {
 
             override val containerView = itemView
 
@@ -257,12 +285,12 @@ class AccountsInListFragment : DialogFragment(), Injectable {
                 loadAvatar(account.avatar, avatar, radius, animateAvatar)
 
                 rejectButton.apply {
-                    if (inAList) {
+                    contentDescription = if (inAList) {
                         setImageResource(R.drawable.ic_reject_24dp)
-                        contentDescription = getString(R.string.action_remove_from_list)
+                        getString(string.action_remove_from_list)
                     } else {
                         setImageResource(R.drawable.ic_plus_24dp)
-                        contentDescription = getString(R.string.action_add_to_list)
+                        getString(string.action_add_to_list)
                     }
                 }
             }

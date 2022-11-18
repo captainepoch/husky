@@ -47,7 +47,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.util.*
+import java.util.Random
 import javax.inject.Inject
 
 /**
@@ -57,13 +57,17 @@ import javax.inject.Inject
  */
 
 class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
+
     companion object {
         @JvmStatic
-        fun newInstance(accountId: String, enableSwipeToRefresh:Boolean=true): AccountMediaFragment {
+        fun newInstance(
+            accountId: String,
+            enableSwipeToRefresh: Boolean = true
+        ): AccountMediaFragment {
             val fragment = AccountMediaFragment()
             val args = Bundle()
             args.putString(ACCOUNT_ID_ARG, accountId)
-            args.putBoolean(ARG_ENABLE_SWIPE_TO_REFRESH,enableSwipeToRefresh)
+            args.putBoolean(ARG_ENABLE_SWIPE_TO_REFRESH, enableSwipeToRefresh)
             fragment.arguments = args
             return fragment
         }
@@ -133,8 +137,10 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
 
                     if (statuses.isEmpty()) {
                         statusView.show()
-                        statusView.setup(R.drawable.elephant_friend_empty, R.string.message_empty,
-                                null)
+                        statusView.setup(
+                            R.drawable.elephant_friend_empty, R.string.message_empty,
+                            null
+                        )
                     }
                 }
             }
@@ -153,7 +159,10 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
             val body = response.body()
             body?.let { fetched ->
                 Log.d(TAG, "fetched ${fetched.size} statuses")
-                if (fetched.isNotEmpty()) Log.d(TAG, "first: ${fetched.first().id}, last: ${fetched.last().id}")
+                if (fetched.isNotEmpty()) Log.d(
+                    TAG,
+                    "first: ${fetched.first().id}, last: ${fetched.last().id}"
+                )
 
                 // filter muted statuses if needed
                 val filtered = fetched.filter { !(filterMuted && it.muted) }
@@ -168,27 +177,31 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
                 adapter.addBottom(result)
             }
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        isSwipeToRefreshEnabled = arguments?.getBoolean(ARG_ENABLE_SWIPE_TO_REFRESH,true) == true
-        accountId =  arguments?.getString(ACCOUNT_ID_ARG)!!
+        isSwipeToRefreshEnabled = arguments?.getBoolean(
+            ARG_ENABLE_SWIPE_TO_REFRESH, true
+        ) == true
+        accountId = arguments?.getString(ACCOUNT_ID_ARG)!!
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_timeline, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val columnCount = view.context.resources.getInteger(R.integer.profile_media_column_count)
         val layoutManager = GridLayoutManager(view.context, columnCount)
 
-        adapter.baseItemColor =  ThemeUtils.getColor(view.context, android.R.attr.windowBackground)
+        adapter.baseItemColor = ThemeUtils.getColor(view.context, android.R.attr.windowBackground)
 
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
@@ -207,11 +220,25 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
                 if (dy > 0) {
                     val itemCount = layoutManager.itemCount
                     val lastItem = layoutManager.findLastCompletelyVisibleItemPosition()
-                    if (itemCount <= lastItem + 3 && fetchingStatus == FetchingStatus.NOT_FETCHING) {
+                    if (itemCount <= lastItem + 3 &&
+                        fetchingStatus == FetchingStatus.NOT_FETCHING
+                    ) {
                         statuses.lastOrNull()?.let { last ->
-                            Log.d(TAG, "Requesting statuses with max_id: ${last.id}, (bottom)")
+                            Log.d(
+                                TAG,
+                                "Requesting statuses with " +
+                                    "max_id: ${last.id}, (bottom)"
+                            )
                             fetchingStatus = FetchingStatus.FETCHING_BOTTOM
-                            currentCall = api.accountStatuses(accountId, last.id, null, null, null, true, null)
+                            currentCall = api.accountStatuses(
+                                accountId,
+                                last.id,
+                                null,
+                                null,
+                                null,
+                                true,
+                                null
+                            )
                             currentCall?.enqueue(bottomCallback)
                         }
                     }
@@ -220,7 +247,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
         })
 
         filterMuted = PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean(
-                PrefKeys.HIDE_MUTED_USERS, false
+            PrefKeys.HIDE_MUTED_USERS, false
         )
 
         doInitialLoadingIfNeeded()
@@ -234,7 +261,10 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
             api.accountStatuses(accountId, null, null, null, null, true, null)
         } else {
             fetchingStatus = FetchingStatus.REFRESHING
-            api.accountStatuses(accountId, null, statuses[0].id, null, null, true, null)
+            api.accountStatuses(
+                accountId, null, statuses[0].id, null, null,
+                true, null
+            )
         }
         currentCall?.enqueue(callback)
 
@@ -250,8 +280,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
             fetchingStatus = FetchingStatus.INITIAL_FETCHING
             currentCall = api.accountStatuses(accountId, null, null, null, null, true, null)
             currentCall?.enqueue(callback)
-        }
-        else if (needToRefresh)
+        } else if (needToRefresh)
             refresh()
         needToRefresh = false
     }
@@ -267,7 +296,8 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
                 if (view != null && activity != null) {
                     val url = items[currentIndex].attachment.url
                     ViewCompat.setTransitionName(view, url)
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, view, url)
+                    val options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, view, url)
                     startActivity(intent, options.toBundle())
                 } else {
                     startActivity(intent)
@@ -284,7 +314,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
     }
 
     inner class MediaGridAdapter :
-            RecyclerView.Adapter<MediaGridAdapter.MediaViewHolder>() {
+        RecyclerView.Adapter<MediaGridAdapter.MediaViewHolder>() {
 
         var baseItemColor = Color.BLACK
 
@@ -325,15 +355,14 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
             val item = items[position]
 
             Glide.with(holder.imageView)
-                    .load(item.attachment.previewUrl)
-                    .centerInside()
-                    .into(holder.imageView)
+                .load(item.attachment.previewUrl)
+                .centerInside()
+                .into(holder.imageView)
         }
 
-
-        inner class MediaViewHolder(val imageView: ImageView)
-            : RecyclerView.ViewHolder(imageView),
-                View.OnClickListener {
+        inner class MediaViewHolder(val imageView: ImageView) :
+            RecyclerView.ViewHolder(imageView),
+            View.OnClickListener {
             init {
                 itemView.setOnClickListener(this)
             }
@@ -351,6 +380,4 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
         else
             needToRefresh = true
     }
-
-
 }

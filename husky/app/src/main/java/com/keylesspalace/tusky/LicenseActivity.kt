@@ -26,12 +26,11 @@ import android.widget.TextView
 import androidx.annotation.RawRes
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityLicenseBinding
-import com.keylesspalace.tusky.databinding.ActivityLoginBinding
 import com.keylesspalace.tusky.util.IOUtils
+import timber.log.Timber
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import timber.log.Timber
 
 class LicenseActivity : BaseActivity() {
 
@@ -53,7 +52,7 @@ class LicenseActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -69,12 +68,12 @@ class LicenseActivity : BaseActivity() {
 
         try {
             var line: String? = br.readLine()
-            while(line != null) {
+            while (line != null) {
                 sb.append(line)
                 sb.append('\n')
                 line = br.readLine()
             }
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             Timber.w(e)
         }
 

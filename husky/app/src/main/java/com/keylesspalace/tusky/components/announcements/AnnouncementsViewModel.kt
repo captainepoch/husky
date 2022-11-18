@@ -113,11 +113,11 @@ class AnnouncementsViewModel @Inject constructor(
                 announcementsMutable.postValue(
                     Success(
                         announcements.value!!.data!!.map { announcement ->
-                            if(announcement.id == announcementId) {
+                            if (announcement.id == announcementId) {
                                 announcement.copy(
-                                    reactions = if(announcement.reactions.find { reaction -> reaction.name == name } != null) {
+                                    reactions = if (announcement.reactions.find { reaction -> reaction.name == name } != null) {
                                         announcement.reactions.map { reaction ->
-                                            if(reaction.name == name) {
+                                            if (reaction.name == name) {
                                                 reaction.copy(
                                                     count = reaction.count + 1,
                                                     me = true
@@ -160,11 +160,11 @@ class AnnouncementsViewModel @Inject constructor(
                 announcementsMutable.postValue(
                     Success(
                         announcements.value!!.data!!.map { announcement ->
-                            if(announcement.id == announcementId) {
+                            if (announcement.id == announcementId) {
                                 announcement.copy(
                                     reactions = announcement.reactions.mapNotNull { reaction ->
-                                        if(reaction.name == name) {
-                                            if(reaction.count > 1) {
+                                        if (reaction.name == name) {
+                                            if (reaction.count > 1) {
                                                 reaction.copy(
                                                     count = reaction.count - 1,
                                                     me = false

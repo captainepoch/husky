@@ -41,10 +41,12 @@ interface ItemInteractionListener {
     fun onChipClicked(tab: TabData, tabPosition: Int, chipPosition: Int)
 }
 
-class TabAdapter(private var data: List<TabData>,
-                 private val small: Boolean,
-                 private val listener: ItemInteractionListener,
-                 private var removeButtonEnabled: Boolean = false) : RecyclerView.Adapter<TabAdapter.ViewHolder>() {
+class TabAdapter(
+    private var data: List<TabData>,
+    private val small: Boolean,
+    private val listener: ItemInteractionListener,
+    private var removeButtonEnabled: Boolean = false
+) : RecyclerView.Adapter<TabAdapter.ViewHolder>() {
 
     fun updateData(newData: List<TabData>) {
         this.data = newData
@@ -89,9 +91,9 @@ class TabAdapter(private var data: List<TabData>,
         if (holder.itemView.removeButton != null) {
             holder.itemView.removeButton.isEnabled = removeButtonEnabled
             ThemeUtils.setDrawableTint(
-                    holder.itemView.context,
-                    holder.itemView.removeButton.drawable,
-                    (if (removeButtonEnabled) android.R.attr.textColorTertiary else R.attr.textColorDisabled)
+                holder.itemView.context,
+                holder.itemView.removeButton.drawable,
+                (if (removeButtonEnabled) android.R.attr.textColorTertiary else R.attr.textColorDisabled)
             )
         }
 
@@ -108,14 +110,14 @@ class TabAdapter(private var data: List<TabData>,
                 tab.arguments.forEachIndexed { i, arg ->
 
                     val chip = holder.itemView.chipGroup.getChildAt(i).takeUnless { it.id == R.id.actionChip } as Chip?
-                            ?: Chip(context).apply {
-                                holder.itemView.chipGroup.addView(this, holder.itemView.chipGroup.size - 1)
-                                chipIconTint = ColorStateList.valueOf(ThemeUtils.getColor(context, android.R.attr.textColorPrimary))
-                            }
+                        ?: Chip(context).apply {
+                            holder.itemView.chipGroup.addView(this, holder.itemView.chipGroup.size - 1)
+                            chipIconTint = ColorStateList.valueOf(ThemeUtils.getColor(context, android.R.attr.textColorPrimary))
+                        }
 
                     chip.text = arg
 
-                    if(tab.arguments.size <= 1) {
+                    if (tab.arguments.size <= 1) {
                         chip.chipIcon = null
                         chip.setOnClickListener(null)
                     } else {
@@ -126,14 +128,13 @@ class TabAdapter(private var data: List<TabData>,
                     }
                 }
 
-                while(holder.itemView.chipGroup.size - 1 > tab.arguments.size) {
+                while (holder.itemView.chipGroup.size - 1 > tab.arguments.size) {
                     holder.itemView.chipGroup.removeViewAt(tab.arguments.size)
                 }
 
                 holder.itemView.actionChip.setOnClickListener {
                     listener.onActionChipClicked(tab, holder.adapterPosition)
                 }
-
             } else {
                 holder.itemView.chipGroup.hide()
             }

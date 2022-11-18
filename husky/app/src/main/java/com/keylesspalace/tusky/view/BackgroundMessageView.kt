@@ -11,15 +11,14 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.util.visible
 import kotlinx.android.synthetic.main.view_background_message.view.*
 
-
 /**
  * This view is used for screens with downloadable content which may fail.
  * Can show an image, text and button below them.
  */
 class BackgroundMessageView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     init {
@@ -36,8 +35,11 @@ class BackgroundMessageView @JvmOverloads constructor(
      * Setup image, message and button.
      * If [clickListener] is `null` then the button will be hidden.
      */
-    fun setup(@DrawableRes imageRes: Int, @StringRes messageRes: Int,
-              clickListener: ((v: View) -> Unit)? = null) {
+    fun setup(
+        @DrawableRes imageRes: Int,
+        @StringRes messageRes: Int,
+        clickListener: ((v: View) -> Unit)? = null
+    ) {
         messageTextView.setText(messageRes)
         imageView.setImageResource(imageRes)
         button.setOnClickListener(clickListener)

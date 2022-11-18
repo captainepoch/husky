@@ -45,13 +45,13 @@ import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.isLessThan
 import dagger.android.AndroidInjection
-import javax.inject.Inject
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import timber.log.Timber
+import javax.inject.Inject
 
 class StreamingService : Service(), Injectable {
 
@@ -84,19 +84,19 @@ class StreamingService : Service(), Injectable {
     }
 
     private fun stopStreamingForId(id: Long) {
-        if(id in sockets) {
+        if (id in sockets) {
             sockets[id]?.close(1000, null)
             sockets.remove(id)
         }
     }
 
     private fun stopStreaming() {
-        for(sock in sockets) {
+        for (sock in sockets) {
             sock.value.close(1000, null)
         }
         sockets.clear()
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
         }
 
@@ -113,7 +113,7 @@ class StreamingService : Service(), Injectable {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if(intent.getBooleanExtra(KEY_STOP_STREAMING, false)) {
+        if (intent.getBooleanExtra(KEY_STOP_STREAMING, false)) {
             Timber.d("Stream goes suya..")
             stopStreaming()
             stopSelfResult(startId)
@@ -123,10 +123,10 @@ class StreamingService : Service(), Injectable {
         var description = getString(R.string.streaming_notification_description)
         val accounts = accountManager.getAllAccountsOrderedByActive()
         var count = 0
-        for(account in accounts) {
+        for (account in accounts) {
             stopStreamingForId(account.id)
 
-            if(!account.notificationsStreamingEnabled) {
+            if (!account.notificationsStreamingEnabled) {
                 continue
             }
 
@@ -148,14 +148,14 @@ class StreamingService : Service(), Injectable {
             count++
         }
 
-        if(count <= 0) {
+        if (count <= 0) {
             Timber.d("No accounts. Stopping stream")
             stopStreaming()
             stopSelfResult(startId)
             return START_NOT_STICKY
         }
 
-        if(NotificationHelper.NOTIFICATION_USE_CHANNELS) {
+        if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.streaming_notification_name),
@@ -174,11 +174,11 @@ class StreamingService : Service(), Injectable {
 
         val showDescription = PreferenceManager.getDefaultSharedPreferences(this)
             .getBoolean(PrefKeys.HIDE_LIVE_NOTIFICATION_DESCRIPTION, false)
-        if(!showDescription) {
+        if (!showDescription) {
             builder.setContentText(description)
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
             startForeground(1337, builder.build())
         } else {
@@ -201,7 +201,7 @@ class StreamingService : Service(), Injectable {
 
         @JvmStatic
         private fun startForegroundService(ctx: Context, intent: Intent) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 ctx.startForegroundService(intent)
             } else {
                 ctx.startService(intent)
@@ -221,7 +221,7 @@ class StreamingService : Service(), Injectable {
         @JvmStatic
         fun stopStreaming(context: Context) {
             synchronized(serviceRunning) {
-                if(!serviceRunning) {
+                if (!serviceRunning) {
                     return
                 }
 
@@ -255,16 +255,16 @@ class StreamingService : Service(), Injectable {
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 val event = gson.fromJson(text, StreamEvent::class.java)
-                when(event.event) {
+                when (event.event) {
                     StreamEvent.EventType.NOTIFICATION -> {
                         val notification = gson.fromJson(event.payload, Notification::class.java)
                         NotificationHelper.make(this@StreamingService, notification, account, true)
 
-                        if(notification.type == Notification.Type.CHAT_MESSAGE) {
+                        if (notification.type == Notification.Type.CHAT_MESSAGE) {
                             eventHub.dispatch(ChatMessageReceivedEvent(notification.chatMessage!!))
                         }
 
-                        if(account.lastNotificationId.isLessThan(notification.id)) {
+                        if (account.lastNotificationId.isLessThan(notification.id)) {
                             account.lastNotificationId = notification.id
                             accountManager.saveAccount(account)
                         }

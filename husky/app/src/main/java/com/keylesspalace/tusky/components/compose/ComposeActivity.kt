@@ -119,17 +119,18 @@ import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.parcel.Parcelize
+import me.thanel.markdownedit.MarkdownEdit
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
-import kotlinx.android.parcel.Parcelize
-import me.thanel.markdownedit.MarkdownEdit
-import timber.log.Timber
 
-class ComposeActivity : BaseActivity(),
+class ComposeActivity :
+    BaseActivity(),
     ComposeOptionsListener,
     ComposeAutoCompleteAdapter.AutocompletionProvider,
     OnEmojiSelectedListener,
@@ -173,7 +174,7 @@ class ComposeActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
-        if(theme == "black") {
+        if (theme == "black") {
             setTheme(R.style.TuskyDialogActivityBlackTheme)
         }
         setContentView(binding.root)
@@ -212,7 +213,7 @@ class ComposeActivity : BaseActivity(),
 
         val composeOptions = intent.getParcelableExtra<ComposeOptions?>(COMPOSE_OPTIONS_EXTRA)
 
-        suggestFormattingSyntax = if(!composeOptions?.formattingSyntax.isNullOrEmpty()) {
+        suggestFormattingSyntax = if (!composeOptions?.formattingSyntax.isNullOrEmpty()) {
             composeOptions?.formattingSyntax!!
         } else {
             activeAccount.defaultFormattingSyntax
@@ -221,11 +222,11 @@ class ComposeActivity : BaseActivity(),
         viewModel.setup(composeOptions)
         setupReplyViews(composeOptions?.replyingStatusAuthor, composeOptions?.replyingStatusContent)
         val tootText = composeOptions?.tootText
-        if(!tootText.isNullOrEmpty()) {
+        if (!tootText.isNullOrEmpty()) {
             binding.composeEditField.setText(tootText)
         }
 
-        if(!composeOptions?.scheduledAt.isNullOrEmpty()) {
+        if (!composeOptions?.scheduledAt.isNullOrEmpty()) {
             binding.composeScheduleView.setDateTime(composeOptions?.scheduledAt)
         }
 
@@ -243,20 +244,20 @@ class ComposeActivity : BaseActivity(),
         eventHub.events.observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this, Lifecycle.Event.ON_DESTROY)
             .subscribe { event: Event? ->
-                when(event) {
+                when (event) {
                     is StatusPreviewEvent -> onStatusPreviewReady(event.status)
                 }
             }
     }
 
     private fun applyShareIntent(intent: Intent, savedInstanceState: Bundle?) {
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             /* Get incoming images being sent through a share action from another app. Only do this
              * when savedInstanceState is null, otherwise both the images from the intent and the
              * instance state will be re-queued. */
             intent.type?.also { type ->
-                if(type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
-                    when(intent.action) {
+                if (type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
+                    when (intent.action) {
                         Intent.ACTION_SEND -> {
                             intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.let { uri ->
                                 pickMedia(uri)
@@ -269,16 +270,16 @@ class ComposeActivity : BaseActivity(),
                                 }
                         }
                     }
-                } else if(type == "text/plain" && intent.action == Intent.ACTION_SEND) {
+                } else if (type == "text/plain" && intent.action == Intent.ACTION_SEND) {
                     val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
                     val text = intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
-                    val shareBody = if(!subject.isNullOrBlank() && subject !in text) {
+                    val shareBody = if (!subject.isNullOrBlank() && subject !in text) {
                         subject + '\n' + text
                     } else {
                         text
                     }
 
-                    if(shareBody.isNotBlank()) {
+                    if (shareBody.isNotBlank()) {
                         val start = binding.composeEditField.selectionStart.coerceAtLeast(0)
                         val end = binding.composeEditField.selectionEnd.coerceAtLeast(0)
                         val left = min(start, end)
@@ -300,7 +301,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun setupReplyViews(replyingStatusAuthor: String?, replyingStatusContent: String?) {
-        if(replyingStatusAuthor != null) {
+        if (replyingStatusAuthor != null) {
             binding.composeReplyView.show()
             binding.composeReplyView.text = getString(R.string.replying_to, replyingStatusAuthor)
             val arrowDownIcon =
@@ -317,7 +318,7 @@ class ComposeActivity : BaseActivity(),
             binding.composeReplyView.setOnClickListener {
                 TransitionManager.beginDelayedTransition(binding.composeReplyContentView.parent as ViewGroup)
 
-                if(binding.composeReplyContentView.isVisible) {
+                if (binding.composeReplyContentView.isVisible) {
                     binding.composeReplyContentView.hide()
                     binding.composeReplyView.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         null,
@@ -346,7 +347,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun setupContentWarningField(startingContentWarning: String?) {
-        if(startingContentWarning != null) {
+        if (startingContentWarning != null) {
             binding.composeContentWarningField.setText(startingContentWarning)
         }
 
@@ -379,8 +380,8 @@ class ComposeActivity : BaseActivity(),
         }
 
         // work around Android platform bug -> https://issuetracker.google.com/issues/67102093
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.O
-            || Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
         ) {
             binding.composeEditField.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
@@ -408,27 +409,27 @@ class ComposeActivity : BaseActivity(),
             }
 
             viewModel.instanceMetadata.observe { instanceData ->
-                if(instanceData.supportsMarkdown) {
+                if (instanceData.supportsMarkdown) {
                     supportedFormattingSyntax.add("text/markdown")
                 }
 
-                if(instanceData.supportsBBcode) {
+                if (instanceData.supportsBBcode) {
                     supportedFormattingSyntax.add("text/bbcode")
                 }
 
-                if(instanceData.supportsHTML) {
+                if (instanceData.supportsHTML) {
                     supportedFormattingSyntax.add("text/html")
                 }
 
-                if(supportedFormattingSyntax.size != 0) {
+                if (supportedFormattingSyntax.size != 0) {
                     binding.composeFormattingSyntax.visible(true)
 
                     val supportsPrefferedSyntax =
                         supportedFormattingSyntax.contains(viewModel.formattingSyntax.value!!)
 
-                    if(!supportsPrefferedSyntax) {
+                    if (!supportsPrefferedSyntax) {
                         suggestFormattingSyntax =
-                            if(supportedFormattingSyntax.contains(activeAccount.defaultFormattingSyntax))
+                            if (supportedFormattingSyntax.contains(activeAccount.defaultFormattingSyntax))
                                 activeAccount.defaultFormattingSyntax
                             else supportedFormattingSyntax[0]
 
@@ -436,20 +437,20 @@ class ComposeActivity : BaseActivity(),
                     }
                 }
 
-                if(instanceData.software == "pleroma") {
+                if (instanceData.software == "pleroma") {
                     binding.composePreviewButton.visibility = View.VISIBLE
                     reenableAttachments()
                 }
             }
 
             viewModel.haveStickers.observe { haveStickers ->
-                if(haveStickers) {
+                if (haveStickers) {
                     binding.composeStickerButton.visibility = View.VISIBLE
                 }
             }
 
             viewModel.instanceStickers.observe { stickers ->
-                if(stickers.isNotEmpty()) {
+                if (stickers.isNotEmpty()) {
                     binding.composeStickerButton.visibility = View.VISIBLE
                     enableButton(
                         binding.composeStickerButton,
@@ -475,7 +476,7 @@ class ComposeActivity : BaseActivity(),
 
             viewModel.media.observe { media ->
                 mediaAdapter.submitList(media)
-                if(media.size != mediaCount) {
+                if (media.size != mediaCount) {
                     mediaCount = media.size
                     binding.composeMediaPreviewBar.visible(media.isNotEmpty())
                     updateSensitiveMediaToggle(
@@ -491,7 +492,7 @@ class ComposeActivity : BaseActivity(),
             }
 
             viewModel.scheduledAt.observe { scheduledAt ->
-                if(scheduledAt == null) {
+                if (scheduledAt == null) {
                     binding.composeScheduleView.resetSchedule()
                 } else {
                     binding.composeScheduleView.setDateTime(scheduledAt)
@@ -500,9 +501,9 @@ class ComposeActivity : BaseActivity(),
             }
 
             combineOptionalLiveData(viewModel.media, viewModel.poll) { media, poll ->
-                if(!viewModel.hasNoAttachmentLimits) {
-                    val active = poll == null && media!!.size != 4
-                            && (media.isEmpty() || media.first().type == QueuedMedia.Type.IMAGE)
+                if (!viewModel.hasNoAttachmentLimits) {
+                    val active = poll == null && media!!.size != 4 &&
+                        (media.isEmpty() || media.first().type == QueuedMedia.Type.IMAGE)
                     enableButton(binding.composeAddMediaButton, active, active)
                     enablePollButton(media.isNullOrEmpty())
                 }
@@ -518,7 +519,7 @@ class ComposeActivity : BaseActivity(),
             }
 
             viewModel.formattingSyntax.observe {
-                if(it.isEmpty()) {
+                if (it.isEmpty()) {
                     enableFormattingSyntaxButton(suggestFormattingSyntax, false)
                     setIconForSyntax(suggestFormattingSyntax, false)
                 } else {
@@ -610,7 +611,6 @@ class ComposeActivity : BaseActivity(),
             setDisplayShowHomeEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_close_24dp)
         }
-
     }
 
     private fun setupAvatar(preferences: SharedPreferences, activeAccount: AccountEntity) {
@@ -639,7 +639,7 @@ class ComposeActivity : BaseActivity(),
         val end =
             binding.composeEditField.selectionStart.coerceAtLeast(binding.composeEditField.selectionEnd)
         val textToInsert =
-            if(start > 0 && !binding.composeEditField.text[start - 1].isWhitespace()) {
+            if (start > 0 && !binding.composeEditField.text[start - 1].isWhitespace()) {
                 " $text"
             } else {
                 text
@@ -651,21 +651,21 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun enableFormattingSyntaxButton(syntax: String, enable: Boolean) {
-        val stringId = when(syntax) {
+        val stringId = when (syntax) {
             "text/html" -> R.string.action_html
             "text/bbcode" -> R.string.action_bbcode
             else -> R.string.action_markdown
         }
 
         val actionStringId =
-            if(enable) R.string.action_disable_formatting_syntax else R.string.action_enable_formatting_syntax
+            if (enable) R.string.action_disable_formatting_syntax else R.string.action_enable_formatting_syntax
         val tooltipText = getString(actionStringId).format(stringId)
 
         binding.composeFormattingSyntax.contentDescription = tooltipText
 
         @ColorInt val color = ThemeUtils.getColor(
             this,
-            if(enable) R.attr.colorPrimary else android.R.attr.textColorTertiary
+            if (enable) R.attr.colorPrimary else android.R.attr.textColorTertiary
         )
         binding.composeFormattingSyntax.drawable.colorFilter =
             PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
@@ -674,20 +674,20 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun setIconForSyntax(syntax: String, enable: Boolean) {
-        val drawableId = when(syntax) {
+        val drawableId = when (syntax) {
             "text/html" -> R.drawable.ic_html_24dp
             "text/bbcode" -> R.drawable.ic_bbcode_24dp
             else -> R.drawable.ic_markdown
         }
 
         suggestFormattingSyntax =
-            if(drawableId == R.drawable.ic_markdown) "text/markdown" else syntax
+            if (drawableId == R.drawable.ic_markdown) "text/markdown" else syntax
         binding.composeFormattingSyntax.setImageResource(drawableId)
         enableFormattingSyntaxButton(syntax, enable)
     }
 
     private fun toggleFormattingMode() {
-        if(viewModel.formattingSyntax.value!! == suggestFormattingSyntax) {
+        if (viewModel.formattingSyntax.value!! == suggestFormattingSyntax) {
             viewModel.formattingSyntax.value = ""
         } else {
             viewModel.formattingSyntax.value = suggestFormattingSyntax
@@ -702,20 +702,20 @@ class ComposeActivity : BaseActivity(),
         val htmlId = 3
 
         menu.menu.add(0, plaintextId, 0, R.string.action_plaintext)
-        if(viewModel.instanceMetadata.value?.supportsMarkdown == true) {
+        if (viewModel.instanceMetadata.value?.supportsMarkdown == true) {
             menu.menu.add(0, markdownId, 0, R.string.action_markdown)
         }
 
-        if(viewModel.instanceMetadata.value?.supportsBBcode == true) {
+        if (viewModel.instanceMetadata.value?.supportsBBcode == true) {
             menu.menu.add(0, bbcodeId, 0, R.string.action_bbcode)
         }
 
-        if(viewModel.instanceMetadata.value?.supportsHTML == true) {
+        if (viewModel.instanceMetadata.value?.supportsHTML == true) {
             menu.menu.add(0, htmlId, 0, R.string.action_html)
         }
 
         menu.setOnMenuItemClickListener { menuItem ->
-            val choose = when(menuItem.itemId) {
+            val choose = when (menuItem.itemId) {
                 markdownId -> "text/markdown"
                 bbcodeId -> "text/bbcode"
                 htmlId -> "text/html"
@@ -731,7 +731,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun enableMarkdownWYSIWYGButtons(visible: Boolean) {
-        val visibility = if(visible) View.VISIBLE else View.GONE
+        val visibility = if (visible) View.VISIBLE else View.GONE
         binding.codeButton.visibility = visibility
         binding.linkButton.visibility = visibility
         binding.strikethroughButton.visibility = visibility
@@ -747,7 +747,7 @@ class ComposeActivity : BaseActivity(),
             binding.composeEditField.selectionStart.coerceAtLeast(binding.composeEditField.selectionEnd)
         val editorText = binding.composeEditField.text
 
-        if(start == end) {
+        if (start == end) {
             // No selection, just insert text at caret
             editorText.insert(start, text)
             // Set the cursor after the inserted text
@@ -759,10 +759,10 @@ class ComposeActivity : BaseActivity(),
 
             // Iterate the selection backward so we don't have to juggle indices on insertion
             var index = end - 1
-            while(index >= start - 1 && index >= 0) {
+            while (index >= start - 1 && index >= 0) {
                 wasWord = isWord
                 isWord = !Character.isWhitespace(editorText[index])
-                if(wasWord && !isWord) {
+                if (wasWord && !isWord) {
                     // We've reached the beginning of a word, perform insert
                     editorText.insert(index + 1, text)
                     newEnd += text.length
@@ -770,7 +770,7 @@ class ComposeActivity : BaseActivity(),
                 --index
             }
 
-            if(start == 0 && isWord) {
+            if (start == 0 && isWord) {
                 // Special case when the selection includes the start of the text
                 editorText.insert(0, text)
                 newEnd += text.length
@@ -781,7 +781,6 @@ class ComposeActivity : BaseActivity(),
         }
     }
 
-
     private fun atButtonClicked() {
         prependSelectedWordsWith("@")
     }
@@ -791,7 +790,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun codeButtonClicked() {
-        when(viewModel.formattingSyntax.value!!) {
+        when (viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addCode(binding.composeEditField)
             "text/bbcode" -> BBCodeEdit.addCode(binding.composeEditField)
             "text/html" -> HTMLEdit.addCode(binding.composeEditField)
@@ -799,7 +798,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun linkButtonClicked() {
-        when(viewModel.formattingSyntax.value!!) {
+        when (viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addLink(binding.composeEditField)
             "text/bbcode" -> BBCodeEdit.addLink(binding.composeEditField)
             "text/html" -> HTMLEdit.addLink(binding.composeEditField)
@@ -807,7 +806,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun strikethroughButtonClicked() {
-        when(viewModel.formattingSyntax.value!!) {
+        when (viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addStrikeThrough(binding.composeEditField)
             "text/bbcode" -> BBCodeEdit.addStrikeThrough(binding.composeEditField)
             "text/html" -> HTMLEdit.addStrikeThrough(binding.composeEditField)
@@ -815,7 +814,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun italicButtonClicked() {
-        when(viewModel.formattingSyntax.value!!) {
+        when (viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addItalic(binding.composeEditField)
             "text/bbcode" -> BBCodeEdit.addItalic(binding.composeEditField)
             "text/html" -> HTMLEdit.addItalic(binding.composeEditField)
@@ -823,7 +822,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun boldButtonClicked() {
-        when(viewModel.formattingSyntax.value!!) {
+        when (viewModel.formattingSyntax.value!!) {
             "text/markdown" -> MarkdownEdit.addBold(binding.composeEditField)
             "text/bbcode" -> BBCodeEdit.addBold(binding.composeEditField)
             "text/html" -> HTMLEdit.addBold(binding.composeEditField)
@@ -837,7 +836,7 @@ class ComposeActivity : BaseActivity(),
 
     private fun displayTransientError(@StringRes stringId: Int) {
         val bar = Snackbar.make(binding.root, stringId, Snackbar.LENGTH_LONG)
-        //necessary so snackbar is shown over everything
+        // necessary so snackbar is shown over everything
         bar.view.elevation = resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
         bar.show()
     }
@@ -850,18 +849,17 @@ class ComposeActivity : BaseActivity(),
         markMediaSensitive: Boolean,
         contentWarningShown: Boolean
     ) {
-        if(viewModel.media.value.isNullOrEmpty()) {
+        if (viewModel.media.value.isNullOrEmpty()) {
             binding.composeHideMediaButton.hide()
         } else {
             binding.composeHideMediaButton.show()
-            @ColorInt val color = if(contentWarningShown) {
+            @ColorInt val color = if (contentWarningShown) {
                 binding.composeHideMediaButton.setImageResource(R.drawable.ic_hide_media_24dp)
                 binding.composeHideMediaButton.isClickable = false
                 ContextCompat.getColor(this, R.color.transparent_tusky_blue)
-
             } else {
                 binding.composeHideMediaButton.isClickable = true
-                if(markMediaSensitive) {
+                if (markMediaSensitive) {
                     binding.composeHideMediaButton.setImageResource(R.drawable.ic_hide_media_24dp)
                     ContextCompat.getColor(this, R.color.tusky_blue)
                 } else {
@@ -875,7 +873,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun updateScheduleButton() {
-        @ColorInt val color = if(binding.composeScheduleView.time == null) {
+        @ColorInt val color = if (binding.composeScheduleView.time == null) {
             ThemeUtils.getColor(this, android.R.attr.textColorTertiary)
         } else {
             ContextCompat.getColor(this, R.color.tusky_blue)
@@ -900,7 +898,7 @@ class ComposeActivity : BaseActivity(),
         binding.composeOptionsBottomSheet.setStatusVisibility(visibility)
         binding.composeTootButton.setStatusVisibility(visibility)
 
-        val iconRes = when(visibility) {
+        val iconRes = when (visibility) {
             Status.Visibility.PUBLIC -> R.drawable.ic_public_24dp
             Status.Visibility.PRIVATE -> R.drawable.ic_lock_outline_24dp
             Status.Visibility.DIRECT -> R.drawable.ic_email_24dp
@@ -911,7 +909,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun showComposeOptions() {
-        if(composeOptionsBehavior.state == BottomSheetBehavior.STATE_HIDDEN || composeOptionsBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_HIDDEN || composeOptionsBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -924,7 +922,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun onScheduleClick() {
-        if(viewModel.scheduledAt.value == null) {
+        if (viewModel.scheduledAt.value == null) {
             binding.composeScheduleView.openPickDateDialog()
         } else {
             showScheduleView()
@@ -932,7 +930,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun showScheduleView() {
-        if(scheduleBehavior.state == BottomSheetBehavior.STATE_HIDDEN || scheduleBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (scheduleBehavior.state == BottomSheetBehavior.STATE_HIDDEN || scheduleBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             scheduleBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -946,14 +944,14 @@ class ComposeActivity : BaseActivity(),
 
     private fun showEmojis() {
         binding.emojiView.adapter?.let {
-            if(it.itemCount == 0) {
+            if (it.itemCount == 0) {
                 val errorMessage = getString(
                     R.string.error_no_custom_emojis,
                     accountManager.activeAccount!!.domain
                 )
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             } else {
-                if(emojiBehavior.state == BottomSheetBehavior.STATE_HIDDEN || emojiBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                if (emojiBehavior.state == BottomSheetBehavior.STATE_HIDDEN || emojiBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                     emojiBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -968,7 +966,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun openPickDialog() {
-        if(addMediaBehavior.state == BottomSheetBehavior.STATE_HIDDEN || addMediaBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (addMediaBehavior.state == BottomSheetBehavior.STATE_HIDDEN || addMediaBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             addMediaBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -983,10 +981,10 @@ class ComposeActivity : BaseActivity(),
     private fun onMediaPick() {
         addMediaBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                //Wait until bottom sheet is not collapsed and show next screen after
-                if(newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                // Wait until bottom sheet is not collapsed and show next screen after
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     addMediaBehavior.removeBottomSheetCallback(this)
-                    if(ContextCompat.checkSelfPermission(
+                    if (ContextCompat.checkSelfPermission(
                             this@ComposeActivity,
                             Manifest.permission.READ_EXTERNAL_STORAGE
                         ) != PackageManager.PERMISSION_GRANTED
@@ -1036,7 +1034,7 @@ class ComposeActivity : BaseActivity(),
             popup.menu.add(0, editId, 0, R.string.edit_poll)
             popup.menu.add(0, removeId, 0, R.string.action_remove)
             popup.setOnMenuItemClickListener { menuItem ->
-                when(menuItem.itemId) {
+                when (menuItem.itemId) {
                     editId -> openPollDialog()
                     removeId -> removePoll()
                 }
@@ -1060,13 +1058,13 @@ class ComposeActivity : BaseActivity(),
     fun calculateTextLength(): Int {
         var offset = 0
         val urlSpans = binding.composeEditField.urls
-        if(urlSpans != null) {
-            for(span in urlSpans) {
+        if (urlSpans != null) {
+            for (span in urlSpans) {
                 offset += max(0, span.url.length - MAXIMUM_URL_LENGTH)
             }
         }
         var length = binding.composeEditField.length() - offset
-        if(viewModel.showContentWarning.value!!) {
+        if (viewModel.showContentWarning.value!!) {
             length += binding.composeContentWarningField.length()
         }
         return length
@@ -1077,7 +1075,7 @@ class ComposeActivity : BaseActivity(),
         binding.composeCharactersLeftView.text =
             String.format(Locale.getDefault(), "%d", remainingLength)
 
-        val textColor = if(remainingLength < 0) {
+        val textColor = if (remainingLength < 0) {
             ContextCompat.getColor(this, R.color.tusky_red)
         } else {
             ThemeUtils.getColor(this, android.R.attr.textColorTertiary)
@@ -1100,15 +1098,15 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun onSendClicked(preview: Boolean) {
-        if(preview && previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN
-            && previewBehavior.state != BottomSheetBehavior.STATE_COLLAPSED
+        if (preview && previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN &&
+            previewBehavior.state != BottomSheetBehavior.STATE_COLLAPSED
         ) {
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
             return
         }
 
-        if(verifyScheduledTime()) {
+        if (verifyScheduledTime()) {
             sendStatus(preview)
         } else {
             showScheduleView()
@@ -1117,8 +1115,8 @@ class ComposeActivity : BaseActivity(),
 
     private fun onStatusPreviewReady(status: Status) {
         enableButtons(true)
-        if(previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN
-            && previewBehavior.state != BottomSheetBehavior.STATE_COLLAPSED
+        if (previewBehavior.state != BottomSheetBehavior.STATE_HIDDEN &&
+            previewBehavior.state != BottomSheetBehavior.STATE_COLLAPSED
         ) {
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
@@ -1141,13 +1139,13 @@ class ComposeActivity : BaseActivity(),
         // Verify the returned content's type is of the correct MIME type
         val supported = inputContentInfo.description.hasMimeType("image/*")
 
-        if(supported) {
+        if (supported) {
             val lacksPermission =
                 (flags and InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION) != 0
-            if(lacksPermission) {
+            if (lacksPermission) {
                 try {
                     inputContentInfo.requestPermission()
-                } catch(e: Exception) {
+                } catch (e: Exception) {
                     Timber.e("InputContentInfoCompat#requestPermission() failed: ${e.message}")
                     return false
                 }
@@ -1162,22 +1160,22 @@ class ComposeActivity : BaseActivity(),
     private fun sendStatus(preview: Boolean) {
         enableButtons(false)
         val tempText = binding.composeEditField.text.toString()
-        val contentText = if(viewModel.composeWithZwsp.value == true) {
+        val contentText = if (viewModel.composeWithZwsp.value == true) {
             tempText.composeWithZwsp()
         } else {
             tempText
         }
 
         var spoilerText = ""
-        if(viewModel.showContentWarning.value!!) {
+        if (viewModel.showContentWarning.value!!) {
             spoilerText = binding.composeContentWarningField.text.toString()
         }
         val characterCount = calculateTextLength()
-        if((characterCount <= 0 || contentText.isBlank()) && viewModel.media.value!!.isEmpty()) {
+        if ((characterCount <= 0 || contentText.isBlank()) && viewModel.media.value!!.isEmpty()) {
             binding.composeEditField.error = getString(R.string.error_empty)
             enableButtons(true)
-        } else if(characterCount <= maximumTootCharacters) {
-            if(viewModel.media.value!!.isNotEmpty()) {
+        } else if (characterCount <= maximumTootCharacters) {
+            if (viewModel.media.value!!.isNotEmpty()) {
                 finishingUploadDialog = ProgressDialog.show(
                     this, getString(R.string.dialog_title_finishing_media_upload),
                     getString(R.string.dialog_message_uploading_media), true, true
@@ -1186,11 +1184,10 @@ class ComposeActivity : BaseActivity(),
 
             viewModel.sendStatus(contentText, spoilerText, preview).observeOnce(this) {
                 finishingUploadDialog?.dismiss()
-                if(!preview) {
+                if (!preview) {
                     deleteDraftAndFinish()
                 }
             }
-
         } else {
             binding.composeEditField.error = getString(R.string.error_compose_character_limit)
             enableButtons(true)
@@ -1198,22 +1195,22 @@ class ComposeActivity : BaseActivity(),
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
+        requestCode: Int,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initiateMediaPicking()
             } else {
                 val bar = Snackbar.make(
                     binding.root, R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
-
                 }
                 bar.setAction(R.string.action_retry) { onMediaPick() }
-                //necessary so snackbar is shown over everything
+                // necessary so snackbar is shown over everything
                 bar.view.elevation =
                     resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
                 bar.show()
@@ -1228,10 +1225,10 @@ class ComposeActivity : BaseActivity(),
         // android.permission.WRITE_EXTERNAL_STORAGE only on SDKs *older* than Kitkat, which was
         // way before permission dialogues have been introduced.
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if(intent.resolveActivity(packageManager) != null) {
+        if (intent.resolveActivity(packageManager) != null) {
             val photoFile: File = try {
                 createNewImageFile(this)
-            } catch(ex: IOException) {
+            } catch (ex: IOException) {
                 displayTransientError(R.string.error_media_upload_opening)
                 return
             }
@@ -1250,7 +1247,7 @@ class ComposeActivity : BaseActivity(),
     private fun initiateMediaPicking() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
 
-        if(!viewModel.hasNoAttachmentLimits) {
+        if (!viewModel.hasNoAttachmentLimits) {
             val mimeTypes = arrayOf("image/*", "video/*", "audio/*")
             intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         }
@@ -1264,7 +1261,7 @@ class ComposeActivity : BaseActivity(),
         button.isEnabled = clickable
         ThemeUtils.setDrawableTint(
             this, button.drawable,
-            if(colorActive) android.R.attr.textColorTertiary
+            if (colorActive) android.R.attr.textColorTertiary
             else R.attr.textColorDisabled
         )
     }
@@ -1273,7 +1270,7 @@ class ComposeActivity : BaseActivity(),
         binding.addPollTextActionTextView.isEnabled = enable
         val textColor = ThemeUtils.getColor(
             this,
-            if(enable) android.R.attr.textColorTertiary
+            if (enable) android.R.attr.textColorTertiary
             else R.attr.textColorDisabled
         )
         binding.addPollTextActionTextView.setTextColor(textColor)
@@ -1287,14 +1284,14 @@ class ComposeActivity : BaseActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
-        if(resultCode == Activity.RESULT_OK && requestCode == MEDIA_PICK_RESULT && intent != null) {
-            if(intent.data != null) {
+        if (resultCode == Activity.RESULT_OK && requestCode == MEDIA_PICK_RESULT && intent != null) {
+            if (intent.data != null) {
                 // Single media, upload it and done.
                 pickMedia(intent.data!!)
-            } else if(intent.clipData != null) {
+            } else if (intent.clipData != null) {
                 val clipData = intent.clipData!!
                 val count = clipData.itemCount
-                if(mediaCount + count > maxUploadMediaNumber) {
+                if (mediaCount + count > maxUploadMediaNumber) {
                     // check if exist media + upcoming media > 4, then prob error message.
                     Toast.makeText(
                         this,
@@ -1303,13 +1300,13 @@ class ComposeActivity : BaseActivity(),
                     ).show()
                 } else {
                     // if not grater then 4, upload all multiple media.
-                    for(i in 0 until count) {
+                    for (i in 0 until count) {
                         val imageUri = clipData.getItemAt(i).uri
                         pickMedia(imageUri)
                     }
                 }
             }
-        } else if(resultCode == Activity.RESULT_OK && requestCode == MEDIA_TAKE_PHOTO_RESULT) {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == MEDIA_TAKE_PHOTO_RESULT) {
             pickMedia(photoUploadUri!!)
         }
     }
@@ -1325,7 +1322,7 @@ class ComposeActivity : BaseActivity(),
                     contentInfoCompat?.releasePermission()
 
                     exceptionOrItem.asLeftOrNull()?.let {
-                        val errorId = when(it) {
+                        val errorId = when (it) {
                             is VideoSizeException -> {
                                 R.string.error_video_upload_size
                             }
@@ -1351,7 +1348,7 @@ class ComposeActivity : BaseActivity(),
 
     private fun showContentWarning(show: Boolean) {
         TransitionManager.beginDelayedTransition(binding.composeContentWarningBar.parent as ViewGroup)
-        @ColorInt val color = if(show) {
+        @ColorInt val color = if (show) {
             binding.composeContentWarningBar.show()
             binding.composeContentWarningField.setSelection(binding.composeContentWarningField.text.length)
             binding.composeContentWarningField.requestFocus()
@@ -1363,11 +1360,10 @@ class ComposeActivity : BaseActivity(),
         }
         binding.composeContentWarningButton.drawable.colorFilter =
             PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) {
+        if (item.itemId == android.R.id.home) {
             handleCloseButton()
             return true
         }
@@ -1377,7 +1373,7 @@ class ComposeActivity : BaseActivity(),
 
     override fun onBackPressed() {
         // Acting like a teen: deliberately ignoring parent.
-        if(composeOptionsBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+        if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
             addMediaBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
             emojiBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
             scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
@@ -1400,16 +1396,16 @@ class ComposeActivity : BaseActivity(),
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Timber.d(event.toString())
 
-        if(event.action == KeyEvent.ACTION_UP) {
-            if(event.isCtrlPressed) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (event.action == KeyEvent.ACTION_UP) {
+            if (event.isCtrlPressed) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     // send toot by pressing CTRL + ENTER
                     this.onSendClicked(false)
                     return true
                 }
             }
 
-            if(keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
                 onBackPressed()
                 return true
             }
@@ -1420,7 +1416,7 @@ class ComposeActivity : BaseActivity(),
     private fun handleCloseButton() {
         val contentText = binding.composeEditField.text.toString()
         val contentWarning = binding.composeContentWarningField.text.toString()
-        if(viewModel.didChange(contentText, contentWarning)) {
+        if (viewModel.didChange(contentText, contentWarning)) {
             AlertDialog.Builder(this)
                 .setMessage(R.string.compose_save_draft)
                 .setPositiveButton(R.string.action_save) { _, _ ->
@@ -1452,7 +1448,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun setEmojiList(emojiList: List<Emoji>?) {
-        if(emojiList != null) {
+        if (emojiList != null) {
             binding.emojiView.adapter = EmojiAdapter(
                 emojiList,
                 this@ComposeActivity,
@@ -1463,7 +1459,7 @@ class ComposeActivity : BaseActivity(),
     }
 
     private fun showStickers() {
-        if(stickerBehavior.state == BottomSheetBehavior.STATE_HIDDEN || stickerBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (stickerBehavior.state == BottomSheetBehavior.STATE_HIDDEN || stickerBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             stickerBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -1485,7 +1481,7 @@ class ComposeActivity : BaseActivity(),
 
             override fun onResourceReady(resource: File, transition: Transition<in File>?) {
                 val cut = shortcode.lastIndexOf('/')
-                val filename = if(cut != -1) shortcode.substring(cut + 1) else "unknown.png"
+                val filename = if (cut != -1) shortcode.substring(cut + 1) else "unknown.png"
                 pickMedia(resource.toUri(), null, filename)
             }
         })
@@ -1515,7 +1511,7 @@ class ComposeActivity : BaseActivity(),
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
         binding.composeScheduleView.onTimeSet(hourOfDay, minute)
         viewModel.updateScheduledAt(binding.composeScheduleView.time)
-        if(verifyScheduledTime()) {
+        if (verifyScheduledTime()) {
             scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
             showScheduleView()
@@ -1572,9 +1568,11 @@ class ComposeActivity : BaseActivity(),
         }
 
         fun canHandleMimeType(mimeType: String?): Boolean {
-            return mimeType != null && (mimeType.startsWith("image/") || mimeType.startsWith("video/") || mimeType.startsWith(
-                "audio/"
-            ) || mimeType == "text/plain")
+            return mimeType != null && (
+                mimeType.startsWith("image/") || mimeType.startsWith("video/") || mimeType.startsWith(
+                    "audio/"
+                ) || mimeType == "text/plain"
+                )
         }
     }
 }

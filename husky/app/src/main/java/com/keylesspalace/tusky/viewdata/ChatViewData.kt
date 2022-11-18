@@ -5,29 +5,37 @@ import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Card
 import com.keylesspalace.tusky.entity.Emoji
-import java.util.*
-
+import java.util.Date
+import java.util.Objects
 
 abstract class ChatViewData {
-    abstract fun getViewDataId() : Int
-    abstract fun deepEquals(o: ChatViewData) : Boolean
+    abstract fun getViewDataId(): Int
+    abstract fun deepEquals(o: ChatViewData): Boolean
 
-    class Concrete(val account : Account,
+    class Concrete(
+        val account: Account,
         val id: String,
         val unread: Long,
         val lastMessage: ChatMessageViewData.Concrete?,
-        val updatedAt: Date ) : ChatViewData() {
+        val updatedAt: Date
+    ) : ChatViewData() {
         override fun getViewDataId(): Int {
             return id.hashCode()
         }
 
         override fun deepEquals(o: ChatViewData): Boolean {
             if (o !is Concrete) return false
-            return Objects.equals(o.account, account)
-                    && Objects.equals(o.id, id)
-                    && o.unread == unread
-                    && (lastMessage == o.lastMessage || (lastMessage != null && o.lastMessage != null && o.lastMessage.deepEquals(lastMessage)))
-                    && Objects.equals(o.updatedAt, updatedAt)
+            return Objects.equals(o.account, account) &&
+                Objects.equals(o.id, id) &&
+                o.unread == unread &&
+                (
+                    lastMessage == o.lastMessage ||
+                        (
+                            lastMessage != null &&
+                                o.lastMessage != null &&
+                                o.lastMessage.deepEquals(lastMessage)
+                            )
+                    ) && Objects.equals(o.updatedAt, updatedAt)
         }
 
         override fun hashCode(): Int {
@@ -48,7 +56,7 @@ abstract class ChatViewData {
         }
 
         override fun deepEquals(o: ChatViewData): Boolean {
-            if( o !is Placeholder ) return false
+            if (o !is Placeholder) return false
             return o.isLoading == isLoading && o.id == id
         }
 
@@ -68,36 +76,37 @@ abstract class ChatViewData {
 }
 
 abstract class ChatMessageViewData {
-    abstract fun getViewDataId() : Int
-    abstract fun deepEquals(o: ChatMessageViewData) : Boolean
+    abstract fun getViewDataId(): Int
+    abstract fun deepEquals(o: ChatMessageViewData): Boolean
 
-    class Concrete(val id: String,
-                   val content: Spanned?,
-                   val chatId: String,
-                   val accountId: String,
-                   val createdAt: Date,
-                   val attachment: Attachment?,
-                   val emojis: List<Emoji>,
-                   val card: Card?) : ChatMessageViewData()
-    {
+    class Concrete(
+        val id: String,
+        val content: Spanned?,
+        val chatId: String,
+        val accountId: String,
+        val createdAt: Date,
+        val attachment: Attachment?,
+        val emojis: List<Emoji>,
+        val card: Card?
+    ) : ChatMessageViewData() {
         override fun getViewDataId(): Int {
             return id.hashCode()
         }
 
         override fun deepEquals(o: ChatMessageViewData): Boolean {
-            if( o !is Concrete ) return false
+            if (o !is Concrete) return false
 
-            return Objects.equals(o.id, id)
-                    && Objects.equals(o.content, content)
-                    && Objects.equals(o.chatId, chatId)
-                    && Objects.equals(o.accountId, accountId)
-                    && Objects.equals(o.createdAt, createdAt)
-                    && Objects.equals(o.attachment, attachment)
-                    && Objects.equals(o.emojis, emojis)
-                    && Objects.equals(o.card, card)
+            return Objects.equals(o.id, id) &&
+                Objects.equals(o.content, content) &&
+                Objects.equals(o.chatId, chatId) &&
+                Objects.equals(o.accountId, accountId) &&
+                Objects.equals(o.createdAt, createdAt) &&
+                Objects.equals(o.attachment, attachment) &&
+                Objects.equals(o.emojis, emojis) &&
+                Objects.equals(o.card, card)
         }
 
-        override fun hashCode() : Int {
+        override fun hashCode(): Int {
             return Objects.hash(id, content, chatId, accountId, createdAt, attachment, card)
         }
 
@@ -115,7 +124,7 @@ abstract class ChatMessageViewData {
         }
 
         override fun deepEquals(o: ChatMessageViewData): Boolean {
-            if( o !is Placeholder) return false
+            if (o !is Placeholder) return false
             return o.isLoading == isLoading && o.id == id
         }
 

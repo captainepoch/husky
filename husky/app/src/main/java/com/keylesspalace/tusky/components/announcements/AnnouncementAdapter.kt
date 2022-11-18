@@ -32,22 +32,21 @@ import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.emojify
 import kotlinx.android.synthetic.main.item_announcement.view.*
 
-
-interface AnnouncementActionListener: LinkListener {
+interface AnnouncementActionListener : LinkListener {
     fun openReactionPicker(announcementId: String, target: View)
     fun addReaction(announcementId: String, name: String)
     fun removeReaction(announcementId: String, name: String)
 }
 
 class AnnouncementAdapter(
-        private var items: List<Announcement> = emptyList(),
-        private val listener: AnnouncementActionListener,
-        private val wellbeingEnabled: Boolean = false
+    private var items: List<Announcement> = emptyList(),
+    private val listener: AnnouncementActionListener,
+    private val wellbeingEnabled: Boolean = false
 ) : RecyclerView.Adapter<AnnouncementAdapter.AnnouncementViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_announcement, parent, false)
+            .inflate(R.layout.item_announcement, parent, false)
         return AnnouncementViewHolder(view)
     }
 
@@ -79,39 +78,43 @@ class AnnouncementAdapter(
             }
 
             item.reactions.forEachIndexed { i, reaction ->
-                (chips.getChildAt(i)?.takeUnless { it.id == R.id.addReactionChip } as Chip?
+                (
+                    chips.getChildAt(i)?.takeUnless { it.id == R.id.addReactionChip } as Chip?
                         ?: Chip(ContextThemeWrapper(view.context, R.style.Widget_MaterialComponents_Chip_Choice)).apply {
                             isCheckable = true
                             checkedIcon = null
                             chips.addView(this, i)
-                        })
-                        .apply {
-                            val emojiText = if (reaction.url == null) {
-                                reaction.name
-                            } else {
-                                view.context.getString(R.string.emoji_shortcode_format, reaction.name)
-                            }
-                            text = ("$emojiText ${reaction.count}")
-                                    .emojify(
-                                            listOf(Emoji(
-                                                    reaction.name,
-                                                    reaction.url ?: "",
-                                                    reaction.staticUrl ?: "",
-                                                    null
-                                            )),
-                                            this
+                        }
+                    )
+                    .apply {
+                        val emojiText = if (reaction.url == null) {
+                            reaction.name
+                        } else {
+                            view.context.getString(R.string.emoji_shortcode_format, reaction.name)
+                        }
+                        text = ("$emojiText ${reaction.count}")
+                            .emojify(
+                                listOf(
+                                    Emoji(
+                                        reaction.name,
+                                        reaction.url ?: "",
+                                        reaction.staticUrl ?: "",
+                                        null
                                     )
+                                ),
+                                this
+                            )
 
-                            isChecked = reaction.me
+                        isChecked = reaction.me
 
-                            setOnClickListener {
-                                if (reaction.me) {
-                                    listener.removeReaction(item.id, reaction.name)
-                                } else {
-                                    listener.addReaction(item.id, reaction.name)
-                                }
+                        setOnClickListener {
+                            if (reaction.me) {
+                                listener.removeReaction(item.id, reaction.name)
+                            } else {
+                                listener.addReaction(item.id, reaction.name)
                             }
                         }
+                    }
             }
 
             while (chips.size - 1 > item.reactions.size) {

@@ -31,13 +31,13 @@ import androidx.core.content.FileProvider
 import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.core.ui.callbacks.ActivityCallback
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Thread.UncaughtExceptionHandler
 import javax.inject.Inject
 import kotlin.system.exitProcess
-import timber.log.Timber
 
 class CrashHandler @Inject constructor(
     private val huskyApp: Application
@@ -56,7 +56,7 @@ class CrashHandler @Inject constructor(
 
         override fun onActivityStopped(activity: Activity) {
             activityCounter--
-            if(activityCounter <= 0) {
+            if (activityCounter <= 0) {
                 lastActivity = null
             }
             Timber.d("onActivityStopped[${activity::class.simpleName}]")
@@ -66,7 +66,7 @@ class CrashHandler @Inject constructor(
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         try {
             sendLogEmail(throwable.stackTraceToString())
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             Timber.e("CrashHandler Exception[${e.message}]")
         } finally {
             lastActivity?.let { activity ->
@@ -102,8 +102,8 @@ class CrashHandler @Inject constructor(
                     .appendLine()
                     .appendLine("## Device details")
                     .appendLine(getDeviceInfo())
-                //.appendLine("## Crash details")
-                //.appendLine(stacktrace)
+                // .appendLine("## Crash details")
+                // .appendLine(stacktrace)
             }.toString()
             Timber.d(formattedLog)
 
@@ -119,7 +119,7 @@ class CrashHandler @Inject constructor(
                 flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             }
 
-            if(intent.resolveActivity(activity.packageManager) != null) {
+            if (intent.resolveActivity(activity.packageManager) != null) {
                 activity.startActivity(intent)
             }
         }
@@ -160,7 +160,7 @@ class CrashHandler @Inject constructor(
         Thread.setDefaultUncaughtExceptionHandler(handler)
         huskyApp.registerActivityLifecycleCallbacks(activityCallbacks)
 
-        Timber.d("Set default handler[${handler}]")
+        Timber.d("Set default handler[$handler]")
     }
 
     fun removeDefaultHandler() {

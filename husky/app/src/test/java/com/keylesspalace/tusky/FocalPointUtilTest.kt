@@ -82,7 +82,8 @@ class FocalPointUtilTest {
             FocalPointUtil.calculateScaling(
                 2f, 5f,
                 5f, 12.5f
-            ), 0.4f, eps
+            ),
+            0.4f, eps
         )
     }
 
@@ -92,7 +93,8 @@ class FocalPointUtilTest {
             FocalPointUtil.calculateScaling(
                 2f, 5f,
                 1f, 2.5f
-            ), 2f, eps
+            ),
+            2f, eps
         )
     }
 
@@ -102,7 +104,8 @@ class FocalPointUtilTest {
             FocalPointUtil.calculateScaling(
                 2f, 1f,
                 1f, 2f
-            ), 2f, eps
+            ),
+            2f, eps
         )
     }
 
@@ -112,7 +115,8 @@ class FocalPointUtilTest {
             FocalPointUtil.calculateScaling(
                 4f, 3f,
                 8f, 24f
-            ), 0.5f, eps
+            ),
+            0.5f, eps
         )
     }
 
@@ -122,7 +126,8 @@ class FocalPointUtilTest {
             FocalPointUtil.calculateScaling(
                 1f, 2f,
                 2f, 1f
-            ), 2f, eps
+            ),
+            2f, eps
         )
     }
 
@@ -132,7 +137,8 @@ class FocalPointUtilTest {
             FocalPointUtil.calculateScaling(
                 3f, 4f,
                 24f, 8f
-            ), 0.5f, eps
+            ),
+            0.5f, eps
         )
     }
 

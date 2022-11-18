@@ -32,32 +32,30 @@ interface ScheduledTootActionListener {
 }
 
 class ScheduledTootAdapter(
-        val listener: ScheduledTootActionListener
+    val listener: ScheduledTootActionListener
 ) : PagedListAdapter<ScheduledStatus, ScheduledTootAdapter.TootViewHolder>(
-        object: DiffUtil.ItemCallback<ScheduledStatus>(){
-            override fun areItemsTheSame(oldItem: ScheduledStatus, newItem: ScheduledStatus): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: ScheduledStatus, newItem: ScheduledStatus): Boolean {
-                return oldItem == newItem
-            }
-
+    object : DiffUtil.ItemCallback<ScheduledStatus>() {
+        override fun areItemsTheSame(oldItem: ScheduledStatus, newItem: ScheduledStatus): Boolean {
+            return oldItem.id == newItem.id
         }
+
+        override fun areContentsTheSame(oldItem: ScheduledStatus, newItem: ScheduledStatus): Boolean {
+            return oldItem == newItem
+        }
+    }
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TootViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_scheduled_toot, parent, false)
+            .inflate(R.layout.item_scheduled_toot, parent, false)
         return TootViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: TootViewHolder, position: Int) {
-        getItem(position)?.let{
+        getItem(position)?.let {
             viewHolder.bind(it)
         }
     }
-
 
     inner class TootViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -77,9 +75,6 @@ class ScheduledTootAdapter(
                 v.isEnabled = false
                 listener.delete(item)
             }
-
         }
-
     }
-
 }

@@ -35,5 +35,4 @@ class SearchAccountsFragment : SearchFragment<Account>() {
     companion object {
         fun newInstance() = SearchAccountsFragment()
     }
-
 }

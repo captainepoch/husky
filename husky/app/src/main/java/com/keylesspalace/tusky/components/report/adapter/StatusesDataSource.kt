@@ -25,10 +25,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.Executor
 
-class StatusesDataSource(private val accountId: String,
-                         private val mastodonApi: MastodonApi,
-                         private val disposables: CompositeDisposable,
-                         private val retryExecutor: Executor) : ItemKeyedDataSource<String, Status>() {
+class StatusesDataSource(
+    private val accountId: String,
+    private val mastodonApi: MastodonApi,
+    private val disposables: CompositeDisposable,
+    private val retryExecutor: Executor
+) : ItemKeyedDataSource<String, Status>() {
 
     val networkStateAfter = MutableLiveData<NetworkState>()
     val networkStateBefore = MutableLiveData<NetworkState>()
@@ -77,29 +79,30 @@ class StatusesDataSource(private val accountId: String,
             mastodonApi.accountStatusesObservable(accountId, null, null, params.requestedLoadSize, true)
         } else {
             mastodonApi.statusObservable(initialKey).zipWith(
-                    mastodonApi.accountStatusesObservable(accountId, params.requestedInitialKey, null, params.requestedLoadSize - 1, true),
-                    BiFunction { status: Status, list: List<Status> ->
-                        val ret = ArrayList<Status>()
-                        ret.add(status)
-                        ret.addAll(list)
-                        return@BiFunction ret
-                    })
-        }
-                .doOnSubscribe {
-                    disposables.add(it)
+                mastodonApi.accountStatusesObservable(accountId, params.requestedInitialKey, null, params.requestedLoadSize - 1, true),
+                BiFunction { status: Status, list: List<Status> ->
+                    val ret = ArrayList<Status>()
+                    ret.add(status)
+                    ret.addAll(list)
+                    return@BiFunction ret
                 }
-                .subscribe(
-                        {
-                            callback.onResult(it)
-                            initialLoad.postValue(NetworkState.LOADED)
-                        },
-                        {
-                            retryInitial = {
-                                loadInitial(params, callback)
-                            }
-                            initialLoad.postValue(NetworkState.error(it.message))
-                        }
-                )
+            )
+        }
+            .doOnSubscribe {
+                disposables.add(it)
+            }
+            .subscribe(
+                {
+                    callback.onResult(it)
+                    initialLoad.postValue(NetworkState.LOADED)
+                },
+                {
+                    retryInitial = {
+                        loadInitial(params, callback)
+                    }
+                    initialLoad.postValue(NetworkState.error(it.message))
+                }
+            )
     }
 
     @SuppressLint("CheckResult")
@@ -107,21 +110,21 @@ class StatusesDataSource(private val accountId: String,
         networkStateAfter.postValue(NetworkState.LOADING)
         retryAfter = null
         mastodonApi.accountStatusesObservable(accountId, params.key, null, params.requestedLoadSize, true)
-                .doOnSubscribe {
-                    disposables.add(it)
+            .doOnSubscribe {
+                disposables.add(it)
+            }
+            .subscribe(
+                {
+                    callback.onResult(it)
+                    networkStateAfter.postValue(NetworkState.LOADED)
+                },
+                {
+                    retryAfter = {
+                        loadAfter(params, callback)
+                    }
+                    networkStateAfter.postValue(NetworkState.error(it.message))
                 }
-                .subscribe(
-                        {
-                            callback.onResult(it)
-                            networkStateAfter.postValue(NetworkState.LOADED)
-                        },
-                        {
-                            retryAfter = {
-                                loadAfter(params, callback)
-                            }
-                            networkStateAfter.postValue(NetworkState.error(it.message))
-                        }
-                )
+            )
     }
 
     @SuppressLint("CheckResult")
@@ -129,21 +132,21 @@ class StatusesDataSource(private val accountId: String,
         networkStateBefore.postValue(NetworkState.LOADING)
         retryBefore = null
         mastodonApi.accountStatusesObservable(accountId, null, params.key, params.requestedLoadSize, true)
-                .doOnSubscribe {
-                    disposables.add(it)
+            .doOnSubscribe {
+                disposables.add(it)
+            }
+            .subscribe(
+                {
+                    callback.onResult(it)
+                    networkStateBefore.postValue(NetworkState.LOADED)
+                },
+                {
+                    retryBefore = {
+                        loadBefore(params, callback)
+                    }
+                    networkStateBefore.postValue(NetworkState.error(it.message))
                 }
-                .subscribe(
-                        {
-                            callback.onResult(it)
-                            networkStateBefore.postValue(NetworkState.LOADED)
-                        },
-                        {
-                            retryBefore = {
-                                loadBefore(params, callback)
-                            }
-                            networkStateBefore.postValue(NetworkState.error(it.message))
-                        }
-                )
+            )
     }
 
     override fun getKey(item: Status): String = item.id

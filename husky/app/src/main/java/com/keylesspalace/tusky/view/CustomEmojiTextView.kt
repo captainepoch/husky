@@ -50,10 +50,10 @@ class CustomEmojiTextView
         var overridden = false
 
         // Do not change if break strategy is already Layout.BREAK_STRATEGY_HIGH_QUALITY
-        if(text is Spannable && breakStrategy != Layout.BREAK_STRATEGY_SIMPLE) {
+        if (text is Spannable && breakStrategy != Layout.BREAK_STRATEGY_SIMPLE) {
             val spans = text.getSpans(0, text.length, EmojiSpan::class.java)
 
-            if(spans.size >= SPAN_LIMIT) {
+            if (spans.size >= SPAN_LIMIT) {
                 oldBreakStrategy = breakStrategy
                 breakStrategy = Layout.BREAK_STRATEGY_SIMPLE
                 overridden = true
@@ -62,7 +62,7 @@ class CustomEmojiTextView
             }
         }
 
-        if(!overridden) {
+        if (!overridden) {
             breakStrategy = oldBreakStrategy
 
             Timber.d("Setting old break strategy")

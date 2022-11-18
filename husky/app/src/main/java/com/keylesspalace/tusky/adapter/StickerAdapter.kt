@@ -21,7 +21,6 @@
 package com.keylesspalace.tusky.adapter
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -38,14 +37,14 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.entity.StickerPack
 import com.keylesspalace.tusky.view.EmojiKeyboard
 import com.keylesspalace.tusky.view.EmojiKeyboard.EmojiKeyboardAdapter
-import java.util.*
 
 class StickerAdapter(
-        private val stickerPacks: Array<StickerPack>,
-        private val listener: EmojiKeyboard.OnEmojiSelectedListener
-    ) : RecyclerView.Adapter<SingleViewHolder>(), TabConfigurationStrategy, EmojiKeyboardAdapter {
+    private val stickerPacks: Array<StickerPack>,
+    private val listener: EmojiKeyboard.OnEmojiSelectedListener
+) : RecyclerView.Adapter<SingleViewHolder>(), TabConfigurationStrategy, EmojiKeyboardAdapter {
 
     private val recentsAdapter = StickerPageAdapter(null, listener, emptyList())
+
     // this value doesn't reflect actual button width but how much we want for button to take space
     // this is bad, only villains do that
     private val BUTTON_WIDTH_DP = 90.0f
@@ -58,17 +57,23 @@ class StickerAdapter(
 
         val pack = stickerPacks[position - 1]
         val imageView = ImageView(tab.view.context)
-        imageView.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        imageView.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
         Glide.with(imageView)
             .asDrawable()
             .load(pack.internal_url + pack.tabIcon)
             .thumbnail()
             .centerCrop()
-            .into( object: CustomTarget<Drawable>() {
+            .into(object : CustomTarget<Drawable>() {
                 override fun onLoadCleared(placeholder: Drawable?) {
                 }
 
-                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
                     // tab.icon = resource
                     imageView.setImageDrawable(resource)
                     tab.customView = imageView
@@ -78,7 +83,7 @@ class StickerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_emoji_keyboard_page, parent, false)
+            .inflate(R.layout.item_emoji_keyboard_page, parent, false)
         val holder = SingleViewHolder(view)
 
         val dm = parent.context.resources.displayMetrics
@@ -101,11 +106,12 @@ class StickerAdapter(
     }
 
     override fun onBindViewHolder(holder: SingleViewHolder, position: Int) {
-        if( position == 0 ) {
+        if (position == 0) {
             (holder.itemView as RecyclerView).adapter = recentsAdapter
         } else {
             val pack = stickerPacks[position - 1]
-            (holder.itemView as RecyclerView).adapter = StickerPageAdapter(pack.internal_url, listener, pack.stickers)
+            (holder.itemView as RecyclerView).adapter =
+                StickerPageAdapter(pack.internal_url, listener, pack.stickers)
         }
     }
 
@@ -120,17 +126,17 @@ class StickerAdapter(
 
         override fun onBindViewHolder(holder: SingleViewHolder, position: Int) {
             (holder.itemView as AppCompatImageButton).setOnClickListener {
-                listener.onEmojiSelected("", ( url ?: "" ) + stickers[position])
+                listener.onEmojiSelected("", (url ?: "") + stickers[position])
             }
             Glide.with(holder.itemView)
-                .load(( url ?: "" ) + stickers[position])
+                .load((url ?: "") + stickers[position])
                 .thumbnail()
                 .into(holder.itemView as AppCompatImageButton)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_emoji_keyboard_sticker, parent, false)
+                .inflate(R.layout.item_emoji_keyboard_sticker, parent, false)
             return SingleViewHolder(view)
         }
     }

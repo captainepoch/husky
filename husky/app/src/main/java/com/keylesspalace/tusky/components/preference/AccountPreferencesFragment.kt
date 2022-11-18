@@ -16,28 +16,47 @@
 package com.keylesspalace.tusky.components.preference
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
-import com.keylesspalace.tusky.*
+import com.keylesspalace.tusky.AccountListActivity
+import com.keylesspalace.tusky.AccountListActivity.Type.BLOCKS
+import com.keylesspalace.tusky.AccountListActivity.Type.MUTES
+import com.keylesspalace.tusky.BuildConfig
+import com.keylesspalace.tusky.FiltersActivity
+import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.R.anim
+import com.keylesspalace.tusky.R.array
+import com.keylesspalace.tusky.R.attr
+import com.keylesspalace.tusky.R.dimen
+import com.keylesspalace.tusky.R.drawable
+import com.keylesspalace.tusky.R.string
+import com.keylesspalace.tusky.TabPreferenceActivity
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
-import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.components.instancemute.InstanceListActivity
+import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Filter
 import com.keylesspalace.tusky.entity.Status
+import com.keylesspalace.tusky.entity.Status.Visibility
+import com.keylesspalace.tusky.entity.Status.Visibility.PUBLIC
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.settings.*
+import com.keylesspalace.tusky.settings.PrefKeys
+import com.keylesspalace.tusky.settings.listPreference
+import com.keylesspalace.tusky.settings.makePreferenceScreen
+import com.keylesspalace.tusky.settings.preference
+import com.keylesspalace.tusky.settings.preferenceCategory
+import com.keylesspalace.tusky.settings.switchPreference
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial.Icon.gmd_block
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial.Icon.gmd_notifications
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeRes
 import retrofit2.Call
@@ -46,6 +65,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
+
     @Inject
     lateinit var accountManager: AccountManager
 
@@ -59,10 +79,10 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
         val context = requireContext()
         makePreferenceScreen {
             preference {
-                setTitle(R.string.pref_title_edit_notification_settings)
-                icon = IconicsDrawable(context, GoogleMaterial.Icon.gmd_notifications).apply {
-                    sizeRes = R.dimen.preference_icon_size
-                    colorInt = ThemeUtils.getColor(context, R.attr.iconColor)
+                setTitle(string.pref_title_edit_notification_settings)
+                icon = IconicsDrawable(context, gmd_notifications).apply {
+                    sizeRes = dimen.preference_icon_size
+                    colorInt = ThemeUtils.getColor(context, attr.iconColor)
                 }
                 setOnPreferenceClickListener {
                     openNotificationPrefs()
@@ -71,86 +91,94 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
             }
 
             preference {
-                setTitle(R.string.title_tab_preferences)
-                setIcon(R.drawable.ic_tabs)
+                setTitle(string.title_tab_preferences)
+                setIcon(drawable.ic_tabs)
                 setOnPreferenceClickListener {
                     val intent = Intent(context, TabPreferenceActivity::class.java)
                     activity?.startActivity(intent)
-                    activity?.overridePendingTransition(R.anim.slide_from_right,
-                            R.anim.slide_to_left)
+                    activity?.overridePendingTransition(
+                        anim.slide_from_right,
+                        anim.slide_to_left
+                    )
                     true
                 }
             }
 
             preference {
-                setTitle(R.string.action_view_mutes)
-                setIcon(R.drawable.ic_mute_24dp)
+                setTitle(string.action_view_mutes)
+                setIcon(drawable.ic_mute_24dp)
                 setOnPreferenceClickListener {
                     val intent = Intent(context, AccountListActivity::class.java)
-                    intent.putExtra("type", AccountListActivity.Type.MUTES)
+                    intent.putExtra("type", MUTES)
                     activity?.startActivity(intent)
-                    activity?.overridePendingTransition(R.anim.slide_from_right,
-                            R.anim.slide_to_left)
+                    activity?.overridePendingTransition(
+                        anim.slide_from_right,
+                        anim.slide_to_left
+                    )
                     true
                 }
             }
 
             preference {
-                setTitle(R.string.action_view_blocks)
-                icon = IconicsDrawable(context, GoogleMaterial.Icon.gmd_block).apply {
-                    sizeRes = R.dimen.preference_icon_size
-                    colorInt = ThemeUtils.getColor(context, R.attr.iconColor)
+                setTitle(string.action_view_blocks)
+                icon = IconicsDrawable(context, gmd_block).apply {
+                    sizeRes = dimen.preference_icon_size
+                    colorInt = ThemeUtils.getColor(context, attr.iconColor)
                 }
                 setOnPreferenceClickListener {
                     val intent = Intent(context, AccountListActivity::class.java)
-                    intent.putExtra("type", AccountListActivity.Type.BLOCKS)
+                    intent.putExtra("type", BLOCKS)
                     activity?.startActivity(intent)
-                    activity?.overridePendingTransition(R.anim.slide_from_right,
-                            R.anim.slide_to_left)
+                    activity?.overridePendingTransition(
+                        anim.slide_from_right,
+                        anim.slide_to_left
+                    )
                     true
                 }
             }
 
             preference {
-                setTitle(R.string.title_domain_mutes)
-                setIcon(R.drawable.ic_mute_24dp)
+                setTitle(string.title_domain_mutes)
+                setIcon(drawable.ic_mute_24dp)
                 setOnPreferenceClickListener {
                     val intent = Intent(context, InstanceListActivity::class.java)
                     activity?.startActivity(intent)
-                    activity?.overridePendingTransition(R.anim.slide_from_right,
-                            R.anim.slide_to_left)
+                    activity?.overridePendingTransition(
+                        anim.slide_from_right,
+                        anim.slide_to_left
+                    )
                     true
                 }
             }
 
-            preferenceCategory(R.string.pref_publishing) {
+            preferenceCategory(string.pref_publishing) {
                 listPreference {
-                    setTitle(R.string.pref_default_post_privacy)
-                    setEntries(R.array.post_privacy_names)
-                    setEntryValues(R.array.post_privacy_values)
+                    setTitle(string.pref_default_post_privacy)
+                    setEntries(array.post_privacy_names)
+                    setEntryValues(array.post_privacy_values)
                     key = PrefKeys.DEFAULT_POST_PRIVACY
                     setSummaryProvider { entry }
                     val visibility = accountManager.activeAccount?.defaultPostPrivacy
-                            ?: Status.Visibility.PUBLIC
+                        ?: PUBLIC
                     value = visibility.serverString()
                     setIcon(getIconForVisibility(visibility))
                     setOnPreferenceChangeListener { _, newValue ->
-                        setIcon(getIconForVisibility(Status.Visibility.byString(newValue as String)))
+                        setIcon(getIconForVisibility(Visibility.byString(newValue as String)))
                         syncWithServer(visibility = newValue)
                         eventHub.dispatch(PreferenceChangedEvent(key))
                         true
                     }
                 }
-                
+
                 listPreference {
-                    setTitle(R.string.pref_title_default_formatting)
-                    setEntries(R.array.formatting_syntax_values)
-                    setEntryValues(R.array.formatting_syntax_values)
+                    setTitle(string.pref_title_default_formatting)
+                    setEntries(array.formatting_syntax_values)
+                    setEntryValues(array.formatting_syntax_values)
                     key = PrefKeys.DEFAULT_FORMATTING_SYNTAX
                     setSummaryProvider { entry }
                     val syntax = accountManager.activeAccount?.defaultFormattingSyntax
-                           ?: ""
-                    value = when(syntax) {
+                        ?: ""
+                    value = when (syntax) {
                         "text/markdown" -> "Markdown"
                         "text/bbcode" -> "BBCode"
                         "text/html" -> "HTML"
@@ -158,7 +186,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     }
                     setIcon(getIconForSyntax(syntax))
                     setOnPreferenceChangeListener { _, newValue ->
-                        val syntax = when(newValue) {
+                        val syntax = when (newValue) {
                             "Markdown" -> "text/markdown"
                             "BBCode" -> "text/bbcode"
                             "HTML" -> "text/html"
@@ -169,16 +197,15 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
                         eventHub.dispatch(PreferenceChangedEvent(key))
                         true
                     }
-                    
                 }
 
                 switchPreference {
-                    setTitle(R.string.pref_default_media_sensitivity)
-                    setIcon(R.drawable.ic_eye_24dp)
+                    setTitle(string.pref_default_media_sensitivity)
+                    setIcon(drawable.ic_eye_24dp)
                     key = PrefKeys.DEFAULT_MEDIA_SENSITIVITY
                     isSingleLineTitle = false
                     val sensitivity = accountManager.activeAccount?.defaultMediaSensitivity
-                            ?: false
+                        ?: false
                     setDefaultValue(sensitivity)
                     setIcon(getIconForSensitivity(sensitivity))
                     setOnPreferenceChangeListener { _, newValue ->
@@ -190,10 +217,10 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
                 }
             }
 
-            preferenceCategory(R.string.pref_title_timelines) {
+            preferenceCategory(string.pref_title_timelines) {
                 switchPreference {
                     key = PrefKeys.MEDIA_PREVIEW_ENABLED
-                    setTitle(R.string.pref_title_show_media_preview)
+                    setTitle(string.pref_title_show_media_preview)
                     isSingleLineTitle = false
                     isChecked = accountManager.activeAccount?.mediaPreviewEnabled ?: true
                     setOnPreferenceChangeListener { _, newValue ->
@@ -205,7 +232,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
                 switchPreference {
                     key = PrefKeys.ALWAYS_SHOW_SENSITIVE_MEDIA
-                    setTitle(R.string.pref_title_alway_show_sensitive_media)
+                    setTitle(string.pref_title_alway_show_sensitive_media)
                     isSingleLineTitle = false
                     isChecked = accountManager.activeAccount?.alwaysShowSensitiveMedia ?: false
                     setOnPreferenceChangeListener { _, newValue ->
@@ -217,7 +244,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
                 switchPreference {
                     key = PrefKeys.ALWAYS_OPEN_SPOILER
-                    setTitle(R.string.pref_title_alway_open_spoiler)
+                    setTitle(string.pref_title_alway_open_spoiler)
                     isSingleLineTitle = false
                     isChecked = accountManager.activeAccount?.alwaysOpenSpoiler ?: false
                     setOnPreferenceChangeListener { _, newValue ->
@@ -228,13 +255,14 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
                 }
             }
 
-            preferenceCategory(R.string.pref_title_other) {
+            preferenceCategory(string.pref_title_other) {
                 switchPreference {
                     key = PrefKeys.LIVE_NOTIFICATIONS
-                    setTitle(R.string.pref_title_live_notifications)
-                    setSummary(R.string.pref_summary_live_notifications)
+                    setTitle(string.pref_title_live_notifications)
+                    setSummary(string.pref_summary_live_notifications)
                     isSingleLineTitle = false
-                    isChecked = accountManager.activeAccount?.notificationsStreamingEnabled ?: false
+                    isChecked = accountManager.activeAccount
+                        ?.notificationsStreamingEnabled ?: false
                     setOnPreferenceChangeListener { _, newValue ->
                         updateAccount { it.notificationsStreamingEnabled = newValue as Boolean }
                         eventHub.dispatch(PreferenceChangedEvent(key))
@@ -243,45 +271,49 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
                 }
             }
 
-            preferenceCategory(R.string.pref_title_timeline_filters) {
+            preferenceCategory(string.pref_title_timeline_filters) {
                 preference {
-                    setTitle(R.string.pref_title_public_filter_keywords)
+                    setTitle(string.pref_title_public_filter_keywords)
                     setOnPreferenceClickListener {
-                        launchFilterActivity(Filter.PUBLIC,
-                                R.string.pref_title_public_filter_keywords)
+                        launchFilterActivity(
+                            Filter.PUBLIC,
+                            string.pref_title_public_filter_keywords
+                        )
                         true
                     }
                 }
 
                 preference {
-                    setTitle(R.string.title_notifications)
+                    setTitle(string.title_notifications)
                     setOnPreferenceClickListener {
-                        launchFilterActivity(Filter.NOTIFICATIONS, R.string.title_notifications)
+                        launchFilterActivity(Filter.NOTIFICATIONS, string.title_notifications)
                         true
                     }
                 }
 
                 preference {
-                    setTitle(R.string.title_home)
+                    setTitle(string.title_home)
                     setOnPreferenceClickListener {
-                        launchFilterActivity(Filter.HOME, R.string.title_home)
+                        launchFilterActivity(Filter.HOME, string.title_home)
                         true
                     }
                 }
 
                 preference {
-                    setTitle(R.string.pref_title_thread_filter_keywords)
+                    setTitle(string.pref_title_thread_filter_keywords)
                     setOnPreferenceClickListener {
-                        launchFilterActivity(Filter.THREAD,
-                                R.string.pref_title_thread_filter_keywords)
+                        launchFilterActivity(
+                            Filter.THREAD,
+                            string.pref_title_thread_filter_keywords
+                        )
                         true
                     }
                 }
 
                 preference {
-                    setTitle(R.string.title_accounts)
+                    setTitle(string.title_accounts)
                     setOnPreferenceClickListener {
-                        launchFilterActivity(Filter.ACCOUNT, R.string.title_accounts)
+                        launchFilterActivity(Filter.ACCOUNT, string.title_accounts)
                         true
                     }
                 }
@@ -297,11 +329,11 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
             startActivity(intent)
         } else {
             activity?.let {
-                val intent = PreferencesActivity.newIntent(it, PreferencesActivity.NOTIFICATION_PREFERENCES)
+                val intent =
+                    PreferencesActivity.newIntent(it, PreferencesActivity.NOTIFICATION_PREFERENCES)
                 it.startActivity(intent)
                 it.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }
-
         }
     }
 
@@ -314,36 +346,35 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
     private fun syncWithServer(visibility: String? = null, sensitive: Boolean? = null) {
         mastodonApi.accountUpdateSource(visibility, sensitive)
-                .enqueue(object : Callback<Account> {
-                    override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                        val account = response.body()
-                        if (response.isSuccessful && account != null) {
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    val account = response.body()
+                    if (response.isSuccessful && account != null) {
 
-                            accountManager.activeAccount?.let {
-                                it.defaultPostPrivacy = account.source?.privacy
-                                        ?: Status.Visibility.PUBLIC
-                                it.defaultMediaSensitivity = account.source?.sensitive ?: false
-                                accountManager.saveAccount(it)
-                            }
-                        } else {
-                            Log.e("AccountPreferences", "failed updating settings on server")
-                            showErrorSnackbar(visibility, sensitive)
+                        accountManager.activeAccount?.let {
+                            it.defaultPostPrivacy = account.source?.privacy
+                                ?: Status.Visibility.PUBLIC
+                            it.defaultMediaSensitivity = account.source?.sensitive ?: false
+                            accountManager.saveAccount(it)
                         }
-                    }
-
-                    override fun onFailure(call: Call<Account>, t: Throwable) {
-                        Log.e("AccountPreferences", "failed updating settings on server", t)
+                    } else {
+                        Log.e("AccountPreferences", "failed updating settings on server")
                         showErrorSnackbar(visibility, sensitive)
                     }
+                }
 
-                })
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("AccountPreferences", "failed updating settings on server", t)
+                    showErrorSnackbar(visibility, sensitive)
+                }
+            })
     }
 
     private fun showErrorSnackbar(visibility: String?, sensitive: Boolean?) {
         view?.let { view ->
             Snackbar.make(view, R.string.pref_failed_to_sync, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.action_retry) { syncWithServer(visibility, sensitive) }
-                    .show()
+                .setAction(R.string.action_retry) { syncWithServer(visibility, sensitive) }
+                .show()
         }
     }
 
@@ -366,9 +397,9 @@ class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
             R.drawable.ic_eye_24dp
         }
     }
-    
+
     private fun getIconForSyntax(syntax: String): Int {
-        return when(syntax) {
+        return when (syntax) {
             "text/html" -> R.drawable.ic_html_24dp
             "text/bbcode" -> R.drawable.ic_bbcode_24dp
             "text/markdown" -> R.drawable.ic_markdown

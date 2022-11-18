@@ -22,24 +22,24 @@ import androidx.core.text.parseAsHtml
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.entity.Poll
 import com.keylesspalace.tusky.entity.PollOption
-import java.util.*
+import java.util.Date
 import kotlin.math.roundToInt
 
 data class PollViewData(
-        val id: String,
-        val expiresAt: Date?,
-        val expired: Boolean,
-        val multiple: Boolean,
-        val votesCount: Int,
-        val votersCount: Int?,
-        val options: List<PollOptionViewData>,
-        var voted: Boolean
+    val id: String,
+    val expiresAt: Date?,
+    val expired: Boolean,
+    val multiple: Boolean,
+    val votesCount: Int,
+    val votersCount: Int?,
+    val options: List<PollOptionViewData>,
+    var voted: Boolean
 )
 
 data class PollOptionViewData(
-        val title: String,
-        var votesCount: Int,
-        var selected: Boolean
+    val title: String,
+    var votesCount: Int,
+    var selected: Boolean
 )
 
 fun calculatePercent(fraction: Int, totalVotes: Int): Int {
@@ -52,7 +52,10 @@ fun calculatePercent(fraction: Int, totalVotes: Int): Int {
 
 fun buildDescription(title: String, percent: Int, context: Context): Spanned {
 
-    return SpannableStringBuilder(context.getString(R.string.poll_percent_format, percent).parseAsHtml())
+    return SpannableStringBuilder(
+        context.getString(R.string.poll_percent_format, percent)
+            .parseAsHtml()
+    )
         .append(" ")
         .append(title)
 }
@@ -60,21 +63,21 @@ fun buildDescription(title: String, percent: Int, context: Context): Spanned {
 fun Poll?.toViewData(): PollViewData? {
     if (this == null) return null
     return PollViewData(
-            id,
-            expiresAt,
-            expired,
-            multiple,
-            votesCount,
-            votersCount,
-            options.map { it.toViewData() },
-            voted
+        id,
+        expiresAt,
+        expired,
+        multiple,
+        votesCount,
+        votersCount,
+        options.map { it.toViewData() },
+        voted
     )
 }
 
 fun PollOption.toViewData(): PollOptionViewData {
     return PollOptionViewData(
-            title,
-            votesCount,
-            false
+        title,
+        votesCount,
+        false
     )
 }

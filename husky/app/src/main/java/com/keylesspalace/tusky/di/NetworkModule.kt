@@ -31,11 +31,11 @@ import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.OkHttpUtils
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 /**
  * Created by charlag on 3/24/18.
@@ -76,7 +76,6 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
             .build()
-
     }
 
     @Provides

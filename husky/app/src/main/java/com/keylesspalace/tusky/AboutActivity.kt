@@ -57,7 +57,7 @@ class AboutActivity : BottomSheetActivity(), Injectable {
             BuildConfig.VERSION_NAME
         )
 
-        if(BuildConfig.CUSTOM_INSTANCE.isBlank()) {
+        if (BuildConfig.CUSTOM_INSTANCE.isBlank()) {
             binding.aboutPoweredByTusky.gone()
         }
 
@@ -75,7 +75,7 @@ class AboutActivity : BottomSheetActivity(), Injectable {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -89,7 +89,6 @@ private fun TextView.setClickableTextWithoutUnderlines(@StringRes textId: Int) {
     val text = SpannableString(context.getText(textId))
 
     Linkify.addLinks(text, Linkify.WEB_URLS)
-
 
     text.getSpans(0, text.length, URLSpan::class.java).forEach { span ->
         val start = text.getSpanStart(span)

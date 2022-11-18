@@ -28,7 +28,6 @@ import java.io.IOException
 import java.net.ConnectException
 import javax.inject.Inject
 
-
 internal class ListsViewModel @Inject constructor(private val api: MastodonApi) : RxAwareViewModel() {
     enum class LoadingState {
         INITIAL, LOADING, LOADED, ERROR_NETWORK, ERROR_OTHER
@@ -59,14 +58,16 @@ internal class ListsViewModel @Inject constructor(private val api: MastodonApi) 
         api.getLists().subscribe({ lists ->
             updateState {
                 copy(
-                        lists = lists,
-                        loadingState = LoadingState.LOADED
+                    lists = lists,
+                    loadingState = LoadingState.LOADED
                 )
             }
         }, { err ->
             updateState {
-                copy(loadingState = if (err is IOException || err is ConnectException)
-                    LoadingState.ERROR_NETWORK else LoadingState.ERROR_OTHER)
+                copy(
+                    loadingState = if (err is IOException || err is ConnectException)
+                        LoadingState.ERROR_NETWORK else LoadingState.ERROR_OTHER
+                )
             }
         }).autoDispose()
     }

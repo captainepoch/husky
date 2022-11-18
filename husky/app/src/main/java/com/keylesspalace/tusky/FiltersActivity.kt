@@ -35,12 +35,12 @@ import com.keylesspalace.tusky.entity.Filter
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import java.io.IOException
-import javax.inject.Inject
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
+import javax.inject.Inject
 
 class FiltersActivity : BaseActivity() {
 
@@ -95,7 +95,7 @@ class FiltersActivity : BaseActivity() {
 
             override fun onResponse(call: Call<Filter>, response: Response<Filter>) {
                 val updatedFilter = response.body()!!
-                if(updatedFilter.context.contains(context)) {
+                if (updatedFilter.context.contains(context)) {
                     filters[itemIndex] = updatedFilter
                 } else {
                     filters.removeAt(itemIndex)
@@ -108,7 +108,7 @@ class FiltersActivity : BaseActivity() {
 
     private fun deleteFilter(itemIndex: Int) {
         val filter = filters[itemIndex]
-        if(filter.context.size == 1) {
+        if (filter.context.size == 1) {
             // This is the only context for this filter; delete it
             api.deleteFilter(filters[itemIndex].id).enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -144,7 +144,7 @@ class FiltersActivity : BaseActivity() {
             .enqueue(object : Callback<Filter> {
                 override fun onResponse(call: Call<Filter>, response: Response<Filter>) {
                     val filterResponse = response.body()
-                    if(response.isSuccessful && filterResponse != null) {
+                    if (response.isSuccessful && filterResponse != null) {
                         filters.add(filterResponse)
                         refreshFilterDisplay()
                         eventHub.dispatch(PreferenceChangedEvent(context))
@@ -218,7 +218,8 @@ class FiltersActivity : BaseActivity() {
         binding.filtersView.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
-            filters.map { filter -> filter.phrase })
+            filters.map { filter -> filter.phrase }
+        )
         binding.filtersView.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ -> setupEditDialogForItem(position) }
     }
@@ -233,7 +234,7 @@ class FiltersActivity : BaseActivity() {
 
             override fun onResponse(call: Call<List<Filter>>, response: Response<List<Filter>>) {
                 val filterResponse = response.body()
-                if(response.isSuccessful && filterResponse != null) {
+                if (response.isSuccessful && filterResponse != null) {
                     filters = filterResponse.filter { filter -> filter.context.contains(context) }
                         .toMutableList()
                     refreshFilterDisplay()
@@ -254,7 +255,7 @@ class FiltersActivity : BaseActivity() {
             override fun onFailure(call: Call<List<Filter>>, t: Throwable) {
                 binding.filterProgressBar.hide()
                 binding.filterMessageView.show()
-                if(t is IOException) {
+                if (t is IOException) {
                     binding.filterMessageView.setup(
                         R.drawable.elephant_offline,
                         R.string.error_network
@@ -280,7 +281,7 @@ class FiltersActivity : BaseActivity() {
 
     // Activate back arrow in toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true

@@ -13,12 +13,12 @@ import com.keylesspalace.tusky.util.Listing
 import com.keylesspalace.tusky.util.NetworkState
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.Executors
-import javax.inject.Inject
-import javax.inject.Singleton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class ConversationsRepository @Inject constructor(
@@ -35,7 +35,7 @@ class ConversationsRepository @Inject constructor(
     @MainThread
     fun refresh(accountId: Long, showLoadingIndicator: Boolean): LiveData<NetworkState> {
         val networkState = MutableLiveData<NetworkState>()
-        if(showLoadingIndicator) {
+        if (showLoadingIndicator) {
             networkState.value = NetworkState.LOADING
         }
 
@@ -117,6 +117,5 @@ class ConversationsRepository @Inject constructor(
         result?.filter { it.lastStatus != null }
             ?.map { it.toEntity(accountId) }
             ?.let { db.conversationDao().insert(it) }
-
     }
 }

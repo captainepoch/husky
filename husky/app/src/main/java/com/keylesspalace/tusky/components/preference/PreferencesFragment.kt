@@ -47,8 +47,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizePx
-import javax.inject.Inject
 import okhttp3.OkHttpClient
+import javax.inject.Inject
 
 class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
 
@@ -144,7 +144,6 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setTitle(R.string.pref_title_bot_overlay)
                     isSingleLineTitle = false
                     setIcon(R.drawable.ic_bot_24dp)
-
                 }
 
                 switchPreference {
@@ -310,11 +309,11 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     setDefaultValue(false)
                     key = PrefKeys.WELLBEING_LIMITED_NOTIFICATIONS
                     setOnPreferenceChangeListener { _, value ->
-                        for(account in accountManager.accounts) {
+                        for (account in accountManager.accounts) {
                             val notificationFilter =
                                 deserialize(account.notificationsFilter).toMutableSet()
 
-                            if(value == true) {
+                            if (value == true) {
                                 notificationFilter.add(Notification.Type.FAVOURITE)
                                 notificationFilter.add(Notification.Type.FOLLOW)
                                 notificationFilter.add(Notification.Type.REBLOG)
@@ -372,7 +371,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
                     isSingleLineTitle = false
                     setOnPreferenceChangeListener { _, value ->
                         with(value as Boolean) {
-                            if(this) {
+                            if (this) {
                                 crashHandler.setAsDefaultHandler()
                             } else {
                                 crashHandler.removeDefaultHandler()
@@ -392,7 +391,6 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
             sizePx = iconSize
             colorInt = ThemeUtils.getColor(context, R.attr.iconColor)
         }
-
     }
 
     override fun onResume() {
@@ -409,11 +407,11 @@ class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
             val httpPort = sharedPreferences?.getNonNullString(PrefKeys.HTTP_PROXY_PORT, "-1")
                 ?.toInt() ?: -1
 
-            if(httpProxyEnabled && httpServer.isNotBlank() && httpPort > 0 && httpPort < 65535) {
+            if (httpProxyEnabled && httpServer.isNotBlank() && httpPort > 0 && httpPort < 65535) {
                 httpProxyPref?.summary = "$httpServer:$httpPort"
                 return
             }
-        } catch(e: NumberFormatException) {
+        } catch (e: NumberFormatException) {
             // user has entered wrong port, fall back to empty summary
         }
 

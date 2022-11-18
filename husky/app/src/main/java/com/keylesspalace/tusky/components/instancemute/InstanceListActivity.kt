@@ -7,10 +7,10 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.instancemute.fragment.InstanceListFragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.toolbar_basic.*
+import javax.inject.Inject
 
-class InstanceListActivity: BaseActivity(), HasAndroidInjector {
+class InstanceListActivity : BaseActivity(), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -27,9 +27,9 @@ class InstanceListActivity: BaseActivity(), HasAndroidInjector {
         }
 
         supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, InstanceListFragment())
-                .commit()
+            .beginTransaction()
+            .replace(R.id.fragment_container, InstanceListFragment())
+            .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -43,5 +43,4 @@ class InstanceListActivity: BaseActivity(), HasAndroidInjector {
     }
 
     override fun androidInjector() = androidInjector
-
 }

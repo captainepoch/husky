@@ -21,15 +21,28 @@ import android.text.SpannedString
 import android.widget.EditText
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.keylesspalace.tusky.appstore.*
+import com.keylesspalace.tusky.appstore.EventHubImpl
 import com.keylesspalace.tusky.components.common.DEFAULT_CHARACTER_LIMIT
 import com.keylesspalace.tusky.components.common.MediaUploader
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeViewModel
 import com.keylesspalace.tusky.components.drafts.DraftHelper
-import com.keylesspalace.tusky.db.*
+import com.keylesspalace.tusky.db.AccountEntity
+import com.keylesspalace.tusky.db.AccountManager
+import com.keylesspalace.tusky.db.AppDatabase
+import com.keylesspalace.tusky.db.InstanceDao
+import com.keylesspalace.tusky.db.InstanceEntity
 import com.keylesspalace.tusky.di.ViewModelFactory
-import com.keylesspalace.tusky.entity.*
+import com.keylesspalace.tusky.entity.Account
+import com.keylesspalace.tusky.entity.Instance
+import com.keylesspalace.tusky.entity.NodeInfo
+import com.keylesspalace.tusky.entity.NodeInfoLink
+import com.keylesspalace.tusky.entity.NodeInfoLinks
+import com.keylesspalace.tusky.entity.NodeInfoMetadata
+import com.keylesspalace.tusky.entity.NodeInfoPixelfedConfig
+import com.keylesspalace.tusky.entity.NodeInfoPixelfedUploadLimits
+import com.keylesspalace.tusky.entity.NodeInfoPleromaUploadLimits
+import com.keylesspalace.tusky.entity.NodeInfoSoftware
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.service.ServiceClient
 import com.keylesspalace.tusky.util.SaveTootHelper
@@ -37,12 +50,15 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
 import io.reactivex.Single
 import io.reactivex.SingleObserver
-import org.junit.Assert.*
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertArrayEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.ConscryptMode
@@ -98,7 +114,7 @@ class ComposeActivityTest {
         `when`(apiMock.getCustomEmojis()).thenReturn(Single.just(emptyList()))
         `when`(apiMock.getNodeinfoLinks()).thenReturn(object : Single<NodeInfoLinks>() {
             override fun subscribeActual(observer: SingleObserver<in NodeInfoLinks>) {
-                if(nodeinfoResponseCallback == null) {
+                if (nodeinfoResponseCallback == null) {
                     observer.onError(Throwable())
                 } else {
                     observer.onSuccess(
@@ -112,7 +128,7 @@ class ComposeActivityTest {
         `when`(apiMock.getNodeinfo("")).thenReturn(object : Single<NodeInfo>() {
             override fun subscribeActual(observer: SingleObserver<in NodeInfo>) {
                 val nodeinfo = nodeinfoResponseCallback?.invoke()
-                if(nodeinfo == null) {
+                if (nodeinfo == null) {
                     observer.onError(Throwable())
                 } else {
                     observer.onSuccess(nodeinfo)
@@ -122,7 +138,7 @@ class ComposeActivityTest {
         `when`(apiMock.getInstance()).thenReturn(object : Single<Instance>() {
             override fun subscribeActual(observer: SingleObserver<in Instance>) {
                 val instance = instanceResponseCallback?.invoke()
-                if(instance == null) {
+                if (instance == null) {
                     observer.onError(Throwable())
                 } else {
                     observer.onSuccess(instance)
@@ -388,7 +404,7 @@ class ComposeActivityTest {
         val insertText = "#"
         editor.setText("Some text")
 
-        for(caretIndex in listOf(9, 1, 0)) {
+        for (caretIndex in listOf(9, 1, 0)) {
             editor.setSelection(caretIndex)
             activity.prependSelectedWordsWith(insertText)
             // Text should be inserted at caret

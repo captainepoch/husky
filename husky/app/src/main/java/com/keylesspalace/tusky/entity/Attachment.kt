@@ -27,13 +27,13 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Attachment(
-        val id: String,
-        val url: String,
-        @SerializedName("preview_url") val previewUrl: String?, // can be null for e.g. audio attachments
-        val meta: MetaData?,
-        val type: Type,
-        val description: String?,
-        val blurhash: String?
+    val id: String,
+    val url: String,
+    @SerializedName("preview_url") val previewUrl: String?, // can be null for e.g. audio attachments
+    val meta: MetaData?,
+    val type: Type,
+    val description: String?,
+    val blurhash: String?
 ) : Parcelable {
 
     @JsonAdapter(MediaTypeDeserializer::class)
@@ -63,8 +63,8 @@ data class Attachment(
         }
     }
 
-    fun describeAttachmentType() : Int {
-        return when(type) {
+    fun describeAttachmentType(): Int {
+        return when (type) {
             Type.IMAGE -> R.string.attachment_type_image
             Type.VIDEO, Type.GIFV -> R.string.attachment_type_video
             Type.AUDIO -> R.string.attachment_type_audio
@@ -76,9 +76,9 @@ data class Attachment(
      * The meta data of an [Attachment].
      */
     @Parcelize
-    data class MetaData (
-            val focus: Focus?,
-            val duration: Float?
+    data class MetaData(
+        val focus: Focus?,
+        val duration: Float?
     ) : Parcelable
 
     /**
@@ -88,8 +88,8 @@ data class Attachment(
      *   https://github.com/jonom/jquery-focuspoint#1-calculate-your-images-focus-point
      */
     @Parcelize
-    data class Focus (
-            val x: Float,
-            val y: Float
+    data class Focus(
+        val x: Float,
+        val y: Float
     ) : Parcelable
 }

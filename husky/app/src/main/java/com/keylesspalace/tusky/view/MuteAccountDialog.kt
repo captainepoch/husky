@@ -21,12 +21,12 @@ fun showMuteAccountDialog(
     checkbox.setChecked(true)
 
     AlertDialog.Builder(activity)
-            .setView(view)
-            .setPositiveButton(android.R.string.ok) { _, _ ->
-                val spinner: Spinner = view.findViewById(R.id.duration)
-                val durationValues = activity.resources.getIntArray(R.array.mute_duration_values)
-                onOk(checkbox.isChecked, durationValues[spinner.selectedItemPosition])
-            }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
+        .setView(view)
+        .setPositiveButton(android.R.string.ok) { _, _ ->
+            val spinner: Spinner = view.findViewById(R.id.duration)
+            val durationValues = activity.resources.getIntArray(R.array.mute_duration_values)
+            onOk(checkbox.isChecked, durationValues[spinner.selectedItemPosition])
+        }
+        .setNegativeButton(android.R.string.cancel, null)
+        .show()
 }

@@ -15,20 +15,20 @@ import dagger.Provides
 class RepositoryModule {
     @Provides
     fun providesTimelineRepository(
-            db: AppDatabase,
-            mastodonApi: MastodonApi,
-            accountManager: AccountManager,
-            gson: Gson
+        db: AppDatabase,
+        mastodonApi: MastodonApi,
+        accountManager: AccountManager,
+        gson: Gson
     ): TimelineRepository {
         return TimelineRepositoryImpl(db.timelineDao(), mastodonApi, accountManager, gson)
     }
 
     @Provides
     fun providesChatRepository(
-            db: AppDatabase,
-            mastodonApi: MastodonApi,
-            accountManager: AccountManager,
-            gson: Gson
+        db: AppDatabase,
+        mastodonApi: MastodonApi,
+        accountManager: AccountManager,
+        gson: Gson
     ): ChatRepository {
         return ChatRepositoryImpl(db.chatsDao(), mastodonApi, accountManager, gson)
     }

@@ -33,29 +33,30 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class DraftHelper @Inject constructor(
-        val context: Context,
-        db: AppDatabase
+    val context: Context,
+    db: AppDatabase
 ) {
 
     private val draftDao = db.draftDao()
 
     fun saveDraft(
-            draftId: Int,
-            accountId: Long,
-            inReplyToId: String?,
-            content: String?,
-            contentWarning: String?,
-            sensitive: Boolean,
-            visibility: Status.Visibility,
-            mediaUris: List<String>,
-            mediaDescriptions: List<String?>,
-            poll: NewPoll?,
-            formattingSyntax: String,
-            failedToSend: Boolean
+        draftId: Int,
+        accountId: Long,
+        inReplyToId: String?,
+        content: String?,
+        contentWarning: String?,
+        sensitive: Boolean,
+        visibility: Status.Visibility,
+        mediaUris: List<String>,
+        mediaDescriptions: List<String?>,
+        poll: NewPoll?,
+        formattingSyntax: String,
+        failedToSend: Boolean
     ): Completable {
         return Single.fromCallable {
 
@@ -89,43 +90,40 @@ class DraftHelper @Inject constructor(
             val attachments: MutableList<DraftAttachment> = mutableListOf()
             for (i in mediaUris.indices) {
                 attachments.add(
-                        DraftAttachment(
-                                uriString = uris[i].toString(),
-                                description = mediaDescriptions[i],
-                                type = types[i]
-                        )
+                    DraftAttachment(
+                        uriString = uris[i].toString(),
+                        description = mediaDescriptions[i],
+                        type = types[i]
+                    )
                 )
             }
 
             DraftEntity(
-                    id = draftId,
-                    accountId = accountId,
-                    inReplyToId = inReplyToId,
-                    content = content,
-                    contentWarning = contentWarning,
-                    sensitive = sensitive,
-                    visibility = visibility,
-                    attachments = attachments,
-                    poll = poll,
-                    formattingSyntax = formattingSyntax,
-                    failedToSend = failedToSend
+                id = draftId,
+                accountId = accountId,
+                inReplyToId = inReplyToId,
+                content = content,
+                contentWarning = contentWarning,
+                sensitive = sensitive,
+                visibility = visibility,
+                attachments = attachments,
+                poll = poll,
+                formattingSyntax = formattingSyntax,
+                failedToSend = failedToSend
             )
-
         }.flatMapCompletable { draft ->
             draftDao.insertOrReplace(draft)
         }.subscribeOn(Schedulers.io())
     }
 
     fun deleteDraftAndAttachments(draftId: Int): Completable {
-        return draftDao.find(draftId)
-                .flatMapCompletable { draft ->
-                    deleteDraftAndAttachments(draft)
-                }
+        return draftDao.find(draftId).flatMapCompletable { draft ->
+            deleteDraftAndAttachments(draft)
+        }
     }
 
     fun deleteDraftAndAttachments(draft: DraftEntity): Completable {
-        return deleteAttachments(draft)
-                .andThen(draftDao.delete(draft.id))
+        return deleteAttachments(draft).andThen(draftDao.delete(draft.id))
     }
 
     fun deleteAttachments(draft: DraftEntity): Completable {
@@ -155,7 +153,8 @@ class DraftHelper @Inject constructor(
         val filename = String.format("Tusky_Draft_Media_%s.%s", timeStamp, fileExtension)
         val file = File(folder, filename)
         IOUtils.copyToFile(contentResolver, this, file)
-        return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file)
+        return FileProvider.getUriForFile(
+            context, BuildConfig.APPLICATION_ID + ".fileprovider", file
+        )
     }
-
 }

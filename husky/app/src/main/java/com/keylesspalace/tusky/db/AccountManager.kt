@@ -18,10 +18,9 @@ package com.keylesspalace.tusky.db
 import android.util.Log
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.Comparator
 
 /**
  * This class caches the account database and handles all account related operations
@@ -66,8 +65,12 @@ class AccountManager @Inject constructor(db: AppDatabase) {
 
         val maxAccountId = accounts.maxByOrNull { it.id }?.id ?: 0
         val newAccountId = maxAccountId + 1
-        activeAccount = AccountEntity(id = newAccountId, domain = domain.toLowerCase(Locale.ROOT), accessToken = accessToken, isActive = true)
-
+        activeAccount = AccountEntity(
+            id = newAccountId,
+            domain = domain.toLowerCase(Locale.ROOT),
+            accessToken = accessToken,
+            isActive = true
+        )
     }
 
     /**
@@ -80,7 +83,6 @@ class AccountManager @Inject constructor(db: AppDatabase) {
             Log.d(TAG, "saveAccount: saving account with id " + account.id)
             accountDao.insertOrReplace(account)
         }
-
     }
 
     /**
@@ -104,9 +106,7 @@ class AccountManager @Inject constructor(db: AppDatabase) {
                 activeAccount = null
             }
             return activeAccount
-
         }
-
     }
 
     /**
@@ -130,13 +130,13 @@ class AccountManager @Inject constructor(db: AppDatabase) {
             val accountIndex = accounts.indexOf(it)
 
             if (accountIndex != -1) {
-                //in case the user was already logged in with this account, remove the old information
+                // in case the user was already logged in with this account, remove the
+                // old information
                 accounts.removeAt(accountIndex)
                 accounts.add(accountIndex, it)
             } else {
                 accounts.add(it)
             }
-
         }
     }
 
@@ -167,13 +167,15 @@ class AccountManager @Inject constructor(db: AppDatabase) {
      */
     fun getAllAccountsOrderedByActive(): List<AccountEntity> {
         val accountsCopy = accounts.toMutableList()
-        accountsCopy.sortWith(Comparator { l, r ->
-            when {
-                l.isActive && !r.isActive -> -1
-                r.isActive && !l.isActive -> 1
-                else -> 0
+        accountsCopy.sortWith(
+            Comparator { l, r ->
+                when {
+                    l.isActive && !r.isActive -> -1
+                    r.isActive && !l.isActive -> 1
+                    else -> 0
+                }
             }
-        })
+        )
 
         return accountsCopy
     }
@@ -185,7 +187,7 @@ class AccountManager @Inject constructor(db: AppDatabase) {
         return accounts.any { it.notificationsEnabled }
     }
 
-    fun areNotificationsStreamingEnabled() : Boolean {
+    fun areNotificationsStreamingEnabled(): Boolean {
         return accounts.any { it.notificationsStreamingEnabled }
     }
 
@@ -199,5 +201,4 @@ class AccountManager @Inject constructor(db: AppDatabase) {
             id == accountId
         }
     }
-
 }

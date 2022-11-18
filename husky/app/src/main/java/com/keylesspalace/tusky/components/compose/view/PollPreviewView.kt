@@ -24,10 +24,11 @@ import com.keylesspalace.tusky.entity.NewPoll
 import kotlinx.android.synthetic.main.view_poll_preview.view.*
 
 class PollPreviewView @JvmOverloads constructor(
-        context: Context?,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0)
-    : LinearLayout(context, attrs, defStyleAttr) {
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
+    LinearLayout(context, attrs, defStyleAttr) {
 
     val adapter = PreviewPollOptionsAdapter()
 
@@ -43,22 +44,19 @@ class PollPreviewView @JvmOverloads constructor(
         setPadding(padding, padding, padding, padding)
 
         pollPreviewOptions.adapter = adapter
-
     }
 
-    fun setPoll(poll: NewPoll){
+    fun setPoll(poll: NewPoll) {
         adapter.update(poll.options, poll.multiple)
 
         val pollDurationId = resources.getIntArray(R.array.poll_duration_values).indexOfLast {
             it <= poll.expiresIn
         }
         pollDurationPreview.text = resources.getStringArray(R.array.poll_duration_names)[pollDurationId]
-
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
         super.setOnClickListener(l)
         adapter.setOnClickListener(l)
     }
-
 }

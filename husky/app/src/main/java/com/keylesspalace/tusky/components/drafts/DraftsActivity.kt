@@ -96,12 +96,12 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
         menuInflater.inflate(R.menu.drafts, menu)
         oldDraftsButton = menu.findItem(R.id.action_old_drafts)
         viewModel.showOldDraftsButton()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe { showOldDraftsButton ->
-                    oldDraftsButton?.isVisible = showOldDraftsButton
-                }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe { showOldDraftsButton ->
+                oldDraftsButton?.isVisible = showOldDraftsButton
+            }
         return true
     }
 
@@ -125,43 +125,42 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
         if (draft.inReplyToId != null) {
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
             viewModel.getToot(draft.inReplyToId)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .autoDispose(this)
-                    .subscribe({ status ->
-                        val composeOptions = ComposeActivity.ComposeOptions(
-                                draftId = draft.id,
-                                tootText = draft.content,
-                                contentWarning = draft.contentWarning,
-                                inReplyToId = draft.inReplyToId,
-                                replyingStatusContent = status.content.toString(),
-                                replyingStatusAuthor = status.account.localUsername,
-                                draftAttachments = draft.attachments,
-                                poll = draft.poll,
-                                sensitive = draft.sensitive,
-                                visibility = draft.visibility,
-                                formattingSyntax = draft.formattingSyntax
-                        )
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDispose(this)
+                .subscribe({ status ->
+                    val composeOptions = ComposeActivity.ComposeOptions(
+                        draftId = draft.id,
+                        tootText = draft.content,
+                        contentWarning = draft.contentWarning,
+                        inReplyToId = draft.inReplyToId,
+                        replyingStatusContent = status.content.toString(),
+                        replyingStatusAuthor = status.account.localUsername,
+                        draftAttachments = draft.attachments,
+                        poll = draft.poll,
+                        sensitive = draft.sensitive,
+                        visibility = draft.visibility,
+                        formattingSyntax = draft.formattingSyntax
+                    )
 
-                        bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+                    bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
 
-                        startActivity(ComposeActivity.startIntent(this, composeOptions))
+                    startActivity(ComposeActivity.startIntent(this, composeOptions))
+                }, { throwable ->
 
-                    }, { throwable ->
+                    bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
 
-                        bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+                    Log.w(TAG, "failed loading reply information", throwable)
 
-                        Log.w(TAG, "failed loading reply information", throwable)
-
-                        if (throwable is HttpException && throwable.code() == 404) {
-                            // the original status to which a reply was drafted has been deleted
-                            // let's open the ComposeActivity without reply information
-                            Toast.makeText(this, getString(R.string.drafts_toot_reply_removed), Toast.LENGTH_LONG).show()
-                            openDraftWithoutReply(draft)
-                        } else {
-                            Snackbar.make(binding.root, getString(R.string.drafts_failed_loading_reply), Snackbar.LENGTH_SHORT)
-                                    .show()
-                        }
-                    })
+                    if (throwable is HttpException && throwable.code() == 404) {
+                        // the original status to which a reply was drafted has been deleted
+                        // let's open the ComposeActivity without reply information
+                        Toast.makeText(this, getString(R.string.drafts_toot_reply_removed), Toast.LENGTH_LONG).show()
+                        openDraftWithoutReply(draft)
+                    } else {
+                        Snackbar.make(binding.root, getString(R.string.drafts_failed_loading_reply), Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
+                })
         } else {
             openDraftWithoutReply(draft)
         }
@@ -169,14 +168,14 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
 
     private fun openDraftWithoutReply(draft: DraftEntity) {
         val composeOptions = ComposeActivity.ComposeOptions(
-                draftId = draft.id,
-                tootText = draft.content,
-                contentWarning = draft.contentWarning,
-                draftAttachments = draft.attachments,
-                poll = draft.poll,
-                sensitive = draft.sensitive,
-                visibility = draft.visibility,
-                formattingSyntax = draft.formattingSyntax
+            draftId = draft.id,
+            tootText = draft.content,
+            contentWarning = draft.contentWarning,
+            draftAttachments = draft.attachments,
+            poll = draft.poll,
+            sensitive = draft.sensitive,
+            visibility = draft.visibility,
+            formattingSyntax = draft.formattingSyntax
         )
 
         startActivity(ComposeActivity.startIntent(this, composeOptions))
@@ -185,10 +184,10 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
     override fun onDeleteDraft(draft: DraftEntity) {
         viewModel.deleteDraft(draft)
         Snackbar.make(binding.root, getString(R.string.draft_deleted), Snackbar.LENGTH_LONG)
-                .setAction(R.string.action_undo) {
-                    viewModel.restoreDraft(draft)
-                }
-                .show()
+            .setAction(R.string.action_undo) {
+                viewModel.restoreDraft(draft)
+            }
+            .show()
     }
 
     companion object {

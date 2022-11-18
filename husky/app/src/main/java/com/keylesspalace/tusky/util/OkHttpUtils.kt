@@ -25,9 +25,6 @@ import android.os.Build.VERSION
 import androidx.preference.PreferenceManager
 import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.core.utils.ApplicationUtils.isDebug
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.util.concurrent.TimeUnit.SECONDS
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -35,6 +32,9 @@ import okhttp3.OkHttpClient
 import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.util.concurrent.TimeUnit.SECONDS
 
 object OkHttpUtils {
 
@@ -53,17 +53,17 @@ object OkHttpUtils {
 
         val builder = OkHttpClient.Builder()
             .addInterceptor(getUserAgentInterceptor())
-            //.addInterceptor(getDebugInformation())
+            // .addInterceptor(getDebugInformation())
             .addInterceptor(BrotliInterceptor)
             .readTimeout(60, SECONDS)
             .writeTimeout(60, SECONDS)
             .cache(Cache(context.cacheDir, cacheSize))
 
-        if(isDebug()) {
+        if (isDebug()) {
             builder.addInterceptor(getDebugInformation())
         }
 
-        if(httpProxyEnabled && httpServer.isNotEmpty() && httpPort in 0..65535) {
+        if (httpProxyEnabled && httpServer.isNotEmpty() && httpPort in 0..65535) {
             builder.proxy(
                 Proxy(
                     Proxy.Type.HTTP,

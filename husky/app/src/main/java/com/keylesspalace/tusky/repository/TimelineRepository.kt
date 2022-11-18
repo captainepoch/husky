@@ -25,8 +25,16 @@ import androidx.core.text.parseAsHtml
 import androidx.core.text.toHtml
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.keylesspalace.tusky.db.*
-import com.keylesspalace.tusky.entity.*
+import com.keylesspalace.tusky.db.AccountManager
+import com.keylesspalace.tusky.db.TimelineAccountEntity
+import com.keylesspalace.tusky.db.TimelineDao
+import com.keylesspalace.tusky.db.TimelineStatusEntity
+import com.keylesspalace.tusky.db.TimelineStatusWithAccount
+import com.keylesspalace.tusky.entity.Account
+import com.keylesspalace.tusky.entity.Attachment
+import com.keylesspalace.tusky.entity.Emoji
+import com.keylesspalace.tusky.entity.Poll
+import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.repository.TimelineRequestMode.DISK
 import com.keylesspalace.tusky.repository.TimelineRequestMode.NETWORK
@@ -37,7 +45,7 @@ import com.keylesspalace.tusky.util.trimTrailingWhitespace
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.io.IOException
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 data class Placeholder(val id: String)
@@ -50,7 +58,10 @@ enum class TimelineRequestMode {
 
 interface TimelineRepository {
     fun getStatuses(
-        maxId: String?, sinceId: String?, sincedIdMinusOne: String?, limit: Int,
+        maxId: String?,
+        sinceId: String?,
+        sincedIdMinusOne: String?,
+        limit: Int,
         requestMode: TimelineRequestMode
     ): Single<out List<TimelineStatus>>
 
@@ -71,13 +82,16 @@ class TimelineRepositoryImpl(
     }
 
     override fun getStatuses(
-        maxId: String?, sinceId: String?, sincedIdMinusOne: String?,
-        limit: Int, requestMode: TimelineRequestMode
+        maxId: String?,
+        sinceId: String?,
+        sincedIdMinusOne: String?,
+        limit: Int,
+        requestMode: TimelineRequestMode
     ): Single<out List<TimelineStatus>> {
         val acc = accountManager.activeAccount ?: throw IllegalStateException()
         val accountId = acc.id
 
-        return if(requestMode == DISK) {
+        return if (requestMode == DISK) {
             this.getStatusesFromDb(accountId, maxId, sinceId, limit)
         } else {
             getStatusesFromNetwork(maxId, sinceId, sincedIdMinusOne, limit, accountId, requestMode)
@@ -85,9 +99,12 @@ class TimelineRepositoryImpl(
     }
 
     private fun getStatusesFromNetwork(
-        maxId: String?, sinceId: String?,
-        sinceIdMinusOne: String?, limit: Int,
-        accountId: Long, requestMode: TimelineRequestMode
+        maxId: String?,
+        sinceId: String?,
+        sinceIdMinusOne: String?,
+        limit: Int,
+        accountId: Long,
+        requestMode: TimelineRequestMode
     ): Single<out List<TimelineStatus>> {
         return mastodonApi.homeTimelineSingle(maxId, sinceIdMinusOne, limit + 1)
             .map { statuses ->
@@ -97,7 +114,7 @@ class TimelineRepositoryImpl(
                 this.addFromDbIfNeeded(accountId, statuses, maxId, sinceId, limit, requestMode)
             }
             .onErrorResumeNext { error ->
-                if(error is IOException && requestMode != NETWORK) {
+                if (error is IOException && requestMode != NETWORK) {
                     this.getStatusesFromDb(accountId, maxId, sinceId, limit)
                 } else {
                     Single.error(error)
@@ -106,12 +123,15 @@ class TimelineRepositoryImpl(
     }
 
     private fun addFromDbIfNeeded(
-        accountId: Long, statuses: List<Either<Placeholder, Status>>,
-        maxId: String?, sinceId: String?, limit: Int,
+        accountId: Long,
+        statuses: List<Either<Placeholder, Status>>,
+        maxId: String?,
+        sinceId: String?,
+        limit: Int,
         requestMode: TimelineRequestMode
     ): Single<List<TimelineStatus>>? {
-        return if(requestMode != NETWORK && statuses.size < 2) {
-            val newMaxID = if(statuses.isEmpty()) {
+        return if (requestMode != NETWORK && statuses.size < 2) {
+            val newMaxID = if (statuses.isEmpty()) {
                 maxId
             } else {
                 statuses.last { it.isRight() }.asRight().id
@@ -120,7 +140,7 @@ class TimelineRepositoryImpl(
                 .map { fromDb ->
                     // If it's just placeholders and less than limit (so we exhausted both
                     // db and server at this point)
-                    if(fromDb.size < limit && fromDb.all { !it.isRight() }) {
+                    if (fromDb.size < limit && fromDb.all { !it.isRight() }) {
                         statuses
                     } else {
                         statuses + fromDb
@@ -132,7 +152,9 @@ class TimelineRepositoryImpl(
     }
 
     private fun getStatusesFromDb(
-        accountId: Long, maxId: String?, sinceId: String?,
+        accountId: Long,
+        maxId: String?,
+        sinceId: String?,
         limit: Int
     ): Single<out List<TimelineStatus>> {
         return timelineDao.getStatusesForAccount(accountId, maxId, sinceId, limit)
@@ -143,15 +165,17 @@ class TimelineRepositoryImpl(
     }
 
     private fun saveStatusesToDb(
-        accountId: Long, statuses: List<Status>,
-        maxId: String?, sinceId: String?
+        accountId: Long,
+        statuses: List<Status>,
+        maxId: String?,
+        sinceId: String?
     ): List<Either<Placeholder, Status>> {
         var placeholderToInsert: Placeholder? = null
 
         // Look for overlap
-        val resultStatuses = if(statuses.isNotEmpty() && sinceId != null) {
+        val resultStatuses = if (statuses.isNotEmpty() && sinceId != null) {
             val indexOfSince = statuses.indexOfLast { it.id == sinceId }
-            if(indexOfSince == -1) {
+            if (indexOfSince == -1) {
                 // We didn't find the status which must be there. Add a placeholder
                 placeholderToInsert = Placeholder(sinceId.inc())
                 statuses.mapTo(mutableListOf(), Status::lift)
@@ -172,11 +196,11 @@ class TimelineRepositoryImpl(
 
         Single.fromCallable {
 
-            if(statuses.isNotEmpty()) {
+            if (statuses.isNotEmpty()) {
                 timelineDao.deleteRange(accountId, statuses.last().id, statuses.first().id)
             }
 
-            for(status in statuses) {
+            for (status in statuses) {
                 timelineDao.insertInTransaction(
                     status.toEntity(accountId, gson),
                     status.account.toEntity(accountId, gson),
@@ -190,19 +214,19 @@ class TimelineRepositoryImpl(
 
             // If we're loading in the bottom insert placeholder after every load
             // (for requests on next launches) but not return it.
-            if(sinceId == null && statuses.isNotEmpty()) {
+            if (sinceId == null && statuses.isNotEmpty()) {
                 timelineDao.insertStatusIfNotThere(
                     Placeholder(statuses.last().id.dec()).toEntity(accountId)
                 )
             }
 
             // There may be placeholders which we thought could be from our TL but they are not
-            if(statuses.size > 2) {
+            if (statuses.size > 2) {
                 timelineDao.removeAllPlaceholdersBetween(
                     accountId, statuses.first().id,
                     statuses.last().id
                 )
-            } else if(placeholderToInsert == null && maxId != null && sinceId != null) {
+            } else if (placeholderToInsert == null && maxId != null && sinceId != null) {
                 timelineDao.removeAllPlaceholdersBetween(accountId, maxId, sinceId)
             }
         }
@@ -220,7 +244,7 @@ class TimelineRepositoryImpl(
     }
 
     private fun TimelineStatusWithAccount.toStatus(): TimelineStatus {
-        if(this.status.authorServerId == null) {
+        if (this.status.authorServerId == null) {
             return Either.Left(Placeholder(this.status.serverId))
         }
 
@@ -269,7 +293,7 @@ class TimelineRepositoryImpl(
                 pleroma = pleroma
             )
         }
-        val status = if(reblog != null) {
+        val status = if (reblog != null) {
             Status(
                 id = status.serverId,
                 url = null, // no url for reblogs
@@ -366,7 +390,6 @@ fun TimelineAccountEntity.toAccount(gson: Gson): Account {
         moved = null
     )
 }
-
 
 fun Placeholder.toEntity(timelineUserId: Long): TimelineStatusEntity {
     return TimelineStatusEntity(

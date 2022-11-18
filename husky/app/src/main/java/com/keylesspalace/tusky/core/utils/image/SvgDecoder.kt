@@ -48,17 +48,17 @@ class SvgDecoder : ResourceDecoder<InputStream, SVG> {
         try {
             val svg = SVG.getFromInputStream(source)
 
-            if(width != SIZE_ORIGINAL) {
+            if (width != SIZE_ORIGINAL) {
                 svg.documentWidth = width.toFloat()
             }
 
-            if(height != SIZE_ORIGINAL) {
+            if (height != SIZE_ORIGINAL) {
                 svg.documentHeight = height.toFloat()
             }
 
             return SimpleResource(svg)
-        } catch(ex: SVGParseException) {
-            throw IOException("Cannot load SVG from stream", ex);
+        } catch (ex: SVGParseException) {
+            throw IOException("Cannot load SVG from stream", ex)
         }
     }
 }

@@ -24,7 +24,8 @@ package com.keylesspalace.tusky.util
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.drawable.*
+import android.graphics.drawable.Animatable
+import android.graphics.drawable.Drawable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ReplacementSpan
@@ -46,8 +47,10 @@ import java.util.regex.Pattern
  * Replaces emoji shortcodes in a text with EmojiSpans.
  *
  * @param text the text containing custom emojis.
- * @param emojis a list of the custom emojis (nullable for backward compatibility with old mastodon instances).
- * @param view a reference to the a view the emojis will be shown in (should be the TextView, but parents of the TextView are also acceptable).
+ * @param emojis a list of the custom emojis (nullable for backward compatibility with old
+ * mastodon instances).
+ * @param view a reference to the a view the emojis will be shown in (should be the TextView,
+ * but parents of the TextView are also acceptable).
  *
  * @return The text with the shortcodes replaced by EmojiSpans
  */
@@ -56,7 +59,7 @@ fun CharSequence.emojify(
     view: View,
     forceSmallEmoji: Boolean = false
 ): CharSequence {
-    if(emojis.isNullOrEmpty()) {
+    if (emojis.isNullOrEmpty()) {
         return this
     }
 
@@ -69,7 +72,7 @@ fun CharSequence.emojify(
         val matcher = Pattern.compile(":$shortcode:", Pattern.LITERAL)
             .matcher(this)
 
-        while(matcher.find()) {
+        while (matcher.find()) {
             val span = createEmojiSpan(url, view, smallEmojis, animate)
             builder.setSpan(span, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
@@ -91,7 +94,7 @@ fun createEmojiSpan(
     val smallEmojis = forceSmallEmoji || !pm.getBoolean(PrefKeys.BIG_EMOJIS, true)
     val animate = pm.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
 
-    return createEmojiSpan(emoji_url, view, smallEmojis, animate);
+    return createEmojiSpan(emoji_url, view, smallEmojis, animate)
 }
 
 private fun createEmojiSpan(
@@ -100,7 +103,7 @@ private fun createEmojiSpan(
     smallEmojis: Boolean = false,
     animate: Boolean = false
 ): EmojiSpan {
-    val span = if(smallEmojis) {
+    val span = if (smallEmojis) {
         SmallEmojiSpan(WeakReference<View>(view))
     } else {
         EmojiSpan(WeakReference<View>(view))
@@ -111,17 +114,18 @@ private fun createEmojiSpan(
         .set(AnimationDecoderOption.DISABLE_ANIMATION_WEBP_DECODER, !animate)
         .set(AnimationDecoderOption.DISABLE_ANIMATION_APNG_DECODER, !animate)
     val mimetype = getMimeType(emoji_url)
-    if(mimetype == MIME.SVG) {
+    if (mimetype == MIME.SVG) {
         glideRequest = glideRequest
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .override(512, 512)
     }
     glideRequest.into(span.getTarget(animate))
 
-    return span;
+    return span
 }
 
 open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSpan() {
+
     var imageDrawable: Drawable? = null
 
     override fun getSize(
@@ -131,7 +135,7 @@ open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSp
         end: Int,
         fm: Paint.FontMetricsInt?
     ): Int {
-        if(fm != null) {
+        if (fm != null) {
             /* update FontMetricsInt or otherwise span does not get drawn when
              * it covers the whole text */
             val metrics = paint.fontMetricsInt
@@ -175,7 +179,7 @@ open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSp
 
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 viewWeakReference.get()?.let { view ->
-                    if(animate && resource is Animatable) {
+                    if (animate && resource is Animatable) {
                         val callback = resource.callback
 
                         resource.callback = object : Drawable.Callback {
@@ -213,7 +217,7 @@ class SmallEmojiSpan(viewWeakReference: WeakReference<View>) : EmojiSpan(viewWea
         end: Int,
         fm: Paint.FontMetricsInt?
     ): Int {
-        if(fm != null) {
+        if (fm != null) {
             /* update FontMetricsInt or otherwise span does not get drawn when
              * it covers the whole text */
             val metrics = paint.fontMetricsInt
@@ -235,7 +239,7 @@ class SmallEmojiSpan(viewWeakReference: WeakReference<View>) : EmojiSpan(viewWea
 private fun getMimeType(url: String?): MIME {
     var type: String? = null
     val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-    if(extension != null) {
+    if (extension != null) {
         type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
     return MIME.getMime(type)
@@ -248,7 +252,7 @@ private enum class MIME(private val mimetype: String) {
 
     companion object {
         fun getMime(mime: String?): MIME {
-            return when(mime) {
+            return when (mime) {
                 SVG.mimetype -> SVG
                 else -> NONE
             }

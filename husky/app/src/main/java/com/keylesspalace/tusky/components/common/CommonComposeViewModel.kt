@@ -19,27 +19,32 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
+import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.search.SearchType
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.db.InstanceEntity
-import com.keylesspalace.tusky.entity.*
+import com.keylesspalace.tusky.entity.Emoji
+import com.keylesspalace.tusky.entity.NodeInfo
+import com.keylesspalace.tusky.entity.StickerPack
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.util.RxAwareViewModel
+import com.keylesspalace.tusky.util.VersionUtils
+import com.keylesspalace.tusky.util.map
+import com.keylesspalace.tusky.util.withoutFirstWhich
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Singles
 import retrofit2.Response
-import java.util.*
-import javax.inject.Inject
+import java.util.Locale
 
 open class CommonComposeViewModel(
-        private val api: MastodonApi,
-        private val accountManager: AccountManager,
-        private val mediaUploader: MediaUploader,
-        private val db: AppDatabase
+    private val api: MastodonApi,
+    private val accountManager: AccountManager,
+    private val mediaUploader: MediaUploader,
+    private val db: AppDatabase
 ) : RxAwareViewModel() {
 
     protected val instance: MutableLiveData<InstanceEntity?> = MutableLiveData(null)
@@ -52,47 +57,53 @@ open class CommonComposeViewModel(
 
     val instanceParams: LiveData<ComposeInstanceParams> = instance.map { instance ->
         ComposeInstanceParams(
-                maxChars = instance?.maximumTootCharacters ?: DEFAULT_CHARACTER_LIMIT,
-                chatLimit = instance?.chatLimit ?: DEFAULT_CHARACTER_LIMIT,
-                pollMaxOptions = instance?.maxPollOptions ?: DEFAULT_MAX_OPTION_COUNT,
-                pollMaxLength = instance?.maxPollOptionLength ?: DEFAULT_MAX_OPTION_LENGTH,
-                supportsScheduled = instance?.version?.let { VersionUtils(it).supportsScheduledToots() } ?: false
+            maxChars = instance?.maximumTootCharacters ?: DEFAULT_CHARACTER_LIMIT,
+            chatLimit = instance?.chatLimit ?: DEFAULT_CHARACTER_LIMIT,
+            pollMaxOptions = instance?.maxPollOptions ?: DEFAULT_MAX_OPTION_COUNT,
+            pollMaxLength = instance?.maxPollOptionLength ?: DEFAULT_MAX_OPTION_LENGTH,
+            supportsScheduled = instance?.version?.let {
+                VersionUtils(it).supportsScheduledToots()
+            } ?: false
         )
     }
     val instanceMetadata: LiveData<ComposeInstanceMetadata> = nodeinfo.map { nodeinfo ->
         val software = nodeinfo?.software?.name ?: "mastodon"
 
-        if(software.equals("pleroma") || software.equals("akkoma")) {
+        if (software.equals("pleroma") || software.equals("akkoma")) {
             hasNoAttachmentLimits = true
             ComposeInstanceMetadata(
-                    software = "pleroma",
-                    supportsMarkdown = nodeinfo?.metadata?.postFormats?.contains("text/markdown") ?: false,
-                    supportsBBcode = nodeinfo?.metadata?.postFormats?.contains("text/bbcode") ?: false,
-                    supportsHTML = nodeinfo?.metadata?.postFormats?.contains("text/html") ?: false,
-                    videoLimit = nodeinfo?.metadata?.uploadLimits?.general ?: STATUS_VIDEO_SIZE_LIMIT,
-                    imageLimit = nodeinfo?.metadata?.uploadLimits?.general ?: STATUS_IMAGE_SIZE_LIMIT
+                software = "pleroma",
+                supportsMarkdown = nodeinfo?.metadata?.postFormats?.contains("text/markdown")
+                    ?: false,
+                supportsBBcode = nodeinfo?.metadata?.postFormats?.contains("text/bbcode") ?: false,
+                supportsHTML = nodeinfo?.metadata?.postFormats?.contains("text/html") ?: false,
+                videoLimit = nodeinfo?.metadata?.uploadLimits?.general ?: STATUS_VIDEO_SIZE_LIMIT,
+                imageLimit = nodeinfo?.metadata?.uploadLimits?.general ?: STATUS_IMAGE_SIZE_LIMIT
             )
-        } else if(software.equals("pixelfed")) {
+        } else if (software.equals("pixelfed")) {
             ComposeInstanceMetadata(
-                    software = "pixelfed",
-                    supportsMarkdown = false,
-                    supportsBBcode = false,
-                    supportsHTML = false,
-                    videoLimit = nodeinfo?.metadata?.config?.uploader?.maxPhotoSize?.let { it * 1024 } ?: STATUS_VIDEO_SIZE_LIMIT,
-                    imageLimit = nodeinfo?.metadata?.config?.uploader?.maxPhotoSize?.let { it * 1024 } ?: STATUS_IMAGE_SIZE_LIMIT
+                software = "pixelfed",
+                supportsMarkdown = false,
+                supportsBBcode = false,
+                supportsHTML = false,
+                videoLimit = nodeinfo?.metadata?.config?.uploader?.maxPhotoSize?.let { it * 1024 }
+                    ?: STATUS_VIDEO_SIZE_LIMIT,
+                imageLimit = nodeinfo?.metadata?.config?.uploader?.maxPhotoSize?.let { it * 1024 }
+                    ?: STATUS_IMAGE_SIZE_LIMIT
             )
         } else {
             ComposeInstanceMetadata(
-                    software = "mastodon",
-                    supportsMarkdown = nodeinfo?.software?.version?.contains("+glitch") ?: false,
-                    supportsBBcode = false,
-                    supportsHTML = nodeinfo?.software?.version?.contains("+glitch") ?: false,
-                    videoLimit = STATUS_VIDEO_SIZE_LIMIT,
-                    imageLimit = STATUS_IMAGE_SIZE_LIMIT
+                software = "mastodon",
+                supportsMarkdown = nodeinfo?.software?.version?.contains("+glitch") ?: false,
+                supportsBBcode = false,
+                supportsHTML = nodeinfo?.software?.version?.contains("+glitch") ?: false,
+                videoLimit = STATUS_VIDEO_SIZE_LIMIT,
+                imageLimit = STATUS_IMAGE_SIZE_LIMIT
             )
         }
     }
-    val instanceStickers: LiveData<Array<StickerPack>> = stickers // .map { stickers -> HashMap<String,String>(stickers) }
+    val instanceStickers: LiveData<Array<StickerPack>> =
+        stickers // .map { stickers -> HashMap<String,String>(stickers) }
 
     val emoji: MutableLiveData<List<Emoji>?> = MutableLiveData()
 
@@ -104,39 +115,38 @@ open class CommonComposeViewModel(
     init {
         Singles.zip(api.getCustomEmojis(), api.getInstance()) { emojis, instance ->
             InstanceEntity(
-                    instance = accountManager.activeAccount?.domain!!,
-                    emojiList = emojis,
-                    maximumTootCharacters = instance.maxTootChars,
-                    maxPollOptions = instance.pollLimits?.maxOptions,
-                    maxPollOptionLength = instance.pollLimits?.maxOptionChars,
-                    version = instance.version,
-                    chatLimit = instance.chatLimit
+                instance = accountManager.activeAccount?.domain!!,
+                emojiList = emojis,
+                maximumTootCharacters = instance.maxTootChars,
+                maxPollOptions = instance.pollLimits?.maxOptions,
+                maxPollOptionLength = instance.pollLimits?.maxOptionChars,
+                version = instance.version,
+                chatLimit = instance.chatLimit
             )
         }
-                .doOnSuccess {
-                    db.instanceDao().insertOrReplace(it)
-                }
-                .onErrorResumeNext(
-                        db.instanceDao().loadMetadataForInstance(accountManager.activeAccount?.domain!!)
-                )
-                .subscribe ({ instanceEntity ->
-                    emoji.postValue(instanceEntity.emojiList)
-                    instance.postValue(instanceEntity)
-                }, { throwable ->
-                    // this can happen on network error when no cached data is available
-                    Log.w(TAG, "error loading instance data", throwable)
-                })
-                .autoDispose()
+            .doOnSuccess {
+                db.instanceDao().insertOrReplace(it)
+            }
+            .onErrorResumeNext(
+                db.instanceDao().loadMetadataForInstance(accountManager.activeAccount?.domain!!)
+            )
+            .subscribe({ instanceEntity ->
+                emoji.postValue(instanceEntity.emojiList)
+                instance.postValue(instanceEntity)
+            }, { throwable ->
+                // this can happen on network error when no cached data is available
+                Log.w(TAG, "error loading instance data", throwable)
+            })
+            .autoDispose()
 
-
-        api.getNodeinfoLinks().subscribe({
-            links -> if(links.links.isNotEmpty()) {
-            api.getNodeinfo(links.links[0].href).subscribe({
-                ni -> nodeinfo.postValue(ni)
-            }, {
-                err -> Log.d(TAG, "Failed to get nodeinfo", err)
-            }).autoDispose()
-        }
+        api.getNodeinfoLinks().subscribe({ links ->
+            if (links.links.isNotEmpty()) {
+                api.getNodeinfo(links.links[0].href).subscribe({ ni ->
+                    nodeinfo.postValue(ni)
+                }, { err ->
+                    Log.d(TAG, "Failed to get nodeinfo", err)
+                }).autoDispose()
+            }
         }, { err ->
             Log.d(TAG, "Failed to get nodeinfo links", err)
         }).autoDispose()
@@ -150,63 +160,81 @@ open class CommonComposeViewModel(
         val videoLimit = instanceMetadata.value?.imageLimit ?: STATUS_IMAGE_SIZE_LIMIT
 
         mediaUploader.prepareMedia(uri, videoLimit, imageLimit, filename)
-                .map { (type, uri, size) ->
-                    val mediaItems = media.value!!
-                    if (!hasNoAttachmentLimits
-                            && type != QueuedMedia.Type.IMAGE
-                            && mediaItems.isNotEmpty()
-                            && mediaItems[0].type == QueuedMedia.Type.IMAGE) {
-                        throw VideoOrImageException()
-                    } else {
-                        addMediaToQueue(type, uri, size, filename ?: "unknown", anonymizeNames)
-                    }
+            .map { (type, uri, size) ->
+                val mediaItems = media.value!!
+                if (!hasNoAttachmentLimits &&
+                    type != QueuedMedia.Type.IMAGE &&
+                    mediaItems.isNotEmpty() &&
+                    mediaItems[0].type == QueuedMedia.Type.IMAGE
+                ) {
+                    throw VideoOrImageException()
+                } else {
+                    addMediaToQueue(
+                        type, uri, size, filename ?: "unknown", anonymizeNames
+                    )
                 }
-                .subscribe({ queuedMedia ->
-                    liveData.postValue(Either.Right(queuedMedia))
-                }, { error ->
-                    liveData.postValue(Either.Left(error))
-                })
-                .autoDispose()
+            }
+            .subscribe({ queuedMedia ->
+                liveData.postValue(Either.Right(queuedMedia))
+            }, { error ->
+                liveData.postValue(Either.Left(error))
+            })
+            .autoDispose()
         return liveData
     }
 
-    private fun addMediaToQueue(type: Int, uri: Uri, mediaSize: Long, filename: String, anonymizeNames: Boolean): QueuedMedia {
-        val mediaItem = QueuedMedia(System.currentTimeMillis(), uri, type, mediaSize, filename,
-                hasNoAttachmentLimits, anonymizeNames)
+    private fun addMediaToQueue(
+        type: Int,
+        uri: Uri,
+        mediaSize: Long,
+        filename: String,
+        anonymizeNames: Boolean
+    ): QueuedMedia {
+        val mediaItem = QueuedMedia(
+            System.currentTimeMillis(), uri, type, mediaSize, filename,
+            hasNoAttachmentLimits, anonymizeNames
+        )
         val imageLimit = instanceMetadata.value?.videoLimit ?: STATUS_VIDEO_SIZE_LIMIT
         val videoLimit = instanceMetadata.value?.imageLimit ?: STATUS_IMAGE_SIZE_LIMIT
 
         media.value = media.value!! + mediaItem
         mediaToDisposable[mediaItem.localId] = mediaUploader
-                .uploadMedia(mediaItem, videoLimit, imageLimit )
-                .subscribe ({ event ->
-                    val item = media.value?.find { it.localId == mediaItem.localId }
-                            ?: return@subscribe
-                    val newMediaItem = when (event) {
-                        is UploadEvent.ProgressEvent ->
-                            item.copy(uploadPercent = event.percentage)
-                        is UploadEvent.FinishedEvent ->
-                            item.copy(id = event.attachment.id, uploadPercent = -1)
-                    }
-                    synchronized(media) {
-                        val mediaValue = media.value!!
-                        val index = mediaValue.indexOfFirst { it.localId == newMediaItem.localId }
-                        media.postValue(if (index == -1) {
+            .uploadMedia(mediaItem, videoLimit, imageLimit)
+            .subscribe({ event ->
+                val item = media.value?.find { it.localId == mediaItem.localId }
+                    ?: return@subscribe
+                val newMediaItem = when (event) {
+                    is UploadEvent.ProgressEvent ->
+                        item.copy(uploadPercent = event.percentage)
+                    is UploadEvent.FinishedEvent ->
+                        item.copy(id = event.attachment.id, uploadPercent = -1)
+                }
+                synchronized(media) {
+                    val mediaValue = media.value!!
+                    val index = mediaValue.indexOfFirst { it.localId == newMediaItem.localId }
+                    media.postValue(
+                        if (index == -1) {
                             mediaValue + newMediaItem
                         } else {
                             mediaValue.toMutableList().also { it[index] = newMediaItem }
-                        })
-                    }
-                }, { error ->
-                    media.postValue(media.value?.filter { it.localId != mediaItem.localId } ?: emptyList())
-                    uploadError.postValue(error)
-                })
+                        }
+                    )
+                }
+            }, { error ->
+                media.postValue(
+                    media.value?.filter { it.localId != mediaItem.localId }
+                        ?: emptyList()
+                )
+                uploadError.postValue(error)
+            })
         return mediaItem
     }
 
     protected fun addUploadedMedia(id: String, type: Int, uri: Uri, description: String?) {
-        val mediaItem = QueuedMedia(System.currentTimeMillis(), uri, type, 0, "unknown",
-                hasNoAttachmentLimits, anonymizeNames, -1, id, description)
+        val mediaItem = QueuedMedia(
+            System.currentTimeMillis(), uri, type, 0, "unknown",
+            hasNoAttachmentLimits, anonymizeNames, -1, id, description
+        )
         media.value = media.value!! + mediaItem
     }
 
@@ -230,12 +258,12 @@ open class CommonComposeViewModel(
                     media.removeObserver(this)
                 } else if (updatedItem.id != null) {
                     api.updateMedia(updatedItem.id, description)
-                            .subscribe({
-                                completedCaptioningLiveData.postValue(true)
-                            }, {
-                                completedCaptioningLiveData.postValue(false)
-                            })
-                            .autoDispose()
+                        .subscribe({
+                            completedCaptioningLiveData.postValue(true)
+                        }, {
+                            completedCaptioningLiveData.postValue(false)
+                        })
+                        .autoDispose()
                     media.removeObserver(this)
                 }
             }
@@ -243,17 +271,18 @@ open class CommonComposeViewModel(
         return completedCaptioningLiveData
     }
 
-    fun searchAutocompleteSuggestions(token: String): List<ComposeAutoCompleteAdapter.AutocompleteResult> {
+    fun searchAutocompleteSuggestions(token: String):
+        List<ComposeAutoCompleteAdapter.AutocompleteResult> {
         when (token[0]) {
             '@' -> {
                 return try {
                     val acct = token.substring(1)
                     api.searchAccounts(query = acct, resolve = true, limit = 10)
-                            .blockingGet()
-                            .map { ComposeAutoCompleteAdapter.AccountResult(it) }
-                            .filter {
-                                it.account.username.startsWith(acct, ignoreCase = true)
-                            }
+                        .blockingGet()
+                        .map { ComposeAutoCompleteAdapter.AccountResult(it) }
+                        .filter {
+                            it.account.username.startsWith(acct, ignoreCase = true)
+                        }
                 } catch (e: Throwable) {
                     Log.e(TAG, String.format("Autocomplete search for %s failed.", token), e)
                     emptyList()
@@ -261,10 +290,14 @@ open class CommonComposeViewModel(
             }
             '#' -> {
                 return try {
-                    api.searchObservable(query = token, type = SearchType.Hashtag.apiParameter, limit = 10)
-                            .blockingGet()
-                            .hashtags
-                            .map { ComposeAutoCompleteAdapter.HashtagResult(it) }
+                    api.searchObservable(
+                        query = token,
+                        type = SearchType.Hashtag.apiParameter,
+                        limit = 10
+                    )
+                        .blockingGet()
+                        .hashtags
+                        .map { ComposeAutoCompleteAdapter.HashtagResult(it) }
                 } catch (e: Throwable) {
                     Log.e(TAG, String.format("Autocomplete search for %s failed.", token), e)
                     emptyList()
@@ -305,7 +338,7 @@ open class CommonComposeViewModel(
     }
 
     private fun getStickers() {
-        if(!tryFetchStickers)
+        if (!tryFetchStickers)
             return
 
         api.getStickers().subscribe({ stickers ->
@@ -314,30 +347,32 @@ open class CommonComposeViewModel(
 
                 val singles = mutableListOf<Single<Response<StickerPack>>>()
 
-                for(entry in stickers) {
-                    val url = entry.value.removePrefix("/").removeSuffix("/") + "/pack.json";
+                for (entry in stickers) {
+                    val url = entry.value.removePrefix("/")
+                        .removeSuffix("/") + "/pack.json"
                     singles += api.getStickerPack(url)
                 }
 
                 Single.zip(singles) {
                     it.map {
                         it as Response<StickerPack>
-                        it.body()!!.internal_url = it.raw().request.url.toString().removeSuffix("pack.json")
+                        it.body()!!.internal_url =
+                            it.raw().request.url.toString().removeSuffix("pack.json")
                         it.body()!!
                     }
                 }.onErrorReturn {
                     Log.d(TAG, "Failed to get sticker pack.json", it)
                     emptyList()
                 }.subscribe() { pack ->
-                    if(pack.isNotEmpty()) {
+                    if (pack.isNotEmpty()) {
                         val array = pack.toTypedArray()
                         array.sort()
                         this.stickers.postValue(array)
                     }
                 }.autoDispose()
             }
-        }, {
-            err -> Log.d(TAG, "Failed to get sticker.json", err)
+        }, { err ->
+            Log.d(TAG, "Failed to get sticker.json", err)
         }).autoDispose()
     }
 
@@ -348,7 +383,6 @@ open class CommonComposeViewModel(
     private companion object {
         const val TAG = "CCVM"
     }
-
 }
 
 fun <T> mutableLiveData(default: T) = MutableLiveData<T>().apply { value = default }
@@ -356,24 +390,24 @@ fun <T> mutableLiveData(default: T) = MutableLiveData<T>().apply { value = defau
 const val DEFAULT_CHARACTER_LIMIT = 500
 const val DEFAULT_MAX_OPTION_COUNT = 4
 const val DEFAULT_MAX_OPTION_LENGTH = 25
-const val STATUS_VIDEO_SIZE_LIMIT : Long = 41943040 // 40MiB
-const val STATUS_IMAGE_SIZE_LIMIT : Long = 8388608 // 8MiB
+const val STATUS_VIDEO_SIZE_LIMIT: Long = 41943040 // 40MiB
+const val STATUS_IMAGE_SIZE_LIMIT: Long = 8388608 // 8MiB
 
 data class ComposeInstanceParams(
-        val maxChars: Int,
-        val chatLimit: Int,
-        val pollMaxOptions: Int,
-        val pollMaxLength: Int,
-        val supportsScheduled: Boolean
+    val maxChars: Int,
+    val chatLimit: Int,
+    val pollMaxOptions: Int,
+    val pollMaxLength: Int,
+    val supportsScheduled: Boolean
 )
 
 data class ComposeInstanceMetadata(
-        val software: String,
-        val supportsMarkdown: Boolean,
-        val supportsBBcode: Boolean,
-        val supportsHTML: Boolean,
-        val videoLimit: Long,
-        val imageLimit: Long
+    val software: String,
+    val supportsMarkdown: Boolean,
+    val supportsBBcode: Boolean,
+    val supportsHTML: Boolean,
+    val videoLimit: Long,
+    val imageLimit: Long
 )
 
 /**

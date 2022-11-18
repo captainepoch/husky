@@ -7,15 +7,15 @@ import androidx.room.Entity
  */
 
 @Entity(
-        primaryKeys = ["localId", "messageId"]
+    primaryKeys = ["localId", "messageId"]
 )
 data class ChatMessageEntity(
-        val localId: Long,
-        val messageId: String,
-        val content: String?,
-        val chatId: String,
-        val accountId: String,
-        val createdAt: Long,
-        val attachment: String?,
-        val emojis: String
+    val localId: Long,
+    val messageId: String,
+    val content: String?,
+    val chatId: String,
+    val accountId: String,
+    val createdAt: Long,
+    val attachment: String?,
+    val emojis: String
 )

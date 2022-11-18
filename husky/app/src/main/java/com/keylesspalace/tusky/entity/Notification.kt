@@ -20,26 +20,30 @@
 
 package com.keylesspalace.tusky.entity
 
-import com.google.gson.*
-import com.google.gson.annotations.SerializedName
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonParseException
 import com.google.gson.annotations.JsonAdapter
-import java.util.*
+import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class PleromaNotification(
     @SerializedName("is_seen") val seen: Boolean
 )
 
 data class Notification(
-        val type: Type,
-        val id: String,
-        val account: Account,
-        val status: Status?,
-        val pleroma: PleromaNotification? = null,
-        val emoji: String? = null,
-        @SerializedName("emoji_url") val emojiUrl: String? = null,
-        @SerializedName("chat_message") val chatMessage: ChatMessage? = null,
-        @SerializedName("created_at") val createdAt: Date? = null,
-        val target: Account? = null) {
+    val type: Type,
+    val id: String,
+    val account: Account,
+    val status: Status?,
+    val pleroma: PleromaNotification? = null,
+    val emoji: String? = null,
+    @SerializedName("emoji_url") val emojiUrl: String? = null,
+    @SerializedName("chat_message") val chatMessage: ChatMessage? = null,
+    @SerializedName("created_at") val createdAt: Date? = null,
+    val target: Account? = null
+) {
 
     @JsonAdapter(NotificationTypeAdapter::class)
     enum class Type(val presentation: String) {
@@ -65,7 +69,19 @@ data class Notification(
                 }
                 return UNKNOWN
             }
-            val asList = listOf(MENTION, REBLOG, FAVOURITE, FOLLOW, POLL, EMOJI_REACTION, FOLLOW_REQUEST, CHAT_MESSAGE, MOVE, STATUS)
+
+            val asList = listOf(
+                MENTION,
+                REBLOG,
+                FAVOURITE,
+                FOLLOW,
+                POLL,
+                EMOJI_REACTION,
+                FOLLOW_REQUEST,
+                CHAT_MESSAGE,
+                MOVE,
+                STATUS
+            )
 
             val asStringList = asList.map { it.presentation }
         }
@@ -90,22 +106,29 @@ data class Notification(
     class NotificationTypeAdapter : JsonDeserializer<Type> {
 
         @Throws(JsonParseException::class)
-        override fun deserialize(json: JsonElement, typeOfT: java.lang.reflect.Type, context: JsonDeserializationContext): Type {
+        override fun deserialize(
+            json: JsonElement,
+            typeOfT: java.lang.reflect.Type,
+            context: JsonDeserializationContext
+        ): Type {
             return Type.byString(json.asString)
         }
-
     }
 
     companion object {
 
         // for Pleroma compatibility that uses Mention type
         @JvmStatic
-        fun rewriteToStatusTypeIfNeeded(body: Notification, accountId: String) : Notification {
-            if (body.type == Type.MENTION
-                    && body.status != null) {
+        fun rewriteToStatusTypeIfNeeded(body: Notification, accountId: String): Notification {
+            if (body.type == Type.MENTION && body.status != null) {
                 return if (body.status.mentions.any {
                     it.id == accountId
-                }) body else body.copy(type = Type.STATUS)
+                }
+                ) {
+                    body
+                } else {
+                    body.copy(type = Type.STATUS)
+                }
             }
             return body
         }

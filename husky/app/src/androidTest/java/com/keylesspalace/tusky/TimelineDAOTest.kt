@@ -42,7 +42,7 @@ class TimelineDAOTest {
         val ignoredOne = makeStatus(statusId = 1)
         val ignoredTwo = makeStatus(accountId = 2)
 
-        for((status, author, reblogger) in listOf(setOne, setTwo, ignoredOne, ignoredTwo)) {
+        for ((status, author, reblogger) in listOf(setOne, setTwo, ignoredOne, ignoredTwo)) {
             timelineDao.insertInTransaction(status, author, reblogger)
         }
 
@@ -53,7 +53,7 @@ class TimelineDAOTest {
             .blockingGet()
 
         assertEquals(2, resultsFromDb.size)
-        for((set, fromDb) in listOf(setTwo, setOne).zip(resultsFromDb)) {
+        for ((set, fromDb) in listOf(setTwo, setOne).zip(resultsFromDb)) {
             val (status, author, reblogger) = set
             assertEquals(status, fromDb.status)
             assertEquals(author, fromDb.account)
@@ -78,7 +78,6 @@ class TimelineDAOTest {
         assertEquals(author, result.account)
         assertEquals(status, result.status)
         assertNull(result.reblogAccount)
-
     }
 
     @Test
@@ -104,12 +103,14 @@ class TimelineDAOTest {
             accountId = 2
         )
 
-        for((status, author, reblogAuthor) in listOf(
-            oldThisAccount,
-            oldAnotherAccount,
-            recentThisAccount,
-            recentAnotherAccount
-        )) {
+        for (
+            (status, author, reblogAuthor) in listOf(
+                oldThisAccount,
+                oldAnotherAccount,
+                recentThisAccount,
+                recentAnotherAccount
+            )
+        ) {
             timelineDao.insertInTransaction(status, author, reblogAuthor)
         }
 
@@ -151,7 +152,7 @@ class TimelineDAOTest {
             oldStatuses.first().first.serverId
         )
 
-        for((status, author, reblogAuthor) in oldStatuses) {
+        for ((status, author, reblogAuthor) in oldStatuses) {
             timelineDao.insertInTransaction(status, author, reblogAuthor)
         }
 
@@ -167,7 +168,7 @@ class TimelineDAOTest {
             newStatuses.first().first.serverId
         )
 
-        for((status, author, reblogAuthor) in newStatuses) {
+        for ((status, author, reblogAuthor) in newStatuses) {
             timelineDao.insertInTransaction(status, author, reblogAuthor)
         }
 
@@ -202,7 +203,7 @@ class TimelineDAOTest {
             false
         )
 
-        val reblogAuthor = if(reblog) {
+        val reblogAuthor = if (reblog) {
             TimelineAccountEntity(
                 "R$authorServerId",
                 accountId,
@@ -215,7 +216,6 @@ class TimelineDAOTest {
                 false
             )
         } else null
-
 
         val even = accountId % 2 == 0L
         val status = TimelineStatusEntity(
@@ -239,7 +239,7 @@ class TimelineDAOTest {
             attachments = "attachments$accountId",
             mentions = "mentions$accountId",
             application = "application$accountId",
-            reblogServerId = if(reblog) (statusId * 100).toString() else null,
+            reblogServerId = if (reblog) (statusId * 100).toString() else null,
             reblogAccountId = reblogAuthor?.serverId,
             poll = null,
             pleroma = null

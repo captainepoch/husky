@@ -88,12 +88,14 @@ class ComposeViewModel @Inject constructor(
 
     fun didChange(content: String?, contentWarning: String?): Boolean {
 
-        val textChanged = !(content.isNullOrEmpty()
-                || startingText?.startsWith(content.toString()) ?: false)
+        val textChanged = !(
+            content.isNullOrEmpty() ||
+                startingText?.startsWith(content.toString()) ?: false
+            )
 
-        val contentWarningChanged = showContentWarning.value!!
-                && !contentWarning.isNullOrEmpty()
-                && !startingContentWarning.startsWith(contentWarning.toString())
+        val contentWarningChanged = showContentWarning.value!! &&
+            !contentWarning.isNullOrEmpty() &&
+            !startingContentWarning.startsWith(contentWarning.toString())
         val mediaChanged = !media.value.isNullOrEmpty()
         val pollChanged = poll.value != null
 
@@ -106,10 +108,10 @@ class ComposeViewModel @Inject constructor(
     }
 
     fun deleteDraft() {
-        if(savedTootUid != 0) {
+        if (savedTootUid != 0) {
             saveTootHelper.deleteDraft(savedTootUid)
         }
-        if(draftId != 0) {
+        if (draftId != 0) {
             draftHelper.deleteDraftAndAttachments(draftId)
                 .subscribe()
         }
@@ -149,7 +151,7 @@ class ComposeViewModel @Inject constructor(
         preview: Boolean
     ): LiveData<Unit> {
 
-        val deletionObservable = if(isEditingScheduledToot) {
+        val deletionObservable = if (isEditingScheduledToot) {
             api.deleteScheduledStatus(scheduledTootId.toString()).toObservable().map { }
         } else {
             just(Unit)
@@ -161,7 +163,7 @@ class ComposeViewModel @Inject constructor(
                 val mediaIds = ArrayList<String>()
                 val mediaUris = ArrayList<Uri>()
                 val mediaDescriptions = ArrayList<String>()
-                for(item in media.value!!) {
+                for (item in media.value!!) {
                     mediaIds.add(item.id!!)
                     mediaUris.add(item.uri)
                     mediaDescriptions.add(item.description ?: "")
@@ -197,7 +199,7 @@ class ComposeViewModel @Inject constructor(
 
     fun setup(composeOptions: ComposeActivity.ComposeOptions?) {
 
-        if(setupComplete.value == true) {
+        if (setupComplete.value == true) {
             return
         }
 
@@ -213,10 +215,10 @@ class ComposeViewModel @Inject constructor(
         modifiedInitialState = composeOptions?.modifiedInitialState == true
 
         val contentWarning = composeOptions?.contentWarning
-        if(contentWarning != null) {
+        if (contentWarning != null) {
             startingContentWarning = contentWarning
         }
-        if(!contentWarningStateChanged) {
+        if (!contentWarningStateChanged) {
             showContentWarning.value = !contentWarning.isNullOrBlank()
         }
 
@@ -224,17 +226,17 @@ class ComposeViewModel @Inject constructor(
         val loadedDraftMediaUris = composeOptions?.mediaUrls
         val loadedDraftMediaDescriptions: List<String?>? = composeOptions?.mediaDescriptions
         val draftAttachments = composeOptions?.draftAttachments
-        if(loadedDraftMediaUris != null && loadedDraftMediaDescriptions != null) {
+        if (loadedDraftMediaUris != null && loadedDraftMediaDescriptions != null) {
             // when coming from SavedTootActivity
             loadedDraftMediaUris.zip(loadedDraftMediaDescriptions)
                 .forEach { (uri, description) ->
                     pickMedia(uri.toUri(), null).observeForever { errorOrItem ->
-                        if(errorOrItem.isRight() && description != null) {
+                        if (errorOrItem.isRight() && description != null) {
                             updateDescription(errorOrItem.asRight().localId, description)
                         }
                     }
                 }
-        } else if(draftAttachments != null) {
+        } else if (draftAttachments != null) {
             // when coming from DraftActivity
             draftAttachments.forEach { attachment ->
                 pickMedia(
@@ -244,7 +246,7 @@ class ComposeViewModel @Inject constructor(
             }
         } else composeOptions?.mediaAttachments?.forEach { a ->
             // when coming from redraft or ScheduledTootActivity
-            val mediaType = when(a.type) {
+            val mediaType = when (a.type) {
                 Attachment.Type.VIDEO, Attachment.Type.GIFV -> QueuedMedia.Type.VIDEO
                 Attachment.Type.UNKNOWN, Attachment.Type.IMAGE -> QueuedMedia.Type.IMAGE
                 Attachment.Type.AUDIO -> QueuedMedia.Type.AUDIO
@@ -258,14 +260,14 @@ class ComposeViewModel @Inject constructor(
         startingText = composeOptions?.tootText
 
         val tootVisibility = composeOptions?.visibility ?: Status.Visibility.UNKNOWN
-        if(tootVisibility.num != Status.Visibility.UNKNOWN.num) {
+        if (tootVisibility.num != Status.Visibility.UNKNOWN.num) {
             startingVisibility = tootVisibility
         }
         statusVisibility.value = startingVisibility
         val mentionedUsernames = composeOptions?.mentionedUsernames
-        if(mentionedUsernames != null) {
+        if (mentionedUsernames != null) {
             val builder = StringBuilder()
-            for(name in mentionedUsernames) {
+            for (name in mentionedUsernames) {
                 builder.append('@')
                 builder.append(name)
                 builder.append(' ')
@@ -278,7 +280,7 @@ class ComposeViewModel @Inject constructor(
         composeOptions?.sensitive?.let { markMediaAsSensitive.value = it }
 
         val poll = composeOptions?.poll
-        if(poll != null && composeOptions.mediaAttachments.isNullOrEmpty()) {
+        if (poll != null && composeOptions.mediaAttachments.isNullOrEmpty()) {
             this.poll.value = poll
         }
         replyingStatusContent = composeOptions?.replyingStatusContent
@@ -297,7 +299,7 @@ class ComposeViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        for(uploadDisposable in mediaToDisposable.values) {
+        for (uploadDisposable in mediaToDisposable.values) {
             uploadDisposable.dispose()
         }
         super.onCleared()

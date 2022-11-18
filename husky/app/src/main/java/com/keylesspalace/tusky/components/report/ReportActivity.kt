@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_report.*
 import kotlinx.android.synthetic.main.toolbar_basic.*
 import javax.inject.Inject
 
-
 class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
 
     @Inject
@@ -51,7 +50,6 @@ class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
         }
 
         viewModel.init(accountId, accountUserName, intent?.getStringExtra(STATUS_ID))
-
 
         setContentView(R.layout.activity_report)
 
@@ -77,25 +75,31 @@ class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     private fun subscribeObservables() {
-        viewModel.navigation.observe(this, Observer { screen ->
-            if (screen != null) {
-                viewModel.navigated()
-                when (screen) {
-                    Screen.Statuses -> showStatusesPage()
-                    Screen.Note -> showNotesPage()
-                    Screen.Done -> showDonePage()
-                    Screen.Back -> showPreviousScreen()
-                    Screen.Finish -> closeScreen()
+        viewModel.navigation.observe(
+            this,
+            Observer { screen ->
+                if (screen != null) {
+                    viewModel.navigated()
+                    when (screen) {
+                        Screen.Statuses -> showStatusesPage()
+                        Screen.Note -> showNotesPage()
+                        Screen.Done -> showDonePage()
+                        Screen.Back -> showPreviousScreen()
+                        Screen.Finish -> closeScreen()
+                    }
                 }
             }
-        })
+        )
 
-        viewModel.checkUrl.observe(this, Observer {
-            if (!it.isNullOrBlank()) {
-                viewModel.urlChecked()
-                viewUrl(it)
+        viewModel.checkUrl.observe(
+            this,
+            Observer {
+                if (!it.isNullOrBlank()) {
+                    viewModel.urlChecked()
+                    viewUrl(it)
+                }
             }
-        })
+        )
     }
 
     private fun showPreviousScreen() {
@@ -138,12 +142,12 @@ class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
 
         @JvmStatic
         fun getIntent(context: Context, accountId: String, userName: String, statusId: String? = null) =
-                Intent(context, ReportActivity::class.java)
-                        .apply {
-                            putExtra(ACCOUNT_ID, accountId)
-                            putExtra(ACCOUNT_USERNAME, userName)
-                            putExtra(STATUS_ID, statusId)
-                        }
+            Intent(context, ReportActivity::class.java)
+                .apply {
+                    putExtra(ACCOUNT_ID, accountId)
+                    putExtra(ACCOUNT_USERNAME, userName)
+                    putExtra(STATUS_ID, statusId)
+                }
     }
 
     override fun androidInjector() = androidInjector

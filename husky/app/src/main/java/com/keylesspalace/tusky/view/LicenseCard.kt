@@ -51,7 +51,7 @@ class LicenseCard
 
         binding.licenseCardName.text = name
         binding.licenseCardLicense.text = license
-        if(link.isNullOrBlank()) {
+        if (link.isNullOrBlank()) {
             binding.licenseCardLink.gone()
         } else {
             binding.licenseCardLink.text = link

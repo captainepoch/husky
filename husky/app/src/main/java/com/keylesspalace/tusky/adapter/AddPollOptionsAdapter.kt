@@ -28,11 +28,11 @@ import com.keylesspalace.tusky.util.onTextChanged
 import com.keylesspalace.tusky.util.visible
 
 class AddPollOptionsAdapter(
-        private var options: MutableList<String>,
-        private val maxOptionLength: Int,
-        private val onOptionRemoved: (Boolean) -> Unit,
-        private val onOptionChanged: (Boolean) -> Unit
-): RecyclerView.Adapter<ViewHolder>() {
+    private var options: MutableList<String>,
+    private val maxOptionLength: Int,
+    private val onOptionRemoved: (Boolean) -> Unit,
+    private val onOptionChanged: (Boolean) -> Unit
+) : RecyclerView.Adapter<ViewHolder>() {
 
     val pollOptions: List<String>
         get() = options.toList()
@@ -48,7 +48,7 @@ class AddPollOptionsAdapter(
 
         holder.editText.onTextChanged { s, _, _, _ ->
             val pos = holder.adapterPosition
-            if(pos != RecyclerView.NO_POSITION) {
+            if (pos != RecyclerView.NO_POSITION) {
                 options[pos] = s.toString()
                 onOptionChanged(validateInput())
             }
@@ -81,11 +81,9 @@ class AddPollOptionsAdapter(
 
         return true
     }
-
 }
 
-
-class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val textInputLayout: TextInputLayout = itemView.findViewById(R.id.optionTextInputLayout)
     val editText: TextInputEditText = itemView.findViewById(R.id.optionEditText)
     val deleteButton: ImageButton = itemView.findViewById(R.id.deleteButton)

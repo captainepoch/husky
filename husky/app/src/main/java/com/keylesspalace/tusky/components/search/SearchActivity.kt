@@ -37,8 +37,8 @@ import com.keylesspalace.tusky.databinding.ActivitySearchBinding
 import com.keylesspalace.tusky.di.ViewModelFactory
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
 
@@ -96,7 +96,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -106,7 +106,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     private fun getPageTitle(position: Int): CharSequence? {
-        return when(position) {
+        return when (position) {
             0 -> getString(R.string.title_statuses)
             1 -> getString(R.string.title_accounts)
             2 -> getString(R.string.title_hashtags_dialog)
@@ -115,7 +115,7 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
     }
 
     private fun handleIntent(intent: Intent) {
-        if(Intent.ACTION_SEARCH == intent.action) {
+        if (Intent.ACTION_SEARCH == intent.action) {
             viewModel.currentQuery = intent.getStringExtra(SearchManager.QUERY) ?: ""
             viewModel.search(viewModel.currentQuery)
         }

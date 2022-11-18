@@ -24,21 +24,35 @@ import com.keylesspalace.tusky.components.report.model.StatusViewState
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.interfaces.LinkListener
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.LinkHelper
+import com.keylesspalace.tusky.util.StatusDisplayOptions
+import com.keylesspalace.tusky.util.StatusViewHelper
 import com.keylesspalace.tusky.util.StatusViewHelper.Companion.COLLAPSE_INPUT_FILTER
 import com.keylesspalace.tusky.util.StatusViewHelper.Companion.NO_INPUT_FILTER
+import com.keylesspalace.tusky.util.TimestampUtils
+import com.keylesspalace.tusky.util.emojify
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.shouldTrimStatus
+import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.viewdata.toViewData
-import kotlinx.android.synthetic.main.item_report_status.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.item_report_status.view.buttonToggleContent
+import kotlinx.android.synthetic.main.item_report_status.view.statusContent
+import kotlinx.android.synthetic.main.item_report_status.view.statusContentWarningButton
+import kotlinx.android.synthetic.main.item_report_status.view.statusContentWarningDescription
+import kotlinx.android.synthetic.main.item_report_status.view.statusSelection
+import kotlinx.android.synthetic.main.item_report_status.view.status_media_preview_container
+import kotlinx.android.synthetic.main.item_report_status.view.timestampInfo
+import java.util.Date
 
 class StatusViewHolder(
-        itemView: View,
-        private val statusDisplayOptions: StatusDisplayOptions,
-        private val viewState: StatusViewState,
-        private val adapterHandler: AdapterHandler,
-        private val getStatusForPosition: (Int) -> Status?
+    itemView: View,
+    private val statusDisplayOptions: StatusDisplayOptions,
+    private val viewState: StatusViewState,
+    private val adapterHandler: AdapterHandler,
+    private val getStatusForPosition: (Int) -> Status?
 ) : RecyclerView.ViewHolder(itemView) {
-    private val mediaViewHeight = itemView.context.resources.getDimensionPixelSize(R.dimen.status_media_preview_height)
+    private val mediaViewHeight =
+        itemView.context.resources.getDimensionPixelSize(R.dimen.status_media_preview_height)
     private val statusViewHelper = StatusViewHelper(itemView)
 
     private val previewListener = object : StatusViewHelper.MediaPreviewListener {
@@ -71,25 +85,40 @@ class StatusViewHolder(
 
         val sensitive = status.sensitive
 
-        statusViewHelper.setMediasPreview(statusDisplayOptions, status.attachments,
-                sensitive, previewListener, viewState.isMediaShow(status.id, status.sensitive),
-                mediaViewHeight)
+        statusViewHelper.setMediasPreview(
+            statusDisplayOptions,
+            status.attachments,
+            sensitive,
+            previewListener,
+            viewState.isMediaShow(status.id, status.sensitive),
+            mediaViewHeight
+        )
 
-        statusViewHelper.setupPollReadonly(status.poll.toViewData(), status.emojis, statusDisplayOptions.useAbsoluteTime)
+        statusViewHelper.setupPollReadonly(
+            status.poll.toViewData(), status.emojis, statusDisplayOptions.useAbsoluteTime
+        )
         setCreatedAt(status.createdAt)
     }
 
     private fun updateTextView() {
         status()?.let { status ->
-            setupCollapsedState(shouldTrimStatus(status.content), viewState.isCollapsed(status.id, true),
-                    viewState.isContentShow(status.id, status.sensitive), status.spoilerText)
+            setupCollapsedState(
+                shouldTrimStatus(status.content),
+                viewState.isCollapsed(status.id, true),
+                viewState.isContentShow(status.id, status.sensitive),
+                status.spoilerText
+            )
 
             if (status.spoilerText.isBlank()) {
-                setTextVisible(true, status.content, status.mentions, status.emojis, adapterHandler)
+                setTextVisible(
+                    true, status.content, status.mentions, status.emojis, adapterHandler
+                )
                 itemView.statusContentWarningButton.hide()
                 itemView.statusContentWarningDescription.hide()
             } else {
-                val emojiSpoiler = status.spoilerText.emojify(status.emojis, itemView.statusContentWarningDescription)
+                val emojiSpoiler = status.spoilerText.emojify(
+                    status.emojis, itemView.statusContentWarningDescription
+                )
                 itemView.statusContentWarningDescription.text = emojiSpoiler
                 itemView.statusContentWarningDescription.show()
                 itemView.statusContentWarningButton.show()
@@ -99,28 +128,42 @@ class StatusViewHolder(
                         val contentShown = viewState.isContentShow(status.id, true)
                         itemView.statusContentWarningDescription.invalidate()
                         viewState.setContentShow(status.id, !contentShown)
-                        setTextVisible(!contentShown, status.content, status.mentions, status.emojis, adapterHandler)
+                        setTextVisible(
+                            !contentShown,
+                            status.content,
+                            status.mentions,
+                            status.emojis,
+                            adapterHandler
+                        )
                         setContentWarningButtonText(!contentShown)
                     }
                 }
-                setTextVisible(viewState.isContentShow(status.id, true), status.content, status.mentions, status.emojis, adapterHandler)
+                setTextVisible(
+                    viewState.isContentShow(status.id, true),
+                    status.content,
+                    status.mentions,
+                    status.emojis,
+                    adapterHandler
+                )
             }
         }
     }
 
     private fun setContentWarningButtonText(contentShown: Boolean) {
-        if(contentShown) {
+        if (contentShown) {
             itemView.statusContentWarningButton.setText(R.string.status_content_warning_show_less)
         } else {
             itemView.statusContentWarningButton.setText(R.string.status_content_warning_show_more)
         }
     }
 
-    private fun setTextVisible(expanded: Boolean,
-                               content: Spanned,
-                               mentions: Array<Status.Mention>?,
-                               emojis: List<Emoji>,
-                               listener: LinkListener) {
+    private fun setTextVisible(
+        expanded: Boolean,
+        content: Spanned,
+        mentions: Array<Status.Mention>?,
+        emojis: List<Emoji>,
+        listener: LinkListener
+    ) {
         if (expanded) {
             val emojifiedText = content.emojify(emojis, itemView.statusContent)
             LinkHelper.setClickableText(itemView.statusContent, emojifiedText, mentions, listener)
@@ -149,11 +192,15 @@ class StatusViewHolder(
         }
     }
 
-
-    private fun setupCollapsedState(collapsible: Boolean, collapsed: Boolean, expanded: Boolean, spoilerText: String) {
+    private fun setupCollapsedState(
+        collapsible: Boolean,
+        collapsed: Boolean,
+        expanded: Boolean,
+        spoilerText: String
+    ) {
         /* input filter for TextViews have to be set before text */
         if (collapsible && (expanded || TextUtils.isEmpty(spoilerText))) {
-            itemView.buttonToggleContent.setOnClickListener{
+            itemView.buttonToggleContent.setOnClickListener {
                 status()?.let { status ->
                     viewState.setCollapsed(status.id, !collapsed)
                     updateTextView()

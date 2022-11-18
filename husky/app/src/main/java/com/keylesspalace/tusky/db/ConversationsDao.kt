@@ -16,7 +16,11 @@
 package com.keylesspalace.tusky.db
 
 import androidx.paging.DataSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.keylesspalace.tusky.components.conversation.ConversationEntity
 import io.reactivex.Single
 
@@ -31,11 +35,12 @@ interface ConversationsDao {
     @Delete
     fun delete(conversation: ConversationEntity): Single<Int>
 
-    @Query("SELECT * FROM ConversationEntity WHERE accountId = :accountId ORDER BY s_createdAt DESC")
-    fun conversationsForAccount(accountId: Long) : DataSource.Factory<Int, ConversationEntity>
+    @Query(
+        "SELECT * FROM ConversationEntity WHERE accountId = :accountId " +
+            "ORDER BY s_createdAt DESC"
+    )
+    fun conversationsForAccount(accountId: Long): DataSource.Factory<Int, ConversationEntity>
 
     @Query("DELETE FROM ConversationEntity WHERE accountId = :accountId")
     fun deleteForAccount(accountId: Long)
-
-
 }

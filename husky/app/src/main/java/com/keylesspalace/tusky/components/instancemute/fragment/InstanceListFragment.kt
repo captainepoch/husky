@@ -30,7 +30,7 @@ import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class InstanceListFragment: BaseFragment(), Injectable, InstanceActionListener {
+class InstanceListFragment : BaseFragment(), Injectable, InstanceActionListener {
     @Inject
     lateinit var api: MastodonApi
 
@@ -67,7 +67,7 @@ class InstanceListFragment: BaseFragment(), Injectable, InstanceActionListener {
 
     override fun mute(mute: Boolean, instance: String, position: Int) {
         if (mute) {
-            api.blockDomain(instance).enqueue(object: Callback<Any> {
+            api.blockDomain(instance).enqueue(object : Callback<Any> {
                 override fun onFailure(call: Call<Any>, t: Throwable) {
                     Log.e(TAG, "Error muting domain $instance")
                 }
@@ -81,7 +81,7 @@ class InstanceListFragment: BaseFragment(), Injectable, InstanceActionListener {
                 }
             })
         } else {
-            api.unblockDomain(instance).enqueue(object: Callback<Any> {
+            api.unblockDomain(instance).enqueue(object : Callback<Any> {
                 override fun onFailure(call: Call<Any>, t: Throwable) {
                     Log.e(TAG, "Error unmuting domain $instance")
                 }
@@ -90,10 +90,10 @@ class InstanceListFragment: BaseFragment(), Injectable, InstanceActionListener {
                     if (response.isSuccessful) {
                         adapter.removeItem(position)
                         Snackbar.make(recyclerView, getString(R.string.confirmation_domain_unmuted, instance), Snackbar.LENGTH_LONG)
-                                .setAction(R.string.action_undo) {
-                                    mute(true, instance, position)
-                                }
-                                .show()
+                            .setAction(R.string.action_undo) {
+                                mute(true, instance, position)
+                            }
+                            .show()
                     } else {
                         Log.e(TAG, "Error unmuting domain $instance")
                     }
@@ -114,19 +114,19 @@ class InstanceListFragment: BaseFragment(), Injectable, InstanceActionListener {
         }
 
         api.domainBlocks(id, bottomId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))
-                .subscribe({ response ->
-                    val instances = response.body()
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))
+            .subscribe({ response ->
+                val instances = response.body()
 
-                    if (response.isSuccessful && instances != null) {
-                        onFetchInstancesSuccess(instances, response.headers().get("Link"))
-                    } else {
-                        onFetchInstancesFailure(Exception(response.message()))
-                    }
-                }, {throwable ->
-                    onFetchInstancesFailure(throwable)
-                })
+                if (response.isSuccessful && instances != null) {
+                    onFetchInstancesSuccess(instances, response.headers().get("Link"))
+                } else {
+                    onFetchInstancesFailure(Exception(response.message()))
+                }
+            }, { throwable ->
+                onFetchInstancesFailure(throwable)
+            })
     }
 
     private fun onFetchInstancesSuccess(instances: List<String>, linkHeader: String?) {
@@ -143,9 +143,9 @@ class InstanceListFragment: BaseFragment(), Injectable, InstanceActionListener {
         if (adapter.itemCount == 0) {
             messageView.show()
             messageView.setup(
-                    R.drawable.elephant_friend_empty,
-                    R.string.message_empty,
-                    null
+                R.drawable.elephant_friend_empty,
+                R.string.message_empty,
+                null
             )
         } else {
             messageView.hide()

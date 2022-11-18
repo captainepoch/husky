@@ -18,8 +18,8 @@ package com.keylesspalace.tusky.components.report.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.report.Screen
@@ -45,36 +45,44 @@ class ReportDoneFragment : Fragment(R.layout.fragment_report_done), Injectable {
     }
 
     private fun subscribeObservables() {
-        viewModel.muteState.observe(viewLifecycleOwner, Observer {
-            if (it !is Loading) {
-                buttonMute.show()
-                progressMute.show()
-            } else {
-                buttonMute.hide()
-                progressMute.hide()
-            }
+        viewModel.muteState.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it !is Loading) {
+                    buttonMute.show()
+                    progressMute.show()
+                } else {
+                    buttonMute.hide()
+                    progressMute.hide()
+                }
 
-            buttonMute.setText(when (it.data) {
-                true -> R.string.action_unmute
-                else -> R.string.action_mute
-            })
-        })
-
-        viewModel.blockState.observe(viewLifecycleOwner, Observer {
-            if (it !is Loading) {
-                buttonBlock.show()
-                progressBlock.show()
+                buttonMute.setText(
+                    when (it.data) {
+                        true -> R.string.action_unmute
+                        else -> R.string.action_mute
+                    }
+                )
             }
-            else{
-                buttonBlock.hide()
-                progressBlock.hide()
-            }
-            buttonBlock.setText(when (it.data) {
-                true -> R.string.action_unblock
-                else -> R.string.action_block
-            })
-        })
+        )
 
+        viewModel.blockState.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it !is Loading) {
+                    buttonBlock.show()
+                    progressBlock.show()
+                } else {
+                    buttonBlock.hide()
+                    progressBlock.hide()
+                }
+                buttonBlock.setText(
+                    when (it.data) {
+                        true -> R.string.action_unblock
+                        else -> R.string.action_block
+                    }
+                )
+            }
+        )
     }
 
     private fun handleClicks() {
@@ -92,5 +100,4 @@ class ReportDoneFragment : Fragment(R.layout.fragment_report_done), Injectable {
     companion object {
         fun newInstance() = ReportDoneFragment()
     }
-
 }

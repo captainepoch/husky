@@ -25,12 +25,13 @@ import androidx.emoji.text.EmojiCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.entity.Emoji
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.emojify
+import com.keylesspalace.tusky.util.visible
 import com.keylesspalace.tusky.viewdata.PollOptionViewData
 import com.keylesspalace.tusky.viewdata.buildDescription
 import com.keylesspalace.tusky.viewdata.calculatePercent
 
-class PollAdapter: RecyclerView.Adapter<PollViewHolder>() {
+class PollAdapter : RecyclerView.Adapter<PollViewHolder>() {
 
     private var pollOptions: List<PollOptionViewData> = emptyList()
     private var voteCount: Int = 0
@@ -40,12 +41,13 @@ class PollAdapter: RecyclerView.Adapter<PollViewHolder>() {
     private var resultClickListener: View.OnClickListener? = null
 
     fun setup(
-            options: List<PollOptionViewData>,
-            voteCount: Int,
-            votersCount: Int?,
-            emojis: List<Emoji>,
-            mode: Int,
-            resultClickListener: View.OnClickListener?) {
+        options: List<PollOptionViewData>,
+        voteCount: Int,
+        votersCount: Int?,
+        emojis: List<Emoji>,
+        mode: Int,
+        resultClickListener: View.OnClickListener?
+    ) {
         this.pollOptions = options
         this.voteCount = voteCount
         this.votersCount = votersCount
@@ -55,14 +57,17 @@ class PollAdapter: RecyclerView.Adapter<PollViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun getSelected() : List<Int> {
+    fun getSelected(): List<Int> {
         return pollOptions.filter { it.selected }
-                .map { pollOptions.indexOf(it) }
+            .map { pollOptions.indexOf(it) }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PollViewHolder {
-        return PollViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_poll, parent, false))
+        return PollViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_poll, parent, false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -77,10 +82,11 @@ class PollAdapter: RecyclerView.Adapter<PollViewHolder>() {
         holder.radioButton.visible(mode == SINGLE)
         holder.checkBox.visible(mode == MULTIPLE)
 
-        when(mode) {
+        when (mode) {
             RESULT -> {
                 val percent = calculatePercent(option.votesCount, voteCount)
-                val emojifiedPollOptionText = buildDescription(option.title, percent, holder.resultTextView.context)
+                val emojifiedPollOptionText =
+                    buildDescription(option.title, percent, holder.resultTextView.context)
                         .emojify(emojis, holder.resultTextView)
                 holder.resultTextView.text = EmojiCompat.get().process(emojifiedPollOptionText)
 
@@ -109,7 +115,6 @@ class PollAdapter: RecyclerView.Adapter<PollViewHolder>() {
                 }
             }
         }
-
     }
 
     companion object {
@@ -119,12 +124,9 @@ class PollAdapter: RecyclerView.Adapter<PollViewHolder>() {
     }
 }
 
-
-
-class PollViewHolder(view: View): RecyclerView.ViewHolder(view) {
+class PollViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     val resultTextView: TextView = view.findViewById(R.id.status_poll_option_result)
     val radioButton: RadioButton = view.findViewById(R.id.status_poll_radio_button)
     val checkBox: CheckBox = view.findViewById(R.id.status_poll_checkbox)
-
 }

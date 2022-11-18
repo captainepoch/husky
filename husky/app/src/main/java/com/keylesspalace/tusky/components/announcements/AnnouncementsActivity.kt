@@ -40,15 +40,18 @@ import com.keylesspalace.tusky.util.Success
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.EmojiPicker
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_announcements.announcementsList
 import kotlinx.android.synthetic.main.activity_announcements.errorMessageView
 import kotlinx.android.synthetic.main.activity_announcements.progressBar
 import kotlinx.android.synthetic.main.activity_announcements.swipeRefreshLayout
 import kotlinx.android.synthetic.main.toolbar_basic.toolbar
+import javax.inject.Inject
 
-class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
-    OnEmojiSelectedListener, Injectable {
+class AnnouncementsActivity :
+    BottomSheetActivity(),
+    AnnouncementActionListener,
+    OnEmojiSelectedListener,
+    Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -98,11 +101,11 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
         announcementsList.adapter = adapter
 
         viewModel.announcements.observe(this) {
-            when(it) {
+            when (it) {
                 is Success -> {
                     progressBar.hide()
                     swipeRefreshLayout.isRefreshing = false
-                    if(it.data.isNullOrEmpty()) {
+                    if (it.data.isNullOrEmpty()) {
                         errorMessageView.setup(
                             R.drawable.elephant_friend_empty,
                             R.string.no_announcements
@@ -142,7 +145,7 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -181,13 +184,13 @@ class AnnouncementsActivity : BottomSheetActivity(), AnnouncementActionListener,
     }
 
     override fun onViewAccount(id: String?) {
-        if(id != null) {
+        if (id != null) {
             viewAccount(id)
         }
     }
 
     override fun onViewUrl(url: String?) {
-        if(url != null) {
+        if (url != null) {
             viewUrl(url)
         }
     }

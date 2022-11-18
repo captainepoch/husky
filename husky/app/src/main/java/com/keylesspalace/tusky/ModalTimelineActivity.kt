@@ -19,14 +19,16 @@ class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity, HasAn
         private const val ARG_ARG = "arg"
 
         @JvmStatic
-        fun newIntent(context: Context, kind: TimelineFragment.Kind,
-                      argument: String?): Intent {
+        fun newIntent(
+            context: Context,
+            kind: TimelineFragment.Kind,
+            argument: String?
+        ): Intent {
             val intent = Intent(context, ModalTimelineActivity::class.java)
             intent.putExtra(ARG_KIND, kind)
             intent.putExtra(ARG_ARG, argument)
             return intent
         }
-
     }
 
     @Inject
@@ -46,11 +48,11 @@ class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity, HasAn
 
         if (supportFragmentManager.findFragmentById(R.id.contentFrame) == null) {
             val kind = intent?.getSerializableExtra(ARG_KIND) as? TimelineFragment.Kind
-                    ?: TimelineFragment.Kind.HOME
+                ?: TimelineFragment.Kind.HOME
             val argument = intent?.getStringExtra(ARG_ARG)
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.contentFrame, TimelineFragment.newInstance(kind, argument))
-                    .commit()
+                .replace(R.id.contentFrame, TimelineFragment.newInstance(kind, argument))
+                .commit()
         }
     }
 
@@ -65,5 +67,4 @@ class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity, HasAn
     }
 
     override fun androidInjector() = dispatchingAndroidInjector
-
 }

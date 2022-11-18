@@ -20,9 +20,8 @@ import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.paging.PagedList
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,12 +41,24 @@ import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.CardViewMode
+import com.keylesspalace.tusky.util.StatusDisplayOptions
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.viewdata.AttachmentViewData
-import kotlinx.android.synthetic.main.fragment_report_statuses.*
+import kotlinx.android.synthetic.main.fragment_report_statuses.buttonCancel
+import kotlinx.android.synthetic.main.fragment_report_statuses.buttonContinue
+import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarBottom
+import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarLoading
+import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarTop
+import kotlinx.android.synthetic.main.fragment_report_statuses.recyclerView
+import kotlinx.android.synthetic.main.fragment_report_statuses.swipeRefreshLayout
 import javax.inject.Inject
 
-class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Injectable, AdapterHandler {
+class ReportStatusesFragment :
+    Fragment(R.layout.fragment_report_statuses),
+    Injectable,
+    AdapterHandler {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -64,15 +75,20 @@ class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Inje
     override fun showMedia(v: View?, status: Status?, idx: Int) {
         status?.actionableStatus?.let { actionable ->
             when (actionable.attachments[idx].type) {
-                Attachment.Type.GIFV, Attachment.Type.VIDEO, Attachment.Type.IMAGE, Attachment.Type.AUDIO -> {
+                Attachment.Type.GIFV,
+                Attachment.Type.VIDEO,
+                Attachment.Type.IMAGE,
+                Attachment.Type.AUDIO -> {
                     val attachments = AttachmentViewData.list(actionable)
-                    val intent = ViewMediaActivity.newIntent(context, attachments,
-                            idx)
+                    val intent = ViewMediaActivity.newIntent(
+                        context, attachments, idx
+                    )
                     if (v != null) {
                         val url = actionable.attachments[idx].url
                         ViewCompat.setTransitionName(v, url)
-                        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(),
-                                v, url)
+                        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            requireActivity(), v, url
+                        )
                         startActivity(intent, options.toBundle())
                     } else {
                         startActivity(intent)
@@ -81,7 +97,6 @@ class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Inje
                 Attachment.Type.UNKNOWN -> {
                 }
             }
-
         }
     }
 
@@ -103,72 +118,94 @@ class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Inje
     private fun initStatusesView() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val statusDisplayOptions = StatusDisplayOptions(
-                animateAvatars = false,
-                mediaPreviewEnabled = accountManager.activeAccount?.mediaPreviewEnabled ?: true,
-                useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
-                showBotOverlay = false,
-                useBlurhash = preferences.getBoolean("useBlurhash", true),
-                cardViewMode = CardViewMode.NONE,
-                confirmReblogs = preferences.getBoolean("confirmReblogs", true),
-                renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
+            animateAvatars = false,
+            mediaPreviewEnabled = accountManager.activeAccount?.mediaPreviewEnabled ?: true,
+            useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
+            showBotOverlay = false,
+            useBlurhash = preferences.getBoolean("useBlurhash", true),
+            cardViewMode = CardViewMode.NONE,
+            confirmReblogs = preferences.getBoolean("confirmReblogs", true),
+            renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
+            hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
         )
 
-        adapter = StatusesAdapter(statusDisplayOptions,
-                viewModel.statusViewState, this)
+        adapter = StatusesAdapter(
+            statusDisplayOptions, viewModel.statusViewState, this
+        )
 
-        recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(), DividerItemDecoration.VERTICAL
+            )
+        )
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
         (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        viewModel.statuses.observe(viewLifecycleOwner, Observer<PagedList<Status>> {
+        viewModel.statuses.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-        })
+        }
 
-        viewModel.networkStateAfter.observe(viewLifecycleOwner, Observer {
-            if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING)
-                progressBarBottom.show()
-            else
-                progressBarBottom.hide()
+        viewModel.networkStateAfter.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING) {
+                    progressBarBottom.show()
+                } else {
+                    progressBarBottom.hide()
+                }
 
-            if (it?.status == com.keylesspalace.tusky.util.Status.FAILED)
-                showError(it.msg)
-        })
+                if (it?.status == com.keylesspalace.tusky.util.Status.FAILED) {
+                    showError(it.msg)
+                }
+            }
+        )
 
-        viewModel.networkStateBefore.observe(viewLifecycleOwner, Observer {
-            if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING)
-                progressBarTop.show()
-            else
-                progressBarTop.hide()
+        viewModel.networkStateBefore.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING) {
+                    progressBarTop.show()
+                } else {
+                    progressBarTop.hide()
+                }
 
-            if (it?.status == com.keylesspalace.tusky.util.Status.FAILED)
-                showError(it.msg)
-        })
+                if (it?.status == com.keylesspalace.tusky.util.Status.FAILED) {
+                    showError(it.msg)
+                }
+            }
+        )
 
-        viewModel.networkStateRefresh.observe(viewLifecycleOwner, Observer {
-            if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING && !swipeRefreshLayout.isRefreshing)
+        viewModel.networkStateRefresh.observe(viewLifecycleOwner) {
+            if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING &&
+                !swipeRefreshLayout.isRefreshing
+            ) {
                 progressBarLoading.show()
-            else
+            } else {
                 progressBarLoading.hide()
+            }
 
-            if (it?.status != com.keylesspalace.tusky.util.Status.RUNNING)
+            if (it?.status != com.keylesspalace.tusky.util.Status.RUNNING) {
                 swipeRefreshLayout.isRefreshing = false
-            if (it?.status == com.keylesspalace.tusky.util.Status.FAILED)
+            }
+
+            if (it?.status == com.keylesspalace.tusky.util.Status.FAILED) {
                 showError(it.msg)
-        })
+            }
+        }
     }
 
     private fun showError(@Suppress("UNUSED_PARAMETER") msg: String?) {
         if (snackbarErrorRetry?.isShown != true) {
-            snackbarErrorRetry = Snackbar.make(swipeRefreshLayout, R.string.failed_fetch_statuses, Snackbar.LENGTH_INDEFINITE)
+            snackbarErrorRetry = Snackbar.make(
+                swipeRefreshLayout, R.string.failed_fetch_statuses, Snackbar.LENGTH_INDEFINITE
+            )
             snackbarErrorRetry?.setAction(R.string.action_retry) {
                 viewModel.retryStatusLoad()
             }
             snackbarErrorRetry?.show()
         }
     }
-
 
     private fun handleClicks() {
         buttonCancel.setOnClickListener {
@@ -188,9 +225,11 @@ class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Inje
         return viewModel.isStatusChecked(id)
     }
 
-    override fun onViewAccount(id: String) = startActivity(AccountActivity.getIntent(requireContext(), id))
+    override fun onViewAccount(id: String) =
+        startActivity(AccountActivity.getIntent(requireContext(), id))
 
-    override fun onViewTag(tag: String) = startActivity(ViewTagActivity.getIntent(requireContext(), tag))
+    override fun onViewTag(tag: String) =
+        startActivity(ViewTagActivity.getIntent(requireContext(), tag))
 
     override fun onViewUrl(url: String?) = viewModel.checkClickedUrl(url)
 

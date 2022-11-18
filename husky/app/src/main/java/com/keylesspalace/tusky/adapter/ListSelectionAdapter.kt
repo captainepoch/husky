@@ -30,7 +30,7 @@ class ListSelectionAdapter(context: Context) : ArrayAdapter<MastoList>(context, 
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         val view = convertView
-                ?: layoutInflater.inflate(R.layout.item_picker_list, parent, false)
+            ?: layoutInflater.inflate(R.layout.item_picker_list, parent, false)
 
         getItem(position)?.let { list ->
             view.title.text = list.title

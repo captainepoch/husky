@@ -15,15 +15,23 @@
 
 package com.keylesspalace.tusky.network
 
-import com.keylesspalace.tusky.appstore.*
+import android.util.Log
+import com.keylesspalace.tusky.appstore.BlockEvent
+import com.keylesspalace.tusky.appstore.BookmarkEvent
+import com.keylesspalace.tusky.appstore.EmojiReactEvent
+import com.keylesspalace.tusky.appstore.EventHub
+import com.keylesspalace.tusky.appstore.FavoriteEvent
+import com.keylesspalace.tusky.appstore.MuteConversationEvent
+import com.keylesspalace.tusky.appstore.MuteEvent
+import com.keylesspalace.tusky.appstore.PollVoteEvent
+import com.keylesspalace.tusky.appstore.ReblogEvent
+import com.keylesspalace.tusky.appstore.StatusDeletedEvent
 import com.keylesspalace.tusky.entity.DeletedStatus
 import com.keylesspalace.tusky.entity.Poll
 import com.keylesspalace.tusky.entity.Status
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import java.lang.IllegalStateException
-import android.util.Log
 
 /**
  * Created by charlag on 3/24/18.
@@ -39,12 +47,12 @@ interface TimelineCases {
     fun delete(id: String): Single<DeletedStatus>
     fun pin(status: Status, pin: Boolean)
     fun voteInPoll(status: Status, choices: List<Int>): Single<Poll>
-    fun react(emoji: String, id: String, react: Boolean) : Single<Status>
+    fun react(emoji: String, id: String, react: Boolean): Single<Status>
 }
 
 class TimelineCasesImpl(
-        private val mastodonApi: MastodonApi,
-        private val eventHub: EventHub
+    private val mastodonApi: MastodonApi,
+    private val eventHub: EventHub
 ) : TimelineCases {
 
     /**
@@ -99,54 +107,54 @@ class TimelineCasesImpl(
         } else {
             mastodonApi.unmuteConversation(id)
         }
-                .subscribe({
-                    eventHub.dispatch(MuteConversationEvent(id, mute))
-                }, { t ->
-                    Log.w("Failed to mute status", t)
-                })
-                .addTo(cancelDisposable)
+            .subscribe({
+                eventHub.dispatch(MuteConversationEvent(id, mute))
+            }, { t ->
+                Log.w("Failed to mute status", t)
+            })
+            .addTo(cancelDisposable)
     }
 
     override fun mute(id: String, notifications: Boolean, duration: Int) {
         mastodonApi.muteAccount(id, notifications, duration)
-                .subscribe({
-                    eventHub.dispatch(MuteEvent(id, true))
-                }, { t ->
-                    Log.w("Failed to mute account", t)
-                })
-                .addTo(cancelDisposable)
+            .subscribe({
+                eventHub.dispatch(MuteEvent(id, true))
+            }, { t ->
+                Log.w("Failed to mute account", t)
+            })
+            .addTo(cancelDisposable)
     }
 
     override fun block(id: String) {
         mastodonApi.blockAccount(id)
-                .subscribe({
-                    eventHub.dispatch(BlockEvent(id))
-                }, { t ->
-                    Log.w("Failed to block account", t)
-                })
-                .addTo(cancelDisposable)
+            .subscribe({
+                eventHub.dispatch(BlockEvent(id))
+            }, { t ->
+                Log.w("Failed to block account", t)
+            })
+            .addTo(cancelDisposable)
     }
 
     override fun delete(id: String): Single<DeletedStatus> {
         return mastodonApi.deleteStatus(id)
-                .doAfterSuccess {
-                    eventHub.dispatch(StatusDeletedEvent(id))
-                }
+            .doAfterSuccess {
+                eventHub.dispatch(StatusDeletedEvent(id))
+            }
     }
 
     override fun pin(status: Status, pin: Boolean) {
         // Replace with extension method if we use RxKotlin
         (if (pin) mastodonApi.pinStatus(status.id) else mastodonApi.unpinStatus(status.id))
-                .subscribe({ updatedStatus ->
-                    status.pinned = updatedStatus.pinned
-                }, {})
-                .addTo(this.cancelDisposable)
+            .subscribe({ updatedStatus ->
+                status.pinned = updatedStatus.pinned
+            }, {})
+            .addTo(this.cancelDisposable)
     }
 
     override fun voteInPoll(status: Status, choices: List<Int>): Single<Poll> {
         val pollId = status.actionableStatus.poll?.id
 
-        if(pollId == null || choices.isEmpty()) {
+        if (pollId == null || choices.isEmpty()) {
             return Single.error(IllegalStateException())
         }
 

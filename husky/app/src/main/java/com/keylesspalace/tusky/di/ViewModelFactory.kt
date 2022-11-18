@@ -4,8 +4,8 @@ package com.keylesspalace.tusky.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.keylesspalace.tusky.components.chat.ChatViewModel
 import com.keylesspalace.tusky.components.announcements.AnnouncementsViewModel
+import com.keylesspalace.tusky.components.chat.ChatViewModel
 import com.keylesspalace.tusky.components.compose.ComposeViewModel
 import com.keylesspalace.tusky.components.conversation.ConversationsViewModel
 import com.keylesspalace.tusky.components.drafts.DraftsViewModel
@@ -62,7 +62,6 @@ abstract class ViewModelModule {
     @ViewModelKey(ListsViewModel::class)
     internal abstract fun listsViewModel(viewModel: ListsViewModel): ViewModel
 
-
     @Binds
     @IntoMap
     @ViewModelKey(AccountsInListViewModel::class)
@@ -91,7 +90,7 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(ChatViewModel::class)
-    internal abstract fun chatViewModel(viewModel: ChatViewModel) : ViewModel
+    internal abstract fun chatViewModel(viewModel: ChatViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -103,5 +102,5 @@ abstract class ViewModelModule {
     @ViewModelKey(DraftsViewModel::class)
     internal abstract fun draftsViewModel(viewModel: DraftsViewModel): ViewModel
 
-    //Add more ViewModels here
+    // Add more ViewModels here
 }

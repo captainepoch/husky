@@ -52,7 +52,10 @@ typealias ChatMesssageOrPlaceholder = Either<Placeholder, ChatMessage>
 
 interface ChatRepository {
     fun getChats(
-        maxId: String?, sinceId: String?, sincedIdMinusOne: String?, limit: Int,
+        maxId: String?,
+        sinceId: String?,
+        sincedIdMinusOne: String?,
+        limit: Int,
         requestMode: TimelineRequestMode
     ): Single<out List<ChatStatus>>
 
@@ -74,13 +77,16 @@ class ChatRepositoryImpl(
 ) : ChatRepository {
 
     override fun getChats(
-        maxId: String?, sinceId: String?, sincedIdMinusOne: String?,
-        limit: Int, requestMode: TimelineRequestMode
+        maxId: String?,
+        sinceId: String?,
+        sincedIdMinusOne: String?,
+        limit: Int,
+        requestMode: TimelineRequestMode
     ): Single<out List<ChatStatus>> {
         val acc = accountManager.activeAccount ?: throw IllegalStateException()
         val accountId = acc.id
 
-        return if(requestMode == DISK) {
+        return if (requestMode == DISK) {
             this.getChatsFromDb(accountId, maxId, sinceId, limit)
         } else {
             getChatsFromNetwork(maxId, sinceId, sincedIdMinusOne, limit, accountId, requestMode)
@@ -108,9 +114,12 @@ class ChatRepositoryImpl(
     }
 
     private fun getChatsFromNetwork(
-        maxId: String?, sinceId: String?,
-        sinceIdMinusOne: String?, limit: Int,
-        accountId: Long, requestMode: TimelineRequestMode
+        maxId: String?,
+        sinceId: String?,
+        sinceIdMinusOne: String?,
+        limit: Int,
+        accountId: Long,
+        requestMode: TimelineRequestMode
     ): Single<out List<ChatStatus>> {
         return mastodonApi.getChats(null, null, sinceIdMinusOne, 0, limit + 1)
             .map { chats ->
@@ -120,7 +129,7 @@ class ChatRepositoryImpl(
                 this.addFromDbIfNeeded(accountId, chats, maxId, sinceId, limit, requestMode)
             }
             .onErrorResumeNext { error ->
-                if(error is IOException && requestMode != NETWORK) {
+                if (error is IOException && requestMode != NETWORK) {
                     this.getChatsFromDb(accountId, maxId, sinceId, limit)
                 } else {
                     Single.error(error)
@@ -129,23 +138,29 @@ class ChatRepositoryImpl(
     }
 
     private fun getChatMessagesFromNetwork(
-        chatId: String, maxId: String?, sinceId: String?,
-        sinceIdMinusOne: String?, limit: Int,
-        accountId: Long, requestMode: TimelineRequestMode
+        chatId: String,
+        maxId: String?,
+        sinceId: String?,
+        sinceIdMinusOne: String?,
+        limit: Int,
+        accountId: Long,
+        requestMode: TimelineRequestMode
     ): Single<out List<ChatMesssageOrPlaceholder>> {
         return mastodonApi.getChatMessages(chatId, maxId, null, sinceIdMinusOne, 0, limit + 1).map {
             it.mapTo(mutableListOf(), ChatMessage::lift)
         }
     }
 
-
     private fun addFromDbIfNeeded(
-        accountId: Long, chats: List<ChatStatus>,
-        maxId: String?, sinceId: String?, limit: Int,
+        accountId: Long,
+        chats: List<ChatStatus>,
+        maxId: String?,
+        sinceId: String?,
+        limit: Int,
         requestMode: TimelineRequestMode
     ): Single<List<ChatStatus>> {
-        return if(requestMode != NETWORK && chats.size < 2) {
-            val newMaxID = if(chats.isEmpty()) {
+        return if (requestMode != NETWORK && chats.size < 2) {
+            val newMaxID = if (chats.isEmpty()) {
                 maxId
             } else {
                 chats.last { it.isRight() }.asRight().id
@@ -154,7 +169,7 @@ class ChatRepositoryImpl(
                 .map { fromDb ->
                     // If it's just placeholders and less than limit (so we exhausted both
                     // db and server at this point)
-                    if(fromDb.size < limit && fromDb.all { !it.isRight() }) {
+                    if (fromDb.size < limit && fromDb.all { !it.isRight() }) {
                         chats
                     } else {
                         chats + fromDb
@@ -166,7 +181,9 @@ class ChatRepositoryImpl(
     }
 
     private fun getChatsFromDb(
-        accountId: Long, maxId: String?, sinceId: String?,
+        accountId: Long,
+        maxId: String?,
+        sinceId: String?,
         limit: Int
     ): Single<out List<ChatStatus>> {
         return chatsDao.getChatsForAccount(accountId, maxId, sinceId, limit)
@@ -176,17 +193,18 @@ class ChatRepositoryImpl(
             }
     }
 
-
     private fun saveChatsToDb(
-        accountId: Long, chats: List<Chat>,
-        maxId: String?, sinceId: String?
+        accountId: Long,
+        chats: List<Chat>,
+        maxId: String?,
+        sinceId: String?
     ): List<ChatStatus> {
         var placeholderToInsert: Placeholder? = null
 
         // Look for overlap
-        val resultChats = if(chats.isNotEmpty() && sinceId != null) {
+        val resultChats = if (chats.isNotEmpty() && sinceId != null) {
             val indexOfSince = chats.indexOfLast { it.id == sinceId }
-            if(indexOfSince == -1) {
+            if (indexOfSince == -1) {
                 // We didn't find the status which must be there. Add a placeholder
                 placeholderToInsert = Placeholder(sinceId.inc())
                 chats.mapTo(mutableListOf(), Chat::lift)
@@ -207,11 +225,11 @@ class ChatRepositoryImpl(
 
         Single.fromCallable {
 
-            if(chats.isNotEmpty()) {
+            if (chats.isNotEmpty()) {
                 chatsDao.deleteRange(accountId, chats.last().id, chats.first().id)
             }
 
-            for(chat in chats) {
+            for (chat in chats) {
                 val pair = chat.toEntity(accountId, gson)
 
                 chatsDao.insertInTransaction(
@@ -227,19 +245,19 @@ class ChatRepositoryImpl(
 
             // If we're loading in the bottom insert placeholder after every load
             // (for requests on next launches) but not return it.
-            if(sinceId == null && chats.isNotEmpty()) {
+            if (sinceId == null && chats.isNotEmpty()) {
                 chatsDao.insertChatIfNotThere(
                     Placeholder(chats.last().id.dec()).toChatEntity(accountId)
                 )
             }
 
             // There may be placeholders which we thought could be from our TL but they are not
-            if(chats.size > 2) {
+            if (chats.size > 2) {
                 chatsDao.removeAllPlaceholdersBetween(
                     accountId, chats.first().id,
                     chats.last().id
                 )
-            } else if(placeholderToInsert == null && maxId != null && sinceId != null) {
+            } else if (placeholderToInsert == null && maxId != null && sinceId != null) {
                 chatsDao.removeAllPlaceholdersBetween(accountId, maxId, sinceId)
             }
         }
@@ -285,7 +303,8 @@ fun Chat.toEntity(timelineUserId: Long, gson: Gson): Pair<ChatEntity, ChatMessag
             unread = this.unread,
             updatedAt = this.updatedAt.time,
             lastMessageId = this.lastMessage?.id
-        ), this.lastMessage?.toEntity(timelineUserId, gson)
+        ),
+        this.lastMessage?.toEntity(timelineUserId, gson)
     )
 }
 
@@ -303,7 +322,7 @@ fun ChatMessageEntity.toChatMessage(gson: Gson): ChatMessage {
 }
 
 fun ChatEntityWithAccount.toChat(gson: Gson): ChatStatus {
-    if(account == null || chat.accountId.isEmpty() || chat.updatedAt == 0L)
+    if (account == null || chat.accountId.isEmpty() || chat.updatedAt == 0L)
         return Either.Left(Placeholder(chat.chatId))
 
     return Chat(

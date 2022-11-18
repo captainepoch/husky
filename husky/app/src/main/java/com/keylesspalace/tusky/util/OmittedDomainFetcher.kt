@@ -1,7 +1,6 @@
 package com.keylesspalace.tusky.util
 
 import android.content.Context
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
@@ -23,7 +22,7 @@ import javax.inject.Inject
 @GlideModule
 class OmittedDomainAppModule : AppGlideModule() {
     @Inject
-    lateinit var accountManager : AccountManager
+    lateinit var accountManager: AccountManager
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         (context.applicationContext as TuskyApplication).androidInjector.inject(this)
@@ -39,9 +38,8 @@ class OmittedDomainLoaderFactory(val accountManager: AccountManager) : ModelLoad
 }
 
 class OmittedDomainLoader(val accountManager: AccountManager) : ModelLoader<String, InputStream> {
-    override fun buildLoadData(model: String, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>?
-    {
-        val trueUrl = if(accountManager.activeAccount != null)
+    override fun buildLoadData(model: String, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
+        val trueUrl = if (accountManager.activeAccount != null)
             "https://" + accountManager.activeAccount!!.domain + model
         else model
 
@@ -49,7 +47,6 @@ class OmittedDomainLoader(val accountManager: AccountManager) : ModelLoader<Stri
 
         return ModelLoader.LoadData(ObjectKey(model), HttpUrlFetcher(GlideUrl(trueUrl), timeout))
     }
-
 
     override fun handles(model: String): Boolean {
         val file = File(model)

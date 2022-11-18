@@ -551,7 +551,7 @@ interface MastodonApi {
         val irreversible: Boolean?,
         val whole_word: Boolean?,
         val expires_in: String?
-    );
+    )
 
     @POST("api/v1/filters")
     fun createFilter(@Body body: PostFilter): Call<Filter>

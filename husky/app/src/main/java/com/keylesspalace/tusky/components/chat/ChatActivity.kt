@@ -103,10 +103,6 @@ import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import java.io.File
-import java.io.IOException
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_chat.actionPhotoPick
 import kotlinx.android.synthetic.main.activity_chat.actionPhotoTake
 import kotlinx.android.synthetic.main.activity_chat.activityChat
@@ -129,8 +125,13 @@ import kotlinx.android.synthetic.main.activity_chat.stickerKeyboard
 import kotlinx.android.synthetic.main.activity_chat.textAttachment
 import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class ChatActivity : BottomSheetActivity(),
+class ChatActivity :
+    BottomSheetActivity(),
     Injectable,
     ChatActionListener,
     ComposeAutoCompleteAdapter.AutocompletionProvider,
@@ -164,10 +165,12 @@ class ChatActivity : BottomSheetActivity(),
     lateinit var adapter: ChatMessagesAdapter
 
     private val msgs =
-        PairedList<ChatMesssageOrPlaceholder, ChatMessageViewData?>(Function<ChatMesssageOrPlaceholder, ChatMessageViewData?> { input ->
-            input.asRightOrNull()?.let(ViewDataUtils::chatMessageToViewData)
-                ?: ChatMessageViewData.Placeholder(input.asLeft().id, false)
-        })
+        PairedList<ChatMesssageOrPlaceholder, ChatMessageViewData?>(
+            Function<ChatMesssageOrPlaceholder, ChatMessageViewData?> { input ->
+                input.asRightOrNull()?.let(ViewDataUtils::chatMessageToViewData)
+                    ?: ChatMessageViewData.Placeholder(input.asLeft().id, false)
+            }
+        )
 
     private var bottomLoading = false
     private var isNeedRefresh = false
@@ -190,7 +193,7 @@ class ChatActivity : BottomSheetActivity(),
         override fun onInserted(position: Int, count: Int) {
             Timber.d("onInserted")
             adapter.notifyItemRangeInserted(position, count)
-            if(position == 0) {
+            if (position == 0) {
                 recycler.scrollToPosition(0)
             }
         }
@@ -230,10 +233,10 @@ class ChatActivity : BottomSheetActivity(),
             oldItem: ChatMessageViewData,
             newItem: ChatMessageViewData
         ): Any? {
-            return if(oldItem.deepEquals(newItem)) {
-                //If items are equal - update timestamp only
+            return if (oldItem.deepEquals(newItem)) {
+                // If items are equal - update timestamp only
                 listOf(ChatMessagesViewHolder.Key.KEY_CREATED)
-            } else  // If items are different - update a whole view holder
+            } else // If items are different - update a whole view holder
                 null
         }
     }
@@ -264,7 +267,7 @@ class ChatActivity : BottomSheetActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(accountManager.activeAccount == null) {
+        if (accountManager.activeAccount == null) {
             throw Exception("No active account!")
         }
 
@@ -302,9 +305,9 @@ class ChatActivity : BottomSheetActivity(),
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this, Lifecycle.Event.ON_DESTROY)
             .subscribe { event: Event? ->
-                when(event) {
+                when (event) {
                     is ChatMessageDeliveredEvent -> {
-                        if(event.chatMsg.chatId == chatId) {
+                        if (event.chatMsg.chatId == chatId) {
                             onRefresh()
                             enableButton(attachmentButton, true, true)
                             enableButton(stickerButton, haveStickers, haveStickers)
@@ -314,7 +317,7 @@ class ChatActivity : BottomSheetActivity(),
                         }
                     }
                     is ChatMessageReceivedEvent -> {
-                        if(event.chatMsg.chatId == chatId) {
+                        if (event.chatMsg.chatId == chatId) {
                             onRefresh()
                         }
                     }
@@ -361,7 +364,7 @@ class ChatActivity : BottomSheetActivity(),
             popup.menu.add(0, removeId, 0, R.string.action_remove)
             popup.setOnMenuItemClickListener { menuItem ->
                 viewModel.media.value?.get(0)?.let {
-                    when(menuItem.itemId) {
+                    when (menuItem.itemId) {
                         addCaptionId -> {
                             makeCaptionDialog(it.description, it.uri) { newDescription ->
                                 viewModel.updateDescription(it.localId, newDescription)
@@ -402,8 +405,8 @@ class ChatActivity : BottomSheetActivity(),
         }
 
         // work around Android platform bug -> https://issuetracker.google.com/issues/67102093
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.O
-            || Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
         ) {
             editText.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
@@ -411,7 +414,7 @@ class ChatActivity : BottomSheetActivity(),
 
     private var sending = false
     private fun enableSendButton() {
-        if(sending)
+        if (sending)
             return
 
         val haveMedia = viewModel.media.value?.isNotEmpty() ?: false
@@ -433,13 +436,13 @@ class ChatActivity : BottomSheetActivity(),
         // Verify the returned content's type is of the correct MIME type
         val supported = inputContentInfo.description.hasMimeType("image/*")
 
-        if(supported) {
+        if (supported) {
             val lacksPermission =
                 (flags and InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION) != 0
-            if(lacksPermission) {
+            if (lacksPermission) {
                 try {
                     inputContentInfo.requestPermission()
-                } catch(e: Exception) {
+                } catch (e: Exception) {
                     Timber.e("InputContentInfoCompat#requestPermission() failed: ${e.message}")
                     return false
                 }
@@ -457,7 +460,7 @@ class ChatActivity : BottomSheetActivity(),
                 maximumTootCharacters = instanceData.chatLimit
             }
             viewModel.instanceStickers.observe { stickers ->
-                if(stickers.isNotEmpty()) {
+                if (stickers.isNotEmpty()) {
                     haveStickers = true
                     stickerButton.visibility = View.VISIBLE
                     enableButton(stickerButton, true, true)
@@ -476,10 +479,10 @@ class ChatActivity : BottomSheetActivity(),
                     haveStickers && notHaveMedia
                 )
 
-                if(!notHaveMedia) {
+                if (!notHaveMedia) {
                     val media = it[0]
 
-                    when(media.type) {
+                    when (media.type) {
                         ComposeActivity.QueuedMedia.UNKNOWN -> {
                             textAttachment.visibility = View.VISIBLE
                             imageAttachment.visibility = View.GONE
@@ -523,7 +526,7 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun setEmojiList(emojiList: List<Emoji>?) {
-        if(emojiList != null) {
+        if (emojiList != null) {
             emojiView.adapter = EmojiAdapter(
                 emojiList,
                 this@ChatActivity,
@@ -537,7 +540,7 @@ class ChatActivity : BottomSheetActivity(),
         // If you select "backward" in an editable, you get SelectionStart > SelectionEnd
         val start = editText.selectionStart.coerceAtMost(editText.selectionEnd)
         val end = editText.selectionStart.coerceAtLeast(editText.selectionEnd)
-        val textToInsert = if(start > 0 && !editText.text[start - 1].isWhitespace()) {
+        val textToInsert = if (start > 0 && !editText.text[start - 1].isWhitespace()) {
             " $text"
         } else {
             text
@@ -560,7 +563,7 @@ class ChatActivity : BottomSheetActivity(),
 
             override fun onResourceReady(resource: File, transition: Transition<in File>?) {
                 val cut = shortcode.lastIndexOf('/')
-                val filename = if(cut != -1) shortcode.substring(cut + 1) else "unknown.png"
+                val filename = if (cut != -1) shortcode.substring(cut + 1) else "unknown.png"
                 pickMedia(resource.toUri(), null, filename)
             }
         })
@@ -576,7 +579,7 @@ class ChatActivity : BottomSheetActivity(),
 
         attachmentButton.setOnClickListener { openPickDialog() }
         emojiButton.setOnClickListener { showEmojis() }
-        if(viewModel.tryFetchStickers) {
+        if (viewModel.tryFetchStickers) {
             stickerButton.setOnClickListener { showStickers() }
             stickerButton.visibility = View.VISIBLE
             enableButton(stickerButton, false, false)
@@ -630,7 +633,7 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun openPickDialog() {
-        if(addMediaBehavior.state == BottomSheetBehavior.STATE_HIDDEN || addMediaBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (addMediaBehavior.state == BottomSheetBehavior.STATE_HIDDEN || addMediaBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             addMediaBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -641,14 +644,14 @@ class ChatActivity : BottomSheetActivity(),
 
     private fun showEmojis() {
         emojiView.adapter?.let {
-            if(it.itemCount == 0) {
+            if (it.itemCount == 0) {
                 val errorMessage = getString(
                     R.string.error_no_custom_emojis,
                     accountManager.activeAccount!!.domain
                 )
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             } else {
-                if(emojiBehavior.state == BottomSheetBehavior.STATE_HIDDEN || emojiBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                if (emojiBehavior.state == BottomSheetBehavior.STATE_HIDDEN || emojiBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
                     emojiBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                     stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                     addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -660,7 +663,7 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun showStickers() {
-        if(stickerBehavior.state == BottomSheetBehavior.STATE_HIDDEN || stickerBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+        if (stickerBehavior.state == BottomSheetBehavior.STATE_HIDDEN || stickerBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             stickerBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -676,10 +679,10 @@ class ChatActivity : BottomSheetActivity(),
         // android.permission.WRITE_EXTERNAL_STORAGE only on SDKs *older* than Kitkat, which was
         // way before permission dialogues have been introduced.
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if(intent.resolveActivity(packageManager) != null) {
+        if (intent.resolveActivity(packageManager) != null) {
             val photoFile: File = try {
                 createNewImageFile(this)
-            } catch(ex: IOException) {
+            } catch (ex: IOException) {
                 displayTransientError(R.string.error_media_upload_opening)
                 return
             }
@@ -698,10 +701,10 @@ class ChatActivity : BottomSheetActivity(),
     private fun onMediaPick() {
         addMediaBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                //Wait until bottom sheet is not collapsed and show next screen after
-                if(newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                // Wait until bottom sheet is not collapsed and show next screen after
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     addMediaBehavior.removeBottomSheetCallback(this)
-                    if(ContextCompat.checkSelfPermission(
+                    if (ContextCompat.checkSelfPermission(
                             this@ChatActivity,
                             Manifest.permission.READ_EXTERNAL_STORAGE
                         ) != PackageManager.PERMISSION_GRANTED
@@ -723,21 +726,21 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
+        requestCode: Int,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if(requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initiateMediaPicking()
             } else {
                 val bar = Snackbar.make(
                     activityChat, R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
-
                 }
                 bar.setAction(R.string.action_retry) { onMediaPick() }
-                //necessary so snackbar is shown over everything
+                // necessary so snackbar is shown over everything
                 bar.view.elevation =
                     resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
                 bar.show()
@@ -755,9 +758,9 @@ class ChatActivity : BottomSheetActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
-        if(resultCode == Activity.RESULT_OK && requestCode == MEDIA_PICK_RESULT && intent != null) {
+        if (resultCode == Activity.RESULT_OK && requestCode == MEDIA_PICK_RESULT && intent != null) {
             pickMedia(intent.data!!)
-        } else if(resultCode == Activity.RESULT_OK && requestCode == MEDIA_TAKE_PHOTO_RESULT) {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == MEDIA_TAKE_PHOTO_RESULT) {
             pickMedia(photoUploadUri!!)
         }
     }
@@ -766,7 +769,7 @@ class ChatActivity : BottomSheetActivity(),
         button.isEnabled = clickable
         ThemeUtils.setDrawableTint(
             this, button.drawable,
-            if(colorActive) android.R.attr.textColorTertiary
+            if (colorActive) android.R.attr.textColorTertiary
             else R.attr.textColorDisabled
         )
     }
@@ -782,8 +785,8 @@ class ChatActivity : BottomSheetActivity(),
 
                     contentInfoCompat?.releasePermission()
 
-                    if(exceptionOrItem.isLeft()) {
-                        val errorId = when(val exception = exceptionOrItem.asLeft()) {
+                    if (exceptionOrItem.isLeft()) {
+                        val errorId = when (val exception = exceptionOrItem.asLeft()) {
                             is VideoSizeException -> {
                                 R.string.error_video_upload_size
                             }
@@ -815,7 +818,7 @@ class ChatActivity : BottomSheetActivity(),
 
     private fun displayTransientError(@StringRes stringId: Int) {
         val bar = Snackbar.make(activityChat, stringId, Snackbar.LENGTH_LONG)
-        //necessary so snackbar is shown over everything
+        // necessary so snackbar is shown over everything
         bar.view.elevation = resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
         bar.show()
     }
@@ -831,7 +834,7 @@ class ChatActivity : BottomSheetActivity(),
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this, Lifecycle.Event.ON_DESTROY)
             .subscribe { msgs ->
-                if(msgs.size > 1) {
+                if (msgs.size > 1) {
                     val mutableMsgs = msgs.toMutableList()
                     clearPlaceholdersForResponse(mutableMsgs)
                     this.msgs.clear()
@@ -846,7 +849,7 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun updateCurrent() {
-        if(msgs.isEmpty()) {
+        if (msgs.isEmpty()) {
             return
         }
 
@@ -864,11 +867,11 @@ class ChatActivity : BottomSheetActivity(),
             .subscribe({ messages ->
                 initialUpdateFailed = false
                 // When cached timeline is too old, we would replace it with nothing
-                if(messages.isNotEmpty()) {
+                if (messages.isNotEmpty()) {
                     // clear old cached statuses
-                    if(this.msgs.isNotEmpty()) {
+                    if (this.msgs.isNotEmpty()) {
                         this.msgs.removeAll {
-                            if(it.isRight()) {
+                            if (it.isRight()) {
                                 val chat = it.asRight()
                                 chat.id.length < topId.length || chat.id < topId
                             } else {
@@ -896,17 +899,17 @@ class ChatActivity : BottomSheetActivity(),
     private fun loadAbove() {
         var firstOrNull: String? = null
         var secondOrNull: String? = null
-        for(i in msgs.indices) {
+        for (i in msgs.indices) {
             val msg = msgs[i]
-            if(msg.isRight()) {
+            if (msg.isRight()) {
                 firstOrNull = msg.asRight().id
-                if(i + 1 < msgs.size && msgs[i + 1].isRight()) {
+                if (i + 1 < msgs.size && msgs[i + 1].isRight()) {
                     secondOrNull = msgs[i + 1].asRight().id
                 }
                 break
             }
         }
-        if(firstOrNull != null) {
+        if (firstOrNull != null) {
             sendFetchMessagesRequest(null, firstOrNull, secondOrNull, FetchEnd.TOP, -1)
         } else {
             sendFetchMessagesRequest(null, null, null, FetchEnd.BOTTOM, -1)
@@ -914,12 +917,14 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun sendFetchMessagesRequest(
-        maxId: String?, sinceId: String?,
+        maxId: String?,
+        sinceId: String?,
         sinceIdMinusOne: String?,
-        fetchEnd: FetchEnd, pos: Int
+        fetchEnd: FetchEnd,
+        pos: Int
     ) {
         // allow getting old statuses/fallbacks for network only for for bottom loading
-        val mode = if(fetchEnd == FetchEnd.BOTTOM) {
+        val mode = if (fetchEnd == FetchEnd.BOTTOM) {
             TimelineRequestMode.ANY
         } else {
             TimelineRequestMode.NETWORK
@@ -927,8 +932,10 @@ class ChatActivity : BottomSheetActivity(),
         chatsRepo.getChatMessages(chatId, maxId, sinceId, sinceIdMinusOne, LOAD_AT_ONCE, mode)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-            .subscribe({ result -> onFetchTimelineSuccess(result.toMutableList(), fetchEnd, pos) },
-                { onFetchTimelineFailure(Exception(it), fetchEnd, pos) })
+            .subscribe(
+                { result -> onFetchTimelineSuccess(result.toMutableList(), fetchEnd, pos) },
+                { onFetchTimelineFailure(Exception(it), fetchEnd, pos) }
+            )
     }
 
     private fun updateAdapter() {
@@ -940,21 +947,21 @@ class ChatActivity : BottomSheetActivity(),
         newMsgs: MutableList<ChatMesssageOrPlaceholder>,
         fullFetch: Boolean
     ) {
-        if(newMsgs.isEmpty()) {
+        if (newMsgs.isEmpty()) {
             updateAdapter()
             return
         }
-        if(msgs.isEmpty()) {
+        if (msgs.isEmpty()) {
             msgs.addAll(newMsgs)
         } else {
             val lastOfNew = newMsgs[newMsgs.size - 1]
             val index = msgs.indexOf(lastOfNew)
-            if(index >= 0) {
+            if (index >= 0) {
                 msgs.subList(0, index).clear()
             }
             val newIndex = newMsgs.indexOf(msgs[0])
-            if(newIndex == -1) {
-                if(index == -1 && fullFetch) {
+            if (newIndex == -1) {
+                if (index == -1 && fullFetch) {
                     newMsgs.findLast { it.isRight() }?.let {
                         val placeholderId = it.asRight().id.inc()
                         newMsgs.add(Either.Left(Placeholder(placeholderId)))
@@ -971,8 +978,8 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun removeConsecutivePlaceholders() {
-        for(i in 0 until msgs.size - 1) {
-            if(msgs[i].isLeft() && msgs[i + 1].isLeft()) {
+        for (i in 0 until msgs.size - 1) {
+            if (msgs[i].isLeft() && msgs[i + 1].isLeft()) {
                 msgs.removeAt(i)
             }
         }
@@ -980,17 +987,18 @@ class ChatActivity : BottomSheetActivity(),
 
     private fun replacePlaceholderWithMessages(
         newMsgs: MutableList<ChatMesssageOrPlaceholder>,
-        fullFetch: Boolean, pos: Int
+        fullFetch: Boolean,
+        pos: Int
     ) {
         val placeholder = msgs[pos]
-        if(placeholder.isLeft()) {
+        if (placeholder.isLeft()) {
             msgs.removeAt(pos)
         }
-        if(newMsgs.isEmpty()) {
+        if (newMsgs.isEmpty()) {
             updateAdapter()
             return
         }
-        if(fullFetch) {
+        if (fullFetch) {
             newMsgs.add(placeholder)
         }
         msgs.addAll(pos, newMsgs)
@@ -999,14 +1007,14 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun addItems(newMsgs: List<ChatMesssageOrPlaceholder>) {
-        if(newMsgs.isEmpty()) {
+        if (newMsgs.isEmpty()) {
             return
         }
         val last = msgs.findLast { it.isRight() }
 
         // I was about to replace findStatus with indexOf but it is incorrect to compare value
         // types by ID anyway and we should change equals() for Status, I think, so this makes sense
-        if(last != null && !newMsgs.contains(last)) {
+        if (last != null && !newMsgs.contains(last)) {
             msgs.addAll(newMsgs)
             removeConsecutivePlaceholders()
             updateAdapter()
@@ -1015,14 +1023,15 @@ class ChatActivity : BottomSheetActivity(),
 
     private fun onFetchTimelineSuccess(
         msgs: MutableList<ChatMesssageOrPlaceholder>,
-        fetchEnd: FetchEnd, pos: Int
+        fetchEnd: FetchEnd,
+        pos: Int
     ) {
 
         // We filled the hole (or reached the end) if the server returned less statuses than we
         // we asked for.
         val fullFetch = msgs.size >= LOAD_AT_ONCE
 
-        when(fetchEnd) {
+        when (fetchEnd) {
             FetchEnd.TOP -> {
                 updateMessages(msgs, fullFetch)
 
@@ -1041,24 +1050,24 @@ class ChatActivity : BottomSheetActivity(),
                 replacePlaceholderWithMessages(msgs, fullFetch, pos)
             }
             FetchEnd.BOTTOM -> {
-                if(this.msgs.isNotEmpty() && !this.msgs.last().isRight()) {
+                if (this.msgs.isNotEmpty() && !this.msgs.last().isRight()) {
                     this.msgs.removeAt(this.msgs.size - 1)
                     updateAdapter()
                 }
 
-                if(msgs.isNotEmpty() && !msgs.last().isRight()) {
+                if (msgs.isNotEmpty() && !msgs.last().isRight()) {
                     // Removing placeholder if it's the last one from the cache
                     msgs.removeAt(msgs.size - 1)
                 }
 
                 val oldSize = this.msgs.size
-                if(this.msgs.size > 1) {
+                if (this.msgs.size > 1) {
                     addItems(msgs)
                 } else {
                     updateMessages(msgs, fullFetch)
                 }
 
-                if(this.msgs.size == oldSize) {
+                if (this.msgs.size == oldSize) {
                     // This may be a brittle check but seems like it works
                     // Can we check it using headers somehow? Do all server support them?
                     didLoadEverythingBottom = true
@@ -1067,7 +1076,7 @@ class ChatActivity : BottomSheetActivity(),
         }
         updateBottomLoadingState(fetchEnd)
         progressBar.visibility = View.GONE
-        if(this.msgs.size == 0) {
+        if (this.msgs.size == 0) {
             showNothing()
         } else {
             messageView.visibility = View.GONE
@@ -1078,17 +1087,17 @@ class ChatActivity : BottomSheetActivity(),
         messageView.visibility = View.GONE
         isNeedRefresh = false
 
-        if(this.initialUpdateFailed) {
+        if (this.initialUpdateFailed) {
             updateCurrent()
         }
         loadAbove()
     }
 
     private fun onFetchTimelineFailure(exception: Exception, fetchEnd: FetchEnd, position: Int) {
-        if(fetchEnd == FetchEnd.MIDDLE && !msgs[position].isRight()) {
+        if (fetchEnd == FetchEnd.MIDDLE && !msgs[position].isRight()) {
             var placeholder = msgs[position].asLeftOrNull()
             val newViewData: ChatMessageViewData
-            if(placeholder == null) {
+            if (placeholder == null) {
                 val msg = msgs[position - 1].asRight()
                 val newId = msg.id.dec()
                 placeholder = Placeholder(newId)
@@ -1096,9 +1105,9 @@ class ChatActivity : BottomSheetActivity(),
             newViewData = ChatMessageViewData.Placeholder(placeholder.id, false)
             msgs.setPairedItem(position, newViewData)
             updateAdapter()
-        } else if(msgs.isEmpty()) {
+        } else if (msgs.isEmpty()) {
             messageView.visibility = View.VISIBLE
-            if(exception is IOException) {
+            if (exception is IOException) {
                 messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
                     progressBar.visibility = View.VISIBLE
                     onRefresh()
@@ -1116,23 +1125,23 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     private fun updateBottomLoadingState(fetchEnd: FetchEnd) {
-        if(fetchEnd == FetchEnd.BOTTOM) {
+        if (fetchEnd == FetchEnd.BOTTOM) {
             bottomLoading = false
         }
     }
 
     override fun onLoadMore(position: Int) {
-        //check bounds before accessing list,
-        if(msgs.size >= position && position > 0) {
+        // check bounds before accessing list,
+        if (msgs.size >= position && position > 0) {
             val fromChat = msgs[position - 1].asRightOrNull()
             val toChat = msgs[position + 1].asRightOrNull()
-            if(fromChat == null || toChat == null) {
+            if (fromChat == null || toChat == null) {
                 Timber.e("Failed to load more at $position, wrong placeholder position")
                 return
             }
 
             val maxMinusOne =
-                if(msgs.size > position + 1 && msgs[position + 2].isRight()) msgs[position + 1].asRight().id else null
+                if (msgs.size > position + 1 && msgs[position + 2].isRight()) msgs[position + 1].asRight().id else null
             sendFetchMessagesRequest(
                 fromChat.id, toChat.id, maxMinusOne,
                 FetchEnd.MIDDLE, position
@@ -1149,16 +1158,16 @@ class ChatActivity : BottomSheetActivity(),
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Timber.d(event.toString())
-        if(event.action == KeyEvent.ACTION_DOWN) {
-            if(event.isCtrlPressed) {
-                if(keyCode == KeyEvent.KEYCODE_ENTER) {
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            if (event.isCtrlPressed) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     // send message by pressing CTRL + ENTER
                     onSendClicked()
                     return true
                 }
             }
 
-            if(keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
                 onBackPressed()
                 return true
             }
@@ -1166,10 +1175,9 @@ class ChatActivity : BottomSheetActivity(),
         return super.onKeyDown(keyCode, event)
     }
 
-
     override fun onBackPressed() {
         // Acting like a teen: deliberately ignoring parent.
-        if(addMediaBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
+        if (addMediaBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
             emojiBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
             stickerBehavior.state != BottomSheetBehavior.STATE_HIDDEN
         ) {
@@ -1183,7 +1191,7 @@ class ChatActivity : BottomSheetActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
                 finish()
                 return true
@@ -1205,7 +1213,7 @@ class ChatActivity : BottomSheetActivity(),
     private fun startUpdateTimestamp() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false)
-        if(!useAbsoluteTime) {
+        if (!useAbsoluteTime) {
             Observable.interval(1, TimeUnit.MINUTES)
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDispose(this, Lifecycle.Event.ON_PAUSE)
@@ -1230,10 +1238,10 @@ class ChatActivity : BottomSheetActivity(),
     override fun onViewMedia(position: Int, view: View?) {
         val attachment = msgs[position].asRight().attachment!!
 
-        when(attachment.type) {
+        when (attachment.type) {
             Attachment.Type.GIFV, Attachment.Type.VIDEO, Attachment.Type.AUDIO, Attachment.Type.IMAGE -> {
                 val intent = ViewMediaActivity.newIntent(this, attachment)
-                if(view != null) {
+                if (view != null) {
                     val url = attachment.url
                     ViewCompat.setTransitionName(view, url)
                     val options =

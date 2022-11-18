@@ -15,13 +15,13 @@
 
 package com.keylesspalace.tusky.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.entity.StringField
 import kotlinx.android.synthetic.main.item_edit_field.view.*
@@ -36,7 +36,7 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
         fields.forEach { field ->
             fieldData.add(MutableStringPair(field.name, field.value))
         }
-        if(fieldData.isEmpty()) {
+        if (fieldData.isEmpty()) {
             fieldData.add(MutableStringPair("", ""))
         }
 
@@ -65,7 +65,7 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
         viewHolder.nameTextView.setText(fieldData[position].first)
         viewHolder.valueTextView.setText(fieldData[position].second)
 
-        viewHolder.nameTextView.addTextChangedListener(object: TextWatcher {
+        viewHolder.nameTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(newText: Editable) {
                 fieldData[viewHolder.adapterPosition].first = newText.toString()
             }
@@ -75,7 +75,7 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
 
-        viewHolder.valueTextView.addTextChangedListener(object: TextWatcher {
+        viewHolder.valueTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(newText: Editable) {
                 fieldData[viewHolder.adapterPosition].second = newText.toString()
             }
@@ -84,7 +84,6 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
-
     }
 
     class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
@@ -92,7 +91,5 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
         val valueTextView: EditText = rootView.accountFieldValue
     }
 
-    class MutableStringPair (var first: String, var second: String)
-
-
+    class MutableStringPair(var first: String, var second: String)
 }

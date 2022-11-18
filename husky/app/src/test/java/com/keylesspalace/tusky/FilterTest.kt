@@ -10,7 +10,6 @@ import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.fragment.SFragment
 import com.keylesspalace.tusky.network.MastodonApi
 import com.nhaarman.mockitokotlin2.mock
-import java.util.Date
 import okhttp3.Request
 import okio.Timeout
 import org.junit.Assert.assertFalse
@@ -25,6 +24,7 @@ import org.robolectric.annotation.ConscryptMode.Mode.OFF
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Date
 
 @ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
@@ -114,11 +114,9 @@ class FilterTest {
 
         activity.mastodonApi = apiMock
 
-
         controller.create().start()
 
         fragment.mastodonApi = apiMock
-
 
         activity.supportFragmentManager.beginTransaction()
             .replace(R.id.mainDrawerLayout, fragment, "fragment")
@@ -242,7 +240,7 @@ class FilterTest {
             mentions = emptyArray(),
             application = null,
             pinned = false,
-            poll = if(pollOptions != null) {
+            poll = if (pollOptions != null) {
                 Poll(
                     id = "1234",
                     expiresAt = null,
@@ -259,7 +257,6 @@ class FilterTest {
             card = null
         )
     }
-
 }
 
 class FakeActivity : BottomSheetActivity() {

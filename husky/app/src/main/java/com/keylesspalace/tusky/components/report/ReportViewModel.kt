@@ -92,7 +92,7 @@ class ReportViewModel @Inject constructor(
         }
 
         isRemoteAccount = userName.contains('@')
-        if(isRemoteAccount) {
+        if (isRemoteAccount) {
             remoteServer = userName.substring(userName.indexOf('@') + 1)
         }
 
@@ -118,7 +118,6 @@ class ReportViewModel @Inject constructor(
             .subscribe(
                 { data ->
                     updateRelationship(data.getOrNull(0))
-
                 },
                 {
                     updateRelationship(null)
@@ -127,9 +126,8 @@ class ReportViewModel @Inject constructor(
             .autoDispose()
     }
 
-
     private fun updateRelationship(relationship: Relationship?) {
-        if(relationship != null) {
+        if (relationship != null) {
             muteStateMutable.value = Success(relationship.muting)
             blockStateMutable.value = Success(relationship.blocking)
         } else {
@@ -140,7 +138,7 @@ class ReportViewModel @Inject constructor(
 
     fun toggleMute() {
         val alreadyMuted = muteStateMutable.value?.data == true
-        if(alreadyMuted) {
+        if (alreadyMuted) {
             mastodonApi.unmuteAccount(accountId)
         } else {
             mastodonApi.muteAccount(accountId)
@@ -151,7 +149,7 @@ class ReportViewModel @Inject constructor(
                 { relationship ->
                     val muting = relationship?.muting == true
                     muteStateMutable.value = Success(muting)
-                    if(muting) {
+                    if (muting) {
                         eventHub.dispatch(MuteEvent(accountId, true))
                     }
                 },
@@ -165,7 +163,7 @@ class ReportViewModel @Inject constructor(
 
     fun toggleBlock() {
         val alreadyBlocked = blockStateMutable.value?.data == true
-        if(alreadyBlocked) {
+        if (alreadyBlocked) {
             mastodonApi.unblockAccount(accountId)
         } else {
             mastodonApi.blockAccount(accountId)
@@ -176,7 +174,7 @@ class ReportViewModel @Inject constructor(
                 { relationship ->
                     val blocking = relationship?.blocking == true
                     blockStateMutable.value = Success(blocking)
-                    if(blocking) {
+                    if (blocking) {
                         eventHub.dispatch(BlockEvent(accountId))
                     }
                 },
@@ -195,7 +193,7 @@ class ReportViewModel @Inject constructor(
             accountId,
             selectedIds.toList(),
             reportNote,
-            if(isRemoteAccount) isRemoteNotify else null
+            if (isRemoteAccount) isRemoteNotify else null
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -208,7 +206,6 @@ class ReportViewModel @Inject constructor(
                 }
             )
             .autoDispose()
-
     }
 
     fun retryStatusLoad() {
@@ -228,7 +225,7 @@ class ReportViewModel @Inject constructor(
     }
 
     fun setStatusChecked(status: Status, checked: Boolean) {
-        if(checked) {
+        if (checked) {
             selectedIds.add(status.id)
         } else {
             selectedIds.remove(status.id)
@@ -238,5 +235,4 @@ class ReportViewModel @Inject constructor(
     fun isStatusChecked(id: String): Boolean {
         return selectedIds.contains(id)
     }
-
 }

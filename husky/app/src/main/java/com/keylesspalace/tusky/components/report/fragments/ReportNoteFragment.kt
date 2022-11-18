@@ -19,16 +19,25 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.report.Screen
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
-import com.keylesspalace.tusky.util.*
-import kotlinx.android.synthetic.main.fragment_report_note.*
+import com.keylesspalace.tusky.util.Error
+import com.keylesspalace.tusky.util.Loading
+import com.keylesspalace.tusky.util.Success
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.show
+import kotlinx.android.synthetic.main.fragment_report_note.buttonBack
+import kotlinx.android.synthetic.main.fragment_report_note.buttonReport
+import kotlinx.android.synthetic.main.fragment_report_note.checkIsNotifyRemote
+import kotlinx.android.synthetic.main.fragment_report_note.editNote
+import kotlinx.android.synthetic.main.fragment_report_note.progressBar
+import kotlinx.android.synthetic.main.fragment_report_note.reportDescriptionRemoteInstance
 import java.io.IOException
 import javax.inject.Inject
 
@@ -58,29 +67,31 @@ class ReportNoteFragment : Fragment(R.layout.fragment_report_note), Injectable {
     private fun fillViews() {
         editNote.setText(viewModel.reportNote)
 
-        if (viewModel.isRemoteAccount){
+        if (viewModel.isRemoteAccount) {
             checkIsNotifyRemote.show()
             reportDescriptionRemoteInstance.show()
-        }
-        else{
+        } else {
             checkIsNotifyRemote.hide()
             reportDescriptionRemoteInstance.hide()
         }
 
         if (viewModel.isRemoteAccount)
-            checkIsNotifyRemote.text = getString(R.string.report_remote_instance, viewModel.remoteServer)
+            checkIsNotifyRemote.text =
+                getString(R.string.report_remote_instance, viewModel.remoteServer)
         checkIsNotifyRemote.isChecked = viewModel.isRemoteNotify
     }
 
     private fun subscribeObservables() {
-        viewModel.reportingState.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Success -> viewModel.navigateTo(Screen.Done)
-                is Loading -> showLoading()
-                is Error -> showError(it.cause)
-
+        viewModel.reportingState.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it) {
+                    is Success -> viewModel.navigateTo(Screen.Done)
+                    is Loading -> showLoading()
+                    is Error -> showError(it.cause)
+                }
             }
-        })
+        )
     }
 
     private fun showError(error: Throwable?) {
@@ -90,13 +101,19 @@ class ReportNoteFragment : Fragment(R.layout.fragment_report_note), Injectable {
         buttonBack.isEnabled = true
         progressBar.hide()
 
-        Snackbar.make(buttonBack, if (error is IOException) R.string.error_network else R.string.error_generic, Snackbar.LENGTH_LONG)
-                .apply {
-                    setAction(R.string.action_retry) {
-                        sendReport()
-                    }
-                }
-                .show()
+        Snackbar.make(
+            buttonBack,
+            if (error is IOException) {
+                R.string.error_network
+            } else {
+                R.string.error_generic
+            },
+            Snackbar.LENGTH_LONG
+        ).apply {
+            setAction(R.string.action_retry) {
+                sendReport()
+            }
+        }.show()
     }
 
     private fun sendReport() {
@@ -124,5 +141,4 @@ class ReportNoteFragment : Fragment(R.layout.fragment_report_note), Injectable {
     companion object {
         fun newInstance() = ReportNoteFragment()
     }
-
 }

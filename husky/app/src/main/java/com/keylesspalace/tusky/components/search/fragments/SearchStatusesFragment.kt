@@ -89,22 +89,21 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
     override fun createAdapter(): PagedListAdapter<Pair<Status, StatusViewData.Concrete>, *> {
         val preferences = PreferenceManager.getDefaultSharedPreferences(searchRecyclerView.context)
         val statusDisplayOptions = StatusDisplayOptions(
-                animateAvatars = preferences.getBoolean("animateGifAvatars", false),
-                mediaPreviewEnabled = viewModel.mediaPreviewEnabled,
-                useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
-                showBotOverlay = preferences.getBoolean("showBotOverlay", true),
-                useBlurhash = preferences.getBoolean("useBlurhash", true),
-                cardViewMode = CardViewMode.NONE,
-                confirmReblogs = preferences.getBoolean("confirmReblogs", true),
-                renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
+            animateAvatars = preferences.getBoolean("animateGifAvatars", false),
+            mediaPreviewEnabled = viewModel.mediaPreviewEnabled,
+            useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
+            showBotOverlay = preferences.getBoolean("showBotOverlay", true),
+            useBlurhash = preferences.getBoolean("useBlurhash", true),
+            cardViewMode = CardViewMode.NONE,
+            confirmReblogs = preferences.getBoolean("confirmReblogs", true),
+            renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
+            hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
         )
 
         searchRecyclerView.addItemDecoration(DividerItemDecoration(searchRecyclerView.context, DividerItemDecoration.VERTICAL))
         searchRecyclerView.layoutManager = LinearLayoutManager(searchRecyclerView.context)
         return SearchStatusesAdapter(statusDisplayOptions, this)
     }
-
 
     override fun onContentHiddenChange(isShowing: Boolean, position: Int) {
         searchAdapter.getItem(position)?.let {
@@ -141,13 +140,17 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
             when (actionable.attachments[attachmentIndex].type) {
                 Attachment.Type.GIFV, Attachment.Type.VIDEO, Attachment.Type.IMAGE, Attachment.Type.AUDIO -> {
                     val attachments = AttachmentViewData.list(actionable)
-                    val intent = ViewMediaActivity.newIntent(context, attachments,
-                            attachmentIndex)
+                    val intent = ViewMediaActivity.newIntent(
+                        context, attachments,
+                        attachmentIndex
+                    )
                     if (view != null) {
                         val url = actionable.attachments[attachmentIndex].url
                         ViewCompat.setTransitionName(view, url)
-                        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(),
-                                view, url)
+                        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            requireActivity(),
+                            view, url
+                        )
                         startActivity(intent, options.toBundle())
                     } else {
                         startActivity(intent)
@@ -157,9 +160,7 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                     LinkHelper.openLink(actionable.attachments[attachmentIndex].url, context)
                 }
             }
-
         }
-
     }
 
     override fun onViewThread(position: Int) {
@@ -223,20 +224,23 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
     private fun reply(status: Status) {
         val actionableStatus = status.actionableStatus
         val mentionedUsernames = actionableStatus.mentions.map { it.username }
-                .toMutableSet()
-                .apply {
-                    add(actionableStatus.account.username)
-                    remove(viewModel.activeAccount?.username)
-                }
+            .toMutableSet()
+            .apply {
+                add(actionableStatus.account.username)
+                remove(viewModel.activeAccount?.username)
+            }
 
-        val intent = ComposeActivity.startIntent(requireContext(), ComposeOptions(
+        val intent = ComposeActivity.startIntent(
+            requireContext(),
+            ComposeOptions(
                 inReplyToId = status.actionableId,
                 replyVisibility = actionableStatus.visibility,
                 contentWarning = actionableStatus.spoilerText,
                 mentionedUsernames = mentionedUsernames,
                 replyingStatusAuthor = actionableStatus.account.localUsername,
                 replyingStatusContent = actionableStatus.content.toString()
-        ))
+            )
+        )
         startActivity(intent)
     }
 
@@ -272,7 +276,7 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                     menu.findItem(R.id.status_unreblog_private).isVisible = reblogged
                 }
                 Status.Visibility.UNKNOWN, Status.Visibility.DIRECT -> {
-                } //Ignore
+                } // Ignore
             }
         }
 
@@ -298,8 +302,8 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                     sendIntent.action = Intent.ACTION_SEND
 
                     val stringToShare = statusToShare.account.username +
-                            " - " +
-                            statusToShare.content.toString()
+                        " - " +
+                        statusToShare.content.toString()
                     sendIntent.putExtra(Intent.EXTRA_TEXT, stringToShare)
                     sendIntent.type = "text/plain"
                     startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_status_content_to)))
@@ -324,7 +328,7 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                 }
                 R.id.status_open_as -> {
                     val title = item.title
-                    if(statusUrl != null && title != null) {
+                    if (statusUrl != null && title != null) {
                         showOpenAsDialog(statusUrl, title)
                     }
                     return@setOnMenuItemClickListener true
@@ -375,10 +379,10 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
 
     private fun onBlock(accountId: String, accountUsername: String) {
         AlertDialog.Builder(requireContext())
-                .setMessage(getString(R.string.dialog_block_warning, accountUsername))
-                .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.blockAccount(accountId) }
-                .setNegativeButton(android.R.string.cancel, null)
-                .show()
+            .setMessage(getString(R.string.dialog_block_warning, accountUsername))
+            .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.blockAccount(accountId) }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun onMute(accountId: String, accountUsername: String) {
@@ -397,11 +401,14 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
     }
 
     private fun showOpenAsDialog(statusUrl: String, dialogTitle: CharSequence) {
-        bottomSheetActivity?.showAccountChooserDialog(dialogTitle, false, object : AccountSelectionListener {
-            override fun onAccountSelected(account: AccountEntity) {
-                openAsAccount(statusUrl, account)
+        bottomSheetActivity?.showAccountChooserDialog(
+            dialogTitle, false,
+            object : AccountSelectionListener {
+                override fun onAccountSelected(account: AccountEntity) {
+                    openAsAccount(statusUrl, account)
+                }
             }
-        })
+        )
     }
 
     private fun openAsAccount(statusUrl: String, account: AccountEntity) {
@@ -444,51 +451,53 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
     private fun showConfirmDeleteDialog(id: String, position: Int) {
         context?.let {
             AlertDialog.Builder(it)
-                    .setMessage(R.string.dialog_delete_toot_warning)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        viewModel.deleteStatus(id)
-                        removeItem(position)
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
+                .setMessage(R.string.dialog_delete_toot_warning)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    viewModel.deleteStatus(id)
+                    removeItem(position)
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
         }
     }
 
     private fun showConfirmEditDialog(id: String, position: Int, status: Status) {
         activity?.let {
             AlertDialog.Builder(it)
-                    .setMessage(R.string.dialog_redraft_toot_warning)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        viewModel.deleteStatus(id)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))
-                                .subscribe({ deletedStatus ->
-                                    removeItem(position)
+                .setMessage(R.string.dialog_redraft_toot_warning)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    viewModel.deleteStatus(id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))
+                        .subscribe({ deletedStatus ->
+                            removeItem(position)
 
-                                    val redraftStatus = if (deletedStatus.isEmpty()) {
-                                        status.toDeletedStatus()
-                                    } else {
-                                        deletedStatus
-                                    }
+                            val redraftStatus = if (deletedStatus.isEmpty()) {
+                                status.toDeletedStatus()
+                            } else {
+                                deletedStatus
+                            }
 
-                                    val intent = ComposeActivity.startIntent(requireContext(), ComposeOptions(
-                                            tootText = redraftStatus.text ?: "",
-                                            inReplyToId = redraftStatus.inReplyToId,
-                                            visibility = redraftStatus.visibility,
-                                            contentWarning = redraftStatus.spoilerText,
-                                            mediaAttachments = redraftStatus.attachments,
-                                            sensitive = redraftStatus.sensitive,
-                                            poll = redraftStatus.poll?.toNewPoll(status.createdAt)
-                                    ))
-                                    startActivity(intent)
-                                }, { error ->
-                                    Timber.e(error, "Error deleting status")
-                                    Toast.makeText(context, R.string.error_generic, Toast.LENGTH_SHORT).show()
-                                })
-
-                    }
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .show()
+                            val intent = ComposeActivity.startIntent(
+                                requireContext(),
+                                ComposeOptions(
+                                    tootText = redraftStatus.text ?: "",
+                                    inReplyToId = redraftStatus.inReplyToId,
+                                    visibility = redraftStatus.visibility,
+                                    contentWarning = redraftStatus.spoilerText,
+                                    mediaAttachments = redraftStatus.attachments,
+                                    sensitive = redraftStatus.sensitive,
+                                    poll = redraftStatus.poll?.toNewPoll(status.createdAt)
+                                )
+                            )
+                            startActivity(intent)
+                        }, { error ->
+                            Timber.e(error, "Error deleting status")
+                            Toast.makeText(context, R.string.error_generic, Toast.LENGTH_SHORT).show()
+                        })
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
         }
     }
 

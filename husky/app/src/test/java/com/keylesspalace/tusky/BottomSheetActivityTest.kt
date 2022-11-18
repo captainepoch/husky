@@ -27,9 +27,6 @@ import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.TestScheduler
-import java.util.Collections
-import java.util.Date
-import java.util.concurrent.TimeUnit
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -37,10 +34,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.robolectric.annotation.ConscryptMode
 import org.robolectric.annotation.ConscryptMode.Mode.OFF
+import java.util.Collections
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 @ConscryptMode(OFF)
 @RunWith(AndroidJUnit4::class)
@@ -281,10 +281,12 @@ class BottomSheetActivityTest {
 
     @Test
     fun search_withNoResults_appliesRequestedFallbackBehavior() {
-        for(fallbackBehavior in listOf(
-            PostLookupFallbackBehavior.OPEN_IN_BROWSER,
-            PostLookupFallbackBehavior.DISPLAY_ERROR
-        )) {
+        for (
+            fallbackBehavior in listOf(
+                PostLookupFallbackBehavior.OPEN_IN_BROWSER,
+                PostLookupFallbackBehavior.DISPLAY_ERROR
+            )
+        ) {
             activity.viewUrl(nonMastodonQuery, fallbackBehavior)
             testScheduler.advanceTimeBy(100, TimeUnit.MILLISECONDS)
             Assert.assertEquals(nonMastodonQuery, activity.link)

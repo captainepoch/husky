@@ -22,28 +22,32 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
+import com.github.piasy.biv.view.BigImageView
 import com.github.piasy.biv.view.GlideImageViewFactory
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.visible
-import io.reactivex.subjects.BehaviorSubject
-import kotlinx.android.synthetic.main.activity_view_media.*
-import kotlinx.android.synthetic.main.fragment_view_image.*
+import kotlinx.android.synthetic.main.activity_view_media.toolbar
+import kotlinx.android.synthetic.main.fragment_view_image.captionSheet
+import kotlinx.android.synthetic.main.fragment_view_image.mediaDescription
+import kotlinx.android.synthetic.main.fragment_view_image.photoView
+import kotlinx.android.synthetic.main.fragment_view_image.progressBar
 import java.io.File
-import java.lang.Exception
 import kotlin.math.abs
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.github.piasy.biv.view.BigImageView
-
 
 class ViewImageFragment : ViewMediaFragment() {
+
     interface PhotoActionsListener {
         fun onBringUp()
         fun onDismiss()
@@ -68,23 +72,29 @@ class ViewImageFragment : ViewMediaFragment() {
         photoActionsListener = context as PhotoActionsListener
     }
 
-    override fun setupMediaView(url: String,
-                                previewUrl: String?,
-                                description: String?,
-                                showingDescription: Boolean) {
+    override fun setupMediaView(
+        url: String,
+        previewUrl: String?,
+        description: String?,
+        showingDescription: Boolean
+    ) {
         photoView.transitionName = url
         mediaDescription.text = description
         captionSheet.visible(showingDescription)
 
         startedTransition = false
         uri = Uri.parse(url)
-        if(previewUrl != null && !previewUrl.equals(url)) {
+        if (previewUrl != null && !previewUrl.equals(url)) {
             previewUri = Uri.parse(previewUrl)
         }
         loadImageFromNetwork()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         toolbar = activity!!.toolbar
         return inflater.inflate(R.layout.fragment_view_image, container, false)
     }
@@ -97,13 +107,13 @@ class ViewImageFragment : ViewMediaFragment() {
             // This part is for scaling/translating on vertical move.
             // We use raw coordinates to get the correct ones during scaling
 
-            if(event.pointerCount != 1) {
+            if (event.pointerCount != 1) {
                 onGestureEnd()
                 swipeStartedWithOneFinger = false
                 return false
             }
 
-            when(event.action) {
+            when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     swipeStartedWithOneFinger = true
                     lastY = event.rawY
@@ -113,11 +123,13 @@ class ViewImageFragment : ViewMediaFragment() {
                     swipeStartedWithOneFinger = false
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if(swipeStartedWithOneFinger &&
-                            (photoView.ssiv == null || photoView.ssiv.scale <= photoView.ssiv.minScale)) {
+                    if (swipeStartedWithOneFinger &&
+                        (photoView.ssiv == null || photoView.ssiv.scale <= photoView.ssiv.minScale)
+                    ) {
                         val diff = event.rawY - lastY
                         // This code is to prevent transformations during page scrolling
-                        // If we are already translating or we reached the threshold, then transform.
+                        // If we are already translating or we reached the threshold,
+                        // then transform.
                         if (photoView.translationY != 0f || abs(diff) > 40) {
                             photoView.translationY += (diff)
                             val scale = (-abs(photoView.translationY) / 720 + 1).coerceAtLeast(0.5f)
@@ -132,7 +144,6 @@ class ViewImageFragment : ViewMediaFragment() {
             return false
         }
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -179,13 +190,13 @@ class ViewImageFragment : ViewMediaFragment() {
         isDescriptionVisible = showingDescription && visible
         val alpha = if (isDescriptionVisible) 1.0f else 0.0f
         captionSheet.animate().alpha(alpha)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        captionSheet?.visible(isDescriptionVisible)
-                        animation.removeListener(this)
-                    }
-                })
-                .start()
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    captionSheet?.visible(isDescriptionVisible)
+                    animation.removeListener(this)
+                }
+            })
+            .start()
     }
 
     override fun onDestroyView() {
@@ -193,10 +204,11 @@ class ViewImageFragment : ViewMediaFragment() {
         photoView.ssiv?.recycle()
     }
 
-    private inner class DummyCacheTarget(val ctx: Context, val requestPreview : Boolean) : CustomTarget<File>() {
+    private inner class DummyCacheTarget(val ctx: Context, val requestPreview: Boolean) :
+        CustomTarget<File>() {
         override fun onLoadCleared(placeholder: Drawable?) {}
         override fun onLoadFailed(errorDrawable: Drawable?) {
-            if(requestPreview) {
+            if (requestPreview) {
                 // no preview, no full image in cache, load full image
                 // forget about fancy transition
                 showingPreview = false
@@ -208,16 +220,16 @@ class ViewImageFragment : ViewMediaFragment() {
 
                 // meanwhile poke cache about preview image
                 Glide.with(ctx).asFile()
-                        .load(previewUri)
-                        .dontAnimate()
-                        .onlyRetrieveFromCache(true)
-                        .into(DummyCacheTarget(ctx, true))
+                    .load(previewUri)
+                    .dontAnimate()
+                    .onlyRetrieveFromCache(true)
+                    .into(DummyCacheTarget(ctx, true))
             }
         }
 
         override fun onResourceReady(resource: File, transition: Transition<in File>?) {
             showingPreview = requestPreview
-            if(requestPreview) {
+            if (requestPreview) {
                 // have preview cached but not full image
                 photoView.showImage(previewUri, uri, true)
             } else {
@@ -228,15 +240,15 @@ class ViewImageFragment : ViewMediaFragment() {
     }
 
     private fun loadImageFromNetwork() {
-        if(previewUri != Uri.EMPTY) {
+        if (previewUri != Uri.EMPTY) {
             // check if we have full image in the cache, if yes, use it
             // if not, look for preview in cache and use it if available
             // if not, load full image anyway
             Glide.with(this).asFile()
-                    .load(uri)
-                    .onlyRetrieveFromCache(true)
-                    .dontAnimate()
-                    .into(DummyCacheTarget(context!!, false))
+                .load(uri)
+                .onlyRetrieveFromCache(true)
+                .dontAnimate()
+                .into(DummyCacheTarget(context!!, false))
         } else {
             // no need in cache lookup, just load full image
             showingPreview = false
@@ -255,7 +267,7 @@ class ViewImageFragment : ViewMediaFragment() {
 
     private val imageLoaderCallback = object : ImageLoader.Callback {
         override fun onSuccess(image: File?) {
-            if(!showingPreview) {
+            if (!showingPreview) {
                 progressBar?.hide()
 
                 photoView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE)

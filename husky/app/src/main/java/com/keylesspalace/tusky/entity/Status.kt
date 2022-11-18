@@ -77,7 +77,7 @@ data class Status(
         DIRECT(4);
 
         fun serverString(): String {
-            return when(this) {
+            return when (this) {
                 PUBLIC -> "public"
                 UNLISTED -> "unlisted"
                 PRIVATE -> "private"
@@ -90,7 +90,7 @@ data class Status(
 
             @JvmStatic
             fun byNum(num: Int): Visibility {
-                return when(num) {
+                return when (num) {
                     4 -> DIRECT
                     3 -> PRIVATE
                     2 -> UNLISTED
@@ -102,7 +102,7 @@ data class Status(
 
             @JvmStatic
             fun byString(s: String): Visibility {
-                return when(s) {
+                return when (s) {
                     "public" -> PUBLIC
                     "unlisted" -> UNLISTED
                     "private" -> PRIVATE
@@ -148,7 +148,7 @@ data class Status(
     }
 
     fun setThreadMuted(mute: Boolean) {
-        if(pleroma?.threadMuted != null)
+        if (pleroma?.threadMuted != null)
             pleroma.threadMuted = mute
     }
 
@@ -157,23 +157,23 @@ data class Status(
     }
 
     fun getEmojiReactions(): List<EmojiReaction>? {
-        return pleroma?.emojiReactions;
+        return pleroma?.emojiReactions
     }
 
     fun getInReplyToAccountAcct(): String? {
-        return pleroma?.inReplyToAccountAcct;
+        return pleroma?.inReplyToAccountAcct
     }
 
     fun getParentVisible(): Boolean {
-        return pleroma?.parentVisible ?: true;
+        return pleroma?.parentVisible ?: true
     }
 
     private fun getEditableText(): String {
         val builder = SpannableStringBuilder(content)
-        for(span in content.getSpans(0, content.length, URLSpan::class.java)) {
+        for (span in content.getSpans(0, content.length, URLSpan::class.java)) {
             val url = span.url
-            for((_, url1, username) in mentions) {
-                if(url == url1) {
+            for ((_, url1, username) in mentions) {
+                if (url == url1) {
                     val start = builder.getSpanStart(span)
                     val end = builder.getSpanEnd(span)
                     builder.replace(start, end, "@$username")
@@ -185,8 +185,8 @@ data class Status(
     }
 
     override fun equals(other: Any?): Boolean {
-        if(this === other) return true
-        if(other == null || javaClass != other.javaClass) return false
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
 
         val status = other as Status?
         return id == status?.id

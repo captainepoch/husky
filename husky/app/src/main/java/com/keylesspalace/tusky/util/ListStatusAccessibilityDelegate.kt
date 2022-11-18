@@ -27,20 +27,22 @@ interface StatusProvider {
 }
 
 class ListStatusAccessibilityDelegate(
-        private val recyclerView: RecyclerView,
-        private val statusActionListener: StatusActionListener,
-        private val statusProvider: StatusProvider
+    private val recyclerView: RecyclerView,
+    private val statusActionListener: StatusActionListener,
+    private val statusProvider: StatusProvider
 ) : RecyclerViewAccessibilityDelegate(recyclerView) {
     private val a11yManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE)
-            as AccessibilityManager
+        as AccessibilityManager
 
     override fun getItemDelegate(): AccessibilityDelegateCompat = itemDelegate
 
     private val context: Context get() = recyclerView.context
 
     private val itemDelegate = object : RecyclerViewAccessibilityDelegate.ItemDelegate(this) {
-        override fun onInitializeAccessibilityNodeInfo(host: View,
-                                                       info: AccessibilityNodeInfoCompat) {
+        override fun onInitializeAccessibilityNodeInfo(
+            host: View,
+            info: AccessibilityNodeInfoCompat
+        ) {
             super.onInitializeAccessibilityNodeInfo(host, info)
 
             val pos = recyclerView.getChildAdapterPosition(host)
@@ -59,15 +61,19 @@ class ListStatusAccessibilityDelegate(
                 info.addAction(if (status.isBookmarked) unbookmarkAction else bookmarkAction)
 
                 val mediaActions = intArrayOf(
-                        R.id.action_open_media_1,
-                        R.id.action_open_media_2,
-                        R.id.action_open_media_3,
-                        R.id.action_open_media_4)
+                    R.id.action_open_media_1,
+                    R.id.action_open_media_2,
+                    R.id.action_open_media_3,
+                    R.id.action_open_media_4
+                )
                 val attachmentCount = min(status.attachments.size, MAX_MEDIA_ATTACHMENTS)
                 for (i in 0 until attachmentCount) {
-                    info.addAction(AccessibilityActionCompat(
+                    info.addAction(
+                        AccessibilityActionCompat(
                             mediaActions[i],
-                            context.getString(R.string.action_open_media_n, i + 1)))
+                            context.getString(R.string.action_open_media_n, i + 1)
+                        )
+                    )
                 }
 
                 info.addAction(openProfileAction)
@@ -85,11 +91,13 @@ class ListStatusAccessibilityDelegate(
 
                 info.addAction(moreAction)
             }
-
         }
 
-        override fun performAccessibilityAction(host: View, action: Int,
-                                                args: Bundle?): Boolean {
+        override fun performAccessibilityAction(
+            host: View,
+            action: Int,
+            args: Bundle?
+        ): Boolean {
             val pos = recyclerView.getChildAdapterPosition(host)
             when (action) {
                 R.id.action_reply -> {
@@ -105,7 +113,8 @@ class ListStatusAccessibilityDelegate(
                 R.id.action_open_profile -> {
                     interrupt()
                     statusActionListener.onViewAccount(
-                            (statusProvider.getStatus(pos) as StatusViewData.Concrete).senderId)
+                        (statusProvider.getStatus(pos) as StatusViewData.Concrete).senderId
+                    )
                 }
                 R.id.action_open_media_1 -> {
                     interrupt()
@@ -160,20 +169,21 @@ class ListStatusAccessibilityDelegate(
             return true
         }
 
-
         private fun showLinksDialog(host: View) {
             val status = getStatus(host) as? StatusViewData.Concrete ?: return
             val links = getLinks(status).toList()
             val textLinks = links.map { item -> item.link }
             AlertDialog.Builder(host.context)
-                    .setTitle(R.string.title_links_dialog)
-                    .setAdapter(ArrayAdapter(
-                            host.context,
-                            android.R.layout.simple_list_item_1,
-                            textLinks)
-                    ) { _, which -> LinkHelper.openLink(links[which].link, host.context) }
-                    .show()
-                    .let { forceFocus(it.listView) }
+                .setTitle(R.string.title_links_dialog)
+                .setAdapter(
+                    ArrayAdapter(
+                        host.context,
+                        android.R.layout.simple_list_item_1,
+                        textLinks
+                    )
+                ) { _, which -> LinkHelper.openLink(links[which].link, host.context) }
+                .show()
+                .let { forceFocus(it.listView) }
         }
 
         private fun showMentionsDialog(host: View) {
@@ -181,28 +191,34 @@ class ListStatusAccessibilityDelegate(
             val mentions = status.mentions ?: return
             val stringMentions = mentions.map { it.username }
             AlertDialog.Builder(host.context)
-                    .setTitle(R.string.title_mentions_dialog)
-                    .setAdapter(ArrayAdapter<CharSequence>(host.context,
-                            android.R.layout.simple_list_item_1, stringMentions)
-                    ) { _, which ->
-                        statusActionListener.onViewAccount(mentions[which].id)
-                    }
-                    .show()
-                    .let { forceFocus(it.listView) }
+                .setTitle(R.string.title_mentions_dialog)
+                .setAdapter(
+                    ArrayAdapter<CharSequence>(
+                        host.context,
+                        android.R.layout.simple_list_item_1, stringMentions
+                    )
+                ) { _, which ->
+                    statusActionListener.onViewAccount(mentions[which].id)
+                }
+                .show()
+                .let { forceFocus(it.listView) }
         }
 
         private fun showHashtagsDialog(host: View) {
             val status = getStatus(host) as? StatusViewData.Concrete ?: return
             val tags = getHashtags(status).map { it.subSequence(1, it.length) }.toList()
             AlertDialog.Builder(host.context)
-                    .setTitle(R.string.title_hashtags_dialog)
-                    .setAdapter(ArrayAdapter(host.context,
-                            android.R.layout.simple_list_item_1, tags)
-                    ) { _, which ->
-                        statusActionListener.onViewTag(tags[which].toString())
-                    }
-                    .show()
-                    .let { forceFocus(it.listView) }
+                .setTitle(R.string.title_hashtags_dialog)
+                .setAdapter(
+                    ArrayAdapter(
+                        host.context,
+                        android.R.layout.simple_list_item_1, tags
+                    )
+                ) { _, which ->
+                    statusActionListener.onViewTag(tags[which].toString())
+                }
+                .show()
+                .let { forceFocus(it.listView) }
         }
 
         private fun getStatus(childView: View): StatusViewData {
@@ -210,19 +226,19 @@ class ListStatusAccessibilityDelegate(
         }
     }
 
-
     private fun getLinks(status: StatusViewData.Concrete): Sequence<LinkSpanInfo> {
         val content = status.content
         return if (content is Spannable) {
             content.getSpans(0, content.length, URLSpan::class.java)
-                    .asSequence()
-                    .map { span ->
-                        val text = content.subSequence(
-                                content.getSpanStart(span),
-                                content.getSpanEnd(span))
-                        if (isHashtag(text)) null else LinkSpanInfo(text.toString(), span.url)
-                    }
-                    .filterNotNull()
+                .asSequence()
+                .map { span ->
+                    val text = content.subSequence(
+                        content.getSpanStart(span),
+                        content.getSpanEnd(span)
+                    )
+                    if (isHashtag(text)) null else LinkSpanInfo(text.toString(), span.url)
+                }
+                .filterNotNull()
         } else {
             emptySequence()
         }
@@ -231,11 +247,11 @@ class ListStatusAccessibilityDelegate(
     private fun getHashtags(status: StatusViewData.Concrete): Sequence<CharSequence> {
         val content = status.content
         return content.getSpans(0, content.length, Object::class.java)
-                .asSequence()
-                .map { span ->
-                    content.subSequence(content.getSpanStart(span), content.getSpanEnd(span))
-                }
-                .filter(this::isHashtag)
+            .asSequence()
+            .map { span ->
+                content.subSequence(content.getSpanStart(span), content.getSpanEnd(span))
+            }
+            .filter(this::isHashtag)
     }
 
     private fun forceFocus(host: View) {
@@ -249,76 +265,91 @@ class ListStatusAccessibilityDelegate(
         a11yManager.interrupt()
     }
 
-
     private fun isHashtag(text: CharSequence) = text.startsWith("#")
 
     private val collapseCwAction = AccessibilityActionCompat(
-            R.id.action_collapse_cw,
-            context.getString(R.string.status_content_warning_show_less))
+        R.id.action_collapse_cw,
+        context.getString(R.string.status_content_warning_show_less)
+    )
 
     private val expandCwAction = AccessibilityActionCompat(
-            R.id.action_expand_cw,
-            context.getString(R.string.status_content_warning_show_more))
+        R.id.action_expand_cw,
+        context.getString(R.string.status_content_warning_show_more)
+    )
 
     private val replyAction = AccessibilityActionCompat(
-            R.id.action_reply,
-            context.getString(R.string.action_reply))
+        R.id.action_reply,
+        context.getString(R.string.action_reply)
+    )
 
     private val unreblogAction = AccessibilityActionCompat(
-            R.id.action_unreblog,
-            context.getString(R.string.action_unreblog))
+        R.id.action_unreblog,
+        context.getString(R.string.action_unreblog)
+    )
 
     private val reblogAction = AccessibilityActionCompat(
-            R.id.action_reblog,
-            context.getString(R.string.action_reblog))
+        R.id.action_reblog,
+        context.getString(R.string.action_reblog)
+    )
 
     private val unfavouriteAction = AccessibilityActionCompat(
-            R.id.action_unfavourite,
-            context.getString(R.string.action_unfavourite))
+        R.id.action_unfavourite,
+        context.getString(R.string.action_unfavourite)
+    )
 
     private val favouriteAction = AccessibilityActionCompat(
-            R.id.action_favourite,
-            context.getString(R.string.action_favourite))
+        R.id.action_favourite,
+        context.getString(R.string.action_favourite)
+    )
 
     private val bookmarkAction = AccessibilityActionCompat(
-            R.id.action_bookmark,
-            context.getString(R.string.action_bookmark))
+        R.id.action_bookmark,
+        context.getString(R.string.action_bookmark)
+    )
 
     private val unbookmarkAction = AccessibilityActionCompat(
-            R.id.action_unbookmark,
-            context.getString(R.string.action_bookmark))
+        R.id.action_unbookmark,
+        context.getString(R.string.action_bookmark)
+    )
 
     private val openProfileAction = AccessibilityActionCompat(
-            R.id.action_open_profile,
-            context.getString(R.string.action_view_profile))
+        R.id.action_open_profile,
+        context.getString(R.string.action_view_profile)
+    )
 
     private val linksAction = AccessibilityActionCompat(
-            R.id.action_links,
-            context.getString(R.string.action_links))
+        R.id.action_links,
+        context.getString(R.string.action_links)
+    )
 
     private val mentionsAction = AccessibilityActionCompat(
-            R.id.action_mentions,
-            context.getString(R.string.action_mentions))
+        R.id.action_mentions,
+        context.getString(R.string.action_mentions)
+    )
 
     private val hashtagsAction = AccessibilityActionCompat(
-            R.id.action_hashtags,
-            context.getString(R.string.action_hashtags))
+        R.id.action_hashtags,
+        context.getString(R.string.action_hashtags)
+    )
 
     private val openRebloggerAction = AccessibilityActionCompat(
-            R.id.action_open_reblogger,
-            context.getString(R.string.action_open_reblogger))
+        R.id.action_open_reblogger,
+        context.getString(R.string.action_open_reblogger)
+    )
 
     private val openRebloggedByAction = AccessibilityActionCompat(
-            R.id.action_open_reblogged_by,
-            context.getString(R.string.action_open_reblogged_by))
+        R.id.action_open_reblogged_by,
+        context.getString(R.string.action_open_reblogged_by)
+    )
 
     private val openFavsAction = AccessibilityActionCompat(
-            R.id.action_open_faved_by,
-            context.getString(R.string.action_open_faved_by))
+        R.id.action_open_faved_by,
+        context.getString(R.string.action_open_faved_by)
+    )
 
     private val moreAction = AccessibilityActionCompat(
-            R.id.action_more,
-            context.getString(R.string.action_more)
+        R.id.action_more,
+        context.getString(R.string.action_more)
     )
 
     private data class LinkSpanInfo(val text: String, val link: String)

@@ -15,24 +15,23 @@
 
 package com.keylesspalace.tusky.entity
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Emoji(
-        val shortcode: String,
-        val url: String,
-        @SerializedName("static_url") val staticUrl: String,
-        @SerializedName("visible_in_picker") val visibleInPicker: Boolean?
+    val shortcode: String,
+    val url: String,
+    @SerializedName("static_url") val staticUrl: String,
+    @SerializedName("visible_in_picker") val visibleInPicker: Boolean?
 ) : Parcelable
 
 data class EmojiReaction(
-        val name: String,
-        val count: Int,
-        val me: Boolean,
-        val url: String?,
-        @SerializedName("static_url") val staticUrl: String?,
-        val accounts: List<Account>? // only for emoji_reactions_by
+    val name: String,
+    val count: Int,
+    val me: Boolean,
+    val url: String?,
+    @SerializedName("static_url") val staticUrl: String?,
+    val accounts: List<Account>? // only for emoji_reactions_by
 )

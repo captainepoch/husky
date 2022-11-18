@@ -21,7 +21,6 @@
 package com.keylesspalace.tusky.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +30,13 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.arch.core.util.Function
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListUpdateCallback
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import at.connyduck.sparkbutton.helpers.Utils
 import com.keylesspalace.tusky.BottomSheetActivity
@@ -40,50 +45,75 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.adapter.ChatsAdapter
 import com.keylesspalace.tusky.adapter.StatusBaseViewHolder
 import com.keylesspalace.tusky.adapter.TimelineAdapter
-import com.keylesspalace.tusky.appstore.*
-import com.keylesspalace.tusky.components.chat.ChatActivity
+import com.keylesspalace.tusky.appstore.BlockEvent
+import com.keylesspalace.tusky.appstore.ChatMessageReceivedEvent
+import com.keylesspalace.tusky.appstore.DomainMuteEvent
+import com.keylesspalace.tusky.appstore.Event
+import com.keylesspalace.tusky.appstore.EventHub
+import com.keylesspalace.tusky.appstore.MuteEvent
+import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
+import com.keylesspalace.tusky.appstore.StatusDeletedEvent
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Chat
-import com.keylesspalace.tusky.entity.ChatMessage
-import com.keylesspalace.tusky.entity.NewChatMessage
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
 import com.keylesspalace.tusky.interfaces.ChatActionListener
 import com.keylesspalace.tusky.interfaces.RefreshableFragment
 import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.network.TimelineCases
-import com.keylesspalace.tusky.repository.*
+import com.keylesspalace.tusky.repository.ChatRepository
+import com.keylesspalace.tusky.repository.ChatStatus
+import com.keylesspalace.tusky.repository.Placeholder
+import com.keylesspalace.tusky.repository.TimelineRequestMode
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.util.*
+import com.keylesspalace.tusky.util.CardViewMode
 import com.keylesspalace.tusky.util.Either.Left
+import com.keylesspalace.tusky.util.LinkHelper
+import com.keylesspalace.tusky.util.PairedList
+import com.keylesspalace.tusky.util.StatusDisplayOptions
+import com.keylesspalace.tusky.util.ViewDataUtils
+import com.keylesspalace.tusky.util.dec
+import com.keylesspalace.tusky.util.inc
 import com.keylesspalace.tusky.view.EndlessOnScrollListener
 import com.keylesspalace.tusky.viewdata.ChatViewData
-import com.uber.autodispose.AutoDispose
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_timeline.*
+import kotlinx.android.synthetic.main.fragment_timeline.progressBar
+import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
+import kotlinx.android.synthetic.main.fragment_timeline.statusView
+import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_timeline.topProgressBar
 import java.io.IOException
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, ReselectableFragment, ChatActionListener, OnRefreshListener {
+class ChatsFragment :
+    BaseFragment(),
+    Injectable,
+    RefreshableFragment,
+    ReselectableFragment,
+    ChatActionListener,
+    OnRefreshListener {
+
     private val TAG = "ChatsF" // logging tag
     private val LOAD_AT_ONCE = 30
-    private val BROKEN_PAGINATION_IN_BACKEND = true // break pagination until it's not fixed in plemora
-
+    private val BROKEN_PAGINATION_IN_BACKEND =
+        true // break pagination until it's not fixed in plemora
 
     @Inject
     lateinit var eventHub: EventHub
+
     @Inject
     lateinit var api: MastodonApi
+
     @Inject
     lateinit var accountManager: AccountManager
+
     @Inject
     lateinit var chatRepo: ChatRepository
+
     @Inject
     lateinit var timelineCases: TimelineCases
 
@@ -107,39 +137,41 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         TOP, BOTTOM, MIDDLE
     }
 
-    private val chats = PairedList<ChatStatus, ChatViewData?>(Function<ChatStatus, ChatViewData?> {input ->
-        input.asRightOrNull()?.let(ViewDataUtils::chatToViewData) ?:
-            ChatViewData.Placeholder(input.asLeft().id, false)
-    })
+    private val chats = PairedList<ChatStatus, ChatViewData?>(
+        Function<ChatStatus, ChatViewData?> { input ->
+            input.asRightOrNull()?.let(ViewDataUtils::chatToViewData)
+                ?: ChatViewData.Placeholder(input.asLeft().id, false)
+        }
+    )
 
     private val listUpdateCallback = object : ListUpdateCallback {
         override fun onInserted(position: Int, count: Int) {
             if (isAdded) {
-                Log.d(TAG, "onInserted");
+                Log.d(TAG, "onInserted")
                 adapter.notifyItemRangeInserted(position, count)
                 // scroll up when new items at the top are loaded while being in the first position
                 // https://github.com/tuskyapp/Tusky/pull/1905#issuecomment-677819724
                 if (position == 0 && context != null && adapter.itemCount != count) {
                     if (isSwipeToRefreshEnabled)
-                        recyclerView.scrollBy(0, Utils.dpToPx(context!!, -30));
+                        recyclerView.scrollBy(0, Utils.dpToPx(context!!, -30))
                     else
-                        recyclerView.scrollToPosition(0);
+                        recyclerView.scrollToPosition(0)
                 }
             }
         }
 
         override fun onRemoved(position: Int, count: Int) {
-            Log.d(TAG, "onRemoved");
+            Log.d(TAG, "onRemoved")
             adapter.notifyItemRangeRemoved(position, count)
         }
 
         override fun onMoved(fromPosition: Int, toPosition: Int) {
-            Log.d(TAG, "onMoved");
+            Log.d(TAG, "onMoved")
             adapter.notifyItemMoved(fromPosition, toPosition)
         }
 
         override fun onChanged(position: Int, count: Int, payload: Any?) {
-            Log.d(TAG, "onChanged");
+            Log.d(TAG, "onChanged")
             adapter.notifyItemRangeChanged(position, count, payload)
         }
     }
@@ -150,20 +182,24 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         }
 
         override fun areContentsTheSame(oldItem: ChatViewData, newItem: ChatViewData): Boolean {
-            return false // Items are different always. It allows to refresh timestamp on every view holder update
+            // Items are different always. It allows to refresh timestamp on every
+            // view holder update
+            return false
         }
 
         override fun getChangePayload(oldItem: ChatViewData, newItem: ChatViewData): Any? {
             return if (oldItem.deepEquals(newItem)) {
-                //If items are equal - update timestamp only
+                // If items are equal - update timestamp only
                 listOf(StatusBaseViewHolder.Key.KEY_CREATED)
-            } else  // If items are different - update a whole view holder
+            } else // If items are different - update a whole view holder
                 null
         }
     }
 
-    private val differ = AsyncListDiffer(listUpdateCallback,
-            AsyncDifferConfig.Builder(diffCallback).build())
+    private val differ = AsyncListDiffer(
+        listUpdateCallback,
+        AsyncDifferConfig.Builder(diffCallback).build()
+    )
 
     private val dataSource = object : TimelineAdapter.AdapterDataSource<ChatViewData> {
         override fun getItemCount(): Int {
@@ -175,25 +211,29 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         val statusDisplayOptions = StatusDisplayOptions(
-                animateAvatars = preferences.getBoolean(PrefKeys.ANIMATE_GIF_AVATARS, false),
-                mediaPreviewEnabled = accountManager.activeAccount!!.mediaPreviewEnabled,
-                useAbsoluteTime = preferences.getBoolean(PrefKeys.ABSOLUTE_TIME_VIEW, false),
-                showBotOverlay = preferences.getBoolean(PrefKeys.SHOW_BOT_OVERLAY, true),
-                useBlurhash = false,
-                cardViewMode = CardViewMode.NONE,
-                confirmReblogs = false,
-                renderStatusAsMention = false,
-                hideStats = false
+            animateAvatars = preferences.getBoolean(PrefKeys.ANIMATE_GIF_AVATARS, false),
+            mediaPreviewEnabled = accountManager.activeAccount!!.mediaPreviewEnabled,
+            useAbsoluteTime = preferences.getBoolean(PrefKeys.ABSOLUTE_TIME_VIEW, false),
+            showBotOverlay = preferences.getBoolean(PrefKeys.SHOW_BOT_OVERLAY, true),
+            useBlurhash = false,
+            cardViewMode = CardViewMode.NONE,
+            confirmReblogs = false,
+            renderStatusAsMention = false,
+            hideStats = false
         )
 
-        adapter = ChatsAdapter(dataSource, statusDisplayOptions, this, accountManager.activeAccount!!.accountId)
+        adapter = ChatsAdapter(
+            dataSource,
+            statusDisplayOptions,
+            this,
+            accountManager.activeAccount!!.accountId
+        )
     }
 
     override fun onAttach(context: Context) {
@@ -205,7 +245,11 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_timeline, container, false)
     }
 
@@ -219,7 +263,12 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         recyclerView.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(view.context)
         recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL))
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                view.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         recyclerView.adapter = adapter
 
         if (chats.isEmpty()) {
@@ -231,6 +280,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
             if (isNeedRefresh) onRefresh()
         }
     }
+
     private fun sendInitialRequest() {
         // debug
         // sendFetchChatsRequest(null, null, null, FetchEnd.BOTTOM, -1)
@@ -240,23 +290,29 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
     private fun tryCache() {
         // Request timeline from disk to make it quick, then replace it with timeline from
         // the server to update it
-        chatRepo.getChats(null, null, null, LOAD_AT_ONCE, TimelineRequestMode.DISK)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe { newChats ->
-                    if (newChats.size > 1) {
-                        val mutableChats = newChats.toMutableList()
-                        mutableChats.removeAll { it.isLeft() }
+        chatRepo.getChats(
+            null,
+            null,
+            null,
+            LOAD_AT_ONCE,
+            TimelineRequestMode.DISK
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe { newChats ->
+                if (newChats.size > 1) {
+                    val mutableChats = newChats.toMutableList()
+                    mutableChats.removeAll { it.isLeft() }
 
-                        chats.clear()
-                        chats.addAll(mutableChats)
+                    chats.clear()
+                    chats.addAll(mutableChats)
 
-                        updateAdapter()
-                        progressBar.visibility = View.GONE
-                    }
-                    updateCurrent()
-                    loadAbove()
+                    updateAdapter()
+                    progressBar.visibility = View.GONE
                 }
+                updateCurrent()
+                loadAbove()
+            }
     }
 
     private fun updateCurrent() {
@@ -264,41 +320,46 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
             return
         }
 
-        val topId  = chats.firstOrNull { it.isRight() }?.asRight()?.id
-        chatRepo.getChats(topId, null, null, LOAD_AT_ONCE, TimelineRequestMode.NETWORK)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe({ newChats ->
-                    initialUpdateFailed = false
-                    // When cached timeline is too old, we would replace it with nothing
-                    if (newChats.isNotEmpty()) {
-                        // clear old cached statuses
-                        if(BROKEN_PAGINATION_IN_BACKEND) {
-                            chats.clear()
-                        } else {
-                            chats.removeAll {
-                                if(it.isLeft()) {
-                                    val p = it.asLeft()
-                                    p.id.length < topId!!.length || p.id < topId
-                                } else {
-                                    val c = it.asRight()
-                                    c.id.length < topId!!.length || c.id < topId
-                                }
+        val topId = chats.firstOrNull { it.isRight() }?.asRight()?.id
+        chatRepo.getChats(
+            topId,
+            null,
+            null,
+            LOAD_AT_ONCE,
+            TimelineRequestMode.NETWORK
+        ).observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe({ newChats ->
+                initialUpdateFailed = false
+                // When cached timeline is too old, we would replace it with nothing
+                if (newChats.isNotEmpty()) {
+                    // clear old cached statuses
+                    if (BROKEN_PAGINATION_IN_BACKEND) {
+                        chats.clear()
+                    } else {
+                        chats.removeAll {
+                            if (it.isLeft()) {
+                                val p = it.asLeft()
+                                p.id.length < topId!!.length || p.id < topId
+                            } else {
+                                val c = it.asRight()
+                                c.id.length < topId!!.length || c.id < topId
                             }
                         }
-                        chats.addAll(newChats)
-                        updateAdapter()
                     }
-                    bottomLoading = false
-                    // Indicate that we are not loading anymore
-                    progressBar.visibility = View.GONE
-                    swipeRefreshLayout.isRefreshing = false
-                }, {
-                    initialUpdateFailed = true
-                    // Indicate that we are not loading anymore
-                    progressBar.visibility = View.GONE
-                    swipeRefreshLayout.isRefreshing = false
-                })
+                    chats.addAll(newChats)
+                    updateAdapter()
+                }
+                bottomLoading = false
+                // Indicate that we are not loading anymore
+                progressBar.visibility = View.GONE
+                swipeRefreshLayout.isRefreshing = false
+            }, {
+                initialUpdateFailed = true
+                // Indicate that we are not loading anymore
+                progressBar.visibility = View.GONE
+                swipeRefreshLayout.isRefreshing = false
+            })
     }
 
     private fun showNothing() {
@@ -324,16 +385,16 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
 
     private fun deleteChatById(id: String) {
         val iterator = chats.iterator()
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             val chat = iterator.next().asRightOrNull()
-            if(chat != null && chat.id == id) {
+            if (chat != null && chat.id == id) {
                 iterator.remove()
                 updateAdapter()
                 break
             }
         }
 
-        if(chats.isEmpty()) {
+        if (chats.isEmpty()) {
             showNothing()
         }
     }
@@ -366,25 +427,25 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
             }
 
             override fun onLoadMore(totalItemsCount: Int, view: RecyclerView) {
-                if(!BROKEN_PAGINATION_IN_BACKEND)
+                if (!BROKEN_PAGINATION_IN_BACKEND)
                     this@ChatsFragment.onLoadMore()
             }
         }
         recyclerView.addOnScrollListener(scrollListener)
         if (!eventRegistered) {
             eventHub.events
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                    .subscribe { event: Event? ->
-                        when(event) {
-                            is BlockEvent -> removeAllByAccountId(event.accountId)
-                            is MuteEvent -> removeAllByAccountId(event.accountId)
-                            is DomainMuteEvent -> removeAllByInstance(event.instance)
-                            is StatusDeletedEvent -> deleteChatById(event.statusId)
-                            is PreferenceChangedEvent -> onPreferenceChanged(event.preferenceKey)
-                            is ChatMessageReceivedEvent -> onRefresh() // TODO: proper update
-                        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+                .subscribe { event: Event? ->
+                    when (event) {
+                        is BlockEvent -> removeAllByAccountId(event.accountId)
+                        is MuteEvent -> removeAllByAccountId(event.accountId)
+                        is DomainMuteEvent -> removeAllByInstance(event.instance)
+                        is StatusDeletedEvent -> deleteChatById(event.statusId)
+                        is PreferenceChangedEvent -> onPreferenceChanged(event.preferenceKey)
+                        is ChatMessageReceivedEvent -> onRefresh() // TODO: proper update
                     }
+                }
             eventRegistered = true
         }
     }
@@ -435,7 +496,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
     }
 
     private fun loadAbove() {
-        if(BROKEN_PAGINATION_IN_BACKEND) {
+        if (BROKEN_PAGINATION_IN_BACKEND) {
             updateCurrent()
             return
         }
@@ -455,14 +516,16 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         if (firstOrNull != null) {
             sendFetchChatsRequest(null, firstOrNull, secondOrNull, FetchEnd.TOP, -1)
         } else {
-            sendFetchChatsRequest(null, null, null, FetchEnd.BOTTOM, -1)
+            sendFetchChatsRequest(
+                null, null, null, FetchEnd.BOTTOM, -1
+            )
         }
     }
 
     private fun onLoadMore() {
         if (BROKEN_PAGINATION_IN_BACKEND)
             updateCurrent()
-            return
+        return
 
         if (didLoadEverythingBottom || bottomLoading) {
             return
@@ -481,20 +544,26 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         } else {
             placeholder = last.asLeft()
         }
-        chats.setPairedItem(chats.size - 1,
-                ChatViewData.Placeholder(placeholder.id, true))
+        chats.setPairedItem(
+            chats.size - 1,
+            ChatViewData.Placeholder(placeholder.id, true)
+        )
         updateAdapter()
         val bottomId = chats.findLast { it.isRight() }?.let { it.asRight().id }
         sendFetchChatsRequest(bottomId, null, null, FetchEnd.BOTTOM, -1)
     }
 
-
-    private fun sendFetchChatsRequest(maxId: String?, sinceId: String?,
-                                      sinceIdMinusOne: String?,
-                                      fetchEnd: FetchEnd, pos: Int) {
-        if (isAdded
-                && (fetchEnd == FetchEnd.TOP || fetchEnd == FetchEnd.BOTTOM && maxId == null && progressBar.visibility != View.VISIBLE)
-                && !isSwipeToRefreshEnabled)
+    private fun sendFetchChatsRequest(
+        maxId: String?,
+        sinceId: String?,
+        sinceIdMinusOne: String?,
+        fetchEnd: FetchEnd,
+        pos: Int
+    ) {
+        if (isAdded &&
+            (fetchEnd == FetchEnd.TOP || fetchEnd == FetchEnd.BOTTOM && maxId == null && progressBar.visibility != View.VISIBLE) &&
+            !isSwipeToRefreshEnabled
+        )
             topProgressBar.show()
         // allow getting old statuses/fallbacks for network only for for bottom loading
         val mode = if (fetchEnd == FetchEnd.BOTTOM) {
@@ -503,10 +572,12 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
             TimelineRequestMode.NETWORK
         }
         chatRepo.getChats(maxId, sinceId, sinceIdMinusOne, LOAD_AT_ONCE, mode)
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                .subscribe( { result -> onFetchTimelineSuccess(result.toMutableList(), fetchEnd, pos) },
-                        { onFetchTimelineFailure(Exception(it), fetchEnd, pos) })
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDispose(this, Lifecycle.Event.ON_DESTROY)
+            .subscribe(
+                { result -> onFetchTimelineSuccess(result.toMutableList(), fetchEnd, pos) },
+                { onFetchTimelineFailure(Exception(it), fetchEnd, pos) }
+            )
     }
 
     private fun updateChats(newChats: MutableList<ChatStatus>, fullFetch: Boolean) {
@@ -548,8 +619,11 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         }
     }
 
-    private fun replacePlaceholderWithChats(newChats: MutableList<ChatStatus>,
-                                               fullFetch: Boolean, pos: Int) {
+    private fun replacePlaceholderWithChats(
+        newChats: MutableList<ChatStatus>,
+        fullFetch: Boolean,
+        pos: Int
+    ) {
         val placeholder = chats[pos]
         if (placeholder.isLeft()) {
             chats.removeAt(pos)
@@ -573,7 +647,8 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         val last = chats.findLast { it.isRight() }
 
         // I was about to replace findStatus with indexOf but it is incorrect to compare value
-        // types by ID anyway and we should change equals() for Status, I think, so this makes sense
+        // types by ID anyway and we should change equals() for Status, I think, so this
+        // makes sense
         if (last != null && !newChats.contains(last)) {
             chats.addAll(newChats)
             removeConsecutivePlaceholders()
@@ -581,8 +656,11 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         }
     }
 
-    private fun onFetchTimelineSuccess(chats: MutableList<ChatStatus>,
-                                       fetchEnd: FetchEnd, pos: Int) {
+    private fun onFetchTimelineSuccess(
+        chats: MutableList<ChatStatus>,
+        fetchEnd: FetchEnd,
+        pos: Int
+    ) {
 
         // We filled the hole (or reached the end) if the server returned less statuses than we
         // we asked for.
@@ -677,7 +755,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
     }
 
     override fun onLoadMore(position: Int) {
-        //check bounds before accessing list,
+        // check bounds before accessing list,
         if (chats.size >= position && position > 0) {
             val fromChat = chats[position - 1].asRightOrNull()
             val toChat = chats[position + 1].asRightOrNull()
@@ -686,9 +764,15 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
                 return
             }
 
-            val maxMinusOne = if (chats.size > position + 1 && chats[position + 2].isRight()) chats[position + 1].asRight().id else null
-            sendFetchChatsRequest(fromChat.id, toChat.id, maxMinusOne,
-                    FetchEnd.MIDDLE, position)
+            val maxMinusOne = if (chats.size > position + 1 && chats[position + 2].isRight()) {
+                chats[position + 1].asRight().id
+            } else {
+                null
+            }
+            sendFetchChatsRequest(
+                fromChat.id, toChat.id, maxMinusOne,
+                FetchEnd.MIDDLE, position
+            )
 
             val (id) = chats[position].asLeft()
             val newViewData = ChatViewData.Placeholder(id, true)
@@ -746,13 +830,13 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         val useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false)
         if (!useAbsoluteTime) {
             Observable.interval(1, TimeUnit.MINUTES)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .autoDispose(this, Lifecycle.Event.ON_PAUSE)
-                    .subscribe { updateAdapter() }
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDispose(this, Lifecycle.Event.ON_PAUSE)
+                .subscribe { updateAdapter() }
         }
     }
 
-    private fun findChatPosition(id: String) : Int {
+    private fun findChatPosition(id: String): Int {
         return chats.indexOfFirst { it.isRight() && it.asRight().id == id }
     }
 
@@ -771,12 +855,13 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
         val chat = chats[pos].asRight()
         // val menu = popup.menu
         popup.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.chat_mark_as_read -> {
                     api.markChatAsRead(chat.id, chat.lastMessage?.id ?: null)
                         .observeOn(AndroidSchedulers.mainThread())
                         .autoDispose(this, Lifecycle.Event.ON_DESTROY)
-                        .subscribe({ chat -> markAsRead(chat)
+                        .subscribe({ chat ->
+                            markAsRead(chat)
                         }, { err -> Log.e(TAG, "Failed to mark chat as read", err) })
 
                     true
@@ -790,7 +875,7 @@ class ChatsFragment : BaseFragment(), Injectable, RefreshableFragment, Reselecta
     }
 
     override fun openChat(position: Int) {
-        if(position < 0 || position >= chats.size)
+        if (position < 0 || position >= chats.size)
             return
 
         val chat = chats[position].asRightOrNull()

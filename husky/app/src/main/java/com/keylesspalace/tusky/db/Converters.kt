@@ -24,18 +24,22 @@ import com.google.gson.reflect.TypeToken
 import com.keylesspalace.tusky.TabData
 import com.keylesspalace.tusky.components.conversation.ConversationAccountEntity
 import com.keylesspalace.tusky.createTabDataFromId
-import com.keylesspalace.tusky.entity.*
+import com.keylesspalace.tusky.entity.Attachment
+import com.keylesspalace.tusky.entity.Emoji
+import com.keylesspalace.tusky.entity.NewPoll
+import com.keylesspalace.tusky.entity.Poll
+import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.json.SpannedTypeAdapter
 import com.keylesspalace.tusky.util.trimTrailingWhitespace
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.util.*
+import java.util.Date
 
 class Converters {
 
     private val gson = GsonBuilder()
-            .registerTypeAdapter(Spanned::class.java, SpannedTypeAdapter())
-            .create()
+        .registerTypeAdapter(Spanned::class.java, SpannedTypeAdapter())
+        .create()
 
     @TypeConverter
     fun jsonToEmojiList(emojiListJson: String?): List<Emoji>? {
@@ -60,16 +64,26 @@ class Converters {
     @TypeConverter
     fun stringToTabData(str: String?): List<TabData>? {
         return str?.split(";")
-                ?.map {
-                    val data = it.split(":")
-                    createTabDataFromId(data[0], data.drop(1).map { s -> URLDecoder.decode(s, "UTF-8") })
-                }
+            ?.map {
+                val data = it.split(":")
+                createTabDataFromId(
+                    data[0],
+                    data.drop(1).map { s -> URLDecoder.decode(s, "UTF-8") }
+                )
+            }
     }
 
     @TypeConverter
     fun tabDataToString(tabData: List<TabData>?): String? {
         // List name may include ":"
-        return tabData?.joinToString(";") { it.id + ":" + it.arguments.joinToString(":") { s -> URLEncoder.encode(s, "UTF-8") } }
+        return tabData?.joinToString(";") {
+            it.id + ":" + it.arguments.joinToString(":") { s ->
+                URLEncoder.encode(
+                    s,
+                    "UTF-8"
+                )
+            }
+        }
     }
 
     @TypeConverter
@@ -89,7 +103,10 @@ class Converters {
 
     @TypeConverter
     fun jsonToAccountList(accountListJson: String?): List<ConversationAccountEntity>? {
-        return gson.fromJson(accountListJson, object : TypeToken<List<ConversationAccountEntity>>() {}.type)
+        return gson.fromJson(
+            accountListJson,
+            object : TypeToken<List<ConversationAccountEntity>>() {}.type
+        )
     }
 
     @TypeConverter
@@ -99,7 +116,10 @@ class Converters {
 
     @TypeConverter
     fun jsonToAttachmentList(attachmentListJson: String?): ArrayList<Attachment>? {
-        return gson.fromJson(attachmentListJson, object : TypeToken<ArrayList<Attachment>>() {}.type)
+        return gson.fromJson(
+            attachmentListJson,
+            object : TypeToken<ArrayList<Attachment>>() {}.type
+        )
     }
 
     @TypeConverter
@@ -124,7 +144,7 @@ class Converters {
 
     @TypeConverter
     fun spannedToString(spanned: Spanned?): String? {
-        if(spanned == null) {
+        if (spanned == null) {
             return null
         }
         return spanned.toHtml()
@@ -132,7 +152,7 @@ class Converters {
 
     @TypeConverter
     fun stringToSpanned(spannedString: String?): Spanned? {
-        if(spannedString == null) {
+        if (spannedString == null) {
             return null
         }
         return spannedString.parseAsHtml().trimTrailingWhitespace()
@@ -165,6 +185,9 @@ class Converters {
 
     @TypeConverter
     fun jsonToDraftAttachmentList(draftAttachmentListJson: String?): List<DraftAttachment>? {
-        return gson.fromJson(draftAttachmentListJson, object : TypeToken<List<DraftAttachment>>() {}.type)
+        return gson.fromJson(
+            draftAttachmentListJson,
+            object : TypeToken<List<DraftAttachment>>() {}.type
+        )
     }
 }

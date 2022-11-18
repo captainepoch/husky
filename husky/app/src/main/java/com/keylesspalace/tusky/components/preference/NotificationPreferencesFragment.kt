@@ -100,7 +100,7 @@ class NotificationPreferencesFragment : PreferenceFragmentCompat(), Injectable {
                         true
                     }
                 }
-                
+
                 switchPreference {
                     setTitle(R.string.pref_title_notification_filter_emoji)
                     key = PrefKeys.NOTIFICATION_FILTER_EMOJI_REACTIONS
@@ -209,5 +209,4 @@ class NotificationPreferencesFragment : PreferenceFragmentCompat(), Injectable {
             return NotificationPreferencesFragment()
         }
     }
-
 }

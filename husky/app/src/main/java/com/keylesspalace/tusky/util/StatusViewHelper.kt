@@ -34,10 +34,12 @@ import com.keylesspalace.tusky.viewdata.buildDescription
 import com.keylesspalace.tusky.viewdata.calculatePercent
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import kotlin.math.min
 
 class StatusViewHelper(private val itemView: View) {
+
     interface MediaPreviewListener {
         fun onViewMedia(v: View?, idx: Int)
         fun onContentHiddenChange(isShowing: Boolean)
@@ -47,27 +49,31 @@ class StatusViewHelper(private val itemView: View) {
     private val longSdf = SimpleDateFormat("MM/dd HH:mm:ss", Locale.getDefault())
 
     fun setMediasPreview(
-            statusDisplayOptions: StatusDisplayOptions,
-            attachments: List<Attachment>,
-            sensitive: Boolean,
-            previewListener: MediaPreviewListener,
-            showingContent: Boolean,
-            mediaPreviewHeight: Int) {
+        statusDisplayOptions: StatusDisplayOptions,
+        attachments: List<Attachment>,
+        sensitive: Boolean,
+        previewListener: MediaPreviewListener,
+        showingContent: Boolean,
+        mediaPreviewHeight: Int
+    ) {
 
         val context = itemView.context
         val mediaPreviews = arrayOf<MediaPreviewImageView>(
-                itemView.findViewById(R.id.status_media_preview_0),
-                itemView.findViewById(R.id.status_media_preview_1),
-                itemView.findViewById(R.id.status_media_preview_2),
-                itemView.findViewById(R.id.status_media_preview_3))
+            itemView.findViewById(R.id.status_media_preview_0),
+            itemView.findViewById(R.id.status_media_preview_1),
+            itemView.findViewById(R.id.status_media_preview_2),
+            itemView.findViewById(R.id.status_media_preview_3)
+        )
 
         val mediaOverlays = arrayOf<ImageView>(
-                itemView.findViewById(R.id.status_media_overlay_0),
-                itemView.findViewById(R.id.status_media_overlay_1),
-                itemView.findViewById(R.id.status_media_overlay_2),
-                itemView.findViewById(R.id.status_media_overlay_3))
+            itemView.findViewById(R.id.status_media_overlay_0),
+            itemView.findViewById(R.id.status_media_overlay_1),
+            itemView.findViewById(R.id.status_media_overlay_2),
+            itemView.findViewById(R.id.status_media_overlay_3)
+        )
 
-        val sensitiveMediaWarning = itemView.findViewById<TextView>(R.id.status_sensitive_media_warning)
+        val sensitiveMediaWarning =
+            itemView.findViewById<TextView>(R.id.status_sensitive_media_warning)
         val sensitiveMediaShow = itemView.findViewById<View>(R.id.status_sensitive_media_button)
         val mediaLabel = itemView.findViewById<TextView>(R.id.status_media_label)
         if (statusDisplayOptions.mediaPreviewEnabled) {
@@ -85,8 +91,8 @@ class StatusViewHelper(private val itemView: View) {
             return
         }
 
-
-        val mediaPreviewUnloaded = ColorDrawable(ThemeUtils.getColor(context, R.attr.colorBackgroundAccent))
+        val mediaPreviewUnloaded =
+            ColorDrawable(ThemeUtils.getColor(context, R.attr.colorBackgroundAccent))
 
         val n = min(attachments.size, Status.MAX_MEDIA_ATTACHMENTS)
 
@@ -105,9 +111,9 @@ class StatusViewHelper(private val itemView: View) {
 
             if (TextUtils.isEmpty(previewUrl)) {
                 Glide.with(mediaPreviews[i])
-                        .load(mediaPreviewUnloaded)
-                        .centerInside()
-                        .into(mediaPreviews[i])
+                    .load(mediaPreviewUnloaded)
+                    .centerInside()
+                    .into(mediaPreviews[i])
             } else {
                 val placeholder = if (attachment.blurhash != null)
                     decodeBlurHash(context, attachment.blurhash)
@@ -119,19 +125,19 @@ class StatusViewHelper(private val itemView: View) {
                         mediaPreviews[i].setFocalPoint(focus)
 
                         Glide.with(mediaPreviews[i])
-                                .load(previewUrl)
-                                .placeholder(placeholder)
-                                .centerInside()
-                                .addListener(mediaPreviews[i])
-                                .into(mediaPreviews[i])
+                            .load(previewUrl)
+                            .placeholder(placeholder)
+                            .centerInside()
+                            .addListener(mediaPreviews[i])
+                            .into(mediaPreviews[i])
                     } else {
                         mediaPreviews[i].removeFocalPoint()
 
                         Glide.with(mediaPreviews[i])
-                                .load(previewUrl)
-                                .placeholder(placeholder)
-                                .centerInside()
-                                .into(mediaPreviews[i])
+                            .load(previewUrl)
+                            .placeholder(placeholder)
+                            .centerInside()
+                            .into(mediaPreviews[i])
                     }
                 } else {
                     mediaPreviews[i].removeFocalPoint()
@@ -145,8 +151,9 @@ class StatusViewHelper(private val itemView: View) {
             }
 
             val type = attachment.type
-            if (showingContent
-                    && (type === Attachment.Type.VIDEO) or (type === Attachment.Type.GIFV)) {
+            if (showingContent &&
+                (type === Attachment.Type.VIDEO) or (type === Attachment.Type.GIFV)
+            ) {
                 mediaOverlays[i].visibility = View.VISIBLE
             } else {
                 mediaOverlays[i].visibility = View.GONE
@@ -170,7 +177,7 @@ class StatusViewHelper(private val itemView: View) {
             sensitiveMediaWarning.visibility = View.GONE
             sensitiveMediaShow.visibility = View.GONE
         } else {
-            sensitiveMediaWarning.text =  if (sensitive) {
+            sensitiveMediaWarning.text = if (sensitive) {
                 context.getString(R.string.status_sensitive_media_title)
             } else {
                 context.getString(R.string.status_media_hidden_title)
@@ -182,15 +189,19 @@ class StatusViewHelper(private val itemView: View) {
                 previewListener.onContentHiddenChange(false)
                 v.visibility = View.GONE
                 sensitiveMediaWarning.visibility = View.VISIBLE
-                setMediasPreview(statusDisplayOptions, attachments, sensitive, previewListener,
-                        false, mediaPreviewHeight)
+                setMediasPreview(
+                    statusDisplayOptions, attachments, sensitive, previewListener,
+                    false, mediaPreviewHeight
+                )
             }
             sensitiveMediaWarning.setOnClickListener { v ->
                 previewListener.onContentHiddenChange(true)
                 v.visibility = View.GONE
                 sensitiveMediaShow.visibility = View.VISIBLE
-                setMediasPreview(statusDisplayOptions, attachments, sensitive, previewListener,
-                        true, mediaPreviewHeight)
+                setMediasPreview(
+                    statusDisplayOptions, attachments, sensitive, previewListener,
+                    true, mediaPreviewHeight
+                )
             }
         }
 
@@ -200,8 +211,12 @@ class StatusViewHelper(private val itemView: View) {
         }
     }
 
-    private fun setMediaLabel(mediaLabel: TextView, attachments: List<Attachment>, sensitive: Boolean,
-                              listener: MediaPreviewListener) {
+    private fun setMediaLabel(
+        mediaLabel: TextView,
+        attachments: List<Attachment>,
+        sensitive: Boolean,
+        listener: MediaPreviewListener
+    ) {
         if (attachments.isEmpty()) {
             mediaLabel.visibility = View.GONE
             return
@@ -245,10 +260,11 @@ class StatusViewHelper(private val itemView: View) {
 
     fun setupPollReadonly(poll: PollViewData?, emojis: List<Emoji>, useAbsoluteTime: Boolean) {
         val pollResults = listOf<TextView>(
-                itemView.findViewById(R.id.status_poll_option_result_0),
-                itemView.findViewById(R.id.status_poll_option_result_1),
-                itemView.findViewById(R.id.status_poll_option_result_2),
-                itemView.findViewById(R.id.status_poll_option_result_3))
+            itemView.findViewById(R.id.status_poll_option_result_0),
+            itemView.findViewById(R.id.status_poll_option_result_1),
+            itemView.findViewById(R.id.status_poll_option_result_2),
+            itemView.findViewById(R.id.status_poll_option_result_3)
+        )
 
         val pollDescription = itemView.findViewById<TextView>(R.id.status_poll_description)
 
@@ -260,17 +276,22 @@ class StatusViewHelper(private val itemView: View) {
         } else {
             val timestamp = System.currentTimeMillis()
 
-
             setupPollResult(poll, emojis, pollResults)
 
             pollDescription.visibility = View.VISIBLE
-            pollDescription.text = getPollInfoText(timestamp, poll, pollDescription, useAbsoluteTime)
+            pollDescription.text =
+                getPollInfoText(timestamp, poll, pollDescription, useAbsoluteTime)
         }
     }
 
-    private fun getPollInfoText(timestamp: Long, poll: PollViewData, pollDescription: TextView, useAbsoluteTime: Boolean): CharSequence {
+    private fun getPollInfoText(
+        timestamp: Long,
+        poll: PollViewData,
+        pollDescription: TextView,
+        useAbsoluteTime: Boolean
+    ): CharSequence {
         val context = pollDescription.context
-        val votesText = if(poll.votersCount == null) {
+        val votesText = if (poll.votersCount == null) {
             val votes = NumberFormat.getNumberInstance().format(poll.votesCount.toLong())
             context.resources.getQuantityString(R.plurals.poll_info_votes, poll.votesCount, votes)
         } else {
@@ -290,22 +311,25 @@ class StatusViewHelper(private val itemView: View) {
         return context.getString(R.string.poll_info_format, votesText, pollDurationInfo)
     }
 
-
-    private fun setupPollResult(poll: PollViewData, emojis: List<Emoji>, pollResults: List<TextView>) {
+    private fun setupPollResult(
+        poll: PollViewData,
+        emojis: List<Emoji>,
+        pollResults: List<TextView>
+    ) {
         val options = poll.options
 
         for (i in 0 until Status.MAX_POLL_OPTIONS) {
             if (i < options.size) {
                 val percent = calculatePercent(options[i].votesCount, poll.votesCount)
 
-                val pollOptionText = buildDescription(options[i].title, percent, pollResults[i].context)
+                val pollOptionText =
+                    buildDescription(options[i].title, percent, pollResults[i].context)
                 pollResults[i].text = pollOptionText.emojify(emojis, pollResults[i])
                 pollResults[i].visibility = View.VISIBLE
 
                 val level = percent * 100
 
                 pollResults[i].background.level = level
-
             } else {
                 pollResults[i].visibility = View.GONE
             }
