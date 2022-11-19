@@ -60,6 +60,7 @@ import com.keylesspalace.tusky.adapter.AccountFieldAdapter
 import com.keylesspalace.tusky.components.chat.ChatActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.report.ReportActivity
+import com.keylesspalace.tusky.core.extensions.DefaultTextWatcher
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Relationship
@@ -68,7 +69,6 @@ import com.keylesspalace.tusky.interfaces.LinkListener
 import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.pager.AccountPagerAdapter
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.util.DefaultTextWatcher
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.Success

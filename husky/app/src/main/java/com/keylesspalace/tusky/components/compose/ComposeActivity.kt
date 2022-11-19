@@ -85,7 +85,9 @@ import com.keylesspalace.tusky.components.common.toFileName
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.components.compose.dialog.showAddPollDialog
 import com.keylesspalace.tusky.components.compose.view.ComposeOptionsListener
+import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.composeWithZwsp
+import com.keylesspalace.tusky.core.extensions.onTextChanged
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityComposeBinding
 import com.keylesspalace.tusky.db.AccountEntity
@@ -101,14 +103,12 @@ import com.keylesspalace.tusky.util.BBCodeEdit
 import com.keylesspalace.tusky.util.ComposeTokenizer
 import com.keylesspalace.tusky.util.HTMLEdit
 import com.keylesspalace.tusky.util.ThemeUtils
-import com.keylesspalace.tusky.util.afterTextChanged
 import com.keylesspalace.tusky.util.combineLiveData
 import com.keylesspalace.tusky.util.combineOptionalLiveData
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.highlightSpans
 import com.keylesspalace.tusky.util.loadAvatar
 import com.keylesspalace.tusky.util.observeOnce
-import com.keylesspalace.tusky.util.onTextChanged
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.util.visible
 import com.keylesspalace.tusky.util.withLifecycleContext

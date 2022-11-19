@@ -1,3 +1,23 @@
+/*
+ * Husky -- A Pleroma client for Android
+ *
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2020  Alibek Omarov
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.keylesspalace.tusky.components.chat
 
 import android.Manifest
@@ -68,6 +88,7 @@ import com.keylesspalace.tusky.components.common.toFileName
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
+import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Attachment
@@ -87,7 +108,6 @@ import com.keylesspalace.tusky.util.Either
 import com.keylesspalace.tusky.util.PairedList
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.ViewDataUtils
-import com.keylesspalace.tusky.util.afterTextChanged
 import com.keylesspalace.tusky.util.dec
 import com.keylesspalace.tusky.util.emojify
 import com.keylesspalace.tusky.util.highlightSpans
