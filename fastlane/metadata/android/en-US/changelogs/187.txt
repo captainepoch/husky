@@ -1,0 +1,8 @@
+Husky 1.4.0-beta1
+
+Changelog:
+  - Update for Android 13.
+  - Migrated more Views to ViewBinding.
+  - Treat internally Akkoma as a Pleroma server (patch thanks to Karol Kosek).
+  - Updated dependencies.
+  - Fix: Poll values should be shown correctly.
