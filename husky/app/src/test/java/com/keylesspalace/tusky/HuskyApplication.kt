@@ -28,8 +28,8 @@ import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 
-// Override TuskyApplication for Robolectric tests, only initialize the necessary stuff
-class TuskyApplication : Application() {
+// Override HuskyApplication for Robolectric tests, only initialize the necessary stuff
+class HuskyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
