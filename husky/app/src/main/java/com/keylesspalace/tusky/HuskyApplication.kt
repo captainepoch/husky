@@ -48,7 +48,7 @@ import timber.log.Timber
 import java.security.Security
 import javax.inject.Inject
 
-class TuskyApplication : Application(), HasAndroidInjector {
+class HuskyApplication : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>

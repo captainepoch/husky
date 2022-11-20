@@ -26,7 +26,7 @@ import android.content.SharedPreferences
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.room.Room
-import com.keylesspalace.tusky.TuskyApplication
+import com.keylesspalace.tusky.HuskyApplication
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.EventHubImpl
 import com.keylesspalace.tusky.components.notifications.Notifier
@@ -44,7 +44,7 @@ import javax.inject.Singleton
 class AppModule {
 
     @Provides
-    fun providesApplication(app: TuskyApplication): Application = app
+    fun providesApplication(app: HuskyApplication): Application = app
 
     @Provides
     fun providesContext(app: Application): Context = app

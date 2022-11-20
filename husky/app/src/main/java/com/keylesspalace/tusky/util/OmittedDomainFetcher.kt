@@ -13,7 +13,7 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.load.model.stream.HttpGlideUrlLoader
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.signature.ObjectKey
-import com.keylesspalace.tusky.TuskyApplication
+import com.keylesspalace.tusky.HuskyApplication
 import com.keylesspalace.tusky.db.AccountManager
 import java.io.File
 import java.io.InputStream
@@ -25,7 +25,7 @@ class OmittedDomainAppModule : AppGlideModule() {
     lateinit var accountManager: AccountManager
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        (context.applicationContext as TuskyApplication).androidInjector.inject(this)
+        (context.applicationContext as HuskyApplication).androidInjector.inject(this)
 
         registry.append(String::class.java, InputStream::class.java, OmittedDomainLoaderFactory(accountManager))
     }

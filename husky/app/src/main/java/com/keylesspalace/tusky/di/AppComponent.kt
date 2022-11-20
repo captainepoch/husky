@@ -15,7 +15,7 @@
 
 package com.keylesspalace.tusky.di
 
-import com.keylesspalace.tusky.TuskyApplication
+import com.keylesspalace.tusky.HuskyApplication
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
@@ -44,10 +44,10 @@ interface AppComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun application(tuskyApp: TuskyApplication): Builder
+        fun application(tuskyApp: HuskyApplication): Builder
 
         fun build(): AppComponent
     }
 
-    fun inject(app: TuskyApplication)
+    fun inject(app: HuskyApplication)
 }
