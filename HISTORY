@@ -1,3 +1,29 @@
+Husky 1.4.0-beta1 - 2022-11-20
+  - Update for Android 13.
+  - Migrated more Views to ViewBinding.
+  - Treat internally Akkoma as a Pleroma server (patch thanks to Karol Kosek).
+  - Fix: Poll values should be shown correctly.
+
+  Update dependencies:
+   - androidGradlePlugin (7.3.0 -> 7.3.1)
+   - appcompat (1.5.0 -> 1.5.1)
+   - coreKtx (1.8.0 -> 1.9.0)
+   - dagger (2.43.2 -> 2.44.2)
+   - espresso (3.4.0 -> 3.5.0)
+   - exifInterface (1.3.3 -> 1.3.5)
+   - extJunit (1.1.3 -> 1.1.4)
+   - fragmentKtx (1.5.3 -> 1.5.4)
+   - fragmentviewbindingdelegateKt (1.0.1 -> 1.0.2)
+   - glide (4.13.2 -> 4.14.2)
+   - glidePluginAnimation (2.23.0 -> 2.24.0)
+   - kotlin (1.7.20 -> 1.7.21)
+   - materialDesign (1.6.0 -> 1.7.0)
+   - mockitoInline (4.7.0 -> 4.8.0)
+   - roboelectric (4.8.2 -> 4.9)
+   - shareTarget (1.2.0-rc02 -> 1.2.0)
+   - simplestack (2.6.4 -> 2.6.5)
+   - simplestackext (2.2.4 -> 2.2.5)
+
 Husky 1.3.1 - 2022-08-26
  - Fix: Null username crashing bookmarks (possibly more).
  - Migrated more Activities to ViewBinding.
