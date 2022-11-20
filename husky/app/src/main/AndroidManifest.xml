@@ -201,10 +201,10 @@
             android:exported="false" />
 
         <service
-            android:name=".service.TuskyTileService"
-            android:exported="false"
+            android:name=".service.HuskyTileService"
+            android:exported="true"
             android:icon="@drawable/ic_tusky"
-            android:label="Compose Toot"
+            android:label="Compose Status"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             tools:targetApi="24">
             <intent-filter>
