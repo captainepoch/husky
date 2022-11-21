@@ -58,7 +58,7 @@ Tusky's maintainer is [ConnyDuck@chaos.social][tusky_maintainer].
 [husky_fdroid]: https://f-droid.org/repository/browse/?fdid=su.xash.husky
 [husky_maintainer]: https://stereophonic.space/captainepoch
 [husky_man]: https://man.sr.ht/~captainepoch/husky-man/
-[husky_man_bugreport]: https://man.sr.ht/~captainepoch/husky-man/bugreport.md
+[husky_man_bugreport]: https://man.sr.ht/~captainepoch/husky-man/open_ticket.md
 [husky_man_contributing]: https://man.sr.ht/~captainepoch/husky-man/contributing.md
 [husky_original_issues]: https://git.mentality.rip/FWGS/Husky/issues
 [husky_playstore]: https://play.google.com/store/apps/details?id=su.xash.husky
