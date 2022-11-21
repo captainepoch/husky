@@ -1,17 +1,22 @@
-/* Copyright 2019 Joel Pyska
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2019  Joel Pyska
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.report.fragments
 
@@ -20,11 +25,11 @@ import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.report.Screen
+import com.keylesspalace.tusky.databinding.FragmentReportNoteBinding
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.util.Error
@@ -32,16 +37,13 @@ import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.Success
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import kotlinx.android.synthetic.main.fragment_report_note.buttonBack
-import kotlinx.android.synthetic.main.fragment_report_note.buttonReport
-import kotlinx.android.synthetic.main.fragment_report_note.checkIsNotifyRemote
-import kotlinx.android.synthetic.main.fragment_report_note.editNote
-import kotlinx.android.synthetic.main.fragment_report_note.progressBar
-import kotlinx.android.synthetic.main.fragment_report_note.reportDescriptionRemoteInstance
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import java.io.IOException
 import javax.inject.Inject
 
 class ReportNoteFragment : Fragment(R.layout.fragment_report_note), Injectable {
+
+    private val binding by viewBinding(FragmentReportNoteBinding::bind)
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -56,53 +58,51 @@ class ReportNoteFragment : Fragment(R.layout.fragment_report_note), Injectable {
     }
 
     private fun handleChanges() {
-        editNote.doAfterTextChanged {
+        binding.editNote.doAfterTextChanged {
             viewModel.reportNote = it?.toString() ?: ""
         }
-        checkIsNotifyRemote.setOnCheckedChangeListener { _, isChecked ->
+        binding.checkIsNotifyRemote.setOnCheckedChangeListener { _, isChecked ->
             viewModel.isRemoteNotify = isChecked
         }
     }
 
     private fun fillViews() {
-        editNote.setText(viewModel.reportNote)
+        binding.editNote.setText(viewModel.reportNote)
 
         if (viewModel.isRemoteAccount) {
-            checkIsNotifyRemote.show()
-            reportDescriptionRemoteInstance.show()
+            binding.checkIsNotifyRemote.show()
+            binding.reportDescriptionRemoteInstance.show()
         } else {
-            checkIsNotifyRemote.hide()
-            reportDescriptionRemoteInstance.hide()
+            binding.checkIsNotifyRemote.hide()
+            binding.reportDescriptionRemoteInstance.hide()
         }
 
-        if (viewModel.isRemoteAccount)
-            checkIsNotifyRemote.text =
+        if (viewModel.isRemoteAccount) {
+            binding.checkIsNotifyRemote.text =
                 getString(R.string.report_remote_instance, viewModel.remoteServer)
-        checkIsNotifyRemote.isChecked = viewModel.isRemoteNotify
+        }
+        binding.checkIsNotifyRemote.isChecked = viewModel.isRemoteNotify
     }
 
     private fun subscribeObservables() {
-        viewModel.reportingState.observe(
-            viewLifecycleOwner,
-            Observer {
-                when (it) {
-                    is Success -> viewModel.navigateTo(Screen.Done)
-                    is Loading -> showLoading()
-                    is Error -> showError(it.cause)
-                }
+        viewModel.reportingState.observe(viewLifecycleOwner) {
+            when (it) {
+                is Success -> viewModel.navigateTo(Screen.Done)
+                is Loading -> showLoading()
+                is Error -> showError(it.cause)
             }
-        )
+        }
     }
 
     private fun showError(error: Throwable?) {
-        editNote.isEnabled = true
-        checkIsNotifyRemote.isEnabled = true
-        buttonReport.isEnabled = true
-        buttonBack.isEnabled = true
-        progressBar.hide()
+        binding.editNote.isEnabled = true
+        binding.checkIsNotifyRemote.isEnabled = true
+        binding.buttonReport.isEnabled = true
+        binding.buttonBack.isEnabled = true
+        binding.progressBar.hide()
 
         Snackbar.make(
-            buttonBack,
+            binding.buttonBack,
             if (error is IOException) {
                 R.string.error_network
             } else {
@@ -121,19 +121,19 @@ class ReportNoteFragment : Fragment(R.layout.fragment_report_note), Injectable {
     }
 
     private fun showLoading() {
-        buttonReport.isEnabled = false
-        buttonBack.isEnabled = false
-        editNote.isEnabled = false
-        checkIsNotifyRemote.isEnabled = false
-        progressBar.show()
+        binding.buttonReport.isEnabled = false
+        binding.buttonBack.isEnabled = false
+        binding.editNote.isEnabled = false
+        binding.checkIsNotifyRemote.isEnabled = false
+        binding.progressBar.show()
     }
 
     private fun handleClicks() {
-        buttonBack.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             viewModel.navigateTo(Screen.Back)
         }
 
-        buttonReport.setOnClickListener {
+        binding.buttonReport.setOnClickListener {
             sendReport()
         }
     }
