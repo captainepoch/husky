@@ -1,3 +1,23 @@
+/*
+ * Husky -- A Pleroma client for Android
+ *
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2019  Tusky Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.keylesspalace.tusky.components.search.fragments
 
 import android.os.Bundle
@@ -18,6 +38,7 @@ import com.keylesspalace.tusky.BottomSheetActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewTagActivity
 import com.keylesspalace.tusky.components.search.SearchViewModel
+import com.keylesspalace.tusky.databinding.FragmentSearchBinding
 import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.interfaces.LinkListener
@@ -26,12 +47,7 @@ import com.keylesspalace.tusky.util.Status
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.util.visible
-import kotlinx.android.synthetic.main.fragment_search.layoutRoot
-import kotlinx.android.synthetic.main.fragment_search.progressBarBottom
-import kotlinx.android.synthetic.main.fragment_search.searchNoResultsText
-import kotlinx.android.synthetic.main.fragment_search.searchProgressBar
-import kotlinx.android.synthetic.main.fragment_search.searchRecyclerView
-import kotlinx.android.synthetic.main.fragment_search.swipeRefreshLayout
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import javax.inject.Inject
 
 abstract class SearchFragment<T> :
@@ -39,6 +55,8 @@ abstract class SearchFragment<T> :
     LinkListener,
     Injectable,
     SwipeRefreshLayout.OnRefreshListener {
+
+    private val binding by viewBinding(FragmentSearchBinding::bind)
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -61,8 +79,8 @@ abstract class SearchFragment<T> :
     }
 
     private fun setupSwipeRefreshLayout() {
-        swipeRefreshLayout.setOnRefreshListener(this)
-        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
     }
 
     private fun subscribeObservables() {
@@ -73,30 +91,22 @@ abstract class SearchFragment<T> :
             }
         )
 
-        networkStateRefresh.observe(
-            viewLifecycleOwner,
-            Observer {
+        networkStateRefresh.observe(viewLifecycleOwner) {
+            binding.searchProgressBar.visible(it == NetworkState.LOADING)
 
-                searchProgressBar.visible(it == NetworkState.LOADING)
-
-                if (it.status == Status.FAILED) {
-                    showError()
-                }
-                checkNoData()
+            if (it.status == Status.FAILED) {
+                showError()
             }
-        )
+            checkNoData()
+        }
 
-        networkState.observe(
-            viewLifecycleOwner,
-            Observer {
+        networkState.observe(viewLifecycleOwner) {
+            binding.progressBarBottom.visible(it == NetworkState.LOADING)
 
-                progressBarBottom.visible(it == NetworkState.LOADING)
-
-                if (it.status == Status.FAILED) {
-                    showError()
-                }
+            if (it.status == Status.FAILED) {
+                showError()
             }
-        )
+        }
     }
 
     private fun checkNoData() {
@@ -104,30 +114,33 @@ abstract class SearchFragment<T> :
     }
 
     private fun initAdapter() {
-        searchRecyclerView.addItemDecoration(
+        binding.searchRecyclerView.addItemDecoration(
             DividerItemDecoration(
-                searchRecyclerView.context,
+                binding.searchRecyclerView.context,
                 DividerItemDecoration.VERTICAL
             )
         )
-        searchRecyclerView.layoutManager = LinearLayoutManager(searchRecyclerView.context)
+        binding.searchRecyclerView.layoutManager =
+            LinearLayoutManager(binding.searchRecyclerView.context)
         adapter = createAdapter()
-        searchRecyclerView.adapter = adapter
-        searchRecyclerView.setHasFixedSize(true)
-        (searchRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        binding.searchRecyclerView.adapter = adapter
+        binding.searchRecyclerView.setHasFixedSize(true)
+        (binding.searchRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+            false
     }
 
     private fun showNoData(isEmpty: Boolean) {
-        if (isEmpty && networkStateRefresh.value == NetworkState.LOADED)
-            searchNoResultsText.show()
-        else
-            searchNoResultsText.hide()
+        if (isEmpty && networkStateRefresh.value == NetworkState.LOADED) {
+            binding.searchNoResultsText.show()
+        } else {
+            binding.searchNoResultsText.hide()
+        }
     }
 
     private fun showError() {
         if (snackbarErrorRetry?.isShown != true) {
             snackbarErrorRetry =
-                Snackbar.make(layoutRoot, R.string.failed_search, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(binding.root, R.string.failed_search, Snackbar.LENGTH_INDEFINITE)
             snackbarErrorRetry?.setAction(R.string.action_retry) {
                 snackbarErrorRetry = null
                 viewModel.retryAllSearches()
@@ -152,8 +165,8 @@ abstract class SearchFragment<T> :
     override fun onRefresh() {
         // Dismissed here because the RecyclerView bottomProgressBar is shown as
         // soon as the retry begins.
-        swipeRefreshLayout.post {
-            swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.post {
+            binding.swipeRefreshLayout.isRefreshing = false
         }
         viewModel.retryAllSearches()
     }
