@@ -18,7 +18,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package com.keylesspalace.tusky.fragment;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
@@ -1077,7 +1076,7 @@ public class TimelineFragment extends SFragment implements
             case PUBLIC_FEDERATED:
                 return api.publicTimeline(null, fromId, uptoId, LOAD_AT_ONCE);
             case PUBLIC_BUBBLE:
-                return api.bubbleTimeline(null, fromId, uptoId, LOAD_AT_ONCE);
+                return api.bubbleTimeline(fromId, uptoId, LOAD_AT_ONCE);
             case PUBLIC_LOCAL:
                 return api.publicTimeline(true, fromId, uptoId, LOAD_AT_ONCE);
             case TAG:
