@@ -28,6 +28,7 @@ import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.json.SpannedTypeAdapter
 import com.keylesspalace.tusky.network.InstanceSwitchAuthInterceptor
 import com.keylesspalace.tusky.network.MastodonApi
+import com.keylesspalace.tusky.network.MastodonService
 import com.keylesspalace.tusky.util.OkHttpUtils
 import dagger.Module
 import dagger.Provides
@@ -36,10 +37,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-
-/**
- * Created by charlag on 3/24/18.
- */
 
 @Module
 class NetworkModule {
@@ -54,10 +51,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesHttpClient(
-        accountManager: AccountManager,
-        context: Context
-    ): OkHttpClient {
+    fun providesHttpClient(accountManager: AccountManager, context: Context): OkHttpClient {
         return OkHttpUtils.getCompatibleClientBuilder(context)
             .apply {
                 addInterceptor(InstanceSwitchAuthInterceptor(accountManager))
@@ -67,10 +61,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit(
-        httpClient: OkHttpClient,
-        gson: Gson
-    ): Retrofit {
+    fun providesRetrofit(httpClient: OkHttpClient, gson: Gson): Retrofit {
         return Retrofit.Builder().baseUrl("https://" + MastodonApi.PLACEHOLDER_DOMAIN)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -80,5 +71,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providesApi(retrofit: Retrofit): MastodonApi = retrofit.create(MastodonApi::class.java)
+    fun providesService(retrofit: Retrofit): MastodonApi {
+        return MastodonService(retrofit)
+    }
 }
