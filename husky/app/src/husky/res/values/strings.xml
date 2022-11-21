@@ -50,7 +50,7 @@
     <string name="pref_title_composing_title">Composing using zero-width space characters in emojis</string>
 
     <string name="pref_crashhandler_category">CrashHanlder Settings</string>
-    <string name="pref_crashhandler_body">Enable CrashHanlder email reporting</string>
+    <string name="pref_crashhandler_body">Enable uncontrolled crash email reporting</string>
     <string name="pref_crashhandler_key">enableCrashHanlder</string>
 
     <string name="pref_title_anonymize_upload_filenames">Anonymize uploaded file names</string>
