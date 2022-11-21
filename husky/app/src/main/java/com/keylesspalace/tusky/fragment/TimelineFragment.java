@@ -133,6 +133,7 @@ public class TimelineFragment extends SFragment implements
         HOME,
         PUBLIC_LOCAL,
         PUBLIC_FEDERATED,
+        PUBLIC_BUBBLE,
         TAG,
         USER,
         USER_PINNED,
@@ -407,6 +408,7 @@ public class TimelineFragment extends SFragment implements
             case LIST:
                 return filterContext.contains(Filter.HOME);
             case PUBLIC_FEDERATED:
+            case PUBLIC_BUBBLE:
             case PUBLIC_LOCAL:
             case TAG:
                 return filterContext.contains(Filter.PUBLIC);
@@ -1074,6 +1076,8 @@ public class TimelineFragment extends SFragment implements
                 return api.homeTimeline(fromId, uptoId, LOAD_AT_ONCE);
             case PUBLIC_FEDERATED:
                 return api.publicTimeline(null, fromId, uptoId, LOAD_AT_ONCE);
+            case PUBLIC_BUBBLE:
+                return api.bubbleTimeline(null, fromId, uptoId, LOAD_AT_ONCE);
             case PUBLIC_LOCAL:
                 return api.publicTimeline(true, fromId, uptoId, LOAD_AT_ONCE);
             case TAG:
@@ -1434,6 +1438,7 @@ public class TimelineFragment extends SFragment implements
         switch(kind) {
             case HOME:
             case PUBLIC_FEDERATED:
+            case PUBLIC_BUBBLE:
             case PUBLIC_LOCAL:
                 break;
             case USER:

@@ -30,6 +30,7 @@ const val HOME = "Home"
 const val NOTIFICATIONS = "Notifications"
 const val LOCAL = "Local"
 const val FEDERATED = "Federated"
+const val BUBBLE = "Bubble"
 const val DIRECT = "Direct"
 const val HASHTAG = "Hashtag"
 const val LIST = "List"
@@ -69,6 +70,12 @@ fun createTabDataFromId(id: String, arguments: List<String> = emptyList()): TabD
             R.string.title_public_federated,
             R.drawable.ic_public_24dp,
             { TimelineFragment.newInstance(TimelineFragment.Kind.PUBLIC_FEDERATED) }
+        )
+        BUBBLE -> TabData(
+            BUBBLE,
+            R.string.title_public_bubble,
+            R.drawable.ic_bubble_24dp,
+            { TimelineFragment.newInstance(TimelineFragment.Kind.PUBLIC_BUBBLE) }
         )
         DIRECT -> TabData(
             DIRECT,

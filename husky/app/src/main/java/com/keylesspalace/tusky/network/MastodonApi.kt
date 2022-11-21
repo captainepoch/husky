@@ -118,6 +118,14 @@ interface MastodonApi {
         @Query("limit") limit: Int?
     ): Call<List<Status>>
 
+    @GET("api/v1/timelines/bubble?with_muted=true")
+    fun bubbleTimeline(
+        @Query("local") local: Boolean?,
+        @Query("max_id") maxId: String?,
+        @Query("since_id") sinceId: String?,
+        @Query("limit") limit: Int?
+    ): Call<List<Status>>
+
     @GET("api/v1/timelines/tag/{hashtag}?with_muted=true")
     fun hashtagTimeline(
         @Path("hashtag") hashtag: String,

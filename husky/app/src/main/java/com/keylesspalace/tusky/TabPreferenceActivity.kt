@@ -306,6 +306,10 @@ class TabPreferenceActivity : BaseActivity(), Injectable, ItemInteractionListene
         if (!currentTabs.contains(federatedTab)) {
             addableTabs.add(federatedTab)
         }
+        val bubbleTab = createTabDataFromId(BUBBLE)
+        if (!currentTabs.contains(bubbleTab)) {
+            addableTabs.add(bubbleTab)
+        }
         val directMessagesTab = createTabDataFromId(DIRECT)
         if (!currentTabs.contains(directMessagesTab)) {
             addableTabs.add(directMessagesTab)
