@@ -41,6 +41,7 @@ import android.view.MenuItem
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -49,6 +50,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
 import com.keylesspalace.tusky.BuildConfig.APPLICATION_ID
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityViewMediaBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.fragment.ViewImageFragment
 import com.keylesspalace.tusky.pager.AvatarImagePagerAdapter
@@ -60,9 +63,6 @@ import com.uber.autodispose.autoDispose
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_view_media.progressBarShare
-import kotlinx.android.synthetic.main.activity_view_media.toolbar
-import kotlinx.android.synthetic.main.activity_view_media.viewPager
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -109,11 +109,13 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         }
     }
 
-    var isToolbarVisible = true
-        private set
+    private val binding by viewBinding(ActivityViewMediaBinding::inflate)
 
     private var attachments: ArrayList<AttachmentViewData>? = null
     private val toolbarVisibilityListeners = mutableListOf<ToolbarVisibilityListener>()
+
+    var isToolbarVisible = true
+        private set
 
     fun addToolbarVisibilityListener(listener: ToolbarVisibilityListener): Function0<Boolean> {
         this.toolbarVisibilityListeners.add(listener)
@@ -123,7 +125,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_media)
+        setContentView(binding.root)
 
         supportPostponeEnterTransition()
 
@@ -145,24 +147,24 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             AvatarImagePagerAdapter(this, avatarUrl)
         }
 
-        viewPager.adapter = adapter
-        viewPager.setCurrentItem(initialPosition, false)
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.adapter = adapter
+        binding.viewPager.setCurrentItem(initialPosition, false)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                toolbar.title = getPageTitle(position)
+                binding.toolbar.title = getPageTitle(position)
             }
         })
 
         // Setup the toolbar.
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setDisplayShowHomeEnabled(true)
             actionBar.title = getPageTitle(initialPosition)
         }
-        toolbar.setNavigationOnClickListener { supportFinishAfterTransition() }
-        toolbar.setOnMenuItemClickListener { item: MenuItem ->
+        binding.toolbar.setNavigationOnClickListener { supportFinishAfterTransition() }
+        binding.toolbar.setOnMenuItemClickListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.action_open_in_external_app -> openInExternalApp()
                 R.id.action_download -> requestDownloadMedia()
@@ -177,7 +179,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         window.statusBarColor = Color.BLACK
         window.sharedElementEnterTransition.addListener(object : NoopTransitionListener {
             override fun onTransitionEnd(transition: Transition) {
-                adapter.onTransitionEnd(viewPager.currentItem)
+                adapter.onTransitionEnd(binding.viewPager.currentItem)
                 window.sharedElementEnterTransition.removeListener(this)
             }
         })
@@ -220,18 +222,22 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         val alpha = if (isToolbarVisible) 1.0f else 0.0f
         if (isToolbarVisible) {
             // If to be visible, need to make visible immediately and animate alpha
-            toolbar.alpha = 0.0f
-            toolbar.visibility = visibility
+            binding.toolbar.alpha = 0.0f
+            binding.toolbar.visibility = visibility
         }
 
-        toolbar.animate().alpha(alpha)
+        binding.toolbar.animate().alpha(alpha)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    toolbar.visibility = visibility
+                    binding.toolbar.visibility = visibility
                     animation.removeListener(this)
                 }
             })
             .start()
+    }
+
+    fun getToolbar(): Toolbar {
+        return binding.toolbar
     }
 
     private fun getPageTitle(position: Int): CharSequence {
@@ -242,7 +248,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun downloadMedia() {
-        val url = attachments!![viewPager.currentItem].attachment.url
+        val url = attachments!![binding.viewPager.currentItem].attachment.url
         val filename = Uri.parse(url).lastPathSegment
         Toast.makeText(
             applicationContext,
@@ -265,7 +271,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                 downloadMedia()
             } else {
                 showErrorDialog(
-                    toolbar,
+                    binding.toolbar,
                     R.string.error_media_download_permission,
                     R.string.action_retry
                 ) { requestDownloadMedia() }
@@ -274,7 +280,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun onOpenStatus() {
-        val attach = attachments!![viewPager.currentItem]
+        val attach = attachments!![binding.viewPager.currentItem]
         startActivityWithSlideInAnimation(
             ViewThreadActivity.startIntent(
                 this,
@@ -289,7 +295,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         clipboard.setPrimaryClip(
             ClipData.newPlainText(
                 null,
-                attachments!![viewPager.currentItem].attachment.url
+                attachments!![binding.viewPager.currentItem].attachment.url
             )
         )
     }
@@ -301,7 +307,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             return
         }
 
-        val attachment = attachments!![viewPager.currentItem].attachment
+        val attachment = attachments!![binding.viewPager.currentItem].attachment
         when (attachment.type) {
             Attachment.Type.IMAGE -> shareImage(directory, attachment.url)
             Attachment.Type.AUDIO,
@@ -325,7 +331,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun openInExternalApp() {
-        val url = attachments!![viewPager.currentItem].attachment.url
+        val url = attachments!![binding.viewPager.currentItem].attachment.url
         val intent = Intent(Intent.ACTION_VIEW)
         val extension = MimeTypeMap.getFileExtensionFromUrl(url)
         if (extension != null) {
@@ -344,7 +350,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
 
     private fun shareImage(directory: File, url: String) {
         isCreating = true
-        progressBarShare.visibility = View.VISIBLE
+        binding.progressBarShare.visibility = View.VISIBLE
         invalidateOptionsMenu()
         val file = File(directory, getTemporaryMediaFilename("png"))
         val futureTask: FutureTarget<Bitmap> =
@@ -374,14 +380,14 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     Log.d(TAG, "Download image result: $result")
                     isCreating = false
                     invalidateOptionsMenu()
-                    progressBarShare.visibility = View.GONE
+                    binding.progressBarShare.visibility = View.GONE
                     if (result)
                         shareFile(file, "image/png")
                 },
                 { error ->
                     isCreating = false
                     invalidateOptionsMenu()
-                    progressBarShare.visibility = View.GONE
+                    binding.progressBarShare.visibility = View.GONE
                     Log.e(TAG, "Failed to download image", error)
                 }
             )
