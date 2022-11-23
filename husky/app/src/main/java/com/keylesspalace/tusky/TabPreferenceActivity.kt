@@ -47,7 +47,6 @@ import com.keylesspalace.tusky.appstore.MainTabsChangedEvent
 import com.keylesspalace.tusky.core.extensions.onTextChanged
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityTabPreferenceBinding
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.visible
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
@@ -55,24 +54,18 @@ import com.uber.autodispose.autoDispose
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.koin.android.ext.android.inject
 import java.util.regex.Pattern
-import javax.inject.Inject
 
-class TabPreferenceActivity : BaseActivity(), Injectable, ItemInteractionListener {
+class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
 
     private val binding by viewBinding(ActivityTabPreferenceBinding::inflate)
-
-    @Inject
-    lateinit var mastodonApi: MastodonApi
-
-    @Inject
-    lateinit var eventHub: EventHub
-
+    private val mastodonApi: MastodonApi by inject()
+    private val eventHub: EventHub by inject()
     private lateinit var currentTabs: MutableList<TabData>
     private lateinit var currentTabsAdapter: TabAdapter
     private lateinit var touchHelper: ItemTouchHelper
     private lateinit var addTabAdapter: TabAdapter
-
     private var tabsChanged = false
     private val selectedItemElevation by lazy { resources.getDimension(R.dimen.selected_drag_item_elevation) }
 
@@ -95,7 +88,7 @@ class TabPreferenceActivity : BaseActivity(), Injectable, ItemInteractionListene
             setDisplayShowHomeEnabled(true)
         }
 
-        currentTabs = accountManager.activeAccount?.tabPreferences.orEmpty().toMutableList()
+        currentTabs = accountManager.value.activeAccount?.tabPreferences.orEmpty().toMutableList()
         currentTabsAdapter = TabAdapter(currentTabs, false, this, currentTabs.size <= MIN_TAB_COUNT)
         binding.currentTabsRecyclerView.adapter = currentTabsAdapter
         binding.currentTabsRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -369,10 +362,10 @@ class TabPreferenceActivity : BaseActivity(), Injectable, ItemInteractionListene
     }
 
     private fun saveTabs() {
-        accountManager.activeAccount?.let {
+        accountManager.value.activeAccount?.let {
             Single.fromCallable {
                 it.tabPreferences = currentTabs
-                accountManager.saveAccount(it)
+                accountManager.value.saveAccount(it)
             }
                 .subscribeOn(Schedulers.io())
                 .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))

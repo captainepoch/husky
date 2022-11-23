@@ -38,37 +38,25 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.entity.StreamEvent
-import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.isLessThan
-import dagger.android.AndroidInjection
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
-import javax.inject.Inject
 
-class StreamingService : Service(), Injectable {
+class StreamingService : Service(), KoinComponent {
 
-    @Inject
-    lateinit var api: MastodonApi
-
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    @Inject
-    lateinit var gson: Gson
-
-    @Inject
-    lateinit var client: OkHttpClient
+    private val eventHub: EventHub by inject()
+    private val accountManager: AccountManager by inject()
+    private val gson: Gson by inject()
+    private val client: OkHttpClient by inject()
 
     private val sockets: MutableMap<Long, WebSocket> = mutableMapOf()
 
@@ -76,11 +64,6 @@ class StreamingService : Service(), Injectable {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
-    }
-
-    override fun onCreate() {
-        AndroidInjection.inject(this)
-        super.onCreate()
     }
 
     private fun stopStreamingForId(id: Long) {
@@ -238,7 +221,6 @@ class StreamingService : Service(), Injectable {
     }
 
     private fun makeStreamingListener(tag: String, account: AccountEntity): WebSocketListener {
-
         return object : WebSocketListener() {
 
             override fun onOpen(webSocket: WebSocket, response: Response) {

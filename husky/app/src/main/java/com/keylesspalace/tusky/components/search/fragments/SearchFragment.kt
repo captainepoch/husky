@@ -23,7 +23,6 @@ package com.keylesspalace.tusky.components.search.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
@@ -39,8 +38,6 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewTagActivity
 import com.keylesspalace.tusky.components.search.SearchViewModel
 import com.keylesspalace.tusky.databinding.FragmentSearchBinding
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.interfaces.LinkListener
 import com.keylesspalace.tusky.util.NetworkState
 import com.keylesspalace.tusky.util.Status
@@ -48,20 +45,15 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.util.visible
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class SearchFragment<T> :
     Fragment(R.layout.fragment_search),
     LinkListener,
-    Injectable,
     SwipeRefreshLayout.OnRefreshListener {
 
     private val binding by viewBinding(FragmentSearchBinding::bind)
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    protected val viewModel: SearchViewModel by activityViewModels { viewModelFactory }
+    protected val viewModel: SearchViewModel by viewModel()
 
     private var snackbarErrorRetry: Snackbar? = null
 

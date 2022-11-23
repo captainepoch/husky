@@ -6,9 +6,8 @@ import com.keylesspalace.tusky.db.AppDatabase
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class CacheUpdater @Inject constructor(
+class CacheUpdater(
     eventHub: EventHub,
     accountManager: AccountManager,
     private val appDatabase: AppDatabase,

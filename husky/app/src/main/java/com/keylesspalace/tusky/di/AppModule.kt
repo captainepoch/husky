@@ -20,61 +20,39 @@
 
 package com.keylesspalace.tusky.di
 
-import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.room.Room
-import com.keylesspalace.tusky.HuskyApplication
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.EventHubImpl
 import com.keylesspalace.tusky.components.notifications.Notifier
 import com.keylesspalace.tusky.components.notifications.SystemNotifier
-import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.network.TimelineCases
 import com.keylesspalace.tusky.network.TimelineCasesImpl
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-class AppModule {
+val appModule = module {
+    single {
+        PreferenceManager.getDefaultSharedPreferences(get())
+    } bind SharedPreferences::class
 
-    @Provides
-    fun providesApplication(app: HuskyApplication): Application = app
+    factory {
+        LocalBroadcastManager.getInstance(get())
+    } bind LocalBroadcastManager::class
 
-    @Provides
-    fun providesContext(app: Application): Context = app
+    factory {
+        TimelineCasesImpl(get(), get())
+    } bind TimelineCases::class
 
-    @Provides
-    fun providesSharedPreferences(app: Application): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(app)
-    }
+    single {
+        EventHubImpl
+    } bind EventHub::class
 
-    @Provides
-    fun providesBroadcastManager(app: Application): LocalBroadcastManager {
-        return LocalBroadcastManager.getInstance(app)
-    }
-
-    @Provides
-    fun providesTimelineUseCases(
-        api: MastodonApi,
-        eventHub: EventHub
-    ): TimelineCases {
-        return TimelineCasesImpl(api, eventHub)
-    }
-
-    @Provides
-    @Singleton
-    fun providesEventHub(): EventHub = EventHubImpl
-
-    @Provides
-    @Singleton
-    fun providesDatabase(appContext: Context): AppDatabase {
-        return Room.databaseBuilder(appContext, AppDatabase::class.java, "tuskyDB")
+    single {
+        Room.databaseBuilder(get(), AppDatabase::class.java, "tuskyDB")
             .allowMainThreadQueries()
             .addMigrations(
                 AppDatabase.MIGRATION_2_3,
@@ -103,15 +81,10 @@ class AppModule {
                 AppDatabase.MIGRATION_24_25,
                 AppDatabase.MIGRATION_25_26,
                 AppDatabase.MIGRATION_26_27
-            )
-            .build()
-    }
+            ).build()
+    } bind AppDatabase::class
 
-    @Provides
-    @Singleton
-    fun notifier(context: Context): Notifier = SystemNotifier(context)
-
-    @Provides
-    @Singleton
-    fun crashHandler(app: Application) = CrashHandler(app)
+    single {
+        SystemNotifier(get())
+    } bind Notifier::class
 }

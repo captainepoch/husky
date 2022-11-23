@@ -44,14 +44,6 @@ lifecycle.viewmodelKtx =
 androidx.lifecycle = lifecycle
 deps.androidx = androidx
 
-def dagger = [:]
-dagger.dagger = "com.google.dagger:dagger:${versions.dagger}"
-dagger.daggerAndroid = "com.google.dagger:dagger-android:${versions.dagger}"
-dagger.daggerCompiler = "com.google.dagger:dagger-compiler:${versions.dagger}"
-dagger.daggerProcessor = "com.google.dagger:dagger-android-processor:${versions.dagger}"
-dagger.daggerSupport = "com.google.dagger:dagger-android-support:${versions.dagger}"
-deps.dagger = dagger
-
 def glide = [:]
 glide.glide = "com.github.bumptech.glide:glide:${versions.glide}"
 glide.glideCompiler = "com.github.bumptech.glide:compiler:${versions.glide}"
@@ -67,6 +59,13 @@ google.flexbox = "com.google.android:flexbox:${versions.flexbox}"
 google.exoplayer = "com.google.android.exoplayer:exoplayer:${versions.exoplayer}"
 google.materialDesign = "com.google.android.material:material:${versions.materialDesign}"
 deps.google = google
+
+def koin = [:]
+koin.android = "io.insert-koin:koin-android:${versions.koinAndroid}"
+koin.core = "io.insert-koin:koin-core:${versions.koin}"
+koin.java = "io.insert-koin:koin-android-compat:${versions.koinAndroid}"
+koin.workManager = "io.insert-koin:koin-androidx-workmanager:${versions.koinAndroid}"
+deps.koin = koin
 
 def kotlin = [:]
 kotlin.reflect = "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"

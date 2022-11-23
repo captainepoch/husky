@@ -7,12 +7,9 @@ import android.view.MenuItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.keylesspalace.tusky.fragment.TimelineFragment
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.toolbar_basic.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 
-class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInjector {
+class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity {
 
     companion object {
         private const val ARG_KIND = "kind"
@@ -30,9 +27,6 @@ class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity, HasAn
             return intent
         }
     }
-
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +59,4 @@ class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity, HasAn
         }
         return false
     }
-
-    override fun androidInjector() = dispatchingAndroidInjector
 }

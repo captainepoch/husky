@@ -32,7 +32,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -45,8 +44,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.adapter.AccountFieldEditAdapter
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityEditProfileBinding
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.Resource
@@ -59,19 +56,13 @@ import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.theartofdev.edmodo.cropper.CropImage
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EditProfileActivity : BaseActivity(), Injectable {
+class EditProfileActivity : BaseActivity() {
 
     private val binding by viewBinding(ActivityEditProfileBinding::inflate)
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: EditProfileViewModel by viewModels { viewModelFactory }
-
+    private val viewModel: EditProfileViewModel by viewModel()
     private var currentlyPicking: PickType = PickType.NOTHING
-
     private val accountFieldEditAdapter = AccountFieldEditAdapter()
     private var maxAccountFields = MASTODON_MAX_ACCOUNT_FIELDS
 

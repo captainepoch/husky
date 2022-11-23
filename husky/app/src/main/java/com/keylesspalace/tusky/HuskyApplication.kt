@@ -22,6 +22,7 @@ package com.keylesspalace.tusky
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.emoji.text.EmojiCompat
@@ -30,67 +31,67 @@ import androidx.work.WorkManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideCustomImageLoader
-import com.keylesspalace.tusky.components.notifications.NotificationWorkerFactory
 import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.core.logging.HyperlinkDebugTree
 import com.keylesspalace.tusky.core.utils.ApplicationUtils
-import com.keylesspalace.tusky.di.AppInjector
+import com.keylesspalace.tusky.di.appComponentModule
+import com.keylesspalace.tusky.di.appModule
+import com.keylesspalace.tusky.di.networkModule
+import com.keylesspalace.tusky.di.repositoryModule
+import com.keylesspalace.tusky.di.servicesModule
+import com.keylesspalace.tusky.di.viewModelsModule
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.EmojiCompatFont
 import com.keylesspalace.tusky.util.LocaleManager
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.uber.autodispose.AutoDisposePlugins
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import io.reactivex.plugins.RxJavaPlugins
 import org.conscrypt.Conscrypt
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import timber.log.Timber
 import java.security.Security
-import javax.inject.Inject
 
-class HuskyApplication : Application(), HasAndroidInjector {
+class HuskyApplication : Application() {
 
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var notificationWorkerFactory: NotificationWorkerFactory
-
-    @Inject
-    protected lateinit var crashHandler: CrashHandler
+    private val crashHandler: CrashHandler by inject()
 
     override fun onCreate() {
         super.onCreate()
+        initKoin()
 
-        AppInjector.init(this)
-
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-
-        if (preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
+        val preferences: SharedPreferences = get()
+        if(preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
             crashHandler.setAsDefaultHandler()
         }
 
-        if (ApplicationUtils.isDebug()) {
+        setLocaleManager()
+
+        if(ApplicationUtils.isDebug()) {
             Timber.plant(HyperlinkDebugTree())
         }
 
         Security.insertProviderAt(Conscrypt.newProvider(), 1)
 
-        AutoDisposePlugins.setHideProxies(false) // a small performance optimization
+        // Small performance optimization
+        AutoDisposePlugins.setHideProxies(false)
 
-        // init the custom emoji fonts
+        // Init custom emoji fonts
         val emojiSelection = preferences.getInt(PrefKeys.EMOJI, 0)
         val emojiConfig = EmojiCompatFont.byId(emojiSelection)
             .getConfig(this)
             .setReplaceAll(true)
         EmojiCompat.init(emojiConfig)
 
-        // init night mode
+        // Setup default theme
         val theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
         ThemeUtils.setAppNightMode(theme)
 
         RxJavaPlugins.setErrorHandler {
-            Timber.tag("RxJava").w("undeliverable exception: $it")
+            Timber.tag("RxJava").w("Undeliverable exception: $it")
         }
 
         SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.ARGB_8888)
@@ -99,14 +100,26 @@ class HuskyApplication : Application(), HasAndroidInjector {
         WorkManager.initialize(
             this,
             androidx.work.Configuration.Builder()
-                .setWorkerFactory(notificationWorkerFactory)
+                .setWorkerFactory(get())
                 .build()
         )
     }
 
-    override fun attachBaseContext(base: Context) {
-        localeManager = LocaleManager(base)
-        super.attachBaseContext(localeManager.setLocale(base))
+    private fun initKoin() {
+        startKoin {
+            androidLogger()
+            androidContext(this@HuskyApplication)
+            modules(
+                listOf(
+                    appComponentModule,
+                    appModule,
+                    networkModule,
+                    repositoryModule,
+                    servicesModule,
+                    viewModelsModule
+                )
+            )
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -114,9 +127,14 @@ class HuskyApplication : Application(), HasAndroidInjector {
         localeManager.setLocale(this)
     }
 
-    override fun androidInjector() = androidInjector
+    private fun setLocaleManager() {
+        localeManager = get<LocaleManager>().apply {
+            setLocale(this@HuskyApplication)
+        }
+    }
 
     companion object {
+
         @JvmStatic
         lateinit var localeManager: LocaleManager
     }

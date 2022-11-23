@@ -43,8 +43,6 @@ import com.keylesspalace.tusky.appstore.StatusScheduledEvent
 import com.keylesspalace.tusky.components.drafts.DraftHelper
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.ChatMessage
 import com.keylesspalace.tusky.entity.NewChatMessage
 import com.keylesspalace.tusky.entity.NewPoll
@@ -53,8 +51,9 @@ import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.Either
 import com.keylesspalace.tusky.util.SaveTootHelper
-import dagger.android.AndroidInjection
 import kotlinx.android.parcel.Parcelize
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,27 +61,14 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class SendTootService : Service(), Injectable {
+class SendTootService : Service(), KoinComponent {
 
-    @Inject
-    lateinit var mastodonApi: MastodonApi
-
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var database: AppDatabase
-
-    @Inject
-    lateinit var draftHelper: DraftHelper
-
-    @Inject
-    lateinit var saveTootHelper: SaveTootHelper
+    private val mastodonApi: MastodonApi by inject()
+    private val accountManager: AccountManager by inject()
+    private val eventHub: EventHub by inject()
+    private val draftHelper: DraftHelper by inject()
+    private val saveTootHelper: SaveTootHelper by inject()
 
     private val tootsToSend = ConcurrentHashMap<Int, PostToSend>()
     private val sendCalls = ConcurrentHashMap<Int, Either<Call<Status>, Call<ChatMessage>>>()
@@ -90,11 +76,6 @@ class SendTootService : Service(), Injectable {
     private val timer = Timer()
 
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-
-    override fun onCreate() {
-        AndroidInjection.inject(this)
-        super.onCreate()
-    }
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -489,8 +470,11 @@ data class TootToSend(
     val idempotencyKey: String,
     var retries: Int
 ) : Parcelable, PostToSend {
+
     override fun getNotificationText(): String {
-        return if (warningText.isBlank()) text else warningText
+        return warningText.ifBlank {
+            text
+        }
     }
 
     override fun getAccountId(): Long {

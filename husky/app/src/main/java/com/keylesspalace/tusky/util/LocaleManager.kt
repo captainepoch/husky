@@ -18,12 +18,14 @@ package com.keylesspalace.tusky.util
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.preference.PreferenceManager
+import com.keylesspalace.tusky.core.extensions.getNonNullString
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.Locale
 
-class LocaleManager(context: Context) {
+class LocaleManager : KoinComponent {
 
-    private var prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val prefs: SharedPreferences by inject()
 
     fun setLocale(context: Context): Context {
         val language = prefs.getNonNullString("language", "default")
@@ -33,9 +35,9 @@ class LocaleManager(context: Context) {
         val locale = Locale.forLanguageTag(language)
         Locale.setDefault(locale)
 
-        val res = context.resources
-        val config = Configuration(res.configuration)
-        config.setLocale(locale)
+        val config = Configuration(context.resources.configuration).apply {
+            setLocale(locale)
+        }
         return context.createConfigurationContext(config)
     }
 }

@@ -15,39 +15,32 @@
 
 package com.keylesspalace.tusky.di
 
-import com.keylesspalace.tusky.HuskyApplication
-import dagger.BindsInstance
-import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
-import javax.inject.Singleton
+import com.keylesspalace.tusky.appstore.CacheUpdater
+import com.keylesspalace.tusky.components.common.MediaUploader
+import com.keylesspalace.tusky.components.common.MediaUploaderImpl
+import com.keylesspalace.tusky.components.drafts.DraftHelper
+import com.keylesspalace.tusky.core.logging.CrashHandler
+import com.keylesspalace.tusky.db.AccountManager
+import com.keylesspalace.tusky.util.SaveTootHelper
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-/**
- * Created by charlag on 3/21/18.
- */
+val appComponentModule = module {
+    single { CacheUpdater(get(), get(), get(), get()) }
 
-@Singleton
-@Component(
-    modules = [
-        AppModule::class,
-        NetworkModule::class,
-        AndroidSupportInjectionModule::class,
-        ActivitiesModule::class,
-        ServicesModule::class,
-        BroadcastReceiverModule::class,
-        ViewModelModule::class,
-        RepositoryModule::class,
-        MediaUploaderModule::class,
-        GlideModule::class
-    ]
-)
-interface AppComponent {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(tuskyApp: HuskyApplication): Builder
+    single { CrashHandler(get()) }
 
-        fun build(): AppComponent
+    single { AccountManager(get()) }
+
+    factory {
+        MediaUploaderImpl(get(), get())
+    } bind MediaUploader::class
+
+    factory {
+        DraftHelper(get(), get())
     }
 
-    fun inject(app: HuskyApplication)
+    factory {
+        SaveTootHelper(get(), get())
+    }
 }

@@ -20,7 +20,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -28,67 +27,56 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.keylesspalace.tusky.adapter.SavedTootAdapter;
 import com.keylesspalace.tusky.appstore.EventHub;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.components.compose.ComposeActivity;
+import static com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
 import com.keylesspalace.tusky.db.AppDatabase;
 import com.keylesspalace.tusky.db.TootDao;
 import com.keylesspalace.tusky.db.TootEntity;
-import com.keylesspalace.tusky.di.Injectable;
 import com.keylesspalace.tusky.util.SaveTootHelper;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
-
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import static org.koin.java.KoinJavaComponent.inject;
 
-import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-
-import static com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
-
-public final class SavedTootActivity extends BaseActivity implements SavedTootAdapter.SavedTootAction,
-        Injectable {
-
+public final class SavedTootActivity extends BaseActivity
+    implements SavedTootAdapter.SavedTootAction
+{
     // ui
     private SavedTootAdapter adapter;
     private BackgroundMessageView errorMessageView;
-
     private List<TootEntity> toots = new ArrayList<>();
     @Nullable
     private AsyncTask<?, ?, ?> asyncTask;
-
-    @Inject
-    EventHub eventHub;
-    @Inject
-    AppDatabase database;
-    @Inject
-    SaveTootHelper saveTootHelper;
+    private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
+    private final AppDatabase database = (AppDatabase) inject(AppDatabase.class).getValue();
+    private final SaveTootHelper saveTootHelper =
+        (SaveTootHelper) inject(SaveTootHelper.class).getValue();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        eventHub.getEvents()
-                .observeOn(AndroidSchedulers.mainThread())
-                .ofType(StatusComposedEvent.class)
-                .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-                .subscribe((__) -> this.fetchToots());
+        eventHub.getEvents().observeOn(AndroidSchedulers.mainThread())
+            .ofType(StatusComposedEvent.class)
+            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+            .subscribe((__) -> this.fetchToots());
 
         setContentView(R.layout.activity_saved_toot);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
-        if (bar != null) {
+        if(bar != null) {
             bar.setTitle(getString(R.string.title_drafts));
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowHomeEnabled(true);
@@ -99,8 +87,8 @@ public final class SavedTootActivity extends BaseActivity implements SavedTootAd
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration divider = new DividerItemDecoration(
-                this, layoutManager.getOrientation());
+        DividerItemDecoration divider =
+            new DividerItemDecoration(this, layoutManager.getOrientation());
         recyclerView.addItemDecoration(divider);
         adapter = new SavedTootAdapter(this);
         recyclerView.setAdapter(adapter);
@@ -115,12 +103,14 @@ public final class SavedTootActivity extends BaseActivity implements SavedTootAd
     @Override
     protected void onPause() {
         super.onPause();
-        if (asyncTask != null) asyncTask.cancel(true);
+        if(asyncTask != null) {
+            asyncTask.cancel(true);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case android.R.id.home: {
                 onBackPressed();
                 return true;
@@ -130,13 +120,14 @@ public final class SavedTootActivity extends BaseActivity implements SavedTootAd
     }
 
     private void fetchToots() {
-        asyncTask = new FetchPojosTask(this, database.tootDao())
-                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        asyncTask = new FetchPojosTask(this, database.tootDao()).executeOnExecutor(
+            AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void setNoContent(int size) {
-        if (size == 0) {
-            errorMessageView.setup(R.drawable.elephant_friend_empty, R.string.no_saved_status, null);
+        if(size == 0) {
+            errorMessageView.setup(R.drawable.elephant_friend_empty, R.string.no_saved_status,
+                null);
             errorMessageView.setVisibility(View.VISIBLE);
         } else {
             errorMessageView.setVisibility(View.GONE);
@@ -150,7 +141,7 @@ public final class SavedTootActivity extends BaseActivity implements SavedTootAd
 
         toots.remove(position);
         // update adapter
-        if (adapter != null) {
+        if(adapter != null) {
             adapter.removeItem(position);
             setNoContent(toots.size());
         }
@@ -159,32 +150,23 @@ public final class SavedTootActivity extends BaseActivity implements SavedTootAd
     @Override
     public void click(int position, TootEntity item) {
         Gson gson = new Gson();
-        Type stringListType = new TypeToken<List<String>>() {}.getType();
+        Type stringListType = new TypeToken<List<String>>() {
+        }.getType();
         List<String> jsonUrls = gson.fromJson(item.getUrls(), stringListType);
         List<String> descriptions = gson.fromJson(item.getDescriptions(), stringListType);
 
         ComposeOptions composeOptions = new ComposeOptions(
-                /*scheduledTootUid*/null,
-                item.getUid(),
-                /*drafId*/null,
-                item.getText(),
-                jsonUrls,
-                descriptions,
-                /*mentionedUsernames*/null,
-                item.getInReplyToId(),
-                /*replyVisibility*/null,
-                item.getVisibility(),
-                item.getContentWarning(),
-                item.getInReplyToUsername(),
-                item.getInReplyToText(),
-                /*mediaAttachments*/null,
-                /*draftAttachments*/null,
-                /*scheduledAt*/null,
-                /*sensitive*/null,
-                /*poll*/null,
-                item.getFormattingSyntax(),
-                /* modifiedInitialState */ true
-        );
+            /*scheduledTootUid*/null, item.getUid(),
+            /*drafId*/null, item.getText(), jsonUrls, descriptions,
+            /*mentionedUsernames*/null, item.getInReplyToId(),
+            /*replyVisibility*/null, item.getVisibility(), item.getContentWarning(),
+            item.getInReplyToUsername(), item.getInReplyToText(),
+            /*mediaAttachments*/null,
+            /*draftAttachments*/null,
+            /*scheduledAt*/null,
+            /*sensitive*/null,
+            /*poll*/null, item.getFormattingSyntax(),
+            /* modifiedInitialState */ true);
         Intent intent = ComposeActivity.startIntent(this, composeOptions);
         startActivity(intent);
     }
@@ -208,7 +190,9 @@ public final class SavedTootActivity extends BaseActivity implements SavedTootAd
         protected void onPostExecute(List<TootEntity> pojos) {
             super.onPostExecute(pojos);
             SavedTootActivity activity = activityRef.get();
-            if (activity == null) return;
+            if(activity == null) {
+                return;
+            }
 
             activity.toots.clear();
             activity.toots.addAll(pojos);

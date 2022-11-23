@@ -20,29 +20,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keylesspalace.tusky.BaseActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.compose.ComposeActivity
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.ScheduledStatus
 import com.keylesspalace.tusky.util.Status
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import kotlinx.android.synthetic.main.activity_scheduled_toot.*
-import kotlinx.android.synthetic.main.toolbar_basic.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_scheduled_toot.errorMessageView
+import kotlinx.android.synthetic.main.activity_scheduled_toot.progressBar
+import kotlinx.android.synthetic.main.activity_scheduled_toot.scheduledTootList
+import kotlinx.android.synthetic.main.activity_scheduled_toot.swipeRefreshLayout
+import kotlinx.android.synthetic.main.toolbar_basic.toolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injectable {
+class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    lateinit var viewModel: ScheduledTootViewModel
-
+    private val viewModel: ScheduledTootViewModel by viewModel()
     private val adapter = ScheduledTootAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +61,6 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injec
         scheduledTootList.addItemDecoration(divider)
         scheduledTootList.adapter = adapter
 
-        viewModel = ViewModelProvider(this, viewModelFactory)[ScheduledTootViewModel::class.java]
-
         viewModel.data.observe(
             this,
             Observer {
@@ -82,7 +76,10 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injec
                         progressBar.hide()
                         swipeRefreshLayout.isRefreshing = false
                         if (viewModel.data.value?.loadedCount == 0) {
-                            errorMessageView.setup(R.drawable.elephant_friend_empty, R.string.no_scheduled_status)
+                            errorMessageView.setup(
+                                R.drawable.elephant_friend_empty,
+                                R.string.no_scheduled_status
+                            )
                             errorMessageView.show()
                         } else {
                             errorMessageView.hide()
@@ -100,7 +97,10 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener, Injec
                         if (viewModel.data.value?.loadedCount ?: 0 >= 0) {
                             progressBar.hide()
                             swipeRefreshLayout.isRefreshing = false
-                            errorMessageView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                            errorMessageView.setup(
+                                R.drawable.elephant_error,
+                                R.string.error_generic
+                            ) {
                                 refreshStatuses()
                             }
                             errorMessageView.show()

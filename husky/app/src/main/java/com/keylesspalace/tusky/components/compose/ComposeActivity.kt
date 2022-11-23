@@ -44,7 +44,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
@@ -92,8 +91,6 @@ import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityComposeBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.DraftAttachment
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.NewPoll
@@ -121,11 +118,12 @@ import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.parcel.Parcelize
 import me.thanel.markdownedit.MarkdownEdit
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.Locale
-import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 
@@ -134,18 +132,13 @@ class ComposeActivity :
     ComposeOptionsListener,
     ComposeAutoCompleteAdapter.AutocompletionProvider,
     OnEmojiSelectedListener,
-    Injectable,
     InputConnectionCompat.OnCommitContentListener,
     TimePickerDialog.OnTimeSetListener,
     EmojiKeyboard.OnEmojiSelectedListener {
 
     private val binding by viewBinding(ActivityComposeBinding::inflate)
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    lateinit var eventHub: EventHub
+    private val viewModel: ComposeViewModel by viewModel()
+    private val eventHub: EventHub by inject()
 
     private lateinit var composeOptionsBehavior: BottomSheetBehavior<*>
     private lateinit var addMediaBehavior: BottomSheetBehavior<*>
@@ -161,8 +154,6 @@ class ComposeActivity :
     @VisibleForTesting
     var maximumTootCharacters = DEFAULT_CHARACTER_LIMIT
 
-    @VisibleForTesting
-    val viewModel: ComposeViewModel by viewModels { viewModelFactory }
     private var suggestFormattingSyntax: String = "text/markdown"
 
     private val maxUploadMediaNumber = 4
@@ -181,7 +172,7 @@ class ComposeActivity :
 
         setupActionBar()
         // do not do anything when not logged in, activity will be finished in super.onCreate() anyway
-        val activeAccount = accountManager.activeAccount ?: return
+        val activeAccount = accountManager.value.activeAccount ?: return
 
         viewModel.tryFetchStickers = preferences.getBoolean(PrefKeys.STICKERS, false)
         viewModel.anonymizeNames = preferences.getBoolean(PrefKeys.ANONYMIZE_FILENAMES, false)
@@ -947,7 +938,7 @@ class ComposeActivity :
             if (it.itemCount == 0) {
                 val errorMessage = getString(
                     R.string.error_no_custom_emojis,
-                    accountManager.activeAccount!!.domain
+                    accountManager.value.activeAccount!!.domain
                 )
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             } else {

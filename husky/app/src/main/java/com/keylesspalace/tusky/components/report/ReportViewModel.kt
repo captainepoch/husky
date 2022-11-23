@@ -36,9 +36,8 @@ import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.Success
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ReportViewModel @Inject constructor(
+class ReportViewModel(
     private val mastodonApi: MastodonApi,
     private val eventHub: EventHub,
     private val statusesRepository: StatusesRepository

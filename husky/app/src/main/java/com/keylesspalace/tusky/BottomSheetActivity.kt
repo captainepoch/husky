@@ -29,9 +29,9 @@ import com.keylesspalace.tusky.util.LinkHelper
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.koin.android.ext.android.inject
 import java.net.URI
 import java.net.URISyntaxException
-import javax.inject.Inject
 
 /** this is the base class for all activities that open links
  *  links are checked against the api if they are mastodon links so they can be openend in Tusky
@@ -43,8 +43,7 @@ abstract class BottomSheetActivity : BaseActivity() {
     lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
     var searchUrl: String? = null
 
-    @Inject
-    lateinit var mastodonApi: MastodonApi
+    protected val mastodonApi: MastodonApi by inject()
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
@@ -63,7 +62,10 @@ abstract class BottomSheetActivity : BaseActivity() {
         })
     }
 
-    open fun viewUrl(url: String, lookupFallbackBehavior: PostLookupFallbackBehavior = PostLookupFallbackBehavior.OPEN_IN_BROWSER) {
+    open fun viewUrl(
+        url: String,
+        lookupFallbackBehavior: PostLookupFallbackBehavior = PostLookupFallbackBehavior.OPEN_IN_BROWSER
+    ) {
         if (!looksLikeMastodonUrl(url)) {
             openLink(url)
             return
@@ -85,7 +87,8 @@ abstract class BottomSheetActivity : BaseActivity() {
 
                     // HACKHACK: Pleroma, remove when search will work normally
                     if (accounts[0].pleroma != null) {
-                        val account = accounts.firstOrNull { it.pleroma?.apId == url || it.url == url }
+                        val account =
+                            accounts.firstOrNull { it.pleroma?.apId == url || it.url == url }
 
                         if (account != null) {
                             viewAccount(account.id)
@@ -129,10 +132,17 @@ abstract class BottomSheetActivity : BaseActivity() {
         startActivityWithSlideInAnimation(ChatActivity.getIntent(this, chat))
     }
 
-    protected open fun performUrlFallbackAction(url: String, fallbackBehavior: PostLookupFallbackBehavior) {
+    protected open fun performUrlFallbackAction(
+        url: String,
+        fallbackBehavior: PostLookupFallbackBehavior
+    ) {
         when (fallbackBehavior) {
             PostLookupFallbackBehavior.OPEN_IN_BROWSER -> openLink(url)
-            PostLookupFallbackBehavior.DISPLAY_ERROR -> Toast.makeText(this, getString(R.string.post_lookup_error_format, url), Toast.LENGTH_SHORT).show()
+            PostLookupFallbackBehavior.DISPLAY_ERROR -> Toast.makeText(
+                this,
+                getString(R.string.post_lookup_error_format, url),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

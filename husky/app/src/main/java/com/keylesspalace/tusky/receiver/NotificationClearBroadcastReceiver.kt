@@ -20,17 +20,14 @@ import android.content.Context
 import android.content.Intent
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountManager
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class NotificationClearBroadcastReceiver : BroadcastReceiver() {
+class NotificationClearBroadcastReceiver : BroadcastReceiver(), KoinComponent {
 
-    @Inject
-    lateinit var accountManager: AccountManager
+    private val accountManager: AccountManager by inject()
 
     override fun onReceive(context: Context, intent: Intent) {
-        AndroidInjection.inject(this, context)
-
         val accountId = intent.getLongExtra(NotificationHelper.ACCOUNT_ID, -1)
 
         val account = accountManager.getAccountById(accountId)

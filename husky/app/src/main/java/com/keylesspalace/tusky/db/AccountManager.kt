@@ -19,8 +19,6 @@ import android.util.Log
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * This class caches the account database and handles all account related operations
@@ -29,8 +27,7 @@ import javax.inject.Singleton
 
 private const val TAG = "AccountManager"
 
-@Singleton
-class AccountManager @Inject constructor(db: AppDatabase) {
+class AccountManager(db: AppDatabase) {
 
     @Volatile
     var activeAccount: AccountEntity? = null

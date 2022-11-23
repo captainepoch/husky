@@ -36,12 +36,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Thread.UncaughtExceptionHandler
-import javax.inject.Inject
 import kotlin.system.exitProcess
 
-class CrashHandler @Inject constructor(
-    private val huskyApp: Application
-) : UncaughtExceptionHandler {
+class CrashHandler(private val huskyApp: Application) : UncaughtExceptionHandler {
 
     private val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
     private var activityCounter = 0

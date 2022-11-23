@@ -26,7 +26,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.keylesspalace.tusky.BottomSheetActivity
@@ -34,23 +33,13 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.search.adapter.SearchPagerAdapter
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivitySearchBinding
-import com.keylesspalace.tusky.di.ViewModelFactory
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
-class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
+class SearchActivity : BottomSheetActivity() {
 
     private val binding by viewBinding(ActivitySearchBinding::inflate)
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: SearchViewModel by viewModels { viewModelFactory }
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,8 +123,6 @@ class SearchActivity : BottomSheetActivity(), HasAndroidInjector {
 
         searchView.maxWidth = Integer.MAX_VALUE
     }
-
-    override fun androidInjector() = androidInjector
 
     companion object {
         fun getIntent(context: Context) = Intent(context, SearchActivity::class.java)

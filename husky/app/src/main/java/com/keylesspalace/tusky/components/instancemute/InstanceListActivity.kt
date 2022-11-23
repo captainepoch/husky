@@ -5,15 +5,9 @@ import android.view.MenuItem
 import com.keylesspalace.tusky.BaseActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.instancemute.fragment.InstanceListFragment
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.toolbar_basic.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 
-class InstanceListActivity : BaseActivity(), HasAndroidInjector {
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+class InstanceListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +35,4 @@ class InstanceListActivity : BaseActivity(), HasAndroidInjector {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun androidInjector() = androidInjector
 }

@@ -44,10 +44,8 @@ import com.keylesspalace.tusky.util.map
 import com.keylesspalace.tusky.util.randomAlphanumericString
 import com.keylesspalace.tusky.util.toLiveData
 import io.reactivex.Observable.just
-import java.util.ArrayList
-import javax.inject.Inject
 
-class ComposeViewModel @Inject constructor(
+class ComposeViewModel(
     private val api: MastodonApi,
     private val accountManager: AccountManager,
     private val mediaUploader: MediaUploader,

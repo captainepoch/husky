@@ -19,27 +19,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.BottomSheetActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.adapter.ReportPagerAdapter
-import com.keylesspalace.tusky.di.ViewModelFactory
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.activity_report.*
-import kotlinx.android.synthetic.main.toolbar_basic.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_report.wizard
+import kotlinx.android.synthetic.main.toolbar_basic.toolbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
+class ReportActivity : BottomSheetActivity() {
 
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: ReportViewModel by viewModels { viewModelFactory }
+    private val viewModel: ReportViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +131,12 @@ class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
         private const val STATUS_ID = "status_id"
 
         @JvmStatic
-        fun getIntent(context: Context, accountId: String, userName: String, statusId: String? = null) =
+        fun getIntent(
+            context: Context,
+            accountId: String,
+            userName: String,
+            statusId: String? = null
+        ) =
             Intent(context, ReportActivity::class.java)
                 .apply {
                     putExtra(ACCOUNT_ID, accountId)
@@ -149,6 +144,4 @@ class ReportActivity : BottomSheetActivity(), HasAndroidInjector {
                     putExtra(STATUS_ID, statusId)
                 }
     }
-
-    override fun androidInjector() = androidInjector
 }

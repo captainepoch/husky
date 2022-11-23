@@ -7,13 +7,13 @@ import com.keylesspalace.tusky.entity.Marker
 import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.isLessThan
-import javax.inject.Inject
 
-class NotificationFetcher @Inject constructor(
+class NotificationFetcher(
     private val mastodonApi: MastodonApi,
     private val accountManager: AccountManager,
     private val notifier: Notifier
 ) {
+
     fun fetchAndShow() {
         for (account in accountManager.getAllAccountsOrderedByActive()) {
             if (account.notificationsEnabled) {

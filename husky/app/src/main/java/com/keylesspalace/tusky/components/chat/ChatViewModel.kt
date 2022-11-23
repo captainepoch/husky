@@ -8,10 +8,8 @@ import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.service.ServiceClient
 import com.keylesspalace.tusky.util.SaveTootHelper
-import javax.inject.Inject
 
-open class ChatViewModel
-@Inject constructor(
+open class ChatViewModel(
     private val api: MastodonApi,
     private val accountManager: AccountManager,
     private val mediaUploader: MediaUploader,

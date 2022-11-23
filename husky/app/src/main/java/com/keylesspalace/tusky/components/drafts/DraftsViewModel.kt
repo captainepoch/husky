@@ -24,16 +24,16 @@ import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import io.reactivex.Observable
 import io.reactivex.Single
-import javax.inject.Inject
 
-class DraftsViewModel @Inject constructor(
-    val database: AppDatabase,
-    val accountManager: AccountManager,
-    val api: MastodonApi,
-    val draftHelper: DraftHelper
+class DraftsViewModel(
+    private val database: AppDatabase,
+    private val accountManager: AccountManager,
+    private val api: MastodonApi,
+    private val draftHelper: DraftHelper
 ) : ViewModel() {
 
-    val drafts = database.draftDao().loadDrafts(accountManager.activeAccount?.id!!).toLiveData(pageSize = 20)
+    val drafts =
+        database.draftDao().loadDrafts(accountManager.activeAccount?.id!!).toLiveData(pageSize = 20)
 
     private val deletedDrafts: MutableList<DraftEntity> = mutableListOf()
 

@@ -35,7 +35,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -53,17 +52,23 @@ import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import at.connyduck.sparkbutton.helpers.Utils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.adapter.NotificationsAdapter;
 import com.keylesspalace.tusky.adapter.StatusBaseViewHolder;
-import com.keylesspalace.tusky.appstore.*;
+import com.keylesspalace.tusky.appstore.BlockEvent;
+import com.keylesspalace.tusky.appstore.BookmarkEvent;
+import com.keylesspalace.tusky.appstore.EmojiReactEvent;
+import com.keylesspalace.tusky.appstore.EventHub;
+import com.keylesspalace.tusky.appstore.FavoriteEvent;
+import com.keylesspalace.tusky.appstore.MuteConversationEvent;
+import com.keylesspalace.tusky.appstore.MuteEvent;
+import com.keylesspalace.tusky.appstore.PreferenceChangedEvent;
+import com.keylesspalace.tusky.appstore.ReblogEvent;
 import com.keylesspalace.tusky.db.AccountEntity;
-import com.keylesspalace.tusky.db.AccountManager;
-import com.keylesspalace.tusky.di.Injectable;
-import com.keylesspalace.tusky.entity.*;
+import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Notification;
 import com.keylesspalace.tusky.entity.Poll;
 import com.keylesspalace.tusky.entity.Relationship;
@@ -81,12 +86,17 @@ import com.keylesspalace.tusky.util.ListUtils;
 import com.keylesspalace.tusky.util.NotificationTypeConverterKt;
 import com.keylesspalace.tusky.util.PairedList;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
+import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
 import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
 import com.keylesspalace.tusky.viewdata.NotificationViewData;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,31 +106,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
-import at.connyduck.sparkbutton.helpers.Utils;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.functions.Function1;
 import okhttp3.ResponseBody;
+import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+public class NotificationsFragment extends SFragment
+    implements SwipeRefreshLayout.OnRefreshListener, StatusActionListener,
+    NotificationsAdapter.NotificationActionListener, AccountActionListener, ReselectableFragment
+{
 
-public class NotificationsFragment extends SFragment implements
-        SwipeRefreshLayout.OnRefreshListener,
-        StatusActionListener,
-        NotificationsAdapter.NotificationActionListener,
-        AccountActionListener,
-        Injectable, ReselectableFragment {
     private static final String TAG = "NotificationF"; // logging tag
 
     private static final int LOAD_AT_ONCE = 30;
@@ -130,9 +129,7 @@ public class NotificationsFragment extends SFragment implements
     private Set<Notification.Type> notificationFilter = new HashSet<>();
 
     private enum FetchEnd {
-        TOP,
-        BOTTOM,
-        MIDDLE
+        TOP, BOTTOM, MIDDLE
     }
 
     /**
@@ -151,11 +148,7 @@ public class NotificationsFragment extends SFragment implements
         }
     }
 
-    @Inject
-    AccountManager accountManager;
-    @Inject
-    EventHub eventHub;
-
+    private EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -177,25 +170,23 @@ public class NotificationsFragment extends SFragment implements
     private boolean withMuted;
 
     // Each element is either a Notification for loading data or a Placeholder
-    private final PairedList<Either<Placeholder, Notification>, NotificationViewData> notifications
-            = new PairedList<>(new Function<Either<Placeholder, Notification>, NotificationViewData>() {
-        @Override
-        public NotificationViewData apply(Either<Placeholder, Notification> input) {
-            if (input.isRight()) {
-                Notification notification = Notification.rewriteToStatusTypeIfNeeded(
-                        input.asRight(), accountManager.getActiveAccount().getAccountId()
-                );
+    private final PairedList<Either<Placeholder, Notification>, NotificationViewData>
+        notifications =
+        new PairedList<>(new Function<Either<Placeholder, Notification>, NotificationViewData>() {
+            @Override
+            public NotificationViewData apply(Either<Placeholder, Notification> input) {
+                if(input.isRight()) {
+                    Notification notification =
+                        Notification.rewriteToStatusTypeIfNeeded(input.asRight(),
+                            accountManager.getValue().getActiveAccount().getAccountId());
 
-                return ViewDataUtils.notificationToViewData(
-                        notification,
-                        alwaysShowSensitiveMedia,
-                        alwaysOpenSpoiler
-                );
-            } else {
-                return new NotificationViewData.Placeholder(input.asLeft().id, false);
+                    return ViewDataUtils.notificationToViewData(notification,
+                        alwaysShowSensitiveMedia, alwaysOpenSpoiler);
+                } else {
+                    return new NotificationViewData.Placeholder(input.asLeft().id, false);
+                }
             }
-        }
-    });
+        });
 
     public static NotificationsFragment newInstance() {
         NotificationsFragment fragment = new NotificationsFragment();
@@ -207,16 +198,20 @@ public class NotificationsFragment extends SFragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_timeline_notifications, container, false);
+        @Nullable Bundle savedInstanceState)
+    {
+        View rootView =
+            inflater.inflate(R.layout.fragment_timeline_notifications, container, false);
 
         @NonNull Context context = inflater.getContext(); // from inflater to silence warning
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        boolean showNotificationsFilterSetting = preferences.getBoolean("showNotificationsFilter", true);
+        boolean showNotificationsFilterSetting =
+            preferences.getBoolean("showNotificationsFilter", true);
         //Clear notifications on filter visibility change to force refresh
-        if (showNotificationsFilterSetting != showNotificationsFilter)
+        if(showNotificationsFilterSetting != showNotificationsFilter) {
             notifications.clear();
+        }
         showNotificationsFilter = showNotificationsFilterSetting;
 
         // Setup the SwipeRefreshLayout.
@@ -236,35 +231,36 @@ public class NotificationsFragment extends SFragment implements
         layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAccessibilityDelegateCompat(
-                new ListStatusAccessibilityDelegate(recyclerView, this, (pos) -> {
-                    NotificationViewData notification = notifications.getPairedItemOrNull(pos);
-                    // We support replies only for now
-                    if (notification instanceof NotificationViewData.Concrete) {
-                        return ((NotificationViewData.Concrete) notification).getStatusViewData();
-                    } else {
-                        return null;
-                    }
-                }));
+            new ListStatusAccessibilityDelegate(recyclerView, this, (pos) -> {
+                NotificationViewData notification = notifications.getPairedItemOrNull(pos);
+                // We support replies only for now
+                if(notification instanceof NotificationViewData.Concrete) {
+                    return ((NotificationViewData.Concrete) notification).getStatusViewData();
+                } else {
+                    return null;
+                }
+            }));
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(
+            new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
-        StatusDisplayOptions statusDisplayOptions = new StatusDisplayOptions(
-                preferences.getBoolean("animateGifAvatars", false),
-                accountManager.getActiveAccount().getMediaPreviewEnabled(),
+        StatusDisplayOptions statusDisplayOptions =
+            new StatusDisplayOptions(preferences.getBoolean("animateGifAvatars", false),
+                accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
                 preferences.getBoolean("absoluteTimeView", false),
                 preferences.getBoolean("showBotOverlay", true),
-                preferences.getBoolean("useBlurhash", true),
-                CardViewMode.NONE,
+                preferences.getBoolean("useBlurhash", true), CardViewMode.NONE,
                 preferences.getBoolean("confirmReblogs", true),
                 preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
-        );
+                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false));
         withMuted = !preferences.getBoolean(PrefKeys.HIDE_MUTED_USERS, false);
 
-        adapter = new NotificationsAdapter(accountManager.getActiveAccount().getAccountId(),
+        adapter =
+            new NotificationsAdapter(accountManager.getValue().getActiveAccount().getAccountId(),
                 dataSource, statusDisplayOptions, this, this, this);
-        alwaysShowSensitiveMedia = accountManager.getActiveAccount().getAlwaysShowSensitiveMedia();
-        alwaysOpenSpoiler = accountManager.getActiveAccount().getAlwaysOpenSpoiler();
+        alwaysShowSensitiveMedia =
+            accountManager.getValue().getActiveAccount().getAlwaysShowSensitiveMedia();
+        alwaysOpenSpoiler = accountManager.getValue().getActiveAccount().getAlwaysOpenSpoiler();
         recyclerView.setAdapter(adapter);
 
         topLoading = false;
@@ -278,7 +274,7 @@ public class NotificationsFragment extends SFragment implements
         buttonFilter = rootView.findViewById(R.id.buttonFilter);
         buttonFilter.setOnClickListener(v -> showFilterMenu());
 
-        if (notifications.isEmpty()) {
+        if(notifications.isEmpty()) {
             swipeRefreshLayout.setEnabled(false);
             sendFetchNotificationsRequest(null, null, FetchEnd.BOTTOM, -1);
         } else {
@@ -294,8 +290,8 @@ public class NotificationsFragment extends SFragment implements
 
     private void updateFilterVisibility() {
         CoordinatorLayout.LayoutParams params =
-                (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
-        if (showNotificationsFilter && !showingError) {
+            (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
+        if(showNotificationsFilter && !showingError) {
             appBarOptions.setExpanded(true, false);
             appBarOptions.setVisibility(View.VISIBLE);
             //Set content behaviour to hide filter on scroll
@@ -309,64 +305,67 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void confirmClearNotifications() {
-        new AlertDialog.Builder(getContext())
-                .setMessage(R.string.notification_clear_text)
-                .setPositiveButton(android.R.string.yes, (DialogInterface dia, int which) -> clearNotifications())
-                .setNegativeButton(android.R.string.no, null)
-                .show();
+        new AlertDialog.Builder(getContext()).setMessage(R.string.notification_clear_text)
+            .setPositiveButton(android.R.string.yes,
+                (DialogInterface dia, int which) -> clearNotifications())
+            .setNegativeButton(android.R.string.no, null).show();
     }
 
     private void handleFavEvent(FavoriteEvent event) {
-        Pair<Integer, Notification> posAndNotification =
-                findReplyPosition(event.getStatusId());
-        if (posAndNotification == null) return;
+        Pair<Integer, Notification> posAndNotification = findReplyPosition(event.getStatusId());
+        if(posAndNotification == null) {
+            return;
+        }
         //noinspection ConstantConditions
-        setFavouriteForStatus(posAndNotification.first,
-                posAndNotification.second.getStatus(),
-                event.getFavourite());
+        setFavouriteForStatus(posAndNotification.first, posAndNotification.second.getStatus(),
+            event.getFavourite());
     }
 
     private void handleBookmarkEvent(BookmarkEvent event) {
-        Pair<Integer, Notification> posAndNotification =
-                findReplyPosition(event.getStatusId());
-        if (posAndNotification == null) return;
+        Pair<Integer, Notification> posAndNotification = findReplyPosition(event.getStatusId());
+        if(posAndNotification == null) {
+            return;
+        }
         //noinspection ConstantConditions
-        setBookmarkForStatus(posAndNotification.first,
-                posAndNotification.second.getStatus(),
-                event.getBookmark());
+        setBookmarkForStatus(posAndNotification.first, posAndNotification.second.getStatus(),
+            event.getBookmark());
     }
 
     private void handleReblogEvent(ReblogEvent event) {
         Pair<Integer, Notification> posAndNotification = findReplyPosition(event.getStatusId());
-        if (posAndNotification == null) return;
+        if(posAndNotification == null) {
+            return;
+        }
         //noinspection ConstantConditions
-        setReblogForStatus(posAndNotification.first,
-                posAndNotification.second.getStatus(),
-                event.getReblog());
+        setReblogForStatus(posAndNotification.first, posAndNotification.second.getStatus(),
+            event.getReblog());
     }
 
     private void handleMuteStatusEvent(MuteConversationEvent event) {
         Pair<Integer, Notification> posAndNotification = findReplyPosition(event.getStatusId());
-        if (posAndNotification == null)
+        if(posAndNotification == null) {
             return;
+        }
 
         String conversationId = posAndNotification.second.getStatus().getConversationId();
 
         if(conversationId.isEmpty()) { // invalid conversation ID
             if(withMuted) {
-                setMutedStatusForStatus(posAndNotification.first, posAndNotification.second.getStatus(), event.getMute(), event.getMute());
+                setMutedStatusForStatus(posAndNotification.first,
+                    posAndNotification.second.getStatus(), event.getMute(), event.getMute());
             } else {
                 notifications.remove(posAndNotification.first);
             }
         } else {
             //noinspection ConstantConditions
             if(withMuted) {
-                for (int i = 0; i < notifications.size(); i++) {
+                for(int i = 0; i < notifications.size(); i++) {
                     Notification notification = notifications.get(i).asRightOrNull();
-                    if (notification != null && notification.getStatus() != null
-                            && notification.getType() == Notification.Type.MENTION &&
-                            notification.getStatus().getConversationId() == conversationId) {
-                        setMutedStatusForStatus(i, notification.getStatus(), event.getMute(), event.getMute());
+                    if(notification != null && notification.getStatus() != null &&
+                       notification.getType() == Notification.Type.MENTION &&
+                       notification.getStatus().getConversationId() == conversationId) {
+                        setMutedStatusForStatus(i, notification.getStatus(), event.getMute(),
+                            event.getMute());
                     }
                 }
             } else {
@@ -381,13 +380,12 @@ public class NotificationsFragment extends SFragment implements
         boolean mute = event.getMute();
 
         if(withMuted) {
-            for (int i = 0; i < notifications.size(); i++) {
+            for(int i = 0; i < notifications.size(); i++) {
                 Notification notification = notifications.get(i).asRightOrNull();
-                if (notification != null
-                        && notification.getStatus() != null
-                        && notification.getType() == Notification.Type.MENTION
-                        && notification.getAccount().getId().equals(id)
-                        && !notification.getStatus().isThreadMuted()) {
+                if(notification != null && notification.getStatus() != null &&
+                   notification.getType() == Notification.Type.MENTION &&
+                   notification.getAccount().getId().equals(id) &&
+                   !notification.getStatus().isThreadMuted()) {
                     setMutedStatusForStatus(i, notification.getStatus(), mute, false);
                 }
             }
@@ -401,7 +399,9 @@ public class NotificationsFragment extends SFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Activity activity = getActivity();
-        if (activity == null) throw new AssertionError("Activity is null");
+        if(activity == null) {
+            throw new AssertionError("Activity is null");
+        }
 
         /* This is delayed until onActivityCreated solely because MainActivity.composeButton isn't
          * guaranteed to be set until then.
@@ -417,14 +417,14 @@ public class NotificationsFragment extends SFragment implements
                 ActionButtonActivity activity = (ActionButtonActivity) getActivity();
                 FloatingActionButton composeButton = activity.getActionButton();
 
-                if (composeButton != null) {
-                    if (hideFab) {
-                        if (dy > 0 && composeButton.isShown()) {
+                if(composeButton != null) {
+                    if(hideFab) {
+                        if(dy > 0 && composeButton.isShown()) {
                             composeButton.hide(); // hides the button if we're scrolling down
-                        } else if (dy < 0 && !composeButton.isShown()) {
+                        } else if(dy < 0 && !composeButton.isShown()) {
                             composeButton.show(); // shows it if we are scrolling up
                         }
-                    } else if (!composeButton.isShown()) {
+                    } else if(!composeButton.isShown()) {
                         composeButton.show();
                     }
                 }
@@ -438,28 +438,26 @@ public class NotificationsFragment extends SFragment implements
 
         recyclerView.addOnScrollListener(scrollListener);
 
-        eventHub.getEvents()
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-                .subscribe(event -> {
-                    if (event instanceof FavoriteEvent) {
-                        handleFavEvent((FavoriteEvent) event);
-                    } else if (event instanceof BookmarkEvent) {
-                        handleBookmarkEvent((BookmarkEvent) event);
-                    } else if (event instanceof ReblogEvent) {
-                        handleReblogEvent((ReblogEvent) event);
-                    } else if (event instanceof MuteConversationEvent) {
-	                    handleMuteStatusEvent((MuteConversationEvent) event);
-                    } else if (event instanceof BlockEvent) {
-                        removeAllByAccountId(((BlockEvent) event).getAccountId());
-                    } else if (event instanceof MuteEvent) {
-                        handleMuteEvent((MuteEvent)event);
-                    } else if (event instanceof PreferenceChangedEvent) {
-                        onPreferenceChanged(((PreferenceChangedEvent) event).getPreferenceKey());
-                    } else if (event instanceof EmojiReactEvent) {
-	                    handleEmojiReactEvent((EmojiReactEvent) event);
-                    }
-                });
+        eventHub.getEvents().observeOn(AndroidSchedulers.mainThread())
+            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY))).subscribe(event -> {
+                if(event instanceof FavoriteEvent) {
+                    handleFavEvent((FavoriteEvent) event);
+                } else if(event instanceof BookmarkEvent) {
+                    handleBookmarkEvent((BookmarkEvent) event);
+                } else if(event instanceof ReblogEvent) {
+                    handleReblogEvent((ReblogEvent) event);
+                } else if(event instanceof MuteConversationEvent) {
+                    handleMuteStatusEvent((MuteConversationEvent) event);
+                } else if(event instanceof BlockEvent) {
+                    removeAllByAccountId(((BlockEvent) event).getAccountId());
+                } else if(event instanceof MuteEvent) {
+                    handleMuteEvent((MuteEvent) event);
+                } else if(event instanceof PreferenceChangedEvent) {
+                    onPreferenceChanged(((PreferenceChangedEvent) event).getPreferenceKey());
+                } else if(event instanceof EmojiReactEvent) {
+                    handleEmojiReactEvent((EmojiReactEvent) event);
+                }
+            });
     }
 
     @Override
@@ -468,7 +466,7 @@ public class NotificationsFragment extends SFragment implements
         this.showingError = false;
         Either<Placeholder, Notification> first = CollectionsKt.firstOrNull(this.notifications);
         String topId;
-        if (first != null && first.isRight()) {
+        if(first != null && first.isRight()) {
             topId = first.asRight().getId();
         } else {
             topId = null;
@@ -486,31 +484,30 @@ public class NotificationsFragment extends SFragment implements
         final Notification notification = notifications.get(position).asRight();
         final Status status = notification.getStatus();
         Objects.requireNonNull(status, "Reblog on notification without status");
-        timelineCases.reblog(status, reblog)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this)))
-                .subscribe(
-                        (newStatus) -> setReblogForStatus(position, status, reblog),
-                        (t) -> Log.d(getClass().getSimpleName(),
-                                "Failed to reblog status: " + status.getId(), t)
-                );
+        timelineCases.getValue().reblog(status, reblog).observeOn(AndroidSchedulers.mainThread())
+            .as(autoDisposable(from(this)))
+            .subscribe((newStatus) -> setReblogForStatus(position, status, reblog),
+                (t) -> Log.d(getClass().getSimpleName(),
+                    "Failed to reblog status: " + status.getId(), t));
     }
 
     private void setReblogForStatus(int position, Status status, boolean reblog) {
         status.setReblogged(reblog);
 
-        if (status.getReblog() != null) {
+        if(status.getReblog() != null) {
             status.getReblog().setReblogged(reblog);
         }
 
-        NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
+        NotificationViewData.Concrete viewdata =
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
-        StatusViewData.Builder viewDataBuilder = new StatusViewData.Builder(viewdata.getStatusViewData());
+        StatusViewData.Builder viewDataBuilder =
+            new StatusViewData.Builder(viewdata.getStatusViewData());
         viewDataBuilder.setReblogged(reblog);
 
-        NotificationViewData.Concrete newViewData = new NotificationViewData.Concrete(
-                viewdata.getType(), viewdata.getId(), viewdata.getAccount(),
-                viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
+        NotificationViewData.Concrete newViewData =
+            new NotificationViewData.Concrete(viewdata.getType(), viewdata.getId(),
+                viewdata.getAccount(), viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
                 viewdata.getEmojiUrl(), viewdata.getTarget());
         notifications.setPairedItem(position, newViewData);
         updateAdapter();
@@ -521,31 +518,30 @@ public class NotificationsFragment extends SFragment implements
         final Notification notification = notifications.get(position).asRight();
         final Status status = notification.getStatus();
 
-        timelineCases.favourite(status, favourite)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this)))
-                .subscribe(
-                        (newStatus) -> setFavouriteForStatus(position, status, favourite),
-                        (t) -> Log.d(getClass().getSimpleName(),
-                                "Failed to favourite status: " + status.getId(), t)
-                );
+        timelineCases.getValue().favourite(status, favourite)
+            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+            .subscribe((newStatus) -> setFavouriteForStatus(position, status, favourite),
+                (t) -> Log.d(getClass().getSimpleName(),
+                    "Failed to favourite status: " + status.getId(), t));
     }
 
     private void setFavouriteForStatus(int position, Status status, boolean favourite) {
         status.setFavourited(favourite);
 
-        if (status.getReblog() != null) {
+        if(status.getReblog() != null) {
             status.getReblog().setFavourited(favourite);
         }
 
-        NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
+        NotificationViewData.Concrete viewdata =
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
-        StatusViewData.Builder viewDataBuilder = new StatusViewData.Builder(viewdata.getStatusViewData());
+        StatusViewData.Builder viewDataBuilder =
+            new StatusViewData.Builder(viewdata.getStatusViewData());
         viewDataBuilder.setFavourited(favourite);
 
-        NotificationViewData.Concrete newViewData = new NotificationViewData.Concrete(
-                viewdata.getType(), viewdata.getId(), viewdata.getAccount(),
-                viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
+        NotificationViewData.Concrete newViewData =
+            new NotificationViewData.Concrete(viewdata.getType(), viewdata.getId(),
+                viewdata.getAccount(), viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
                 viewdata.getEmojiUrl(), viewdata.getTarget());
 
         notifications.setPairedItem(position, newViewData);
@@ -557,31 +553,30 @@ public class NotificationsFragment extends SFragment implements
         final Notification notification = notifications.get(position).asRight();
         final Status status = notification.getStatus();
 
-        timelineCases.bookmark(status, bookmark)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this)))
-                .subscribe(
-                        (newStatus) -> setBookmarkForStatus(position, status, bookmark),
-                        (t) -> Log.d(getClass().getSimpleName(),
-                                "Failed to bookmark status: " + status.getId(), t)
-                );
+        timelineCases.getValue().bookmark(status, bookmark)
+            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+            .subscribe((newStatus) -> setBookmarkForStatus(position, status, bookmark),
+                (t) -> Log.d(getClass().getSimpleName(),
+                    "Failed to bookmark status: " + status.getId(), t));
     }
 
     private void setBookmarkForStatus(int position, Status status, boolean bookmark) {
         status.setBookmarked(bookmark);
 
-        if (status.getReblog() != null) {
+        if(status.getReblog() != null) {
             status.getReblog().setBookmarked(bookmark);
         }
 
-        NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
+        NotificationViewData.Concrete viewdata =
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
-        StatusViewData.Builder viewDataBuilder = new StatusViewData.Builder(viewdata.getStatusViewData());
+        StatusViewData.Builder viewDataBuilder =
+            new StatusViewData.Builder(viewdata.getStatusViewData());
         viewDataBuilder.setBookmarked(bookmark);
 
-        NotificationViewData.Concrete newViewData = new NotificationViewData.Concrete(
-                viewdata.getType(), viewdata.getId(), viewdata.getAccount(),
-                viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
+        NotificationViewData.Concrete newViewData =
+            new NotificationViewData.Concrete(viewdata.getType(), viewdata.getId(),
+                viewdata.getAccount(), viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
                 viewdata.getEmojiUrl(), viewdata.getTarget());
 
         notifications.setPairedItem(position, newViewData);
@@ -592,26 +587,24 @@ public class NotificationsFragment extends SFragment implements
         final Notification notification = notifications.get(position).asRight();
         final Status status = notification.getStatus();
 
-        timelineCases.voteInPoll(status, choices)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this)))
-                .subscribe(
-                        (newPoll) -> setVoteForPoll(position, newPoll),
-                        (t) -> Log.d(TAG,
-                                "Failed to vote in poll: " + status.getId(), t)
-                );
+        timelineCases.getValue().voteInPoll(status, choices)
+            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+            .subscribe((newPoll) -> setVoteForPoll(position, newPoll),
+                (t) -> Log.d(TAG, "Failed to vote in poll: " + status.getId(), t));
     }
 
     private void setVoteForPoll(int position, Poll poll) {
 
-        NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
+        NotificationViewData.Concrete viewdata =
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
-        StatusViewData.Builder viewDataBuilder = new StatusViewData.Builder(viewdata.getStatusViewData());
+        StatusViewData.Builder viewDataBuilder =
+            new StatusViewData.Builder(viewdata.getStatusViewData());
         viewDataBuilder.setPoll(poll);
 
-        NotificationViewData.Concrete newViewData = new NotificationViewData.Concrete(
-                viewdata.getType(), viewdata.getId(), viewdata.getAccount(),
-                viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
+        NotificationViewData.Concrete newViewData =
+            new NotificationViewData.Concrete(viewdata.getType(), viewdata.getId(),
+                viewdata.getAccount(), viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
                 viewdata.getEmojiUrl(), viewdata.getTarget());
 
         notifications.setPairedItem(position, newViewData);
@@ -627,7 +620,9 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onViewMedia(int position, int attachmentIndex, @Nullable View view) {
         Notification notification = notifications.get(position).asRightOrNull();
-        if (notification == null || notification.getStatus() == null) return;
+        if(notification == null || notification.getStatus() == null) {
+            return;
+        }
         super.viewMedia(attachmentIndex, notification.getStatus(), view);
     }
 
@@ -640,7 +635,9 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onViewReplyTo(int position) {
         Notification notification = notifications.get(position).asRightOrNull();
-        if (notification == null) return;
+        if(notification == null) {
+            return;
+        }
         super.onShowReplyTo(notification.getStatus().getInReplyToId());
     }
 
@@ -653,14 +650,13 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onExpandedChange(boolean expanded, int position) {
         NotificationViewData.Concrete old =
-                (NotificationViewData.Concrete) notifications.getPairedItem(position);
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
         StatusViewData.Concrete statusViewData =
-                new StatusViewData.Builder(old.getStatusViewData())
-                        .setIsExpanded(expanded)
-                        .createStatusViewData();
-        NotificationViewData notificationViewData = new NotificationViewData.Concrete(old.getType(),
-                old.getId(), old.getAccount(), statusViewData, old.getEmoji(),
-                old.getEmojiUrl(), old.getTarget());
+            new StatusViewData.Builder(old.getStatusViewData()).setIsExpanded(expanded)
+                .createStatusViewData();
+        NotificationViewData notificationViewData =
+            new NotificationViewData.Concrete(old.getType(), old.getId(), old.getAccount(),
+                statusViewData, old.getEmoji(), old.getEmojiUrl(), old.getTarget());
         notifications.setPairedItem(position, notificationViewData);
         updateAdapter();
     }
@@ -668,14 +664,13 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onContentHiddenChange(boolean isShowing, int position) {
         NotificationViewData.Concrete old =
-                (NotificationViewData.Concrete) notifications.getPairedItem(position);
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
         StatusViewData.Concrete statusViewData =
-                new StatusViewData.Builder(old.getStatusViewData())
-                        .setIsShowingSensitiveContent(isShowing)
-                        .createStatusViewData();
-        NotificationViewData notificationViewData = new NotificationViewData.Concrete(old.getType(),
-                old.getId(), old.getAccount(), statusViewData, old.getEmoji(),
-                old.getEmojiUrl(), old.getTarget());
+            new StatusViewData.Builder(old.getStatusViewData()).setIsShowingSensitiveContent(
+                isShowing).createStatusViewData();
+        NotificationViewData notificationViewData =
+            new NotificationViewData.Concrete(old.getType(), old.getId(), old.getAccount(),
+                statusViewData, old.getEmoji(), old.getEmojiUrl(), old.getTarget());
         notifications.setPairedItem(position, notificationViewData);
         updateAdapter();
     }
@@ -683,30 +678,33 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onMute(int position, boolean isMuted) {
         NotificationViewData.Concrete old =
-                (NotificationViewData.Concrete) notifications.getPairedItem(position);
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
         StatusViewData.Concrete statusViewData =
-                new StatusViewData.Builder(old.getStatusViewData())
-                        .setMuted(isMuted)
-                        .createStatusViewData();
-        NotificationViewData notificationViewData = new NotificationViewData.Concrete(old.getType(),
-                old.getId(), old.getAccount(), statusViewData, old.getEmoji(),
-                old.getEmojiUrl(), old.getTarget());
+            new StatusViewData.Builder(old.getStatusViewData()).setMuted(isMuted)
+                .createStatusViewData();
+        NotificationViewData notificationViewData =
+            new NotificationViewData.Concrete(old.getType(), old.getId(), old.getAccount(),
+                statusViewData, old.getEmoji(), old.getEmojiUrl(), old.getTarget());
         notifications.setPairedItem(position, notificationViewData);
         updateAdapter();
     }
 
-    private void setMutedStatusForStatus(int position, Status status, boolean muted, boolean threadMuted) {
+    private void setMutedStatusForStatus(int position, Status status, boolean muted,
+        boolean threadMuted)
+    {
         status.setThreadMuted(threadMuted);
 
-        NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
+        NotificationViewData.Concrete viewdata =
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
-        StatusViewData.Builder viewDataBuilder = new StatusViewData.Builder(viewdata.getStatusViewData());
+        StatusViewData.Builder viewDataBuilder =
+            new StatusViewData.Builder(viewdata.getStatusViewData());
         viewDataBuilder.setThreadMuted(threadMuted);
         viewDataBuilder.setMuted(muted);
 
-        NotificationViewData.Concrete newViewData = new NotificationViewData.Concrete(
-                viewdata.getType(), viewdata.getId(), viewdata.getAccount(),
-                viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
+        NotificationViewData.Concrete newViewData =
+            new NotificationViewData.Concrete(viewdata.getType(), viewdata.getId(),
+                viewdata.getAccount(), viewDataBuilder.createStatusViewData(), viewdata.getEmoji(),
                 viewdata.getEmojiUrl(), viewdata.getTarget());
 
         notifications.setPairedItem(position, newViewData);
@@ -716,17 +714,18 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onLoadMore(int position) {
         //check bounds before accessing list,
-        if (notifications.size() >= position && position > 0) {
+        if(notifications.size() >= position && position > 0) {
             Notification previous = notifications.get(position - 1).asRightOrNull();
             Notification next = notifications.get(position + 1).asRightOrNull();
-            if (previous == null || next == null) {
+            if(previous == null || next == null) {
                 Log.e(TAG, "Failed to load more, invalid placeholder position: " + position);
                 return;
             }
-            sendFetchNotificationsRequest(previous.getId(), next.getId(), FetchEnd.MIDDLE, position);
+            sendFetchNotificationsRequest(previous.getId(), next.getId(), FetchEnd.MIDDLE,
+                position);
             Placeholder placeholder = notifications.get(position).asLeft();
             NotificationViewData notificationViewData =
-                    new NotificationViewData.Placeholder(placeholder.id, true);
+                new NotificationViewData.Placeholder(placeholder.id, true);
             notifications.setPairedItem(position, notificationViewData);
             updateAdapter();
         } else {
@@ -736,37 +735,34 @@ public class NotificationsFragment extends SFragment implements
 
     @Override
     public void onContentCollapsedChange(boolean isCollapsed, int position) {
-        if (position < 0 || position >= notifications.size()) {
-            Log.e(TAG, String.format("Tried to access out of bounds status position: %d of %d", position, notifications.size() - 1));
+        if(position < 0 || position >= notifications.size()) {
+            Log.e(TAG,
+                String.format("Tried to access out of bounds status position: %d of %d", position,
+                    notifications.size() - 1));
             return;
         }
 
         NotificationViewData notification = notifications.getPairedItem(position);
-        if (!(notification instanceof NotificationViewData.Concrete)) {
+        if(!(notification instanceof NotificationViewData.Concrete)) {
             Log.e(TAG, String.format(
-                    "Expected NotificationViewData.Concrete, got %s instead at position: %d of %d",
-                    notification == null ? "null" : notification.getClass().getSimpleName(),
-                    position,
-                    notifications.size() - 1
-            ));
+                "Expected NotificationViewData.Concrete, got %s instead at position: %d of %d",
+                notification == null ? "null" : notification.getClass().getSimpleName(), position,
+                notifications.size() - 1));
             return;
         }
 
-        StatusViewData.Concrete status = ((NotificationViewData.Concrete) notification).getStatusViewData();
-        StatusViewData.Concrete updatedStatus = new StatusViewData.Builder(status)
-                .setCollapsed(isCollapsed)
-                .createStatusViewData();
+        StatusViewData.Concrete status =
+            ((NotificationViewData.Concrete) notification).getStatusViewData();
+        StatusViewData.Concrete updatedStatus =
+            new StatusViewData.Builder(status).setCollapsed(isCollapsed).createStatusViewData();
 
-        NotificationViewData.Concrete concreteNotification = (NotificationViewData.Concrete) notification;
-        NotificationViewData updatedNotification = new NotificationViewData.Concrete(
-                concreteNotification.getType(),
-                concreteNotification.getId(),
-                concreteNotification.getAccount(),
-                updatedStatus,
-                concreteNotification.getEmoji(),
-                concreteNotification.getEmojiUrl(),
-                concreteNotification.getTarget()
-        );
+        NotificationViewData.Concrete concreteNotification =
+            (NotificationViewData.Concrete) notification;
+        NotificationViewData updatedNotification =
+            new NotificationViewData.Concrete(concreteNotification.getType(),
+                concreteNotification.getId(), concreteNotification.getAccount(), updatedStatus,
+                concreteNotification.getEmoji(), concreteNotification.getEmojiUrl(),
+                concreteNotification.getTarget());
         notifications.setPairedItem(position, updatedNotification);
         updateAdapter();
 
@@ -796,12 +792,14 @@ public class NotificationsFragment extends SFragment implements
         updateAdapter();
 
         //Execute clear notifications request
-        Call<ResponseBody> call = mastodonApi.clearNotifications();
+        Call<ResponseBody> call = mastodonApi.getValue().clearNotifications();
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if (isAdded()) {
-                    if (!response.isSuccessful()) {
+            public void onResponse(@NonNull Call<ResponseBody> call,
+                @NonNull Response<ResponseBody> response)
+            {
+                if(isAdded()) {
+                    if(!response.isSuccessful()) {
                         //Reload notifications on failure
                         fullyRefreshWithProgressBar(true);
                     }
@@ -818,7 +816,7 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void resetNotificationsLoad() {
-        for (Call callItem : callList) {
+        for(Call callItem : callList) {
             callItem.cancel();
         }
         callList.clear();
@@ -836,36 +834,41 @@ public class NotificationsFragment extends SFragment implements
     private void showFilterMenu() {
         List<Notification.Type> notificationsList = Notification.Type.Companion.getAsList();
         List<String> list = new ArrayList<>();
-        for (Notification.Type type : notificationsList) {
+        for(Notification.Type type : notificationsList) {
             // ignore chat messages, as we don't work with them in main notification fragment
-            if(type == Notification.Type.CHAT_MESSAGE)
+            if(type == Notification.Type.CHAT_MESSAGE) {
                 continue;
+            }
 
             list.add(getNotificationText(type));
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_multiple_choice, list);
+        ArrayAdapter<String> adapter =
+            new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_multiple_choice,
+                list);
         PopupWindow window = new PopupWindow(getContext());
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.notifications_filter, (ViewGroup) getView(), false);
+        View view = LayoutInflater.from(getContext())
+            .inflate(R.layout.notifications_filter, (ViewGroup) getView(), false);
         final ListView listView = view.findViewById(R.id.listView);
-        view.findViewById(R.id.buttonApply)
-                .setOnClickListener(v -> {
-                    SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-                    Set<Notification.Type> excludes = new HashSet<>();
-                    for (int i = 0; i < notificationsList.size(); i++) {
-                        if (!checkedItems.get(i, false))
-                            excludes.add(notificationsList.get(i));
-                    }
-                    window.dismiss();
-                    applyFilterChanges(excludes);
+        view.findViewById(R.id.buttonApply).setOnClickListener(v -> {
+            SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
+            Set<Notification.Type> excludes = new HashSet<>();
+            for(int i = 0; i < notificationsList.size(); i++) {
+                if(!checkedItems.get(i, false)) {
+                    excludes.add(notificationsList.get(i));
+                }
+            }
+            window.dismiss();
+            applyFilterChanges(excludes);
 
-                });
+        });
 
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        for (int i = 0; i < notificationsList.size(); i++) {
-            if (!notificationFilter.contains(notificationsList.get(i)))
+        for(int i = 0; i < notificationsList.size(); i++) {
+            if(!notificationFilter.contains(notificationsList.get(i))) {
                 listView.setItemChecked(i, true);
+            }
         }
         window.setContentView(view);
         window.setFocusable(true);
@@ -876,7 +879,7 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private String getNotificationText(Notification.Type type) {
-        switch (type) {
+        switch(type) {
             case MENTION:
                 return getString(R.string.notification_mention_name);
             case FAVOURITE:
@@ -903,16 +906,16 @@ public class NotificationsFragment extends SFragment implements
     private void applyFilterChanges(Set<Notification.Type> newSet) {
         List<Notification.Type> notifications = Notification.Type.Companion.getAsList();
         boolean isChanged = false;
-        for (Notification.Type type : notifications) {
-            if (notificationFilter.contains(type) && !newSet.contains(type)) {
+        for(Notification.Type type : notifications) {
+            if(notificationFilter.contains(type) && !newSet.contains(type)) {
                 notificationFilter.remove(type);
                 isChanged = true;
-            } else if (!notificationFilter.contains(type) && newSet.contains(type)) {
+            } else if(!notificationFilter.contains(type) && newSet.contains(type)) {
                 notificationFilter.add(type);
                 isChanged = true;
             }
         }
-        if (isChanged) {
+        if(isChanged) {
             saveNotificationsFilter();
             fullyRefreshWithProgressBar(true);
         }
@@ -920,19 +923,20 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void loadNotificationsFilter() {
-        AccountEntity account = accountManager.getActiveAccount();
-        if (account != null) {
+        AccountEntity account = accountManager.getValue().getActiveAccount();
+        if(account != null) {
             notificationFilter.clear();
-            notificationFilter.addAll(NotificationTypeConverterKt.deserialize(
-                    account.getNotificationsFilter()));
+            notificationFilter.addAll(
+                NotificationTypeConverterKt.deserialize(account.getNotificationsFilter()));
         }
     }
 
     private void saveNotificationsFilter() {
-        AccountEntity account = accountManager.getActiveAccount();
-        if (account != null) {
-            account.setNotificationsFilter(NotificationTypeConverterKt.serialize(notificationFilter));
-            accountManager.saveAccount(account);
+        AccountEntity account = accountManager.getValue().getActiveAccount();
+        if(account != null) {
+            account.setNotificationsFilter(
+                NotificationTypeConverterKt.serialize(notificationFilter));
+            accountManager.getValue().saveAccount(account);
         }
     }
 
@@ -958,22 +962,20 @@ public class NotificationsFragment extends SFragment implements
 
     @Override
     public void onRespondToFollowRequest(boolean accept, String id, int position) {
-        Single<Relationship> request = accept ?
-                mastodonApi.authorizeFollowRequestObservable(id) :
-                mastodonApi.rejectFollowRequestObservable(id);
+        Single<Relationship> request =
+            accept ? mastodonApi.getValue().authorizeFollowRequestObservable(id) :
+                mastodonApi.getValue().rejectFollowRequestObservable(id);
         request.observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-                .subscribe(
-                        (relationship) -> fullyRefreshWithProgressBar(true),
-                        (error) -> Log.e(TAG, String.format("Failed to %s account id %s", accept ? "accept" : "reject", id))
-                );
+            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+            .subscribe((relationship) -> fullyRefreshWithProgressBar(true), (error) -> Log.e(TAG,
+                String.format("Failed to %s account id %s", accept ? "accept" : "reject", id)));
     }
 
     @Override
     public void onViewStatusForNotificationId(String notificationId) {
-        for (Either<Placeholder, Notification> either : notifications) {
+        for(Either<Placeholder, Notification> either : notifications) {
             Notification notification = either.asRightOrNull();
-            if (notification != null && notification.getId().equals(notificationId)) {
+            if(notification != null && notification.getId().equals(notificationId)) {
                 super.viewThread(notification.getStatus());
                 return;
             }
@@ -982,23 +984,26 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void onPreferenceChanged(String key) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        switch (key) {
+        switch(key) {
             case "fabHide": {
                 hideFab = sharedPreferences.getBoolean("fabHide", false);
                 break;
             }
             case "mediaPreviewEnabled": {
-                boolean enabled = accountManager.getActiveAccount().getMediaPreviewEnabled();
-                if (enabled != adapter.isMediaPreviewEnabled()) {
+                boolean enabled =
+                    accountManager.getValue().getActiveAccount().getMediaPreviewEnabled();
+                if(enabled != adapter.isMediaPreviewEnabled()) {
                     adapter.setMediaPreviewEnabled(enabled);
                     fullyRefresh();
                 }
             }
             case "showNotificationsFilter": {
-                if (isAdded()) {
-                    showNotificationsFilter = sharedPreferences.getBoolean("showNotificationsFilter", true);
+                if(isAdded()) {
+                    showNotificationsFilter =
+                        sharedPreferences.getBoolean("showNotificationsFilter", true);
                     updateFilterVisibility();
                     fullyRefreshWithProgressBar(true);
                 }
@@ -1019,12 +1024,12 @@ public class NotificationsFragment extends SFragment implements
     private void removeAllByConversationId(String conversationId) {
         // using iterator to safely remove items while iterating
         Iterator<Either<Placeholder, Notification>> iterator = notifications.iterator();
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()) {
             Either<Placeholder, Notification> placeholderOrNotification = iterator.next();
             Notification notification = placeholderOrNotification.asRightOrNull();
-            if (notification != null && notification.getStatus() != null
-                    && notification.getType() == Notification.Type.MENTION &&
-                    notification.getStatus().getConversationId().equalsIgnoreCase(conversationId)) {
+            if(notification != null && notification.getStatus() != null &&
+               notification.getType() == Notification.Type.MENTION &&
+               notification.getStatus().getConversationId().equalsIgnoreCase(conversationId)) {
                 iterator.remove();
             }
         }
@@ -1034,10 +1039,11 @@ public class NotificationsFragment extends SFragment implements
     private void removeAllByAccountId(String accountId) {
         // using iterator to safely remove items while iterating
         Iterator<Either<Placeholder, Notification>> iterator = notifications.iterator();
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()) {
             Either<Placeholder, Notification> notification = iterator.next();
             Notification maybeNotification = notification.asRightOrNull();
-            if (maybeNotification != null && maybeNotification.getAccount().getId().equals(accountId)) {
+            if(maybeNotification != null &&
+               maybeNotification.getAccount().getId().equals(accountId)) {
                 iterator.remove();
             }
         }
@@ -1045,7 +1051,7 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void onLoadMore() {
-        if (bottomId == null) {
+        if(bottomId == null) {
             // already loaded everything
             return;
         }
@@ -1053,13 +1059,13 @@ public class NotificationsFragment extends SFragment implements
         // Check for out-of-bounds when loading
         // This is required to allow full-timeline reloads of collapsible statuses when the settings
         // change.
-        if (notifications.size() > 0) {
+        if(notifications.size() > 0) {
             Either<Placeholder, Notification> last = notifications.get(notifications.size() - 1);
-            if (last.isRight()) {
+            if(last.isRight()) {
                 final Placeholder placeholder = newPlaceholder();
                 notifications.add(new Either.Left<>(placeholder));
                 NotificationViewData viewData =
-                        new NotificationViewData.Placeholder(placeholder.id, true);
+                    new NotificationViewData.Placeholder(placeholder.id, true);
                 notifications.setPairedItem(notifications.size() - 1, viewData);
                 updateAdapter();
             }
@@ -1075,7 +1081,7 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void jumpToTop() {
-        if (isAdded()) {
+        if(isAdded()) {
             appBarOptions.setExpanded(true, false);
             layoutManager.scrollToPosition(0);
             scrollListener.reset();
@@ -1083,29 +1089,33 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private void sendFetchNotificationsRequest(String fromId, String uptoId,
-                                               final FetchEnd fetchEnd, final int pos) {
+        final FetchEnd fetchEnd, final int pos)
+    {
         /* If there is a fetch already ongoing, record however many fetches are requested and
          * fulfill them after it's complete. */
-        if (fetchEnd == FetchEnd.TOP && topLoading) {
+        if(fetchEnd == FetchEnd.TOP && topLoading) {
             return;
         }
-        if (fetchEnd == FetchEnd.BOTTOM && bottomLoading) {
+        if(fetchEnd == FetchEnd.BOTTOM && bottomLoading) {
             return;
         }
-        if (fetchEnd == FetchEnd.TOP) {
+        if(fetchEnd == FetchEnd.TOP) {
             topLoading = true;
         }
-        if (fetchEnd == FetchEnd.BOTTOM) {
+        if(fetchEnd == FetchEnd.BOTTOM) {
             bottomLoading = true;
         }
 
-        Call<List<Notification>> call = mastodonApi.notifications(fromId, uptoId, LOAD_AT_ONCE, showNotificationsFilter ? notificationFilter : null, withMuted);
+        Call<List<Notification>> call = mastodonApi.getValue()
+            .notifications(fromId, uptoId, LOAD_AT_ONCE,
+                showNotificationsFilter ? notificationFilter : null, withMuted);
 
         call.enqueue(new Callback<List<Notification>>() {
             @Override
             public void onResponse(@NonNull Call<List<Notification>> call,
-                                   @NonNull Response<List<Notification>> response) {
-                if (response.isSuccessful()) {
+                @NonNull Response<List<Notification>> response)
+            {
+                if(response.isSuccessful()) {
                     String linkHeader = response.headers().get("Link");
                     onFetchNotificationsSuccess(response.body(), linkHeader, fetchEnd, pos);
                 } else {
@@ -1115,23 +1125,25 @@ public class NotificationsFragment extends SFragment implements
 
             @Override
             public void onFailure(@NonNull Call<List<Notification>> call, @NonNull Throwable t) {
-                if (!call.isCanceled())
+                if(!call.isCanceled()) {
                     onFetchNotificationsFailure((Exception) t, fetchEnd, pos);
+                }
             }
         });
         callList.add(call);
     }
 
     private void onFetchNotificationsSuccess(List<Notification> notifications, String linkHeader,
-                                             FetchEnd fetchEnd, int pos) {
+        FetchEnd fetchEnd, int pos)
+    {
         List<HttpHeaderLink> links = HttpHeaderLink.parse(linkHeader);
         HttpHeaderLink next = HttpHeaderLink.findByRelationType(links, "next");
         String fromId = null;
-        if (next != null) {
+        if(next != null) {
             fromId = next.uri.getQueryParameter("max_id");
         }
 
-        switch (fetchEnd) {
+        switch(fetchEnd) {
             case TOP: {
                 update(notifications, this.notifications.isEmpty() ? fromId : null);
                 break;
@@ -1142,13 +1154,13 @@ public class NotificationsFragment extends SFragment implements
             }
             case BOTTOM: {
 
-                if (!this.notifications.isEmpty()
-                        && !this.notifications.get(this.notifications.size() - 1).isRight()) {
+                if(!this.notifications.isEmpty() &&
+                   !this.notifications.get(this.notifications.size() - 1).isRight()) {
                     this.notifications.remove(this.notifications.size() - 1);
                     updateAdapter();
                 }
 
-                if (adapter.getItemCount() > 1) {
+                if(adapter.getItemCount() > 1) {
                     addItems(notifications, fromId);
                 } else {
                     update(notifications, fromId);
@@ -1160,14 +1172,14 @@ public class NotificationsFragment extends SFragment implements
 
         saveNewestNotificationId(notifications);
 
-        if (fetchEnd == FetchEnd.TOP) {
+        if(fetchEnd == FetchEnd.TOP) {
             topLoading = false;
         }
-        if (fetchEnd == FetchEnd.BOTTOM) {
+        if(fetchEnd == FetchEnd.BOTTOM) {
             bottomLoading = false;
         }
 
-        if (notifications.size() == 0 && adapter.getItemCount() == 0) {
+        if(notifications.size() == 0 && adapter.getItemCount() == 0) {
             this.statusView.setVisibility(View.VISIBLE);
             this.statusView.setup(R.drawable.elephant_friend_empty, R.string.message_empty, null);
         } else {
@@ -1180,17 +1192,17 @@ public class NotificationsFragment extends SFragment implements
 
     private void onFetchNotificationsFailure(Exception exception, FetchEnd fetchEnd, int position) {
         swipeRefreshLayout.setRefreshing(false);
-        if (fetchEnd == FetchEnd.MIDDLE && !notifications.get(position).isRight()) {
+        if(fetchEnd == FetchEnd.MIDDLE && !notifications.get(position).isRight()) {
             Placeholder placeholder = notifications.get(position).asLeft();
             NotificationViewData placeholderVD =
-                    new NotificationViewData.Placeholder(placeholder.id, false);
+                new NotificationViewData.Placeholder(placeholder.id, false);
             notifications.setPairedItem(position, placeholderVD);
             updateAdapter();
-        } else if (this.notifications.isEmpty()) {
+        } else if(this.notifications.isEmpty()) {
             this.statusView.setVisibility(View.VISIBLE);
             swipeRefreshLayout.setEnabled(false);
             this.showingError = true;
-            if (exception instanceof IOException) {
+            if(exception instanceof IOException) {
                 this.statusView.setup(R.drawable.elephant_offline, R.string.error_network, __ -> {
                     this.progressBar.setVisibility(View.VISIBLE);
                     this.onRefresh();
@@ -1207,10 +1219,10 @@ public class NotificationsFragment extends SFragment implements
         }
         Log.e(TAG, "Fetch failure: " + exception.getMessage());
 
-        if (fetchEnd == FetchEnd.TOP) {
+        if(fetchEnd == FetchEnd.TOP) {
             topLoading = false;
         }
-        if (fetchEnd == FetchEnd.BOTTOM) {
+        if(fetchEnd == FetchEnd.BOTTOM) {
             bottomLoading = false;
         }
 
@@ -1219,45 +1231,44 @@ public class NotificationsFragment extends SFragment implements
 
     private void saveNewestNotificationId(List<Notification> notifications) {
 
-        AccountEntity account = accountManager.getActiveAccount();
-        if (account != null) {
+        AccountEntity account = accountManager.getValue().getActiveAccount();
+        if(account != null) {
             String lastNotificationId = account.getLastNotificationId();
 
-            for (Notification noti : notifications) {
-                if (isLessThan(lastNotificationId, noti.getId())) {
+            for(Notification noti : notifications) {
+                if(isLessThan(lastNotificationId, noti.getId())) {
                     lastNotificationId = noti.getId();
                 }
             }
 
-            if (!account.getLastNotificationId().equals(lastNotificationId)) {
+            if(!account.getLastNotificationId().equals(lastNotificationId)) {
                 Log.d(TAG, "saving newest noti id: " + lastNotificationId);
                 account.setLastNotificationId(lastNotificationId);
-                accountManager.saveAccount(account);
+                accountManager.getValue().saveAccount(account);
             }
         }
     }
 
     private void update(@Nullable List<Notification> newNotifications, @Nullable String fromId) {
-        if (ListUtils.isEmpty(newNotifications)) {
+        if(ListUtils.isEmpty(newNotifications)) {
             updateAdapter();
             return;
         }
-        if (fromId != null) {
+        if(fromId != null) {
             bottomId = fromId;
         }
-        List<Either<Placeholder, Notification>> liftedNew =
-                liftNotificationList(newNotifications);
-        if (notifications.isEmpty()) {
+        List<Either<Placeholder, Notification>> liftedNew = liftNotificationList(newNotifications);
+        if(notifications.isEmpty()) {
             notifications.addAll(liftedNew);
         } else {
             int index = notifications.indexOf(liftedNew.get(newNotifications.size() - 1));
-            for (int i = 0; i < index; i++) {
+            for(int i = 0; i < index; i++) {
                 notifications.remove(0);
             }
 
             int newIndex = liftedNew.indexOf(notifications.get(0));
-            if (newIndex == -1) {
-                if (index == -1 && liftedNew.size() >= LOAD_AT_ONCE) {
+            if(newIndex == -1) {
+                if(index == -1 && liftedNew.size() >= LOAD_AT_ONCE) {
                     liftedNew.add(new Either.Left<>(newPlaceholder()));
                 }
                 notifications.addAll(0, liftedNew);
@@ -1270,13 +1281,13 @@ public class NotificationsFragment extends SFragment implements
 
     private void addItems(List<Notification> newNotifications, @Nullable String fromId) {
         bottomId = fromId;
-        if (ListUtils.isEmpty(newNotifications)) {
+        if(ListUtils.isEmpty(newNotifications)) {
             return;
         }
         int end = notifications.size();
         List<Either<Placeholder, Notification>> liftedNew = liftNotificationList(newNotifications);
         Either<Placeholder, Notification> last = notifications.get(end - 1);
-        if (last != null && liftedNew.indexOf(last) == -1) {
+        if(last != null && liftedNew.indexOf(last) == -1) {
             notifications.addAll(liftedNew);
             updateAdapter();
         }
@@ -1286,7 +1297,7 @@ public class NotificationsFragment extends SFragment implements
         // Remove placeholder
         notifications.remove(pos);
 
-        if (ListUtils.isEmpty(newNotifications)) {
+        if(ListUtils.isEmpty(newNotifications)) {
             updateAdapter();
             return;
         }
@@ -1296,7 +1307,7 @@ public class NotificationsFragment extends SFragment implements
         // If we fetched less posts than in the limit, it means that the hole is not filled
         // If we fetched at least as much it means that there are more posts to load and we should
         // insert new placeholder
-        if (newNotifications.size() >= LOAD_AT_ONCE) {
+        if(newNotifications.size() >= LOAD_AT_ONCE) {
             liftedNew.add(new Either.Left<>(newPlaceholder()));
         }
 
@@ -1305,7 +1316,7 @@ public class NotificationsFragment extends SFragment implements
     }
 
     private final Function1<Notification, Either<Placeholder, Notification>> notificationLifter =
-            Either.Right::new;
+        Either.Right::new;
 
     private List<Either<Placeholder, Notification>> liftNotificationList(List<Notification> list) {
         return CollectionsKt.map(list, notificationLifter);
@@ -1313,7 +1324,7 @@ public class NotificationsFragment extends SFragment implements
 
     private void fullyRefreshWithProgressBar(boolean isShow) {
         resetNotificationsLoad();
-        if (isShow) {
+        if(isShow) {
             progressBar.setVisibility(View.VISIBLE);
             statusView.setVisibility(View.GONE);
         }
@@ -1327,14 +1338,13 @@ public class NotificationsFragment extends SFragment implements
 
     @Nullable
     private Pair<Integer, Notification> findReplyPosition(@NonNull String statusId) {
-        for (int i = 0; i < notifications.size(); i++) {
+        for(int i = 0; i < notifications.size(); i++) {
             Notification notification = notifications.get(i).asRightOrNull();
-            if (notification != null
-                    && notification.getStatus() != null
-                    && notification.getType() == Notification.Type.MENTION
-                    && (statusId.equals(notification.getStatus().getId())
-                    || (notification.getStatus().getReblog() != null
-                    && statusId.equals(notification.getStatus().getReblog().getId())))) {
+            if(notification != null && notification.getStatus() != null &&
+               notification.getType() == Notification.Type.MENTION &&
+               (statusId.equals(notification.getStatus().getId()) ||
+                (notification.getStatus().getReblog() != null &&
+                 statusId.equals(notification.getStatus().getReblog().getId())))) {
                 return new Pair<>(i, notification);
             }
         }
@@ -1348,12 +1358,12 @@ public class NotificationsFragment extends SFragment implements
     private final ListUpdateCallback listUpdateCallback = new ListUpdateCallback() {
         @Override
         public void onInserted(int position, int count) {
-            if (isAdded()) {
+            if(isAdded()) {
                 adapter.notifyItemRangeInserted(position, count);
                 Context context = getContext();
                 // scroll up when new items at the top are loaded while being at the start
                 // https://github.com/tuskyapp/Tusky/pull/1905#issuecomment-677819724
-                if (position == 0 && context != null && adapter.getItemCount() != count) {
+                if(position == 0 && context != null && adapter.getItemCount() != count) {
                     recyclerView.scrollBy(0, Utils.dpToPx(context, -30));
                 }
             }
@@ -1375,54 +1385,64 @@ public class NotificationsFragment extends SFragment implements
         }
     };
 
-    private final AsyncListDiffer<NotificationViewData>
-            differ = new AsyncListDiffer<>(listUpdateCallback,
+    private final AsyncListDiffer<NotificationViewData> differ =
+        new AsyncListDiffer<>(listUpdateCallback,
             new AsyncDifferConfig.Builder<>(diffCallback).build());
 
     private final NotificationsAdapter.AdapterDataSource<NotificationViewData> dataSource =
-            new NotificationsAdapter.AdapterDataSource<NotificationViewData>() {
-                @Override
-                public int getItemCount() {
-                    return differ.getCurrentList().size();
-                }
+        new NotificationsAdapter.AdapterDataSource<NotificationViewData>() {
+            @Override
+            public int getItemCount() {
+                return differ.getCurrentList().size();
+            }
 
-                @Override
-                public NotificationViewData getItemAt(int pos) {
-                    return differ.getCurrentList().get(pos);
-                }
-            };
+            @Override
+            public NotificationViewData getItemAt(int pos) {
+                return differ.getCurrentList().get(pos);
+            }
+        };
 
-    private static final DiffUtil.ItemCallback<NotificationViewData> diffCallback
-            = new DiffUtil.ItemCallback<NotificationViewData>() {
+    private static final DiffUtil.ItemCallback<NotificationViewData> diffCallback =
+        new DiffUtil.ItemCallback<NotificationViewData>() {
 
-        @Override
-        public boolean areItemsTheSame(NotificationViewData oldItem, NotificationViewData newItem) {
-            return oldItem.getViewDataId() == newItem.getViewDataId();
-        }
+            @Override
+            public boolean areItemsTheSame(NotificationViewData oldItem,
+                NotificationViewData newItem)
+            {
+                return oldItem.getViewDataId() == newItem.getViewDataId();
+            }
 
-        @Override
-        public boolean areContentsTheSame(@NonNull NotificationViewData oldItem, @NonNull NotificationViewData newItem) {
-            return false;
-        }
+            @Override
+            public boolean areContentsTheSame(@NonNull NotificationViewData oldItem,
+                @NonNull NotificationViewData newItem)
+            {
+                return false;
+            }
 
-        @Nullable
-        @Override
-        public Object getChangePayload(@NonNull NotificationViewData oldItem, @NonNull NotificationViewData newItem) {
-            if (oldItem.deepEquals(newItem)) {
-                //If items are equal - update timestamp only
-                return Collections.singletonList(StatusBaseViewHolder.Key.KEY_CREATED);
-            } else
+            @Nullable
+            @Override
+            public Object getChangePayload(@NonNull NotificationViewData oldItem,
+                @NonNull NotificationViewData newItem)
+            {
+                if(oldItem.deepEquals(newItem)) {
+                    //If items are equal - update timestamp only
+                    return Collections.singletonList(StatusBaseViewHolder.Key.KEY_CREATED);
+                } else
                 // If items are different - update a whole view holder
-                return null;
-        }
-    };
+                {
+                    return null;
+                }
+            }
+        };
 
     @Override
     public void onResume() {
         super.onResume();
-        String rawAccountNotificationFilter = accountManager.getActiveAccount().getNotificationsFilter();
-        Set<Notification.Type> accountNotificationFilter = NotificationTypeConverterKt.deserialize(rawAccountNotificationFilter);
-        if (!notificationFilter.equals(accountNotificationFilter)) {
+        String rawAccountNotificationFilter =
+            accountManager.getValue().getActiveAccount().getNotificationsFilter();
+        Set<Notification.Type> accountNotificationFilter =
+            NotificationTypeConverterKt.deserialize(rawAccountNotificationFilter);
+        if(!notificationFilter.equals(accountNotificationFilter)) {
             loadNotificationsFilter();
             fullyRefreshWithProgressBar(true);
         }
@@ -1435,15 +1455,13 @@ public class NotificationsFragment extends SFragment implements
      * Auto dispose observable on pause
      */
     private void startUpdateTimestamp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences preferences =
+            PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false);
-        if (!useAbsoluteTime) {
-            Observable.interval(1, TimeUnit.MINUTES)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .as(autoDisposable(from(this, Lifecycle.Event.ON_PAUSE)))
-                    .subscribe(
-                            interval -> updateAdapter()
-                    );
+        if(!useAbsoluteTime) {
+            Observable.interval(1, TimeUnit.MINUTES).observeOn(AndroidSchedulers.mainThread())
+                .as(autoDisposable(from(this, Lifecycle.Event.ON_PAUSE)))
+                .subscribe(interval -> updateAdapter());
         }
 
     }
@@ -1453,12 +1471,13 @@ public class NotificationsFragment extends SFragment implements
         jumpToTop();
     }
 
-	private void setEmojiReactForStatus(int position, Status newStatus) {
-        NotificationViewData.Concrete viewdata = (NotificationViewData.Concrete) notifications.getPairedItem(position);
+    private void setEmojiReactForStatus(int position, Status newStatus) {
+        NotificationViewData.Concrete viewdata =
+            (NotificationViewData.Concrete) notifications.getPairedItem(position);
 
-        NotificationViewData.Concrete newViewData = new NotificationViewData.Concrete(
-                viewdata.getType(), viewdata.getId(), viewdata.getAccount(),
-                ViewDataUtils.statusToViewData(newStatus, false, false),
+        NotificationViewData.Concrete newViewData =
+            new NotificationViewData.Concrete(viewdata.getType(), viewdata.getId(),
+                viewdata.getAccount(), ViewDataUtils.statusToViewData(newStatus, false, false),
                 viewdata.getEmoji(), viewdata.getEmojiUrl(), viewdata.getTarget());
 
         notifications.setPairedItem(position, newViewData);
@@ -1467,8 +1486,10 @@ public class NotificationsFragment extends SFragment implements
 
     private void handleEmojiReactEvent(EmojiReactEvent event) {
         Pair<Integer, Notification> posAndNotification =
-                findReplyPosition(event.getNewStatus().getActionableId());
-        if (posAndNotification == null) return;
+            findReplyPosition(event.getNewStatus().getActionableId());
+        if(posAndNotification == null) {
+            return;
+        }
         //noinspection ConstantConditions
         setEmojiReactForStatus(posAndNotification.first, event.getNewStatus());
     }
@@ -1477,22 +1498,21 @@ public class NotificationsFragment extends SFragment implements
     @Override
     public void onEmojiReact(final boolean react, final String emoji, final String statusId) {
         Pair<Integer, Notification> posAndNotification = findReplyPosition(statusId);
-        if (posAndNotification == null)
+        if(posAndNotification == null) {
             return;
+        }
 
-        timelineCases.react(emoji, statusId, react)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(autoDisposable(from(this)))
-                .subscribe(
-                        (newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
-                        (t) -> Log.d(TAG,
-                                "Failed to react with " + emoji + " on status: " + statusId, t)
-                );
+        timelineCases.getValue().react(emoji, statusId, react)
+            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+            .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
+                (t) -> Log.d(TAG, "Failed to react with " + emoji + " on status: " + statusId, t));
 
     }
 
     @Override
-    public void onEmojiReactMenu(@NonNull View view, final EmojiReaction emoji, final String statusId) {
+    public void onEmojiReactMenu(@NonNull View view, final EmojiReaction emoji,
+        final String statusId)
+    {
         super.emojiReactMenu(statusId, emoji, view, this);
     }
 }

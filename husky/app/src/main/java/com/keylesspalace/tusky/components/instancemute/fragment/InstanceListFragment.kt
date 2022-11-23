@@ -13,7 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.instancemute.adapter.DomainMutesAdapter
 import com.keylesspalace.tusky.components.instancemute.interfaces.InstanceActionListener
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.fragment.BaseFragment
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.HttpHeaderLink
@@ -23,17 +22,18 @@ import com.keylesspalace.tusky.view.EndlessOnScrollListener
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_instance_list.*
+import kotlinx.android.synthetic.main.fragment_instance_list.instanceProgressBar
+import kotlinx.android.synthetic.main.fragment_instance_list.messageView
+import kotlinx.android.synthetic.main.fragment_instance_list.recyclerView
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import javax.inject.Inject
 
-class InstanceListFragment : BaseFragment(), Injectable, InstanceActionListener {
-    @Inject
-    lateinit var api: MastodonApi
+class InstanceListFragment : BaseFragment(), InstanceActionListener {
 
+    private val api: MastodonApi by inject()
     private var fetching = false
     private var bottomId: String? = null
     private var adapter = DomainMutesAdapter(this)

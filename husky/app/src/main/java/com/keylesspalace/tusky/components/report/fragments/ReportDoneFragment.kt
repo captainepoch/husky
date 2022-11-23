@@ -18,25 +18,24 @@ package com.keylesspalace.tusky.components.report.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.report.Screen
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import kotlinx.android.synthetic.main.fragment_report_done.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_report_done.buttonBlock
+import kotlinx.android.synthetic.main.fragment_report_done.buttonDone
+import kotlinx.android.synthetic.main.fragment_report_done.buttonMute
+import kotlinx.android.synthetic.main.fragment_report_done.progressBlock
+import kotlinx.android.synthetic.main.fragment_report_done.progressMute
+import kotlinx.android.synthetic.main.fragment_report_done.textReported
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ReportDoneFragment : Fragment(R.layout.fragment_report_done), Injectable {
+class ReportDoneFragment : Fragment(R.layout.fragment_report_done) {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: ReportViewModel by activityViewModels { viewModelFactory }
+    private val viewModel: ReportViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         textReported.text = getString(R.string.report_sent_success, viewModel.accountUserName)

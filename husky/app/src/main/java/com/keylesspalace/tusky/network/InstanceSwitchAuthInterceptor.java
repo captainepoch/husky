@@ -1,69 +1,67 @@
-/* Copyright 2018 charlag
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  charlag
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.network;
 
 import androidx.annotation.NonNull;
-
 import com.keylesspalace.tusky.db.AccountEntity;
 import com.keylesspalace.tusky.db.AccountManager;
-
 import java.io.IOException;
-
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by charlag on 31/10/17.
- */
-
 public final class InstanceSwitchAuthInterceptor implements Interceptor {
-    private AccountManager accountManager;
+
+    private final AccountManager accountManager;
 
     public InstanceSwitchAuthInterceptor(AccountManager accountManager) {
         this.accountManager = accountManager;
     }
 
+    @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
-
         Request originalRequest = chain.request();
 
-        // only switch domains if the request comes from retrofit
-        if (originalRequest.url().host().equals(MastodonApi.PLACEHOLDER_DOMAIN)) {
+        // Only switch domains if the request comes from retrofit
+        if(originalRequest.url().host().equals(MastodonApi.PLACEHOLDER_DOMAIN)) {
             AccountEntity currentAccount = accountManager.getActiveAccount();
 
             Request.Builder builder = originalRequest.newBuilder();
 
             String instanceHeader = originalRequest.header(MastodonApi.DOMAIN_HEADER);
-            if (instanceHeader != null) {
+            if(instanceHeader != null) {
                 // use domain explicitly specified in custom header
                 builder.url(swapHost(originalRequest.url(), instanceHeader));
                 builder.removeHeader(MastodonApi.DOMAIN_HEADER);
-            } else if (currentAccount != null) {
+            } else if(currentAccount != null) {
                 //use domain of current account
                 builder.url(swapHost(originalRequest.url(), currentAccount.getDomain()))
-                        .header("Authorization",
-                                String.format("Bearer %s", currentAccount.getAccessToken()));
+                       .header("Authorization",
+                           String.format("Bearer %s", currentAccount.getAccessToken()));
             }
             Request newRequest = builder.build();
 
             return chain.proceed(newRequest);
-
         } else {
             return chain.proceed(originalRequest);
         }

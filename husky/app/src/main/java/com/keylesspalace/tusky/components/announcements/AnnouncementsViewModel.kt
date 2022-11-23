@@ -34,9 +34,8 @@ import com.keylesspalace.tusky.util.Resource
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.Success
 import io.reactivex.rxkotlin.Singles
-import javax.inject.Inject
 
-class AnnouncementsViewModel @Inject constructor(
+class AnnouncementsViewModel(
     accountManager: AccountManager,
     private val appDatabase: AppDatabase,
     private val mastodonApi: MastodonApi,

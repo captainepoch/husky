@@ -23,6 +23,7 @@ import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.util.NetworkState
 
 class SearchAccountsFragment : SearchFragment<Account>() {
+
     override fun createAdapter(): PagedListAdapter<Account, *> = SearchAccountsAdapter(this)
 
     override val networkStateRefresh: LiveData<NetworkState>

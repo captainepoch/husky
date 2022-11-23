@@ -27,9 +27,9 @@ import androidx.preference.PreferenceFragmentCompat
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
+import com.keylesspalace.tusky.core.extensions.getNonNullString
 import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.settings.AppTheme
 import com.keylesspalace.tusky.settings.PrefKeys
@@ -41,28 +41,20 @@ import com.keylesspalace.tusky.settings.preferenceCategory
 import com.keylesspalace.tusky.settings.switchPreference
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.deserialize
-import com.keylesspalace.tusky.util.getNonNullString
 import com.keylesspalace.tusky.util.serialize
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizePx
 import okhttp3.OkHttpClient
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-class PreferencesFragment : PreferenceFragmentCompat(), Injectable {
+class PreferencesFragment : PreferenceFragmentCompat() {
 
-    @Inject
-    lateinit var okhttpclient: OkHttpClient
-
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var crashHandler: CrashHandler
+    private val okhttpclient: OkHttpClient by inject()
+    private val accountManager: AccountManager by inject()
+    private val eventHub: EventHub by inject()
+    private val crashHandler: CrashHandler by inject()
 
     private val iconSize by lazy { resources.getDimensionPixelSize(R.dimen.preference_icon_size) }
     private var httpProxyPref: Preference? = null

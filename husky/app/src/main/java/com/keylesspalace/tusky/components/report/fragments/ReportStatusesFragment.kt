@@ -20,7 +20,6 @@ import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -36,8 +35,6 @@ import com.keylesspalace.tusky.components.report.Screen
 import com.keylesspalace.tusky.components.report.adapter.AdapterHandler
 import com.keylesspalace.tusky.components.report.adapter.StatusesAdapter
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.settings.PrefKeys
@@ -53,23 +50,17 @@ import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarLoadin
 import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarTop
 import kotlinx.android.synthetic.main.fragment_report_statuses.recyclerView
 import kotlinx.android.synthetic.main.fragment_report_statuses.swipeRefreshLayout
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReportStatusesFragment :
     Fragment(R.layout.fragment_report_statuses),
-    Injectable,
     AdapterHandler {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    private val viewModel: ReportViewModel by activityViewModels { viewModelFactory }
+    private val accountManager: AccountManager by inject()
+    private val viewModel: ReportViewModel by viewModel()
 
     private lateinit var adapter: StatusesAdapter
-
     private var snackbarErrorRetry: Snackbar? = null
 
     override fun showMedia(v: View?, status: Status?, idx: Int) {

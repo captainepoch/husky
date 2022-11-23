@@ -43,8 +43,6 @@ import androidx.recyclerview.widget.RecyclerView
 import at.connyduck.sparkbutton.helpers.Utils
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.core.extensions.onTextChanged
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.MastoList
 import com.keylesspalace.tusky.fragment.TimelineFragment
 import com.keylesspalace.tusky.util.ThemeUtils
@@ -66,21 +64,19 @@ import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_lists.addListButton
 import kotlinx.android.synthetic.main.activity_lists.listsRecycler
 import kotlinx.android.synthetic.main.activity_lists.messageView
 import kotlinx.android.synthetic.main.activity_lists.progressBar
 import kotlinx.android.synthetic.main.toolbar_basic.toolbar
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 /**
  * Created by charlag on 1/4/18.
  */
 
-class ListsActivity : BaseActivity(), Injectable, HasAndroidInjector {
+class ListsActivity : BaseActivity() {
 
     companion object {
         @JvmStatic
@@ -89,13 +85,7 @@ class ListsActivity : BaseActivity(), Injectable, HasAndroidInjector {
         }
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
-    private lateinit var viewModel: ListsViewModel
+    private val viewModel: ListsViewModel by inject()
     private val adapter = ListsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +105,6 @@ class ListsActivity : BaseActivity(), Injectable, HasAndroidInjector {
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
 
-        viewModel = viewModelFactory.create(ListsViewModel::class.java)
         viewModel.state
             .observeOn(AndroidSchedulers.mainThread())
             .autoDispose(from(this))
@@ -241,8 +230,6 @@ class ListsActivity : BaseActivity(), Injectable, HasAndroidInjector {
             show()
         }
     }
-
-    override fun androidInjector() = dispatchingAndroidInjector
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {

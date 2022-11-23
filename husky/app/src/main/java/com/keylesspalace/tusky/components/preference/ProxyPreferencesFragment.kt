@@ -25,6 +25,7 @@ import com.keylesspalace.tusky.settings.switchPreference
 import kotlin.system.exitProcess
 
 class ProxyPreferencesFragment : PreferenceFragmentCompat() {
+
     private var pendingRestart = false
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

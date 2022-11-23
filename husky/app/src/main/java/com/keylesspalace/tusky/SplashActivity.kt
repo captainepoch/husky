@@ -25,13 +25,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-class SplashActivity : AppCompatActivity(), Injectable {
+class SplashActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var accountManager: AccountManager
+    private val accountManager: AccountManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

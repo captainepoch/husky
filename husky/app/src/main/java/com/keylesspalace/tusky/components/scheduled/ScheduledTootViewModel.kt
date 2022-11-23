@@ -24,11 +24,10 @@ import com.keylesspalace.tusky.entity.ScheduledStatus
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
-import javax.inject.Inject
 
-class ScheduledTootViewModel @Inject constructor(
-    val mastodonApi: MastodonApi,
-    val eventHub: EventHub
+class ScheduledTootViewModel(
+    private val mastodonApi: MastodonApi,
+    private val eventHub: EventHub
 ) : RxAwareViewModel() {
 
     private val dataSourceFactory = ScheduledTootDataSourceFactory(mastodonApi, disposables)

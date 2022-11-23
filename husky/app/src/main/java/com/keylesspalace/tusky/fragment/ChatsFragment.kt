@@ -54,7 +54,6 @@ import com.keylesspalace.tusky.appstore.MuteEvent
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Chat
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
 import com.keylesspalace.tusky.interfaces.ChatActionListener
@@ -85,13 +84,12 @@ import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
 import kotlinx.android.synthetic.main.fragment_timeline.statusView
 import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_timeline.topProgressBar
+import org.koin.android.ext.android.inject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class ChatsFragment :
     BaseFragment(),
-    Injectable,
     RefreshableFragment,
     ReselectableFragment,
     ChatActionListener,
@@ -99,23 +97,13 @@ class ChatsFragment :
 
     private val TAG = "ChatsF" // logging tag
     private val LOAD_AT_ONCE = 30
-    private val BROKEN_PAGINATION_IN_BACKEND =
-        true // break pagination until it's not fixed in plemora
-
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var api: MastodonApi
-
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    @Inject
-    lateinit var chatRepo: ChatRepository
-
-    @Inject
-    lateinit var timelineCases: TimelineCases
+    // break pagination until it's not fixed in plemora
+    private val BROKEN_PAGINATION_IN_BACKEND = true
+    private val eventHub: EventHub by inject()
+    private val api: MastodonApi by inject()
+    private val accountManager: AccountManager by inject()
+    private val chatRepo: ChatRepository by inject()
+    private val timelineCases: TimelineCases by inject()
 
     lateinit var adapter: ChatsAdapter
 

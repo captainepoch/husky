@@ -28,31 +28,21 @@ import com.keylesspalace.tusky.MainActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
+import com.keylesspalace.tusky.core.extensions.getNonNullString
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.ThemeUtils
-import com.keylesspalace.tusky.util.getNonNullString
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.toolbar_basic.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 class PreferencesActivity :
     BaseActivity(),
-    SharedPreferences.OnSharedPreferenceChangeListener,
-    HasAndroidInjector {
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
+    private val eventHub: EventHub by inject()
     private var restartActivitiesOnExit: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_preferences)
 
         setSupportActionBar(toolbar)
@@ -94,12 +84,14 @@ class PreferencesActivity :
 
     override fun onResume() {
         super.onResume()
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this)
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this)
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -124,7 +116,8 @@ class PreferencesActivity :
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             "appTheme" -> {
-                val theme = sharedPreferences.getNonNullString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
+                val theme =
+                    sharedPreferences.getNonNullString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
                 Log.d("activeTheme", theme)
                 ThemeUtils.setAppNightMode(theme)
 
@@ -169,8 +162,6 @@ class PreferencesActivity :
             super.onBackPressed()
         }
     }
-
-    override fun androidInjector() = androidInjector
 
     companion object {
 

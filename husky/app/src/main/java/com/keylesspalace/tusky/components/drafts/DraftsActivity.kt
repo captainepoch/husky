@@ -23,7 +23,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,25 +34,19 @@ import com.keylesspalace.tusky.SavedTootActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.databinding.ActivityDraftsBinding
 import com.keylesspalace.tusky.db.DraftEntity
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.HttpException
-import javax.inject.Inject
 
 class DraftsActivity : BaseActivity(), DraftActionListener {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: DraftsViewModel by viewModels { viewModelFactory }
-
     private lateinit var binding: ActivityDraftsBinding
+    private val viewModel: DraftsViewModel by viewModel()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
-
     private var oldDraftsButton: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -29,16 +29,10 @@ import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityStatuslistBinding
 import com.keylesspalace.tusky.fragment.TimelineFragment
 import com.keylesspalace.tusky.fragment.TimelineFragment.Kind
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import javax.inject.Inject
 
-class StatusListActivity : BottomSheetActivity(), HasAndroidInjector {
+class StatusListActivity : BottomSheetActivity() {
 
     private val binding by viewBinding(ActivityStatuslistBinding::inflate)
-
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +67,6 @@ class StatusListActivity : BottomSheetActivity(), HasAndroidInjector {
 
         return super.onOptionsItemSelected(item)
     }
-
-    override fun androidInjector() = dispatchingAndroidInjector
 
     private fun getKind(kind: String?): Kind {
         kind?.let { value ->

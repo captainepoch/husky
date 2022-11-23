@@ -15,29 +15,13 @@
 
 package com.keylesspalace.tusky.di
 
-import android.content.Context
-import com.keylesspalace.tusky.service.SendTootService
 import com.keylesspalace.tusky.service.ServiceClient
 import com.keylesspalace.tusky.service.ServiceClientImpl
-import com.keylesspalace.tusky.service.StreamingService
-import dagger.Module
-import dagger.Provides
-import dagger.android.ContributesAndroidInjector
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-abstract class ServicesModule {
-    @ContributesAndroidInjector
-    abstract fun contributesSendTootService(): SendTootService
-
-    @ContributesAndroidInjector
-    abstract fun contributesStreamingService(): StreamingService
-
-    @Module
-    companion object {
-        @Provides
-        @JvmStatic
-        fun providesServiceClient(context: Context): ServiceClient {
-            return ServiceClientImpl(context)
-        }
-    }
+val servicesModule = module {
+    factory {
+        ServiceClientImpl(get())
+    } bind ServiceClient::class
 }

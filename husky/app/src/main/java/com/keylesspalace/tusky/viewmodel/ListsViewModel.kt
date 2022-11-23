@@ -26,9 +26,9 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.io.IOException
 import java.net.ConnectException
-import javax.inject.Inject
 
-internal class ListsViewModel @Inject constructor(private val api: MastodonApi) : RxAwareViewModel() {
+internal class ListsViewModel(private val api: MastodonApi) : RxAwareViewModel() {
+
     enum class LoadingState {
         INITIAL, LOADING, LOADED, ERROR_NETWORK, ERROR_OTHER
     }

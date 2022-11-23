@@ -19,33 +19,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.keylesspalace.tusky.fragment.TimelineFragment;
-
 import java.util.Collections;
 
-import javax.inject.Inject;
-
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasAndroidInjector;
-
-public class ViewTagActivity extends BottomSheetActivity implements HasAndroidInjector {
+public class ViewTagActivity extends BottomSheetActivity {
 
     private static final String HASHTAG = "hashtag";
 
-    @Inject
-    public DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
-
-    public static Intent getIntent(Context context, String tag){
-        Intent intent = new Intent(context,ViewTagActivity.class);
-        intent.putExtra(HASHTAG,tag);
+    public static Intent getIntent(Context context, String tag) {
+        Intent intent = new Intent(context, ViewTagActivity.class);
+        intent.putExtra(HASHTAG, tag);
         return intent;
     }
 
@@ -60,7 +48,7 @@ public class ViewTagActivity extends BottomSheetActivity implements HasAndroidIn
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
 
-        if (bar != null) {
+        if(bar != null) {
             bar.setTitle(String.format(getString(R.string.title_tag), hashtag));
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowHomeEnabled(true);
@@ -74,7 +62,7 @@ public class ViewTagActivity extends BottomSheetActivity implements HasAndroidIn
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case android.R.id.home: {
                 onBackPressed();
                 return true;
@@ -82,10 +70,4 @@ public class ViewTagActivity extends BottomSheetActivity implements HasAndroidIn
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public AndroidInjector<Object> androidInjector() {
-        return dispatchingAndroidInjector;
-    }
-
 }

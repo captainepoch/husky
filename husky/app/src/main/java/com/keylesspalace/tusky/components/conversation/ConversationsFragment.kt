@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.preference.PreferenceManager
@@ -30,8 +29,6 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.keylesspalace.tusky.AccountActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewTagActivity
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.fragment.SFragment
 import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.interfaces.StatusActionListener
@@ -44,14 +41,11 @@ import kotlinx.android.synthetic.main.fragment_timeline.progressBar
 import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
 import kotlinx.android.synthetic.main.fragment_timeline.statusView
 import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ConversationsFragment : SFragment(), StatusActionListener, Injectable, ReselectableFragment {
+class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFragment {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: ConversationsViewModel by viewModels { viewModelFactory }
+    private val viewModel: ConversationsViewModel by viewModel()
 
     private lateinit var adapter: ConversationAdapter
 
@@ -70,7 +64,7 @@ class ConversationsFragment : SFragment(), StatusActionListener, Injectable, Res
 
         val statusDisplayOptions = StatusDisplayOptions(
             animateAvatars = preferences.getBoolean("animateGifAvatars", false),
-            mediaPreviewEnabled = accountManager.activeAccount?.mediaPreviewEnabled ?: true,
+            mediaPreviewEnabled = accountManager.value.activeAccount?.mediaPreviewEnabled ?: true,
             useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
             showBotOverlay = preferences.getBoolean("showBotOverlay", true),
             useBlurhash = preferences.getBoolean("useBlurhash", true),

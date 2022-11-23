@@ -18,23 +18,15 @@ package com.keylesspalace.tusky;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import com.keylesspalace.tusky.fragment.ViewThreadFragment;
-import com.keylesspalace.tusky.util.LinkHelper;
 
-import javax.inject.Inject;
-
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasAndroidInjector;
-
-public class ViewThreadActivity extends BottomSheetActivity implements HasAndroidInjector {
+public class ViewThreadActivity extends BottomSheetActivity {
 
     public static final int REVEAL_BUTTON_HIDDEN = 1;
     public static final int REVEAL_BUTTON_REVEAL = 2;
@@ -53,9 +45,6 @@ public class ViewThreadActivity extends BottomSheetActivity implements HasAndroi
 
     private int revealButtonState = REVEAL_BUTTON_HIDDEN;
 
-    @Inject
-    public DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
-
     private ViewThreadFragment fragment;
 
     @Override
@@ -66,7 +55,7 @@ public class ViewThreadActivity extends BottomSheetActivity implements HasAndroi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
+        if(actionBar != null) {
             actionBar.setTitle(R.string.title_view_thread);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
@@ -74,7 +63,8 @@ public class ViewThreadActivity extends BottomSheetActivity implements HasAndroi
 
         String id = getIntent().getStringExtra(ID_EXTRA);
 
-        fragment = (ViewThreadFragment)getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG + id);
+        fragment =
+            (ViewThreadFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG + id);
         if(fragment == null) {
             fragment = ViewThreadFragment.newInstance(id);
         }
@@ -89,13 +79,13 @@ public class ViewThreadActivity extends BottomSheetActivity implements HasAndroi
         getMenuInflater().inflate(R.menu.view_thread_toolbar, menu);
         MenuItem menuItem = menu.findItem(R.id.action_reveal);
         menuItem.setVisible(revealButtonState != REVEAL_BUTTON_HIDDEN);
-        menuItem.setIcon(revealButtonState == REVEAL_BUTTON_REVEAL ?
-        R.drawable.ic_eye_24dp : R.drawable.ic_hide_media_24dp);
+        menuItem.setIcon(revealButtonState == REVEAL_BUTTON_REVEAL ? R.drawable.ic_eye_24dp :
+            R.drawable.ic_hide_media_24dp);
         return super.onCreateOptionsMenu(menu);
     }
 
     public void setRevealButtonState(int state) {
-        switch (state) {
+        switch(state) {
             case REVEAL_BUTTON_HIDDEN:
             case REVEAL_BUTTON_REVEAL:
             case REVEAL_BUTTON_HIDE:
@@ -109,7 +99,7 @@ public class ViewThreadActivity extends BottomSheetActivity implements HasAndroi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case android.R.id.home: {
                 onBackPressed();
                 return true;
@@ -121,10 +111,4 @@ public class ViewThreadActivity extends BottomSheetActivity implements HasAndroi
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public AndroidInjector<Object> androidInjector() {
-        return dispatchingAndroidInjector;
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.keylesspalace.tusky.util
+package com.keylesspalace.tusky.core.extensions
 
 import android.content.SharedPreferences
 

@@ -12,9 +12,8 @@ import com.keylesspalace.tusky.util.Listing
 import com.keylesspalace.tusky.util.NetworkState
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ConversationsViewModel @Inject constructor(
+class ConversationsViewModel(
     private val repository: ConversationsRepository,
     private val timelineCases: TimelineCases,
     private val database: AppDatabase,

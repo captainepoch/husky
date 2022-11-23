@@ -198,13 +198,6 @@ dependencies {
     implementation deps.androidx.lifecycle.reactiveStreamsKtx
     implementation deps.androidx.lifecycle.viewmodelKtx
 
-    // Dagger dependencies
-    implementation deps.dagger.dagger
-    implementation deps.dagger.daggerAndroid
-    kapt deps.dagger.daggerCompiler
-    kapt deps.dagger.daggerProcessor
-    implementation deps.dagger.daggerSupport
-
     // Glide dependencies
     implementation deps.glide.glide
     kapt deps.glide.glideCompiler
@@ -217,6 +210,12 @@ dependencies {
     implementation deps.google.flexbox
     implementation deps.google.exoplayer
     implementation deps.google.materialDesign
+
+    // Koin dependencies
+    implementation deps.koin.android
+    implementation deps.koin.core
+    implementation deps.koin.java
+    implementation deps.koin.workManager
 
     // Kotlin dependencies
     implementation deps.kotlin.stdlib
@@ -231,10 +230,6 @@ dependencies {
     implementation deps.rxjava.rxJava
     implementation deps.rxjava.rxKotlin
 
-    // simple-stack dependencies
-    implementation deps.simplestack.ext
-    implementation deps.simplestack.lib
-
     // Square dependencies
     implementation deps.square.retrofit
     implementation deps.square.retrofitAdapterRxJ2
@@ -244,8 +239,6 @@ dependencies {
     implementation deps.square.okhttpBrotli
 
     // Other dependencies
-    //implementation deps.acraMail
-    //implementation deps.acraNotification
     implementation deps.androidImageCropper
     implementation deps.androidSvg
     implementation deps.autodispose

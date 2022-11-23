@@ -132,7 +132,7 @@
       <option name="CLASS_BRACE_STYLE" value="5" />
       <option name="METHOD_BRACE_STYLE" value="5" />
       <option name="LAMBDA_BRACE_STYLE" value="5" />
-      <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
+      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
       <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
       <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />

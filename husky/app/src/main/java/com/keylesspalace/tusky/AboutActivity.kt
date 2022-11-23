@@ -32,10 +32,9 @@ import androidx.annotation.StringRes
 import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityAboutBinding
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.util.CustomURLSpan
 
-class AboutActivity : BottomSheetActivity(), Injectable {
+class AboutActivity : BottomSheetActivity() {
 
     private val binding by viewBinding(ActivityAboutBinding::inflate)
 

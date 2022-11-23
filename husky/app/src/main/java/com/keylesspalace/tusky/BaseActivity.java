@@ -25,7 +25,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -34,26 +33,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.keylesspalace.tusky.adapter.AccountSelectionAdapter;
 import com.keylesspalace.tusky.db.AccountEntity;
 import com.keylesspalace.tusky.db.AccountManager;
-import com.keylesspalace.tusky.di.Injectable;
 import com.keylesspalace.tusky.interfaces.AccountSelectionListener;
 import com.keylesspalace.tusky.interfaces.PermissionRequester;
 import com.keylesspalace.tusky.util.ThemeUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import kotlin.Lazy;
+import static org.koin.java.KoinJavaComponent.inject;
 
-import javax.inject.Inject;
+public abstract class BaseActivity extends AppCompatActivity {
 
-public abstract class BaseActivity extends AppCompatActivity implements Injectable {
-
-    @Inject
-    public AccountManager accountManager;
+    public Lazy<AccountManager> accountManager = inject(AccountManager.class);
 
     private static final int REQUESTER_NONE = Integer.MAX_VALUE;
     private HashMap<Integer, PermissionRequester> requesters;
@@ -69,7 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
          * views are created. */
         String theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT);
         Log.d("activeTheme", theme);
-        if (theme.equals("black")) {
+        if(theme.equals("black")) {
             setTheme(R.style.TuskyBlackTheme);
         }
 
@@ -78,7 +73,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
         Bitmap appIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         int recentsBackgroundColor = ThemeUtils.getColor(this, R.attr.colorSurface);
 
-        setTaskDescription(new ActivityManager.TaskDescription(appName, appIcon, recentsBackgroundColor));
+        setTaskDescription(
+            new ActivityManager.TaskDescription(appName, appIcon, recentsBackgroundColor));
 
         int style = textStyle(preferences.getString("statusTextSize", "medium"));
         getTheme().applyStyle(style, false);
@@ -101,7 +97,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
 
     private static int textStyle(String name) {
         int style;
-        switch (name) {
+        switch(name) {
             case "smallest":
                 style = R.style.TextSizeSmallest;
                 break;
@@ -138,8 +134,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
     }
 
     protected void redirectIfNotLoggedIn() {
-        AccountEntity account = accountManager.getActiveAccount();
-        if (account == null) {
+        AccountEntity account = accountManager.getValue().getActiveAccount();
+        if(account == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivityWithSlideInAnimation(intent);
@@ -147,26 +143,33 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
         }
     }
 
-    protected void showErrorDialog(View anyView, @StringRes int descriptionId, @StringRes int actionId, View.OnClickListener listener) {
-        if (anyView != null) {
+    protected void showErrorDialog(View anyView,
+        @StringRes int descriptionId,
+        @StringRes int actionId,
+        View.OnClickListener listener)
+    {
+        if(anyView != null) {
             Snackbar bar = Snackbar.make(anyView, getString(descriptionId), Snackbar.LENGTH_SHORT);
             bar.setAction(actionId, listener);
             bar.show();
         }
     }
 
-    public void showAccountChooserDialog(CharSequence dialogTitle, boolean showActiveAccount, AccountSelectionListener listener) {
-        List<AccountEntity> accounts = accountManager.getAllAccountsOrderedByActive();
-        AccountEntity activeAccount = accountManager.getActiveAccount();
+    public void showAccountChooserDialog(CharSequence dialogTitle,
+        boolean showActiveAccount,
+        AccountSelectionListener listener)
+    {
+        List<AccountEntity> accounts = accountManager.getValue().getAllAccountsOrderedByActive();
+        AccountEntity activeAccount = accountManager.getValue().getActiveAccount();
 
         switch(accounts.size()) {
             case 1:
                 listener.onAccountSelected(activeAccount);
                 return;
             case 2:
-                if (!showActiveAccount) {
-                    for (AccountEntity account : accounts) {
-                        if (activeAccount != account) {
+                if(!showActiveAccount) {
+                    for(AccountEntity account : accounts) {
+                        if(activeAccount != account) {
                             listener.onAccountSelected(account);
                             return;
                         }
@@ -175,21 +178,22 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
                 break;
         }
 
-        if (!showActiveAccount && activeAccount != null) {
+        if(!showActiveAccount && activeAccount != null) {
             accounts.remove(activeAccount);
         }
         AccountSelectionAdapter adapter = new AccountSelectionAdapter(this);
         adapter.addAll(accounts);
 
-        new AlertDialog.Builder(this)
-                .setTitle(dialogTitle)
-                .setAdapter(adapter, (dialogInterface, index) -> listener.onAccountSelected(accounts.get(index)))
-                .show();
+        new AlertDialog.Builder(this).setTitle(dialogTitle).setAdapter(adapter,
+            (dialogInterface, index) -> listener.onAccountSelected(accounts.get(index))).show();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requesters.containsKey(requestCode)) {
+    public void onRequestPermissionsResult(int requestCode,
+        @NonNull String[] permissions,
+        @NonNull int[] grantResults)
+    {
+        if(requesters.containsKey(requestCode)) {
             PermissionRequester requester = requesters.remove(requestCode);
             requester.onRequestPermissionsResult(permissions, grantResults);
         }
@@ -197,21 +201,23 @@ public abstract class BaseActivity extends AppCompatActivity implements Injectab
 
     public void requestPermissions(String[] permissions, PermissionRequester requester) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for(String permission: permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+        for(String permission : permissions) {
+            if(ContextCompat.checkSelfPermission(this, permission) !=
+               PackageManager.PERMISSION_GRANTED) {
                 permissionsToRequest.add(permission);
             }
         }
-        if (permissionsToRequest.isEmpty()) {
+        if(permissionsToRequest.isEmpty()) {
             int[] permissionsAlreadyGranted = new int[permissions.length];
-            for (int i = 0; i < permissionsAlreadyGranted.length; ++i)
+            for(int i = 0; i < permissionsAlreadyGranted.length; ++i) {
                 permissionsAlreadyGranted[i] = PackageManager.PERMISSION_GRANTED;
+            }
             requester.onRequestPermissionsResult(permissions, permissionsAlreadyGranted);
             return;
         }
 
         int newKey = requester == null ? REQUESTER_NONE : requesters.size();
-        if (newKey != REQUESTER_NONE) {
+        if(newKey != REQUESTER_NONE) {
             requesters.put(newKey, requester);
         }
         String[] permissionsCopy = new String[permissionsToRequest.size()];

@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.interfaces.RefreshableFragment
@@ -42,13 +41,17 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.SquareImageView
 import com.keylesspalace.tusky.viewdata.AttachmentViewData
-import kotlinx.android.synthetic.main.fragment_timeline.*
+import kotlinx.android.synthetic.main.fragment_timeline.progressBar
+import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
+import kotlinx.android.synthetic.main.fragment_timeline.statusView
+import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_timeline.topProgressBar
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.util.Random
-import javax.inject.Inject
 
 /**
  * Created by charlag on 26/10/2017.
@@ -56,7 +59,7 @@ import javax.inject.Inject
  * Fragment with multiple columns of media previews for the specified account.
  */
 
-class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
+class AccountMediaFragment : BaseFragment(), RefreshableFragment {
 
     companion object {
         @JvmStatic
@@ -81,8 +84,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment, Injectable {
     private var needToRefresh = false
     private var filterMuted = false
 
-    @Inject
-    lateinit var api: MastodonApi
+    private val api: MastodonApi by inject()
 
     private val adapter = MediaGridAdapter()
     private var currentCall: Call<List<Status>>? = null

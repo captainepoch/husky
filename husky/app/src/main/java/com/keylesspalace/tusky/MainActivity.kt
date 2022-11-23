@@ -121,31 +121,18 @@ import com.mikepenz.materialdrawer.util.removeItems
 import com.mikepenz.materialdrawer.util.updateBadge
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.uber.autodispose.android.lifecycle.autoDispose
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.koin.android.ext.android.inject
 import timber.log.Timber
-import javax.inject.Inject
 
-class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInjector {
+class MainActivity : BottomSheetActivity(), ActionButtonActivity {
 
     private val binding by viewBinding(ActivityMainBinding::inflate)
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var cacheUpdater: CacheUpdater
-
-    @Inject
-    lateinit var conversationRepository: ConversationsRepository
-
-    @Inject
-    lateinit var appDb: AppDatabase
+    private val eventHub: EventHub by inject()
+    private val cacheUpdater: CacheUpdater by inject()
+    private val conversationRepository: ConversationsRepository by inject()
+    private val appDb: AppDatabase by inject()
 
     private lateinit var header: AccountHeaderView
 
@@ -170,7 +157,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         super.onCreate(savedInstanceState)
 
         // Will be redirected to LoginActivity by BaseActivity
-        val activeAccount = accountManager.activeAccount ?: return
+        val activeAccount = accountManager.value.activeAccount ?: return
 
         var showNotificationTab = false
         if (intent != null) {
@@ -188,7 +175,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
             val accountRequested = accountId != -1L
             if (accountRequested && accountId != activeAccount.id) {
-                accountManager.setActiveAccount(accountId)
+                accountManager.value.setActiveAccount(accountId)
             }
 
             if (canHandleMimeType(intent.type)) {
@@ -305,8 +292,8 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             disablePushNotifications()
         }
 
-        if (NotificationHelper.areNotificationsEnabled(this, accountManager)) {
-            if (accountManager.areNotificationsStreamingEnabled()) {
+        if (NotificationHelper.areNotificationsEnabled(this, accountManager.value)) {
+            if (accountManager.value.areNotificationsStreamingEnabled()) {
                 StreamingService.startStreaming(this)
                 NotificationHelper.disablePullNotifications(this)
             } else {
@@ -326,7 +313,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
     override fun onResume() {
         super.onResume()
-        NotificationHelper.clearNotificationsForActiveAccount(this, accountManager)
+        NotificationHelper.clearNotificationsForActiveAccount(this, accountManager.value)
     }
 
     override fun onBackPressed() {
@@ -630,7 +617,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             binding.tabLayout
         }
 
-        val tabs = accountManager.activeAccount!!.tabPreferences
+        val tabs = accountManager.value.activeAccount!!.tabPreferences
 
         val adapter = MainPagerAdapter(tabs, this)
         binding.viewPager.adapter = adapter
@@ -673,7 +660,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                 if (tab.position == notificationTabPosition) {
                     NotificationHelper.clearNotificationsForActiveAccount(
                         this@MainActivity,
-                        accountManager
+                        accountManager.value
                     )
                 }
 
@@ -700,7 +687,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     private fun handleProfileClick(profile: IProfile, current: Boolean): Boolean {
-        val activeAccount = accountManager.activeAccount
+        val activeAccount = accountManager.value.activeAccount
 
         // Open profile when active image was clicked
         if (current && activeAccount != null) {
@@ -721,7 +708,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     private fun changeAccount(newSelectedId: Long, forward: Intent?) {
         cacheUpdater.stop()
         SFragment.flushFilters()
-        accountManager.setActiveAccount(newSelectedId)
+        accountManager.value.setActiveAccount(newSelectedId)
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         if (forward != null) {
@@ -735,7 +722,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     private fun logout() {
-        accountManager.activeAccount?.let { activeAccount ->
+        accountManager.value.activeAccount?.let { activeAccount ->
             AlertDialog.Builder(this)
                 .setTitle(R.string.action_logout)
                 .setMessage(getString(R.string.action_logout_confirm, activeAccount.fullName))
@@ -744,7 +731,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
                     cacheUpdater.clearForUser(activeAccount.id)
                     conversationRepository.deleteCacheForAccount(activeAccount.id)
                     removeShortcut(this, activeAccount)
-                    val newAccount = accountManager.logActiveAccountOut()
+                    val newAccount = accountManager.value.logActiveAccountOut()
                     initPullNotifications()
                     val intent = if (newAccount == null) {
                         LoginActivity.getIntent(this, false)
@@ -780,9 +767,9 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
         loadDrawerAvatar(me.avatar, false)
 
-        accountManager.updateActiveAccount(me)
+        accountManager.value.updateActiveAccount(me)
         NotificationHelper.createNotificationChannelsForAccount(
-            accountManager.activeAccount!!,
+            accountManager.value.activeAccount!!,
             this
         )
 
@@ -805,7 +792,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
             binding.mainDrawer.removeItems(DRAWER_ITEM_FOLLOW_REQUESTS)
         }
         updateProfiles()
-        updateShortcut(this, accountManager.activeAccount!!)
+        updateShortcut(this, accountManager.value.activeAccount!!)
     }
 
     @SuppressLint("CheckResult")
@@ -865,7 +852,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
 
     private fun updateProfiles() {
         val profiles: MutableList<IProfile> =
-            accountManager.getAllAccountsOrderedByActive().map { acc ->
+            accountManager.value.getAllAccountsOrderedByActive().map { acc ->
                 val emojifiedName =
                     EmojiCompat.get().process(acc.displayName.emojify(acc.emojis, header, true))
 
@@ -888,7 +875,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
         }
         header.clear()
         header.profiles = profiles
-        header.setActiveProfile(accountManager.activeAccount!!.id)
+        header.setActiveProfile(accountManager.value.activeAccount!!.id)
     }
 
     private fun draftWarning() {
@@ -914,8 +901,6 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity, HasAndroidInje
     }
 
     override fun getActionButton(): FloatingActionButton = binding.composeButton
-
-    override fun androidInjector() = androidInjector
 
     companion object {
         private const val DRAWER_ITEM_ADD_ACCOUNT: Long = -13

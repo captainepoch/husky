@@ -13,32 +13,40 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.load.model.stream.HttpGlideUrlLoader
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.signature.ObjectKey
-import com.keylesspalace.tusky.HuskyApplication
 import com.keylesspalace.tusky.db.AccountManager
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.io.File
 import java.io.InputStream
-import javax.inject.Inject
 
 @GlideModule
-class OmittedDomainAppModule : AppGlideModule() {
-    @Inject
-    lateinit var accountManager: AccountManager
+class OmittedDomainAppModule : AppGlideModule(), KoinComponent {
+
+    private val accountManager: AccountManager by inject()
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        (context.applicationContext as HuskyApplication).androidInjector.inject(this)
-
-        registry.append(String::class.java, InputStream::class.java, OmittedDomainLoaderFactory(accountManager))
+        registry.append(
+            String::class.java,
+            InputStream::class.java,
+            OmittedDomainLoaderFactory(accountManager)
+        )
     }
 }
 
 class OmittedDomainLoaderFactory(val accountManager: AccountManager) : ModelLoaderFactory<String, InputStream> {
     override fun teardown() = Unit
 
-    override fun build(factory: MultiModelLoaderFactory): ModelLoader<String, InputStream> = OmittedDomainLoader(accountManager)
+    override fun build(factory: MultiModelLoaderFactory): ModelLoader<String, InputStream> =
+        OmittedDomainLoader(accountManager)
 }
 
 class OmittedDomainLoader(val accountManager: AccountManager) : ModelLoader<String, InputStream> {
-    override fun buildLoadData(model: String, width: Int, height: Int, options: Options): ModelLoader.LoadData<InputStream>? {
+    override fun buildLoadData(
+        model: String,
+        width: Int,
+        height: Int,
+        options: Options
+    ): ModelLoader.LoadData<InputStream> {
         val trueUrl = if (accountManager.activeAccount != null)
             "https://" + accountManager.activeAccount!!.domain + model
         else model

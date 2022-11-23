@@ -36,22 +36,17 @@ import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import okhttp3.ResponseBody
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import javax.inject.Inject
 
 class FiltersActivity : BaseActivity() {
 
-    @Inject
-    lateinit var api: MastodonApi
-
-    @Inject
-    lateinit var eventHub: EventHub
-
+    private val api: MastodonApi by inject()
+    private val eventHub: EventHub by inject()
     private val binding by viewBinding(ActivityFiltersBinding::inflate)
-
     private lateinit var context: String
     private lateinit var filters: MutableList<Filter>
 

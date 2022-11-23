@@ -26,11 +26,10 @@ import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.withoutFirstWhich
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
 
 data class State(val accounts: Either<Throwable, List<Account>>, val searchResult: List<Account>?)
 
-class AccountsInListViewModel @Inject constructor(private val api: MastodonApi) : RxAwareViewModel() {
+class AccountsInListViewModel(private val api: MastodonApi) : RxAwareViewModel() {
 
     val state: Observable<State> get() = _state
     private val _state = BehaviorSubject.createDefault(State(Right(listOf()), null))

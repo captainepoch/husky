@@ -35,12 +35,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
 
-class DraftHelper @Inject constructor(
-    val context: Context,
-    db: AppDatabase
-) {
+class DraftHelper(private val context: Context, private val db: AppDatabase) {
 
     private val draftDao = db.draftDao()
 
@@ -59,7 +55,6 @@ class DraftHelper @Inject constructor(
         failedToSend: Boolean
     ): Completable {
         return Single.fromCallable {
-
             val draftDirectory = context.getExternalFilesDir("Tusky")
 
             if (draftDirectory == null || !(draftDirectory.exists())) {

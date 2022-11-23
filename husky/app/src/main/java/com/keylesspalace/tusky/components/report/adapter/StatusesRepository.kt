@@ -23,18 +23,24 @@ import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.BiListing
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.Executors
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class StatusesRepository @Inject constructor(private val mastodonApi: MastodonApi) {
+class StatusesRepository(private val mastodonApi: MastodonApi) {
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    fun getStatuses(accountId: String, initialStatus: String?, disposables: CompositeDisposable, pageSize: Int = 20): BiListing<Status> {
+    fun getStatuses(
+        accountId: String,
+        initialStatus: String?,
+        disposables: CompositeDisposable,
+        pageSize: Int = 20
+    ): BiListing<Status> {
         val sourceFactory = StatusesDataSourceFactory(accountId, mastodonApi, disposables, executor)
         val livePagedList = sourceFactory.toLiveData(
-            config = Config(pageSize = pageSize, enablePlaceholders = false, initialLoadSizeHint = pageSize * 2),
+            config = Config(
+                pageSize = pageSize,
+                enablePlaceholders = false,
+                initialLoadSizeHint = pageSize * 2
+            ),
             fetchExecutor = executor, initialLoadKey = initialStatus
         )
         return BiListing(
@@ -54,7 +60,6 @@ class StatusesRepository @Inject constructor(private val mastodonApi: MastodonAp
             refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
                 it.initialLoad
             }
-
         )
     }
 }

@@ -29,8 +29,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.R.string
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.util.Either
 import com.keylesspalace.tusky.util.emojify
@@ -52,12 +50,12 @@ import kotlinx.android.synthetic.main.item_follow_request.avatar
 import kotlinx.android.synthetic.main.item_follow_request.displayNameTextView
 import kotlinx.android.synthetic.main.item_follow_request.rejectButton
 import kotlinx.android.synthetic.main.item_follow_request.usernameTextView
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
-import javax.inject.Inject
 
 private typealias AccountInfo = Pair<Account, Boolean>
 
-class AccountsInListFragment : DialogFragment(), Injectable {
+class AccountsInListFragment : DialogFragment() {
 
     companion object {
         private const val LIST_ID_ARG = "listId"
@@ -73,9 +71,7 @@ class AccountsInListFragment : DialogFragment(), Injectable {
         }
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-    lateinit var viewModel: AccountsInListViewModel
+    private val viewModel: AccountsInListViewModel by viewModel()
 
     private lateinit var listId: String
     private lateinit var listName: String
@@ -91,7 +87,6 @@ class AccountsInListFragment : DialogFragment(), Injectable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.TuskyDialogFragmentStyle)
-        viewModel = viewModelFactory.create(AccountsInListViewModel::class.java)
         val args = arguments!!
         listId = args.getString(LIST_ID_ARG)!!
         listName = args.getString(LIST_NAME_ARG)!!

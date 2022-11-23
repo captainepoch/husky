@@ -21,17 +21,15 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.settings.makePreferenceScreen
 import com.keylesspalace.tusky.settings.preferenceCategory
 import com.keylesspalace.tusky.settings.switchPreference
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-class NotificationPreferencesFragment : PreferenceFragmentCompat(), Injectable {
+class NotificationPreferencesFragment : PreferenceFragmentCompat() {
 
-    @Inject
-    lateinit var accountManager: AccountManager
+    private val accountManager: AccountManager by inject()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activeAccount = accountManager.activeAccount ?: return

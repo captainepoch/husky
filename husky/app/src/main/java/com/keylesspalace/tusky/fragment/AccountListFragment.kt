@@ -35,7 +35,6 @@ import com.keylesspalace.tusky.adapter.BlocksAdapter
 import com.keylesspalace.tusky.adapter.FollowAdapter
 import com.keylesspalace.tusky.adapter.FollowRequestsAdapter
 import com.keylesspalace.tusky.adapter.MutesAdapter
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.EmojiReaction
 import com.keylesspalace.tusky.entity.Relationship
@@ -51,17 +50,15 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_account_list.messageView
 import kotlinx.android.synthetic.main.fragment_account_list.recyclerView
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import javax.inject.Inject
 
-class AccountListFragment : BaseFragment(), AccountActionListener, Injectable {
+class AccountListFragment : BaseFragment(), AccountActionListener {
 
-    @Inject
-    lateinit var api: MastodonApi
-
+    private val api: MastodonApi by inject()
     private lateinit var type: Type
     private var id: String? = null
     private var emojiReaction: String? = null

@@ -55,14 +55,13 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.OutputStream
-import javax.inject.Inject
 
 private const val HEADER_FILE_NAME = "header.png"
 private const val AVATAR_FILE_NAME = "avatar.png"
 
 private const val TAG = "EditProfileViewModel"
 
-class EditProfileViewModel @Inject constructor(
+class EditProfileViewModel(
     private val mastodonApi: MastodonApi,
     private val eventHub: EventHub
 ) : ViewModel() {

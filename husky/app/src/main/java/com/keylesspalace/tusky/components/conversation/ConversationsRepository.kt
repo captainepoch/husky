@@ -17,14 +17,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.Executors
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class ConversationsRepository @Inject constructor(
-    val mastodonApi: MastodonApi,
-    val db: AppDatabase
-) {
+class ConversationsRepository(private val mastodonApi: MastodonApi, private val db: AppDatabase) {
 
     private val ioExecutor = Executors.newSingleThreadExecutor()
 

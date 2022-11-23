@@ -74,7 +74,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_search.searchRecyclerView
 import timber.log.Timber
 
-class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concrete>>(), StatusActionListener {
+class SearchStatusesFragment :
+    SearchFragment<Pair<Status, StatusViewData.Concrete>>(),
+    StatusActionListener {
 
     override val networkStateRefresh: LiveData<NetworkState>
         get() = viewModel.networkStateStatusRefresh
@@ -100,7 +102,12 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
             hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
         )
 
-        searchRecyclerView.addItemDecoration(DividerItemDecoration(searchRecyclerView.context, DividerItemDecoration.VERTICAL))
+        searchRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                searchRecyclerView.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         searchRecyclerView.layoutManager = LinearLayoutManager(searchRecyclerView.context)
         return SearchStatusesAdapter(statusDisplayOptions, this)
     }
@@ -266,7 +273,8 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
             menu.findItem(R.id.status_open_as).isVisible = !statusUrl.isNullOrBlank()
             when (status.visibility) {
                 Status.Visibility.PUBLIC, Status.Visibility.UNLISTED -> {
-                    val textId = getString(if (status.isPinned()) R.string.unpin_action else R.string.pin_action)
+                    val textId =
+                        getString(if (status.isPinned()) R.string.unpin_action else R.string.pin_action)
                     menu.add(0, R.id.pin, 1, textId)
                 }
                 Status.Visibility.PRIVATE -> {
@@ -285,7 +293,8 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
             0, 1 -> openAsItem.isVisible = false
             2 -> for (account in accounts) {
                 if (account !== viewModel.activeAccount) {
-                    openAsTitle = String.format(getString(R.string.action_open_as), account.fullName)
+                    openAsTitle =
+                        String.format(getString(R.string.action_open_as), account.fullName)
                     break
                 }
             }
@@ -306,7 +315,12 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                         statusToShare.content.toString()
                     sendIntent.putExtra(Intent.EXTRA_TEXT, stringToShare)
                     sendIntent.type = "text/plain"
-                    startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_status_content_to)))
+                    startActivity(
+                        Intent.createChooser(
+                            sendIntent,
+                            resources.getText(R.string.send_status_content_to)
+                        )
+                    )
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_share_link -> {
@@ -314,11 +328,17 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, statusUrl)
                     sendIntent.type = "text/plain"
-                    startActivity(Intent.createChooser(sendIntent, resources.getText(R.string.send_status_link_to)))
+                    startActivity(
+                        Intent.createChooser(
+                            sendIntent,
+                            resources.getText(R.string.send_status_link_to)
+                        )
+                    )
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_copy_link -> {
-                    val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipboard =
+                        requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     clipboard.setPrimaryClip(ClipData.newPlainText(null, statusUrl))
                     return@setOnMenuItemClickListener true
                 }
@@ -426,7 +446,8 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
             val uri = Uri.parse(url)
             val filename = uri.lastPathSegment
 
-            val downloadManager = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val downloadManager =
+                requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             val request = DownloadManager.Request(uri)
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
             downloadManager.enqueue(request)
@@ -439,13 +460,24 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 downloadAllMedia(status)
             } else {
-                Toast.makeText(context, R.string.error_media_download_permission, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    R.string.error_media_download_permission,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     private fun openReportPage(accountId: String, accountUsername: String, statusId: String) {
-        startActivity(ReportActivity.getIntent(requireContext(), accountId, accountUsername, statusId))
+        startActivity(
+            ReportActivity.getIntent(
+                requireContext(),
+                accountId,
+                accountUsername,
+                statusId
+            )
+        )
     }
 
     private fun showConfirmDeleteDialog(id: String, position: Int) {
@@ -493,7 +525,8 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                             startActivity(intent)
                         }, { error ->
                             Timber.e(error, "Error deleting status")
-                            Toast.makeText(context, R.string.error_generic, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, R.string.error_generic, Toast.LENGTH_SHORT)
+                                .show()
                         })
                 }
                 .setNegativeButton(android.R.string.cancel, null)
@@ -524,7 +557,12 @@ class SearchStatusesFragment : SearchFragment<Pair<Status, StatusViewData.Concre
                     return@setOnMenuItemClickListener true
                 }
                 R.id.emoji_reacted_by -> {
-                    val intent = newIntent(context, AccountListActivity.Type.REACTED, statusId, reaction.name)
+                    val intent = newIntent(
+                        context,
+                        AccountListActivity.Type.REACTED,
+                        statusId,
+                        reaction.name
+                    )
                     (requireActivity() as BaseActivity).startActivityWithSlideInAnimation(intent)
                     return@setOnMenuItemClickListener true
                 }

@@ -37,25 +37,24 @@ import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.service.SendTootService
 import com.keylesspalace.tusky.service.TootToSend
 import com.keylesspalace.tusky.util.randomAlphanumericString
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 private const val TAG = "SendStatusBR"
 
-class SendStatusBroadcastReceiver : BroadcastReceiver() {
+class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
 
-    @Inject
-    lateinit var accountManager: AccountManager
+    private val accountManager: AccountManager by inject()
 
     override fun onReceive(context: Context, intent: Intent) {
-        AndroidInjection.inject(this, context)
-
         val notificationId = intent.getIntExtra(NotificationHelper.KEY_NOTIFICATION_ID, -1)
         val senderId = intent.getLongExtra(NotificationHelper.KEY_SENDER_ACCOUNT_ID, -1)
-        val senderIdentifier = intent.getStringExtra(NotificationHelper.KEY_SENDER_ACCOUNT_IDENTIFIER)
+        val senderIdentifier =
+            intent.getStringExtra(NotificationHelper.KEY_SENDER_ACCOUNT_IDENTIFIER)
         val senderFullName = intent.getStringExtra(NotificationHelper.KEY_SENDER_ACCOUNT_FULL_NAME)
         val citedStatusId = intent.getStringExtra(NotificationHelper.KEY_CITED_STATUS_ID)
-        val visibility = intent.getSerializableExtra(NotificationHelper.KEY_VISIBILITY) as Status.Visibility
+        val visibility =
+            intent.getSerializableExtra(NotificationHelper.KEY_VISIBILITY) as Status.Visibility
         val spoiler = intent.getStringExtra(NotificationHelper.KEY_SPOILER) ?: ""
         val mentions = intent.getStringArrayExtra(NotificationHelper.KEY_MENTIONS) ?: emptyArray()
         val citedText = intent.getStringExtra(NotificationHelper.KEY_CITED_TEXT)
@@ -72,7 +71,10 @@ class SendStatusBroadcastReceiver : BroadcastReceiver() {
             if (account == null) {
                 Log.w(TAG, "Account \"$senderId\" not found in database. Aborting quick reply!")
 
-                val builder = NotificationCompat.Builder(context, NotificationHelper.CHANNEL_MENTION + senderIdentifier)
+                val builder = NotificationCompat.Builder(
+                    context,
+                    NotificationHelper.CHANNEL_MENTION + senderIdentifier
+                )
                     .setSmallIcon(R.drawable.ic_notify)
                     .setColor(ContextCompat.getColor(context, R.color.tusky_blue))
                     .setGroup(senderFullName)
@@ -117,7 +119,10 @@ class SendStatusBroadcastReceiver : BroadcastReceiver() {
 
                 context.startService(sendIntent)
 
-                val builder = NotificationCompat.Builder(context, NotificationHelper.CHANNEL_MENTION + senderIdentifier)
+                val builder = NotificationCompat.Builder(
+                    context,
+                    NotificationHelper.CHANNEL_MENTION + senderIdentifier
+                )
                     .setSmallIcon(R.drawable.ic_notify)
                     .setColor(ContextCompat.getColor(context, (R.color.tusky_blue)))
                     .setGroup(senderFullName)
@@ -134,7 +139,6 @@ class SendStatusBroadcastReceiver : BroadcastReceiver() {
                 notificationManager.notify(notificationId, builder.build())
             }
         } else if (intent.action == NotificationHelper.COMPOSE_ACTION) {
-
             context.sendBroadcast(Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 
             notificationManager.cancel(notificationId)

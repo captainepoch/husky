@@ -38,7 +38,6 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.arch.core.util.Function
@@ -89,8 +88,6 @@ import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
-import com.keylesspalace.tusky.di.Injectable
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Chat
 import com.keylesspalace.tusky.entity.Emoji
@@ -144,15 +141,15 @@ import kotlinx.android.synthetic.main.activity_chat.stickerButton
 import kotlinx.android.synthetic.main.activity_chat.stickerKeyboard
 import kotlinx.android.synthetic.main.activity_chat.textAttachment
 import kotlinx.android.synthetic.main.toolbar_basic.toolbar
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class ChatActivity :
     BottomSheetActivity(),
-    Injectable,
     ChatActionListener,
     ComposeAutoCompleteAdapter.AutocompletionProvider,
     EmojiKeyboard.OnEmojiSelectedListener,
@@ -160,29 +157,15 @@ class ChatActivity :
     InputConnectionCompat.OnCommitContentListener {
 
     private val LOAD_AT_ONCE = 30
-
-    @Inject
-    lateinit var eventHub: EventHub
-
-    @Inject
-    lateinit var api: MastodonApi
-
-    @Inject
-    lateinit var chatsRepo: ChatRepository
-
-    @Inject
-    lateinit var serviceClient: ServiceClient
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    @VisibleForTesting
-    val viewModel: ChatViewModel by viewModels { viewModelFactory }
+    private val eventHub: EventHub by inject()
+    private val api: MastodonApi by inject()
+    private val chatsRepo: ChatRepository by inject()
+    private val serviceClient: ServiceClient by inject()
+    val viewModel: ChatViewModel by viewModel()
+    private lateinit var adapter: ChatMessagesAdapter
 
     @VisibleForTesting
     var maximumTootCharacters = DEFAULT_CHARACTER_LIMIT
-
-    lateinit var adapter: ChatMessagesAdapter
 
     private val msgs =
         PairedList<ChatMesssageOrPlaceholder, ChatMessageViewData?>(
@@ -246,7 +229,9 @@ class ChatActivity :
             oldItem: ChatMessageViewData,
             newItem: ChatMessageViewData
         ): Boolean {
-            return false // Items are different always. It allows to refresh timestamp on every view holder update
+            // Items are different always. It allows to refresh timestamp on every view
+            // holder update
+            return false
         }
 
         override fun getChangePayload(
@@ -287,7 +272,7 @@ class ChatActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (accountManager.activeAccount == null) {
+        if (accountManager.value.activeAccount == null) {
             throw Exception("No active account!")
         }
 
@@ -364,7 +349,8 @@ class ChatActivity :
     }
 
     private fun setupChat() {
-        adapter = ChatMessagesAdapter(dataSource, this, accountManager.activeAccount!!.accountId)
+        adapter =
+            ChatMessagesAdapter(dataSource, this, accountManager.value.activeAccount!!.accountId)
 
         // TODO: a11y
         recycler.setHasFixedSize(true)
@@ -638,7 +624,7 @@ class ChatActivity :
                 editText.text.toString(),
                 media?.id,
                 media?.uri?.toString(),
-                accountManager.activeAccount!!.id,
+                accountManager.value.activeAccount!!.id,
                 this.chatId,
                 0
             )
@@ -667,7 +653,7 @@ class ChatActivity :
             if (it.itemCount == 0) {
                 val errorMessage = getString(
                     R.string.error_no_custom_emojis,
-                    accountManager.activeAccount!!.domain
+                    accountManager.value.activeAccount!!.domain
                 )
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             } else {

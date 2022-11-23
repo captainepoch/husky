@@ -27,16 +27,10 @@ import android.view.MenuItem
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityAccountListBinding
 import com.keylesspalace.tusky.fragment.AccountListFragment
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import javax.inject.Inject
 
-class AccountListActivity : BaseActivity(), HasAndroidInjector {
+class AccountListActivity : BaseActivity() {
 
     private val binding by viewBinding(ActivityAccountListBinding::inflate)
-
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     enum class Type {
         FOLLOWS,
@@ -93,8 +87,6 @@ class AccountListActivity : BaseActivity(), HasAndroidInjector {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun androidInjector() = dispatchingAndroidInjector
 
     companion object {
         private const val EXTRA_TYPE = "type"

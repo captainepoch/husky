@@ -36,7 +36,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.appcompat.app.AlertDialog
@@ -61,7 +60,6 @@ import com.keylesspalace.tusky.components.chat.ChatActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.report.ReportActivity
 import com.keylesspalace.tusky.core.extensions.DefaultTextWatcher
-import com.keylesspalace.tusky.di.ViewModelFactory
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Relationship
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
@@ -82,8 +80,6 @@ import com.keylesspalace.tusky.view.showMuteAccountDialog
 import com.keylesspalace.tusky.viewmodel.AccountViewModel
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_account.accountAdminTextView
 import kotlinx.android.synthetic.main.activity_account.accountAppBarLayout
@@ -123,23 +119,16 @@ import kotlinx.android.synthetic.main.view_account_moved.accountMovedAvatar
 import kotlinx.android.synthetic.main.view_account_moved.accountMovedDisplayName
 import kotlinx.android.synthetic.main.view_account_moved.accountMovedText
 import kotlinx.android.synthetic.main.view_account_moved.accountMovedUsername
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
-import javax.inject.Inject
 import kotlin.math.abs
 
 class AccountActivity :
     BottomSheetActivity(),
     ActionButtonActivity,
-    HasAndroidInjector,
     LinkListener {
 
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: AccountViewModel by viewModels { viewModelFactory }
+    private val viewModel: AccountViewModel by viewModel()
 
     private val accountFieldAdapter = AccountFieldAdapter(this)
 
@@ -1071,8 +1060,6 @@ class AccountActivity :
     override fun onActionButtonHidden() {
         hideFabMenu()
     }
-
-    override fun androidInjector() = dispatchingAndroidInjector
 
     companion object {
 

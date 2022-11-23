@@ -20,24 +20,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import com.keylesspalace.tusky.util.IOUtils;
-
+import static com.keylesspalace.tusky.util.MediaUtilsKt.calculateInSampleSize;
+import static com.keylesspalace.tusky.util.MediaUtilsKt.getImageOrientation;
+import static com.keylesspalace.tusky.util.MediaUtilsKt.reorientBitmap;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.keylesspalace.tusky.util.MediaUtilsKt.calculateInSampleSize;
-import static com.keylesspalace.tusky.util.MediaUtilsKt.getImageOrientation;
-import static com.keylesspalace.tusky.util.MediaUtilsKt.reorientBitmap;
-
 /**
  * Reduces the file size of images to fit under a given limit by resizing them, maintaining both
  * aspect ratio and orientation.
  */
 public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
+
     private int sizeLimit;
     private ContentResolver contentResolver;
     private Listener listener;
@@ -49,7 +47,9 @@ public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
      * @param tempFile        the file where the result will be stored
      * @param listener        to whom the results are given
      */
-    public DownsizeImageTask(int sizeLimit, ContentResolver contentResolver, File tempFile, Listener listener) {
+    public DownsizeImageTask(int sizeLimit, ContentResolver contentResolver, File tempFile,
+        Listener listener)
+    {
         this.sizeLimit = sizeLimit;
         this.contentResolver = contentResolver;
         this.tempFile = tempFile;
@@ -59,7 +59,7 @@ public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Uri... uris) {
         boolean result = DownsizeImageTask.resize(uris, sizeLimit, contentResolver, tempFile);
-        if (isCancelled()) {
+        if(isCancelled()) {
             return false;
         }
         return result;
@@ -67,7 +67,7 @@ public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean successful) {
-        if (successful) {
+        if(successful) {
             listener.onSuccess(tempFile);
         } else {
             listener.onFailure();
@@ -76,12 +76,13 @@ public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
     }
 
     public static boolean resize(Uri[] uris, long sizeLimit, ContentResolver contentResolver,
-                                 File tempFile) {
-        for (Uri uri : uris) {
+        File tempFile)
+    {
+        for(Uri uri : uris) {
             InputStream inputStream;
             try {
                 inputStream = contentResolver.openInputStream(uri);
-            } catch (FileNotFoundException e) {
+            } catch(FileNotFoundException e) {
                 return false;
             }
             // Initially, just get the image dimensions.
@@ -101,36 +102,37 @@ public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
                 OutputStream stream;
                 try {
                     stream = new FileOutputStream(tempFile);
-                } catch (FileNotFoundException e) {
+                } catch(FileNotFoundException e) {
                     return false;
                 }
                 try {
                     inputStream = contentResolver.openInputStream(uri);
-                } catch (FileNotFoundException e) {
+                } catch(FileNotFoundException e) {
                     return false;
                 }
-                options.inSampleSize = calculateInSampleSize(options, scaledImageSize, scaledImageSize);
+                options.inSampleSize =
+                    calculateInSampleSize(options, scaledImageSize, scaledImageSize);
                 options.inJustDecodeBounds = false;
                 Bitmap scaledBitmap;
                 try {
                     scaledBitmap = BitmapFactory.decodeStream(inputStream, null, options);
-                } catch (OutOfMemoryError error) {
+                } catch(OutOfMemoryError error) {
                     return false;
                 } finally {
                     IOUtils.closeQuietly(inputStream);
                 }
-                if (scaledBitmap == null) {
+                if(scaledBitmap == null) {
                     return false;
                 }
                 Bitmap reorientedBitmap = reorientBitmap(scaledBitmap, orientation);
-                if (reorientedBitmap == null) {
+                if(reorientedBitmap == null) {
                     scaledBitmap.recycle();
                     return false;
                 }
                 Bitmap.CompressFormat format;
                 /* It's not likely the user will give transparent images over the upload limit, but
                  * if they do, make sure the transparency is retained. */
-                if (!reorientedBitmap.hasAlpha()) {
+                if(!reorientedBitmap.hasAlpha()) {
                     format = Bitmap.CompressFormat.JPEG;
                 } else {
                     format = Bitmap.CompressFormat.PNG;
@@ -138,7 +140,7 @@ public class DownsizeImageTask extends AsyncTask<Uri, Void, Boolean> {
                 reorientedBitmap.compress(format, 85, stream);
                 reorientedBitmap.recycle();
                 scaledImageSize /= 2;
-            } while (tempFile.length() > sizeLimit);
+            } while(tempFile.length() > sizeLimit);
         }
         return true;
     }

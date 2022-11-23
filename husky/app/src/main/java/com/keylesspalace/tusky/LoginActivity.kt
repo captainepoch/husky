@@ -33,32 +33,28 @@ import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import com.bumptech.glide.Glide
+import com.keylesspalace.tusky.core.extensions.getNonNullString
 import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.core.extensions.isGone
 import com.keylesspalace.tusky.core.extensions.isVisible
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.extensions.visible
 import com.keylesspalace.tusky.databinding.ActivityLoginBinding
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.AccessToken
 import com.keylesspalace.tusky.entity.AppCredentials
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.ThemeUtils
-import com.keylesspalace.tusky.util.getNonNullString
 import okhttp3.HttpUrl
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class LoginActivity : BaseActivity(), Injectable {
+class LoginActivity : BaseActivity() {
 
     private val binding by viewBinding(ActivityLoginBinding::inflate)
-
-    @Inject
-    lateinit var mastodonApi: MastodonApi
-
+    private val mastodonApi: MastodonApi by inject()
     private lateinit var preferences: SharedPreferences
 
     private val oauthRedirectUri: String
@@ -340,7 +336,7 @@ class LoginActivity : BaseActivity(), Injectable {
     private fun onLoginSuccess(accessToken: String, domain: String) {
         setLoading(true)
 
-        accountManager.addAccount(accessToken, domain)
+        accountManager.value.addAccount(accessToken, domain)
 
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

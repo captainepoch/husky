@@ -40,7 +40,6 @@ import com.keylesspalace.tusky.components.instancemute.InstanceListActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.di.Injectable
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Filter
 import com.keylesspalace.tusky.entity.Status
@@ -59,21 +58,16 @@ import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial.Icon.
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial.Icon.gmd_notifications
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeRes
+import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
 
-class AccountPreferencesFragment : PreferenceFragmentCompat(), Injectable {
+class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    @Inject
-    lateinit var mastodonApi: MastodonApi
-
-    @Inject
-    lateinit var eventHub: EventHub
+    private val accountManager: AccountManager by inject()
+    private val mastodonApi: MastodonApi by inject()
+    private val eventHub: EventHub by inject()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = requireContext()
