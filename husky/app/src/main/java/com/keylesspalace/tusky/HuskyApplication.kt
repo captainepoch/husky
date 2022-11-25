@@ -21,12 +21,10 @@
 package com.keylesspalace.tusky
 
 import android.app.Application
-import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.emoji.text.EmojiCompat
-import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.piasy.biv.BigImageViewer
@@ -38,7 +36,8 @@ import com.keylesspalace.tusky.di.appComponentModule
 import com.keylesspalace.tusky.di.appModule
 import com.keylesspalace.tusky.di.networkModule
 import com.keylesspalace.tusky.di.repositoryModule
-import com.keylesspalace.tusky.di.servicesModule
+import com.keylesspalace.tusky.di.serviceModule
+import com.keylesspalace.tusky.di.useCaseModule
 import com.keylesspalace.tusky.di.viewModelsModule
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.EmojiCompatFont
@@ -64,13 +63,13 @@ class HuskyApplication : Application() {
         initKoin()
 
         val preferences: SharedPreferences = get()
-        if(preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
+        if (preferences.getBoolean(PrefKeys.CRASH_HANDLER_ENABLE, false)) {
             crashHandler.setAsDefaultHandler()
         }
 
         setLocaleManager()
 
-        if(ApplicationUtils.isDebug()) {
+        if (ApplicationUtils.isDebug()) {
             Timber.plant(HyperlinkDebugTree())
         }
 
@@ -115,7 +114,8 @@ class HuskyApplication : Application() {
                     appModule,
                     networkModule,
                     repositoryModule,
-                    servicesModule,
+                    serviceModule,
+                    useCaseModule,
                     viewModelsModule
                 )
             )

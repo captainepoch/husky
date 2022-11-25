@@ -20,32 +20,48 @@
 
 package com.keylesspalace.tusky.di
 
+import android.text.Spanned
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.keylesspalace.tusky.appstore.CacheUpdater
 import com.keylesspalace.tusky.components.common.MediaUploader
 import com.keylesspalace.tusky.components.common.MediaUploaderImpl
 import com.keylesspalace.tusky.components.drafts.DraftHelper
 import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.db.AccountManager
+import com.keylesspalace.tusky.json.SpannedTypeAdapter
 import com.keylesspalace.tusky.util.SaveTootHelper
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appComponentModule = module {
-    single { CacheUpdater(get(), get(), get(), get()) }
-
-    single { CrashHandler(get()) }
-
-    single { AccountManager(get()) }
+    factory {
+        DraftHelper(get(), get())
+    }
 
     factory {
         MediaUploaderImpl(get(), get())
     } bind MediaUploader::class
 
     factory {
-        DraftHelper(get(), get())
-    }
-
-    factory {
         SaveTootHelper(get(), get())
     }
+
+    single {
+        AccountManager(get())
+    }
+
+    single {
+        CacheUpdater(get(), get(), get(), get())
+    }
+
+    single {
+        CrashHandler(get())
+    }
+
+    single {
+        GsonBuilder()
+            .registerTypeAdapter(Spanned::class.java, SpannedTypeAdapter())
+            .create()
+    } bind Gson::class
 }

@@ -24,32 +24,42 @@ import android.content.SharedPreferences
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.work.WorkerFactory
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.EventHubImpl
+import com.keylesspalace.tusky.components.notifications.NotificationFetcher
+import com.keylesspalace.tusky.components.notifications.NotificationWorkerFactory
 import com.keylesspalace.tusky.components.notifications.Notifier
 import com.keylesspalace.tusky.components.notifications.SystemNotifier
 import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.network.TimelineCases
-import com.keylesspalace.tusky.network.TimelineCasesImpl
+import com.keylesspalace.tusky.util.LocaleManager
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appModule = module {
-    single {
-        PreferenceManager.getDefaultSharedPreferences(get())
-    } bind SharedPreferences::class
-
     factory {
         LocalBroadcastManager.getInstance(get())
     } bind LocalBroadcastManager::class
 
-    factory {
-        TimelineCasesImpl(get(), get())
-    } bind TimelineCases::class
-
     single {
         EventHubImpl
     } bind EventHub::class
+
+    single {
+        LocaleManager()
+    }
+
+    single {
+        NotificationFetcher(get(), get(), get())
+    }
+
+    single {
+        NotificationWorkerFactory(get())
+    } bind WorkerFactory::class
+
+    single {
+        PreferenceManager.getDefaultSharedPreferences(get())
+    } bind SharedPreferences::class
 
     single {
         Room.databaseBuilder(get(), AppDatabase::class.java, "tuskyDB")

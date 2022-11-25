@@ -2,7 +2,6 @@
  * Husky -- A Pleroma client for Android
  *
  * Copyright (C) 2022  The Husky Developers
- * Copyright (C) 2018  Conny Duck
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +19,13 @@
 
 package com.keylesspalace.tusky.di
 
-import com.keylesspalace.tusky.service.ServiceClient
-import com.keylesspalace.tusky.service.ServiceClientImpl
+import com.keylesspalace.tusky.network.TimelineCases
+import com.keylesspalace.tusky.network.TimelineCasesImpl
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val serviceModule = module {
+val useCaseModule = module {
     factory {
-        ServiceClientImpl(get())
-    } bind ServiceClient::class
+        TimelineCasesImpl(get(), get())
+    } bind TimelineCases::class
 }

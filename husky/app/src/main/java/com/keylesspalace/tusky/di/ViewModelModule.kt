@@ -17,11 +17,23 @@ import org.koin.dsl.module
 
 val viewModelsModule = module {
     viewModel {
+        AccountsInListViewModel(get())
+    }
+
+    viewModel {
         AccountViewModel(get(), get(), get())
     }
 
     viewModel {
-        EditProfileViewModel(get(), get())
+        AnnouncementsViewModel(get(), get(), get(), get())
+    }
+
+    viewModel {
+        ChatViewModel(get(), get(), get(), get(), get(), get())
+    }
+
+    viewModel {
+        ComposeViewModel(get(), get(), get(), get(), get(), get(), get())
     }
 
     viewModel {
@@ -29,11 +41,15 @@ val viewModelsModule = module {
     }
 
     viewModel {
-        ListsViewModel(get())
+        DraftsViewModel(get(), get(), get(), get())
     }
 
     viewModel {
-        AccountsInListViewModel(get())
+        EditProfileViewModel(get(), get())
+    }
+
+    viewModel {
+        ListsViewModel(get())
     }
 
     viewModel {
@@ -45,22 +61,6 @@ val viewModelsModule = module {
     }
 
     viewModel {
-        ComposeViewModel(get(), get(), get(), get(), get(), get(), get())
-    }
-
-    viewModel {
         ScheduledTootViewModel(get(), get())
-    }
-
-    viewModel {
-        ChatViewModel(get(), get(), get(), get(), get(), get())
-    }
-
-    viewModel {
-        AnnouncementsViewModel(get(), get(), get(), get())
-    }
-
-    viewModel {
-        DraftsViewModel(get(), get(), get(), get())
     }
 }

@@ -20,10 +20,6 @@
 
 package com.keylesspalace.tusky.di
 
-import android.text.Spanned
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.keylesspalace.tusky.json.SpannedTypeAdapter
 import com.keylesspalace.tusky.network.InstanceSwitchAuthInterceptor
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.network.MastodonService
@@ -37,10 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
     single {
-        GsonBuilder()
-            .registerTypeAdapter(Spanned::class.java, SpannedTypeAdapter())
-            .create()
-    } bind Gson::class
+        MastodonService(get())
+    } bind MastodonApi::class
 
     single {
         OkHttpUtils.getCompatibleClientBuilder(get()).apply {
@@ -55,8 +49,4 @@ val networkModule = module {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
             .build()
     } bind Retrofit::class
-
-    single {
-        MastodonService(get())
-    } bind MastodonApi::class
 }
