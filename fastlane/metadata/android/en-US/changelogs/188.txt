@@ -1,0 +1,7 @@
+Husky 1.4.0-beta2
+
+Changelog:
+  - Feature: Support for Akkoma bubble timeline (thanks to Tristan Henderson).
+  - Changed DI from Dagger to Koin.
+  - More views to ViewBinding.
+  - Updated strings.

@@ -1,3 +1,12 @@
+Husky 1.4.0-beta2 - 2022-11-27
+  - Feature: Support for Akkoma bubble timeline (thanks to Tristan Henderson).
+  - Changed DI from Dagger to Koin.
+  - More views to ViewBinding.
+  - Updated strings.
+
+  Update dependencies:
+   - gradle (7.5.1 -> 7.6)
+
 Husky 1.4.0-beta1 - 2022-11-20
   - Update for Android 13.
   - Migrated more Views to ViewBinding.
