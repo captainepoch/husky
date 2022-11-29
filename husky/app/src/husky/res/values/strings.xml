@@ -139,6 +139,8 @@
     <string name="title_reblogged_by">Repeated by</string>
     <string name="title_view_thread">Post</string>
 
+    <string name="visibility_local">Local: Do not federate this post</string>
+
     <!--
     <string name="about_tusky_version">Husky %s</string>
     <string name="about_powered_by_tusky">Powered by Husky</string>

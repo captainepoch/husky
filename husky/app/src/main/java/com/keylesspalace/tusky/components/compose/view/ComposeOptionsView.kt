@@ -36,6 +36,8 @@ class ComposeOptionsView @JvmOverloads constructor(context: Context, attrs: Attr
                     Status.Visibility.UNLISTED
                 R.id.privateRadioButton ->
                     Status.Visibility.PRIVATE
+                R.id.localRadioButton ->
+                    Status.Visibility.LOCAL
                 R.id.directRadioButton ->
                     Status.Visibility.DIRECT
                 else ->
@@ -53,6 +55,8 @@ class ComposeOptionsView @JvmOverloads constructor(context: Context, attrs: Attr
                 R.id.unlistedRadioButton
             Status.Visibility.PRIVATE ->
                 R.id.privateRadioButton
+            Status.Visibility.LOCAL ->
+                R.id.localRadioButton
             Status.Visibility.DIRECT ->
                 R.id.directRadioButton
             else ->

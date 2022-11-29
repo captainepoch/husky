@@ -47,6 +47,20 @@
         app:buttonTint="@color/compound_button_color" />
 
     <RadioButton
+        android:id="@+id/localRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        android:button="@drawable/ic_local_24dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
+        android:text="@string/visibility_local"
+        android:textColor="?android:textColorTertiary"
+        app:buttonTint="@color/compound_button_color" />
+
+    <RadioButton
         android:id="@+id/directRadioButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

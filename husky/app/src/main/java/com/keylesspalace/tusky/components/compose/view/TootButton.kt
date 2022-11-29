@@ -54,7 +54,8 @@ class TootButton
                     setText(R.string.action_send_public)
                     null
                 }
-                Status.Visibility.UNLISTED -> {
+                Status.Visibility.UNLISTED,
+                Status.Visibility.LOCAL -> {
                     setText(R.string.action_send)
                     null
                 }
