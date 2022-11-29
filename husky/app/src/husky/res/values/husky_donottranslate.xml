@@ -16,4 +16,12 @@
 		%1$s; %2$s; %3$s
 	</string>
 
+	<string-array name="post_privacy_values">
+		<item>public</item>
+		<item>unlisted</item>
+		<item>private</item>
+		<item>direct</item>
+		<item>local</item>
+	</string-array>
+
 </resources>

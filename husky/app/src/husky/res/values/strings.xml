@@ -114,6 +114,9 @@
     <string name="notification_boost_description">Notifications when your posts get repeated</string>
     <string name="notification_favourite_description">Notifications when your posts get marked as favorite</string>
 
+    <string name="post_privacy_direct">Direct</string>
+    <string name="post_privacy_local">Local</string>
+
     <string name="pref_title_confirm_reblogs">Show confirmation dialog before repeating</string>
     <string name="pref_title_notification_filter_reblogs">my posts are repeated</string>
     <string name="pref_title_show_boosts">Show repeats</string>
