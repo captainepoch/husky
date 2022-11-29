@@ -100,6 +100,9 @@
     <string name="description_status_reblogged">
         Repeated
     </string>
+    <string name="description_visibility_local">
+        Local
+    </string>
     <string name="dialog_delete_toot_warning">Delete this post?</string>
     <string name="dialog_redraft_toot_warning">Delete and re-draft this post?</string>
 

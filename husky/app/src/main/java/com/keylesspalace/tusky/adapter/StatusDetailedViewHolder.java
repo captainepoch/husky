@@ -159,6 +159,9 @@ class StatusDetailedViewHolder extends StatusBaseViewHolder {
             case DIRECT:
                 visibilityIcon = R.drawable.ic_email_24dp;
                 break;
+            case LOCAL:
+                visibilityIcon = R.drawable.ic_local_24dp;
+                break;
             default:
                 return;
         }

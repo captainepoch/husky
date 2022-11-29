@@ -74,7 +74,10 @@ data class Status(
         PRIVATE(3),
 
         @SerializedName("direct")
-        DIRECT(4);
+        DIRECT(4),
+
+        @SerializedName("local")
+        LOCAL(5);
 
         fun serverString(): String {
             return when (this) {
@@ -82,6 +85,7 @@ data class Status(
                 UNLISTED -> "unlisted"
                 PRIVATE -> "private"
                 DIRECT -> "direct"
+                LOCAL -> "local"
                 UNKNOWN -> "unknown"
             }
         }
@@ -91,6 +95,7 @@ data class Status(
             @JvmStatic
             fun byNum(num: Int): Visibility {
                 return when (num) {
+                    5 -> LOCAL
                     4 -> DIRECT
                     3 -> PRIVATE
                     2 -> UNLISTED
@@ -107,6 +112,7 @@ data class Status(
                     "unlisted" -> UNLISTED
                     "private" -> PRIVATE
                     "direct" -> DIRECT
+                    "local" -> LOCAL
                     "unknown" -> UNKNOWN
                     else -> UNKNOWN
                 }

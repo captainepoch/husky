@@ -934,6 +934,9 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             case DIRECT:
                 resource = R.string.description_visiblity_direct;
                 break;
+            case LOCAL:
+                resource = R.string.description_visibility_local;
+                break;
             default:
                 return "";
         }
