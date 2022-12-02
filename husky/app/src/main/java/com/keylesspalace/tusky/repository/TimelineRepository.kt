@@ -275,7 +275,7 @@ class TimelineRepositoryImpl(
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
                 createdAt = Date(status.createdAt),
-                editedAt = null, // FIXME: Cache me..
+                editedAt = status.editedAt?.let { Date(it) },
                 emojis = emojis,
                 reblogsCount = status.reblogsCount,
                 favouritesCount = status.favouritesCount,
@@ -333,7 +333,7 @@ class TimelineRepositoryImpl(
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
                 createdAt = Date(status.createdAt),
-                editedAt = null, // FIXME: Cache me..
+                editedAt = status.editedAt?.let { Date(it) },
                 emojis = emojis,
                 reblogsCount = status.reblogsCount,
                 favouritesCount = status.favouritesCount,
@@ -404,6 +404,7 @@ fun Placeholder.toEntity(timelineUserId: Long): TimelineStatusEntity {
         inReplyToAccountId = null,
         content = null,
         createdAt = 0L,
+        editedAt = null,
         emojis = null,
         reblogsCount = 0,
         favouritesCount = 0,
@@ -437,6 +438,7 @@ fun Status.toEntity(
         inReplyToAccountId = actionable.inReplyToAccountId,
         content = actionable.content.toHtml(),
         createdAt = actionable.createdAt.time,
+        editedAt = actionable.editedAt?.time,
         emojis = actionable.emojis.let(gson::toJson),
         reblogsCount = actionable.reblogsCount,
         favouritesCount = actionable.favouritesCount,

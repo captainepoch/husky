@@ -43,6 +43,7 @@ data class TimelineStatusEntity(
     val inReplyToAccountId: String?,
     val content: String?,
     val createdAt: Long,
+    val editedAt: Long?,
     val emojis: String?,
     val reblogsCount: Int,
     val favouritesCount: Int,

@@ -71,6 +71,7 @@ data class ConversationStatusEntity(
     val account: ConversationAccountEntity,
     val content: Spanned,
     val createdAt: Date,
+    val editedAt: Date?,
     val emojis: List<Emoji>,
     val favouritesCount: Int,
     val favourited: Boolean,
@@ -101,6 +102,7 @@ data class ConversationStatusEntity(
         // TODO find a better method to compare two spanned strings
         if (content.toString() != other.content.toString()) return false
         if (createdAt != other.createdAt) return false
+        if (editedAt != other.editedAt) return false
         if (emojis != other.emojis) return false
         if (favouritesCount != other.favouritesCount) return false
         if (favourited != other.favourited) return false
@@ -125,6 +127,7 @@ data class ConversationStatusEntity(
         result = 31 * result + account.hashCode()
         result = 31 * result + content.hashCode()
         result = 31 * result + createdAt.hashCode()
+        result = 31 * result + (editedAt?.hashCode() ?: 0)
         result = 31 * result + emojis.hashCode()
         result = 31 * result + favouritesCount
         result = 31 * result + favourited.hashCode()
@@ -150,7 +153,7 @@ data class ConversationStatusEntity(
             content = content,
             reblog = null,
             createdAt = createdAt,
-            editedAt = null, // FIXME: Cache me..
+            editedAt = editedAt,
             emojis = emojis,
             reblogsCount = 0,
             favouritesCount = favouritesCount,
@@ -182,7 +185,7 @@ fun Account.toEntity() =
 fun Status.toEntity() =
     ConversationStatusEntity(
         id, url, inReplyToId, inReplyToAccountId, account.toEntity(), content,
-        createdAt, emojis, favouritesCount, favourited, bookmarked, sensitive,
+        createdAt, editedAt, emojis, favouritesCount, favourited, bookmarked, sensitive,
         spoilerText, attachments, mentions,
         false,
         false,

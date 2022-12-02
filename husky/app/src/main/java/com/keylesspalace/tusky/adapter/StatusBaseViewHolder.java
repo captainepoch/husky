@@ -342,8 +342,10 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             }
         }
 
-        if (editedAt != null)
-            timestampText = timestampInfo.getContext().getString(R.string.status_timestamp_with_edited_indicator, timestampText);
+        if (editedAt != null) {
+            timestampText = timestampInfo.getContext()
+                .getString(R.string.status_timestamp_with_edited_indicator, timestampText);
+        }
         timestampInfo.setText(timestampText);
     }
 
