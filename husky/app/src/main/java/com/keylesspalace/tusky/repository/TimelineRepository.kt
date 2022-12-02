@@ -275,6 +275,7 @@ class TimelineRepositoryImpl(
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
                 createdAt = Date(status.createdAt),
+                editedAt = null, // FIXME: Cache me..
                 emojis = emojis,
                 reblogsCount = status.reblogsCount,
                 favouritesCount = status.favouritesCount,
@@ -303,6 +304,7 @@ class TimelineRepositoryImpl(
                 reblog = reblog,
                 content = SpannedString(""),
                 createdAt = Date(status.createdAt), // lie but whatever?
+                editedAt = null,
                 emojis = listOf(),
                 reblogsCount = 0,
                 favouritesCount = 0,
@@ -331,6 +333,7 @@ class TimelineRepositoryImpl(
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
                 createdAt = Date(status.createdAt),
+                editedAt = null, // FIXME: Cache me..
                 emojis = emojis,
                 reblogsCount = status.reblogsCount,
                 favouritesCount = status.favouritesCount,

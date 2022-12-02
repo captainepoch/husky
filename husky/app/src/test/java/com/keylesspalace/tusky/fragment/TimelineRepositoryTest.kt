@@ -327,6 +327,7 @@ class TimelineRepositoryTest {
             account = account,
             content = SpannableString("hello$id"),
             createdAt = Date(),
+            editedAt = null,
             emojis = listOf(),
             reblogsCount = 3,
             favouritesCount = 5,

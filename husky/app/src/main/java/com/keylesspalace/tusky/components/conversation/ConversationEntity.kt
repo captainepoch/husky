@@ -150,6 +150,7 @@ data class ConversationStatusEntity(
             content = content,
             reblog = null,
             createdAt = createdAt,
+            editedAt = null, // FIXME: Cache me..
             emojis = emojis,
             reblogsCount = 0,
             favouritesCount = favouritesCount,

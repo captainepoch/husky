@@ -87,6 +87,7 @@ class BottomSheetActivityTest {
         null,
         SpannedString("omgwat"),
         Date(),
+        null,
         Collections.emptyList(),
         0,
         0,

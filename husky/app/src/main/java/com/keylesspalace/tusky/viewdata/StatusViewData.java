@@ -74,6 +74,7 @@ public abstract class StatusViewData {
         private final String nickname;
         private final String avatar;
         private final Date createdAt;
+        private final Date editedAt;
         private final int reblogsCount;
         private final int favouritesCount;
         @Nullable
@@ -114,7 +115,7 @@ public abstract class StatusViewData {
                         @Nullable String spoilerText, Status.Visibility visibility, List<Attachment> attachments,
                         @Nullable String rebloggedByUsername, @Nullable String rebloggedAvatar, boolean sensitive, boolean isExpanded,
                         boolean isShowingContent, String userFullName, String nickname, String avatar,
-                        Date createdAt, int reblogsCount, int favouritesCount, @Nullable String inReplyToId,
+                        Date createdAt, Date editedAt, int reblogsCount, int favouritesCount, @Nullable String inReplyToId,
                         @Nullable String inReplyToAccountAcct, @Nullable Status.Mention[] mentions, String senderId, boolean rebloggingEnabled,
                         Status.Application application, List<Emoji> statusEmojis, List<Emoji> accountEmojis, List<Emoji> rebloggedByAccountEmojis, @Nullable Card card,
                         boolean isCollapsible, boolean isCollapsed, @Nullable PollViewData poll, boolean isBot, boolean isMuted, boolean isThreadMuted,
@@ -144,6 +145,7 @@ public abstract class StatusViewData {
             this.userFullName = userFullName;
             this.avatar = avatar;
             this.createdAt = createdAt;
+            this.editedAt = editedAt;
             this.reblogsCount = reblogsCount;
             this.favouritesCount = favouritesCount;
             this.inReplyToId = inReplyToId;
@@ -241,6 +243,10 @@ public abstract class StatusViewData {
 
         public Date getCreatedAt() {
             return createdAt;
+        }
+
+        public Date getEditedAt() {
+            return editedAt;
         }
 
         public int getReblogsCount() {
@@ -374,6 +380,7 @@ public abstract class StatusViewData {
                     Objects.equals(nickname, concrete.nickname) &&
                     Objects.equals(avatar, concrete.avatar) &&
                     Objects.equals(createdAt, concrete.createdAt) &&
+                    Objects.equals(editedAt, concrete.editedAt) &&
                     Objects.equals(inReplyToId, concrete.inReplyToId) &&
                     Objects.equals(inReplyToAccountAcct, concrete.inReplyToAccountAcct) &&
                     Arrays.equals(mentions, concrete.mentions) &&
@@ -486,6 +493,7 @@ public abstract class StatusViewData {
         private String nickname;
         private String avatar;
         private Date createdAt;
+        private Date editedAt;
         private int reblogsCount;
         private int favouritesCount;
         private String inReplyToId;
@@ -536,6 +544,7 @@ public abstract class StatusViewData {
             nickname = viewData.nickname;
             avatar = viewData.avatar;
             createdAt = new Date(viewData.createdAt.getTime());
+            editedAt = viewData.editedAt == null ? null : new Date(viewData.editedAt.getTime());
             reblogsCount = viewData.reblogsCount;
             favouritesCount = viewData.favouritesCount;
             inReplyToId = viewData.inReplyToId;
@@ -645,6 +654,11 @@ public abstract class StatusViewData {
 
         public Builder setCreatedAt(Date createdAt) {
             this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder setEditedAt(Date editedAt) {
+            this.editedAt = editedAt;
             return this;
         }
 
@@ -774,7 +788,7 @@ public abstract class StatusViewData {
 
             return new StatusViewData.Concrete(id, content, reblogged, favourited, bookmarked, spoilerText,
                     visibility, attachments, rebloggedByUsername, rebloggedAvatar, isSensitive, isExpanded,
-                    isShowingContent, userFullName, nickname, avatar, createdAt, reblogsCount,
+                    isShowingContent, userFullName, nickname, avatar, createdAt, editedAt, reblogsCount,
                     favouritesCount, inReplyToId, inReplyToAccountAcct, mentions, senderId, rebloggingEnabled, application,
                     statusEmojis, accountEmojis, rebloggedByAccountEmojis, card, isCollapsible, isCollapsed, poll, isBot, isMuted, isThreadMuted,
                     isUserMuted, conversationId, emojiReactions, parentVisible);

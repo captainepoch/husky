@@ -44,6 +44,7 @@ public final class ViewDataUtils {
                 .setAvatar(visibleStatus.getAccount().getAvatar())
                 .setContent(visibleStatus.getContent())
                 .setCreatedAt(visibleStatus.getCreatedAt())
+                .setEditedAt(visibleStatus.getEditedAt())
                 .setReblogsCount(visibleStatus.getReblogsCount())
                 .setFavouritesCount(visibleStatus.getFavouritesCount())
                 .setInReplyToId(visibleStatus.getInReplyToId())
