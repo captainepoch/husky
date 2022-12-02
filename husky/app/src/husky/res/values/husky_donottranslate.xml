@@ -24,4 +24,7 @@
 		<item>local</item>
 	</string-array>
 
+	<string name="status_timestamp_with_edited_indicator" translatable="false">%s *</string>
+	<string name="timestamp_joiner" translatable="false">" • "</string>
+
 </resources>

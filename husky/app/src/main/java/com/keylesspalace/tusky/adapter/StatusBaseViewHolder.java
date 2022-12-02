@@ -327,19 +327,24 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    protected void setCreatedAt(Date createdAt, StatusDisplayOptions statusDisplayOptions) {
+    protected void setCreatedAt(Date createdAt, Date editedAt, StatusDisplayOptions statusDisplayOptions) {
+        String timestampText;
         if (statusDisplayOptions.useAbsoluteTime()) {
-            timestampInfo.setText(getAbsoluteTime(createdAt));
+            timestampText = getAbsoluteTime(createdAt);
         } else {
             if (createdAt == null) {
-                timestampInfo.setText("?m");
+                timestampText = "?m";
             } else {
                 long then = createdAt.getTime();
                 long now = System.currentTimeMillis();
                 String readout = TimestampUtils.getRelativeTimeSpanString(timestampInfo.getContext(), then, now);
-                timestampInfo.setText(readout);
+                timestampText = readout;
             }
         }
+
+        if (editedAt != null)
+            timestampText = timestampInfo.getContext().getString(R.string.status_timestamp_with_edited_indicator, timestampText);
+        timestampInfo.setText(timestampText);
     }
 
     private String getAbsoluteTime(Date createdAt) {
@@ -781,7 +786,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         if (payloads == null) {
             setDisplayName(status.getUserFullName(), status.getAccountEmojis());
             setUsername(status.getNickname());
-            setCreatedAt(status.getCreatedAt(), statusDisplayOptions);
+            setCreatedAt(status.getCreatedAt(), status.getEditedAt(), statusDisplayOptions);
             setIsReply(status.getInReplyToId() != null);
             setReplyInfo(status, listener);
             setAvatar(status.getAvatar(), status.getRebloggedAvatar(), status.isBot(), statusDisplayOptions);
@@ -834,7 +839,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             if (payloads instanceof List)
                 for (Object item : (List<?>) payloads) {
                     if (Key.KEY_CREATED.equals(item)) {
-                        setCreatedAt(status.getCreatedAt(), statusDisplayOptions);
+                        setCreatedAt(status.getCreatedAt(), status.getEditedAt(), statusDisplayOptions);
                     }
                 }
 

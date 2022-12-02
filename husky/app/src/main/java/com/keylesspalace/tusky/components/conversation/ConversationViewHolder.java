@@ -74,7 +74,7 @@ public class ConversationViewHolder extends StatusBaseViewHolder {
 
         setDisplayName(account.getDisplayName(), account.getEmojis());
         setUsername(account.getUsername());
-        setCreatedAt(status.getCreatedAt(), statusDisplayOptions);
+        setCreatedAt(status.getCreatedAt(), null /* FIXME */, statusDisplayOptions);
         setIsReply(status.getInReplyToId() != null);
         setFavourited(status.getFavourited());
         setBookmarked(status.getBookmarked());

@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
@@ -47,13 +49,15 @@ class StatusDetailedViewHolder extends StatusBaseViewHolder {
     }
 
     @Override
-    protected void setCreatedAt(Date createdAt, StatusDisplayOptions statusDisplayOptions) {
-        if (createdAt == null) {
-            timestampInfo.setText("");
-        } else {
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT);
-            timestampInfo.setText(dateFormat.format(createdAt));
-        }
+    protected void setCreatedAt(Date createdAt, Date editedAt, StatusDisplayOptions statusDisplayOptions) {
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT);
+        Context context = timestampInfo.getContext();
+        List<String> list = new ArrayList<>();
+        if (createdAt != null)
+            list.add(dateFormat.format(createdAt));
+        if (editedAt != null)
+            list.add(context.getString(R.string.status_edited, dateFormat.format(editedAt)));
+        timestampInfo.setText(TextUtils.join(context.getString(R.string.timestamp_joiner), list));
     }
 
     private void setReblogAndFavCount(int reblogCount, int favCount, StatusActionListener listener) {

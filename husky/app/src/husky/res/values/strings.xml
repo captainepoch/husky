@@ -137,6 +137,7 @@
     <string name="status_share_link">Share link to post</string>
     <string name="status_boosted_format">%s repeated</string>
     <string name="status_replied_to_format">Reply to %s</string>
+    <string name="status_edited">Edited %s</string>
 
     <string name="title_scheduled_toot">Scheduled posts</string>
     <string name="title_reblogged_by">Repeated by</string>
