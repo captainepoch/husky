@@ -54,8 +54,6 @@ class SearchActivity : BottomSheetActivity() {
 
         setupPages()
         handleIntent(intent)
-
-        Timber.d("onCreate")
     }
 
     private fun setupPages() {
