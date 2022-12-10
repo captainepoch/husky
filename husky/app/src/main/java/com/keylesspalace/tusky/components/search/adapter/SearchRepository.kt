@@ -37,9 +37,21 @@ class SearchRepository<T>(private val mastodonApi: MastodonApi) {
         initialItems: List<T>? = null,
         parser: (SearchResult?) -> List<T>
     ): Listing<T> {
-        val sourceFactory = SearchDataSourceFactory(mastodonApi, searchType, searchRequest, disposables, executor, initialItems, parser)
+        val sourceFactory = SearchDataSourceFactory(
+            mastodonApi,
+            searchType,
+            searchRequest,
+            disposables,
+            executor,
+            initialItems,
+            parser
+        )
         val livePagedList = sourceFactory.toLiveData(
-            config = Config(pageSize = pageSize, enablePlaceholders = false, initialLoadSizeHint = pageSize * 2),
+            config = Config(
+                pageSize = pageSize,
+                enablePlaceholders = false,
+                initialLoadSizeHint = pageSize * 2
+            ),
             fetchExecutor = executor
         )
         return Listing(
