@@ -34,7 +34,6 @@ import com.keylesspalace.tusky.components.search.adapter.SearchPagerAdapter
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivitySearchBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class SearchActivity : BottomSheetActivity() {
 
@@ -102,7 +101,7 @@ class SearchActivity : BottomSheetActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-        if (Intent.ACTION_SEARCH == intent.action) {
+        if (intent.action == Intent.ACTION_SEARCH) {
             viewModel.currentQuery = intent.getStringExtra(SearchManager.QUERY) ?: ""
             viewModel.search(viewModel.currentQuery)
         }
