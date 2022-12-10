@@ -1,5 +1,5 @@
 // Kotlin version
-ext.kotlin_version = "1.7.21"
+ext.kotlin_version = "1.7.22"
 
 // Dependencies versions
 def versions = [:]
@@ -25,7 +25,7 @@ versions.exifInterface = "1.3.5"
 versions.exoplayer = "2.18.2"
 versions.filemojiCompat = "1.0.17"
 versions.flexbox = "2.0.1"
-versions.fragmentKtx = "1.5.4"
+versions.fragmentKtx = "1.5.5"
 versions.fragmentviewbindingdelegateKt = "1.0.2"
 versions.glide = "4.14.2"
 versions.glideImage = "1.8.1"
