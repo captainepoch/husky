@@ -76,12 +76,9 @@ abstract class SearchFragment<T> :
     }
 
     private fun subscribeObservables() {
-        data.observe(
-            viewLifecycleOwner,
-            Observer {
-                adapter.submitList(it)
-            }
-        )
+        data.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
 
         networkStateRefresh.observe(viewLifecycleOwner) {
             binding.searchProgressBar.visible(it == NetworkState.LOADING)
@@ -89,6 +86,7 @@ abstract class SearchFragment<T> :
             if (it.status == Status.FAILED) {
                 showError()
             }
+
             checkNoData()
         }
 
