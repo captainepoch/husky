@@ -1,3 +1,19 @@
+Husky 1.4.0-beta3 - 2022-12-11
+  - Feature: Show visibility icon and description for local posts (fruye).
+  - Feature: Support sending posts with local visibility (fruye).
+  - Feature: Add 'local' and 'direct' options to default post visibility setting
+    (fruye).
+  - Feature: Mark posts that were edited (fruye).
+  - Fix: Search is now working again (SekthDroid).
+  - More views to ViewBinding.
+
+  Update dependencies:
+   - buildTools (32.0.0 -> 33.0.1).
+   - fragmentKtx (1.5.4 -> 1.5.5).
+   - gradlePluginVersions (0.42.0 -> 0.44.0).
+   - kotlin (1.7.21 -> 1.7.22).
+   - materialDrawerTypeface (3.0.1.4.original-kotlin@aar -> 4.0.0.2-kotlin).
+
 Husky 1.4.0-beta2 - 2022-11-27
   - Feature: Support for Akkoma bubble timeline (thanks to Tristan Henderson).
   - Changed DI from Dagger to Koin.

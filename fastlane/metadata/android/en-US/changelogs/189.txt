@@ -1,0 +1,9 @@
+Husky 1.4.0-beta3
+
+Changelog:
+  - Feature: Show visibility icon and description for local posts (fruye).
+  - Feature: Support sending posts with local visibility (fruye).
+  - Feature: Add 'local' and 'direct' options to default post visibility setting
+    (fruye).
+  - Feature: Mark posts that were edited (fruye).
+  - Fix: Search is now working again (SekthDroid).
