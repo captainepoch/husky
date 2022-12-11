@@ -2,7 +2,7 @@ ext.deps = [:]
 
 def deps = [:]
 deps.androidGradlePlugin = "com.android.tools.build:gradle:${versions.gradle.androidGradlePlugin}"
-deps.gradlePluginVersions = "com.github.ben-manes:gradle-versions-plugin:${versions.gradle.gradleVersions}"
+deps.gradlePluginVersions = "com.github.ben-manes:gradle-versions-plugin:${versions.gradle.gradlePluginVersions}"
 deps.kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
 deps.ktlintGradle = "org.jlleitschuh.gradle:ktlint-gradle:${versions.gradle.ktlintGradle}"
 deps.testinstrunner = "androidx.test.runner.AndroidJUnitRunner"

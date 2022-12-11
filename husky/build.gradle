@@ -14,7 +14,6 @@ buildscript {
         classpath deps.kotlinGradlePlugin
 
         classpath deps.gradlePluginVersions
-
         classpath deps.ktlintGradle
     }
 }
