@@ -11,6 +11,7 @@
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:maxSdkVersion="22" /> <!-- for day/night mode -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:name=".HuskyApplication"

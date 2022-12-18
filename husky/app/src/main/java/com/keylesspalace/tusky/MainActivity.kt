@@ -24,9 +24,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -138,8 +141,8 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
 
     private var notificationTabPosition = 0
     private var onTabSelectedListener: OnTabSelectedListener? = null
-
     private var unreadAnnouncementsCount = 0
+    private val notificationPermissionsRequestCode = 100
 
     private val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
 
@@ -287,7 +290,46 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         )
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            notificationPermissionsRequestCode -> {
+                Timber.d("Notifications permissions are requested")
+                if (grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    Timber.d("Permissions are granted")
+                    initPullNotifications()
+                }
+            }
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+                Timber.d("Super method is called")
+            }
+        }
+    }
+
     private fun initPullNotifications(rebootPush: Boolean = false) {
+        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+            Timber.d("Asking permissions on Tiramisu and newer")
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                Timber.w("Permissions denied, requesting permissions for notifications")
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    notificationPermissionsRequestCode
+                )
+
+                return
+            }
+        }
+
         if (rebootPush) {
             disablePushNotifications()
         }
