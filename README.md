@@ -38,7 +38,7 @@ Original tracker with issues is at
 
 The current maintainer is [captainepoch@stereophonic.space][husky_maintainer].
 The previous maintainer is
-[a1ba@expired.mentality.rip][husky_previous_maintainer].
+[a1ba@suya.place][husky_previous_maintainer].
 
 The original app was developed by
 [Vavassor@mastodon.social][tusky_original_dev]. Tusky's maintainer is
@@ -55,7 +55,7 @@ The original app was developed by
 [husky_man_contributing]: https://codeberg.org/husky/husky-man/src/branch/master/contributing.md
 [husky_original_issues]: https://git.mentality.rip/FWGS/Husky/issues
 [husky_playstore]: https://play.google.com/store/apps/details?id=su.xash.husky
-[husky_previous_maintainer]: https://expired.mentality.rip/users/a1ba
+[husky_previous_maintainer]: https://suya.place/users/a1ba
 [husky_todo]: https://codeberg.org/husky/husky/issues
 [mastodon_api_extensions]: https://docs-develop.pleroma.social/backend/development/API/differences_in_mastoapi_responses/
 [tusky_github]: https://github.com/tuskyapp/Tusky
