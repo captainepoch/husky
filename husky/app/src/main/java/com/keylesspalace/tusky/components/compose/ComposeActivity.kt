@@ -33,6 +33,8 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
@@ -972,18 +974,33 @@ class ComposeActivity :
 
     private fun onMediaPick() {
         addMediaBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // Wait until bottom sheet is not collapsed and show next screen after
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    val askForPermissions = if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+                        arrayOf(
+                            Manifest.permission.READ_MEDIA_IMAGES,
+                            Manifest.permission.READ_MEDIA_VIDEO,
+                            Manifest.permission.READ_MEDIA_AUDIO
+                        )
+                    } else {
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }
+
+                    val permissions = askForPermissions.map { permission ->
+                        permission.takeIf {
+                            ContextCompat.checkSelfPermission(this@ComposeActivity, it) ==
+                                PackageManager.PERMISSION_DENIED
+                        }
+                    }.toTypedArray()
+
                     addMediaBehavior.removeBottomSheetCallback(this)
-                    if (ContextCompat.checkSelfPermission(
-                            this@ComposeActivity,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
+
+                    if (permissions.isNotEmpty()) {
                         ActivityCompat.requestPermissions(
                             this@ComposeActivity,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                            permissions,
                             PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
                         )
                     } else {
@@ -993,8 +1010,8 @@ class ComposeActivity :
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        }
-        )
+        })
+
         addMediaBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
@@ -1200,12 +1217,10 @@ class ComposeActivity :
                     binding.root, R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
-                }
-                bar.setAction(R.string.action_retry) { onMediaPick() }
-                // necessary so snackbar is shown over everything
-                bar.view.elevation =
-                    resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
-                bar.show()
+                    setAction(R.string.action_retry) { onMediaPick() }
+                    view.elevation =
+                        resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
+                }.show()
             }
         }
     }
