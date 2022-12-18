@@ -1,0 +1,8 @@
+Husky 1.4.0-beta4
+
+Changelog:
+  - Fix: Media permissions for Android 13.
+  - Fix: Asks permissions for notifications for Android 13.
+  - Feature: New logo for the Compose tile (K3V1NS4N).
+  - Updated URL for reporting issues.
+  - Updated dependencies.

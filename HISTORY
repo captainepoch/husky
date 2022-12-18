@@ -1,3 +1,14 @@
+Husky 1.4.0-beta4 - 2022-12-18
+  - Fix: Media permissions for Android 13.
+  - Fix: Asks permissions for notifications for Android 13.
+  - Feature: New logo for the Compose tile (K3V1NS4N).
+  - Updated URL for reporting issues.
+
+ Update dependencies:
+  - koin (3.2.2 -> 3.3.0)
+  - koinAndroid (3.3.0 -> 3.3.1)
+  - mockito (4.9.0 -> 4.10.0)
+
 Husky 1.4.0-beta3 - 2022-12-11
   - Feature: Show visibility icon and description for local posts (fruye).
   - Feature: Support sending posts with local visibility (fruye).
