@@ -988,7 +988,7 @@ class ComposeActivity :
                         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                     }
 
-                    val permissions = askForPermissions.map { permission ->
+                    val permissions = askForPermissions.mapNotNull { permission ->
                         permission.takeIf {
                             ContextCompat.checkSelfPermission(this@ComposeActivity, it) ==
                                 PackageManager.PERMISSION_DENIED
