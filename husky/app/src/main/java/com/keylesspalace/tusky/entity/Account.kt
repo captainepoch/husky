@@ -1,22 +1,29 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.entity
 
 import android.text.Spanned
+import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
+import com.keylesspalace.tusky.json.CustomDateTypeAdapter
 import java.util.Date
 
 data class Account(
@@ -89,7 +96,8 @@ data class AccountSource(
 data class Field(
     val name: String,
     val value: Spanned,
-    @SerializedName("verified_at") val verifiedAt: Date?
+    @JsonAdapter(CustomDateTypeAdapter::class)
+    @SerializedName("verified_at") val verifiedAt: Date? = null
 )
 
 data class StringField(
