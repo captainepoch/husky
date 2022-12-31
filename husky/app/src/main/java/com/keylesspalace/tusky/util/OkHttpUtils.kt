@@ -82,8 +82,7 @@ object OkHttpUtils {
      */
     private fun getUserAgentInterceptor(): Interceptor {
         return Interceptor { chain: Chain ->
-            val originalRequest = chain.request()
-            val requestWithUserAgent = originalRequest.newBuilder()
+            val requestWithUserAgent = chain.request().newBuilder()
                 .header(
                     "User-Agent",
                     "${BuildConfig.APPLICATION_NAME}/${BuildConfig.VERSION_NAME} Android/${VERSION.RELEASE}"
@@ -94,8 +93,8 @@ object OkHttpUtils {
     }
 
     private fun getDebugInformation(): Interceptor {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = BODY
-        return interceptor
+        return HttpLoggingInterceptor().apply {
+            level = BODY
+        }
     }
 }
