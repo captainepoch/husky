@@ -41,8 +41,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.EmojiCompat.InitCallback
+import androidx.emoji2.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat.InitCallback
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -900,7 +900,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
 
                 ProfileDrawerItem().apply {
                     isSelected = acc.isActive
-                    nameText = emojifiedName
+                    nameText = emojifiedName ?: acc.displayName
                     iconUrl = acc.profilePictureUrl
                     isNameShown = true
                     identifier = acc.id

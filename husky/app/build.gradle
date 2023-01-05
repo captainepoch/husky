@@ -175,9 +175,9 @@ dependencies {
     implementation deps.androidx.cardView
     implementation deps.androidx.constraintLayout
     implementation deps.androidx.coreKtx
-    implementation deps.androidx.emoji
-    implementation deps.androidx.emojiAppCompat
-    implementation deps.androidx.emojiBundled
+    implementation deps.androidx.emoji2
+    implementation deps.androidx.emoji2Views
+    implementation deps.androidx.emoji2ViewsHelper
     implementation deps.androidx.exifInterface
     implementation deps.androidx.fragmentKtx
     implementation deps.androidx.pagingRuntimeKtx
@@ -243,6 +243,8 @@ dependencies {
     implementation deps.bigImageViewer
     implementation deps.conscryptAndroid
     implementation deps.filemojiCompat
+    implementation deps.filemojiCompatDefaults
+    implementation deps.filemojiCompatUi
     implementation deps.fragmentviewbindingdelegateKt
     implementation deps.markdownEdit
     implementation deps.materialDrawer

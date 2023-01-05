@@ -26,7 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView.BufferType;
-import androidx.emoji.widget.EmojiAppCompatButton;
+import androidx.emoji2.widget.EmojiButton;
 import androidx.recyclerview.widget.RecyclerView;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.entity.EmojiReaction;
@@ -58,7 +58,7 @@ public class EmojiReactionsAdapter extends RecyclerView.Adapter<SingleViewHolder
         SpannableStringBuilder builder = new SpannableStringBuilder(
                 reaction.getName() + " " + reaction.getCount());
 
-        EmojiAppCompatButton btn = (EmojiAppCompatButton) holder.itemView;
+        EmojiButton btn = (EmojiButton) holder.itemView;
 
         var url = reaction.getUrl();
         if(url != null) {

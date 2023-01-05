@@ -25,7 +25,7 @@ import android.content.Context
 import android.text.Layout
 import android.text.Spannable
 import android.util.AttributeSet
-import androidx.emoji.widget.EmojiAppCompatTextView
+import androidx.emoji2.widget.EmojiTextView
 import com.keylesspalace.tusky.util.EmojiSpan
 import timber.log.Timber
 
@@ -35,13 +35,12 @@ import timber.log.Timber
  *
  * It fixes an Android performance bug.
  */
-
 class CustomEmojiTextView
 @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : EmojiAppCompatTextView(context, attrs, defStyleAttr) {
+) : EmojiTextView(context, attrs, defStyleAttr) {
 
     private var oldBreakStrategy = Layout.BREAK_STRATEGY_SIMPLE
 

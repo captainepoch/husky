@@ -6,8 +6,7 @@ import android.util.Pair
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
-import androidx.emoji.bundled.BundledEmojiCompatConfig
-import androidx.emoji.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat
 import com.keylesspalace.tusky.R
 import de.c1710.filemojicompat.FileEmojiCompatConfig
 import io.reactivex.Observable
@@ -70,9 +69,9 @@ class EmojiCompatFont(
 
     fun getConfig(context: Context): EmojiCompat.Config {
         if (this === SYSTEM_DEFAULT) {
-            return BundledEmojiCompatConfig(context)
+            return FileEmojiCompatConfig.init(context)
         }
-        return FileEmojiCompatConfig(context, getLatestFontFile(context))
+        return FileEmojiCompatConfig.init(context, getLatestFontFile(context))
     }
 
     fun isDownloaded(context: Context): Boolean {

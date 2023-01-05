@@ -24,7 +24,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import androidx.emoji.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat
 import androidx.work.WorkManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.piasy.biv.BigImageViewer
@@ -44,6 +44,8 @@ import com.keylesspalace.tusky.util.EmojiCompatFont
 import com.keylesspalace.tusky.util.LocaleManager
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.uber.autodispose.AutoDisposePlugins
+import de.c1710.filemojicompat_defaults.DefaultEmojiPackList
+import de.c1710.filemojicompat_ui.helpers.EmojiPackHelper
 import io.reactivex.plugins.RxJavaPlugins
 import org.conscrypt.Conscrypt
 import org.koin.android.ext.android.get
@@ -84,6 +86,7 @@ class HuskyApplication : Application() {
             .getConfig(this)
             .setReplaceAll(true)
         EmojiCompat.init(emojiConfig)
+        EmojiPackHelper.init(this, DefaultEmojiPackList.get(this))
 
         // Setup default theme
         val theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT)

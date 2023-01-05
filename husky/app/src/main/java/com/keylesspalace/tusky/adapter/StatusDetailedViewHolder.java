@@ -6,30 +6,22 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
-import androidx.emoji.widget.EmojiAppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.flexbox.FlexboxLayoutManager;
-
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.entity.Status;
-import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.LinkHelper;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 class StatusDetailedViewHolder extends StatusBaseViewHolder {
     private TextView reblogs;
@@ -109,7 +101,7 @@ class StatusDetailedViewHolder extends StatusBaseViewHolder {
             }
         }
     }
-    
+
     @Override
     protected void setupWithStatus(final StatusViewData.Concrete status,
                                    final StatusActionListener listener,

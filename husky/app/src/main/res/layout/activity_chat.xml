@@ -34,7 +34,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@drawable/avatar_default" />
-                <androidx.emoji.widget.EmojiTextView
+                <androidx.emoji2.widget.EmojiTextView
                     android:id="@+id/chatTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
