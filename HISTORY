@@ -1,3 +1,13 @@
+Husky 1.4.0 - 2023-01-07
+  - Fix: Fix issue while requesting permissions composing a status.
+  - Fix: An empty date crashes the application on Soapbox instances.
+  - All previous changes from beta versions.
+
+ Update dependencies:
+  - koin (3.3.0 -> 3.3.2).
+  - koinAndroid (3.3.1 -> 3.3.2).
+  - roboelectric (4.9 -> 4.9.2).
+
 Husky 1.4.0-beta4 - 2022-12-18
   - Fix: Media permissions for Android 13.
   - Fix: Asks permissions for notifications for Android 13.

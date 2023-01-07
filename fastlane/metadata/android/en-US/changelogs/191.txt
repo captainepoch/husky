@@ -1,0 +1,6 @@
+Husky 1.4.0
+
+Changelog:
+  - Fix: Fix issue while requesting permissions composing a status.
+  - Fix: An empty date crashes the application on Soapbox instances.
+  - All previous changes from beta versions.
