@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.fragment
 
@@ -290,7 +295,7 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
 
     private fun getEmojiReactionFetchCall(): Single<Response<List<EmojiReaction>>> {
         val statusId = requireId(type, id)
-        val emoji = requireId(type, emojiReaction, "emoji")
+        val emoji = requireId(type, emojiReaction, "emoji").split("@")[0]
         return api.statusReactedBy(statusId, emoji)
     }
 
@@ -313,11 +318,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
 
                     if (response.isSuccessful &&
                         emojiReaction != null &&
-                        emojiReaction.size > 0 &&
-                        emojiReaction.get(0).accounts != null
+                        emojiReaction.isNotEmpty() &&
+                        emojiReaction[0].accounts != null
                     ) {
                         val linkHeader = response.headers()["Link"]
-                        onFetchAccountsSuccess(emojiReaction.get(0).accounts!!, linkHeader)
+                        onFetchAccountsSuccess(emojiReaction[0].accounts!!, linkHeader)
                     } else {
                         onFetchAccountsFailure(Exception(response.message()))
                     }
