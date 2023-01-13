@@ -1,18 +1,18 @@
 // Kotlin version
-ext.kotlin_version = "1.7.22"
+ext.kotlin_version = "1.8.0"
 
 // Dependencies versions
 def versions = [:]
 
 def gradle = [:]
-gradle.androidGradlePlugin = "7.3.1"
+gradle.androidGradlePlugin = "7.4.0"
 gradle.gradlePluginVersions = "0.44.0"
 gradle.ktlintGradle = "11.0.0"
 versions.gradle = gradle
 
 versions.androidImageCropper = "2.8.0"
 versions.androidSvg = "1.4"
-versions.appcompat = "1.5.1"
+versions.appcompat = "1.6.0"
 versions.autodispose = "1.4.0"
 versions.bigImageViewer = "1.8.1"
 versions.browser = "1.4.0"
@@ -43,7 +43,7 @@ versions.preferenceKtx = "1.2.0"
 versions.okhttpVersion = "4.10.0"
 versions.recyclerView = "1.2.1"
 versions.retrofit = "2.9.0"
-versions.room = "2.4.3"
+versions.room = "2.5.0"
 versions.rxAndroid = "2.1.1"
 versions.rxJava = "2.2.21"
 versions.rxKotlin = "2.4.0"
@@ -63,7 +63,7 @@ testing.junit = "4.13.2"
 testing.mockitoInline = "4.10.0"
 testing.mockitoKotlin = "2.2.0"
 testing.roboelectric = "4.9.2"
-testing.roomTesting = "2.4.3"
+testing.roomTesting = "2.5.0"
 versions.testing = testing
 
 ext.versions = versions
