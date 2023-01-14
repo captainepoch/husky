@@ -53,6 +53,7 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.MuteEvent
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent
+import com.keylesspalace.tusky.databinding.FragmentTimelineBinding
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Chat
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
@@ -77,13 +78,9 @@ import com.keylesspalace.tusky.util.inc
 import com.keylesspalace.tusky.view.EndlessOnScrollListener
 import com.keylesspalace.tusky.viewdata.ChatViewData
 import com.uber.autodispose.android.lifecycle.autoDispose
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_timeline.progressBar
-import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
-import kotlinx.android.synthetic.main.fragment_timeline.statusView
-import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
-import kotlinx.android.synthetic.main.fragment_timeline.topProgressBar
 import org.koin.android.ext.android.inject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -95,8 +92,11 @@ class ChatsFragment :
     ChatActionListener,
     OnRefreshListener {
 
+    private val binding by viewBinding(FragmentTimelineBinding::bind)
+
     private val TAG = "ChatsF" // logging tag
     private val LOAD_AT_ONCE = 30
+
     // break pagination until it's not fixed in plemora
     private val BROKEN_PAGINATION_IN_BACKEND = true
     private val eventHub: EventHub by inject()
@@ -140,10 +140,11 @@ class ChatsFragment :
                 // scroll up when new items at the top are loaded while being in the first position
                 // https://github.com/tuskyapp/Tusky/pull/1905#issuecomment-677819724
                 if (position == 0 && context != null && adapter.itemCount != count) {
-                    if (isSwipeToRefreshEnabled)
-                        recyclerView.scrollBy(0, Utils.dpToPx(context!!, -30))
-                    else
-                        recyclerView.scrollToPosition(0)
+                    if (isSwipeToRefreshEnabled) {
+                        binding.recyclerView.scrollBy(0, Utils.dpToPx(context!!, -30))
+                    } else {
+                        binding.recyclerView.scrollToPosition(0)
+                    }
                 }
             }
         }
@@ -243,28 +244,28 @@ class ChatsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.isEnabled = isSwipeToRefreshEnabled
-        swipeRefreshLayout.setOnRefreshListener(this)
-        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
+        binding.swipeRefreshLayout.isEnabled = isSwipeToRefreshEnabled
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
 
         // TODO: a11y
-        recyclerView.setHasFixedSize(true)
+        binding.recyclerView.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(view.context)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 view.context,
                 DividerItemDecoration.VERTICAL
             )
         )
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         if (chats.isEmpty()) {
-            progressBar.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.VISIBLE
             bottomLoading = true
             sendInitialRequest()
         } else {
-            progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
             if (isNeedRefresh) onRefresh()
         }
     }
@@ -296,7 +297,7 @@ class ChatsFragment :
                     chats.addAll(mutableChats)
 
                     updateAdapter()
-                    progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                 }
                 updateCurrent()
                 loadAbove()
@@ -340,19 +341,19 @@ class ChatsFragment :
                 }
                 bottomLoading = false
                 // Indicate that we are not loading anymore
-                progressBar.visibility = View.GONE
-                swipeRefreshLayout.isRefreshing = false
+                binding.progressBar.visibility = View.GONE
+                binding.swipeRefreshLayout.isRefreshing = false
             }, {
                 initialUpdateFailed = true
                 // Indicate that we are not loading anymore
-                progressBar.visibility = View.GONE
-                swipeRefreshLayout.isRefreshing = false
+                binding.progressBar.visibility = View.GONE
+                binding.swipeRefreshLayout.isRefreshing = false
             })
     }
 
     private fun showNothing() {
-        statusView.visibility = View.VISIBLE
-        statusView.setup(R.drawable.elephant_friend_empty, R.string.message_empty, null)
+        binding.statusView.visibility = View.VISIBLE
+        binding.statusView.setup(R.drawable.elephant_friend_empty, R.string.message_empty, null)
     }
 
     private fun removeAllByAccountId(accountId: String) {
@@ -419,7 +420,7 @@ class ChatsFragment :
                     this@ChatsFragment.onLoadMore()
             }
         }
-        recyclerView.addOnScrollListener(scrollListener)
+        binding.recyclerView.addOnScrollListener(scrollListener)
         if (!eventRegistered) {
             eventHub.events
                 .observeOn(AndroidSchedulers.mainThread())
@@ -471,10 +472,11 @@ class ChatsFragment :
     }
 
     override fun onRefresh() {
-        if (isSwipeToRefreshEnabled)
-            swipeRefreshLayout.isEnabled = true
+        if (isSwipeToRefreshEnabled) {
+            binding.swipeRefreshLayout.isEnabled = true
+        }
 
-        statusView.visibility = View.GONE
+        binding.statusView.visibility = View.GONE
         isNeedRefresh = false
 
         if (this.initialUpdateFailed) {
@@ -549,10 +551,15 @@ class ChatsFragment :
         pos: Int
     ) {
         if (isAdded &&
-            (fetchEnd == FetchEnd.TOP || fetchEnd == FetchEnd.BOTTOM && maxId == null && progressBar.visibility != View.VISIBLE) &&
+            (
+                fetchEnd == FetchEnd.TOP ||
+                    fetchEnd == FetchEnd.BOTTOM &&
+                    maxId == null &&
+                    binding.progressBar.visibility != View.VISIBLE
+                ) &&
             !isSwipeToRefreshEnabled
         )
-            topProgressBar.show()
+            binding.topProgressBar.show()
         // allow getting old statuses/fallbacks for network only for for bottom loading
         val mode = if (fetchEnd == FetchEnd.BOTTOM) {
             TimelineRequestMode.ANY
@@ -687,23 +694,23 @@ class ChatsFragment :
             }
         }
         if (isAdded) {
-            topProgressBar.hide()
+            binding.topProgressBar.hide()
             updateBottomLoadingState(fetchEnd)
-            progressBar.visibility = View.GONE
-            swipeRefreshLayout.isRefreshing = false
-            swipeRefreshLayout.isEnabled = true
+            binding.progressBar.visibility = View.GONE
+            binding.swipeRefreshLayout.isRefreshing = false
+            binding.swipeRefreshLayout.isEnabled = true
             if (this.chats.size == 0) {
                 showNothing()
             } else {
-                this.statusView.visibility = View.GONE
+                binding.statusView.visibility = View.GONE
             }
         }
     }
 
     private fun onFetchTimelineFailure(exception: Exception, fetchEnd: FetchEnd, position: Int) {
         if (isAdded) {
-            swipeRefreshLayout.isRefreshing = false
-            topProgressBar.hide()
+            binding.swipeRefreshLayout.isRefreshing = false
+            binding.topProgressBar.hide()
             if (fetchEnd == FetchEnd.MIDDLE && !chats[position].isRight()) {
                 var placeholder = chats[position].asLeftOrNull()
                 val newViewData: ChatViewData
@@ -716,23 +723,23 @@ class ChatsFragment :
                 chats.setPairedItem(position, newViewData)
                 updateAdapter()
             } else if (chats.isEmpty()) {
-                swipeRefreshLayout.isEnabled = false
-                statusView.visibility = View.VISIBLE
+                binding.swipeRefreshLayout.isEnabled = false
+                binding.statusView.visibility = View.VISIBLE
                 if (exception is IOException) {
-                    statusView.setup(R.drawable.elephant_offline, R.string.error_network) {
-                        progressBar.visibility = View.VISIBLE
+                    binding.statusView.setup(R.drawable.elephant_offline, R.string.error_network) {
+                        binding.progressBar.visibility = View.VISIBLE
                         onRefresh()
                     }
                 } else {
-                    statusView.setup(R.drawable.elephant_error, R.string.error_generic) {
-                        progressBar.visibility = View.VISIBLE
+                    binding.statusView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                        binding.progressBar.visibility = View.VISIBLE
                         onRefresh()
                     }
                 }
             }
             Log.e(TAG, "Fetch Failure: " + exception.message)
             updateBottomLoadingState(fetchEnd)
-            progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
         }
     }
 
@@ -790,7 +797,7 @@ class ChatsFragment :
     private fun jumpToTop() {
         if (isAdded) {
             layoutManager.scrollToPosition(0)
-            recyclerView.stopScroll()
+            binding.recyclerView.stopScroll()
             scrollListener.reset()
         }
     }
