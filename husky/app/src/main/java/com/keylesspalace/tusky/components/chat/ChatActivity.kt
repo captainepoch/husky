@@ -88,6 +88,8 @@ import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityChatBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Chat
 import com.keylesspalace.tusky.entity.Emoji
@@ -120,27 +122,6 @@ import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_chat.actionPhotoPick
-import kotlinx.android.synthetic.main.activity_chat.actionPhotoTake
-import kotlinx.android.synthetic.main.activity_chat.activityChat
-import kotlinx.android.synthetic.main.activity_chat.addMediaBottomSheet
-import kotlinx.android.synthetic.main.activity_chat.attachmentButton
-import kotlinx.android.synthetic.main.activity_chat.attachmentLayout
-import kotlinx.android.synthetic.main.activity_chat.chatAvatar
-import kotlinx.android.synthetic.main.activity_chat.chatTitle
-import kotlinx.android.synthetic.main.activity_chat.chatUsername
-import kotlinx.android.synthetic.main.activity_chat.editText
-import kotlinx.android.synthetic.main.activity_chat.emojiButton
-import kotlinx.android.synthetic.main.activity_chat.emojiView
-import kotlinx.android.synthetic.main.activity_chat.imageAttachment
-import kotlinx.android.synthetic.main.activity_chat.messageView
-import kotlinx.android.synthetic.main.activity_chat.progressBar
-import kotlinx.android.synthetic.main.activity_chat.recycler
-import kotlinx.android.synthetic.main.activity_chat.sendButton
-import kotlinx.android.synthetic.main.activity_chat.stickerButton
-import kotlinx.android.synthetic.main.activity_chat.stickerKeyboard
-import kotlinx.android.synthetic.main.activity_chat.textAttachment
-import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -155,6 +136,8 @@ class ChatActivity :
     EmojiKeyboard.OnEmojiSelectedListener,
     OnEmojiSelectedListener,
     InputConnectionCompat.OnCommitContentListener {
+
+    private val binding by viewBinding(ActivityChatBinding::inflate)
 
     private val LOAD_AT_ONCE = 30
     private val eventHub: EventHub by inject()
@@ -197,7 +180,7 @@ class ChatActivity :
             Timber.d("onInserted")
             adapter.notifyItemRangeInserted(position, count)
             if (position == 0) {
-                recycler.scrollToPosition(0)
+                binding.recycler.scrollToPosition(0)
             }
         }
 
@@ -287,8 +270,8 @@ class ChatActivity :
         emojis = intent.getParcelableArrayListExtra<Emoji>(EMOJIS)
             ?: throw IllegalArgumentException("Can't open ChatActivity without emojis")
 
-        setContentView(R.layout.activity_chat)
-        setSupportActionBar(toolbar)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         subscribeToUpdates()
 
@@ -314,8 +297,8 @@ class ChatActivity :
                     is ChatMessageDeliveredEvent -> {
                         if (event.chatMsg.chatId == chatId) {
                             onRefresh()
-                            enableButton(attachmentButton, true, true)
-                            enableButton(stickerButton, haveStickers, haveStickers)
+                            enableButton(binding.attachmentButton, true, true)
+                            enableButton(binding.stickerButton, haveStickers, haveStickers)
 
                             sending = false
                             enableSendButton()
@@ -340,12 +323,12 @@ class ChatActivity :
         }
         loadAvatar(
             avatarUrl,
-            chatAvatar,
+            binding.chatAvatar,
             resources.getDimensionPixelSize(R.dimen.avatar_radius_24dp),
             true
         )
-        chatTitle.text = displayName.emojify(emojis, chatTitle, true)
-        chatUsername.text = username
+        binding.chatTitle.text = displayName.emojify(emojis, binding.chatTitle, true)
+        binding.chatUsername.text = username
     }
 
     private fun setupChat() {
@@ -353,12 +336,12 @@ class ChatActivity :
             ChatMessagesAdapter(dataSource, this, accountManager.value.activeAccount!!.accountId)
 
         // TODO: a11y
-        recycler.setHasFixedSize(true)
+        binding.recycler.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
-        recycler.layoutManager = layoutManager
+        binding.recycler.layoutManager = layoutManager
         // recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recycler.adapter = adapter
+        binding.recycler.adapter = adapter
     }
 
     private fun setupAttachment() {
@@ -386,26 +369,26 @@ class ChatActivity :
             popup.show()
         }
 
-        imageAttachment.setOnClickListener(onMediaPick)
-        textAttachment.setOnClickListener(onMediaPick)
+        binding.imageAttachment.setOnClickListener(onMediaPick)
+        binding.textAttachment.setOnClickListener(onMediaPick)
     }
 
     private fun setupComposeField(startingText: String?) {
-        editText.setOnCommitContentListener(this)
+        binding.editText.setOnCommitContentListener(this)
 
-        editText.setOnKeyListener { _, keyCode, event -> this.onKeyDown(keyCode, event) }
+        binding.editText.setOnKeyListener { _, keyCode, event -> this.onKeyDown(keyCode, event) }
 
-        editText.setAdapter(
+        binding.editText.setAdapter(
             ComposeAutoCompleteAdapter(this)
         )
-        editText.setTokenizer(ComposeTokenizer())
+        binding.editText.setTokenizer(ComposeTokenizer())
 
-        editText.setText(startingText)
-        editText.setSelection(editText.length())
+        binding.editText.setText(startingText)
+        binding.editText.setSelection(binding.editText.length())
 
-        val mentionColour = editText.linkTextColors.defaultColor
-        highlightSpans(editText.text, mentionColour)
-        editText.afterTextChanged { editable ->
+        val mentionColour = binding.editText.linkTextColors.defaultColor
+        highlightSpans(binding.editText.text, mentionColour)
+        binding.editText.afterTextChanged { editable ->
             highlightSpans(editable, mentionColour)
             enableSendButton()
         }
@@ -414,7 +397,7 @@ class ChatActivity :
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
             Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
         ) {
-            editText.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            binding.editText.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
     }
 
@@ -424,9 +407,9 @@ class ChatActivity :
             return
 
         val haveMedia = viewModel.media.value?.isNotEmpty() ?: false
-        val haveText = editText.text.isNotEmpty()
+        val haveText = binding.editText.text.isNotEmpty()
 
-        enableButton(sendButton, haveMedia || haveText, haveMedia || haveText)
+        enableButton(binding.sendButton, haveMedia || haveText, haveMedia || haveText)
     }
 
     override fun search(token: String): List<ComposeAutoCompleteAdapter.AutocompleteResult> {
@@ -468,9 +451,9 @@ class ChatActivity :
             viewModel.instanceStickers.observe { stickers ->
                 if (stickers.isNotEmpty()) {
                     haveStickers = true
-                    stickerButton.visibility = View.VISIBLE
-                    enableButton(stickerButton, true, true)
-                    stickerKeyboard.setupStickerKeyboard(this@ChatActivity, stickers)
+                    binding.stickerButton.visibility = View.VISIBLE
+                    enableButton(binding.stickerButton, true, true)
+                    binding.stickerKeyboard.setupStickerKeyboard(this@ChatActivity, stickers)
                 }
             }
             viewModel.emoji.observe { setEmojiList(it) }
@@ -478,9 +461,9 @@ class ChatActivity :
                 val notHaveMedia = it.isEmpty()
 
                 enableSendButton()
-                enableButton(attachmentButton, notHaveMedia, notHaveMedia)
+                enableButton(binding.attachmentButton, notHaveMedia, notHaveMedia)
                 enableButton(
-                    stickerButton,
+                    binding.stickerButton,
                     haveStickers && notHaveMedia,
                     haveStickers && notHaveMedia
                 )
@@ -490,39 +473,39 @@ class ChatActivity :
 
                     when (media.type) {
                         ComposeActivity.QueuedMedia.UNKNOWN -> {
-                            textAttachment.visibility = View.VISIBLE
-                            imageAttachment.visibility = View.GONE
+                            binding.textAttachment.visibility = View.VISIBLE
+                            binding.imageAttachment.visibility = View.GONE
 
-                            textAttachment.text = media.originalFileName
-                            textAttachment.setChecked(!media.description.isNullOrEmpty())
-                            textAttachment.setProgress(media.uploadPercent)
+                            binding.textAttachment.text = media.originalFileName
+                            binding.textAttachment.setChecked(!media.description.isNullOrEmpty())
+                            binding.textAttachment.setProgress(media.uploadPercent)
                         }
                         ComposeActivity.QueuedMedia.AUDIO -> {
-                            imageAttachment.visibility = View.VISIBLE
-                            textAttachment.visibility = View.GONE
+                            binding.imageAttachment.visibility = View.VISIBLE
+                            binding.textAttachment.visibility = View.GONE
 
-                            imageAttachment.setChecked(!media.description.isNullOrEmpty())
-                            imageAttachment.setProgress(media.uploadPercent)
-                            imageAttachment.setImageResource(R.drawable.ic_music_box_preview_24dp)
+                            binding.imageAttachment.setChecked(!media.description.isNullOrEmpty())
+                            binding.imageAttachment.setProgress(media.uploadPercent)
+                            binding.imageAttachment.setImageResource(R.drawable.ic_music_box_preview_24dp)
                         }
                         else -> {
-                            imageAttachment.visibility = View.VISIBLE
-                            textAttachment.visibility = View.GONE
+                            binding.imageAttachment.visibility = View.VISIBLE
+                            binding.textAttachment.visibility = View.GONE
 
-                            imageAttachment.setChecked(!media.description.isNullOrEmpty())
-                            imageAttachment.setProgress(media.uploadPercent)
+                            binding.imageAttachment.setChecked(!media.description.isNullOrEmpty())
+                            binding.imageAttachment.setProgress(media.uploadPercent)
 
-                            Glide.with(imageAttachment.context)
+                            Glide.with(binding.imageAttachment.context)
                                 .load(media.uri)
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .dontAnimate()
-                                .into(imageAttachment)
+                                .into(binding.imageAttachment)
                         }
                     }
 
-                    attachmentLayout.visibility = View.VISIBLE
+                    binding.attachmentLayout.visibility = View.VISIBLE
                 } else {
-                    attachmentLayout.visibility = View.GONE
+                    binding.attachmentLayout.visibility = View.GONE
                 }
             }
             viewModel.uploadError.observe {
@@ -533,28 +516,28 @@ class ChatActivity :
 
     private fun setEmojiList(emojiList: List<Emoji>?) {
         if (emojiList != null) {
-            emojiView.adapter = EmojiAdapter(
+            binding.emojiView.adapter = EmojiAdapter(
                 emojiList,
                 this@ChatActivity,
                 preferences.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
             )
-            enableButton(emojiButton, true, emojiList.isNotEmpty())
+            enableButton(binding.emojiButton, true, emojiList.isNotEmpty())
         }
     }
 
     private fun replaceTextAtCaret(text: CharSequence) {
         // If you select "backward" in an editable, you get SelectionStart > SelectionEnd
-        val start = editText.selectionStart.coerceAtMost(editText.selectionEnd)
-        val end = editText.selectionStart.coerceAtLeast(editText.selectionEnd)
-        val textToInsert = if (start > 0 && !editText.text[start - 1].isWhitespace()) {
+        val start = binding.editText.selectionStart.coerceAtMost(binding.editText.selectionEnd)
+        val end = binding.editText.selectionStart.coerceAtLeast(binding.editText.selectionEnd)
+        val textToInsert = if (start > 0 && !binding.editText.text[start - 1].isWhitespace()) {
             " $text"
         } else {
             text
         }
-        editText.text.replace(start, end, textToInsert)
+        binding.editText.text.replace(start, end, textToInsert)
 
         // Set the cursor after the inserted text
-        editText.setSelection(start + text.length)
+        binding.editText.setSelection(start + text.length)
     }
 
     override fun onEmojiSelected(shortcode: String) {
@@ -577,30 +560,31 @@ class ChatActivity :
     }
 
     private fun setupButtons() {
-        addMediaBehavior = BottomSheetBehavior.from(addMediaBottomSheet)
-        emojiBehavior = BottomSheetBehavior.from(emojiView)
-        stickerBehavior = BottomSheetBehavior.from(stickerKeyboard)
+        addMediaBehavior = BottomSheetBehavior.from(binding.addMediaBottomSheet)
+        emojiBehavior = BottomSheetBehavior.from(binding.emojiView)
+        stickerBehavior = BottomSheetBehavior.from(binding.stickerKeyboard)
 
-        sendButton.setOnClickListener { onSendClicked() }
+        binding.sendButton.setOnClickListener { onSendClicked() }
 
-        attachmentButton.setOnClickListener { openPickDialog() }
-        emojiButton.setOnClickListener { showEmojis() }
+        binding.attachmentButton.setOnClickListener { openPickDialog() }
+        binding.emojiButton.setOnClickListener { showEmojis() }
         if (viewModel.tryFetchStickers) {
-            stickerButton.setOnClickListener { showStickers() }
-            stickerButton.visibility = View.VISIBLE
-            enableButton(stickerButton, false, false)
+            binding.stickerButton.setOnClickListener { showStickers() }
+            binding.stickerButton.visibility = View.VISIBLE
+            enableButton(binding.stickerButton, false, false)
         } else {
-            stickerButton.visibility = View.GONE
+            binding.stickerButton.visibility = View.GONE
         }
 
-        emojiView.layoutManager = GridLayoutManager(this, 3, GridLayoutManager.HORIZONTAL, false)
+        binding.emojiView.layoutManager =
+            GridLayoutManager(this, 3, GridLayoutManager.HORIZONTAL, false)
 
         val textColor = ThemeUtils.getColor(this, android.R.attr.textColorTertiary)
 
         val cameraIcon = IconicsDrawable(this, GoogleMaterial.Icon.gmd_camera_alt).apply {
             colorInt = textColor; sizeDp = 18
         }
-        actionPhotoTake.setCompoundDrawablesRelativeWithIntrinsicBounds(
+        binding.actionPhotoTake.setCompoundDrawablesRelativeWithIntrinsicBounds(
             cameraIcon,
             null,
             null,
@@ -610,10 +594,15 @@ class ChatActivity :
         val imageIcon = IconicsDrawable(this, GoogleMaterial.Icon.gmd_image).apply {
             colorInt = textColor; sizeDp = 18
         }
-        actionPhotoPick.setCompoundDrawablesRelativeWithIntrinsicBounds(imageIcon, null, null, null)
+        binding.actionPhotoPick.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            imageIcon,
+            null,
+            null,
+            null
+        )
 
-        actionPhotoTake.setOnClickListener { initiateCameraApp() }
-        actionPhotoPick.setOnClickListener { onMediaPick() }
+        binding.actionPhotoTake.setOnClickListener { initiateCameraApp() }
+        binding.actionPhotoPick.setOnClickListener { onMediaPick() }
     }
 
     private fun onSendClicked() {
@@ -621,7 +610,7 @@ class ChatActivity :
 
         serviceClient.sendChatMessage(
             MessageToSend(
-                editText.text.toString(),
+                binding.editText.text.toString(),
                 media?.id,
                 media?.uri?.toString(),
                 accountManager.value.activeAccount!!.id,
@@ -631,11 +620,11 @@ class ChatActivity :
         )
 
         sending = true
-        editText.text.clear()
+        binding.editText.text.clear()
         viewModel.media.value = listOf()
-        enableButton(sendButton, false, false)
-        enableButton(attachmentButton, false, false)
-        enableButton(stickerButton, false, false)
+        enableButton(binding.sendButton, false, false)
+        enableButton(binding.attachmentButton, false, false)
+        enableButton(binding.stickerButton, false, false)
     }
 
     private fun openPickDialog() {
@@ -649,7 +638,7 @@ class ChatActivity :
     }
 
     private fun showEmojis() {
-        emojiView.adapter?.let {
+        binding.emojiView.adapter?.let {
             if (it.itemCount == 0) {
                 val errorMessage = getString(
                     R.string.error_no_custom_emojis,
@@ -741,7 +730,7 @@ class ChatActivity :
                 initiateMediaPicking()
             } else {
                 val bar = Snackbar.make(
-                    activityChat, R.string.error_media_upload_permission,
+                    binding.activityChat, R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
                 }
@@ -818,12 +807,12 @@ class ChatActivity :
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(PHOTO_UPLOAD_URI_KEY, photoUploadUri)
-        outState.putString(MESSAGE_KEY, editText.text.toString())
+        outState.putString(MESSAGE_KEY, binding.editText.text.toString())
         super.onSaveInstanceState(outState)
     }
 
     private fun displayTransientError(@StringRes stringId: Int) {
-        val bar = Snackbar.make(activityChat, stringId, Snackbar.LENGTH_LONG)
+        val bar = Snackbar.make(binding.activityChat, stringId, Snackbar.LENGTH_LONG)
         // necessary so snackbar is shown over everything
         bar.view.elevation = resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
         bar.show()
@@ -846,7 +835,7 @@ class ChatActivity :
                     this.msgs.clear()
                     this.msgs.addAll(mutableMsgs)
                     updateAdapter()
-                    progressBar.visibility = View.GONE
+                    binding.progressBar.visibility = View.GONE
                     // Request statuses including current top to refresh all of them
                 }
                 updateCurrent()
@@ -893,13 +882,13 @@ class ChatActivity :
             }, {
                 initialUpdateFailed = true
                 // Indicate that we are not loading anymore
-                progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
             })
     }
 
     private fun showNothing() {
-        messageView.visibility = View.VISIBLE
-        messageView.setup(R.drawable.elephant_friend_empty, R.string.message_empty, null)
+        binding.messageView.visibility = View.VISIBLE
+        binding.messageView.setup(R.drawable.elephant_friend_empty, R.string.message_empty, null)
     }
 
     private fun loadAbove() {
@@ -1081,16 +1070,16 @@ class ChatActivity :
             }
         }
         updateBottomLoadingState(fetchEnd)
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
         if (this.msgs.size == 0) {
             showNothing()
         } else {
-            messageView.visibility = View.GONE
+            binding.messageView.visibility = View.GONE
         }
     }
 
     private fun onRefresh() {
-        messageView.visibility = View.GONE
+        binding.messageView.visibility = View.GONE
         isNeedRefresh = false
 
         if (this.initialUpdateFailed) {
@@ -1112,22 +1101,22 @@ class ChatActivity :
             msgs.setPairedItem(position, newViewData)
             updateAdapter()
         } else if (msgs.isEmpty()) {
-            messageView.visibility = View.VISIBLE
+            binding.messageView.visibility = View.VISIBLE
             if (exception is IOException) {
-                messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
-                    progressBar.visibility = View.VISIBLE
+                binding.messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
+                    binding.progressBar.visibility = View.VISIBLE
                     onRefresh()
                 }
             } else {
-                messageView.setup(R.drawable.elephant_error, R.string.error_generic) {
-                    progressBar.visibility = View.VISIBLE
+                binding.messageView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                    binding.progressBar.visibility = View.VISIBLE
                     onRefresh()
                 }
             }
         }
         Timber.e("Fetch Failure: " + exception.message)
         updateBottomLoadingState(fetchEnd)
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun updateBottomLoadingState(fetchEnd: FetchEnd) {
