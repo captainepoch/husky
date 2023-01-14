@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
+import com.keylesspalace.tusky.databinding.FragmentTimelineBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.interfaces.RefreshableFragment
@@ -41,11 +42,7 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.SquareImageView
 import com.keylesspalace.tusky.viewdata.AttachmentViewData
-import kotlinx.android.synthetic.main.fragment_timeline.progressBar
-import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
-import kotlinx.android.synthetic.main.fragment_timeline.statusView
-import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
-import kotlinx.android.synthetic.main.fragment_timeline.topProgressBar
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,6 +57,8 @@ import java.util.Random
  */
 
 class AccountMediaFragment : BaseFragment(), RefreshableFragment {
+
+    private val binding by viewBinding(FragmentTimelineBinding::bind)
 
     companion object {
         @JvmStatic
@@ -98,16 +97,16 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
             fetchingStatus = FetchingStatus.NOT_FETCHING
 
             if (isAdded) {
-                swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
-                topProgressBar?.hide()
-                statusView.show()
+                binding.swipeRefreshLayout.isRefreshing = false
+                binding.progressBar.visibility = View.GONE
+                binding.topProgressBar?.hide()
+                binding.statusView.show()
                 if (t is IOException) {
-                    statusView.setup(R.drawable.elephant_offline, R.string.error_network) {
+                    binding.statusView.setup(R.drawable.elephant_offline, R.string.error_network) {
                         doInitialLoadingIfNeeded()
                     }
                 } else {
-                    statusView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                    binding.statusView.setup(R.drawable.elephant_error, R.string.error_generic) {
                         doInitialLoadingIfNeeded()
                     }
                 }
@@ -119,9 +118,9 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
             fetchingStatus = FetchingStatus.NOT_FETCHING
             if (isAdded) {
-                swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
-                topProgressBar?.hide()
+                binding.swipeRefreshLayout.isRefreshing = false
+                binding.progressBar.visibility = View.GONE
+                binding.topProgressBar?.hide()
 
                 val body = response.body()
                 body?.let { fetched ->
@@ -134,12 +133,13 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
                         result.addAll(AttachmentViewData.list(status))
                     }
                     adapter.addTop(result)
-                    if (result.isNotEmpty())
-                        recyclerView.scrollToPosition(0)
+                    if (result.isNotEmpty()) {
+                        binding.recyclerView.scrollToPosition(0)
+                    }
 
                     if (statuses.isEmpty()) {
-                        statusView.show()
-                        statusView.setup(
+                        binding.statusView.show()
+                        binding.statusView.setup(
                             R.drawable.elephant_friend_empty, R.string.message_empty,
                             null
                         )
@@ -193,8 +193,8 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_timeline, container, false)
+    ): View {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -205,18 +205,18 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
 
         adapter.baseItemColor = ThemeUtils.getColor(view.context, android.R.attr.windowBackground)
 
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
 
         if (isSwipeToRefreshEnabled) {
-            swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.setOnRefreshListener {
                 refresh()
             }
-            swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
+            binding.swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
         }
-        statusView.visibility = View.GONE
+        binding.statusView.visibility = View.GONE
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recycler_view: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
@@ -256,7 +256,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
     }
 
     private fun refresh() {
-        statusView.hide()
+        binding.statusView.hide()
         if (fetchingStatus != FetchingStatus.NOT_FETCHING) return
         currentCall = if (statuses.isEmpty()) {
             fetchingStatus = FetchingStatus.INITIAL_FETCHING
@@ -270,13 +270,14 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         }
         currentCall?.enqueue(callback)
 
-        if (!isSwipeToRefreshEnabled)
-            topProgressBar?.show()
+        if (!isSwipeToRefreshEnabled) {
+            binding.topProgressBar?.show()
+        }
     }
 
     private fun doInitialLoadingIfNeeded() {
         if (isAdded) {
-            statusView.hide()
+            binding.statusView.hide()
         }
         if (fetchingStatus == FetchingStatus.NOT_FETCHING && statuses.isEmpty()) {
             fetchingStatus = FetchingStatus.INITIAL_FETCHING
