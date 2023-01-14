@@ -34,6 +34,7 @@ import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.report.Screen
 import com.keylesspalace.tusky.components.report.adapter.AdapterHandler
 import com.keylesspalace.tusky.components.report.adapter.StatusesAdapter
+import com.keylesspalace.tusky.databinding.FragmentReportStatusesBinding
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Status
@@ -43,20 +44,13 @@ import com.keylesspalace.tusky.util.StatusDisplayOptions
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.viewdata.AttachmentViewData
-import kotlinx.android.synthetic.main.fragment_report_statuses.buttonCancel
-import kotlinx.android.synthetic.main.fragment_report_statuses.buttonContinue
-import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarBottom
-import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarLoading
-import kotlinx.android.synthetic.main.fragment_report_statuses.progressBarTop
-import kotlinx.android.synthetic.main.fragment_report_statuses.recyclerView
-import kotlinx.android.synthetic.main.fragment_report_statuses.swipeRefreshLayout
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ReportStatusesFragment :
-    Fragment(R.layout.fragment_report_statuses),
-    AdapterHandler {
+class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), AdapterHandler {
 
+    private val binding by viewBinding(FragmentReportStatusesBinding::bind)
     private val accountManager: AccountManager by inject()
     private val viewModel: ReportViewModel by viewModel()
 
@@ -98,9 +92,9 @@ class ReportStatusesFragment :
     }
 
     private fun setupSwipeRefreshLayout() {
-        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
 
-        swipeRefreshLayout.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
             snackbarErrorRetry?.dismiss()
             viewModel.refreshStatuses()
         }
@@ -124,14 +118,14 @@ class ReportStatusesFragment :
             statusDisplayOptions, viewModel.statusViewState, this
         )
 
-        recyclerView.addItemDecoration(
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 requireContext(), DividerItemDecoration.VERTICAL
             )
         )
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
-        (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
+        (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         viewModel.statuses.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -141,9 +135,9 @@ class ReportStatusesFragment :
             viewLifecycleOwner,
             Observer {
                 if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING) {
-                    progressBarBottom.show()
+                    binding.progressBarBottom.show()
                 } else {
-                    progressBarBottom.hide()
+                    binding.progressBarBottom.hide()
                 }
 
                 if (it?.status == com.keylesspalace.tusky.util.Status.FAILED) {
@@ -156,9 +150,9 @@ class ReportStatusesFragment :
             viewLifecycleOwner,
             Observer {
                 if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING) {
-                    progressBarTop.show()
+                    binding.progressBarTop.show()
                 } else {
-                    progressBarTop.hide()
+                    binding.progressBarTop.hide()
                 }
 
                 if (it?.status == com.keylesspalace.tusky.util.Status.FAILED) {
@@ -169,15 +163,15 @@ class ReportStatusesFragment :
 
         viewModel.networkStateRefresh.observe(viewLifecycleOwner) {
             if (it?.status == com.keylesspalace.tusky.util.Status.RUNNING &&
-                !swipeRefreshLayout.isRefreshing
+                !binding.swipeRefreshLayout.isRefreshing
             ) {
-                progressBarLoading.show()
+                binding.progressBarLoading.show()
             } else {
-                progressBarLoading.hide()
+                binding.progressBarLoading.hide()
             }
 
             if (it?.status != com.keylesspalace.tusky.util.Status.RUNNING) {
-                swipeRefreshLayout.isRefreshing = false
+                binding.swipeRefreshLayout.isRefreshing = false
             }
 
             if (it?.status == com.keylesspalace.tusky.util.Status.FAILED) {
@@ -189,7 +183,9 @@ class ReportStatusesFragment :
     private fun showError(@Suppress("UNUSED_PARAMETER") msg: String?) {
         if (snackbarErrorRetry?.isShown != true) {
             snackbarErrorRetry = Snackbar.make(
-                swipeRefreshLayout, R.string.failed_fetch_statuses, Snackbar.LENGTH_INDEFINITE
+                binding.swipeRefreshLayout,
+                R.string.failed_fetch_statuses,
+                Snackbar.LENGTH_INDEFINITE
             )
             snackbarErrorRetry?.setAction(R.string.action_retry) {
                 viewModel.retryStatusLoad()
@@ -199,11 +195,11 @@ class ReportStatusesFragment :
     }
 
     private fun handleClicks() {
-        buttonCancel.setOnClickListener {
+        binding.buttonCancel.setOnClickListener {
             viewModel.navigateTo(Screen.Back)
         }
 
-        buttonContinue.setOnClickListener {
+        binding.buttonContinue.setOnClickListener {
             viewModel.navigateTo(Screen.Note)
         }
     }
