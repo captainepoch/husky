@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.R.string
+import com.keylesspalace.tusky.databinding.FragmentAccountsInListBinding
+import com.keylesspalace.tusky.databinding.ItemFollowRequestBinding
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.util.Either
 import com.keylesspalace.tusky.util.emojify
@@ -39,17 +41,9 @@ import com.keylesspalace.tusky.viewmodel.AccountsInListViewModel
 import com.keylesspalace.tusky.viewmodel.State
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_accounts_in_list.accountsRecycler
-import kotlinx.android.synthetic.main.fragment_accounts_in_list.accountsSearchRecycler
-import kotlinx.android.synthetic.main.fragment_accounts_in_list.messageView
-import kotlinx.android.synthetic.main.fragment_accounts_in_list.searchView
-import kotlinx.android.synthetic.main.item_follow_request.acceptButton
-import kotlinx.android.synthetic.main.item_follow_request.avatar
-import kotlinx.android.synthetic.main.item_follow_request.displayNameTextView
-import kotlinx.android.synthetic.main.item_follow_request.rejectButton
-import kotlinx.android.synthetic.main.item_follow_request.usernameTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.IOException
 
@@ -71,6 +65,7 @@ class AccountsInListFragment : DialogFragment() {
         }
     }
 
+    private val binding by viewBinding(FragmentAccountsInListBinding::bind)
     private val viewModel: AccountsInListViewModel by viewModel()
 
     private lateinit var listId: String
@@ -110,16 +105,16 @@ class AccountsInListFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_accounts_in_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        accountsRecycler.layoutManager = LinearLayoutManager(view.context)
-        accountsRecycler.adapter = adapter
+        binding.accountsRecycler.layoutManager = LinearLayoutManager(view.context)
+        binding.accountsRecycler.adapter = adapter
 
-        accountsSearchRecycler.layoutManager = LinearLayoutManager(view.context)
-        accountsSearchRecycler.adapter = searchAdapter
+        binding.accountsSearchRecycler.layoutManager = LinearLayoutManager(view.context)
+        binding.accountsSearchRecycler.adapter = searchAdapter
 
         viewModel.state
             .observeOn(AndroidSchedulers.mainThread())
@@ -128,15 +123,15 @@ class AccountsInListFragment : DialogFragment() {
                 adapter.submitList(state.accounts.asRightOrNull() ?: listOf())
 
                 when (state.accounts) {
-                    is Either.Right -> messageView.hide()
+                    is Either.Right -> binding.messageView.hide()
                     is Either.Left -> handleError(state.accounts.value)
                 }
 
                 setupSearchView(state)
             }
 
-        searchView.isSubmitButtonEnabled = true
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.searchView.isSubmitButtonEnabled = true
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.search(query ?: "")
                 return true
@@ -155,32 +150,32 @@ class AccountsInListFragment : DialogFragment() {
     private fun setupSearchView(state: State) {
         if (state.searchResult == null) {
             searchAdapter.submitList(listOf())
-            accountsSearchRecycler.hide()
-            accountsRecycler.show()
+            binding.accountsSearchRecycler.hide()
+            binding.accountsRecycler.show()
         } else {
             val listAccounts = state.accounts.asRightOrNull() ?: listOf()
             val newList = state.searchResult.map { acc ->
                 acc to listAccounts.contains(acc)
             }
             searchAdapter.submitList(newList)
-            accountsSearchRecycler.show()
-            accountsRecycler.hide()
+            binding.accountsSearchRecycler.show()
+            binding.accountsRecycler.hide()
         }
     }
 
     private fun handleError(error: Throwable) {
-        messageView.show()
+        binding.messageView.show()
         val retryAction = { _: View ->
-            messageView.hide()
+            binding.messageView.hide()
             viewModel.load(listId)
         }
         if (error is IOException) {
-            messageView.setup(
+            binding.messageView.setup(
                 R.drawable.elephant_offline,
                 R.string.error_network, retryAction
             )
         } else {
-            messageView.setup(
+            binding.messageView.setup(
                 R.drawable.elephant_error,
                 R.string.error_generic, retryAction
             )
@@ -208,33 +203,36 @@ class AccountsInListFragment : DialogFragment() {
     inner class Adapter : ListAdapter<Account, Adapter.ViewHolder>(AccountDiffer) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_follow_request, parent, false)
-            return ViewHolder(view)
+            val binding = ItemFollowRequestBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+
+            return ViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.bind(getItem(position))
         }
 
-        inner class ViewHolder(itemView: View) :
-            RecyclerView.ViewHolder(itemView),
+        inner class ViewHolder(private val binding: ItemFollowRequestBinding) :
+            RecyclerView.ViewHolder(binding.root),
             View.OnClickListener,
             LayoutContainer {
 
             override val containerView = itemView
 
             init {
-                acceptButton.hide()
-                rejectButton.setOnClickListener(this)
-                rejectButton.contentDescription =
+                binding.acceptButton.hide()
+                binding.rejectButton.setOnClickListener(this)
+                binding.rejectButton.contentDescription =
                     itemView.context.getString(R.string.action_remove_from_list)
             }
 
             fun bind(account: Account) {
-                displayNameTextView.text = account.name.emojify(account.emojis, displayNameTextView)
-                usernameTextView.text = account.username
-                loadAvatar(account.avatar, avatar, radius, animateAvatar)
+                binding.displayNameTextView.text =
+                    account.name.emojify(account.emojis, binding.displayNameTextView)
+                binding.usernameTextView.text = account.username
+                loadAvatar(account.avatar, binding.avatar, radius, animateAvatar)
             }
 
             override fun onClick(v: View?) {
@@ -257,9 +255,11 @@ class AccountsInListFragment : DialogFragment() {
     inner class SearchAdapter : ListAdapter<AccountInfo, SearchAdapter.ViewHolder>(SearchDiffer) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_follow_request, parent, false)
-            return ViewHolder(view)
+            val binding = ItemFollowRequestBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+
+            return ViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -267,19 +267,20 @@ class AccountsInListFragment : DialogFragment() {
             holder.bind(account, inAList)
         }
 
-        inner class ViewHolder(itemView: View) :
-            RecyclerView.ViewHolder(itemView),
+        inner class ViewHolder(private val binding: ItemFollowRequestBinding) :
+            RecyclerView.ViewHolder(binding.root),
             View.OnClickListener,
             LayoutContainer {
 
-            override val containerView = itemView
+            override val containerView = binding.root
 
             fun bind(account: Account, inAList: Boolean) {
-                displayNameTextView.text = account.name.emojify(account.emojis, displayNameTextView)
-                usernameTextView.text = account.username
-                loadAvatar(account.avatar, avatar, radius, animateAvatar)
+                binding.displayNameTextView.text =
+                    account.name.emojify(account.emojis, binding.displayNameTextView)
+                binding.usernameTextView.text = account.username
+                loadAvatar(account.avatar, binding.avatar, radius, animateAvatar)
 
-                rejectButton.apply {
+                binding.rejectButton.apply {
                     contentDescription = if (inAList) {
                         setImageResource(R.drawable.ic_reject_24dp)
                         getString(string.action_remove_from_list)
@@ -291,8 +292,8 @@ class AccountsInListFragment : DialogFragment() {
             }
 
             init {
-                acceptButton.hide()
-                rejectButton.setOnClickListener(this)
+                binding.acceptButton.hide()
+                binding.rejectButton.setOnClickListener(this)
             }
 
             override fun onClick(v: View?) {
