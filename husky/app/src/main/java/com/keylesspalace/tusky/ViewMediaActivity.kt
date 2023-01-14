@@ -32,6 +32,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Environment
 import android.transition.Transition
@@ -266,16 +268,20 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun requestDownloadMedia() {
-        requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)) { _, grantResults ->
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                downloadMedia()
-            } else {
-                showErrorDialog(
-                    binding.toolbar,
-                    R.string.error_media_download_permission,
-                    R.string.action_retry
-                ) { requestDownloadMedia() }
+        if (VERSION.SDK_INT < VERSION_CODES.Q) {
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)) { _, grantResults ->
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    downloadMedia()
+                } else {
+                    showErrorDialog(
+                        binding.toolbar,
+                        R.string.error_media_download_permission,
+                        R.string.action_retry
+                    ) { requestDownloadMedia() }
+                }
             }
+        } else {
+            downloadMedia()
         }
     }
 
