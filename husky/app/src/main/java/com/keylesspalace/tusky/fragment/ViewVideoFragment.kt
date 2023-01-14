@@ -37,18 +37,16 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
+import com.keylesspalace.tusky.databinding.FragmentViewVideoBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.util.visible
-import kotlinx.android.synthetic.main.activity_view_media.toolbar
-import kotlinx.android.synthetic.main.fragment_view_video.mediaDescription
-import kotlinx.android.synthetic.main.fragment_view_video.progressBar
-import kotlinx.android.synthetic.main.fragment_view_video.videoControls
-import kotlinx.android.synthetic.main.fragment_view_video.videoView
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import timber.log.Timber
 
 class ViewVideoFragment : ViewMediaFragment() {
+
+    private val binding by viewBinding(FragmentViewVideoBinding::bind)
 
     private lateinit var toolbar: View
     private val handler = Handler(Looper.getMainLooper())
@@ -73,7 +71,7 @@ class ViewVideoFragment : ViewMediaFragment() {
         // Start/pause/resume video playback as fragment is shown/hidden
         super.setUserVisibleHint(isVisibleToUser)
 
-        if (videoView == null) {
+        if (binding.videoView == null) {
             return
         }
 
@@ -96,10 +94,10 @@ class ViewVideoFragment : ViewMediaFragment() {
         description: String?,
         showingDescription: Boolean
     ) {
-        mediaDescription.text = description
-        mediaDescription.visible(showingDescription)
+        binding.mediaDescription.text = description
+        binding.mediaDescription.visible(showingDescription)
 
-        videoView.transitionName = url
+        binding.videoView.transitionName = url
         mediaController = object : MediaController(mediaActivity) {
             override fun show(timeout: Int) {
                 // We're doing manual auto-close management.
@@ -129,7 +127,7 @@ class ViewVideoFragment : ViewMediaFragment() {
             .setTrackSelector(trackSelector)
             .build()
             .also { player ->
-                videoView.player = player
+                binding.videoView.player = player
 
                 val mediaItem = MediaItem.Builder()
                     .setUri(Uri.parse(url))
@@ -143,7 +141,7 @@ class ViewVideoFragment : ViewMediaFragment() {
                 player.prepare()
             }
 
-        videoControls.player = videoView.player
+        binding.videoControls.player = binding.videoView.player
 
         if (arguments!!.getBoolean(ARG_START_POSTPONED_TRANSITION)) {
             mediaActivity.onBringUp()
@@ -159,9 +157,10 @@ class ViewVideoFragment : ViewMediaFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        toolbar = activity!!.toolbar
+        // TODO
+        // toolbar = activity!!.toolbar
         mediaActivity = activity as ViewMediaActivity
-        return inflater.inflate(R.layout.fragment_view_video, container, false)
+        return binding.root
     }
 
     override fun onStart() {
@@ -175,7 +174,7 @@ class ViewVideoFragment : ViewMediaFragment() {
     }
 
     override fun onToolbarVisibilityChange(visible: Boolean) {
-        if (videoView == null || mediaDescription == null || !userVisibleHint) {
+        if (binding.videoView == null || binding.mediaDescription == null || !userVisibleHint) {
             return
         }
 
@@ -183,20 +182,20 @@ class ViewVideoFragment : ViewMediaFragment() {
         val alpha = if (isDescriptionVisible) 1.0f else 0.0f
         if (isDescriptionVisible) {
             // If to be visible, need to make visible immediately and animate alpha
-            mediaDescription.alpha = 0.0f
-            mediaDescription.visible(isDescriptionVisible)
+            binding.mediaDescription.alpha = 0.0f
+            binding.mediaDescription.visible(isDescriptionVisible)
         }
 
-        mediaDescription.animate().alpha(alpha)
+        binding.mediaDescription.animate().alpha(alpha)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    mediaDescription?.visible(isDescriptionVisible)
+                    binding.mediaDescription?.visible(isDescriptionVisible)
                     animation.removeListener(this)
                 }
             })
             .start()
 
-        if (visible && (videoView.player?.isPlaying == true) && !isAudio) {
+        if (visible && (binding.videoView.player?.isPlaying == true) && !isAudio) {
             hideToolbarAfterDelay(TOOLBAR_HIDE_DELAY_MS)
         } else {
             handler.removeCallbacks(hideToolbar)
@@ -234,16 +233,15 @@ class ViewVideoFragment : ViewMediaFragment() {
         override fun onPlaybackStateChanged(playbackState: Int) {
             when (playbackState) {
                 Player.STATE_BUFFERING -> {
-                    progressBar.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
                 }
                 Player.STATE_READY,
                 Player.STATE_ENDED -> {
-                    progressBar.visibility = View.GONE
-                    videoControls.show()
-                    videoControls.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    binding.videoControls.show()
+                    binding.videoControls.visibility = View.VISIBLE
                 }
-                else -> {
-                }
+                else -> Unit
             }
         }
 
