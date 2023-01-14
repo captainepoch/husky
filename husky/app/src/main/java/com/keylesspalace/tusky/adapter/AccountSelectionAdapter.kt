@@ -22,31 +22,26 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.preference.PreferenceManager
 import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.databinding.ItemAutocompleteAccountBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.util.emojify
 import com.keylesspalace.tusky.util.loadAvatar
-import kotlinx.android.synthetic.main.item_autocomplete_account.view.avatar
-import kotlinx.android.synthetic.main.item_autocomplete_account.view.display_name
-import kotlinx.android.synthetic.main.item_autocomplete_account.view.username
 
 class AccountSelectionAdapter(context: Context) :
     ArrayAdapter<AccountEntity>(context, R.layout.item_autocomplete_account) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var view = convertView
-
-        if (convertView == null) {
-            val layoutInflater =
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = layoutInflater.inflate(R.layout.item_autocomplete_account, parent, false)
+        val binding = if (convertView != null) {
+            ItemAutocompleteAccountBinding.bind(convertView)
+        } else {
+            ItemAutocompleteAccountBinding.inflate(LayoutInflater.from(context), parent, false)
         }
-        view!!
 
         val account = getItem(position)
         if (account != null) {
-            val username = view.username
-            val displayName = view.display_name
-            val avatar = view.avatar
+            val username = binding.username
+            val displayName = binding.displayName
+            val avatar = binding.avatar
             username.text = account.fullName
             displayName.text = account.displayName.emojify(account.emojis, displayName)
 
@@ -58,6 +53,6 @@ class AccountSelectionAdapter(context: Context) :
             loadAvatar(account.profilePictureUrl, avatar, avatarRadius, animateAvatar)
         }
 
-        return view
+        return binding.root
     }
 }
