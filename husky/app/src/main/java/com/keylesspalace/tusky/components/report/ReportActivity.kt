@@ -23,12 +23,13 @@ import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.BottomSheetActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.adapter.ReportPagerAdapter
-import kotlinx.android.synthetic.main.activity_report.wizard
-import kotlinx.android.synthetic.main.toolbar_basic.toolbar
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityReportBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReportActivity : BottomSheetActivity() {
 
+    private val binding by viewBinding(ActivityReportBinding::inflate)
     private val viewModel: ReportViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +42,9 @@ class ReportActivity : BottomSheetActivity() {
 
         viewModel.init(accountId, accountUserName, intent?.getStringExtra(STATUS_ID))
 
-        setContentView(R.layout.activity_report)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.includedToolbar.toolbar)
 
         supportActionBar?.apply {
             title = getString(R.string.report_username_format, viewModel.accountUserName)
@@ -60,8 +61,8 @@ class ReportActivity : BottomSheetActivity() {
     }
 
     private fun initViewPager() {
-        wizard.isUserInputEnabled = false
-        wizard.adapter = ReportPagerAdapter(this)
+        binding.wizard.isUserInputEnabled = false
+        binding.wizard.adapter = ReportPagerAdapter(this)
     }
 
     private fun subscribeObservables() {
@@ -93,18 +94,18 @@ class ReportActivity : BottomSheetActivity() {
     }
 
     private fun showPreviousScreen() {
-        when (wizard.currentItem) {
+        when (binding.wizard.currentItem) {
             0 -> closeScreen()
             1 -> showStatusesPage()
         }
     }
 
     private fun showDonePage() {
-        wizard.currentItem = 2
+        binding.wizard.currentItem = 2
     }
 
     private fun showNotesPage() {
-        wizard.currentItem = 1
+        binding.wizard.currentItem = 1
     }
 
     private fun closeScreen() {
@@ -112,7 +113,7 @@ class ReportActivity : BottomSheetActivity() {
     }
 
     private fun showStatusesPage() {
-        wizard.currentItem = 0
+        binding.wizard.currentItem = 0
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
