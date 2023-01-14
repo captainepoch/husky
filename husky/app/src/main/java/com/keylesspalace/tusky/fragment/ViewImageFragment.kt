@@ -34,19 +34,17 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.github.piasy.biv.view.BigImageView
 import com.github.piasy.biv.view.GlideImageViewFactory
-import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.databinding.FragmentViewImageBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.visible
-import kotlinx.android.synthetic.main.activity_view_media.toolbar
-import kotlinx.android.synthetic.main.fragment_view_image.captionSheet
-import kotlinx.android.synthetic.main.fragment_view_image.mediaDescription
-import kotlinx.android.synthetic.main.fragment_view_image.photoView
-import kotlinx.android.synthetic.main.fragment_view_image.progressBar
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import java.io.File
 import kotlin.math.abs
 
 class ViewImageFragment : ViewMediaFragment() {
+
+    private val binding by viewBinding(FragmentViewImageBinding::bind)
 
     interface PhotoActionsListener {
         fun onBringUp()
@@ -78,9 +76,9 @@ class ViewImageFragment : ViewMediaFragment() {
         description: String?,
         showingDescription: Boolean
     ) {
-        photoView.transitionName = url
-        mediaDescription.text = description
-        captionSheet.visible(showingDescription)
+        binding.photoView.transitionName = url
+        binding.mediaDescription.text = description
+        binding.captionSheet.visible(showingDescription)
 
         startedTransition = false
         uri = Uri.parse(url)
@@ -95,8 +93,9 @@ class ViewImageFragment : ViewMediaFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        toolbar = activity!!.toolbar
-        return inflater.inflate(R.layout.fragment_view_image, container, false)
+        // TODO
+        // toolbar = activity!!.toolbar
+        return binding.root
     }
 
     private val imageOnTouchListener = object : View.OnTouchListener {
@@ -124,17 +123,21 @@ class ViewImageFragment : ViewMediaFragment() {
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (swipeStartedWithOneFinger &&
-                        (photoView.ssiv == null || photoView.ssiv.scale <= photoView.ssiv.minScale)
+                        (
+                            binding.photoView.ssiv == null ||
+                                (binding.photoView.ssiv.scale <= binding.photoView.ssiv.minScale)
+                            )
                     ) {
                         val diff = event.rawY - lastY
                         // This code is to prevent transformations during page scrolling
                         // If we are already translating or we reached the threshold,
                         // then transform.
-                        if (photoView.translationY != 0f || abs(diff) > 40) {
-                            photoView.translationY += (diff)
-                            val scale = (-abs(photoView.translationY) / 720 + 1).coerceAtLeast(0.5f)
-                            photoView.scaleY = scale
-                            photoView.scaleX = scale
+                        if (binding.photoView.translationY != 0f || abs(diff) > 40) {
+                            binding.photoView.translationY += (diff)
+                            val scale =
+                                (-abs(binding.photoView.translationY) / 720 + 1).coerceAtLeast(0.5f)
+                            binding.photoView.scaleY = scale
+                            binding.photoView.scaleX = scale
                             lastY = event.rawY
                         }
                     }
@@ -149,8 +152,8 @@ class ViewImageFragment : ViewMediaFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        photoView.setImageLoaderCallback(imageLoaderCallback)
-        photoView.setImageViewFactory(GlideImageViewFactory())
+        binding.photoView.setImageLoaderCallback(imageLoaderCallback)
+        binding.photoView.setImageViewFactory(GlideImageViewFactory())
 
         val arguments = this.requireArguments()
         val attachment = arguments.getParcelable<Attachment>(ARG_ATTACHMENT)
@@ -172,10 +175,10 @@ class ViewImageFragment : ViewMediaFragment() {
     }
 
     private fun onGestureEnd() {
-        if (abs(photoView.translationY) > 180) {
+        if (abs(binding.photoView.translationY) > 180) {
             photoActionsListener.onDismiss()
         } else {
-            photoView.animate().translationY(0f).scaleX(1f).scaleY(1f).start()
+            binding.photoView.animate().translationY(0f).scaleX(1f).scaleY(1f).start()
         }
     }
 
@@ -184,35 +187,36 @@ class ViewImageFragment : ViewMediaFragment() {
     }
 
     override fun onToolbarVisibilityChange(visible: Boolean) {
-        if (photoView == null || !userVisibleHint || captionSheet == null) {
+        if (binding.photoView == null || !userVisibleHint || binding.captionSheet == null) {
             return
         }
         isDescriptionVisible = showingDescription && visible
         val alpha = if (isDescriptionVisible) 1.0f else 0.0f
-        captionSheet.animate().alpha(alpha)
+        binding.captionSheet.animate().alpha(alpha)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    captionSheet?.visible(isDescriptionVisible)
+                    binding.captionSheet?.visible(isDescriptionVisible)
                     animation.removeListener(this)
                 }
-            })
-            .start()
+            }).start()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        photoView.ssiv?.recycle()
+        binding.photoView.ssiv?.recycle()
     }
 
     private inner class DummyCacheTarget(val ctx: Context, val requestPreview: Boolean) :
         CustomTarget<File>() {
+
         override fun onLoadCleared(placeholder: Drawable?) {}
+
         override fun onLoadFailed(errorDrawable: Drawable?) {
             if (requestPreview) {
                 // no preview, no full image in cache, load full image
                 // forget about fancy transition
                 showingPreview = false
-                photoView.showImage(uri)
+                binding.photoView.showImage(uri)
                 photoActionsListener.onBringUp()
             } else {
                 // let's start downloading full image that we supposedly don't have
@@ -231,9 +235,9 @@ class ViewImageFragment : ViewMediaFragment() {
             showingPreview = requestPreview
             if (requestPreview) {
                 // have preview cached but not full image
-                photoView.showImage(previewUri, uri, true)
+                binding.photoView.showImage(previewUri, uri, true)
             } else {
-                photoView.showImage(uri)
+                binding.photoView.showImage(uri)
             }
             photoActionsListener.onBringUp()
         }
@@ -252,7 +256,7 @@ class ViewImageFragment : ViewMediaFragment() {
         } else {
             // no need in cache lookup, just load full image
             showingPreview = false
-            photoView.showImage(uri)
+            binding.photoView.showImage(uri)
             photoActionsListener.onBringUp()
         }
     }
@@ -261,23 +265,23 @@ class ViewImageFragment : ViewMediaFragment() {
         // if we had preview, load full image, as transition has ended
         if (showingPreview) {
             showingPreview = false
-            photoView.showImage(uri)
+            binding.photoView.showImage(uri)
         }
     }
 
     private val imageLoaderCallback = object : ImageLoader.Callback {
         override fun onSuccess(image: File?) {
             if (!showingPreview) {
-                progressBar?.hide()
+                binding.progressBar?.hide()
 
-                photoView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE)
-                photoView.ssiv?.orientation = SubsamplingScaleImageView.ORIENTATION_USE_EXIF
-                photoView.mainView?.setOnTouchListener(imageOnTouchListener)
+                binding.photoView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE)
+                binding.photoView.ssiv?.orientation = SubsamplingScaleImageView.ORIENTATION_USE_EXIF
+                binding.photoView.mainView?.setOnTouchListener(imageOnTouchListener)
             }
         }
 
         override fun onFail(error: Exception?) {
-            progressBar?.hide()
+            binding.progressBar?.hide()
         }
 
         override fun onCacheHit(imageType: Int, image: File?) {
