@@ -18,80 +18,71 @@ package com.keylesspalace.tusky.components.report.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.report.Screen
+import com.keylesspalace.tusky.databinding.FragmentReportDoneBinding
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import kotlinx.android.synthetic.main.fragment_report_done.buttonBlock
-import kotlinx.android.synthetic.main.fragment_report_done.buttonDone
-import kotlinx.android.synthetic.main.fragment_report_done.buttonMute
-import kotlinx.android.synthetic.main.fragment_report_done.progressBlock
-import kotlinx.android.synthetic.main.fragment_report_done.progressMute
-import kotlinx.android.synthetic.main.fragment_report_done.textReported
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReportDoneFragment : Fragment(R.layout.fragment_report_done) {
 
+    private val binding by viewBinding(FragmentReportDoneBinding::bind)
     private val viewModel: ReportViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        textReported.text = getString(R.string.report_sent_success, viewModel.accountUserName)
+        binding.textReported.text =
+            getString(R.string.report_sent_success, viewModel.accountUserName)
         handleClicks()
         subscribeObservables()
     }
 
     private fun subscribeObservables() {
-        viewModel.muteState.observe(
-            viewLifecycleOwner,
-            Observer {
-                if (it !is Loading) {
-                    buttonMute.show()
-                    progressMute.show()
-                } else {
-                    buttonMute.hide()
-                    progressMute.hide()
-                }
-
-                buttonMute.setText(
-                    when (it.data) {
-                        true -> R.string.action_unmute
-                        else -> R.string.action_mute
-                    }
-                )
+        viewModel.muteState.observe(viewLifecycleOwner) {
+            if (it !is Loading) {
+                binding.buttonMute.show()
+                binding.progressMute.show()
+            } else {
+                binding.buttonMute.hide()
+                binding.progressMute.hide()
             }
-        )
 
-        viewModel.blockState.observe(
-            viewLifecycleOwner,
-            Observer {
-                if (it !is Loading) {
-                    buttonBlock.show()
-                    progressBlock.show()
-                } else {
-                    buttonBlock.hide()
-                    progressBlock.hide()
+            binding.buttonMute.setText(
+                when (it.data) {
+                    true -> R.string.action_unmute
+                    else -> R.string.action_mute
                 }
-                buttonBlock.setText(
-                    when (it.data) {
-                        true -> R.string.action_unblock
-                        else -> R.string.action_block
-                    }
-                )
+            )
+        }
+
+        viewModel.blockState.observe(viewLifecycleOwner) {
+            if (it !is Loading) {
+                binding.buttonBlock.show()
+                binding.progressBlock.show()
+            } else {
+                binding.buttonBlock.hide()
+                binding.progressBlock.hide()
             }
-        )
+            binding.buttonBlock.setText(
+                when (it.data) {
+                    true -> R.string.action_unblock
+                    else -> R.string.action_block
+                }
+            )
+        }
     }
 
     private fun handleClicks() {
-        buttonDone.setOnClickListener {
+        binding.buttonDone.setOnClickListener {
             viewModel.navigateTo(Screen.Finish)
         }
-        buttonBlock.setOnClickListener {
+        binding.buttonBlock.setOnClickListener {
             viewModel.toggleBlock()
         }
-        buttonMute.setOnClickListener {
+        binding.buttonMute.setOnClickListener {
             viewModel.toggleMute()
         }
     }
