@@ -40,6 +40,7 @@ import com.keylesspalace.tusky.adapter.BlocksAdapter
 import com.keylesspalace.tusky.adapter.FollowAdapter
 import com.keylesspalace.tusky.adapter.FollowRequestsAdapter
 import com.keylesspalace.tusky.adapter.MutesAdapter
+import com.keylesspalace.tusky.databinding.FragmentAccountListBinding
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.EmojiReaction
 import com.keylesspalace.tusky.entity.Relationship
@@ -51,10 +52,9 @@ import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.EndlessOnScrollListener
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_account_list.messageView
-import kotlinx.android.synthetic.main.fragment_account_list.recyclerView
 import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,6 +62,8 @@ import retrofit2.Response
 import java.io.IOException
 
 class AccountListFragment : BaseFragment(), AccountActionListener {
+
+    private val binding by viewBinding(FragmentAccountListBinding::bind)
 
     private val api: MastodonApi by inject()
     private lateinit var type: Type
@@ -85,18 +87,18 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_account_list, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.setHasFixedSize(true)
+        binding.recyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(view.context)
-        recyclerView.layoutManager = layoutManager
-        (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        binding.recyclerView.layoutManager = layoutManager
+        (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        recyclerView.addItemDecoration(
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 view.context,
                 DividerItemDecoration.VERTICAL
@@ -109,7 +111,7 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
             Type.FOLLOW_REQUESTS -> FollowRequestsAdapter(this)
             else -> FollowAdapter(this)
         }
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         scrollListener = object : EndlessOnScrollListener(layoutManager) {
             override fun onLoadMore(totalItemsCount: Int, view: RecyclerView) {
@@ -120,7 +122,7 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
             }
         }
 
-        recyclerView.addOnScrollListener(scrollListener)
+        binding.recyclerView.addOnScrollListener(scrollListener)
 
         fetchAccounts()
     }
@@ -155,12 +157,11 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         val unmutedUser = mutesAdapter.removeItem(position)
 
         if (unmutedUser != null) {
-            Snackbar.make(recyclerView, R.string.confirmation_unmuted, Snackbar.LENGTH_LONG)
+            Snackbar.make(binding.recyclerView, R.string.confirmation_unmuted, Snackbar.LENGTH_LONG)
                 .setAction(R.string.action_undo) {
                     mutesAdapter.addItem(unmutedUser, position)
                     onMute(true, id, position, notifications)
-                }
-                .show()
+                }.show()
         }
     }
 
@@ -199,12 +200,15 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         val unblockedUser = blocksAdapter.removeItem(position)
 
         if (unblockedUser != null) {
-            Snackbar.make(recyclerView, R.string.confirmation_unblocked, Snackbar.LENGTH_LONG)
+            Snackbar.make(
+                binding.recyclerView,
+                R.string.confirmation_unblocked,
+                Snackbar.LENGTH_LONG
+            )
                 .setAction(R.string.action_undo) {
                     blocksAdapter.addItem(unblockedUser, position)
                     onBlock(true, id, position)
-                }
-                .show()
+                }.show()
         }
     }
 
@@ -306,7 +310,7 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         fetching = true
 
         if (fromId != null) {
-            recyclerView.post { adapter.setBottomLoading(true) }
+            binding.recyclerView.post { adapter.setBottomLoading(true) }
         }
 
         if (type == Type.REACTED) {
@@ -370,14 +374,14 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         fetching = false
 
         if (adapter.itemCount == 0) {
-            messageView.show()
-            messageView.setup(
+            binding.messageView.show()
+            binding.messageView.setup(
                 R.drawable.elephant_friend_empty,
                 R.string.message_empty,
                 null
             )
         } else {
-            messageView.hide()
+            binding.messageView.hide()
         }
     }
 
@@ -406,15 +410,15 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         Log.e(TAG, "Fetch failure", throwable)
 
         if (adapter.itemCount == 0) {
-            messageView.show()
+            binding.messageView.show()
             if (throwable is IOException) {
-                messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
-                    messageView.hide()
+                binding.messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
+                    binding.messageView.hide()
                     this.fetchAccounts(null)
                 }
             } else {
-                messageView.setup(R.drawable.elephant_error, R.string.error_generic) {
-                    messageView.hide()
+                binding.messageView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                    binding.messageView.hide()
                     this.fetchAccounts(null)
                 }
             }
