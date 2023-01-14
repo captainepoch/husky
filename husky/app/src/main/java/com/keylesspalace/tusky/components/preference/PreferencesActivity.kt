@@ -29,23 +29,25 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.core.extensions.getNonNullString
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityPreferencesBinding
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.ThemeUtils
-import kotlinx.android.synthetic.main.toolbar_basic.*
 import org.koin.android.ext.android.inject
 
 class PreferencesActivity :
     BaseActivity(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private val binding by viewBinding(ActivityPreferencesBinding::inflate)
     private val eventHub: EventHub by inject()
     private var restartActivitiesOnExit: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_preferences)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.includedToolbar.toolbar)
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
