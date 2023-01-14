@@ -1,18 +1,22 @@
 package com.keylesspalace.tusky.components.instancemute.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.instancemute.interfaces.InstanceActionListener
-import kotlinx.android.synthetic.main.item_muted_domain.view.*
+import com.keylesspalace.tusky.databinding.ItemMutedDomainBinding
 
 class DomainMutesAdapter(private val actionListener: InstanceActionListener) : RecyclerView.Adapter<DomainMutesAdapter.ViewHolder>() {
+
     var instances: MutableList<String> = mutableListOf()
     var bottomLoading: Boolean = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_muted_domain, parent, false), actionListener)
+        val binding = ItemMutedDomainBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+
+        return ViewHolder(binding, actionListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -44,10 +48,14 @@ class DomainMutesAdapter(private val actionListener: InstanceActionListener) : R
         }
     }
 
-    class ViewHolder(rootView: View, private val actionListener: InstanceActionListener) : RecyclerView.ViewHolder(rootView) {
+    class ViewHolder(
+        private val binding: ItemMutedDomainBinding,
+        private val actionListener: InstanceActionListener
+    ) : RecyclerView.ViewHolder(binding.root) {
+
         fun setupWithInstance(instance: String) {
-            itemView.muted_domain.text = instance
-            itemView.muted_domain_unmute.setOnClickListener {
+            binding.mutedDomain.text = instance
+            binding.mutedDomainUnmute.setOnClickListener {
                 actionListener.mute(false, instance, adapterPosition)
             }
         }
