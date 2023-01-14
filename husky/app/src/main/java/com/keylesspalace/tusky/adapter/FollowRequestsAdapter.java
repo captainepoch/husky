@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.keylesspalace.tusky.R;
+import com.keylesspalace.tusky.databinding.ItemFollowRequestBinding;
 import com.keylesspalace.tusky.interfaces.AccountActionListener;
 
 public class FollowRequestsAdapter extends AccountAdapter {
@@ -37,9 +38,10 @@ public class FollowRequestsAdapter extends AccountAdapter {
         switch (viewType) {
             default:
             case VIEW_TYPE_ACCOUNT: {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_follow_request, parent, false);
-                return new FollowRequestViewHolder(view, false);
+                ItemFollowRequestBinding binding = ItemFollowRequestBinding.inflate(
+                    LayoutInflater.from(parent.getContext()), parent, false
+                );
+                return new FollowRequestViewHolder(binding, false);
             }
             case VIEW_TYPE_FOOTER: {
                 View view = LayoutInflater.from(parent.getContext())
