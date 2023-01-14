@@ -56,7 +56,6 @@
     <JavaCodeStyleSettings>
       <option name="CLASS_NAMES_IN_JAVADOC" value="2" />
       <option name="LAYOUT_STATIC_IMPORTS_SEPARATELY" value="false" />
-      <option name="USE_FQ_CLASS_NAMES" value="true" />
       <option name="INSERT_INNER_CLASS_IMPORTS" value="true" />
       <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
       <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
