@@ -30,6 +30,8 @@ import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewTagActivity
 import com.keylesspalace.tusky.adapter.EmojiAdapter
 import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityAnnouncementsBinding
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.Loading
@@ -37,11 +39,6 @@ import com.keylesspalace.tusky.util.Success
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.EmojiPicker
-import kotlinx.android.synthetic.main.activity_announcements.announcementsList
-import kotlinx.android.synthetic.main.activity_announcements.errorMessageView
-import kotlinx.android.synthetic.main.activity_announcements.progressBar
-import kotlinx.android.synthetic.main.activity_announcements.swipeRefreshLayout
-import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AnnouncementsActivity :
@@ -49,6 +46,7 @@ class AnnouncementsActivity :
     AnnouncementActionListener,
     OnEmojiSelectedListener {
 
+    private val binding by viewBinding(ActivityAnnouncementsBinding::inflate)
     private val viewModel: AnnouncementsViewModel by viewModel()
 
     private lateinit var preferences: SharedPreferences
@@ -69,56 +67,59 @@ class AnnouncementsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_announcements)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.includedToolbar.toolbar)
         supportActionBar?.apply {
             title = getString(R.string.title_announcements)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
 
-        swipeRefreshLayout.setOnRefreshListener(this::refreshAnnouncements)
-        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
+        binding.swipeRefreshLayout.setOnRefreshListener(this::refreshAnnouncements)
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
 
-        announcementsList.setHasFixedSize(true)
-        announcementsList.layoutManager = LinearLayoutManager(this)
+        binding.announcementsList.setHasFixedSize(true)
+        binding.announcementsList.layoutManager = LinearLayoutManager(this)
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        announcementsList.addItemDecoration(divider)
+        binding.announcementsList.addItemDecoration(divider)
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val wellbeingEnabled = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
 
         adapter = AnnouncementAdapter(emptyList(), this, wellbeingEnabled)
 
-        announcementsList.adapter = adapter
+        binding.announcementsList.adapter = adapter
 
         viewModel.announcements.observe(this) {
             when (it) {
                 is Success -> {
-                    progressBar.hide()
-                    swipeRefreshLayout.isRefreshing = false
+                    binding.progressBar.hide()
+                    binding.swipeRefreshLayout.isRefreshing = false
                     if (it.data.isNullOrEmpty()) {
-                        errorMessageView.setup(
+                        binding.errorMessageView.setup(
                             R.drawable.elephant_friend_empty,
                             R.string.no_announcements
                         )
-                        errorMessageView.show()
+                        binding.errorMessageView.show()
                     } else {
-                        errorMessageView.hide()
+                        binding.errorMessageView.hide()
                     }
                     adapter.updateList(it.data ?: listOf())
                 }
                 is Loading -> {
-                    errorMessageView.hide()
+                    binding.errorMessageView.hide()
                 }
                 is Error -> {
-                    progressBar.hide()
-                    swipeRefreshLayout.isRefreshing = false
-                    errorMessageView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                    binding.progressBar.hide()
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    binding.errorMessageView.setup(
+                        R.drawable.elephant_error,
+                        R.string.error_generic
+                    ) {
                         refreshAnnouncements()
                     }
-                    errorMessageView.show()
+                    binding.errorMessageView.show()
                 }
             }
         }
@@ -134,7 +135,7 @@ class AnnouncementsActivity :
         }
 
         viewModel.load()
-        progressBar.show()
+        binding.progressBar.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -149,7 +150,7 @@ class AnnouncementsActivity :
 
     private fun refreshAnnouncements() {
         viewModel.load()
-        swipeRefreshLayout.isRefreshing = true
+        binding.swipeRefreshLayout.isRefreshing = true
     }
 
     override fun openReactionPicker(announcementId: String, target: View) {
