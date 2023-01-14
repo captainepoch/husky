@@ -43,6 +43,8 @@ import androidx.recyclerview.widget.RecyclerView
 import at.connyduck.sparkbutton.helpers.Utils
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.core.extensions.onTextChanged
+import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.databinding.ActivityListsBinding
 import com.keylesspalace.tusky.entity.MastoList
 import com.keylesspalace.tusky.fragment.TimelineFragment
 import com.keylesspalace.tusky.util.ThemeUtils
@@ -65,11 +67,6 @@ import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_lists.addListButton
-import kotlinx.android.synthetic.main.activity_lists.listsRecycler
-import kotlinx.android.synthetic.main.activity_lists.messageView
-import kotlinx.android.synthetic.main.activity_lists.progressBar
-import kotlinx.android.synthetic.main.toolbar_basic.toolbar
 import org.koin.android.ext.android.inject
 
 /**
@@ -85,23 +82,24 @@ class ListsActivity : BaseActivity() {
         }
     }
 
+    private val binding by viewBinding(ActivityListsBinding::inflate)
     private val viewModel: ListsViewModel by inject()
     private val adapter = ListsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lists)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.includedToolbar.toolbar)
         supportActionBar?.apply {
             title = getString(R.string.title_lists)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
 
-        listsRecycler.adapter = adapter
-        listsRecycler.layoutManager = LinearLayoutManager(this)
-        listsRecycler.addItemDecoration(
+        binding.listsRecycler.adapter = adapter
+        binding.listsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.listsRecycler.addItemDecoration(
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         )
 
@@ -111,7 +109,7 @@ class ListsActivity : BaseActivity() {
             .subscribe(this::update)
         viewModel.retryLoading()
 
-        addListButton.setOnClickListener {
+        binding.addListButton.setOnClickListener {
             showlistNameDialog(null)
         }
 
@@ -167,37 +165,37 @@ class ListsActivity : BaseActivity() {
 
     private fun update(state: ListsViewModel.State) {
         adapter.submitList(state.lists)
-        progressBar.visible(state.loadingState == LOADING)
+        binding.progressBar.visible(state.loadingState == LOADING)
         when (state.loadingState) {
-            INITIAL, LOADING -> messageView.hide()
+            INITIAL, LOADING -> binding.messageView.hide()
             ERROR_NETWORK -> {
-                messageView.show()
-                messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
+                binding.messageView.show()
+                binding.messageView.setup(R.drawable.elephant_offline, R.string.error_network) {
                     viewModel.retryLoading()
                 }
             }
             ERROR_OTHER -> {
-                messageView.show()
-                messageView.setup(R.drawable.elephant_error, R.string.error_generic) {
+                binding.messageView.show()
+                binding.messageView.setup(R.drawable.elephant_error, R.string.error_generic) {
                     viewModel.retryLoading()
                 }
             }
             LOADED ->
                 if (state.lists.isEmpty()) {
-                    messageView.show()
-                    messageView.setup(
+                    binding.messageView.show()
+                    binding.messageView.setup(
                         R.drawable.elephant_friend_empty, R.string.message_empty,
                         null
                     )
                 } else {
-                    messageView.hide()
+                    binding.messageView.hide()
                 }
         }
     }
 
     private fun showMessage(@StringRes messageId: Int) {
         Snackbar.make(
-            listsRecycler, messageId, Snackbar.LENGTH_SHORT
+            binding.listsRecycler, messageId, Snackbar.LENGTH_SHORT
         ).show()
     }
 
