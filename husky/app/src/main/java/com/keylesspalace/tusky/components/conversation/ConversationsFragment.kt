@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.keylesspalace.tusky.AccountActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewTagActivity
+import com.keylesspalace.tusky.databinding.FragmentTimelineBinding
 import com.keylesspalace.tusky.fragment.SFragment
 import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.interfaces.StatusActionListener
@@ -37,26 +38,21 @@ import com.keylesspalace.tusky.util.CardViewMode
 import com.keylesspalace.tusky.util.NetworkState
 import com.keylesspalace.tusky.util.StatusDisplayOptions
 import com.keylesspalace.tusky.util.hide
-import kotlinx.android.synthetic.main.fragment_timeline.progressBar
-import kotlinx.android.synthetic.main.fragment_timeline.recyclerView
-import kotlinx.android.synthetic.main.fragment_timeline.statusView
-import kotlinx.android.synthetic.main.fragment_timeline.swipeRefreshLayout
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFragment {
 
+    private val binding by viewBinding(FragmentTimelineBinding::bind)
     private val viewModel: ConversationsViewModel by viewModel()
-
     private lateinit var adapter: ConversationAdapter
-
-    private var layoutManager: LinearLayoutManager? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_timeline, container, false)
+    ): View {
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,19 +72,18 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
 
         adapter = ConversationAdapter(statusDisplayOptions, this, ::onTopLoaded, viewModel::retry)
 
-        recyclerView.addItemDecoration(
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 view.context,
                 DividerItemDecoration.VERTICAL
             )
         )
-        layoutManager = LinearLayoutManager(view.context)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-        (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        binding.recyclerView.layoutManager = LinearLayoutManager(view.context)
+        binding.recyclerView.adapter = adapter
+        (binding.recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        progressBar.hide()
-        statusView.hide()
+        binding.progressBar.hide()
+        binding.statusView.hide()
 
         initSwipeToRefresh()
 
@@ -109,20 +104,19 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
     }
 
     private fun initSwipeToRefresh() {
-        viewModel.refreshState.observe(
-            viewLifecycleOwner,
-            Observer {
-                swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING
-            }
-        )
-        swipeRefreshLayout.setOnRefreshListener {
+        viewModel.refreshState.observe(viewLifecycleOwner) {
+            binding.swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
-        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
+
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue)
     }
 
     private fun onTopLoaded() {
-        recyclerView.scrollToPosition(0)
+        binding.recyclerView.scrollToPosition(0)
     }
 
     override fun onReblog(reblog: Boolean, position: Int) {
@@ -202,8 +196,8 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
 
     private fun jumpToTop() {
         if (isAdded) {
-            layoutManager?.scrollToPosition(0)
-            recyclerView.stopScroll()
+            binding.recyclerView.layoutManager?.scrollToPosition(0)
+            binding.recyclerView.stopScroll()
         }
     }
 
