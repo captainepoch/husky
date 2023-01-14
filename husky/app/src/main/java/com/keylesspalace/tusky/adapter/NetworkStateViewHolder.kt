@@ -26,8 +26,7 @@ import kotlinx.android.synthetic.main.item_network_state.view.*
 class NetworkStateViewHolder(
     itemView: View,
     private val retryCallback: () -> Unit
-) :
-    RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.ViewHolder(itemView) {
 
     fun setUpWithNetworkState(state: NetworkState?, fullScreen: Boolean) {
         itemView.progressBar.visible(state?.status == Status.RUNNING)
