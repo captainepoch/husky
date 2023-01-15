@@ -1,3 +1,9 @@
+Husky 1.4.1 - 2023-01-15
+  - Fix: Mastodon timelines do not update after update.
+  - Fix: Downloading media in newer versions of Android.
+  - Fix: "Who reacted" with custom emojis.
+  - Change: Chat icon in Account activity.
+
 Husky 1.4.0 - 2023-01-07
   - Fix: Fix issue while requesting permissions composing a status.
   - Fix: An empty date crashes the application on Soapbox instances.

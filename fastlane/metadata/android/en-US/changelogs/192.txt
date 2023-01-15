@@ -1,0 +1,7 @@
+Husky 1.4.1
+
+Changelog:
+  - Fix: Mastodon timelines do not update after update.
+  - Fix: Downloading media in newer versions of Android.
+  - Fix: "Who reacted" with custom emojis.
+  - Change: Chat icon in Account activity.
