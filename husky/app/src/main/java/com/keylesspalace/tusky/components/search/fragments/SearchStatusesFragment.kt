@@ -26,6 +26,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
@@ -40,7 +41,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keylesspalace.tusky.AccountListActivity
@@ -71,7 +71,7 @@ import com.keylesspalace.tusky.viewdata.StatusViewData
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_search.searchRecyclerView
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class SearchStatusesFragment :
@@ -89,7 +89,7 @@ class SearchStatusesFragment :
         get() = super.adapter as SearchStatusesAdapter
 
     override fun createAdapter(): PagedListAdapter<Pair<Status, StatusViewData.Concrete>, *> {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(searchRecyclerView.context)
+        val preferences by inject<SharedPreferences>()
         val statusDisplayOptions = StatusDisplayOptions(
             animateAvatars = preferences.getBoolean("animateGifAvatars", false),
             mediaPreviewEnabled = viewModel.mediaPreviewEnabled,
