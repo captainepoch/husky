@@ -22,7 +22,7 @@ import com.keylesspalace.tusky.appstore.AnnouncementReadEvent
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.db.InstanceEntity
+import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.entity.Announcement
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.components.instance.Instance

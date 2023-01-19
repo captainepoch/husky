@@ -24,7 +24,7 @@ import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.search.SearchType
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.db.InstanceEntity
+import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.NodeInfo
 import com.keylesspalace.tusky.entity.StickerPack
