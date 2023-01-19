@@ -13,7 +13,7 @@ import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.EmojiReaction
 import com.keylesspalace.tusky.entity.Filter
 import com.keylesspalace.tusky.entity.IdentityProof
-import com.keylesspalace.tusky.entity.Instance
+import com.keylesspalace.tusky.components.instance.Instance
 import com.keylesspalace.tusky.entity.Marker
 import com.keylesspalace.tusky.entity.MastoList
 import com.keylesspalace.tusky.entity.NewChatMessage

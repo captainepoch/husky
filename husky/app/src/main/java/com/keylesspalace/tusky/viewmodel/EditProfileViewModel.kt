@@ -27,7 +27,7 @@ import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
 import com.keylesspalace.tusky.entity.Account
-import com.keylesspalace.tusky.entity.Instance
+import com.keylesspalace.tusky.components.instance.Instance
 import com.keylesspalace.tusky.entity.StringField
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.Error
