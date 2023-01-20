@@ -52,20 +52,3 @@ data class Instance(
     }
 }
 
-data class InstancePleroma(
-    val metadata: InstancePleromaMetadata
-)
-
-data class InstancePleromaMetadata(
-    val features: List<String>,
-    @SerializedName("fields_limits") val fieldsLimits: InstancePleromaMetadataFieldsLimits
-)
-
-data class InstancePleromaMetadataFieldsLimits(
-    @SerializedName("max_fields") val maxFields: Int
-)
-
-data class PollLimits(
-    @SerializedName("max_options") val maxOptions: Int?,
-    @SerializedName("max_option_chars") val maxOptionChars: Int?
-)
