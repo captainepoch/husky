@@ -23,6 +23,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.keylesspalace.tusky.TabDataKt;
 import com.keylesspalace.tusky.components.conversation.ConversationEntity;
 import com.keylesspalace.tusky.components.instance.InstanceEntity;
+import com.keylesspalace.tusky.components.instance.InstanceDao;
 
 /**
  * Database management.
@@ -36,7 +37,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract AccountDao accountDao();
 
-    public abstract com.keylesspalace.tusky.components.instance.InstanceDao instanceDao();
+    public abstract InstanceDao instanceDao();
 
     public abstract ConversationsDao conversationDao();
 
