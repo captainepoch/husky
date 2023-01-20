@@ -22,12 +22,13 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.keylesspalace.tusky.TabDataKt;
 import com.keylesspalace.tusky.components.conversation.ConversationEntity;
+import com.keylesspalace.tusky.components.instance.InstanceEntity;
 
 /**
  * Database management.
  */
 @Database(entities = {TootEntity.class, DraftEntity.class, AccountEntity.class,
-    com.keylesspalace.tusky.components.instance.InstanceEntity.class, TimelineStatusEntity.class, TimelineAccountEntity.class,
+    InstanceEntity.class, TimelineStatusEntity.class, TimelineAccountEntity.class,
     ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 28)
 public abstract class AppDatabase extends RoomDatabase {
 
