@@ -77,7 +77,6 @@ import com.keylesspalace.tusky.appstore.Event
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.StatusPreviewEvent
 import com.keylesspalace.tusky.components.common.AudioSizeException
-import com.keylesspalace.tusky.components.common.DEFAULT_CHARACTER_LIMIT
 import com.keylesspalace.tusky.components.common.MediaSizeException
 import com.keylesspalace.tusky.components.common.VideoOrImageException
 import com.keylesspalace.tusky.components.common.VideoSizeException
@@ -90,6 +89,7 @@ import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.composeWithZwsp
 import com.keylesspalace.tusky.core.extensions.onTextChanged
 import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.databinding.ActivityComposeBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.DraftAttachment
@@ -154,7 +154,7 @@ class ComposeActivity :
     private var photoUploadUri: Uri? = null
 
     @VisibleForTesting
-    var maximumTootCharacters = DEFAULT_CHARACTER_LIMIT
+    var maximumTootCharacters = InstanceConstants.DEFAULT_CHARACTER_LIMIT
 
     private var suggestFormattingSyntax: String = "text/markdown"
 

@@ -21,10 +21,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
+import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.components.search.SearchType
+import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.NodeInfo
 import com.keylesspalace.tusky.entity.StickerPack
@@ -57,8 +58,8 @@ open class CommonComposeViewModel(
 
     val instanceParams: LiveData<ComposeInstanceParams> = instance.map { instance ->
         ComposeInstanceParams(
-            maxChars = instance?.maximumTootCharacters ?: DEFAULT_CHARACTER_LIMIT,
-            chatLimit = instance?.chatLimit ?: DEFAULT_CHARACTER_LIMIT,
+            maxChars = instance?.maximumTootCharacters ?: InstanceConstants.DEFAULT_CHARACTER_LIMIT,
+            chatLimit = instance?.chatLimit ?: InstanceConstants.DEFAULT_CHARACTER_LIMIT,
             pollMaxOptions = instance?.maxPollOptions ?: DEFAULT_MAX_OPTION_COUNT,
             pollMaxLength = instance?.maxPollOptionLength ?: DEFAULT_MAX_OPTION_LENGTH,
             supportsScheduled = instance?.version?.let {
@@ -121,7 +122,8 @@ open class CommonComposeViewModel(
                 maxPollOptions = instance.pollLimits?.maxOptions,
                 maxPollOptionLength = instance.pollLimits?.maxOptionChars,
                 version = instance.version,
-                chatLimit = instance.chatLimit
+                chatLimit = instance.chatLimit,
+                maxBioLength = instance.descriptionLimit
             )
         }
             .doOnSuccess {
@@ -397,7 +399,6 @@ open class CommonComposeViewModel(
 
 fun <T> mutableLiveData(default: T) = MutableLiveData<T>().apply { value = default }
 
-const val DEFAULT_CHARACTER_LIMIT = 500
 const val DEFAULT_MAX_OPTION_COUNT = 4
 const val DEFAULT_MAX_OPTION_LENGTH = 25
 const val STATUS_VIDEO_SIZE_LIMIT: Long = 41943040 // 40MiB

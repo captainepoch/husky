@@ -20,12 +20,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.keylesspalace.tusky.appstore.AnnouncementReadEvent
 import com.keylesspalace.tusky.appstore.EventHub
+import com.keylesspalace.tusky.components.instance.Instance
+import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
-import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.entity.Announcement
 import com.keylesspalace.tusky.entity.Emoji
-import com.keylesspalace.tusky.components.instance.Instance
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.Either
 import com.keylesspalace.tusky.util.Error
@@ -67,6 +67,7 @@ class AnnouncementsViewModel(
                     either.asRight().maxTootChars,
                     either.asRight().pollLimits?.maxOptions,
                     either.asRight().pollLimits?.maxOptionChars,
+                    either.asRight().maxBioChars,
                     either.asRight().version,
                     either.asRight().chatLimit
                 )

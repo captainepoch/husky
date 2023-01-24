@@ -78,7 +78,6 @@ import com.keylesspalace.tusky.appstore.ChatMessageReceivedEvent
 import com.keylesspalace.tusky.appstore.Event
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.components.common.AudioSizeException
-import com.keylesspalace.tusky.components.common.DEFAULT_CHARACTER_LIMIT
 import com.keylesspalace.tusky.components.common.MediaSizeException
 import com.keylesspalace.tusky.components.common.VideoOrImageException
 import com.keylesspalace.tusky.components.common.VideoSizeException
@@ -90,6 +89,7 @@ import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityChatBinding
+import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Chat
 import com.keylesspalace.tusky.entity.Emoji
@@ -148,7 +148,7 @@ class ChatActivity :
     private lateinit var adapter: ChatMessagesAdapter
 
     @VisibleForTesting
-    var maximumTootCharacters = DEFAULT_CHARACTER_LIMIT
+    var maximumTootCharacters = InstanceConstants.DEFAULT_CHARACTER_LIMIT
 
     private val msgs =
         PairedList<ChatMesssageOrPlaceholder, ChatMessageViewData?>(
