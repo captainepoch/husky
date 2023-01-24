@@ -22,8 +22,8 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.keylesspalace.tusky.TabDataKt;
 import com.keylesspalace.tusky.components.conversation.ConversationEntity;
-import com.keylesspalace.tusky.components.instance.InstanceEntity;
 import com.keylesspalace.tusky.components.instance.InstanceDao;
+import com.keylesspalace.tusky.components.instance.InstanceEntity;
 
 /**
  * Database management.
@@ -48,6 +48,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DraftDao draftDao();
 
     public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -59,6 +60,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE TootEntity ADD COLUMN inReplyToId TEXT");
@@ -69,6 +71,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE `AccountEntity` (" +
@@ -93,6 +96,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -101,6 +105,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -112,6 +117,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -120,6 +126,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -128,6 +135,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -142,6 +150,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `TimelineAccountEntity` (" +
@@ -175,6 +184,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_11_12 = new Migration(11, 12) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             String defaultTabs =
@@ -206,9 +216,9 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_12_13 = new Migration(12, 13) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-
             database.execSQL("DROP TABLE IF EXISTS `TimelineAccountEntity`");
             database.execSQL("DROP TABLE IF EXISTS `TimelineStatusEntity`");
 
@@ -241,6 +251,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_10_13 = new Migration(10, 13) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             MIGRATION_11_12.migrate(database);
@@ -249,6 +260,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_13_14 = new Migration(13, 14) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -257,6 +269,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_14_15 = new Migration(14, 15) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `TimelineStatusEntity` ADD COLUMN `poll` TEXT");
@@ -265,6 +278,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_15_16 = new Migration(15, 16) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -273,6 +287,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_16_17 = new Migration(16, 17) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -281,6 +296,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_17_18 = new Migration(17, 18) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -289,6 +305,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_18_19 = new Migration(18, 19) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `maxPollOptions` INTEGER");
@@ -300,6 +317,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_19_20 = new Migration(19, 20) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -311,6 +329,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_20_21 = new Migration(20, 21) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `version` TEXT");
@@ -319,6 +338,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_21_22 = new Migration(21, 22) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -327,6 +347,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_22_23 = new Migration(22, 23) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             // leave markdownMode unused, we don't need it anymore but don't recreate table
@@ -339,6 +360,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_23_24 = new Migration(23, 24) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -347,6 +369,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_24_25 = new Migration(24, 25) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE `ChatEntity` (`localId` INTEGER NOT NULL," +
@@ -368,6 +391,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_25_26 = new Migration(25, 26) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL(
@@ -378,6 +402,7 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_26_27 = new Migration(26, 27) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS `DraftEntity` (" +
@@ -392,10 +417,20 @@ public abstract class AppDatabase extends RoomDatabase {
     };
 
     public static final Migration MIGRATION_27_28 = new Migration(27, 28) {
+
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `TimelineStatusEntity` ADD COLUMN `editedAt` INTEGER");
             database.execSQL("ALTER TABLE `ConversationEntity` ADD COLUMN `s_editedAt` INTEGER");
+        }
+    };
+
+    public static final Migration MIGRATION_28_29 = new Migration(28, 29) {
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL(
+                "ALTER TABLE `InstanceEntity` ADD COLUMN `notificationsMove` INTEGER NOT NULL DEFAULT 1");
         }
     };
 }
