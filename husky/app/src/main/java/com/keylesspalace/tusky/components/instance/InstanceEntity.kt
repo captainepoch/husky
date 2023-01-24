@@ -29,6 +29,7 @@ data class InstanceEntity(
     val maximumTootCharacters: Int?,
     val maxPollOptions: Int?,
     val maxPollOptionLength: Int?,
+    val maxBioLength: Int?,
     val version: String?,
     val chatLimit: Int?
 )
