@@ -27,6 +27,10 @@ interface InstanceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(instance: InstanceEntity)
 
+    // TODO: Merge both methods in one not returning a Single
     @Query("SELECT * FROM InstanceEntity WHERE instance = :instance LIMIT 1")
     fun loadMetadataForInstance(instance: String): Single<InstanceEntity>
+
+    @Query("SELECT * FROM InstanceEntity WHERE instance = :instance LIMIT 1")
+    fun loadFromCache(instance: String): InstanceEntity
 }
