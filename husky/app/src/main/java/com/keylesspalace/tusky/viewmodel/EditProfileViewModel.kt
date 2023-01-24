@@ -19,26 +19,27 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.keylesspalace.tusky.EditProfileActivity.Companion.AVATAR_SIZE
 import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_HEIGHT
 import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
+import com.keylesspalace.tusky.components.instance.InstanceInfo
+import com.keylesspalace.tusky.components.instance.InstanceRepository
 import com.keylesspalace.tusky.entity.Account
-import com.keylesspalace.tusky.components.instance.Instance
 import com.keylesspalace.tusky.entity.StringField
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.IOUtils
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.Resource
+import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.Success
 import com.keylesspalace.tusky.util.getSampledBitmap
 import com.keylesspalace.tusky.util.randomAlphanumericString
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -51,6 +52,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -59,22 +61,26 @@ import java.io.OutputStream
 private const val HEADER_FILE_NAME = "header.png"
 private const val AVATAR_FILE_NAME = "avatar.png"
 
-private const val TAG = "EditProfileViewModel"
-
 class EditProfileViewModel(
     private val mastodonApi: MastodonApi,
+    private val repository: InstanceRepository,
     private val eventHub: EventHub
-) : ViewModel() {
+) : RxAwareViewModel() {
 
     val profileData = MutableLiveData<Resource<Account>>()
     val avatarData = MutableLiveData<Resource<Bitmap>>()
     val headerData = MutableLiveData<Resource<Bitmap>>()
     val saveData = MutableLiveData<Resource<Nothing>>()
-    val instanceData = MutableLiveData<Resource<Instance>>()
+
+    private val _instanceData = MutableLiveData<InstanceInfo>()
+    val instanceData: LiveData<InstanceInfo>
+        get() = _instanceData
 
     private var oldProfileData: Account? = null
 
-    private val disposeables = CompositeDisposable()
+    init {
+        obtainInstance()
+    }
 
     fun obtainProfile() {
         if (profileData.value == null || profileData.value is Error) {
@@ -89,8 +95,7 @@ class EditProfileViewModel(
                     {
                         profileData.postValue(Error())
                     }
-                )
-                .addTo(disposeables)
+                ).addTo(disposables)
         }
     }
 
@@ -117,12 +122,9 @@ class EditProfileViewModel(
         Single.fromCallable {
             val contentResolver = context.contentResolver
             val sourceBitmap = getSampledBitmap(contentResolver, uri, resizeWidth, resizeHeight)
+                ?: throw Exception()
 
-            if (sourceBitmap == null) {
-                throw Exception()
-            }
-
-            // dont upscale image if its smaller than the desired size
+            // Do not upscale image if it is smaller than the desired size
             val bitmap =
                 if (sourceBitmap.width <= resizeWidth && sourceBitmap.height <= resizeHeight) {
                     sourceBitmap
@@ -136,12 +138,14 @@ class EditProfileViewModel(
 
             bitmap
         }.subscribeOn(Schedulers.io())
-            .subscribe({
-                imageLiveData.postValue(Success(it))
-            }, {
-                imageLiveData.postValue(Error())
-            })
-            .addTo(disposeables)
+            .subscribe(
+                {
+                    imageLiveData.postValue(Success(it))
+                },
+                {
+                    imageLiveData.postValue(Error())
+                }
+            ).addTo(disposables)
     }
 
     fun save(
@@ -214,7 +218,7 @@ class EditProfileViewModel(
             field3 == null &&
             field4 == null
         ) {
-            /** if nothing has changed, there is no need to make a network request */
+            // If nothing has changed, there is no need to make a network request
             saveData.postValue(Success())
             return
         }
@@ -234,6 +238,7 @@ class EditProfileViewModel(
             field4?.first,
             field4?.second
         ).enqueue(object : Callback<Account> {
+
             override fun onResponse(call: Call<Account>, response: Response<Account>) {
                 val newProfileData = response.body()
                 if (!response.isSuccessful || newProfileData == null) {
@@ -260,7 +265,7 @@ class EditProfileViewModel(
         })
     }
 
-    // cache activity state for rotation change
+    // Cache activity state for rotation change
     fun updateProfile(
         newDisplayName: String,
         newNote: String,
@@ -303,7 +308,8 @@ class EditProfileViewModel(
         try {
             outputStream = FileOutputStream(file)
         } catch (e: FileNotFoundException) {
-            Log.w(TAG, Log.getStackTraceString(e))
+            Timber.e("File not found saving the Bitmap: ${Log.getStackTraceString(e)}", e)
+
             return false
         }
 
@@ -313,23 +319,9 @@ class EditProfileViewModel(
         return true
     }
 
-    override fun onCleared() {
-        disposeables.dispose()
-    }
-
-    fun obtainInstance() {
-        if (instanceData.value == null || instanceData.value is Error) {
-            instanceData.postValue(Loading())
-
-            mastodonApi.getInstance().subscribe(
-                { instance ->
-                    instanceData.postValue(Success(instance))
-                },
-                {
-                    instanceData.postValue(Error())
-                }
-            )
-                .addTo(disposeables)
+    private fun obtainInstance() {
+        repository.getInstanceInfo(disposables) {
+            _instanceData.postValue(it)
         }
     }
 }
