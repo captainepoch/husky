@@ -54,6 +54,10 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.getInstance()
     }
 
+    override suspend fun getInstanceData(): Response<Instance> {
+        return api.getInstanceData()
+    }
+
     override fun getFilters(): Call<List<Filter>> {
         return api.getFilters()
     }

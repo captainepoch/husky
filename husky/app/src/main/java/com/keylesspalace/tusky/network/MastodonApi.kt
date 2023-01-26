@@ -93,6 +93,9 @@ interface MastodonApi {
     @GET("api/v1/instance")
     fun getInstance(): Single<Instance>
 
+    @GET("api/v1/instance")
+    suspend fun getInstanceData(): Response<Instance>
+
     @GET("api/v1/filters")
     fun getFilters(): Call<List<Filter>>
 

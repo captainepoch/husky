@@ -1,12 +1,13 @@
 package com.keylesspalace.tusky.components.instance
 
-import com.keylesspalace.tusky.core.utils.InstanceConstants
+import com.keylesspalace.tusky.core.extensions.notNull
+import com.keylesspalace.tusky.core.network.ApiResponse
+import com.keylesspalace.tusky.core.network.ApiResponse.Success
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.network.MastodonService
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class InstanceRepository(
     private val accountManager: AccountManager,
@@ -14,42 +15,27 @@ class InstanceRepository(
     private val db: AppDatabase
 ) {
 
-    fun getInstanceInfo(disposables: CompositeDisposable, callback: (InstanceInfo) -> Unit) {
-        service.getInstance().subscribe(
-            { instance ->
-                val entity = InstanceEntity(
-                    instance = accountManager.activeAccount?.domain!!,
-                    emojiList = null,
-                    maximumTootCharacters = instance.maxTootChars,
-                    maxPollOptions = instance.pollLimits?.maxOptions,
-                    maxPollOptionLength = instance.pollLimits?.maxOptionChars,
-                    maxBioLength = instance.descriptionLimit,
-                    version = instance.version,
-                    chatLimit = instance.chatLimit
+    fun getInstanceInfo(): Flow<ApiResponse<InstanceEntity>> = flow {
+        service.getInstanceData().run {
+            val response = if (isSuccessful && body().notNull()) {
+                val instance = body()!!
+                Success(
+                    InstanceEntity(
+                        instance = accountManager.activeAccount?.domain!!,
+                        emojiList = null,
+                        maximumTootCharacters = instance.maxTootChars,
+                        maxPollOptions = instance.pollLimits?.maxOptions,
+                        maxPollOptionLength = instance.pollLimits?.maxOptionChars,
+                        maxBioLength = instance.descriptionLimit,
+                        version = instance.version,
+                        chatLimit = instance.chatLimit
+                    )
                 )
-                db.instanceDao().insertOrReplace(entity)
-
-                mapToInstanceInfo(entity, callback)
-
-                Timber.d("Instance information retrieved correctly")
-            },
-            {
-                mapToInstanceInfo(
-                    db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain),
-                    callback
-                )
-
-                Timber.e("Fail to retrieve instance information, fallback to cache")
+            } else {
+                Success(db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain))
             }
-        ).addTo(disposables)
-    }
 
-    private fun mapToInstanceInfo(entity: InstanceEntity, callback: (InstanceInfo) -> Unit) {
-        val instanceInfo = InstanceInfo(
-            maxBioLength = entity.maxBioLength ?: InstanceConstants.DEFAULT_BIO_LENGTH,
-            maxTootLength = entity.maximumTootCharacters ?: InstanceConstants.DEFAULT_CHARACTER_LIMIT
-        )
-
-        callback(instanceInfo)
+            emit(response)
+        }
     }
 }
