@@ -18,6 +18,7 @@ package com.keylesspalace.tusky.components.instance
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.db.Converters
 import com.keylesspalace.tusky.entity.Emoji
 
@@ -32,4 +33,12 @@ data class InstanceEntity(
     val maxBioLength: Int?,
     val version: String?,
     val chatLimit: Int?
-)
+) {
+
+    fun toInstanceInfo(): InstanceInfo {
+        return InstanceInfo(
+            maxBioLength = maxBioLength ?: InstanceConstants.DEFAULT_BIO_LENGTH,
+            maxTootLength = maximumTootCharacters ?: InstanceConstants.DEFAULT_CHARACTER_LIMIT
+        )
+    }
+}
