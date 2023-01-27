@@ -21,13 +21,17 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.keylesspalace.tusky.EditProfileActivity.Companion.AVATAR_SIZE
 import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_HEIGHT
 import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
+import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.components.instance.InstanceInfo
 import com.keylesspalace.tusky.components.instance.InstanceRepository
+import com.keylesspalace.tusky.core.extensions.cancelIfActive
+import com.keylesspalace.tusky.core.network.ApiResponse
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.StringField
 import com.keylesspalace.tusky.network.MastodonApi
@@ -42,6 +46,11 @@ import com.keylesspalace.tusky.util.randomAlphanumericString
 import io.reactivex.Single
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -75,6 +84,11 @@ class EditProfileViewModel(
     private val _instanceData = MutableLiveData<InstanceInfo>()
     val instanceData: LiveData<InstanceInfo>
         get() = _instanceData
+
+    private val _flowInstanceData = MutableStateFlow(InstanceInfo())
+    val flowInstanceData = _flowInstanceData.asStateFlow()
+
+    private var getInstanceInfoJob: Job? = null
 
     private var oldProfileData: Account? = null
 
@@ -320,8 +334,19 @@ class EditProfileViewModel(
     }
 
     private fun obtainInstance() {
-        repository.getInstanceInfo(disposables) {
-            _instanceData.postValue(it)
+        getInstanceInfoJob?.cancelIfActive()
+        getInstanceInfoJob = viewModelScope.launch {
+            repository.getInstanceInfo()
+                .catch {
+                    _flowInstanceData.emit(repository.getInstanceInfoDb().toInstanceInfo())
+                }
+                .collect { response ->
+                    when (response) {
+                        is ApiResponse.Success<InstanceEntity> -> {
+                            _flowInstanceData.emit(response.data.toInstanceInfo())
+                        }
+                    }
+                }
         }
     }
 }
