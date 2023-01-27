@@ -32,10 +32,14 @@ class InstanceRepository(
                     )
                 )
             } else {
-                Success(db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain))
+                Success(getInstanceInfoDb())
             }
 
             emit(response)
         }
+    }
+
+    fun getInstanceInfoDb(): InstanceEntity {
+        return db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain)
     }
 }
