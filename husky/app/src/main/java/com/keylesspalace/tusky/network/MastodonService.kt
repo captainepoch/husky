@@ -29,7 +29,6 @@ import com.keylesspalace.tusky.entity.SearchResult
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.entity.StatusContext
 import com.keylesspalace.tusky.entity.StickerPack
-import com.keylesspalace.tusky.network.MastodonApi.PostFilter
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.MultipartBody.Part
@@ -470,12 +469,25 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.getConversations(maxId, limit)
     }
 
-    override fun createFilter(body: PostFilter): Call<Filter> {
-        return api.createFilter(body)
+    override fun createFilter(
+        phrase: String,
+        context: List<String>,
+        irreversible: Boolean?,
+        wholeWord: Boolean?,
+        expiresInSeconds: Int?
+    ): Call<Filter> {
+        return api.createFilter(phrase, context, irreversible, wholeWord, expiresInSeconds)
     }
 
-    override fun updateFilter(id: String, body: PostFilter): Call<Filter> {
-        return api.updateFilter(id, body)
+    override fun updateFilter(
+        id: String,
+        phrase: String,
+        context: List<String>,
+        irreversible: Boolean?,
+        wholeWord: Boolean?,
+        expiresInSeconds: Int?
+    ): Call<Filter> {
+        return api.updateFilter(id, phrase, context, irreversible, wholeWord, expiresInSeconds)
     }
 
     override fun deleteFilter(id: String): Call<ResponseBody> {

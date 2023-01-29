@@ -552,21 +552,25 @@ interface MastodonApi {
         @Query("limit") limit: Int
     ): Call<List<Conversation>>
 
-    data class PostFilter(
-        val phrase: String,
-        val context: List<String>,
-        val irreversible: Boolean?,
-        val whole_word: Boolean?,
-        val expires_in: String?
-    )
-
+    @FormUrlEncoded
     @POST("api/v1/filters")
-    fun createFilter(@Body body: PostFilter): Call<Filter>
+    fun createFilter(
+        @Field("phrase") phrase: String,
+        @Field("context[]") context: List<String>,
+        @Field("irreversible") irreversible: Boolean?,
+        @Field("whole_word") wholeWord: Boolean?,
+        @Field("expires_in") expiresInSeconds: Int?
+    ): Call<Filter>
 
+    @FormUrlEncoded
     @PUT("api/v1/filters/{id}")
     fun updateFilter(
         @Path("id") id: String,
-        @Body body: PostFilter
+        @Field("phrase") phrase: String,
+        @Field("context[]") context: List<String>,
+        @Field("irreversible") irreversible: Boolean?,
+        @Field("whole_word") wholeWord: Boolean?,
+        @Field("expires_in") expiresInSeconds: Int?
     ): Call<Filter>
 
     @DELETE("api/v1/filters/{id}")
