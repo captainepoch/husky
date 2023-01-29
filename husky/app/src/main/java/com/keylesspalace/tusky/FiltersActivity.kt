@@ -64,22 +64,32 @@ class FiltersActivity : BaseActivity() {
             showAddFilterDialog()
         }
 
-        title = intent?.getStringExtra(FILTERS_TITLE)
-        context = intent?.getStringExtra(FILTERS_CONTEXT)!!
-        loadFilters()
+        title = intent.getStringExtra(FILTERS_TITLE)
+        val intentContext = intent.getStringExtra(FILTERS_CONTEXT)
+
+        if (intentContext == null) {
+            Toast.makeText(
+                this,
+                "Error getting the correct context for the filters",
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
+        } else {
+            context = intentContext
+            loadFilters()
+        }
     }
 
     private fun updateFilter(filter: Filter, itemIndex: Int) {
         api.updateFilter(
             filter.id,
-            MastodonApi.PostFilter(
-                filter.phrase,
-                filter.context,
-                filter.irreversible,
-                filter.wholeWord,
-                filter.expiresAt
-            )
+            filter.phrase,
+            filter.context,
+            filter.irreversible,
+            filter.wholeWord,
+            null
         ).enqueue(object : Callback<Filter> {
+
             override fun onFailure(call: Call<Filter>, t: Throwable) {
                 Toast.makeText(
                     this@FiltersActivity,
@@ -90,6 +100,7 @@ class FiltersActivity : BaseActivity() {
 
             override fun onResponse(call: Call<Filter>, response: Response<Filter>) {
                 val updatedFilter = response.body()!!
+
                 if (updatedFilter.context.contains(context)) {
                     filters[itemIndex] = updatedFilter
                 } else {
@@ -106,10 +117,11 @@ class FiltersActivity : BaseActivity() {
         if (filter.context.size == 1) {
             // This is the only context for this filter; delete it
             api.deleteFilter(filters[itemIndex].id).enqueue(object : Callback<ResponseBody> {
+
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Toast.makeText(
                         this@FiltersActivity,
-                        "Error updating filter '${filters[itemIndex].phrase}'",
+                        "Error removing filter '${filters[itemIndex].phrase}'",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -135,8 +147,9 @@ class FiltersActivity : BaseActivity() {
     }
 
     private fun createFilter(phrase: String, wholeWord: Boolean) {
-        api.createFilter(MastodonApi.PostFilter(phrase, listOf(context), false, wholeWord, null))
+        api.createFilter(phrase, listOf(context), false, wholeWord, null)
             .enqueue(object : Callback<Filter> {
+
                 override fun onResponse(call: Call<Filter>, response: Response<Filter>) {
                     val filterResponse = response.body()
                     if (response.isSuccessful && filterResponse != null) {
@@ -165,7 +178,7 @@ class FiltersActivity : BaseActivity() {
     private fun showAddFilterDialog() {
         val dialogBind = DialogFilterBinding.inflate(layoutInflater)
         dialogBind.phraseWholeWord.isChecked = true
-        val dialog = AlertDialog.Builder(this@FiltersActivity)
+        AlertDialog.Builder(this@FiltersActivity)
             .setTitle(R.string.filter_addition_dialog_title)
             .setView(dialogBind.root)
             .setPositiveButton(android.R.string.ok) { _, _ ->
@@ -175,8 +188,7 @@ class FiltersActivity : BaseActivity() {
                 )
             }
             .setNeutralButton(android.R.string.cancel, null)
-            .create()
-        dialog.show()
+            .create().show()
     }
 
     private fun setupEditDialogForItem(itemIndex: Int) {
@@ -186,7 +198,7 @@ class FiltersActivity : BaseActivity() {
         val dialogBind = DialogFilterBinding.inflate(layoutInflater)
         dialogBind.phraseEditText.setText(filter.phrase)
         dialogBind.phraseWholeWord.isChecked = filter.wholeWord
-        val dialog = AlertDialog.Builder(this@FiltersActivity)
+        AlertDialog.Builder(this@FiltersActivity)
             .setTitle(R.string.filter_edit_dialog_title)
             .setView(dialogBind.root)
             .setPositiveButton(R.string.filter_dialog_update_button) { _, _ ->
@@ -205,8 +217,7 @@ class FiltersActivity : BaseActivity() {
                 deleteFilter(itemIndex)
             }
             .setNeutralButton(android.R.string.cancel, null)
-            .create()
-        dialog.show()
+            .create().show()
     }
 
     private fun refreshFilterDisplay() {
