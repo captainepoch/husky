@@ -1,17 +1,22 @@
-/* Copyright 2019 Joel Pyska
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2019  Joel Pyska
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.report.adapter
 
@@ -20,8 +25,8 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.model.StatusViewState
+import com.keylesspalace.tusky.databinding.ItemReportStatusBinding
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.util.StatusDisplayOptions
 
@@ -32,14 +37,22 @@ class StatusesAdapter(
 ) : PagedListAdapter<Status, RecyclerView.ViewHolder>(STATUS_COMPARATOR) {
 
     private val statusForPosition: (Int) -> Status? = { position: Int ->
-        if (position != RecyclerView.NO_POSITION) getItem(position) else null
+        if(position != RecyclerView.NO_POSITION) {
+            getItem(position)
+        } else {
+            null
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_report_status, parent, false)
         return StatusViewHolder(
-            view, statusDisplayOptions, statusViewState, adapterHandler,
+            ItemReportStatusBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent, false
+            ),
+            statusDisplayOptions,
+            statusViewState,
+            adapterHandler,
             statusForPosition
         )
     }

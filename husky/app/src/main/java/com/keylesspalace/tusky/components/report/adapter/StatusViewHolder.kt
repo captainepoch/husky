@@ -1,17 +1,22 @@
-/* Copyright 2019 Joel Pyska
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2019  Joel Pyska
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.report.adapter
 
@@ -21,6 +26,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.report.model.StatusViewState
+import com.keylesspalace.tusky.databinding.ItemReportStatusBinding
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.interfaces.LinkListener
@@ -35,22 +41,16 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.shouldTrimStatus
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.viewdata.toViewData
-import kotlinx.android.synthetic.main.item_report_status.view.buttonToggleContent
-import kotlinx.android.synthetic.main.item_report_status.view.statusContent
-import kotlinx.android.synthetic.main.item_report_status.view.statusContentWarningButton
-import kotlinx.android.synthetic.main.item_report_status.view.statusContentWarningDescription
-import kotlinx.android.synthetic.main.item_report_status.view.statusSelection
-import kotlinx.android.synthetic.main.item_report_status.view.status_media_preview_container
-import kotlinx.android.synthetic.main.item_report_status.view.timestampInfo
 import java.util.Date
 
 class StatusViewHolder(
-    itemView: View,
+    private val binding: ItemReportStatusBinding,
     private val statusDisplayOptions: StatusDisplayOptions,
     private val viewState: StatusViewState,
     private val adapterHandler: AdapterHandler,
     private val getStatusForPosition: (Int) -> Status?
-) : RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.ViewHolder(binding.root) {
+
     private val mediaViewHeight =
         itemView.context.resources.getDimensionPixelSize(R.dimen.status_media_preview_height)
     private val statusViewHelper = StatusViewHelper(itemView)
@@ -70,16 +70,16 @@ class StatusViewHolder(
     }
 
     init {
-        itemView.statusSelection.setOnCheckedChangeListener { _, isChecked ->
+        binding.statusSelection.setOnCheckedChangeListener { _, isChecked ->
             status()?.let { status ->
                 adapterHandler.setStatusChecked(status, isChecked)
             }
         }
-        itemView.status_media_preview_container.clipToOutline = true
+        binding.statusMediaPreviewContainer.clipToOutline = true
     }
 
     fun bind(status: Status) {
-        itemView.statusSelection.isChecked = adapterHandler.isStatusChecked(status.id)
+        binding.statusSelection.isChecked = adapterHandler.isStatusChecked(status.id)
 
         updateTextView()
 
@@ -109,24 +109,24 @@ class StatusViewHolder(
                 status.spoilerText
             )
 
-            if (status.spoilerText.isBlank()) {
+            if(status.spoilerText.isBlank()) {
                 setTextVisible(
                     true, status.content, status.mentions, status.emojis, adapterHandler
                 )
-                itemView.statusContentWarningButton.hide()
-                itemView.statusContentWarningDescription.hide()
+                binding.statusContentWarningButton.hide()
+                binding.statusContentWarningDescription.hide()
             } else {
                 val emojiSpoiler = status.spoilerText.emojify(
-                    status.emojis, itemView.statusContentWarningDescription
+                    status.emojis, binding.statusContentWarningDescription
                 )
-                itemView.statusContentWarningDescription.text = emojiSpoiler
-                itemView.statusContentWarningDescription.show()
-                itemView.statusContentWarningButton.show()
+                binding.statusContentWarningDescription.text = emojiSpoiler
+                binding.statusContentWarningDescription.show()
+                binding.statusContentWarningButton.show()
                 setContentWarningButtonText(viewState.isContentShow(status.id, true))
-                itemView.statusContentWarningButton.setOnClickListener {
+                binding.statusContentWarningButton.setOnClickListener {
                     status()?.let { status ->
                         val contentShown = viewState.isContentShow(status.id, true)
-                        itemView.statusContentWarningDescription.invalidate()
+                        binding.statusContentWarningDescription.invalidate()
                         viewState.setContentShow(status.id, !contentShown)
                         setTextVisible(
                             !contentShown,
@@ -150,10 +150,10 @@ class StatusViewHolder(
     }
 
     private fun setContentWarningButtonText(contentShown: Boolean) {
-        if (contentShown) {
-            itemView.statusContentWarningButton.setText(R.string.status_content_warning_show_less)
+        if(contentShown) {
+            binding.statusContentWarningButton.setText(R.string.status_content_warning_show_less)
         } else {
-            itemView.statusContentWarningButton.setText(R.string.status_content_warning_show_more)
+            binding.statusContentWarningButton.setText(R.string.status_content_warning_show_more)
         }
     }
 
@@ -164,27 +164,27 @@ class StatusViewHolder(
         emojis: List<Emoji>,
         listener: LinkListener
     ) {
-        if (expanded) {
-            val emojifiedText = content.emojify(emojis, itemView.statusContent)
-            LinkHelper.setClickableText(itemView.statusContent, emojifiedText, mentions, listener)
+        if(expanded) {
+            val emojifiedText = content.emojify(emojis, binding.statusContent)
+            LinkHelper.setClickableText(binding.statusContent, emojifiedText, mentions, listener)
         } else {
-            LinkHelper.setClickableMentions(itemView.statusContent, mentions, listener)
+            LinkHelper.setClickableMentions(binding.statusContent, mentions, listener)
         }
-        if (itemView.statusContent.text.isNullOrBlank()) {
-            itemView.statusContent.hide()
+        if(binding.statusContent.text.isNullOrBlank()) {
+            binding.statusContent.hide()
         } else {
-            itemView.statusContent.show()
+            binding.statusContent.show()
         }
     }
 
     private fun setCreatedAt(createdAt: Date?) {
-        if (statusDisplayOptions.useAbsoluteTime) {
-            itemView.timestampInfo.text = statusViewHelper.getAbsoluteTime(createdAt)
+        if(statusDisplayOptions.useAbsoluteTime) {
+            binding.timestampInfo.text = statusViewHelper.getAbsoluteTime(createdAt)
         } else {
-            itemView.timestampInfo.text = if (createdAt != null) {
+            binding.timestampInfo.text = if(createdAt != null) {
                 val then = createdAt.time
                 val now = System.currentTimeMillis()
-                TimestampUtils.getRelativeTimeSpanString(itemView.timestampInfo.context, then, now)
+                TimestampUtils.getRelativeTimeSpanString(binding.timestampInfo.context, then, now)
             } else {
                 // unknown minutes~
                 "?m"
@@ -199,25 +199,25 @@ class StatusViewHolder(
         spoilerText: String
     ) {
         /* input filter for TextViews have to be set before text */
-        if (collapsible && (expanded || TextUtils.isEmpty(spoilerText))) {
-            itemView.buttonToggleContent.setOnClickListener {
+        if(collapsible && (expanded || TextUtils.isEmpty(spoilerText))) {
+            binding.buttonToggleContent.setOnClickListener {
                 status()?.let { status ->
                     viewState.setCollapsed(status.id, !collapsed)
                     updateTextView()
                 }
             }
 
-            itemView.buttonToggleContent.show()
-            if (collapsed) {
-                itemView.buttonToggleContent.setText(R.string.status_content_show_more)
-                itemView.statusContent.filters = COLLAPSE_INPUT_FILTER
+            binding.buttonToggleContent.show()
+            if(collapsed) {
+                binding.buttonToggleContent.setText(R.string.status_content_show_more)
+                binding.statusContent.filters = COLLAPSE_INPUT_FILTER
             } else {
-                itemView.buttonToggleContent.setText(R.string.status_content_show_less)
-                itemView.statusContent.filters = NO_INPUT_FILTER
+                binding.buttonToggleContent.setText(R.string.status_content_show_less)
+                binding.statusContent.filters = NO_INPUT_FILTER
             }
         } else {
-            itemView.buttonToggleContent.hide()
-            itemView.statusContent.filters = NO_INPUT_FILTER
+            binding.buttonToggleContent.hide()
+            binding.statusContent.filters = NO_INPUT_FILTER
         }
     }
 
