@@ -25,6 +25,7 @@ data class Filter(
     val irreversible: Boolean,
     @SerializedName("whole_word") val wholeWord: Boolean
 ) {
+
     companion object {
         const val HOME = "home"
         const val NOTIFICATIONS = "notifications"
@@ -38,10 +39,13 @@ data class Filter(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Filter) {
-            return false
+        return when (other) {
+            is Filter -> {
+                other.id == id
+            }
+            else -> {
+                false
+            }
         }
-        val filter = other as Filter?
-        return filter?.id.equals(id)
     }
 }
