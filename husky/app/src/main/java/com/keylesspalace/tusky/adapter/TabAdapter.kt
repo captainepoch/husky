@@ -1,36 +1,43 @@
-/* Copyright 2019 Conny Duck
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2019  Conny Duck
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.adapter
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.chip.Chip
 import com.keylesspalace.tusky.HASHTAG
 import com.keylesspalace.tusky.LIST
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.TabData
+import com.keylesspalace.tusky.databinding.ItemTabPreferenceBinding
+import com.keylesspalace.tusky.databinding.ItemTabPreferenceSmallBinding
+import com.keylesspalace.tusky.util.BindingViewHolder
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import kotlinx.android.synthetic.main.item_tab_preference.view.*
 
 interface ItemInteractionListener {
     fun onTabAdded(tab: TabData)
@@ -46,61 +53,75 @@ class TabAdapter(
     private val small: Boolean,
     private val listener: ItemInteractionListener,
     private var removeButtonEnabled: Boolean = false
-) : RecyclerView.Adapter<TabAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<BindingViewHolder<ViewBinding>>() {
 
     fun updateData(newData: List<TabData>) {
         this.data = newData
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutId = if (small) {
-            R.layout.item_tab_preference_small
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BindingViewHolder<ViewBinding> {
+        val binding = if(small) {
+            ItemTabPreferenceSmallBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         } else {
-            R.layout.item_tab_preference
+            ItemTabPreferenceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         }
-        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
-        return ViewHolder(view)
+
+        return BindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val context = holder.itemView.context
+    override fun onBindViewHolder(holder: BindingViewHolder<ViewBinding>, position: Int) {
         val tab = data[position]
-        if (!small && tab.id == LIST) {
-            holder.itemView.textView.text = tab.arguments.getOrNull(1).orEmpty()
+
+        if(small) {
+            val binding = holder.binding as ItemTabPreferenceSmallBinding
+
+            with(binding.textView) {
+                setText(tab.text)
+                setCompoundDrawablesRelativeWithIntrinsicBounds(tab.icon, 0, 0, 0)
+                setOnClickListener {
+                    listener.onTabAdded(tab)
+                }
+            }
         } else {
-            holder.itemView.textView.setText(tab.text)
-        }
-        holder.itemView.textView.setCompoundDrawablesRelativeWithIntrinsicBounds(tab.icon, 0, 0, 0)
-        if (small) {
-            holder.itemView.textView.setOnClickListener {
-                listener.onTabAdded(tab)
-            }
-        }
-        holder.itemView.imageView?.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                listener.onStartDrag(holder)
-                true
+            val binding = holder.binding as ItemTabPreferenceBinding
+
+            if(tab.id == LIST) {
+                binding.textView.text = tab.arguments.getOrNull(1).orEmpty()
             } else {
-                false
+                binding.textView.setText(tab.text)
             }
-        }
-        holder.itemView.removeButton?.setOnClickListener {
-            listener.onTabRemoved(holder.adapterPosition)
-        }
-        if (holder.itemView.removeButton != null) {
-            holder.itemView.removeButton.isEnabled = removeButtonEnabled
+            binding.textView.setCompoundDrawablesRelativeWithIntrinsicBounds(tab.icon, 0, 0, 0)
+
+            binding.imageView.setOnTouchListener { _, event ->
+                if(event.action == MotionEvent.ACTION_DOWN) {
+                    listener.onStartDrag(holder)
+                    true
+                } else {
+                    false
+                }
+            }
+
+            binding.removeButton.setOnClickListener {
+                listener.onTabRemoved(holder.bindingAdapterPosition)
+            }
+            binding.removeButton.isEnabled = removeButtonEnabled
+
             ThemeUtils.setDrawableTint(
-                holder.itemView.context,
-                holder.itemView.removeButton.drawable,
-                (if (removeButtonEnabled) android.R.attr.textColorTertiary else R.attr.textColorDisabled)
+                binding.root.context,
+                binding.removeButton.drawable,
+                (if(removeButtonEnabled) android.R.attr.textColorTertiary else R.attr.textColorDisabled)
             )
-        }
 
-        if (!small) {
-
-            if (tab.id == HASHTAG) {
-                holder.itemView.chipGroup.show()
+            if(tab.id == HASHTAG) {
+                binding.chipGroup.show()
 
                 /*
                  * The chip group will always contain the actionChip (it is defined in the xml layout).
@@ -108,16 +129,21 @@ class TabAdapter(
                  * This code tries to reuse already added chips to reduce the number of Views created.
                  */
                 tab.arguments.forEachIndexed { i, arg ->
-
-                    val chip = holder.itemView.chipGroup.getChildAt(i).takeUnless { it.id == R.id.actionChip } as Chip?
-                        ?: Chip(context).apply {
-                            holder.itemView.chipGroup.addView(this, holder.itemView.chipGroup.size - 1)
-                            chipIconTint = ColorStateList.valueOf(ThemeUtils.getColor(context, android.R.attr.textColorPrimary))
-                        }
+                    val chip = binding.chipGroup.getChildAt(i)
+                                   .takeUnless { it.id == R.id.actionChip } as Chip?
+                               ?: Chip(binding.root.context).apply {
+                                   binding.chipGroup.addView(this, binding.chipGroup.size - 1)
+                                   chipIconTint = ColorStateList.valueOf(
+                                       ThemeUtils.getColor(
+                                           context,
+                                           android.R.attr.textColorPrimary
+                                       )
+                                   )
+                               }
 
                     chip.text = arg
 
-                    if (tab.arguments.size <= 1) {
+                    if(tab.arguments.size <= 1) {
                         chip.chipIcon = null
                         chip.setOnClickListener(null)
                     } else {
@@ -128,15 +154,15 @@ class TabAdapter(
                     }
                 }
 
-                while (holder.itemView.chipGroup.size - 1 > tab.arguments.size) {
-                    holder.itemView.chipGroup.removeViewAt(tab.arguments.size)
+                while(binding.chipGroup.size - 1 > tab.arguments.size) {
+                    binding.chipGroup.removeViewAt(tab.arguments.size)
                 }
 
-                holder.itemView.actionChip.setOnClickListener {
+                binding.actionChip.setOnClickListener {
                     listener.onActionChipClicked(tab, holder.adapterPosition)
                 }
             } else {
-                holder.itemView.chipGroup.hide()
+                binding.chipGroup.hide()
             }
         }
     }
@@ -144,11 +170,9 @@ class TabAdapter(
     override fun getItemCount() = data.size
 
     fun setRemoveButtonVisible(enabled: Boolean) {
-        if (removeButtonEnabled != enabled) {
+        if(removeButtonEnabled != enabled) {
             removeButtonEnabled = enabled
             notifyDataSetChanged()
         }
     }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
