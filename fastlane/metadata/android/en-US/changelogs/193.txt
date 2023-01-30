@@ -1,0 +1,4 @@
+Husky 1.4.2
+
+Changelog:
+  - Fix: Creating filters as tags (#example).
