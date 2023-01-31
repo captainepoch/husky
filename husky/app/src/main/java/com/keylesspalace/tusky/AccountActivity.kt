@@ -83,10 +83,6 @@ import com.keylesspalace.tusky.viewmodel.AccountViewModel
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.view_account_moved.accountMovedAvatar
-import kotlinx.android.synthetic.main.view_account_moved.accountMovedDisplayName
-import kotlinx.android.synthetic.main.view_account_moved.accountMovedText
-import kotlinx.android.synthetic.main.view_account_moved.accountMovedUsername
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 import kotlin.math.abs
@@ -537,34 +533,30 @@ class AccountActivity :
      */
     private fun updateMovedAccount() {
         loadedAccount?.moved?.let { movedAccount ->
-            binding.accountMovedView.show()
-
-            // Necessary because accountMovedView is now replaced in layout hierachy
-            findViewById<View>(R.id.accountMovedViewLayout).setOnClickListener {
-                onViewAccount(movedAccount.id)
-            }
-
-            accountMovedDisplayName.text = movedAccount.name
-            accountMovedUsername.text =
+            binding.accountMovedDisplayName.text = movedAccount.name
+            binding.accountMovedUsername.text =
                 getString(R.string.status_username_format, movedAccount.username)
 
             val avatarRadius = resources.getDimensionPixelSize(R.dimen.avatar_radius_48dp)
 
-            loadAvatar(movedAccount.avatar, accountMovedAvatar, avatarRadius, animateAvatar)
+            loadAvatar(movedAccount.avatar, binding.accountMovedAvatar, avatarRadius, animateAvatar)
 
-            accountMovedText.text = getString(R.string.account_moved_description, movedAccount.name)
+            binding.accountMovedText.text =
+                getString(R.string.account_moved_description, movedAccount.name)
 
             // this is necessary because API 19 can't handle vector compound drawables
             val movedIcon = ContextCompat.getDrawable(this, R.drawable.ic_briefcase)?.mutate()
             val textColor = ThemeUtils.getColor(this, android.R.attr.textColorTertiary)
             movedIcon?.colorFilter = PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN)
 
-            accountMovedText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            binding.accountMovedText.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 movedIcon,
                 null,
                 null,
                 null
             )
+
+            binding.accountMovedView.show()
         }
     }
 
