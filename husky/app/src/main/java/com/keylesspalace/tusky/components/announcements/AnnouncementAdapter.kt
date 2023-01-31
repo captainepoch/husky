@@ -73,7 +73,7 @@ class AnnouncementAdapter(
             LinkHelper.setClickableText(binding.text, item.content, null, listener)
 
             // If wellbeing mode is enabled, announcement badge counts should not be shown.
-            if(wellbeingEnabled) {
+            if (wellbeingEnabled) {
                 // Since reactions are not visible in wellbeing mode,
                 // we shouldn't be able to add any ourselves.
                 binding.addReactionChip.visibility = View.GONE
@@ -81,17 +81,19 @@ class AnnouncementAdapter(
             }
 
             item.reactions.forEachIndexed { i, reaction ->
-                (binding.chipGroup.getChildAt(i)
-                     ?.takeUnless { it.id == R.id.addReactionChip } as Chip? ?: Chip(
-                    ContextThemeWrapper(
-                        binding.root.context, R.style.Widget_MaterialComponents_Chip_Choice
-                    )
-                ).apply {
-                    isCheckable = true
-                    checkedIcon = null
-                    binding.chipGroup.addView(this, i)
-                }).apply {
-                    val emojiText = if(reaction.url == null) {
+                (
+                    binding.chipGroup.getChildAt(i)
+                        ?.takeUnless { it.id == R.id.addReactionChip } as Chip? ?: Chip(
+                        ContextThemeWrapper(
+                            binding.root.context, R.style.Widget_MaterialComponents_Chip_Choice
+                        )
+                    ).apply {
+                        isCheckable = true
+                        checkedIcon = null
+                        binding.chipGroup.addView(this, i)
+                    }
+                    ).apply {
+                    val emojiText = if (reaction.url == null) {
                         reaction.name
                     } else {
                         binding.root.context.getString(
@@ -107,13 +109,14 @@ class AnnouncementAdapter(
                                 reaction.staticUrl ?: "",
                                 null
                             )
-                        ), this
+                        ),
+                        this
                     )
 
                     isChecked = reaction.me
 
                     setOnClickListener {
-                        if(reaction.me) {
+                        if (reaction.me) {
                             listener.removeReaction(item.id, reaction.name)
                         } else {
                             listener.addReaction(item.id, reaction.name)
@@ -122,7 +125,7 @@ class AnnouncementAdapter(
                 }
             }
 
-            while((binding.chipGroup.size - 1) > item.reactions.size) {
+            while ((binding.chipGroup.size - 1) > item.reactions.size) {
                 binding.chipGroup.removeViewAt(item.reactions.size)
             }
 

@@ -37,7 +37,7 @@ class StatusesAdapter(
 ) : PagedListAdapter<Status, RecyclerView.ViewHolder>(STATUS_COMPARATOR) {
 
     private val statusForPosition: (Int) -> Status? = { position: Int ->
-        if(position != RecyclerView.NO_POSITION) {
+        if (position != RecyclerView.NO_POSITION) {
             getItem(position)
         } else {
             null

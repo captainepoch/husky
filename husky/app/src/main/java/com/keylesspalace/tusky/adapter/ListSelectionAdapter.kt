@@ -35,7 +35,7 @@ class ListSelectionAdapter(context: Context) : ArrayAdapter<MastoList>(
 ) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val binding = if(convertView != null) {
+        val binding = if (convertView != null) {
             ItemAutocompleteHashtagBinding.bind(convertView)
         } else {
             ItemAutocompleteHashtagBinding.inflate(LayoutInflater.from(context), parent, false)

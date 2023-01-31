@@ -88,7 +88,7 @@ abstract class SearchFragment<T> :
         networkStateRefresh.observe(viewLifecycleOwner) {
             binding.searchProgressBar.visible(it == NetworkState.LOADING)
 
-            if(it.status == Status.FAILED) {
+            if (it.status == Status.FAILED) {
                 showError()
             }
 
@@ -98,7 +98,7 @@ abstract class SearchFragment<T> :
         networkState.observe(viewLifecycleOwner) {
             binding.progressBarBottom.visible(it == NetworkState.LOADING)
 
-            if(it.status == Status.FAILED) {
+            if (it.status == Status.FAILED) {
                 showError()
             }
         }
@@ -125,7 +125,7 @@ abstract class SearchFragment<T> :
     }
 
     private fun showNoData(isEmpty: Boolean) {
-        if(isEmpty && networkStateRefresh.value == NetworkState.LOADED) {
+        if (isEmpty && networkStateRefresh.value == NetworkState.LOADED) {
             binding.searchNoResultsText.show()
         } else {
             binding.searchNoResultsText.hide()
@@ -133,7 +133,7 @@ abstract class SearchFragment<T> :
     }
 
     private fun showError() {
-        if(snackbarErrorRetry?.isShown != true) {
+        if (snackbarErrorRetry?.isShown != true) {
             snackbarErrorRetry =
                 Snackbar.make(binding.root, R.string.failed_search, Snackbar.LENGTH_INDEFINITE)
             snackbarErrorRetry?.setAction(R.string.action_retry) {

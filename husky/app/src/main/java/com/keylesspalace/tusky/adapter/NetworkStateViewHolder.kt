@@ -40,7 +40,7 @@ class NetworkStateViewHolder(
         binding.retryButton.setOnClickListener {
             retryCallback()
         }
-        if(fullScreen) {
+        if (fullScreen) {
             binding.root.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         } else {
             binding.root.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT

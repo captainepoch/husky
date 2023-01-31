@@ -64,7 +64,7 @@ class TabAdapter(
         parent: ViewGroup,
         viewType: Int
     ): BindingViewHolder<ViewBinding> {
-        val binding = if(small) {
+        val binding = if (small) {
             ItemTabPreferenceSmallBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -80,7 +80,7 @@ class TabAdapter(
     override fun onBindViewHolder(holder: BindingViewHolder<ViewBinding>, position: Int) {
         val tab = data[position]
 
-        if(small) {
+        if (small) {
             val binding = holder.binding as ItemTabPreferenceSmallBinding
 
             with(binding.textView) {
@@ -93,7 +93,7 @@ class TabAdapter(
         } else {
             val binding = holder.binding as ItemTabPreferenceBinding
 
-            if(tab.id == LIST) {
+            if (tab.id == LIST) {
                 binding.textView.text = tab.arguments.getOrNull(1).orEmpty()
             } else {
                 binding.textView.setText(tab.text)
@@ -101,7 +101,7 @@ class TabAdapter(
             binding.textView.setCompoundDrawablesRelativeWithIntrinsicBounds(tab.icon, 0, 0, 0)
 
             binding.imageView.setOnTouchListener { _, event ->
-                if(event.action == MotionEvent.ACTION_DOWN) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
                     listener.onStartDrag(holder)
                     true
                 } else {
@@ -117,10 +117,10 @@ class TabAdapter(
             ThemeUtils.setDrawableTint(
                 binding.root.context,
                 binding.removeButton.drawable,
-                (if(removeButtonEnabled) android.R.attr.textColorTertiary else R.attr.textColorDisabled)
+                (if (removeButtonEnabled) android.R.attr.textColorTertiary else R.attr.textColorDisabled)
             )
 
-            if(tab.id == HASHTAG) {
+            if (tab.id == HASHTAG) {
                 binding.chipGroup.show()
 
                 /*
@@ -130,20 +130,20 @@ class TabAdapter(
                  */
                 tab.arguments.forEachIndexed { i, arg ->
                     val chip = binding.chipGroup.getChildAt(i)
-                                   .takeUnless { it.id == R.id.actionChip } as Chip?
-                               ?: Chip(binding.root.context).apply {
-                                   binding.chipGroup.addView(this, binding.chipGroup.size - 1)
-                                   chipIconTint = ColorStateList.valueOf(
-                                       ThemeUtils.getColor(
-                                           context,
-                                           android.R.attr.textColorPrimary
-                                       )
-                                   )
-                               }
+                        .takeUnless { it.id == R.id.actionChip } as Chip?
+                        ?: Chip(binding.root.context).apply {
+                            binding.chipGroup.addView(this, binding.chipGroup.size - 1)
+                            chipIconTint = ColorStateList.valueOf(
+                                ThemeUtils.getColor(
+                                    context,
+                                    android.R.attr.textColorPrimary
+                                )
+                            )
+                        }
 
                     chip.text = arg
 
-                    if(tab.arguments.size <= 1) {
+                    if (tab.arguments.size <= 1) {
                         chip.chipIcon = null
                         chip.setOnClickListener(null)
                     } else {
@@ -154,7 +154,7 @@ class TabAdapter(
                     }
                 }
 
-                while(binding.chipGroup.size - 1 > tab.arguments.size) {
+                while (binding.chipGroup.size - 1 > tab.arguments.size) {
                     binding.chipGroup.removeViewAt(tab.arguments.size)
                 }
 
@@ -170,7 +170,7 @@ class TabAdapter(
     override fun getItemCount() = data.size
 
     fun setRemoveButtonVisible(enabled: Boolean) {
-        if(removeButtonEnabled != enabled) {
+        if (removeButtonEnabled != enabled) {
             removeButtonEnabled = enabled
             notifyDataSetChanged()
         }

@@ -22,12 +22,11 @@ package com.keylesspalace.tusky.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.InputFilter;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -38,14 +37,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
+import at.connyduck.sparkbutton.helpers.Utils;
 import com.bumptech.glide.Glide;
 import com.keylesspalace.tusky.R;
+import com.keylesspalace.tusky.databinding.ItemFollowRequestNotificationBinding;
 import com.keylesspalace.tusky.entity.Account;
 import com.keylesspalace.tusky.entity.Emoji;
 import com.keylesspalace.tusky.entity.Notification;
@@ -59,17 +58,13 @@ import com.keylesspalace.tusky.util.LinkHelper;
 import com.keylesspalace.tusky.util.SmartLengthInputFilter;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.util.StringUtils;
-import com.keylesspalace.tusky.util.ThemeUtils;
 import com.keylesspalace.tusky.util.TimestampUtils;
 import com.keylesspalace.tusky.viewdata.NotificationViewData;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import at.connyduck.sparkbutton.helpers.Utils;
 
 public class NotificationsAdapter extends RecyclerView.Adapter {
 
@@ -78,7 +73,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
 
         T getItemAt(int pos);
     }
-
 
     private static final int VIEW_TYPE_STATUS = 0;
     private static final int VIEW_TYPE_STATUS_NOTIFICATION = 1;
@@ -141,9 +135,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
                 return new FollowViewHolder(view, statusDisplayOptions);
             }
             case VIEW_TYPE_FOLLOW_REQUEST: {
-                View view = inflater
-                        .inflate(R.layout.item_follow_request_notification, parent, false);
-                return new FollowRequestViewHolder(view, true);
+                ItemFollowRequestNotificationBinding binding =
+                    ItemFollowRequestNotificationBinding.inflate(
+                        LayoutInflater.from(parent.getContext()), parent, false
+                    );
+                return new FollowRequestViewHolder(binding, true);
             }
             case VIEW_TYPE_PLACEHOLDER: {
                 View view = inflater

@@ -28,7 +28,7 @@ class ConversationAdapter(
         object : ListUpdateCallback {
             override fun onInserted(position: Int, count: Int) {
                 notifyItemRangeInserted(position, count)
-                if(position == 0) {
+                if (position == 0) {
                     topLoadedCallback()
                 }
             }
@@ -53,7 +53,7 @@ class ConversationAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
+        return when (viewType) {
             R.layout.item_network_state -> NetworkStateViewHolder(
                 ItemNetworkStateBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 retryCallback
@@ -69,7 +69,7 @@ class ConversationAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(getItemViewType(position)) {
+        when (getItemViewType(position)) {
             R.layout.item_network_state -> (holder as NetworkStateViewHolder).setUpWithNetworkState(
                 networkState,
                 differ.itemCount == 0
@@ -83,7 +83,7 @@ class ConversationAdapter(
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
 
     override fun getItemViewType(position: Int): Int {
-        return if(hasExtraRow() && position == itemCount - 1) {
+        return if (hasExtraRow() && position == itemCount - 1) {
             R.layout.item_network_state
         } else {
             R.layout.item_conversation
@@ -91,7 +91,7 @@ class ConversationAdapter(
     }
 
     override fun getItemCount(): Int {
-        return differ.itemCount + if(hasExtraRow()) 1 else 0
+        return differ.itemCount + if (hasExtraRow()) 1 else 0
     }
 
     fun setNetworkState(newNetworkState: NetworkState?) {
@@ -99,13 +99,13 @@ class ConversationAdapter(
         val hadExtraRow = hasExtraRow()
         this.networkState = newNetworkState
         val hasExtraRow = hasExtraRow()
-        if(hadExtraRow != hasExtraRow) {
-            if(hadExtraRow) {
+        if (hadExtraRow != hasExtraRow) {
+            if (hadExtraRow) {
                 notifyItemRemoved(differ.itemCount)
             } else {
                 notifyItemInserted(differ.itemCount)
             }
-        } else if(hasExtraRow && previousState != newNetworkState) {
+        } else if (hasExtraRow && previousState != newNetworkState) {
             notifyItemChanged(itemCount - 1)
         }
     }

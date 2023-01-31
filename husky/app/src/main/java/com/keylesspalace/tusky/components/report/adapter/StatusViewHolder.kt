@@ -109,7 +109,7 @@ class StatusViewHolder(
                 status.spoilerText
             )
 
-            if(status.spoilerText.isBlank()) {
+            if (status.spoilerText.isBlank()) {
                 setTextVisible(
                     true, status.content, status.mentions, status.emojis, adapterHandler
                 )
@@ -150,7 +150,7 @@ class StatusViewHolder(
     }
 
     private fun setContentWarningButtonText(contentShown: Boolean) {
-        if(contentShown) {
+        if (contentShown) {
             binding.statusContentWarningButton.setText(R.string.status_content_warning_show_less)
         } else {
             binding.statusContentWarningButton.setText(R.string.status_content_warning_show_more)
@@ -164,13 +164,13 @@ class StatusViewHolder(
         emojis: List<Emoji>,
         listener: LinkListener
     ) {
-        if(expanded) {
+        if (expanded) {
             val emojifiedText = content.emojify(emojis, binding.statusContent)
             LinkHelper.setClickableText(binding.statusContent, emojifiedText, mentions, listener)
         } else {
             LinkHelper.setClickableMentions(binding.statusContent, mentions, listener)
         }
-        if(binding.statusContent.text.isNullOrBlank()) {
+        if (binding.statusContent.text.isNullOrBlank()) {
             binding.statusContent.hide()
         } else {
             binding.statusContent.show()
@@ -178,10 +178,10 @@ class StatusViewHolder(
     }
 
     private fun setCreatedAt(createdAt: Date?) {
-        if(statusDisplayOptions.useAbsoluteTime) {
+        if (statusDisplayOptions.useAbsoluteTime) {
             binding.timestampInfo.text = statusViewHelper.getAbsoluteTime(createdAt)
         } else {
-            binding.timestampInfo.text = if(createdAt != null) {
+            binding.timestampInfo.text = if (createdAt != null) {
                 val then = createdAt.time
                 val now = System.currentTimeMillis()
                 TimestampUtils.getRelativeTimeSpanString(binding.timestampInfo.context, then, now)
@@ -199,7 +199,7 @@ class StatusViewHolder(
         spoilerText: String
     ) {
         /* input filter for TextViews have to be set before text */
-        if(collapsible && (expanded || TextUtils.isEmpty(spoilerText))) {
+        if (collapsible && (expanded || TextUtils.isEmpty(spoilerText))) {
             binding.buttonToggleContent.setOnClickListener {
                 status()?.let { status ->
                     viewState.setCollapsed(status.id, !collapsed)
@@ -208,7 +208,7 @@ class StatusViewHolder(
             }
 
             binding.buttonToggleContent.show()
-            if(collapsed) {
+            if (collapsed) {
                 binding.buttonToggleContent.setText(R.string.status_content_show_more)
                 binding.statusContent.filters = COLLAPSE_INPUT_FILTER
             } else {
