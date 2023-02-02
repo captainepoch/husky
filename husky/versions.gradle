@@ -1,12 +1,12 @@
 // Kotlin version
-ext.kotlin_version = "1.8.0"
+ext.kotlin_version = "1.8.10"
 
 // Dependencies versions
 def versions = [:]
 
 def gradle = [:]
-gradle.androidGradlePlugin = "7.4.0"
-gradle.gradlePluginVersions = "0.44.0"
+gradle.androidGradlePlugin = "7.4.1"
+gradle.gradlePluginVersions = "0.45.0"
 gradle.ktlintGradle = "11.0.0"
 versions.gradle = gradle
 
