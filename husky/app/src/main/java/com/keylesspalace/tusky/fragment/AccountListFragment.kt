@@ -52,7 +52,6 @@ import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.EndlessOnScrollListener
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.android.inject
@@ -63,7 +62,9 @@ import java.io.IOException
 
 class AccountListFragment : BaseFragment(), AccountActionListener {
 
-    private val binding by viewBinding(FragmentAccountListBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentAccountListBinding::bind)
+    private lateinit var binding: FragmentAccountListBinding
 
     private val api: MastodonApi by inject()
     private lateinit var type: Type
@@ -87,6 +88,7 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentAccountListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
