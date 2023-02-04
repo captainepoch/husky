@@ -41,12 +41,13 @@ import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewVideoBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.util.visible
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import timber.log.Timber
 
 class ViewVideoFragment : ViewMediaFragment() {
 
-    private val binding by viewBinding(FragmentViewVideoBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentViewVideoBinding::bind)
+    private lateinit var binding: FragmentViewVideoBinding
 
     private lateinit var toolbar: View
     private val handler = Handler(Looper.getMainLooper())
@@ -157,9 +158,9 @@ class ViewVideoFragment : ViewMediaFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // TODO
-        // toolbar = activity!!.toolbar
-        mediaActivity = activity as ViewMediaActivity
+        mediaActivity = (activity as ViewMediaActivity)
+        toolbar = mediaActivity.getToolbar()
+        binding = FragmentViewVideoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
