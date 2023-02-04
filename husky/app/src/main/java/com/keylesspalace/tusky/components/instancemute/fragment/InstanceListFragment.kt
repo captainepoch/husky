@@ -22,7 +22,6 @@ import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.EndlessOnScrollListener
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.android.inject
 import retrofit2.Call
@@ -32,7 +31,10 @@ import java.io.IOException
 
 class InstanceListFragment : BaseFragment(), InstanceActionListener {
 
-    private val binding by viewBinding(FragmentInstanceListBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentInstanceListBinding::bind)
+    private lateinit var binding: FragmentInstanceListBinding
+
     private val api: MastodonApi by inject()
     private var fetching = false
     private var bottomId: String? = null
@@ -44,6 +46,7 @@ class InstanceListFragment : BaseFragment(), InstanceActionListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentInstanceListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
