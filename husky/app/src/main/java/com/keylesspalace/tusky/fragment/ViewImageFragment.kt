@@ -34,17 +34,19 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.github.piasy.biv.view.BigImageView
 import com.github.piasy.biv.view.GlideImageViewFactory
+import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewImageBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.visible
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import java.io.File
 import kotlin.math.abs
 
 class ViewImageFragment : ViewMediaFragment() {
 
-    private val binding by viewBinding(FragmentViewImageBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentViewImageBinding::bind)
+    private lateinit var binding: FragmentViewImageBinding
 
     interface PhotoActionsListener {
         fun onBringUp()
@@ -93,8 +95,8 @@ class ViewImageFragment : ViewMediaFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // TODO
-        // toolbar = activity!!.toolbar
+        toolbar = (requireActivity() as ViewMediaActivity).getToolbar()
+        binding = FragmentViewImageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
