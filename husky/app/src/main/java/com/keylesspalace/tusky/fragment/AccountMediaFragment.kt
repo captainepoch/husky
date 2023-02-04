@@ -42,7 +42,6 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.view.SquareImageView
 import com.keylesspalace.tusky.viewdata.AttachmentViewData
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,7 +57,9 @@ import java.util.Random
 
 class AccountMediaFragment : BaseFragment(), RefreshableFragment {
 
-    private val binding by viewBinding(FragmentTimelineBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentTimelineBinding::bind)
+    private lateinit var binding: FragmentTimelineBinding
 
     companion object {
         @JvmStatic
@@ -194,6 +195,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentTimelineBinding.inflate(inflater, container, false)
         return binding.root
     }
 
