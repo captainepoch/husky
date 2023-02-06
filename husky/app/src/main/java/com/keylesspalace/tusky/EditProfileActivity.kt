@@ -34,9 +34,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Lifecycle.State.STARTED
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -72,7 +70,6 @@ class EditProfileActivity : BaseActivity() {
     private val viewModel: EditProfileViewModel by viewModel()
     private var currentlyPicking: PickType = PickType.NOTHING
     private val accountFieldEditAdapter = AccountFieldEditAdapter()
-    private var maxAccountFields = MASTODON_MAX_ACCOUNT_FIELDS
 
     private enum class PickType {
         NOTHING,
@@ -115,8 +112,8 @@ class EditProfileActivity : BaseActivity() {
 
         binding.addFieldButton.setOnClickListener {
             accountFieldEditAdapter.addField()
-            if (accountFieldEditAdapter.itemCount >= maxAccountFields) {
-                it.isVisible = false
+            if (accountFieldEditAdapter.itemCount >= viewModel.flowInstanceData.value.maxBioFields) {
+                it.isEnabled = false
             }
 
             binding.scrollView.post {
@@ -165,7 +162,7 @@ class EditProfileActivity : BaseActivity() {
 
                         accountFieldEditAdapter.setFields(me.source?.fields ?: emptyList())
                         binding.addFieldButton.isEnabled =
-                            (me.source?.fields?.size ?: 0) < maxAccountFields
+                            (me.source?.fields?.size ?: 0) < viewModel.flowInstanceData.value.maxBioFields
 
                         if (viewModel.avatarData.value == null) {
                             Glide.with(this)
@@ -216,14 +213,12 @@ class EditProfileActivity : BaseActivity() {
         }
     }
 
-    private fun handleInstanceInfo(instanceInfo: InstanceInfo?) {
-        instanceInfo?.let { info ->
-            if (info.maxBioLength > 0) {
-                binding.noteEditTextLayout.counterMaxLength = info.maxBioLength
-            }
-
-            viewModel.obtainProfile()
+    private fun handleInstanceInfo(instanceInfo: InstanceInfo) {
+        if (instanceInfo.maxBioLength > 0) {
+            binding.noteEditTextLayout.counterMaxLength = instanceInfo.maxBioLength
         }
+
+        viewModel.obtainProfile()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -467,8 +462,8 @@ class EditProfileActivity : BaseActivity() {
             binding.avatarButton,
             R.string.error_media_upload_sending,
             Snackbar.LENGTH_LONG
-        )
-            .show()
+        ).show()
+
         endMediaPicking()
     }
 
@@ -480,7 +475,6 @@ class EditProfileActivity : BaseActivity() {
         private const val AVATAR_PICK_RESULT = 1
         private const val HEADER_PICK_RESULT = 2
         private const val PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
-        private const val MASTODON_MAX_ACCOUNT_FIELDS = 4
 
         private const val BUNDLE_CURRENTLY_PICKING = "BUNDLE_CURRENTLY_PICKING"
     }
