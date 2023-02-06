@@ -123,7 +123,8 @@ open class CommonComposeViewModel(
                 maxPollOptionLength = instance.pollLimits?.maxOptionChars,
                 version = instance.version,
                 chatLimit = instance.chatLimit,
-                maxBioLength = instance.descriptionLimit
+                maxBioLength = instance.descriptionLimit,
+                maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields
             )
         }
             .doOnSuccess {

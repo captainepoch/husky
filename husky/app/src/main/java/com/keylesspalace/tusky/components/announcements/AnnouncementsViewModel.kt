@@ -68,6 +68,7 @@ class AnnouncementsViewModel(
                     either.asRight().pollLimits?.maxOptions,
                     either.asRight().pollLimits?.maxOptionChars,
                     either.asRight().maxBioChars,
+                    either.asRight().pleroma?.metadata?.fieldsLimits?.maxFields,
                     either.asRight().version,
                     either.asRight().chatLimit
                 )
