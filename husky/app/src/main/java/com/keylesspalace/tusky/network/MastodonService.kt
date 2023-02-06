@@ -251,14 +251,7 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         locked: RequestBody?,
         avatar: Part?,
         header: Part?,
-        fieldName0: RequestBody?,
-        fieldValue0: RequestBody?,
-        fieldName1: RequestBody?,
-        fieldValue1: RequestBody?,
-        fieldName2: RequestBody?,
-        fieldValue2: RequestBody?,
-        fieldName3: RequestBody?,
-        fieldValue3: RequestBody?
+        fields_attributes: HashMap<String, RequestBody>?
     ): Call<Account> {
         return api.accountUpdateCredentials(
             displayName,
@@ -266,14 +259,7 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
             locked,
             avatar,
             header,
-            fieldName0,
-            fieldValue0,
-            fieldName1,
-            fieldValue1,
-            fieldName2,
-            fieldValue2,
-            fieldName3,
-            fieldValue3
+            fields_attributes
         )
     }
 
