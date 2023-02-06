@@ -27,6 +27,7 @@ class InstanceRepository(
                         maxPollOptions = instance.pollLimits?.maxOptions,
                         maxPollOptionLength = instance.pollLimits?.maxOptionChars,
                         maxBioLength = instance.descriptionLimit,
+                        maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
                         version = instance.version,
                         chatLimit = instance.chatLimit
                     )
