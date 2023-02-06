@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 28,
-    "identityHash": "36dff2cf240834b87b5323513d3a1417",
+    "identityHash": "00bbaad505929ad06e13bdfe624b7a92",
     "entities": [
       {
         "tableName": "TootEntity",
@@ -401,7 +401,7 @@
       },
       {
         "tableName": "InstanceEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`instance` TEXT NOT NULL, `emojiList` TEXT, `maximumTootCharacters` INTEGER, `maxPollOptions` INTEGER, `maxPollOptionLength` INTEGER, `maxBioLength` INTEGER, `version` TEXT, `chatLimit` INTEGER, PRIMARY KEY(`instance`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`instance` TEXT NOT NULL, `emojiList` TEXT, `maximumTootCharacters` INTEGER, `maxPollOptions` INTEGER, `maxPollOptionLength` INTEGER, `maxBioLength` INTEGER, `maxBioFields` INTEGER, `version` TEXT, `chatLimit` INTEGER, PRIMARY KEY(`instance`))",
         "fields": [
           {
             "fieldPath": "instance",
@@ -436,6 +436,12 @@
           {
             "fieldPath": "maxBioLength",
             "columnName": "maxBioLength",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "maxBioFields",
+            "columnName": "maxBioFields",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -1003,7 +1009,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '36dff2cf240834b87b5323513d3a1417')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '00bbaad505929ad06e13bdfe624b7a92')"
     ]
   }
 }
