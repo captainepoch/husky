@@ -84,12 +84,8 @@ class EditProfileViewModel(
     val saveData
         get() = _saveData
 
-    private val _instanceData = MutableLiveData<InstanceInfo>()
-    val instanceData: LiveData<InstanceInfo>
-        get() = _instanceData
-
-    private val _flowInstanceData = MutableStateFlow(InstanceInfo())
-    val flowInstanceData = _flowInstanceData.asStateFlow()
+    private val _instanceData = MutableStateFlow(InstanceInfo())
+    val instanceData = _instanceData.asStateFlow()
 
     private var getInstanceInfoJob: Job? = null
 
@@ -321,12 +317,12 @@ class EditProfileViewModel(
         getInstanceInfoJob = viewModelScope.launch {
             repository.getInstanceInfo()
                 .catch {
-                    _flowInstanceData.emit(repository.getInstanceInfoDb().toInstanceInfo())
+                    _instanceData.emit(repository.getInstanceInfoDb().toInstanceInfo())
                 }
                 .collect { response ->
                     when (response) {
                         is ApiResponse.Success<InstanceEntity> -> {
-                            _flowInstanceData.emit(response.data.toInstanceInfo())
+                            _instanceData.emit(response.data.toInstanceInfo())
                         }
                     }
                 }

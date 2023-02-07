@@ -112,7 +112,7 @@ class EditProfileActivity : BaseActivity() {
 
         binding.addFieldButton.setOnClickListener {
             accountFieldEditAdapter.addField()
-            if (accountFieldEditAdapter.itemCount >= viewModel.flowInstanceData.value.maxBioFields) {
+            if (accountFieldEditAdapter.itemCount >= viewModel.instanceData.value.maxBioFields) {
                 it.isEnabled = false
             }
 
@@ -142,8 +142,8 @@ class EditProfileActivity : BaseActivity() {
                         false
                     )
 
-                    flowInstanceData.collect {
-                        handleInstanceInfo(it)
+                    instanceData.collect { instanceInfo ->
+                        handleInstanceInfo(instanceInfo)
                     }
                 }
             }
@@ -162,7 +162,7 @@ class EditProfileActivity : BaseActivity() {
 
                         accountFieldEditAdapter.setFields(me.source?.fields ?: emptyList())
                         binding.addFieldButton.isEnabled =
-                            (me.source?.fields?.size ?: 0) < viewModel.flowInstanceData.value.maxBioFields
+                            (me.source?.fields?.size ?: 0) < viewModel.instanceData.value.maxBioFields
 
                         if (viewModel.avatarData.value == null) {
                             Glide.with(this)
