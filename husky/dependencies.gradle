@@ -31,7 +31,7 @@ androidx.shareTarget = "androidx.sharetarget:sharetarget:${versions.shareTarget}
 androidx.swipeRefreshLayout =
         "androidx.swiperefreshlayout:swiperefreshlayout:${versions.swipeRefreshLayout}"
 androidx.viewpager2 = "androidx.viewpager2:viewpager2:${versions.viewpager2}"
-androidx.workRuntime = "androidx.work:work-runtime:${versions.workRuntime}"
+androidx.workRuntimeKtx = "androidx.work:work-runtime-ktx:${versions.workRuntime}"
 
 def lifecycle = [:]
 lifecycle.commonJava = "androidx.lifecycle:lifecycle-common-java8:${versions.lifecycle}"

@@ -187,7 +187,7 @@ dependencies {
     implementation deps.androidx.shareTarget
     implementation deps.androidx.swipeRefreshLayout
     implementation deps.androidx.viewpager2
-    implementation deps.androidx.workRuntime
+    implementation deps.androidx.workRuntimeKtx
     implementation deps.androidx.lifecycle.commonJava
     implementation deps.androidx.lifecycle.liveDataKtx
     implementation deps.androidx.lifecycle.reactiveStreamsKtx
