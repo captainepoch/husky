@@ -88,8 +88,8 @@ import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.viewBinding
-import com.keylesspalace.tusky.databinding.ActivityChatBinding
 import com.keylesspalace.tusky.core.utils.InstanceConstants
+import com.keylesspalace.tusky.databinding.ActivityChatBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Chat
 import com.keylesspalace.tusky.entity.Emoji

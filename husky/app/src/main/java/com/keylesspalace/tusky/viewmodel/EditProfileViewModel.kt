@@ -19,7 +19,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.keylesspalace.tusky.EditProfileActivity.Companion.AVATAR_SIZE
@@ -72,7 +71,7 @@ private const val AVATAR_FILE_NAME = "avatar.png"
 
 class EditProfileViewModel(
     private val mastodonApi: MastodonApi,
-    private val repository: InstanceRepository,
+    private val instanceRepository: InstanceRepository,
     private val eventHub: EventHub
 ) : RxAwareViewModel() {
 
@@ -315,14 +314,22 @@ class EditProfileViewModel(
     private fun obtainInstance() {
         getInstanceInfoJob?.cancelIfActive()
         getInstanceInfoJob = viewModelScope.launch {
-            repository.getInstanceInfo()
+            instanceRepository.getInstanceInfo()
                 .catch {
-                    _instanceData.emit(repository.getInstanceInfoDb().toInstanceInfo())
+                    _instanceData.emit(
+                        instanceRepository.getInstanceInfoDb().toInstanceInfo().apply {
+                            isLoadingInfo = false
+                        }
+                    )
                 }
                 .collect { response ->
                     when (response) {
                         is ApiResponse.Success<InstanceEntity> -> {
-                            _instanceData.emit(response.data.toInstanceInfo())
+                            _instanceData.emit(
+                                response.data.toInstanceInfo().apply {
+                                    isLoadingInfo = false
+                                }
+                            )
                         }
                     }
                 }

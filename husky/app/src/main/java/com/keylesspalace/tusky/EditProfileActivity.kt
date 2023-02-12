@@ -214,11 +214,13 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun handleInstanceInfo(instanceInfo: InstanceInfo) {
-        if (instanceInfo.maxBioLength > 0) {
-            binding.noteEditTextLayout.counterMaxLength = instanceInfo.maxBioLength
-        }
+        if (instanceInfo.isLoadingInfo.not()) {
+            if (instanceInfo.maxBioLength > 0) {
+                binding.noteEditTextLayout.counterMaxLength = instanceInfo.maxBioLength
+            }
 
-        viewModel.obtainProfile()
+            viewModel.obtainProfile()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
