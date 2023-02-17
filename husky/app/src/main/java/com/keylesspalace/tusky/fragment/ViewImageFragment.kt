@@ -82,6 +82,10 @@ class ViewImageFragment : ViewMediaFragment() {
         binding.mediaDescription.text = description
         binding.captionSheet.visible(showingDescription)
 
+        binding.photoView.setOnClickListener {
+            onMediaTap()
+        }
+
         startedTransition = false
         uri = Uri.parse(url)
         if (previewUrl != null && !previewUrl.equals(url)) {
