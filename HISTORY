@@ -1,3 +1,7 @@
+Husky 1.4.3 - 2023-02-17
+  - Fix: Permissions to upload the avatar/header image while editing the
+  profile.
+
 Husky 1.4.2 - 2023-01-30
   - Fix: Creating filters as tags (#example).
 

@@ -1,0 +1,5 @@
+Husky 1.4.3
+
+Changelog:
+  - Fix: Permissions to upload the avatar/header image while editing the
+  profile.
