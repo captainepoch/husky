@@ -333,7 +333,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun openInExternalApp() {
-        val url = attachments!![binding.viewPager.currentItem].attachment.url
+        val url = avatarUrl ?: attachments!![binding.viewPager.currentItem].attachment.url
         val intent = Intent(Intent.ACTION_VIEW)
         val extension = MimeTypeMap.getFileExtensionFromUrl(url)
         if (extension != null) {
