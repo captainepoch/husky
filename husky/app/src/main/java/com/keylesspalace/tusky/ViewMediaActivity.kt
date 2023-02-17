@@ -37,7 +37,6 @@ import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Environment
 import android.transition.Transition
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -369,9 +368,9 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                 stream.close()
                 return@fromCallable true
             } catch (fnfe: FileNotFoundException) {
-                Log.e(TAG, "Error writing temporary media.")
+                Timber.e("Error writing temporary media")
             } catch (ioe: IOException) {
-                Log.e(TAG, "Error writing temporary media.")
+                Timber.e("Error writing temporary media")
             }
             return@fromCallable false
         }
@@ -383,7 +382,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             .autoDispose(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY))
             .subscribe(
                 { result ->
-                    Log.d(TAG, "Download image result: $result")
+                    Timber.d("Download image result: $result")
                     isCreating = false
                     invalidateOptionsMenu()
                     binding.progressBarShare.visibility = View.GONE
@@ -394,7 +393,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     isCreating = false
                     invalidateOptionsMenu()
                     binding.progressBarShare.visibility = View.GONE
-                    Log.e(TAG, "Failed to download image", error)
+                    Timber.e("Failed to download image", error)
                 }
             )
     }
