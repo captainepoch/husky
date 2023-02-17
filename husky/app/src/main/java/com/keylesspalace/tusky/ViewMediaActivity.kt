@@ -66,12 +66,12 @@ import com.uber.autodispose.autoDispose
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale
-import timber.log.Timber
 
 typealias ToolbarVisibilityListener = (isVisible: Boolean) -> Unit
 
@@ -309,13 +309,17 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             return
         }
 
-        val attachment = attachments!![binding.viewPager.currentItem].attachment
-        when (attachment.type) {
-            Attachment.Type.IMAGE -> shareImage(directory, attachment.url)
-            Attachment.Type.AUDIO,
-            Attachment.Type.VIDEO,
-            Attachment.Type.GIFV -> shareMediaFile(directory, attachment.url)
-            else -> Timber.e("Unknown media format to share")
+        if (avatarUrl != null) {
+            shareImage(directory, avatarUrl!!)
+        } else {
+            val attachment = attachments!![binding.viewPager.currentItem].attachment
+            when (attachment.type) {
+                Attachment.Type.IMAGE -> shareImage(directory, attachment.url)
+                Attachment.Type.AUDIO,
+                Attachment.Type.VIDEO,
+                Attachment.Type.GIFV -> shareMediaFile(directory, attachment.url)
+                else -> Timber.e("Unknown media format to share")
+            }
         }
     }
 
