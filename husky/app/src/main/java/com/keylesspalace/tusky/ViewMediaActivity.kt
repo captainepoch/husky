@@ -51,6 +51,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
+import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.BuildConfig.APPLICATION_ID
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityViewMediaBinding
@@ -70,6 +71,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale
+import timber.log.Timber
 
 typealias ToolbarVisibilityListener = (isVisible: Boolean) -> Unit
 
@@ -115,6 +117,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
 
     private var attachments: ArrayList<AttachmentViewData>? = null
     private val toolbarVisibilityListeners = mutableListOf<ToolbarVisibilityListener>()
+    private var avatarUrl: String? = null
 
     var isToolbarVisible = true
         private set
@@ -143,10 +146,10 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             // Setup the view pager.
             ImagePagerAdapter(this, realAttachs, initialPosition)
         } else {
-            val avatarUrl = intent.getStringExtra(EXTRA_AVATAR_URL)
+            avatarUrl = intent.getStringExtra(EXTRA_AVATAR_URL)
                 ?: throw IllegalArgumentException("attachment list or avatar url has to be set")
 
-            AvatarImagePagerAdapter(this, avatarUrl)
+            AvatarImagePagerAdapter(this, avatarUrl!!)
         }
 
         binding.viewPager.adapter = adapter
@@ -188,21 +191,12 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (attachments != null) {
-            menuInflater.inflate(R.menu.view_media_toolbar, menu)
-            return true
-        }
-        return false
+        menuInflater.inflate(R.menu.view_media_toolbar, menu)
+        return true
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.action_share_media)?.isEnabled = !isCreating
-
-        if (attachments != null) {
-            val isStatus = attachments!!.any { it.statusId != null && it.statusUrl != null }
-            menu.findItem(R.id.action_open_status)?.isVisible = isStatus
-        }
-
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.action_share_media)?.isEnabled = !isCreating
         return true
     }
 
@@ -250,7 +244,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun downloadMedia() {
-        val url = attachments!![binding.viewPager.currentItem].attachment.url
+        val url = avatarUrl ?: attachments!![binding.viewPager.currentItem].attachment.url
         val filename = Uri.parse(url).lastPathSegment
         Toast.makeText(
             applicationContext,
@@ -286,14 +280,16 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun onOpenStatus() {
-        val attach = attachments!![binding.viewPager.currentItem]
-        startActivityWithSlideInAnimation(
-            ViewThreadActivity.startIntent(
-                this,
-                attach.statusId,
-                attach.statusUrl
-            )
-        )
+        if (attachments != null) {
+            val attach = attachments!![binding.viewPager.currentItem]
+            startActivityWithSlideInAnimation(ViewThreadActivity.startIntent(this, attach.statusId, attach.statusUrl))
+        } else {
+            Snackbar.make(
+                binding.root,
+                "You're viewing an image without status.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun copyLink() {
@@ -309,7 +305,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     private fun shareMedia() {
         val directory = applicationContext.getExternalFilesDir("Husky")
         if (directory == null || !(directory.exists())) {
-            Log.e(TAG, "Error obtaining directory to save temporary media.")
+            Timber.e("Error obtaining directory to save temporary media")
             return
         }
 
@@ -319,7 +315,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             Attachment.Type.AUDIO,
             Attachment.Type.VIDEO,
             Attachment.Type.GIFV -> shareMediaFile(directory, attachment.url)
-            else -> Log.e(TAG, "Unknown media format for sharing.")
+            else -> Timber.e("Unknown media format to share")
         }
     }
 
