@@ -1,6 +1,9 @@
-Husky 1.4.3 - 2023-02-17
+Husky 1.5.0-beta1 - 2023-02-22
+  - Add: Download profile pictures.
+  - Add: Hide toolbar and description on image viewer.
   - Fix: Permissions to upload the avatar/header image while editing the
   profile.
+  - Removed old Kotlin Synthetic code.
 
 Husky 1.4.2 - 2023-01-30
   - Fix: Creating filters as tags (#example).

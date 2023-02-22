@@ -1,5 +1,8 @@
-Husky 1.4.3
+Husky 1.5.0-beta1
 
 Changelog:
+  - Add: Download profile pictures.
+  - Add: Hide toolbar and description on image viewer.
   - Fix: Permissions to upload the avatar/header image while editing the
   profile.
+  - Removed old Kotlin Synthetic code.
