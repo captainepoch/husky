@@ -38,12 +38,13 @@ import com.keylesspalace.tusky.util.CardViewMode
 import com.keylesspalace.tusky.util.NetworkState
 import com.keylesspalace.tusky.util.StatusDisplayOptions
 import com.keylesspalace.tusky.util.hide
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFragment {
 
-    private val binding by viewBinding(FragmentTimelineBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentTimelineBinding::bind)
+    private lateinit var binding: FragmentTimelineBinding
     private val viewModel: ConversationsViewModel by viewModel()
     private lateinit var adapter: ConversationAdapter
 
@@ -52,6 +53,7 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = FragmentTimelineBinding.inflate(inflater, container, false)
         return binding.root
     }
 
