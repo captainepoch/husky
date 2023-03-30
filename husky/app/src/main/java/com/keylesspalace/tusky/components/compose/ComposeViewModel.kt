@@ -48,11 +48,11 @@ import io.reactivex.Observable.just
 class ComposeViewModel(
     private val api: MastodonApi,
     private val accountManager: AccountManager,
-    private val mediaUploader: MediaUploader,
+    mediaUploader: MediaUploader,
     private val serviceClient: ServiceClient,
     private val draftHelper: DraftHelper,
     private val saveTootHelper: SaveTootHelper,
-    private val db: AppDatabase
+    db: AppDatabase
 ) : CommonComposeViewModel(api, accountManager, mediaUploader, db) {
 
     private var replyingStatusAuthor: String? = null
@@ -85,7 +85,6 @@ class ComposeViewModel(
     }
 
     fun didChange(content: String?, contentWarning: String?): Boolean {
-
         val textChanged = !(
             content.isNullOrEmpty() ||
                 startingText?.startsWith(content.toString()) ?: false
@@ -148,14 +147,13 @@ class ComposeViewModel(
         spoilerText: String,
         preview: Boolean
     ): LiveData<Unit> {
-
         val deletionObservable = if (isEditingScheduledToot) {
             api.deleteScheduledStatus(scheduledTootId.toString()).toObservable().map { }
         } else {
             just(Unit)
         }.toLiveData()
 
-        val sendObservable = media
+        val sendObservable: LiveData<Unit> = media
             .filter { items -> items.all { it.uploadPercent == -1 } }
             .map {
                 val mediaIds = ArrayList<String>()
@@ -196,7 +194,6 @@ class ComposeViewModel(
     }
 
     fun setup(composeOptions: ComposeActivity.ComposeOptions?) {
-
         if (setupComplete.value == true) {
             return
         }
@@ -245,9 +242,9 @@ class ComposeViewModel(
         } else composeOptions?.mediaAttachments?.forEach { a ->
             // when coming from redraft or ScheduledTootActivity
             val mediaType = when (a.type) {
-                Attachment.Type.VIDEO, Attachment.Type.GIFV -> QueuedMedia.Type.VIDEO
-                Attachment.Type.UNKNOWN, Attachment.Type.IMAGE -> QueuedMedia.Type.IMAGE
-                Attachment.Type.AUDIO -> QueuedMedia.Type.AUDIO
+                Attachment.Type.VIDEO, Attachment.Type.GIFV -> QueuedMedia.VIDEO
+                Attachment.Type.UNKNOWN, Attachment.Type.IMAGE -> QueuedMedia.IMAGE
+                Attachment.Type.AUDIO -> QueuedMedia.AUDIO
             }
             addUploadedMedia(a.id, mediaType, a.url.toUri(), a.description)
         }
@@ -301,9 +298,5 @@ class ComposeViewModel(
             uploadDisposable.dispose()
         }
         super.onCleared()
-    }
-
-    private companion object {
-        const val TAG = "ComposeViewModel"
     }
 }
