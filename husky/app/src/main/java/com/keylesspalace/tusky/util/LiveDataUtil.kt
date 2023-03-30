@@ -17,20 +17,20 @@ package com.keylesspalace.tusky.util
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.toLiveData
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
-import io.reactivex.Single
 
 inline fun <X, Y> LiveData<X>.map(crossinline mapFunction: (X) -> Y): LiveData<Y> =
-    Transformations.map(this) { input -> mapFunction(input) }
+    this.map { input -> mapFunction(input) }
 
 inline fun <X, Y> LiveData<X>.switchMap(
     crossinline switchMapFunction: (X) -> LiveData<Y>
-): LiveData<Y> = Transformations.switchMap(this) { input -> switchMapFunction(input) }
+): LiveData<Y> = this.switchMap { input -> switchMapFunction(input) }
 
 fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {
     observeForever(object : Observer<T> {
@@ -115,7 +115,9 @@ fun <A, B, R> combineOptionalLiveData(a: LiveData<A>, b: LiveData<B>, combiner: 
     return liveData
 }
 
-fun <T> Single<T>.toLiveData() = LiveDataReactiveStreams.fromPublisher(this.toFlowable())
 fun <T> Observable<T>.toLiveData(
     backpressureStrategy: BackpressureStrategy = BackpressureStrategy.LATEST
-) = LiveDataReactiveStreams.fromPublisher(this.toFlowable(BackpressureStrategy.LATEST))
+): LiveData<T> {
+    val publisher = this.toFlowable(backpressureStrategy)
+    return publisher.toLiveData()
+}
