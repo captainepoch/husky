@@ -15,12 +15,12 @@
 
 package com.keylesspalace.tusky.components.report.adapter
 
-import androidx.lifecycle.Transformations
 import androidx.paging.Config
 import androidx.paging.toLiveData
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.BiListing
+import com.keylesspalace.tusky.util.switchMap
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.Executors
 
@@ -45,10 +45,10 @@ class StatusesRepository(private val mastodonApi: MastodonApi) {
         )
         return BiListing(
             pagedList = livePagedList,
-            networkStateBefore = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            networkStateBefore = sourceFactory.sourceLiveData.switchMap {
                 it.networkStateBefore
             },
-            networkStateAfter = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            networkStateAfter = sourceFactory.sourceLiveData.switchMap {
                 it.networkStateAfter
             },
             retry = {
@@ -57,7 +57,7 @@ class StatusesRepository(private val mastodonApi: MastodonApi) {
             refresh = {
                 sourceFactory.sourceLiveData.value?.invalidate()
             },
-            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            refreshState = sourceFactory.sourceLiveData.switchMap {
                 it.initialLoad
             }
         )

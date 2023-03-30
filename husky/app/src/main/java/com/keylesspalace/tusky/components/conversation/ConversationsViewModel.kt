@@ -1,9 +1,8 @@
 package com.keylesspalace.tusky.components.conversation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
@@ -12,6 +11,7 @@ import com.keylesspalace.tusky.util.Listing
 import com.keylesspalace.tusky.util.NetworkState
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 class ConversationsViewModel(
     private val repository: ConversationsRepository,
@@ -22,9 +22,9 @@ class ConversationsViewModel(
 
     private val repoResult = MutableLiveData<Listing<ConversationEntity>>()
 
-    val conversations: LiveData<PagedList<ConversationEntity>> = Transformations.switchMap(repoResult) { it.pagedList }
-    val networkState: LiveData<NetworkState> = Transformations.switchMap(repoResult) { it.networkState }
-    val refreshState: LiveData<NetworkState> = Transformations.switchMap(repoResult) { it.refreshState }
+    val conversations: LiveData<PagedList<ConversationEntity>> = repoResult.switchMap { it.pagedList }
+    val networkState: LiveData<NetworkState> = repoResult.switchMap { it.networkState }
+    val refreshState: LiveData<NetworkState> = repoResult.switchMap { it.refreshState }
 
     fun load() {
         val accountId = accountManager.activeAccount?.id ?: return
@@ -53,7 +53,7 @@ class ConversationsViewModel(
                     database.conversationDao().insert(newConversation)
                 }
                 .subscribeOn(Schedulers.io())
-                .doOnError { t -> Log.w("ConversationViewModel", "Failed to favourite conversation", t) }
+                .doOnError { t -> Timber.w("Failed to favourite conversation: ${t.message}") }
                 .onErrorReturnItem(0)
                 .subscribe()
                 .autoDispose()
@@ -71,7 +71,7 @@ class ConversationsViewModel(
                     database.conversationDao().insert(newConversation)
                 }
                 .subscribeOn(Schedulers.io())
-                .doOnError { t -> Log.w("ConversationViewModel", "Failed to bookmark conversation", t) }
+                .doOnError { t -> Timber.w("Failed to bookmark conversation: ${t.message}") }
                 .onErrorReturnItem(0)
                 .subscribe()
                 .autoDispose()
@@ -89,7 +89,7 @@ class ConversationsViewModel(
                     database.conversationDao().insert(newConversation)
                 }
                 .subscribeOn(Schedulers.io())
-                .doOnError { t -> Log.w("ConversationViewModel", "Failed to favourite conversation", t) }
+                .doOnError { t -> Timber.w("Failed to favourite conversation: ${t.message}") }
                 .onErrorReturnItem(0)
                 .subscribe()
                 .autoDispose()

@@ -15,7 +15,7 @@
 
 package com.keylesspalace.tusky.components.search.adapter
 
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.paging.Config
 import androidx.paging.toLiveData
 import com.keylesspalace.tusky.components.search.SearchType
@@ -56,7 +56,7 @@ class SearchRepository<T>(private val mastodonApi: MastodonApi) {
         )
         return Listing(
             pagedList = livePagedList,
-            networkState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            networkState = sourceFactory.sourceLiveData.switchMap {
                 it.networkState
             },
             retry = {
@@ -65,7 +65,7 @@ class SearchRepository<T>(private val mastodonApi: MastodonApi) {
             refresh = {
                 sourceFactory.sourceLiveData.value?.invalidate()
             },
-            refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            refreshState = sourceFactory.sourceLiveData.switchMap {
                 it.initialLoad
             }
 

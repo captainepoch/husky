@@ -3,7 +3,7 @@ package com.keylesspalace.tusky.components.conversation
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import androidx.paging.Config
 import androidx.paging.toLiveData
 import com.keylesspalace.tusky.db.AppDatabase
@@ -73,7 +73,7 @@ class ConversationsRepository(private val mastodonApi: MastodonApi, private val 
         // refresh method and gets a new live data. Each refresh request by the user becomes a newly
         // dispatched data in refreshTrigger
         val refreshTrigger = MutableLiveData<Unit>()
-        val refreshState = Transformations.switchMap(refreshTrigger) {
+        val refreshState = refreshTrigger.switchMap {
             refresh(accountId, true)
         }
 

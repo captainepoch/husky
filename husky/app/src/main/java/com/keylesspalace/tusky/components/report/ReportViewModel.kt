@@ -17,7 +17,6 @@ package com.keylesspalace.tusky.components.report
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.paging.PagedList
 import com.keylesspalace.tusky.appstore.BlockEvent
 import com.keylesspalace.tusky.appstore.EventHub
@@ -34,6 +33,7 @@ import com.keylesspalace.tusky.util.NetworkState
 import com.keylesspalace.tusky.util.Resource
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.Success
+import com.keylesspalace.tusky.util.switchMap
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -62,13 +62,13 @@ class ReportViewModel(
 
     private val repoResult = MutableLiveData<BiListing<Status>>()
     val statuses: LiveData<PagedList<Status>> =
-        Transformations.switchMap(repoResult) { it.pagedList }
+        repoResult.switchMap { it.pagedList }
     val networkStateAfter: LiveData<NetworkState> =
-        Transformations.switchMap(repoResult) { it.networkStateAfter }
+        repoResult.switchMap { it.networkStateAfter }
     val networkStateBefore: LiveData<NetworkState> =
-        Transformations.switchMap(repoResult) { it.networkStateBefore }
+        repoResult.switchMap { it.networkStateBefore }
     val networkStateRefresh: LiveData<NetworkState> =
-        Transformations.switchMap(repoResult) { it.refreshState }
+        repoResult.switchMap { it.refreshState }
 
     private val selectedIds = HashSet<String>()
     val statusViewState = StatusViewState()
