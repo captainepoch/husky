@@ -7,7 +7,7 @@ import android.text.style.StyleSpan
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.emoji.widget.EmojiTextView
+import androidx.emoji2.widget.EmojiTextView
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

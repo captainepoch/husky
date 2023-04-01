@@ -287,7 +287,7 @@
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/accountRemoveView">
 
-                        <androidx.emoji.widget.EmojiTextView
+                        <androidx.emoji2.widget.EmojiTextView
                             android:id="@+id/accountMovedText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -308,8 +308,7 @@
                             app:layout_constraintTop_toBottomOf="@id/accountMovedText"
                             tools:src="@drawable/avatar_default" />
 
-
-                        <androidx.emoji.widget.EmojiTextView
+                        <androidx.emoji2.widget.EmojiTextView
                             android:id="@+id/accountMovedDisplayName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
