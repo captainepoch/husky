@@ -14,7 +14,7 @@ buildscript {
         classpath deps.kotlinGradlePlugin
 
         classpath deps.gradlePluginVersions
-        classpath deps.ktlintGradle
+        //classpath deps.ktlintGradle
     }
 }
 
@@ -39,7 +39,7 @@ allprojects {
         }
     }
 
-    apply plugin: "org.jlleitschuh.gradle.ktlint"
+    //apply plugin: "org.jlleitschuh.gradle.ktlint"
 }
 
 task clean(type: Delete) {
