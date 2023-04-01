@@ -22,16 +22,8 @@ versions.constraintlayout = "2.1.4"
 versions.coreKtx = "1.9.0"
 versions.emoji2 = "1.3.0"
 versions.exifInterface = "1.3.6"
-<<<<<<< HEAD
 versions.exoplayer = "2.18.6"
-versions.filemojiCompat = "3.2.6"
-||||||| parent of 22e7564 (Update deps)
-versions.exoplayer = "2.18.5"
-versions.filemojiCompat = "3.2.6"
-=======
-versions.exoplayer = "2.18.5"
 versions.filemojiCompat = "3.2.7"
->>>>>>> 22e7564 (Update deps)
 versions.flexbox = "2.0.1"
 versions.fragmentKtx = "1.5.7"
 versions.fragmentviewbindingdelegateKt = "1.0.2"

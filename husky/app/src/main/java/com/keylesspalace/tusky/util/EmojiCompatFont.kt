@@ -1,7 +1,6 @@
 package com.keylesspalace.tusky.util
 
 import android.content.Context
-import android.util.Log
 import android.util.Pair
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -12,6 +11,11 @@ import de.c1710.filemojicompat.FileEmojiCompatConfig
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.schedulers.Schedulers
+import java.io.EOFException
+import java.io.File
+import java.io.FilenameFilter
+import java.io.IOException
+import kotlin.math.max
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -20,11 +24,7 @@ import okhttp3.internal.toLongOrDefault
 import okio.Source
 import okio.buffer
 import okio.sink
-import java.io.EOFException
-import java.io.File
-import java.io.FilenameFilter
-import java.io.IOException
-import kotlin.math.max
+import timber.log.Timber
 
 /**
  * This class bundles information about an emoji font as well as many convenient actions.
@@ -49,7 +49,7 @@ class EmojiCompatFont(
         get() = FONTS.indexOf(this)
 
     fun getDisplay(context: Context): String {
-        return if (this !== SYSTEM_DEFAULT) display else context.getString(R.string.system_default)
+        return if(this !== SYSTEM_DEFAULT) display else context.getString(R.string.system_default)
     }
 
     /**
@@ -59,7 +59,7 @@ class EmojiCompatFont(
      * @return The font (TTF) file or null if called on SYSTEM_FONT
      */
     private fun getFontFile(context: Context): File? {
-        return if (this !== SYSTEM_DEFAULT) {
+        return if(this !== SYSTEM_DEFAULT) {
             val directory = File(context.getExternalFilesDir(null), DIRECTORY)
             File(directory, "$name$version.ttf")
         } else {
@@ -75,7 +75,9 @@ class EmojiCompatFont(
     }
 
     fun isDownloaded(context: Context): Boolean {
-        return this === SYSTEM_DEFAULT || getFontFile(context)?.exists() == true || fontFileExists(context)
+        return this === SYSTEM_DEFAULT || getFontFile(context)?.exists() == true || fontFileExists(
+            context
+        )
     }
 
     /**
@@ -87,7 +89,7 @@ class EmojiCompatFont(
      */
     private fun fontFileExists(context: Context): Boolean {
         val existingFontFiles = getExistingFontFiles(context)
-        return if (existingFontFiles.isNotEmpty()) {
+        return if(existingFontFiles.isNotEmpty()) {
             compareVersions(existingFontFiles.last().second, versionCode) >= 0
         } else {
             false
@@ -101,20 +103,14 @@ class EmojiCompatFont(
      */
     private fun deleteOldVersions(context: Context) {
         val existingFontFiles = getExistingFontFiles(context)
-        Log.d(TAG, "deleting old versions...")
-        Log.d(TAG, String.format("deleteOldVersions: Found %d other font files", existingFontFiles.size))
-        for (fileExists in existingFontFiles) {
-            if (compareVersions(fileExists.second, versionCode) < 0) {
+        Timber.d("Deleting old versions...")
+        Timber.d("deleteOldVersions: Found ${existingFontFiles.size} other font files")
+
+        for(fileExists in existingFontFiles) {
+            if(compareVersions(fileExists.second, versionCode) < 0) {
                 val file = fileExists.first
                 // Uses side effects!
-                Log.d(
-                    TAG,
-                    String.format(
-                        "Deleted %s successfully: %s",
-                        file.absolutePath,
-                        file.delete()
-                    )
-                )
+                Timber.d("Deleted ${file.absolutePath} successfully: ${file.delete()}")
             }
         }
     }
@@ -131,7 +127,7 @@ class EmojiCompatFont(
             return it
         }
         // If we call this on the system default font, just return nothing...
-        if (this === SYSTEM_DEFAULT) {
+        if(this === SYSTEM_DEFAULT) {
             existingFontFileCache = emptyList()
             return emptyList()
         }
@@ -142,26 +138,18 @@ class EmojiCompatFont(
         val fontRegex = "$name(\\d+(\\.\\d+)*)?\\.ttf".toPattern()
         val ttfFilter = FilenameFilter { _, name: String -> name.endsWith(".ttf") }
         val foundFontFiles = directory.listFiles(ttfFilter).orEmpty()
-        Log.d(
-            TAG,
-            String.format(
-                "loadExistingFontFiles: %d other font files found",
-                foundFontFiles.size
-            )
-        )
+        Timber.d("loadExistingFontFiles: ${foundFontFiles.size} other font files found")
 
         return foundFontFiles.map { file ->
             val matcher = fontRegex.matcher(file.name)
-            val versionCode = if (matcher.matches()) {
+            val versionCode = if(matcher.matches()) {
                 val version = matcher.group(1)
                 getVersionCode(version)
             } else {
                 listOf(0)
             }
             Pair(file, versionCode)
-        }.sortedWith(
-            Comparator<Pair<File, List<Int>>> { a, b -> compareVersions(a.second, b.second) }
-        ).also {
+        }.sortedWith { a, b -> compareVersions(a.second, b.second) }.also {
             existingFontFileCache = it
         }
     }
@@ -174,13 +162,13 @@ class EmojiCompatFont(
      */
     private fun getLatestFontFile(context: Context): File? {
         val current = getFontFile(context)
-        if (current != null && current.exists()) return current
+        if(current != null && current.exists()) return current
         val existingFontFiles = getExistingFontFiles(context)
         return existingFontFiles.firstOrNull()?.first
     }
 
     private fun getVersionCode(version: String?): List<Int> {
-        if (version == null) return listOf(0)
+        if(version == null) return listOf(0)
         return version.split(".").map {
             it.toIntOrNull() ?: 0
         }
@@ -193,7 +181,7 @@ class EmojiCompatFont(
         return Observable.create { emitter: ObservableEmitter<Float> ->
             // It is possible (and very likely) that the file does not exist yet
             val downloadFile = getFontFile(context)!!
-            if (!downloadFile.exists()) {
+            if(!downloadFile.exists()) {
                 downloadFile.parentFile?.mkdirs()
                 downloadFile.createNewFile()
             }
@@ -207,38 +195,38 @@ class EmojiCompatFont(
                 val response = okHttpClient.newCall(request).execute()
 
                 val responseBody = response.body
-                if (response.isSuccessful && responseBody != null) {
+                if(response.isSuccessful && responseBody != null) {
                     val size = response.length()
                     var progress = 0f
                     source = responseBody.source()
                     try {
-                        while (!emitter.isDisposed) {
+                        while(!emitter.isDisposed) {
                             sink.write(source, CHUNK_SIZE)
                             progress += CHUNK_SIZE.toFloat()
-                            if (size > 0) {
+                            if(size > 0) {
                                 emitter.onNext(progress / size)
                             } else {
                                 emitter.onNext(-1f)
                             }
                         }
-                    } catch (ex: EOFException) {
+                    } catch(ex: EOFException) {
                         /*
                          This means we've finished downloading the file since sink.write
                          will throw an EOFException when the file to be read is empty.
                         */
                     }
                 } else {
-                    Log.e(TAG, "Downloading $url failed. Status code: ${response.code}")
+                    Timber.e("Downloading $url failed. Status code: ${response.code}")
                     emitter.tryOnError(Exception())
                 }
-            } catch (ex: IOException) {
-                Log.e(TAG, "Downloading $url failed.", ex)
+            } catch(ex: IOException) {
+                Timber.e("Downloading $url failed", ex)
                 downloadFile.deleteIfExists()
                 emitter.tryOnError(ex)
             } finally {
                 source?.close()
                 sink.close()
-                if (emitter.isDisposed) {
+                if(emitter.isDisposed) {
                     downloadFile.deleteIfExists()
                 } else {
                     deleteOldVersions(context)
@@ -261,13 +249,8 @@ class EmojiCompatFont(
     }
 
     companion object {
-        private const val TAG = "EmojiCompatFont"
-
-        /**
-         * This String represents the sub-directory the fonts are stored in.
-         */
+        // This String represents the sub-directory the fonts are stored in.
         private const val DIRECTORY = "emoji"
-
         private const val CHUNK_SIZE = 4096L
 
         // The system font gets some special behavior...
@@ -328,12 +311,12 @@ class EmojiCompatFont(
         @VisibleForTesting
         fun compareVersions(versionA: List<Int>, versionB: List<Int>): Int {
             val len = max(versionB.size, versionA.size)
-            for (i in 0 until len) {
+            for(i in 0 until len) {
                 val vA = versionA.getOrElse(i) { 0 }
                 val vB = versionB.getOrElse(i) { 0 }
 
                 // It needs to be decided on the next level
-                if (vA == vB) continue
+                if(vA == vB) continue
                 // Okay, is version B newer or version A?
                 return vA.compareTo(vB)
             }
@@ -360,8 +343,8 @@ class EmojiCompatFont(
         }
 
         private fun File.deleteIfExists() {
-            if (exists() && !delete()) {
-                Log.e(TAG, "Could not delete file $this")
+            if(exists() && !delete()) {
+                Timber.e("Could not delete file $this")
             }
         }
     }
