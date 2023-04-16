@@ -31,7 +31,7 @@ import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.Field
 import com.keylesspalace.tusky.entity.IdentityProof
 import com.keylesspalace.tusky.interfaces.LinkListener
-import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.emojify
 

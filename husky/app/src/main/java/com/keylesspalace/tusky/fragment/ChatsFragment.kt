@@ -68,7 +68,7 @@ import com.keylesspalace.tusky.repository.Placeholder
 import com.keylesspalace.tusky.repository.TimelineRequestMode
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.CardViewMode
-import com.keylesspalace.tusky.util.Either.Left
+import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.PairedList
 import com.keylesspalace.tusky.util.StatusDisplayOptions

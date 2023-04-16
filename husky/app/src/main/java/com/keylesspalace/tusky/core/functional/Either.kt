@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License along with Tusky; if not,
  * see <http://www.gnu.org/licenses>. */
 
-package com.keylesspalace.tusky.util
+package com.keylesspalace.tusky.core.functional
 
 /**
  * Created by charlag on 05/11/17.
@@ -22,6 +22,7 @@ package com.keylesspalace.tusky.util
  * It is either Left or Right.
  */
 sealed class Either<out L, out R> {
+
     data class Left<out L, out R>(val value: L) : Either<L, R>()
     data class Right<out L, out R>(val value: R) : Either<L, R>()
 

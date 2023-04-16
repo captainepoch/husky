@@ -103,7 +103,7 @@ import com.keylesspalace.tusky.service.MessageToSend
 import com.keylesspalace.tusky.service.ServiceClient
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.ComposeTokenizer
-import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.PairedList
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.ViewDataUtils

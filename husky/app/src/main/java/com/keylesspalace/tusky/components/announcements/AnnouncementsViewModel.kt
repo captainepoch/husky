@@ -27,7 +27,7 @@ import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Announcement
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.Resource

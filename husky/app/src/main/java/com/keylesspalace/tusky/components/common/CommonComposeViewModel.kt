@@ -30,7 +30,7 @@ import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.NodeInfo
 import com.keylesspalace.tusky.entity.StickerPack
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.VersionUtils
 import com.keylesspalace.tusky.util.map

@@ -16,7 +16,7 @@ import com.keylesspalace.tusky.repository.TimelineRepositoryImpl
 import com.keylesspalace.tusky.repository.TimelineRequestMode
 import com.keylesspalace.tusky.repository.lift
 import com.keylesspalace.tusky.repository.toEntity
-import com.keylesspalace.tusky.util.Either
+import com.keylesspalace.tusky.core.functional.Either
 import com.nhaarman.mockitokotlin2.isNull
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions

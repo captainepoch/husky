@@ -33,7 +33,7 @@ import io.reactivex.annotations.Nullable;
  * It is modelled this way because close relationship between placeholder and concrete notification
  * is fine in this case. Placeholder case is not modelled as a type of notification because
  * invariants would be violated and because it would model domain incorrectly. It is prefereable to
- * {@link com.keylesspalace.tusky.util.Either} because class hierarchy is cheaper, faster and
+ * {@link com.keylesspalace.tusky.core.functional.Either} because class hierarchy is cheaper, faster and
  * more native.
  */
 public abstract class NotificationViewData {
