@@ -44,7 +44,7 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
             fieldData.add(MutableStringPair("", ""))
         }
 
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, fieldData.size)
     }
 
     fun getFieldData(): List<StringField> {
