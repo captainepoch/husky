@@ -26,11 +26,9 @@ import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_HEIGHT
 import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
-import com.keylesspalace.tusky.components.instance.InstanceEntity
 import com.keylesspalace.tusky.components.instance.InstanceInfo
 import com.keylesspalace.tusky.components.instance.InstanceRepository
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
-import com.keylesspalace.tusky.core.network.ApiResponse
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.StringField
 import com.keylesspalace.tusky.network.MastodonApi
@@ -45,6 +43,10 @@ import com.keylesspalace.tusky.util.randomAlphanumericString
 import io.reactivex.Single
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.OutputStream
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -61,10 +63,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 private const val HEADER_FILE_NAME = "header.png"
 private const val AVATAR_FILE_NAME = "avatar.png"
@@ -323,7 +321,12 @@ class EditProfileViewModel(
                     )
                 }
                 .collect { response ->
-                    when (response) {
+                    _instanceData.emit(
+                        response.asRight().toInstanceInfo().apply {
+                            isLoadingInfo = false
+                        }
+                    )
+                    /*when (response) {
                         is ApiResponse.Success<InstanceEntity> -> {
                             _instanceData.emit(
                                 response.data.toInstanceInfo().apply {
@@ -331,7 +334,7 @@ class EditProfileViewModel(
                                 }
                             )
                         }
-                    }
+                    }*/
                 }
         }
     }

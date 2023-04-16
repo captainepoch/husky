@@ -1,8 +1,7 @@
 package com.keylesspalace.tusky.components.instance
 
 import com.keylesspalace.tusky.core.extensions.notNull
-import com.keylesspalace.tusky.core.network.ApiResponse
-import com.keylesspalace.tusky.core.network.ApiResponse.Success
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.network.MastodonService
@@ -15,28 +14,26 @@ class InstanceRepository(
     private val db: AppDatabase
 ) {
 
-    fun getInstanceInfo(): Flow<ApiResponse<InstanceEntity>> = flow {
+    fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
         service.getInstanceData().run {
-            val response = if (isSuccessful && body().notNull()) {
+            val response = if(isSuccessful && body().notNull()) {
                 val instance = body()!!
-                Success(
-                    InstanceEntity(
-                        instance = accountManager.activeAccount?.domain!!,
-                        emojiList = null,
-                        maximumTootCharacters = instance.maxTootChars,
-                        maxPollOptions = instance.pollLimits?.maxOptions,
-                        maxPollOptionLength = instance.pollLimits?.maxOptionChars,
-                        maxBioLength = instance.descriptionLimit,
-                        maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
-                        version = instance.version,
-                        chatLimit = instance.chatLimit
-                    )
+                InstanceEntity(
+                    instance = accountManager.activeAccount?.domain!!,
+                    emojiList = null,
+                    maximumTootCharacters = instance.maxTootChars,
+                    maxPollOptions = instance.pollLimits?.maxOptions,
+                    maxPollOptionLength = instance.pollLimits?.maxOptionChars,
+                    maxBioLength = instance.descriptionLimit,
+                    maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
+                    version = instance.version,
+                    chatLimit = instance.chatLimit
                 )
             } else {
-                Success(getInstanceInfoDb())
+                getInstanceInfoDb()
             }
 
-            emit(response)
+            emit(Either.Right(response))
         }
     }
 
