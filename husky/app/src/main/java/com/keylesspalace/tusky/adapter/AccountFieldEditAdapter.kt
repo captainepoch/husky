@@ -25,57 +25,40 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.databinding.ItemEditFieldBinding
 import com.keylesspalace.tusky.entity.StringField
 
-class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.ViewHolder>() {
+class AccountFieldEditAdapter : ListAdapter<MutableStringPair, AccountFieldViewHolder>(
+    AccountFieldsDiff
+) {
 
-    private val fieldData = mutableListOf<MutableStringPair>()
+    internal var clearFieldListener: (Int) -> Unit = {}
 
-    fun setFields(fields: List<StringField>) {
-        fieldData.clear()
-
-        fields.forEach { field ->
-            fieldData.add(MutableStringPair(field.name, field.value))
-        }
-
-        if (fieldData.isEmpty()) {
-            fieldData.add(MutableStringPair("", ""))
-        }
-
-        notifyItemRangeChanged(0, fieldData.size)
-    }
-
-    fun getFieldData(): List<StringField> {
-        return fieldData.map {
-            StringField(it.first, it.second)
-        }
-    }
-
-    fun addField() {
-        fieldData.add(MutableStringPair("", ""))
-        notifyItemInserted(fieldData.size - 1)
-    }
-
-    override fun getItemCount(): Int = fieldData.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountFieldViewHolder {
         val view = ItemEditFieldBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ViewHolder(view)
+        return AccountFieldViewHolder(view)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.nameTextView.setText(fieldData[position].first)
-        viewHolder.valueTextView.setText(fieldData[position].second)
+    override fun getItemCount(): Int = currentList.size
+
+    override fun onBindViewHolder(viewHolder: AccountFieldViewHolder, position: Int) {
+        viewHolder.nameTextView.setText(currentList[position].first)
+        viewHolder.valueTextView.setText(currentList[position].second)
+        viewHolder.deleteField.setOnClickListener {
+            clearFieldListener(position)
+        }
 
         viewHolder.nameTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(newText: Editable) {
-                fieldData[viewHolder.absoluteAdapterPosition].first = newText.toString()
+                currentList[viewHolder.absoluteAdapterPosition].first = newText.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -85,7 +68,7 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
 
         viewHolder.valueTextView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(newText: Editable) {
-                fieldData[viewHolder.absoluteAdapterPosition].second = newText.toString()
+                currentList[viewHolder.absoluteAdapterPosition].second = newText.toString()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -94,10 +77,36 @@ class AccountFieldEditAdapter : RecyclerView.Adapter<AccountFieldEditAdapter.Vie
         })
     }
 
-    class ViewHolder(view: ItemEditFieldBinding) : RecyclerView.ViewHolder(view.root) {
-        val nameTextView: EditText = view.accountFieldName
-        val valueTextView: EditText = view.accountFieldValue
+    fun getFieldData(): List<StringField> {
+        return currentList.map {
+            StringField(it.first, it.second)
+        }
     }
 
-    class MutableStringPair(var first: String, var second: String)
+    private object AccountFieldsDiff : DiffUtil.ItemCallback<MutableStringPair>() {
+
+        override fun areItemsTheSame(
+            oldItem: MutableStringPair,
+            newItem: MutableStringPair
+        ): Boolean {
+            return (oldItem == newItem)
+        }
+
+        override fun areContentsTheSame(
+            oldItem: MutableStringPair,
+            newItem: MutableStringPair
+        ): Boolean {
+            return (oldItem.first == newItem.first &&
+                    oldItem.second == newItem.second)
+        }
+    }
 }
+
+class AccountFieldViewHolder(view: ItemEditFieldBinding) : RecyclerView.ViewHolder(view.root) {
+
+    val nameTextView: EditText = view.accountFieldName
+    val valueTextView: EditText = view.accountFieldValue
+    val deleteField: ImageButton = view.deleteField
+}
+
+class MutableStringPair(var first: String, var second: String)
