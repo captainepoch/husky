@@ -19,6 +19,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.keylesspalace.tusky.EditProfileActivity.Companion.AVATAR_SIZE
@@ -73,7 +74,8 @@ class EditProfileViewModel(
     private val eventHub: EventHub
 ) : RxAwareViewModel() {
 
-    val profileData = MutableLiveData<Resource<Account>>()
+    private val _profileData = MutableLiveData<Resource<Account>>()
+    val profileData: LiveData<Resource<Account>> = _profileData
     val avatarData = MutableLiveData<Resource<Bitmap>>()
     val headerData = MutableLiveData<Resource<Bitmap>>()
 
@@ -93,17 +95,17 @@ class EditProfileViewModel(
     }
 
     fun obtainProfile() {
-        if (profileData.value == null || profileData.value is Error) {
-            profileData.postValue(Loading())
+        if(profileData.value == null || profileData.value is Error) {
+            _profileData.postValue(Loading())
 
             mastodonApi.accountVerifyCredentials()
                 .subscribe(
                     { profile ->
                         oldProfileData = profile
-                        profileData.postValue(Success(profile))
+                        _profileData.postValue(Success(profile))
                     },
                     {
-                        profileData.postValue(Error())
+                        _profileData.postValue(Error())
                     }
                 ).addTo(disposables)
         }
@@ -132,17 +134,17 @@ class EditProfileViewModel(
         Single.fromCallable {
             val contentResolver = context.contentResolver
             val sourceBitmap = getSampledBitmap(contentResolver, uri, resizeWidth, resizeHeight)
-                ?: throw Exception()
+                               ?: throw Exception()
 
             // Do not upscale image if it is smaller than the desired size
             val bitmap =
-                if (sourceBitmap.width <= resizeWidth && sourceBitmap.height <= resizeHeight) {
+                if(sourceBitmap.width <= resizeWidth && sourceBitmap.height <= resizeHeight) {
                     sourceBitmap
                 } else {
                     Bitmap.createScaledBitmap(sourceBitmap, resizeWidth, resizeHeight, true)
                 }
 
-            if (!saveBitmapToFile(bitmap, cacheFile)) {
+            if(!saveBitmapToFile(bitmap, cacheFile)) {
                 throw Exception()
             }
 
@@ -165,29 +167,29 @@ class EditProfileViewModel(
         newFields: List<StringField>,
         context: Context
     ) {
-        if (_saveData.value is Loading || profileData.value !is Success) {
+        if(_saveData.value is Loading || profileData.value !is Success) {
             return
         }
 
-        val displayName = if (oldProfileData?.displayName == newDisplayName) {
+        val displayName = if(oldProfileData?.displayName == newDisplayName) {
             null
         } else {
             newDisplayName.toRequestBody(MultipartBody.FORM)
         }
 
-        val note = if (oldProfileData?.source?.note == newNote) {
+        val note = if(oldProfileData?.source?.note == newNote) {
             null
         } else {
             newNote.toRequestBody(MultipartBody.FORM)
         }
 
-        val locked = if (oldProfileData?.locked == newLocked) {
+        val locked = if(oldProfileData?.locked == newLocked) {
             null
         } else {
             newLocked.toString().toRequestBody(MultipartBody.FORM)
         }
 
-        val avatar = if (avatarData.value is Success && avatarData.value?.data != null) {
+        val avatar = if(avatarData.value is Success && avatarData.value?.data != null) {
             val avatarBody = getCacheFileForName(
                 context,
                 AVATAR_FILE_NAME
@@ -201,7 +203,7 @@ class EditProfileViewModel(
             null
         }
 
-        val header = if (headerData.value is Success && headerData.value?.data != null) {
+        val header = if(headerData.value is Success && headerData.value?.data != null) {
             val headerBody = getCacheFileForName(
                 context,
                 HEADER_FILE_NAME
@@ -215,12 +217,12 @@ class EditProfileViewModel(
             value.takeIf { it.name.isNotEmpty() || it.value.isNotEmpty() }
         }
 
-        if (displayName == null &&
-            note == null &&
-            locked == null &&
-            avatar == null &&
-            header == null &&
-            (oldProfileData?.source?.fields == cleanFieldsList)
+        if(displayName == null &&
+           note == null &&
+           locked == null &&
+           avatar == null &&
+           header == null &&
+           (oldProfileData?.source?.fields == cleanFieldsList)
         ) {
             // If nothing has changed, there is no need to make a network request
             _saveData.postValue(Success())
@@ -244,12 +246,12 @@ class EditProfileViewModel(
 
             override fun onResponse(call: Call<Account>, response: Response<Account>) {
                 val newProfileData = response.body()
-                if (!response.isSuccessful || newProfileData == null) {
+                if(!response.isSuccessful || newProfileData == null) {
                     val errorResponse = response.errorBody()?.string()
-                    val errorMsg = if (!errorResponse.isNullOrBlank()) {
+                    val errorMsg = if(!errorResponse.isNullOrBlank()) {
                         try {
                             JSONObject(errorResponse).optString("error", null)
-                        } catch (e: JSONException) {
+                        } catch(e: JSONException) {
                             null
                         }
                     } else {
@@ -275,7 +277,7 @@ class EditProfileViewModel(
         newLocked: Boolean,
         newFields: List<StringField>
     ) {
-        if (profileData.value is Success) {
+        if(profileData.value is Success) {
             val newProfileSource =
                 profileData.value?.data?.source?.copy(note = newNote, fields = newFields)
             val newProfile = profileData.value?.data?.copy(
@@ -284,8 +286,34 @@ class EditProfileViewModel(
                 source = newProfileSource
             )
 
-            profileData.postValue(Success(newProfile))
+            _profileData.postValue(Success(newProfile))
         }
+    }
+
+    fun addField(name: String = "", value: String = "") {
+        val fields = _profileData.value?.data?.source?.fields?.toMutableList()?.apply {
+            add(StringField(name, value))
+        }?.toList()
+
+        val newProfile = _profileData.value?.data?.copy(
+            source = _profileData.value?.data?.source?.copy(
+                fields = fields
+            )
+        )
+        _profileData.postValue(Success(newProfile))
+    }
+
+    fun updateFieldList(position: Int) {
+        val fields = _profileData.value?.data?.source?.fields?.toMutableList()?.apply {
+            removeAt(position)
+        }?.toList()
+
+        val newProfile = _profileData.value?.data?.copy(
+            source = _profileData.value?.data?.source?.copy(
+                fields = fields
+            )
+        )
+        _profileData.postValue(Success(newProfile))
     }
 
     private fun getCacheFileForName(context: Context, filename: String): File {
@@ -297,7 +325,7 @@ class EditProfileViewModel(
 
         try {
             outputStream = FileOutputStream(file)
-        } catch (e: FileNotFoundException) {
+        } catch(e: FileNotFoundException) {
             Timber.e("File not found saving the Bitmap: ${Log.getStackTraceString(e)}", e)
 
             return false
@@ -326,15 +354,6 @@ class EditProfileViewModel(
                             isLoadingInfo = false
                         }
                     )
-                    /*when (response) {
-                        is ApiResponse.Success<InstanceEntity> -> {
-                            _instanceData.emit(
-                                response.data.toInstanceInfo().apply {
-                                    isLoadingInfo = false
-                                }
-                            )
-                        }
-                    }*/
                 }
         }
     }
