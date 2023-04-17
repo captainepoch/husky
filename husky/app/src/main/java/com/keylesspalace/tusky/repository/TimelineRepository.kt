@@ -25,6 +25,7 @@ import androidx.core.text.parseAsHtml
 import androidx.core.text.toHtml
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.TimelineAccountEntity
 import com.keylesspalace.tusky.db.TimelineDao
@@ -38,7 +39,6 @@ import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.repository.TimelineRequestMode.DISK
 import com.keylesspalace.tusky.repository.TimelineRequestMode.NETWORK
-import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.dec
 import com.keylesspalace.tusky.util.inc
 import com.keylesspalace.tusky.util.trimTrailingWhitespace

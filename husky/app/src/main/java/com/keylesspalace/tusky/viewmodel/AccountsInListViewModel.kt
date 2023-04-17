@@ -17,11 +17,11 @@
 package com.keylesspalace.tusky.viewmodel
 
 import android.util.Log
-import com.keylesspalace.tusky.entity.Account
-import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
+import com.keylesspalace.tusky.entity.Account
+import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.withoutFirstWhich
 import io.reactivex.Observable

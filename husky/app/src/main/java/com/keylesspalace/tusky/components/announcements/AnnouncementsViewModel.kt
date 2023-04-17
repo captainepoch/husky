@@ -22,12 +22,12 @@ import com.keylesspalace.tusky.appstore.AnnouncementReadEvent
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.components.instance.Instance
 import com.keylesspalace.tusky.components.instance.InstanceEntity
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Announcement
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.Resource

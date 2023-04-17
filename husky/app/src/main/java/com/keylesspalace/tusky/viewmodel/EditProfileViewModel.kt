@@ -44,10 +44,6 @@ import com.keylesspalace.tusky.util.randomAlphanumericString
 import io.reactivex.Single
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.OutputStream
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,6 +60,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 private const val HEADER_FILE_NAME = "header.png"
 private const val AVATAR_FILE_NAME = "avatar.png"
@@ -95,7 +95,7 @@ class EditProfileViewModel(
     }
 
     fun obtainProfile() {
-        if(profileData.value == null || profileData.value is Error) {
+        if (profileData.value == null || profileData.value is Error) {
             _profileData.postValue(Loading())
 
             mastodonApi.accountVerifyCredentials()
@@ -134,17 +134,17 @@ class EditProfileViewModel(
         Single.fromCallable {
             val contentResolver = context.contentResolver
             val sourceBitmap = getSampledBitmap(contentResolver, uri, resizeWidth, resizeHeight)
-                               ?: throw Exception()
+                ?: throw Exception()
 
             // Do not upscale image if it is smaller than the desired size
             val bitmap =
-                if(sourceBitmap.width <= resizeWidth && sourceBitmap.height <= resizeHeight) {
+                if (sourceBitmap.width <= resizeWidth && sourceBitmap.height <= resizeHeight) {
                     sourceBitmap
                 } else {
                     Bitmap.createScaledBitmap(sourceBitmap, resizeWidth, resizeHeight, true)
                 }
 
-            if(!saveBitmapToFile(bitmap, cacheFile)) {
+            if (!saveBitmapToFile(bitmap, cacheFile)) {
                 throw Exception()
             }
 
@@ -167,29 +167,29 @@ class EditProfileViewModel(
         newFields: List<StringField>,
         context: Context
     ) {
-        if(_saveData.value is Loading || profileData.value !is Success) {
+        if (_saveData.value is Loading || profileData.value !is Success) {
             return
         }
 
-        val displayName = if(oldProfileData?.displayName == newDisplayName) {
+        val displayName = if (oldProfileData?.displayName == newDisplayName) {
             null
         } else {
             newDisplayName.toRequestBody(MultipartBody.FORM)
         }
 
-        val note = if(oldProfileData?.source?.note == newNote) {
+        val note = if (oldProfileData?.source?.note == newNote) {
             null
         } else {
             newNote.toRequestBody(MultipartBody.FORM)
         }
 
-        val locked = if(oldProfileData?.locked == newLocked) {
+        val locked = if (oldProfileData?.locked == newLocked) {
             null
         } else {
             newLocked.toString().toRequestBody(MultipartBody.FORM)
         }
 
-        val avatar = if(avatarData.value is Success && avatarData.value?.data != null) {
+        val avatar = if (avatarData.value is Success && avatarData.value?.data != null) {
             val avatarBody = getCacheFileForName(
                 context,
                 AVATAR_FILE_NAME
@@ -203,7 +203,7 @@ class EditProfileViewModel(
             null
         }
 
-        val header = if(headerData.value is Success && headerData.value?.data != null) {
+        val header = if (headerData.value is Success && headerData.value?.data != null) {
             val headerBody = getCacheFileForName(
                 context,
                 HEADER_FILE_NAME
@@ -217,12 +217,12 @@ class EditProfileViewModel(
             value.takeIf { it.name.isNotEmpty() || it.value.isNotEmpty() }
         }
 
-        if(displayName == null &&
-           note == null &&
-           locked == null &&
-           avatar == null &&
-           header == null &&
-           (oldProfileData?.source?.fields == cleanFieldsList)
+        if (displayName == null &&
+            note == null &&
+            locked == null &&
+            avatar == null &&
+            header == null &&
+            (oldProfileData?.source?.fields == cleanFieldsList)
         ) {
             // If nothing has changed, there is no need to make a network request
             _saveData.postValue(Success())
@@ -246,12 +246,12 @@ class EditProfileViewModel(
 
             override fun onResponse(call: Call<Account>, response: Response<Account>) {
                 val newProfileData = response.body()
-                if(!response.isSuccessful || newProfileData == null) {
+                if (!response.isSuccessful || newProfileData == null) {
                     val errorResponse = response.errorBody()?.string()
-                    val errorMsg = if(!errorResponse.isNullOrBlank()) {
+                    val errorMsg = if (!errorResponse.isNullOrBlank()) {
                         try {
                             JSONObject(errorResponse).optString("error", null)
-                        } catch(e: JSONException) {
+                        } catch (e: JSONException) {
                             null
                         }
                     } else {
@@ -277,7 +277,7 @@ class EditProfileViewModel(
         newLocked: Boolean,
         newFields: List<StringField>
     ) {
-        if(profileData.value is Success) {
+        if (profileData.value is Success) {
             val newProfileSource =
                 profileData.value?.data?.source?.copy(note = newNote, fields = newFields)
             val newProfile = profileData.value?.data?.copy(
@@ -325,7 +325,7 @@ class EditProfileViewModel(
 
         try {
             outputStream = FileOutputStream(file)
-        } catch(e: FileNotFoundException) {
+        } catch (e: FileNotFoundException) {
             Timber.e("File not found saving the Bitmap: ${Log.getStackTraceString(e)}", e)
 
             return false

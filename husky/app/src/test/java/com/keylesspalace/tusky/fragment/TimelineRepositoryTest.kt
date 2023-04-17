@@ -3,6 +3,7 @@ package com.keylesspalace.tusky.fragment
 import android.text.SpannableString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.TimelineDao
@@ -16,7 +17,6 @@ import com.keylesspalace.tusky.repository.TimelineRepositoryImpl
 import com.keylesspalace.tusky.repository.TimelineRequestMode
 import com.keylesspalace.tusky.repository.lift
 import com.keylesspalace.tusky.repository.toEntity
-import com.keylesspalace.tusky.core.functional.Either
 import com.nhaarman.mockitokotlin2.isNull
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions

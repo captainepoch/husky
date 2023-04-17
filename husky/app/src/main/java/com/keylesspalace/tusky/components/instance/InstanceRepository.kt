@@ -16,7 +16,7 @@ class InstanceRepository(
 
     fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
         service.getInstanceData().run {
-            val response = if(isSuccessful && body().notNull()) {
+            val response = if (isSuccessful && body().notNull()) {
                 val instance = body()!!
                 InstanceEntity(
                     instance = accountManager.activeAccount?.domain!!,

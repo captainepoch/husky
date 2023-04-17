@@ -29,10 +29,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.R.string
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.databinding.FragmentAccountsInListBinding
 import com.keylesspalace.tusky.databinding.ItemFollowRequestBinding
 import com.keylesspalace.tusky.entity.Account
-import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.emojify
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.loadAvatar

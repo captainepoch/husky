@@ -88,6 +88,7 @@ import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.viewBinding
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.databinding.ActivityChatBinding
 import com.keylesspalace.tusky.entity.Attachment
@@ -103,7 +104,6 @@ import com.keylesspalace.tusky.service.MessageToSend
 import com.keylesspalace.tusky.service.ServiceClient
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.ComposeTokenizer
-import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.PairedList
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.ViewDataUtils

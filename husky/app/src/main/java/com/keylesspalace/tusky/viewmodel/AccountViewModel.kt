@@ -8,13 +8,13 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.MuteEvent
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
 import com.keylesspalace.tusky.appstore.UnfollowEvent
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Field
 import com.keylesspalace.tusky.entity.IdentityProof
 import com.keylesspalace.tusky.entity.Relationship
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.Error
 import com.keylesspalace.tusky.util.Loading
 import com.keylesspalace.tusky.util.Resource

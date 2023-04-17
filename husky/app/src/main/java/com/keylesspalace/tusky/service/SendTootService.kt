@@ -42,6 +42,7 @@ import com.keylesspalace.tusky.appstore.StatusPreviewEvent
 import com.keylesspalace.tusky.appstore.StatusScheduledEvent
 import com.keylesspalace.tusky.components.drafts.DraftHelper
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.ChatMessage
 import com.keylesspalace.tusky.entity.NewChatMessage
@@ -49,7 +50,6 @@ import com.keylesspalace.tusky.entity.NewPoll
 import com.keylesspalace.tusky.entity.NewStatus
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
-import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.util.SaveTootHelper
 import kotlinx.android.parcel.Parcelize
 import org.koin.core.component.KoinComponent

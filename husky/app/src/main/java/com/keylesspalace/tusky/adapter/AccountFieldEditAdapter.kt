@@ -96,8 +96,10 @@ class AccountFieldEditAdapter : ListAdapter<MutableStringPair, AccountFieldViewH
             oldItem: MutableStringPair,
             newItem: MutableStringPair
         ): Boolean {
-            return (oldItem.first == newItem.first &&
-                    oldItem.second == newItem.second)
+            return (
+                oldItem.first == newItem.first &&
+                    oldItem.second == newItem.second
+                )
         }
     }
 }

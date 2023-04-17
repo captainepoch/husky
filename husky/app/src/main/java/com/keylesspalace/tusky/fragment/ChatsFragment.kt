@@ -53,6 +53,7 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.MuteEvent
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent
+import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.databinding.FragmentTimelineBinding
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Chat
@@ -68,7 +69,6 @@ import com.keylesspalace.tusky.repository.Placeholder
 import com.keylesspalace.tusky.repository.TimelineRequestMode
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.CardViewMode
-import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.PairedList
 import com.keylesspalace.tusky.util.StatusDisplayOptions
