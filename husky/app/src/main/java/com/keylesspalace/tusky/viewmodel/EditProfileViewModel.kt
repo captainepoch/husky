@@ -134,7 +134,7 @@ class EditProfileViewModel(
         Single.fromCallable {
             val contentResolver = context.contentResolver
             val sourceBitmap = getSampledBitmap(contentResolver, uri, resizeWidth, resizeHeight)
-                ?: throw Exception()
+                               ?: throw Exception()
 
             // Do not upscale image if it is smaller than the desired size
             val bitmap =
@@ -305,7 +305,12 @@ class EditProfileViewModel(
 
     fun updateFieldList(position: Int) {
         val fields = _profileData.value?.data?.source?.fields?.toMutableList()?.apply {
-            removeAt(position)
+            if (size == 1) {
+                removeAt(position)
+                add(StringField("", ""))
+            } else {
+                removeAt(position)
+            }
         }?.toList()
 
         val newProfile = _profileData.value?.data?.copy(
