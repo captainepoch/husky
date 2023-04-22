@@ -1,6 +1,6 @@
 # Husky
 
-[![builds.sr.ht status](https://builds.sr.ht/~captainepoch/husky/commits.svg)](https://builds.sr.ht/~captainepoch/husky)
+[![status-badge](https://ci.codeberg.org/api/badges/husky/husky/status.svg)](https://ci.codeberg.org/husky/husky)
 [![Download F-Droid](https://img.shields.io/badge/Download-F--Droid-blue)][husky_fdroid]
 [![Download Google Play](https://img.shields.io/badge/Download-Play-blue)][husky_playstore]
 
