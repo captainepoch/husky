@@ -45,7 +45,7 @@ val viewModelsModule = module {
     }
 
     viewModel {
-        EditProfileViewModel(get(), get(), get())
+        EditProfileViewModel(get(), get(), get(), get())
     }
 
     viewModel {
