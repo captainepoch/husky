@@ -2,6 +2,7 @@ package com.keylesspalace.tusky.di
 
 import com.keylesspalace.tusky.components.conversation.ConversationsRepository
 import com.keylesspalace.tusky.components.instance.InstanceRepository
+import com.keylesspalace.tusky.components.profile.domain.EditProfileRepository
 import com.keylesspalace.tusky.components.report.adapter.StatusesRepository
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.repository.ChatRepository
@@ -27,6 +28,10 @@ val repositoryModule = module {
     factory {
         TimelineRepositoryImpl(get<AppDatabase>().timelineDao(), get(), get(), get())
     } bind TimelineRepository::class
+
+    factory {
+        EditProfileRepository(get())
+    }
 
     single {
         InstanceRepository(get(), get(), get())
