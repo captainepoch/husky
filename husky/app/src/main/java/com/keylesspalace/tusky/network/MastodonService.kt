@@ -245,6 +245,24 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.accountUpdateSource(privacy, sensitive)
     }
 
+    override suspend fun accountUpdateCredentialsData(
+        displayName: RequestBody?,
+        note: RequestBody?,
+        locked: RequestBody?,
+        avatar: Part?,
+        header: Part?,
+        fields_attributes: HashMap<String, RequestBody>?
+    ): Response<Account> {
+        return api.accountUpdateCredentialsData(
+            displayName,
+            note,
+            locked,
+            avatar,
+            header,
+            fields_attributes
+        )
+    }
+
     override fun accountUpdateCredentials(
         displayName: RequestBody?,
         note: RequestBody?,

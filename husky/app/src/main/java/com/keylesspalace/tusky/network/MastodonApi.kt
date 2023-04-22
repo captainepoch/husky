@@ -306,6 +306,17 @@ interface MastodonApi {
 
     @Multipart
     @PATCH("api/v1/accounts/update_credentials")
+    suspend fun accountUpdateCredentialsData(
+        @Part(value = "display_name") displayName: RequestBody?,
+        @Part(value = "note") note: RequestBody?,
+        @Part(value = "locked") locked: RequestBody?,
+        @Part avatar: MultipartBody.Part?,
+        @Part header: MultipartBody.Part?,
+        @PartMap() fields_attributes: HashMap<String, RequestBody>?
+    ): Response<Account>
+
+    @Multipart
+    @PATCH("api/v1/accounts/update_credentials")
     fun accountUpdateCredentials(
         @Part(value = "display_name") displayName: RequestBody?,
         @Part(value = "note") note: RequestBody?,
