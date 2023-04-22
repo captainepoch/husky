@@ -29,7 +29,10 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
 import com.keylesspalace.tusky.components.instance.InstanceInfo
 import com.keylesspalace.tusky.components.instance.InstanceRepository
+import com.keylesspalace.tusky.components.profile.domain.EditProfileRepository
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
+import com.keylesspalace.tusky.core.functional.Either.Left
+import com.keylesspalace.tusky.core.functional.Either.Right
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.StringField
 import com.keylesspalace.tusky.network.MastodonApi
@@ -44,21 +47,18 @@ import com.keylesspalace.tusky.util.randomAlphanumericString
 import io.reactivex.Single
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -71,11 +71,16 @@ private const val AVATAR_FILE_NAME = "avatar.png"
 class EditProfileViewModel(
     private val mastodonApi: MastodonApi,
     private val instanceRepository: InstanceRepository,
+    private val editProfileRepository: EditProfileRepository,
     private val eventHub: EventHub
 ) : RxAwareViewModel() {
 
+    private var updateCredentialsJob: Job? = null
+
     private val _profileData = MutableLiveData<Resource<Account>>()
-    val profileData: LiveData<Resource<Account>> = _profileData
+    val profileData: LiveData<Resource<Account>>
+        get() = _profileData
+
     val avatarData = MutableLiveData<Resource<Bitmap>>()
     val headerData = MutableLiveData<Resource<Bitmap>>()
 
@@ -134,7 +139,7 @@ class EditProfileViewModel(
         Single.fromCallable {
             val contentResolver = context.contentResolver
             val sourceBitmap = getSampledBitmap(contentResolver, uri, resizeWidth, resizeHeight)
-                               ?: throw Exception()
+                ?: throw Exception()
 
             // Do not upscale image if it is smaller than the desired size
             val bitmap =
@@ -167,107 +172,108 @@ class EditProfileViewModel(
         newFields: List<StringField>,
         context: Context
     ) {
-        if (_saveData.value is Loading || profileData.value !is Success) {
-            return
-        }
+        updateCredentialsJob?.cancelIfActive()
+        updateCredentialsJob = viewModelScope.launch(Dispatchers.IO) {
+            if (_saveData.value is Loading || profileData.value !is Success) {
+                return@launch
+            }
 
-        val displayName = if (oldProfileData?.displayName == newDisplayName) {
-            null
-        } else {
-            newDisplayName.toRequestBody(MultipartBody.FORM)
-        }
+            val displayName = if (oldProfileData?.displayName == newDisplayName) {
+                null
+            } else {
+                newDisplayName.toRequestBody(MultipartBody.FORM)
+            }
 
-        val note = if (oldProfileData?.source?.note == newNote) {
-            null
-        } else {
-            newNote.toRequestBody(MultipartBody.FORM)
-        }
+            val note = if (oldProfileData?.source?.note == newNote) {
+                null
+            } else {
+                newNote.toRequestBody(MultipartBody.FORM)
+            }
 
-        val locked = if (oldProfileData?.locked == newLocked) {
-            null
-        } else {
-            newLocked.toString().toRequestBody(MultipartBody.FORM)
-        }
+            val locked = if (oldProfileData?.locked == newLocked) {
+                null
+            } else {
+                newLocked.toString().toRequestBody(MultipartBody.FORM)
+            }
 
-        val avatar = if (avatarData.value is Success && avatarData.value?.data != null) {
-            val avatarBody = getCacheFileForName(
-                context,
-                AVATAR_FILE_NAME
-            ).asRequestBody("image/png".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData(
-                "avatar",
-                randomAlphanumericString(12),
-                avatarBody
-            )
-        } else {
-            null
-        }
+            val avatar = if (avatarData.value is Success && avatarData.value?.data != null) {
+                val avatarBody = getCacheFileForName(
+                    context,
+                    AVATAR_FILE_NAME
+                ).asRequestBody("image/png".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData(
+                    "avatar",
+                    randomAlphanumericString(12),
+                    avatarBody
+                )
+            } else {
+                null
+            }
 
-        val header = if (headerData.value is Success && headerData.value?.data != null) {
-            val headerBody = getCacheFileForName(
-                context,
-                HEADER_FILE_NAME
-            ).asRequestBody("image/png".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("header", randomAlphanumericString(12), headerBody)
-        } else {
-            null
-        }
+            val header = if (headerData.value is Success && headerData.value?.data != null) {
+                val headerBody = getCacheFileForName(
+                    context,
+                    HEADER_FILE_NAME
+                ).asRequestBody("image/png".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData(
+                    "header",
+                    randomAlphanumericString(12),
+                    headerBody
+                )
+            } else {
+                null
+            }
 
-        val cleanFieldsList = newFields.mapNotNull { value ->
-            value.takeIf { it.name.isNotEmpty() || it.value.isNotEmpty() }
-        }
+            val cleanFieldsList = newFields.mapNotNull { value ->
+                value.takeIf { it.name.isNotBlank() && it.value.isNotBlank() }
+            }
 
-        if (displayName == null &&
-            note == null &&
-            locked == null &&
-            avatar == null &&
-            header == null &&
-            (oldProfileData?.source?.fields == cleanFieldsList)
-        ) {
-            // If nothing has changed, there is no need to make a network request
-            _saveData.postValue(Success())
-            return
-        }
-
-        val fieldsMap = hashMapOf<String, RequestBody>()
-        cleanFieldsList.forEachIndexed { index, stringField ->
-            fieldsMap["fields_attributes[$index][name]"] = stringField.name.toRequestBody()
-            fieldsMap["fields_attributes[$index][value]"] = stringField.value.toRequestBody()
-        }
-
-        mastodonApi.accountUpdateCredentials(
-            displayName,
-            note,
-            locked,
-            avatar,
-            header,
-            fieldsMap
-        ).enqueue(object : Callback<Account> {
-
-            override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                val newProfileData = response.body()
-                if (!response.isSuccessful || newProfileData == null) {
-                    val errorResponse = response.errorBody()?.string()
-                    val errorMsg = if (!errorResponse.isNullOrBlank()) {
-                        try {
-                            JSONObject(errorResponse).optString("error", null)
-                        } catch (e: JSONException) {
-                            null
-                        }
-                    } else {
-                        null
-                    }
-                    _saveData.postValue(Error(errorMessage = errorMsg))
-                    return
-                }
+            if (displayName == null &&
+                note == null &&
+                locked == null &&
+                avatar == null &&
+                header == null &&
+                (oldProfileData?.source?.fields == cleanFieldsList)
+            ) {
+                // If nothing is changed, there is no need to make a network request
                 _saveData.postValue(Success())
-                eventHub.dispatch(ProfileEditedEvent(newProfileData))
+                return@launch
             }
 
-            override fun onFailure(call: Call<Account>, t: Throwable) {
-                _saveData.postValue(Error())
+            val fieldsMap = hashMapOf<String, RequestBody>()
+            cleanFieldsList.forEachIndexed { index, stringField ->
+                fieldsMap["fields_attributes[$index][name]"] = stringField.name.toRequestBody()
+                fieldsMap["fields_attributes[$index][value]"] = stringField.value.toRequestBody()
             }
-        })
+
+            if (fieldsMap.isEmpty()) {
+                fieldsMap["fields_attributes[0][name]"] = "".toRequestBody()
+                fieldsMap["fields_attributes[0][value]"] = "".toRequestBody()
+            }
+
+            editProfileRepository.accountUpdateCredentialsData(
+                displayName,
+                note,
+                locked,
+                avatar,
+                header,
+                fieldsMap
+            ).onStart {
+                _saveData.postValue(Loading())
+            }.catch {
+                _saveData.postValue(Error(errorMessage = it.message))
+            }.collect { result ->
+                when (result) {
+                    is Right -> {
+                        _saveData.postValue(Success())
+                        eventHub.dispatch(ProfileEditedEvent(result.asRight()))
+                    }
+                    is Left -> {
+                        _saveData.postValue(result.asLeft())
+                    }
+                }
+            }
+        }
     }
 
     // Cache activity state for rotation change

@@ -51,4 +51,3 @@ data class Instance(
         return instance?.uri.equals(uri)
     }
 }
-
