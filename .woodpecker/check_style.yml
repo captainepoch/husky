@@ -1,0 +1,7 @@
+pipeline:
+  style:
+    image: ghcr.io/alvr/alpine-android:android-33-jdk11
+    group: check
+    commands:
+      - cd husky
+      - ./gradlew ktlintCheck
