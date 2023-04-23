@@ -10,10 +10,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-const val TEST_DB = "migration_test"
-
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MigrationsTest {
+
+    private val testDB = "migration_test"
 
     @JvmField
     @Rule
@@ -25,7 +25,7 @@ class MigrationsTest {
 
     @Test
     fun migrateTo11() {
-        val db = helper.createDatabase(TEST_DB, 10)
+        val db = helper.createDatabase(testDB, 10)
 
         val id = 1
         val domain = "domain.site"
@@ -55,7 +55,7 @@ class MigrationsTest {
         db.close()
 
         val newDb = helper.runMigrationsAndValidate(
-            TEST_DB,
+            testDB,
             11,
             true,
             AppDatabase.MIGRATION_10_11
