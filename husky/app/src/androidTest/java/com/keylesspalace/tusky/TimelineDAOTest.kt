@@ -1,8 +1,8 @@
 package com.keylesspalace.tusky
 
 import androidx.room.Room
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.AndroidJUnit4
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.db.TimelineAccountEntity
 import com.keylesspalace.tusky.db.TimelineDao
@@ -17,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class TimelineDAOTest {
 
     private lateinit var timelineDao: TimelineDao
@@ -139,7 +139,6 @@ class TimelineDAOTest {
 
     @Test
     fun overwriteDeletedStatus() {
-
         val oldStatuses = listOf(
             makeStatus(statusId = 3),
             makeStatus(statusId = 2),

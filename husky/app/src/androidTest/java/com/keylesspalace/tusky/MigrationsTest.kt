@@ -2,8 +2,8 @@ package com.keylesspalace.tusky
 
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.AndroidJUnit4
 import com.keylesspalace.tusky.db.AppDatabase
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 
 const val TEST_DB = "migration_test"
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class MigrationsTest {
 
     @JvmField
