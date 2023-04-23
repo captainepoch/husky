@@ -7,7 +7,6 @@ class EmojiCompatFontTest {
 
     @Test
     fun testCompareVersions() {
-
         assertEquals(
             -1,
             EmojiCompatFont.compareVersions(
