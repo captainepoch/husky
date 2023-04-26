@@ -90,7 +90,8 @@ class LoginActivity : BaseActivity() {
         }
 
         preferences = getSharedPreferences(
-            getString(R.string.preferences_file_key), Context.MODE_PRIVATE
+            getString(R.string.preferences_file_key),
+            Context.MODE_PRIVATE
         )
 
         binding.loginButton.setOnClickListener { onButtonClick() }
@@ -203,8 +204,11 @@ class LoginActivity : BaseActivity() {
 
         mastodonApi
             .authenticateApp(
-                domain, appname, oauthRedirectUri,
-                OAUTH_SCOPES, website
+                domain,
+                appname,
+                oauthRedirectUri,
+                OAUTH_SCOPES,
+                website
             ).enqueue(callback)
 
         setLoading(true)
@@ -251,7 +255,6 @@ class LoginActivity : BaseActivity() {
             val clientSecret = preferences.getNonNullString(CLIENT_SECRET, "")
 
             if (code != null && domain.isNotEmpty() && clientId.isNotEmpty() && clientSecret.isNotEmpty()) {
-
                 setLoading(true)
                 /* Since authorization has succeeded, the final step to log in is to exchange
                  * the authorization code for an access token. */
@@ -291,7 +294,11 @@ class LoginActivity : BaseActivity() {
                 }
 
                 mastodonApi.fetchOAuthToken(
-                    domain, clientId, clientSecret, redirectUri, code,
+                    domain,
+                    clientId,
+                    clientSecret,
+                    redirectUri,
+                    code,
                     "authorization_code"
                 ).enqueue(callback)
             } else if (error != null) {

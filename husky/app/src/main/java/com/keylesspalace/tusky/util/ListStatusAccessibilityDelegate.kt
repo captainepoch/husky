@@ -195,7 +195,8 @@ class ListStatusAccessibilityDelegate(
                 .setAdapter(
                     ArrayAdapter<CharSequence>(
                         host.context,
-                        android.R.layout.simple_list_item_1, stringMentions
+                        android.R.layout.simple_list_item_1,
+                        stringMentions
                     )
                 ) { _, which ->
                     statusActionListener.onViewAccount(mentions[which].id)
@@ -212,7 +213,8 @@ class ListStatusAccessibilityDelegate(
                 .setAdapter(
                     ArrayAdapter(
                         host.context,
-                        android.R.layout.simple_list_item_1, tags
+                        android.R.layout.simple_list_item_1,
+                        tags
                     )
                 ) { _, which ->
                     statusActionListener.onViewTag(tags[which].toString())

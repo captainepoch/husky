@@ -65,7 +65,6 @@ class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
         val notificationManager = NotificationManagerCompat.from(context)
 
         if (intent.action == NotificationHelper.REPLY_ACTION) {
-
             val message = getReplyMessage(intent)
 
             if (account == null) {
@@ -113,7 +112,7 @@ class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
                         retries = 0,
                         formattingSyntax = "",
                         preview = false,
-                        savedTootUid = -1,
+                        savedTootUid = -1
                     )
                 )
 

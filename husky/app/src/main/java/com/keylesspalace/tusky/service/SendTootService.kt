@@ -171,7 +171,6 @@ class SendTootService : Service(), KoinComponent {
 
             val callback = object : Callback<Status> {
                 override fun onResponse(call: Call<Status>, response: Response<Status>) {
-
                     val scheduled = !postToSend.scheduledAt.isNullOrEmpty()
                     tootsToSend.remove(tootId)
 
@@ -386,8 +385,9 @@ class SendTootService : Service(), KoinComponent {
             Int.MIN_VALUE // use even more negative ids to not clash with other notis
 
         private fun Intent.forwardUriPermissions(mediaUris: List<String>) {
-            if (mediaUris.isEmpty())
+            if (mediaUris.isEmpty()) {
                 return
+            }
 
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             val uriClip = ClipData(
@@ -403,8 +403,9 @@ class SendTootService : Service(), KoinComponent {
         fun sendMessageIntent(context: Context, msgToSend: MessageToSend): Intent {
             val intent = Intent(context, SendTootService::class.java)
             intent.putExtra(KEY_CHATMSG, msgToSend)
-            if (msgToSend.mediaUri != null)
+            if (msgToSend.mediaUri != null) {
                 intent.forwardUriPermissions(listOf(msgToSend.mediaUri))
+            }
 
             return intent
         }

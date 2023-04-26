@@ -48,7 +48,9 @@ class TimelineDAOTest {
 
         val resultsFromDb = timelineDao.getStatusesForAccount(
             setOne.first.timelineUserId,
-            maxId = "21", sinceId = ignoredOne.first.serverId, limit = 10
+            maxId = "21",
+            sinceId = ignoredOne.first.serverId,
+            limit = 10
         )
             .blockingGet()
 
@@ -104,12 +106,12 @@ class TimelineDAOTest {
         )
 
         for (
-            (status, author, reblogAuthor) in listOf(
-                oldThisAccount,
-                oldAnotherAccount,
-                recentThisAccount,
-                recentAnotherAccount
-            )
+        (status, author, reblogAuthor) in listOf(
+            oldThisAccount,
+            oldAnotherAccount,
+            recentThisAccount,
+            recentAnotherAccount
+        )
         ) {
             timelineDao.insertInTransaction(status, author, reblogAuthor)
         }
@@ -214,7 +216,9 @@ class TimelineDAOTest {
                 "[]",
                 false
             )
-        } else null
+        } else {
+            null
+        }
 
         val even = accountId % 2 == 0L
         val status = TimelineStatusEntity(

@@ -32,7 +32,9 @@ class AccountPagerAdapter(
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> TimelineFragment.newInstance(
-                TimelineFragment.Kind.USER, accountId, false
+                TimelineFragment.Kind.USER,
+                accountId,
+                false
             )
             1 -> TimelineFragment.newInstance(
                 TimelineFragment.Kind.USER_WITH_REPLIES,

@@ -40,12 +40,16 @@ data class Attachment(
     enum class Type {
         @SerializedName("image")
         IMAGE,
+
         @SerializedName("gifv")
         GIFV,
+
         @SerializedName("video")
         VIDEO,
+
         @SerializedName("audio")
         AUDIO,
+
         @SerializedName("unknown")
         UNKNOWN
     }

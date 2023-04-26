@@ -422,9 +422,11 @@ class ComposeActivity :
 
                     if (!supportsPrefferedSyntax) {
                         suggestFormattingSyntax =
-                            if (supportedFormattingSyntax.contains(activeAccount.defaultFormattingSyntax))
+                            if (supportedFormattingSyntax.contains(activeAccount.defaultFormattingSyntax)) {
                                 activeAccount.defaultFormattingSyntax
-                            else supportedFormattingSyntax[0]
+                            } else {
+                                supportedFormattingSyntax[0]
+                            }
 
                         viewModel.formattingSyntax.value = ""
                     }
@@ -1019,8 +1021,11 @@ class ComposeActivity :
         addMediaBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         val instanceParams = viewModel.instanceParams.value!!
         showAddPollDialog(
-            this, viewModel.poll.value, instanceParams.pollMaxOptions,
-            instanceParams.pollMaxLength, viewModel::updatePoll
+            this,
+            viewModel.poll.value,
+            instanceParams.pollMaxOptions,
+            instanceParams.pollMaxLength,
+            viewModel::updatePoll
         )
     }
 
@@ -1186,8 +1191,11 @@ class ComposeActivity :
         } else if (characterCount <= maximumTootCharacters) {
             if (viewModel.media.value!!.isNotEmpty()) {
                 finishingUploadDialog = ProgressDialog.show(
-                    this, getString(R.string.dialog_title_finishing_media_upload),
-                    getString(R.string.dialog_message_uploading_media), true, true
+                    this,
+                    getString(R.string.dialog_title_finishing_media_upload),
+                    getString(R.string.dialog_message_uploading_media),
+                    true,
+                    true
                 )
             }
 
@@ -1214,7 +1222,8 @@ class ComposeActivity :
                 initiateMediaPicking()
             } else {
                 val bar = Snackbar.make(
-                    binding.root, R.string.error_media_upload_permission,
+                    binding.root,
+                    R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
                     setAction(R.string.action_retry) { onMediaPick() }
@@ -1267,9 +1276,13 @@ class ComposeActivity :
     private fun enableButton(button: ImageButton, clickable: Boolean, colorActive: Boolean) {
         button.isEnabled = clickable
         ThemeUtils.setDrawableTint(
-            this, button.drawable,
-            if (colorActive) android.R.attr.textColorTertiary
-            else R.attr.textColorDisabled
+            this,
+            button.drawable,
+            if (colorActive) {
+                android.R.attr.textColorTertiary
+            } else {
+                R.attr.textColorDisabled
+            }
         )
     }
 
@@ -1277,8 +1290,11 @@ class ComposeActivity :
         binding.addPollTextActionTextView.isEnabled = enable
         val textColor = ThemeUtils.getColor(
             this,
-            if (enable) android.R.attr.textColorTertiary
-            else R.attr.textColorDisabled
+            if (enable) {
+                android.R.attr.textColorTertiary
+            } else {
+                R.attr.textColorDisabled
+            }
         )
         binding.addPollTextActionTextView.setTextColor(textColor)
         binding.addPollTextActionTextView.compoundDrawablesRelative[0].colorFilter =

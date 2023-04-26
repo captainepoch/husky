@@ -312,7 +312,6 @@ class AccountActivity :
                 AppBarLayout.OnOffsetChangedListener {
 
                 override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-
                     if (verticalOffset == oldOffset) {
                         return
                     }
@@ -721,10 +720,11 @@ class AccountActivity :
             binding.accountSubscribeButton.setOnClickListener {
                 viewModel.changeSubscribingState()
             }
-            if (relation.notifying != null)
+            if (relation.notifying != null) {
                 subscribing = relation.notifying
-            else if (relation.subscribing != null)
+            } else if (relation.subscribing != null) {
                 subscribing = relation.subscribing
+            }
         }
 
         binding.accountNoteTextInputLayout.visible(relation.note != null)

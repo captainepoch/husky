@@ -84,7 +84,6 @@ abstract class BottomSheetActivity : BaseActivity() {
                 onEndSearch(url)
 
                 if (accounts.isNotEmpty()) {
-
                     // HACKHACK: Pleroma, remove when search will work normally
                     if (accounts[0].pleroma != null) {
                         val account =
@@ -230,5 +229,5 @@ fun looksLikeMastodonUrl(urlString: String): Boolean {
 
 enum class PostLookupFallbackBehavior {
     OPEN_IN_BROWSER,
-    DISPLAY_ERROR,
+    DISPLAY_ERROR
 }

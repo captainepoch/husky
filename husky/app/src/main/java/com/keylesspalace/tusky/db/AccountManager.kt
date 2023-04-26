@@ -52,7 +52,6 @@ class AccountManager(db: AppDatabase) {
      * @param domain the domain of the accounts Mastodon instance
      */
     fun addAccount(accessToken: String, domain: String) {
-
         activeAccount?.let {
             it.isActive = false
             Log.d(TAG, "addAccount: saving account with id " + it.id)
@@ -87,7 +86,6 @@ class AccountManager(db: AppDatabase) {
      * @return the new active account, or null if no other account was found
      */
     fun logActiveAccountOut(): AccountEntity? {
-
         if (activeAccount == null) {
             return null
         } else {
@@ -142,7 +140,6 @@ class AccountManager(db: AppDatabase) {
      * @param accountId the database id of the new active account
      */
     fun setActiveAccount(accountId: Long) {
-
         activeAccount?.let {
             Log.d(TAG, "setActiveAccount: saving account with id " + it.id)
             it.isActive = false

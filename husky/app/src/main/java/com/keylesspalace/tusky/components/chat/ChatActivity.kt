@@ -224,8 +224,10 @@ class ChatActivity :
             return if (oldItem.deepEquals(newItem)) {
                 // If items are equal - update timestamp only
                 listOf(ChatMessagesViewHolder.Key.KEY_CREATED)
-            } else // If items are different - update a whole view holder
+            } else {
+                // If items are different - update a whole view holder
                 null
+            }
         }
     }
 
@@ -403,8 +405,9 @@ class ChatActivity :
 
     private var sending = false
     private fun enableSendButton() {
-        if (sending)
+        if (sending) {
             return
+        }
 
         val haveMedia = viewModel.media.value?.isNotEmpty() ?: false
         val haveText = binding.editText.text.isNotEmpty()
@@ -730,7 +733,8 @@ class ChatActivity :
                 initiateMediaPicking()
             } else {
                 val bar = Snackbar.make(
-                    binding.activityChat, R.string.error_media_upload_permission,
+                    binding.activityChat,
+                    R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
                 }
@@ -763,9 +767,13 @@ class ChatActivity :
     private fun enableButton(button: ImageButton, clickable: Boolean, colorActive: Boolean) {
         button.isEnabled = clickable
         ThemeUtils.setDrawableTint(
-            this, button.drawable,
-            if (colorActive) android.R.attr.textColorTertiary
-            else R.attr.textColorDisabled
+            this,
+            button.drawable,
+            if (colorActive) {
+                android.R.attr.textColorTertiary
+            } else {
+                R.attr.textColorDisabled
+            }
         )
     }
 
@@ -1021,7 +1029,6 @@ class ChatActivity :
         fetchEnd: FetchEnd,
         pos: Int
     ) {
-
         // We filled the hole (or reached the end) if the server returned less statuses than we
         // we asked for.
         val fullFetch = msgs.size >= LOAD_AT_ONCE
@@ -1138,8 +1145,11 @@ class ChatActivity :
             val maxMinusOne =
                 if (msgs.size > position + 1 && msgs[position + 2].isRight()) msgs[position + 1].asRight().id else null
             sendFetchMessagesRequest(
-                fromChat.id, toChat.id, maxMinusOne,
-                FetchEnd.MIDDLE, position
+                fromChat.id,
+                toChat.id,
+                maxMinusOne,
+                FetchEnd.MIDDLE,
+                position
             )
 
             val (id) = msgs[position].asLeft()

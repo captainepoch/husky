@@ -239,14 +239,16 @@ class ComposeViewModel(
                     attachment.description
                 )
             }
-        } else composeOptions?.mediaAttachments?.forEach { a ->
-            // when coming from redraft or ScheduledTootActivity
-            val mediaType = when (a.type) {
-                Attachment.Type.VIDEO, Attachment.Type.GIFV -> QueuedMedia.VIDEO
-                Attachment.Type.UNKNOWN, Attachment.Type.IMAGE -> QueuedMedia.IMAGE
-                Attachment.Type.AUDIO -> QueuedMedia.AUDIO
+        } else {
+            composeOptions?.mediaAttachments?.forEach { a ->
+                // when coming from redraft or ScheduledTootActivity
+                val mediaType = when (a.type) {
+                    Attachment.Type.VIDEO, Attachment.Type.GIFV -> QueuedMedia.VIDEO
+                    Attachment.Type.UNKNOWN, Attachment.Type.IMAGE -> QueuedMedia.IMAGE
+                    Attachment.Type.AUDIO -> QueuedMedia.AUDIO
+                }
+                addUploadedMedia(a.id, mediaType, a.url.toUri(), a.description)
             }
-            addUploadedMedia(a.id, mediaType, a.url.toUri(), a.description)
         }
 
         savedTootUid = composeOptions?.savedTootUid ?: 0

@@ -155,8 +155,9 @@ data class Status(
     }
 
     fun setThreadMuted(mute: Boolean) {
-        if (pleroma?.threadMuted != null)
+        if (pleroma?.threadMuted != null) {
             pleroma.threadMuted = mute
+        }
     }
 
     fun getConversationId(): String {

@@ -95,7 +95,9 @@ class MediaUploaderImpl(
             .fromCallable {
                 if (shouldResizeMedia(media, imageLimit)) {
                     downsize(media, imageLimit)
-                } else media
+                } else {
+                    media
+                }
             }
             .switchMap { upload(it) }
             .subscribeOn(Schedulers.io())
@@ -194,7 +196,9 @@ class MediaUploaderImpl(
                 media.uri,
                 media.originalFileName
             )
-            val filename = if (!media.anonymizeFileName) media.originalFileName else
+            val filename = if (!media.anonymizeFileName) {
+                media.originalFileName
+            } else {
                 String.format(
                     "%s_%s_%s%s",
                     context.getString(R.string.app_name),
@@ -202,6 +206,7 @@ class MediaUploaderImpl(
                     randomAlphanumericString(10),
                     fileExtension
                 )
+            }
 
             val stream = contentResolver.openInputStream(media.uri)
 
@@ -209,7 +214,8 @@ class MediaUploaderImpl(
 
             var lastProgress = -1
             val fileBody = ProgressRequestBody(
-                stream, media.mediaSize,
+                stream,
+                media.mediaSize,
                 mimeType.toMediaTypeOrNull()
             ) { percentage ->
                 if (percentage != lastProgress) {
@@ -260,7 +266,8 @@ class MediaUploaderImpl(
 
             // resize when exceed pixel limit
             if (getImageSquarePixels(
-                    context.contentResolver, media.uri
+                    context.contentResolver,
+                    media.uri
                 ) > STATUS_IMAGE_PIXEL_SIZE_LIMIT
             ) {
                 return true
@@ -277,7 +284,6 @@ class MediaUploaderImpl(
 }
 
 fun Uri.toFileName(contentResolver: ContentResolver? = null): String {
-
     var result = "unknown"
 
     if (scheme.equals("content") && contentResolver != null) {

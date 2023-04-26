@@ -67,8 +67,9 @@ class ChatsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
             val onClickListener = View.OnClickListener {
                 val pos = adapterPosition
-                if (pos != RecyclerView.NO_POSITION)
+                if (pos != RecyclerView.NO_POSITION) {
                     listener.openChat(pos)
+                }
             }
 
             content.setOnLongClickListener(onLongClickListener)
@@ -81,7 +82,9 @@ class ChatsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     content.setTypeface(null, Typeface.NORMAL)
 
                     chat.lastMessage.content.emojify(
-                        chat.lastMessage.emojis, content, true
+                        chat.lastMessage.emojis,
+                        content,
+                        true
                     )
                 } else if (chat.lastMessage.attachment != null) {
                     content.setTypeface(null, Typeface.ITALIC)
@@ -135,7 +138,9 @@ class ChatsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val avatarRadius =
             itemView.context.resources.getDimensionPixelSize(R.dimen.avatar_radius_48dp)
         loadAvatar(
-            url, avatar, avatarRadius,
+            url,
+            avatar,
+            avatarRadius,
             statusDisplayOptions.animateAvatars
         )
     }
@@ -199,8 +204,10 @@ class ChatsAdapter(
             holder.setup(chatActionListener, (chat as ChatViewData.Placeholder).isLoading)
         } else if (holder is ChatsViewHolder) {
             holder.setupWithChat(
-                chat as ChatViewData.Concrete, chatActionListener,
-                statusDisplayOptions, localUserId,
+                chat as ChatViewData.Concrete,
+                chatActionListener,
+                statusDisplayOptions,
+                localUserId,
                 if (payloads != null && payloads.isNotEmpty()) {
                     payloads[0]
                 } else {
@@ -224,8 +231,9 @@ class ChatsAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (dataSource.getItemAt(position) is ChatViewData.Concrete)
+        if (dataSource.getItemAt(position) is ChatViewData.Concrete) {
             return VIEW_TYPE_CHAT
+        }
 
         return VIEW_TYPE_PLACEHOLDER
     }

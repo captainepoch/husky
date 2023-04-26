@@ -139,8 +139,12 @@ class FiltersActivity : BaseActivity() {
             // Keep the filter, but remove it from this context
             val oldFilter = filters[itemIndex]
             val newFilter = Filter(
-                oldFilter.id, oldFilter.phrase, oldFilter.context.filter { c -> c != context },
-                oldFilter.expiresAt, oldFilter.irreversible, oldFilter.wholeWord
+                oldFilter.id,
+                oldFilter.phrase,
+                oldFilter.context.filter { c -> c != context },
+                oldFilter.expiresAt,
+                oldFilter.irreversible,
+                oldFilter.wholeWord
             )
             updateFilter(newFilter, itemIndex)
         }

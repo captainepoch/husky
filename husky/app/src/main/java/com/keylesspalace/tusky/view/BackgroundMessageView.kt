@@ -23,7 +23,8 @@ class BackgroundMessageView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val binding = ViewBackgroundMessageBinding.inflate(
-        LayoutInflater.from(context), this
+        LayoutInflater.from(context),
+        this
     )
 
     init {

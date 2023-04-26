@@ -195,7 +195,6 @@ class TimelineRepositoryImpl(
         }
 
         Single.fromCallable {
-
             if (statuses.isNotEmpty()) {
                 timelineDao.deleteRange(accountId, statuses.last().id, statuses.first().id)
             }
@@ -223,7 +222,8 @@ class TimelineRepositoryImpl(
             // There may be placeholders which we thought could be from our TL but they are not
             if (statuses.size > 2) {
                 timelineDao.removeAllPlaceholdersBetween(
-                    accountId, statuses.first().id,
+                    accountId,
+                    statuses.first().id,
                     statuses.last().id
                 )
             } else if (placeholderToInsert == null && maxId != null && sinceId != null) {

@@ -89,7 +89,6 @@ object SmartLengthInputFilter : InputFilter {
 
             keep = boundary
         } else {
-
             // If no runway is allowed simply remove whitespaces if present
             while (source[keep - 1].isWhitespace()) {
                 --keep

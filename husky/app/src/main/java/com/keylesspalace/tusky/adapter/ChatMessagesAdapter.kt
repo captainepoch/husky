@@ -229,7 +229,8 @@ class ChatMessagesAdapter(
             holder.setup(chatActionListener, (chat as ChatMessageViewData.Placeholder).isLoading)
         } else if (holder is ChatMessagesViewHolder) {
             holder.setupWithChatMessage(
-                chat as ChatMessageViewData.Concrete, chatActionListener,
+                chat as ChatMessageViewData.Concrete,
+                chatActionListener,
                 if (payloads != null && payloads.isNotEmpty()) payloads[0] else null
             )
         }

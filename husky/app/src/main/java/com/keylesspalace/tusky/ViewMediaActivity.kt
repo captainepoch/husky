@@ -328,7 +328,9 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         sendIntent.putExtra(
             Intent.EXTRA_STREAM,
             FileProvider.getUriForFile(
-                applicationContext, "$APPLICATION_ID.fileprovider", file
+                applicationContext,
+                "$APPLICATION_ID.fileprovider",
+                file
             )
         )
         sendIntent.type = mimeType
@@ -386,8 +388,9 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     isCreating = false
                     invalidateOptionsMenu()
                     binding.progressBarShare.visibility = View.GONE
-                    if (result)
+                    if (result) {
                         shareFile(file, "image/png")
+                    }
                 },
                 { error ->
                     isCreating = false

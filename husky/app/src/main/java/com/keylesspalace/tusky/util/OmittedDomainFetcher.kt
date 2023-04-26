@@ -47,9 +47,11 @@ class OmittedDomainLoader(val accountManager: AccountManager) : ModelLoader<Stri
         height: Int,
         options: Options
     ): ModelLoader.LoadData<InputStream> {
-        val trueUrl = if (accountManager.activeAccount != null)
+        val trueUrl = if (accountManager.activeAccount != null) {
             "https://" + accountManager.activeAccount!!.domain + model
-        else model
+        } else {
+            model
+        }
 
         val timeout = options.get(HttpGlideUrlLoader.TIMEOUT) ?: 100
 

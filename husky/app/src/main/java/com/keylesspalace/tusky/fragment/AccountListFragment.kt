@@ -228,7 +228,6 @@ class AccountListFragment : BaseFragment(), AccountActionListener {
         accountId: String,
         position: Int
     ) {
-
         val callback = object : Callback<Relationship> {
             override fun onResponse(call: Call<Relationship>, response: Response<Relationship>) {
                 if (response.isSuccessful) {

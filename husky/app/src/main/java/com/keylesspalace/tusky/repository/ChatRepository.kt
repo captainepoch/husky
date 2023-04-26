@@ -224,7 +224,6 @@ class ChatRepositoryImpl(
         }
 
         Single.fromCallable {
-
             if (chats.isNotEmpty()) {
                 chatsDao.deleteRange(accountId, chats.last().id, chats.first().id)
             }
@@ -254,7 +253,8 @@ class ChatRepositoryImpl(
             // There may be placeholders which we thought could be from our TL but they are not
             if (chats.size > 2) {
                 chatsDao.removeAllPlaceholdersBetween(
-                    accountId, chats.first().id,
+                    accountId,
+                    chats.first().id,
                     chats.last().id
                 )
             } else if (placeholderToInsert == null && maxId != null && sinceId != null) {
@@ -322,8 +322,9 @@ fun ChatMessageEntity.toChatMessage(gson: Gson): ChatMessage {
 }
 
 fun ChatEntityWithAccount.toChat(gson: Gson): ChatStatus {
-    if (account == null || chat.accountId.isEmpty() || chat.updatedAt == 0L)
+    if (account == null || chat.accountId.isEmpty() || chat.updatedAt == 0L) {
         return Either.Left(Placeholder(chat.chatId))
+    }
 
     return Chat(
         account = this.account?.toAccount(gson) ?: Account(

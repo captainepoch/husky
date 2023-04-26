@@ -148,7 +148,8 @@ class SearchStatusesFragment :
                 Attachment.Type.GIFV, Attachment.Type.VIDEO, Attachment.Type.IMAGE, Attachment.Type.AUDIO -> {
                     val attachments = AttachmentViewData.list(actionable)
                     val intent = ViewMediaActivity.newIntent(
-                        context, attachments,
+                        context,
+                        attachments,
                         attachmentIndex
                     )
                     if (view != null) {
@@ -156,7 +157,8 @@ class SearchStatusesFragment :
                         ViewCompat.setTransitionName(view, url)
                         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             requireActivity(),
-                            view, url
+                            view,
+                            url
                         )
                         startActivity(intent, options.toBundle())
                     } else {
@@ -422,7 +424,8 @@ class SearchStatusesFragment :
 
     private fun showOpenAsDialog(statusUrl: String, dialogTitle: CharSequence) {
         bottomSheetActivity?.showAccountChooserDialog(
-            dialogTitle, false,
+            dialogTitle,
+            false,
             object : AccountSelectionListener {
                 override fun onAccountSelected(account: AccountEntity) {
                     openAsAccount(statusUrl, account)

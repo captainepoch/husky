@@ -74,13 +74,18 @@ class SearchViewModel(
     fun search(query: String) {
         loadedStatuses.clear()
         repoResultStatus.value = statusesRepository.getSearchData(
-            SearchType.Status, query, disposables, initialItems = loadedStatuses
+            SearchType.Status,
+            query,
+            disposables,
+            initialItems = loadedStatuses
         ) {
             it?.statuses?.map { status ->
                 Pair(
                     status,
                     ViewDataUtils.statusToViewData(
-                        status, alwaysShowSensitiveMedia, alwaysOpenSpoiler
+                        status,
+                        alwaysShowSensitiveMedia,
+                        alwaysOpenSpoiler
                     )!!
                 )
             }.orEmpty().apply {
@@ -177,7 +182,9 @@ class SearchViewModel(
         timelineCases.voteInPoll(status.first, choices).observeOn(AndroidSchedulers.mainThread())
             .subscribe({ newPoll -> updateStatus(status, newPoll) }, { t ->
                 Log.d(
-                    TAG, "Failed to vote in poll: ${status.first.id}", t
+                    TAG,
+                    "Failed to vote in poll: ${status.first.id}",
+                    t
                 )
             }).autoDispose()
     }
@@ -185,7 +192,6 @@ class SearchViewModel(
     private fun updateStatus(status: Pair<Status, StatusViewData.Concrete>, newPoll: Poll) {
         val idx = loadedStatuses.indexOf(status)
         if (idx >= 0) {
-
             val newViewData =
                 StatusViewData.Builder(status.second).setPoll(newPoll).createStatusViewData()
             loadedStatuses[idx] = Pair(status.first, newViewData)

@@ -50,7 +50,6 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
     private var oldDraftsButton: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         binding = ActivityDraftsBinding.inflate(layoutInflater)
@@ -114,7 +113,6 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
     }
 
     override fun onOpenDraft(draft: DraftEntity) {
-
         if (draft.inReplyToId != null) {
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
             viewModel.getToot(draft.inReplyToId)

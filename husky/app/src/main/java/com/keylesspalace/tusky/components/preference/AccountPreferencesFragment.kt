@@ -344,7 +344,6 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     val account = response.body()
                     if (response.isSuccessful && account != null) {
-
                         accountManager.activeAccount?.let {
                             it.defaultPostPrivacy = account.source?.privacy
                                 ?: Status.Visibility.PUBLIC

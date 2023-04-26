@@ -66,13 +66,17 @@ class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Adap
                 Attachment.Type.AUDIO -> {
                     val attachments = AttachmentViewData.list(actionable)
                     val intent = ViewMediaActivity.newIntent(
-                        context, attachments, idx
+                        context,
+                        attachments,
+                        idx
                     )
                     if (v != null) {
                         val url = actionable.attachments[idx].url
                         ViewCompat.setTransitionName(v, url)
                         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            requireActivity(), v, url
+                            requireActivity(),
+                            v,
+                            url
                         )
                         startActivity(intent, options.toBundle())
                     } else {
@@ -115,12 +119,15 @@ class ReportStatusesFragment : Fragment(R.layout.fragment_report_statuses), Adap
         )
 
         adapter = StatusesAdapter(
-            statusDisplayOptions, viewModel.statusViewState, this
+            statusDisplayOptions,
+            viewModel.statusViewState,
+            this
         )
 
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
-                requireContext(), DividerItemDecoration.VERTICAL
+                requireContext(),
+                DividerItemDecoration.VERTICAL
             )
         )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

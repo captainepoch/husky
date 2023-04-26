@@ -51,7 +51,6 @@ fun calculatePercent(fraction: Int, totalVotes: Int): Int {
 }
 
 fun buildDescription(title: String, percent: Int, context: Context): Spanned {
-
     return SpannableStringBuilder(
         context.getString(R.string.poll_percent_format, percent)
             .parseAsHtml()

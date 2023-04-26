@@ -50,7 +50,9 @@ class AnnouncementAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementViewHolder {
         return AnnouncementViewHolder(
             ItemAnnouncementBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
             )
         )
     }
@@ -85,7 +87,8 @@ class AnnouncementAdapter(
                     binding.chipGroup.getChildAt(i)
                         ?.takeUnless { it.id == R.id.addReactionChip } as Chip? ?: Chip(
                         ContextThemeWrapper(
-                            binding.root.context, R.style.Widget_MaterialComponents_Chip_Choice
+                            binding.root.context,
+                            R.style.Widget_MaterialComponents_Chip_Choice
                         )
                     ).apply {
                         isCheckable = true

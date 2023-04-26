@@ -82,7 +82,9 @@ class CustomDateTypeAdapter : TypeAdapter<Date>() {
     init {
         dateFormats.add(
             DateFormat.getDateTimeInstance(
-                DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.US
+                DateFormat.DEFAULT,
+                DateFormat.DEFAULT,
+                Locale.US
             )
         )
 

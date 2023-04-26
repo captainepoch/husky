@@ -64,7 +64,8 @@ class EditTextTyped @JvmOverloads constructor(
             EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf("image/*"))
             getEmojiEditTextHelper().onCreateInputConnection(
                 InputConnectionCompat.createWrapper(
-                    connection, editorInfo,
+                    connection,
+                    editorInfo,
                     onCommitContentListener!!
                 ),
                 editorInfo

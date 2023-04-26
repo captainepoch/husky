@@ -141,7 +141,8 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
                     if (statuses.isEmpty()) {
                         binding.statusView.show()
                         binding.statusView.setup(
-                            R.drawable.elephant_friend_empty, R.string.message_empty,
+                            R.drawable.elephant_friend_empty,
+                            R.string.message_empty,
                             null
                         )
                     }
@@ -162,10 +163,12 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
             val body = response.body()
             body?.let { fetched ->
                 Log.d(TAG, "fetched ${fetched.size} statuses")
-                if (fetched.isNotEmpty()) Log.d(
-                    TAG,
-                    "first: ${fetched.first().id}, last: ${fetched.last().id}"
-                )
+                if (fetched.isNotEmpty()) {
+                    Log.d(
+                        TAG,
+                        "first: ${fetched.first().id}, last: ${fetched.last().id}"
+                    )
+                }
 
                 // filter muted statuses if needed
                 val filtered = fetched.filter { !(filterMuted && it.muted) }
@@ -185,7 +188,8 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isSwipeToRefreshEnabled = arguments?.getBoolean(
-            ARG_ENABLE_SWIPE_TO_REFRESH, true
+            ARG_ENABLE_SWIPE_TO_REFRESH,
+            true
         ) == true
         accountId = arguments?.getString(ACCOUNT_ID_ARG)!!
     }
@@ -251,7 +255,8 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         })
 
         filterMuted = PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean(
-            PrefKeys.HIDE_MUTED_USERS, false
+            PrefKeys.HIDE_MUTED_USERS,
+            false
         )
 
         doInitialLoadingIfNeeded()
@@ -266,8 +271,13 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         } else {
             fetchingStatus = FetchingStatus.REFRESHING
             api.accountStatuses(
-                accountId, null, statuses[0].id, null, null,
-                true, null
+                accountId,
+                null,
+                statuses[0].id,
+                null,
+                null,
+                true,
+                null
             )
         }
         currentCall?.enqueue(callback)
@@ -285,13 +295,13 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
             fetchingStatus = FetchingStatus.INITIAL_FETCHING
             currentCall = api.accountStatuses(accountId, null, null, null, null, true, null)
             currentCall?.enqueue(callback)
-        } else if (needToRefresh)
+        } else if (needToRefresh) {
             refresh()
+        }
         needToRefresh = false
     }
 
     private fun viewMedia(items: List<AttachmentViewData>, currentIndex: Int, view: View?) {
-
         when (items[currentIndex].attachment.type) {
             Attachment.Type.IMAGE,
             Attachment.Type.GIFV,
@@ -380,9 +390,10 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
     }
 
     override fun refreshContent() {
-        if (isAdded)
+        if (isAdded) {
             refresh()
-        else
+        } else {
             needToRefresh = true
+        }
     }
 }

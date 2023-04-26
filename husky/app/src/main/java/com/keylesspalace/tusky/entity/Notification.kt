@@ -64,8 +64,9 @@ data class Notification(
             @JvmStatic
             fun byString(s: String): Type {
                 values().forEach {
-                    if (s == it.presentation)
+                    if (s == it.presentation) {
                         return it
+                    }
                 }
                 return UNKNOWN
             }

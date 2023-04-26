@@ -95,7 +95,9 @@ class StatusViewHolder(
         )
 
         statusViewHelper.setupPollReadonly(
-            status.poll.toViewData(), status.emojis, statusDisplayOptions.useAbsoluteTime
+            status.poll.toViewData(),
+            status.emojis,
+            statusDisplayOptions.useAbsoluteTime
         )
         setCreatedAt(status.createdAt)
     }
@@ -111,13 +113,18 @@ class StatusViewHolder(
 
             if (status.spoilerText.isBlank()) {
                 setTextVisible(
-                    true, status.content, status.mentions, status.emojis, adapterHandler
+                    true,
+                    status.content,
+                    status.mentions,
+                    status.emojis,
+                    adapterHandler
                 )
                 binding.statusContentWarningButton.hide()
                 binding.statusContentWarningDescription.hide()
             } else {
                 val emojiSpoiler = status.spoilerText.emojify(
-                    status.emojis, binding.statusContentWarningDescription
+                    status.emojis,
+                    binding.statusContentWarningDescription
                 )
                 binding.statusContentWarningDescription.text = emojiSpoiler
                 binding.statusContentWarningDescription.show()

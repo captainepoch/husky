@@ -42,6 +42,7 @@ abstract class ViewMediaFragment : BaseFragment() {
 
         @JvmStatic
         protected val ARG_ATTACHMENT = "attach"
+
         @JvmStatic
         protected val ARG_AVATAR_URL = "avatarUrl"
 

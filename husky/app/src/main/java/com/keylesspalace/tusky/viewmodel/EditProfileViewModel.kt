@@ -78,7 +78,6 @@ class EditProfileViewModel(
 
     fun obtainProfile() {
         if (profileData.value == null || profileData.value is Error) {
-
             profileData.postValue(Loading())
 
             mastodonApi.accountVerifyCredentials()
@@ -115,7 +114,6 @@ class EditProfileViewModel(
         cacheFile: File,
         imageLiveData: MutableLiveData<Resource<Bitmap>>
     ) {
-
         Single.fromCallable {
             val contentResolver = context.contentResolver
             val sourceBitmap = getSampledBitmap(contentResolver, uri, resizeWidth, resizeHeight)
@@ -153,7 +151,6 @@ class EditProfileViewModel(
         newFields: List<StringField>,
         context: Context
     ) {
-
         if (saveData.value is Loading || profileData.value !is Success) {
             return
         }
@@ -183,7 +180,8 @@ class EditProfileViewModel(
             ).asRequestBody("image/png".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(
                 "avatar",
-                randomAlphanumericString(12), avatarBody
+                randomAlphanumericString(12),
+                avatarBody
             )
         } else {
             null
@@ -274,7 +272,8 @@ class EditProfileViewModel(
                 profileData.value?.data?.source?.copy(note = newNote, fields = newFields)
             val newProfile = profileData.value?.data?.copy(
                 displayName = newDisplayName,
-                locked = newLocked, source = newProfileSource
+                locked = newLocked,
+                source = newProfileSource
             )
 
             profileData.postValue(Success(newProfile))
@@ -299,7 +298,6 @@ class EditProfileViewModel(
     }
 
     private fun saveBitmapToFile(bitmap: Bitmap, file: File): Boolean {
-
         val outputStream: OutputStream
 
         try {

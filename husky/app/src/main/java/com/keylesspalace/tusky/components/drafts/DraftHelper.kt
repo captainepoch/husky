@@ -149,7 +149,9 @@ class DraftHelper(private val context: Context, private val db: AppDatabase) {
         val file = File(folder, filename)
         IOUtils.copyToFile(contentResolver, this, file)
         return FileProvider.getUriForFile(
-            context, BuildConfig.APPLICATION_ID + ".fileprovider", file
+            context,
+            BuildConfig.APPLICATION_ID + ".fileprovider",
+            file
         )
     }
 }

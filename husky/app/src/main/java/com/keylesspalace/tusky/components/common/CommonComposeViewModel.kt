@@ -170,7 +170,11 @@ open class CommonComposeViewModel(
                     throw VideoOrImageException()
                 } else {
                     addMediaToQueue(
-                        type, uri, size, filename ?: "unknown", anonymizeNames
+                        type,
+                        uri,
+                        size,
+                        filename ?: "unknown",
+                        anonymizeNames
                     )
                 }
             }
@@ -191,8 +195,13 @@ open class CommonComposeViewModel(
         anonymizeNames: Boolean
     ): QueuedMedia {
         val mediaItem = QueuedMedia(
-            System.currentTimeMillis(), uri, type, mediaSize, filename,
-            hasNoAttachmentLimits, anonymizeNames
+            System.currentTimeMillis(),
+            uri,
+            type,
+            mediaSize,
+            filename,
+            hasNoAttachmentLimits,
+            anonymizeNames
         )
         val imageLimit = instanceMetadata.value?.videoLimit ?: STATUS_VIDEO_SIZE_LIMIT
         val videoLimit = instanceMetadata.value?.imageLimit ?: STATUS_IMAGE_SIZE_LIMIT
@@ -338,8 +347,9 @@ open class CommonComposeViewModel(
     }
 
     private fun getStickers() {
-        if (!tryFetchStickers)
+        if (!tryFetchStickers) {
             return
+        }
 
         api.getStickers().subscribe({ stickers ->
             if (stickers.isNotEmpty()) {

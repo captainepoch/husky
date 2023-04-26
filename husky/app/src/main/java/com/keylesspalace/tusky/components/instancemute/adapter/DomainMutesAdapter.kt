@@ -13,7 +13,9 @@ class DomainMutesAdapter(private val actionListener: InstanceActionListener) : R
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemMutedDomainBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
 
         return ViewHolder(binding, actionListener)
@@ -25,8 +27,9 @@ class DomainMutesAdapter(private val actionListener: InstanceActionListener) : R
 
     override fun getItemCount(): Int {
         var count = instances.size
-        if (bottomLoading)
+        if (bottomLoading) {
             ++count
+        }
         return count
     }
 

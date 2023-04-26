@@ -50,7 +50,9 @@ data class Account(
     val name: String
         get() = if (displayName.isNullOrEmpty()) {
             localUsername
-        } else displayName
+        } else {
+            displayName
+        }
 
     override fun hashCode(): Int {
         return id.hashCode()
@@ -97,7 +99,8 @@ data class Field(
     val name: String,
     val value: Spanned,
     @JsonAdapter(CustomDateTypeAdapter::class)
-    @SerializedName("verified_at") val verifiedAt: Date? = null
+    @SerializedName("verified_at")
+    val verifiedAt: Date? = null
 )
 
 data class StringField(

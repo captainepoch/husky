@@ -41,7 +41,8 @@ class StatusesRepository(private val mastodonApi: MastodonApi) {
                 enablePlaceholders = false,
                 initialLoadSizeHint = pageSize * 2
             ),
-            fetchExecutor = executor, initialLoadKey = initialStatus
+            fetchExecutor = executor,
+            initialLoadKey = initialStatus
         )
         return BiListing(
             pagedList = livePagedList,

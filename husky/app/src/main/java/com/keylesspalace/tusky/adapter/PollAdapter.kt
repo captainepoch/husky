@@ -65,7 +65,9 @@ class PollAdapter : RecyclerView.Adapter<PollViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PollViewHolder {
         return PollViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_poll, parent, false
+                R.layout.item_poll,
+                parent,
+                false
             )
         )
     }
@@ -75,7 +77,6 @@ class PollAdapter : RecyclerView.Adapter<PollViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: PollViewHolder, position: Int) {
-
         val option = pollOptions[position]
 
         holder.resultTextView.visible(mode == RESULT)

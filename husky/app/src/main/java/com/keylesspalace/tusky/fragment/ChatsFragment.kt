@@ -180,8 +180,10 @@ class ChatsFragment :
             return if (oldItem.deepEquals(newItem)) {
                 // If items are equal - update timestamp only
                 listOf(StatusBaseViewHolder.Key.KEY_CREATED)
-            } else // If items are different - update a whole view holder
+            } else {
+                // If items are different - update a whole view holder
                 null
+            }
         }
     }
 
@@ -416,8 +418,9 @@ class ChatsFragment :
             }
 
             override fun onLoadMore(totalItemsCount: Int, view: RecyclerView) {
-                if (!BROKEN_PAGINATION_IN_BACKEND)
+                if (!BROKEN_PAGINATION_IN_BACKEND) {
                     this@ChatsFragment.onLoadMore()
+                }
             }
         }
         binding.recyclerView.addOnScrollListener(scrollListener)
@@ -507,14 +510,19 @@ class ChatsFragment :
             sendFetchChatsRequest(null, firstOrNull, secondOrNull, FetchEnd.TOP, -1)
         } else {
             sendFetchChatsRequest(
-                null, null, null, FetchEnd.BOTTOM, -1
+                null,
+                null,
+                null,
+                FetchEnd.BOTTOM,
+                -1
             )
         }
     }
 
     private fun onLoadMore() {
-        if (BROKEN_PAGINATION_IN_BACKEND)
+        if (BROKEN_PAGINATION_IN_BACKEND) {
             updateCurrent()
+        }
         return
 
         if (didLoadEverythingBottom || bottomLoading) {
@@ -558,8 +566,9 @@ class ChatsFragment :
                     binding.progressBar.visibility != View.VISIBLE
                 ) &&
             !isSwipeToRefreshEnabled
-        )
+        ) {
             binding.topProgressBar.show()
+        }
         // allow getting old statuses/fallbacks for network only for for bottom loading
         val mode = if (fetchEnd == FetchEnd.BOTTOM) {
             TimelineRequestMode.ANY
@@ -656,7 +665,6 @@ class ChatsFragment :
         fetchEnd: FetchEnd,
         pos: Int
     ) {
-
         // We filled the hole (or reached the end) if the server returned less statuses than we
         // we asked for.
         val fullFetch = chats.size >= LOAD_AT_ONCE
@@ -765,8 +773,11 @@ class ChatsFragment :
                 null
             }
             sendFetchChatsRequest(
-                fromChat.id, toChat.id, maxMinusOne,
-                FetchEnd.MIDDLE, position
+                fromChat.id,
+                toChat.id,
+                maxMinusOne,
+                FetchEnd.MIDDLE,
+                position
             )
 
             val (id) = chats[position].asLeft()
@@ -870,8 +881,9 @@ class ChatsFragment :
     }
 
     override fun openChat(position: Int) {
-        if (position < 0 || position >= chats.size)
+        if (position < 0 || position >= chats.size) {
             return
+        }
 
         val chat = chats[position].asRightOrNull()
         chat?.let {

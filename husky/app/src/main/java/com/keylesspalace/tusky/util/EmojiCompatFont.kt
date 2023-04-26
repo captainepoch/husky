@@ -69,8 +69,9 @@ class EmojiCompatFont(
     }
 
     fun getConfig(context: Context): EmojiCompat.Config {
-        if (this === SYSTEM_DEFAULT)
+        if (this === SYSTEM_DEFAULT) {
             return BundledEmojiCompatConfig(context)
+        }
         return FileEmojiCompatConfig(context, getLatestFontFile(context))
     }
 
@@ -110,7 +111,8 @@ class EmojiCompatFont(
                 Log.d(
                     TAG,
                     String.format(
-                        "Deleted %s successfully: %s", file.absolutePath,
+                        "Deleted %s successfully: %s",
+                        file.absolutePath,
                         file.delete()
                     )
                 )
@@ -328,7 +330,6 @@ class EmojiCompatFont(
         fun compareVersions(versionA: List<Int>, versionB: List<Int>): Int {
             val len = max(versionB.size, versionA.size)
             for (i in 0 until len) {
-
                 val vA = versionA.getOrElse(i) { 0 }
                 val vB = versionB.getOrElse(i) { 0 }
 

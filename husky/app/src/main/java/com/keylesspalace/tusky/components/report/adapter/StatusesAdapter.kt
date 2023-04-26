@@ -48,7 +48,8 @@ class StatusesAdapter(
         return StatusViewHolder(
             ItemReportStatusBinding.inflate(
                 LayoutInflater.from(parent.context),
-                parent, false
+                parent,
+                false
             ),
             statusDisplayOptions,
             statusViewState,

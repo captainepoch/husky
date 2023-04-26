@@ -88,7 +88,6 @@ class AccountViewModel(
 
     private fun obtainRelationship(reload: Boolean = false) {
         if (relationshipData.value == null || reload) {
-
             relationshipData.postValue(Loading())
 
             mastodonApi.relationships(listOf(accountId))
@@ -104,7 +103,6 @@ class AccountViewModel(
 
     private fun obtainIdentityProof(reload: Boolean = false) {
         if (identityProofData.value == null || reload) {
-
             mastodonApi.identityProofs(accountId)
                 .subscribe({ proofs ->
                     identityProofData.postValue(proofs)
@@ -227,14 +225,18 @@ class AccountViewModel(
                 RelationShipAction.MUTE -> relation.copy(muting = true)
                 RelationShipAction.UNMUTE -> relation.copy(muting = false)
                 RelationShipAction.SUBSCRIBE -> {
-                    if (isMastodon)
+                    if (isMastodon) {
                         relation.copy(notifying = true)
-                    else relation.copy(subscribing = true)
+                    } else {
+                        relation.copy(subscribing = true)
+                    }
                 }
                 RelationShipAction.UNSUBSCRIBE -> {
-                    if (isMastodon)
+                    if (isMastodon) {
                         relation.copy(notifying = false)
-                    else relation.copy(subscribing = false)
+                    } else {
+                        relation.copy(subscribing = false)
+                    }
                 }
             }
             relationshipData.postValue(Loading(newRelation))
@@ -255,14 +257,18 @@ class AccountViewModel(
             )
             RelationShipAction.UNMUTE -> mastodonApi.unmuteAccount(accountId)
             RelationShipAction.SUBSCRIBE -> {
-                if (isMastodon)
+                if (isMastodon) {
                     mastodonApi.followAccount(accountId, notify = true)
-                else mastodonApi.subscribeAccount(accountId)
+                } else {
+                    mastodonApi.subscribeAccount(accountId)
+                }
             }
             RelationShipAction.UNSUBSCRIBE -> {
-                if (isMastodon)
+                if (isMastodon) {
                     mastodonApi.followAccount(accountId, notify = false)
-                else mastodonApi.unsubscribeAccount(accountId)
+                } else {
+                    mastodonApi.unsubscribeAccount(accountId)
+                }
             }
         }.subscribe(
             { relationship ->
@@ -313,13 +319,15 @@ class AccountViewModel(
     }
 
     private fun reload(isReload: Boolean = false) {
-        if (isDataLoading)
+        if (isDataLoading) {
             return
+        }
         accountId.let {
             obtainAccount(isReload)
             obtainIdentityProof()
-            if (!isSelf)
+            if (!isSelf) {
                 obtainRelationship(isReload)
+            }
         }
     }
 
