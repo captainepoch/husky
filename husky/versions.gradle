@@ -7,7 +7,7 @@ def versions = [:]
 def gradle = [:]
 gradle.androidGradlePlugin = "7.4.2"
 gradle.gradlePluginVersions = "0.46.0"
-gradle.ktlintGradle = "11.0.0"
+gradle.ktlintGradle = "11.3.2"
 versions.gradle = gradle
 
 versions.androidImageCropper = "2.8.0"
