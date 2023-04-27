@@ -3,7 +3,7 @@ when:
 
 pipeline:
   style:
-    image: ghcr.io/alvr/alpine-android:android-33-jdk11
+    image: ghcr.io/alvr/alpine-android:android-33-jdk17
     group: check
     commands:
       - cd husky
