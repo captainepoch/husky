@@ -8,6 +8,8 @@ plugins {
 }
 
 android {
+    namespace "com.keylesspalace.tusky"
+
     compileSdkVersion buildVersions.compileSdk
     buildToolsVersion buildVersions.buildTools
 
