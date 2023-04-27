@@ -1,12 +1,9 @@
 depends_on:
   - check_style
 
-run_on: [ success ]
-skip_clone: true
-
 pipeline:
   tests:
     image: ghcr.io/alvr/alpine-android:android-33-jdk17
-    group: check
     commands:
+      - cd husky
       - ./gradlew testHuskyStableReleaseUnitTest
