@@ -1,6 +1,6 @@
 package com.keylesspalace.tusky.util
 
-@Deprecated("Use ApiResponse")
+@Deprecated("Use Either<Left, Right>")
 sealed class Resource<T>(open val data: T?)
 
 class Loading<T> (override val data: T? = null) : Resource<T>(data)
