@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.keylesspalace.tusky.core.extensions.formatDate
 import com.keylesspalace.tusky.databinding.ItemScheduledTootBinding
 import com.keylesspalace.tusky.entity.ScheduledStatus
 
@@ -58,6 +59,7 @@ class ScheduledTootAdapter(
             binding.edit.isEnabled = true
             binding.delete.isEnabled = true
             binding.text.text = item.params.text
+            binding.date.text = item.scheduledAt.formatDate()
 
             binding.edit.setOnClickListener { v: View ->
                 v.isEnabled = false

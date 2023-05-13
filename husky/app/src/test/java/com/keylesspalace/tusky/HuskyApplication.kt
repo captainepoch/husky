@@ -16,7 +16,7 @@
 package com.keylesspalace.tusky
 
 import android.app.Application
-import androidx.emoji.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat
 import de.c1710.filemojicompat.FileEmojiCompatConfig
 
 // Override HuskyApplication for Robolectric tests, only initialize the necessary stuff.
@@ -24,6 +24,6 @@ class HuskyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        EmojiCompat.init(FileEmojiCompatConfig(this, ""))
+        EmojiCompat.init(FileEmojiCompatConfig.init(this, ""))
     }
 }
