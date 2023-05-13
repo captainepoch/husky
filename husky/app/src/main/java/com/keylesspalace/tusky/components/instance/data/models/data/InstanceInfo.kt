@@ -1,4 +1,4 @@
-package com.keylesspalace.tusky.components.instance
+package com.keylesspalace.tusky.components.instance.data.models.data
 
 import com.keylesspalace.tusky.core.utils.InstanceConstants
 

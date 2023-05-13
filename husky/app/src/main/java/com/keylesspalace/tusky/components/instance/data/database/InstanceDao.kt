@@ -13,12 +13,13 @@
  * You should have received a copy of the GNU General Public License along with Tusky; if not,
  * see <http://www.gnu.org/licenses>. */
 
-package com.keylesspalace.tusky.components.instance
+package com.keylesspalace.tusky.components.instance.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
 import io.reactivex.Single
 
 @Dao
