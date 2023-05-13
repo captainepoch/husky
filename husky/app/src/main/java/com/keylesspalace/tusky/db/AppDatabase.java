@@ -22,8 +22,8 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.keylesspalace.tusky.TabDataKt;
 import com.keylesspalace.tusky.components.conversation.ConversationEntity;
-import com.keylesspalace.tusky.components.instance.InstanceDao;
-import com.keylesspalace.tusky.components.instance.InstanceEntity;
+import com.keylesspalace.tusky.components.instance.data.database.InstanceDao;
+import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity;
 
 /**
  * Database management.

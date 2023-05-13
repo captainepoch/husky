@@ -45,7 +45,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.adapter.AccountFieldEditAdapter
 import com.keylesspalace.tusky.adapter.MutableStringPair
-import com.keylesspalace.tusky.components.instance.InstanceInfo
+import com.keylesspalace.tusky.components.instance.data.models.data.InstanceInfo
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.extensions.viewObserve
 import com.keylesspalace.tusky.databinding.ActivityEditProfileBinding

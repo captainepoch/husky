@@ -1,6 +1,6 @@
 package com.keylesspalace.tusky.network
 
-import com.keylesspalace.tusky.components.instance.Instance
+import com.keylesspalace.tusky.components.instance.data.models.data.Instance
 import com.keylesspalace.tusky.entity.AccessToken
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Announcement

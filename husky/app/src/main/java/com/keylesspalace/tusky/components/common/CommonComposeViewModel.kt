@@ -21,7 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
-import com.keylesspalace.tusky.components.instance.InstanceEntity
+import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
 import com.keylesspalace.tusky.components.search.SearchType
 import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.core.utils.InstanceConstants

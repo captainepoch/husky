@@ -27,8 +27,8 @@ import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_HEIGHT
 import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
-import com.keylesspalace.tusky.components.instance.InstanceInfo
-import com.keylesspalace.tusky.components.instance.InstanceRepository
+import com.keylesspalace.tusky.components.instance.data.models.data.InstanceInfo
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository
 import com.keylesspalace.tusky.components.profile.domain.EditProfileRepository
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.core.functional.Either.Left
