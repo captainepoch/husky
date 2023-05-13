@@ -1,7 +1,8 @@
 package com.keylesspalace.tusky.di
 
 import com.keylesspalace.tusky.components.conversation.ConversationsRepository
-import com.keylesspalace.tusky.components.instance.InstanceRepository
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepositoryImp
 import com.keylesspalace.tusky.components.profile.domain.EditProfileRepository
 import com.keylesspalace.tusky.components.report.adapter.StatusesRepository
 import com.keylesspalace.tusky.db.AppDatabase
@@ -33,7 +34,7 @@ val repositoryModule = module {
         EditProfileRepository(get())
     }
 
-    single {
-        InstanceRepository(get(), get(), get())
-    }
+    factory {
+        InstanceRepositoryImp(get(), get(), get())
+    } bind InstanceRepository::class
 }
