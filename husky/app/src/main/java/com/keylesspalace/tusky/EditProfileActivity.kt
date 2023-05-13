@@ -167,16 +167,12 @@ class EditProfileActivity : BaseActivity() {
                         binding.noteEditText.setText(me.source?.note)
                         binding.lockedCheckBox.isChecked = me.locked
 
-                        me.source?.fields?.forEach {
-                            Timber.d("F ${it.name} D ${it.value}")
-                        }
-
                         accountFieldEditAdapter.submitList(
                             me.source?.fields?.map {
                                 MutableStringPair(it.name, it.value)
                             } ?: emptyList()
                         )
-                        // accountFieldEditAdapter.setFields()
+
                         binding.addFieldButton.isEnabled =
                             (
                             me.source?.fields?.size
