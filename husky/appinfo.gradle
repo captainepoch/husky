@@ -17,7 +17,7 @@ def beta = [:]
 beta.suffix = "beta"
 beta.applicationId = "su.xash.husky.${beta.suffix}"
 
-beta.versionSuffix = "2"
+beta.versionSuffix = "2.1"
 buildVersions.beta = beta
 
 // Dev version info
