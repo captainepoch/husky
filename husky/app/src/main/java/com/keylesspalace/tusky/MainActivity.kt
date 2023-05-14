@@ -286,10 +286,10 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     is PreferenceChangedEvent -> {
                         when (event.preferenceKey) {
                             PrefKeys.LIVE_NOTIFICATIONS -> {
-                                initPullNotifications()
+                                //initPullNotifications()
                             }
                             PrefKeys.HIDE_LIVE_NOTIFICATION_DESCRIPTION -> {
-                                initPullNotifications(rebootPush = true)
+                                //initPullNotifications(rebootPush = true)
                             }
                         }
                     }
@@ -325,7 +325,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     Timber.d("Permissions are granted")
-                    initPullNotifications()
+                    //initPullNotifications()
                 }
             }
             else -> {
@@ -783,7 +783,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     conversationRepository.deleteCacheForAccount(activeAccount.id)
                     removeShortcut(this, activeAccount)
                     val newAccount = accountManager.value.logActiveAccountOut()
-                    initPullNotifications()
+                    //initPullNotifications()
                     val intent = if (newAccount == null) {
                         LoginActivity.getIntent(this, false)
                     } else {
@@ -824,7 +824,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
             this
         )
 
-        initPullNotifications()
+        //initPullNotifications()
 
         // Show follow requests in the menu, if this is a locked account.
         if (me.locked && binding.mainDrawer.getDrawerItem(DRAWER_ITEM_FOLLOW_REQUESTS) == null) {

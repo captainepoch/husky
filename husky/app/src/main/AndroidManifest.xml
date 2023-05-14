@@ -202,9 +202,9 @@
 
         <activity android:name=".components.drafts.DraftsActivity" />
 
-        <receiver
+        <!--<receiver
             android:name=".receiver.NotificationClearBroadcastReceiver"
-            android:exported="false" />
+            android:exported="false" />-->
 
         <receiver
             android:name=".receiver.SendStatusBroadcastReceiver"
@@ -225,7 +225,7 @@
 
         <service android:name=".service.SendTootService" />
 
-        <service android:name=".service.StreamingService" />
+        <!--<service android:name=".service.StreamingService" />-->
 
         <provider
             android:name="androidx.core.content.FileProvider"
