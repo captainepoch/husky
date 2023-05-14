@@ -9,7 +9,7 @@ buildVersions.jdkVersion = "${buildVersions.javaCompat}"
 
 buildVersions.encoding = "UTF-8"
 
-buildVersions.versionCode = 196
+buildVersions.versionCode = 197
 buildVersions.versionName = "1.5.0"
 
 // Beta version info
