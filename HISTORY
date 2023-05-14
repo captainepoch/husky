@@ -1,3 +1,19 @@
+Husky 1.5.0-beta2 - 2023-05-14
+  - Fix: Rotating the screen makes reaction emojis in the selector to disappear.
+  - Fix: Lists not showing.
+  - Gradle: Enabled R8 Full Mode.
+  - Feature: Show the date in the Schedulede posts list.
+  - Feature: Instance capabilities.
+
+    The app has now the ability to be set up with some instance settings (i.e.
+    the number of fields of the profile). This will make Husky to behave like
+    PleromaFE in some cases.
+
+    For now the only part of the application that has this implemented is the
+    "Edit Profile" view. More parts of the app to come.
+
+  - Update dependencies.
+
 Husky 1.5.0-beta1.1 - 2023-02-22
   - Fix: Fix crash when accessing to DMs view.
 
