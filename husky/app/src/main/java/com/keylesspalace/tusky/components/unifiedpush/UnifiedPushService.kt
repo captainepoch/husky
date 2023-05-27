@@ -35,6 +35,7 @@ import com.keylesspalace.tusky.core.crypto.CryptoECKeyPair
 import com.keylesspalace.tusky.core.crypto.CryptoUtils
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
+import java.security.Security
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -43,7 +44,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.security.Security
 
 class UnifiedPushService : Service(), KoinComponent {
 
@@ -78,7 +78,7 @@ class UnifiedPushService : Service(), KoinComponent {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (!serviceStarted) {
+        if(!serviceStarted) {
             Timber.d("Service not created")
             createServiceNotification()
             Timber.d("Create push notification")
@@ -86,9 +86,14 @@ class UnifiedPushService : Service(), KoinComponent {
             modifySecurityProvider(true)
             modifySecurityProvider()
 
-            Timber.d("Subscribing to push notifications")
-            subscribeToPush(generateKeyPair(), getAuth(), intent?.getStringExtra(ENDPOINT))
-            Timber.d("Subscribed to push notifications")
+            val endpoint = intent?.getStringExtra(ENDPOINT)
+            if(endpoint.isNullOrEmpty() || endpoint.isBlank()) {
+                stopSelf()
+            } else {
+                Timber.d("Subscribing to push notifications")
+                subscribeToPush(generateKeyPair(), getAuth(), endpoint)
+                Timber.d("Subscribed to push notifications")
+            }
 
             serviceStarted = true
         }
@@ -97,7 +102,7 @@ class UnifiedPushService : Service(), KoinComponent {
     }
 
     private fun createServiceNotification() {
-        if (VERSION.SDK_INT >= VERSION_CODES.O) {
+        if(VERSION.SDK_INT >= VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.unifiedpush_service_foreground_channel),
@@ -117,7 +122,7 @@ class UnifiedPushService : Service(), KoinComponent {
     }
 
     private fun modifySecurityProvider(delete: Boolean = false) {
-        if (delete) {
+        if(delete) {
             Timber.d("Deleting the security provider")
 
             Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
@@ -138,34 +143,43 @@ class UnifiedPushService : Service(), KoinComponent {
         return CryptoUtils.getSecureRandomStringBase64(16)
     }
 
-    private fun subscribeToPush(keyPair: CryptoECKeyPair, auth: String, endpoint: String?) {
+    private fun subscribeToPush(keyPair: CryptoECKeyPair, auth: String, endpoint: String) {
         scope.launch {
             Timber.d("Subscribing to the push notification service")
 
-            val activeAccount = accountManager.activeAccount
-            val response = api.subscribePushNotifications(
-                "Bearer ${activeAccount?.accessToken}",
-                activeAccount?.domain,
-                endpoint,
-                keyPair.pubKey,
-                auth,
-                UnifiedPushHelper.buildPushDataMap(notificationManager, activeAccount)
-            )
+            accountManager.activeAccount?.let { account ->
+                val response = api.subscribePushNotifications(
+                    "Bearer ${account.accessToken}",
+                    account.domain,
+                    endpoint,
+                    keyPair.pubKey,
+                    auth,
+                    UnifiedPushHelper.buildPushDataMap(notificationManager, account)
+                )
 
-            if (response.body() != null) {
-                Timber.d("Service responded with a non-null body")
+                if(response.body() != null) {
+                    Timber.d("UnifiedPush registration for ${account.username}")
 
-                // TODO: See what to do with the correct response
+                    account.unifiedPushUrl = endpoint
+                    accountManager.saveAccount(account)
 
-                stopSelf()
-                return@launch
-            }
+                    // TODO: Update push notification
 
-            if (response.errorBody() != null) {
-                Timber.e("Error in the response [${response.raw().message}]")
+                    stopSelf()
+                    return@launch
+                }
 
-                // TODO: See what to do with an error
+                if(response.errorBody() != null) {
+                    Timber.e("Error in the response [${response.raw().message}]")
 
+                    // TODO: See what to do with an error
+
+                    stopSelf()
+                    return@launch
+                }
+
+                null
+            } ?: runCatching {
                 stopSelf()
                 return@launch
             }
@@ -182,7 +196,7 @@ class UnifiedPushService : Service(), KoinComponent {
             val intent = Intent(context, UnifiedPushService::class.java)
             intent.putExtra(ENDPOINT, endpoint)
 
-            if (VERSION.SDK_INT >= VERSION_CODES.O) {
+            if(VERSION.SDK_INT >= VERSION_CODES.O) {
                 context.startForegroundService(intent)
             } else {
                 context.startService(intent)
