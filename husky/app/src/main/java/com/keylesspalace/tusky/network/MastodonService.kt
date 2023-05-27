@@ -1,6 +1,7 @@
 package com.keylesspalace.tusky.network
 
 import com.keylesspalace.tusky.components.instance.data.models.data.Instance
+import com.keylesspalace.tusky.components.unifiedpush.PushNotificationResponse
 import com.keylesspalace.tusky.entity.AccessToken
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Announcement
@@ -667,5 +668,23 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
 
     override fun updateAccountNote(accountId: String, note: String): Single<Relationship> {
         return api.updateAccountNote(accountId, note)
+    }
+
+    override suspend fun subscribePushNotifications(
+        authToken: String?,
+        instanceDomain: String?,
+        unifiedPushEndpoint: String?,
+        p256dhPubKey: String?,
+        authKey: String?,
+        pushData: Map<String, Boolean>?
+    ): Response<PushNotificationResponse> {
+        return api.subscribePushNotifications(
+            authToken,
+            instanceDomain,
+            unifiedPushEndpoint,
+            p256dhPubKey,
+            authKey,
+            pushData
+        )
     }
 }

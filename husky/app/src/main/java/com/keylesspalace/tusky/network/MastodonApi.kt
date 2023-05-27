@@ -21,6 +21,7 @@
 package com.keylesspalace.tusky.network
 
 import com.keylesspalace.tusky.components.instance.data.models.data.Instance
+import com.keylesspalace.tusky.components.unifiedpush.PushNotificationResponse
 import com.keylesspalace.tusky.entity.AccessToken
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Announcement
@@ -58,6 +59,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -767,4 +769,15 @@ interface MastodonApi {
         @Path("id") accountId: String,
         @Field("comment") note: String
     ): Single<Relationship>
+
+    @FormUrlEncoded
+    @POST("api/v1/push/subscription")
+    suspend fun subscribePushNotifications(
+        @Header("Authorization") authToken: String?,
+        @Header(DOMAIN_HEADER) instanceDomain: String?,
+        @Field("subscription[endpoint]") unifiedPushEndpoint: String?,
+        @Field("subscription[keys][p256dh]") p256dhPubKey: String?,
+        @Field("subscription[keys][auth]") authKey: String?,
+        @FieldMap pushData: Map<String, Boolean>?
+    ): Response<PushNotificationResponse>
 }
