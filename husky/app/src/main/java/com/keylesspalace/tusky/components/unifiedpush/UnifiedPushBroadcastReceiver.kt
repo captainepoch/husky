@@ -20,6 +20,8 @@
 package com.keylesspalace.tusky.components.unifiedpush
 
 import android.content.Context
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 
@@ -28,6 +30,10 @@ class UnifiedPushBroadcastReceiver : MessagingReceiver() {
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         super.onMessage(context, message, instance)
         Timber.d("New message for $instance")
+
+        WorkManager.getInstance(context).enqueue(
+            OneTimeWorkRequest.from(NotificationWorker::class.java)
+        )
     }
 
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
