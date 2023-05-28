@@ -143,7 +143,16 @@ class CustomDateTypeAdapter : TypeAdapter<Date>() {
         }
 
         return runCatching {
-            ISO8601Utils.parse(s, ParsePosition(0))
+            // NASTY Hack to add the Z to the Date (Timezone)
+            Timber.d("Date to parse: $s")
+            val newDate = if (s?.get(s.length - 1)?.lowercase() != "z") {
+                Timber.w("Timezone needed into the Date")
+
+                "${s}Z"
+            } else {
+                s
+            }
+            ISO8601Utils.parse(newDate, ParsePosition(0))
         }.getOrElse { e ->
             Timber.e("Failed parsing '$s' as Date; at path ${reader?.path}", e)
 
