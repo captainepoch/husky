@@ -8,6 +8,7 @@ import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.isLessThan
 
+@Deprecated("Newer one focused in UnifiedPush")
 class NotificationFetcher(
     private val mastodonApi: MastodonApi,
     private val accountManager: AccountManager,
