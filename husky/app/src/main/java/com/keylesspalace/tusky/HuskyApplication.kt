@@ -35,6 +35,7 @@ import com.keylesspalace.tusky.core.utils.ApplicationUtils
 import com.keylesspalace.tusky.di.appComponentModule
 import com.keylesspalace.tusky.di.appModule
 import com.keylesspalace.tusky.di.networkModule
+import com.keylesspalace.tusky.di.notificationsModule
 import com.keylesspalace.tusky.di.repositoryModule
 import com.keylesspalace.tusky.di.serviceModule
 import com.keylesspalace.tusky.di.useCaseModule
@@ -116,6 +117,7 @@ class HuskyApplication : Application() {
                     appComponentModule,
                     appModule,
                     networkModule,
+                    notificationsModule,
                     repositoryModule,
                     serviceModule,
                     useCaseModule,

@@ -24,13 +24,8 @@ import android.content.SharedPreferences
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import androidx.room.Room
-import androidx.work.WorkerFactory
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.EventHubImpl
-import com.keylesspalace.tusky.components.notifications.NotificationFetcher
-import com.keylesspalace.tusky.components.notifications.NotificationWorkerFactory
-import com.keylesspalace.tusky.components.notifications.Notifier
-import com.keylesspalace.tusky.components.notifications.SystemNotifier
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.util.LocaleManager
 import org.koin.dsl.bind
@@ -48,14 +43,6 @@ val appModule = module {
     single {
         LocaleManager()
     }
-
-    single {
-        NotificationFetcher(get(), get(), get())
-    }
-
-    single {
-        NotificationWorkerFactory(get())
-    } bind WorkerFactory::class
 
     single {
         PreferenceManager.getDefaultSharedPreferences(get())
@@ -96,8 +83,4 @@ val appModule = module {
                 AppDatabase.MIGRATION_29_30
             ).build()
     } bind AppDatabase::class
-
-    single {
-        SystemNotifier(get())
-    } bind Notifier::class
 }
