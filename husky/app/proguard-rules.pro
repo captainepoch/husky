@@ -101,6 +101,7 @@ public void printStackTrace();
 
 # Because new AGP and Gradle
 # From: https://github.com/google/gson/issues/2379#issuecomment-1564517629
+# Thanks to SekthDroid for pointing me to the path for fixing this
 -if class *
 -keepclasseswithmembers class <1> {
     <init>(...);
