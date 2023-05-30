@@ -14,12 +14,14 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+
 # keep setters in Views so that animations can still work.
 # see http://proguard.sourceforge.net/manual/examples.html#beans
 -keepclassmembers public class * extends android.view.View {
     void set*(***);
     *** get*();
 }
+
 # We want to keep methods in Activity that could be used in the XML attribute onClick
 -keepclassmembers class * extends android.app.Activity {
     public void *(android.view.View);
@@ -90,8 +92,17 @@ public void printStackTrace();
 # Retain generic signatures of TypeToken and its subclasses with R8 version 3.0 and higher.
 -keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
 -keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+
 # Retain abstract classes and interfaces from Gson
 -keep class * extends com.google.gson.TypeAdapter
 -keep class * implements com.google.gson.TypeAdapterFactory
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
+
+# Because new AGP and Gradle
+# From: https://github.com/google/gson/issues/2379#issuecomment-1564517629
+-if class *
+-keepclasseswithmembers class <1> {
+    <init>(...);
+    @com.google.gson.annotations.SerializedName <fields>;
+}
