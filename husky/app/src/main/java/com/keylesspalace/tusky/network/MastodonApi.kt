@@ -154,6 +154,7 @@ interface MastodonApi {
         @Query("with_muted") withMuted: Boolean?
     ): Call<List<Notification>>
 
+    @Deprecated("New API with Coroutines")
     @GET("api/v1/markers")
     fun markersWithAuth(
         @Header("Authorization") auth: String,
@@ -161,6 +162,14 @@ interface MastodonApi {
         @Query("timeline[]") timelines: List<String>
     ): Single<Map<String, Marker>>
 
+    @GET("api/v1/markers")
+    suspend fun markersWithAuthCoroutine(
+        @Header("Authorization") auth: String,
+        @Header(DOMAIN_HEADER) domain: String,
+        @Query("timeline[]") timelines: List<String>
+    ): Response<Map<String, Marker>>
+
+    @Deprecated("New API with Coroutines")
     @GET("api/v1/notifications?with_muted=true")
     fun notificationsWithAuth(
         @Header("Authorization") auth: String,
@@ -168,6 +177,13 @@ interface MastodonApi {
         @Query("since_id") sinceId: String?,
         @Query("include_types[]") includeTypes: List<String>?
     ): Single<List<Notification>>
+
+    @GET("api/v1/notifications")
+    suspend fun notificationsWithAuthCoroutine(
+        @Header("Authorization") auth: String,
+        @Header(DOMAIN_HEADER) domain: String,
+        @Query("min_id") minId: String?
+    ): Response<List<Notification>>
 
     @POST("api/v1/notifications/clear")
     fun clearNotifications(): Call<ResponseBody>
