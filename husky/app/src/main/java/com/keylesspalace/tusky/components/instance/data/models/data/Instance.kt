@@ -1,17 +1,22 @@
-/* Copyright 2018 Levi Bard
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2021  The Husky Developers
+ * Copyright (C) 2018  Levi Bard
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.instance.data.models.data
 
@@ -19,15 +24,15 @@ import com.google.gson.annotations.SerializedName
 import com.keylesspalace.tusky.entity.Account
 
 data class Instance(
-    val uri: String,
-    val title: String,
-    val description: String,
-    val email: String,
-    val version: String,
-    val urls: Map<String, String>,
-    val stats: Map<String, Int>?,
-    val thumbnail: String?,
-    val languages: List<String>,
+    @SerializedName("uri") val uri: String,
+    @SerializedName("title") val title: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("version") val version: String,
+    @SerializedName("urls") val urls: Map<String, String>,
+    @SerializedName("stats") val stats: Map<String, Int>?,
+    @SerializedName("thumbnail") val thumbnail: String?,
+    @SerializedName("languages") val languages: List<String>,
     @SerializedName("contact_account") val contactAccount: Account,
     @SerializedName("max_toot_chars") val maxTootChars: Int?,
     @SerializedName("max_bio_chars") val maxBioChars: Int?,
@@ -37,7 +42,7 @@ data class Instance(
     @SerializedName("banner_upload_limit") val bannerUploadLimit: Long?,
     @SerializedName("description_limit") val descriptionLimit: Int?,
     @SerializedName("upload_limit") val uploadLimit: Long?,
-    val pleroma: InstancePleroma?
+    @SerializedName("pleroma") val pleroma: InstancePleroma?
 ) {
     override fun hashCode(): Int {
         return uri.hashCode()

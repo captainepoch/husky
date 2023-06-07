@@ -1,5 +1,7 @@
 package com.keylesspalace.tusky.components.instance.data.models.data
 
+import com.google.gson.annotations.SerializedName
+
 data class InstancePleroma(
-    val metadata: InstancePleromaMetadata
+    @SerializedName("metadata") val metadata: InstancePleromaMetadata
 )
