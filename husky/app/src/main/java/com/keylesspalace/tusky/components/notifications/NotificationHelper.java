@@ -22,7 +22,6 @@
 
 package com.keylesspalace.tusky.components.notifications;
 
-import static com.keylesspalace.tusky.viewdata.PollViewDataKt.buildDescription;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
@@ -53,6 +52,7 @@ import com.bumptech.glide.request.FutureTarget;
 import com.keylesspalace.tusky.BuildConfig;
 import com.keylesspalace.tusky.MainActivity;
 import com.keylesspalace.tusky.R;
+import com.keylesspalace.tusky.components.unifiedpush.NotificationWorker;
 import com.keylesspalace.tusky.db.AccountEntity;
 import com.keylesspalace.tusky.db.AccountManager;
 import com.keylesspalace.tusky.entity.Notification;
@@ -63,6 +63,7 @@ import com.keylesspalace.tusky.receiver.NotificationClearBroadcastReceiver;
 import com.keylesspalace.tusky.receiver.SendStatusBroadcastReceiver;
 import com.keylesspalace.tusky.util.StringUtils;
 import com.keylesspalace.tusky.viewdata.PollViewDataKt;
+import static com.keylesspalace.tusky.viewdata.PollViewDataKt.buildDescription;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
