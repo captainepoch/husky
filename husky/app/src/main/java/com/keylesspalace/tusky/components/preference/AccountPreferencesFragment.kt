@@ -255,10 +255,9 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     setTitle(string.pref_title_live_notifications)
                     setSummary(string.pref_summary_live_notifications)
                     isSingleLineTitle = false
-                    isChecked = accountManager.activeAccount
-                        ?.notificationsStreamingEnabled ?: false
+                    isChecked = accountManager.hasNotificationsEnabled()
                     setOnPreferenceChangeListener { _, newValue ->
-                        updateAccount { it.notificationsStreamingEnabled = newValue as Boolean }
+                        updateAccount { it.notificationsEnabled = newValue as Boolean }
                         eventHub.dispatch(PreferenceChangedEvent(key))
                         true
                     }
