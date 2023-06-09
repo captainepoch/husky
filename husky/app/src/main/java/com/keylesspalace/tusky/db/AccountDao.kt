@@ -23,6 +23,7 @@ import androidx.room.Query
 
 @Dao
 interface AccountDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(account: AccountEntity): Long
 

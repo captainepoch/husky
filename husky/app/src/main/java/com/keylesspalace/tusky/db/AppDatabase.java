@@ -429,16 +429,20 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `maxBioLength` INTEGER DEFAULT -1");
-            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `maxBioFields` INTEGER DEFAULT -1");
+            database.execSQL(
+                "ALTER TABLE `InstanceEntity` ADD COLUMN `maxBioLength` INTEGER DEFAULT -1");
+            database.execSQL(
+                "ALTER TABLE `InstanceEntity` ADD COLUMN `maxBioFields` INTEGER DEFAULT -1");
         }
     };
 
     public static final Migration MIGRATION_29_30 = new Migration(29, 30) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE `AccountEntity` ADD COLUMN `oauthScopes`  TEXT NOT NULL DEFAULT ''");
-            database.execSQL("ALTER TABLE `AccountEntity` ADD COLUMN `unifiedPushUrl`  TEXT NOT NULL DEFAULT ''");
+            database.execSQL(
+                "ALTER TABLE `AccountEntity` ADD COLUMN `oauthScopes`  TEXT NOT NULL DEFAULT ''");
+            database.execSQL(
+                "ALTER TABLE `AccountEntity` ADD COLUMN `unifiedPushUrl`  TEXT NOT NULL DEFAULT ''");
         }
     };
 }
