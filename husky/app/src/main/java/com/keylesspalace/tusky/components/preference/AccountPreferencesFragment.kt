@@ -251,7 +251,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
             preferenceCategory(string.pref_title_other) {
                 switchPreference {
-                    key = PrefKeys.LIVE_NOTIFICATIONS
+                    key = accountManager.pushNotificationPrefKey()
                     setTitle(string.pref_title_live_notifications)
                     setSummary(string.pref_summary_live_notifications)
                     isSingleLineTitle = false

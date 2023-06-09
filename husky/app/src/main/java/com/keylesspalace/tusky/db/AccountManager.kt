@@ -18,6 +18,7 @@ package com.keylesspalace.tusky.db
 import android.util.Log
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
+import com.keylesspalace.tusky.settings.PrefKeys
 import java.util.Locale
 
 /**
@@ -75,7 +76,7 @@ class AccountManager(db: AppDatabase) {
      * @param account the account to save
      */
     fun saveAccount(account: AccountEntity) {
-        if (account.id != 0L) {
+        if(account.id != 0L) {
             Log.d(TAG, "saveAccount: saving account with id " + account.id)
             accountDao.insertOrReplace(account)
         }
@@ -86,13 +87,13 @@ class AccountManager(db: AppDatabase) {
      * @return the new active account, or null if no other account was found
      */
     fun logActiveAccountOut(): AccountEntity? {
-        if (activeAccount == null) {
+        if(activeAccount == null) {
             return null
         } else {
             accounts.remove(activeAccount!!)
             accountDao.delete(activeAccount!!)
 
-            if (accounts.size > 0) {
+            if(accounts.size > 0) {
                 accounts[0].isActive = true
                 activeAccount = accounts[0]
                 Log.d(TAG, "logActiveAccountOut: saving account with id " + accounts[0].id)
@@ -124,7 +125,7 @@ class AccountManager(db: AppDatabase) {
 
             val accountIndex = accounts.indexOf(it)
 
-            if (accountIndex != -1) {
+            if(accountIndex != -1) {
                 // in case the user was already logged in with this account, remove the
                 // old information
                 accounts.removeAt(accountIndex)
@@ -177,12 +178,29 @@ class AccountManager(db: AppDatabase) {
     /**
      * @return true if at least one account has notifications enabled
      */
+    @Deprecated(
+        "Notifications will be enabled individually",
+        ReplaceWith("hasNotificationsEnabled()")
+    )
     fun areNotificationsEnabled(): Boolean {
-        return accounts.any { it.notificationsEnabled }
+        return accounts.any {
+            it.notificationsEnabled
+        }
     }
 
-    fun areNotificationsStreamingEnabled(): Boolean {
-        return accounts.any { it.notificationsStreamingEnabled }
+    /**
+     * Get the correct key to save the preference for push notifications per account
+     *
+     * @return Key + username and instance, key if account is null
+     */
+    fun pushNotificationPrefKey(): String {
+        return activeAccount?.let { account ->
+            "${PrefKeys.LIVE_NOTIFICATIONS}+${account.fullName}"
+        } ?: PrefKeys.LIVE_NOTIFICATIONS
+    }
+
+    fun hasNotificationsEnabled(): Boolean {
+        return activeAccount?.notificationsEnabled ?: false
     }
 
     /**
