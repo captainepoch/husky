@@ -18,7 +18,9 @@ package com.keylesspalace.tusky.db
 import android.text.Spanned
 import androidx.core.text.parseAsHtml
 import androidx.core.text.toHtml
+import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.keylesspalace.tusky.TabData
@@ -34,12 +36,13 @@ import com.keylesspalace.tusky.util.trimTrailingWhitespace
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.Date
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class Converters {
+@ProvidedTypeConverter
+class Converters : KoinComponent {
 
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(Spanned::class.java, SpannedTypeAdapter())
-        .create()
+    private val gson by inject<Gson>()
 
     @TypeConverter
     fun jsonToEmojiList(emojiListJson: String?): List<Emoji>? {
@@ -144,7 +147,7 @@ class Converters {
 
     @TypeConverter
     fun spannedToString(spanned: Spanned?): String? {
-        if (spanned == null) {
+        if(spanned == null) {
             return null
         }
         return spanned.toHtml()
@@ -152,7 +155,7 @@ class Converters {
 
     @TypeConverter
     fun stringToSpanned(spannedString: String?): Spanned? {
-        if (spannedString == null) {
+        if(spannedString == null) {
             return null
         }
         return spannedString.parseAsHtml().trimTrailingWhitespace()

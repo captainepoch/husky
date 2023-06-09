@@ -27,6 +27,7 @@ import androidx.room.Room
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.EventHubImpl
 import com.keylesspalace.tusky.db.AppDatabase
+import com.keylesspalace.tusky.db.Converters
 import com.keylesspalace.tusky.util.LocaleManager
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -49,7 +50,12 @@ val appModule = module {
     } bind SharedPreferences::class
 
     single {
+        Converters()
+    } bind Converters::class
+
+    single {
         Room.databaseBuilder(get(), AppDatabase::class.java, "tuskyDB")
+            .addTypeConverter(get<Converters>())
             .allowMainThreadQueries()
             .addMigrations(
                 AppDatabase.MIGRATION_2_3,
