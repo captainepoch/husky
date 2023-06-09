@@ -76,7 +76,7 @@ class AccountManager(db: AppDatabase) {
      * @param account the account to save
      */
     fun saveAccount(account: AccountEntity) {
-        if(account.id != 0L) {
+        if (account.id != 0L) {
             Log.d(TAG, "saveAccount: saving account with id " + account.id)
             accountDao.insertOrReplace(account)
         }
@@ -87,13 +87,13 @@ class AccountManager(db: AppDatabase) {
      * @return the new active account, or null if no other account was found
      */
     fun logActiveAccountOut(): AccountEntity? {
-        if(activeAccount == null) {
+        if (activeAccount == null) {
             return null
         } else {
             accounts.remove(activeAccount!!)
             accountDao.delete(activeAccount!!)
 
-            if(accounts.size > 0) {
+            if (accounts.size > 0) {
                 accounts[0].isActive = true
                 activeAccount = accounts[0]
                 Log.d(TAG, "logActiveAccountOut: saving account with id " + accounts[0].id)
@@ -125,7 +125,7 @@ class AccountManager(db: AppDatabase) {
 
             val accountIndex = accounts.indexOf(it)
 
-            if(accountIndex != -1) {
+            if (accountIndex != -1) {
                 // in case the user was already logged in with this account, remove the
                 // old information
                 accounts.removeAt(accountIndex)

@@ -12,5 +12,6 @@ data class Marker(
     @SerializedName("last_read_id") val lastReadId: String,
     @SerializedName("version") val version: Int,
     @JsonAdapter(CustomDateTypeAdapter::class)
-    @SerializedName("updated_at") val updatedAt: Date
+    @SerializedName("updated_at")
+    val updatedAt: Date
 )

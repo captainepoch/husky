@@ -21,7 +21,6 @@ import androidx.core.text.toHtml
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.keylesspalace.tusky.TabData
 import com.keylesspalace.tusky.components.conversation.ConversationAccountEntity
@@ -31,13 +30,12 @@ import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.NewPoll
 import com.keylesspalace.tusky.entity.Poll
 import com.keylesspalace.tusky.entity.Status
-import com.keylesspalace.tusky.json.SpannedTypeAdapter
 import com.keylesspalace.tusky.util.trimTrailingWhitespace
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.Date
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 @ProvidedTypeConverter
 class Converters : KoinComponent {
@@ -147,7 +145,7 @@ class Converters : KoinComponent {
 
     @TypeConverter
     fun spannedToString(spanned: Spanned?): String? {
-        if(spanned == null) {
+        if (spanned == null) {
             return null
         }
         return spanned.toHtml()
@@ -155,7 +153,7 @@ class Converters : KoinComponent {
 
     @TypeConverter
     fun stringToSpanned(spannedString: String?): Spanned? {
-        if(spannedString == null) {
+        if (spannedString == null) {
             return null
         }
         return spannedString.parseAsHtml().trimTrailingWhitespace()
