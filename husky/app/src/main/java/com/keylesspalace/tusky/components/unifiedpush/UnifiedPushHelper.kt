@@ -21,8 +21,6 @@ package com.keylesspalace.tusky.components.unifiedpush
 
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.entity.Notification.Type
@@ -44,11 +42,15 @@ object UnifiedPushHelper {
     ) {
         Timber.d("Registering UnifiedPush for ${account?.username}")
 
-        UnifiedPush.registerAppWithDialog(
-            context,
-            account?.id.toString(),
-            features = arrayListOf(UnifiedPush.FEATURE_BYTES_MESSAGE)
-        )
+        account?.let {
+            createNotificationsChannels(account, context)
+
+            UnifiedPush.registerAppWithDialog(
+                context,
+                it.id.toString(),
+                features = arrayListOf(UnifiedPush.FEATURE_BYTES_MESSAGE)
+            )
+        } ?: Timber.e("Account cannot be null")
     }
 
     fun buildPushDataMap(
@@ -65,12 +67,16 @@ object UnifiedPushHelper {
         }
     }
 
+    private fun createNotificationsChannels(account: AccountEntity, applicationContext: Context) {
+        NotificationHelper.createNotificationChannelsForAccount(account, applicationContext)
+    }
+
     private fun filterNotificationType(
         notificationManager: NotificationManager,
         account: AccountEntity?,
         type: Type
     ): Boolean {
-        if (VERSION.SDK_INT >= VERSION_CODES.O) {
+        if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
             val channelId = getChannelId(account, type) ?: return false
 
             val channel = notificationManager.getNotificationChannel(channelId)
