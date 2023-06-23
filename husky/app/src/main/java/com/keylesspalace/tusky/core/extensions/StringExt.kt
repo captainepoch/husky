@@ -26,9 +26,8 @@ import java.util.regex.Pattern
  *
  * @return An empty string.
  */
-fun String.Companion.empty(): String {
-    return ""
-}
+val String.Companion.Empty
+    inline get() = ""
 
 /**
  * Add https protocol to the URL.
@@ -42,7 +41,7 @@ fun String?.addHttpsProtocolUrl(): String {
         }
     }
 
-    return String.empty()
+    return String.Empty
 }
 
 /**
