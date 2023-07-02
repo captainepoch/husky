@@ -19,11 +19,13 @@
 
 package com.keylesspalace.tusky.components.unifiedpush
 
+import android.annotation.SuppressLint
 import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.entity.Marker
 import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.isLessThan
@@ -40,23 +42,35 @@ class NotificationFetcher(
     private val context: Context
 ) {
 
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
+    private val notificationManager = NotificationManagerCompat.from(context)
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    fun fetchAndShow() {
+    @SuppressLint("MissingPermission")
+    fun fetchAndShow(instance: String) {
         scope.launch {
-            val notifications = fetchNotifications(accountManager.activeAccount!!)
-            notifications.forEachIndexed { index, notification ->
-                NotificationHelper.make(
-                    context,
-                    notification,
-                    accountManager.activeAccount,
-                    index == 0
-                )
-                Timber.d("Notification $index made")
+            accountManager.getAccountByUnifiedPushInstance(instance)?.let { account ->
+                fetchNotifications(account).forEachIndexed { index, notification ->
+                    val androidNotification = NotificationHelper.make(
+                        context,
+                        notificationManager,
+                        notification,
+                        account,
+                        index == 0
+                    )
 
-                // Delay pushing notifications too fast because of Android limits
-                delay(500)
+                    Timber.d("Notification $index made")
+
+                    androidNotification?.let { pushNotification ->
+                        notificationManager.notify(
+                            notification.id,
+                            account.id.toInt(),
+                            pushNotification
+                        )
+                    }
+
+                    // Delay pushing notifications too fast because of Android limits
+                    delay(500)
+                }
             }
         }
     }
@@ -64,31 +78,37 @@ class NotificationFetcher(
     private suspend fun fetchNotifications(account: AccountEntity): MutableList<Notification> {
         val token = "Bearer ${account.accessToken}"
 
-        // Fetch markers to not load/show notifications the user already saw
-        val marker = fetchMarkers(token, account.domain)
-        if (marker != null && account.lastNotificationId.isLessThan(marker.lastReadId)) {
-            account.lastNotificationId = marker.lastReadId
-        }
-        Timber.d("Getting Notifications for ${account.username}")
+        val lastRemoteMarker = fetchLastMarkerRemoteId(token, account.domain)
+        val lastReadNotificationId = account.lastNotificationId
+        val lastMarkerNotificationId = account.lastNotificationMarkerId
+        val minMarkerId = minOf(lastRemoteMarker, lastReadNotificationId, lastMarkerNotificationId)
+
+        Timber.d(
+            "lastRemoteMarker[$lastRemoteMarker] " +
+            "lastReadNotificationId[$lastReadNotificationId] " +
+            "lastMarkerNotificationId[$lastMarkerNotificationId] " +
+            "minMarkerId[$minMarkerId]"
+        )
+
+        Timber.d("Getting Notifications for ${account.username} from id $minMarkerId")
+        val notifications = mutableListOf<Notification>()
         val notificationsResponse = api.notificationsWithAuthCoroutine(
             token,
             account.domain,
-            account.lastNotificationId
+            minMarkerId
         )
 
-        val newId = account.lastNotificationId
-        val notifications = mutableListOf<Notification>()
-        var newestId = ""
-        if (notificationsResponse.body() != null) {
+        if(notificationsResponse.isSuccessful && notificationsResponse.body() != null) {
+            var newMarkerId = String.Empty
             Timber.d("Notifications not null")
             notificationsResponse.body()!!.reversed().forEach { notification ->
                 val currentId = notification.id
-                if (newestId.isLessThan(currentId)) {
-                    newestId = currentId
+                if(newMarkerId.isLessThan(currentId)) {
+                    newMarkerId = currentId
                     account.lastNotificationId = currentId
                 }
 
-                if (newId.isLessThan(currentId)) {
+                if(lastReadNotificationId.isLessThan(currentId)) {
                     Timber.d("Notification added")
                     notifications.add(notification)
                 }
@@ -98,18 +118,18 @@ class NotificationFetcher(
         return notifications
     }
 
-    private suspend fun fetchMarkers(token: String, domain: String): Marker? {
+    private suspend fun fetchLastMarkerRemoteId(token: String, domain: String): String {
         val markersResponse = api.markersWithAuthCoroutine(token, domain, listOf("notifications"))
-        if (markersResponse.body() != null) {
+        if(markersResponse.body() != null) {
             val markersMap = markersResponse.body()!!
             val notificationMarker = markersMap["notifications"]
             Timber.d("Fetched markers [$notificationMarker]")
 
-            return notificationMarker
+            return notificationMarker?.lastReadId ?: "0"
         }
 
         Timber.e("Error [${markersResponse.raw()}]")
 
-        return null
+        return "0"
     }
 }
