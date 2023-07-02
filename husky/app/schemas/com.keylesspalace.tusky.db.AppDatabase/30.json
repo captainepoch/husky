@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "d6b2f61ea0b2f988937b8a80013d2766",
+    "identityHash": "b47985dc6b764da54ac810c8389bd32b",
     "entities": [
       {
         "tableName": "TootEntity",
@@ -172,7 +172,7 @@
       },
       {
         "tableName": "AccountEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `domain` TEXT NOT NULL, `accessToken` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `accountId` TEXT NOT NULL, `username` TEXT NOT NULL, `displayName` TEXT NOT NULL, `profilePictureUrl` TEXT NOT NULL, `notificationsEnabled` INTEGER NOT NULL, `notificationsStreamingEnabled` INTEGER NOT NULL, `notificationsMentioned` INTEGER NOT NULL, `notificationsFollowed` INTEGER NOT NULL, `notificationsFollowRequested` INTEGER NOT NULL, `notificationsReblogged` INTEGER NOT NULL, `notificationsFavorited` INTEGER NOT NULL, `notificationsPolls` INTEGER NOT NULL, `notificationsEmojiReactions` INTEGER NOT NULL, `notificationsChatMessages` INTEGER NOT NULL, `notificationsSubscriptions` INTEGER NOT NULL, `notificationsMove` INTEGER NOT NULL, `notificationSound` INTEGER NOT NULL, `notificationVibration` INTEGER NOT NULL, `notificationLight` INTEGER NOT NULL, `defaultPostPrivacy` INTEGER NOT NULL, `defaultMediaSensitivity` INTEGER NOT NULL, `alwaysShowSensitiveMedia` INTEGER NOT NULL, `alwaysOpenSpoiler` INTEGER NOT NULL, `mediaPreviewEnabled` INTEGER NOT NULL, `lastNotificationId` TEXT NOT NULL, `activeNotifications` TEXT NOT NULL, `emojis` TEXT NOT NULL, `tabPreferences` TEXT NOT NULL, `notificationsFilter` TEXT NOT NULL, `defaultFormattingSyntax` TEXT NOT NULL, `oauthScopes` TEXT NOT NULL, `unifiedPushUrl` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `domain` TEXT NOT NULL, `accessToken` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `accountId` TEXT NOT NULL, `username` TEXT NOT NULL, `displayName` TEXT NOT NULL, `profilePictureUrl` TEXT NOT NULL, `notificationsEnabled` INTEGER NOT NULL, `notificationsStreamingEnabled` INTEGER NOT NULL, `notificationsMentioned` INTEGER NOT NULL, `notificationsFollowed` INTEGER NOT NULL, `notificationsFollowRequested` INTEGER NOT NULL, `notificationsReblogged` INTEGER NOT NULL, `notificationsFavorited` INTEGER NOT NULL, `notificationsPolls` INTEGER NOT NULL, `notificationsEmojiReactions` INTEGER NOT NULL, `notificationsChatMessages` INTEGER NOT NULL, `notificationsSubscriptions` INTEGER NOT NULL, `notificationsMove` INTEGER NOT NULL, `notificationSound` INTEGER NOT NULL, `notificationVibration` INTEGER NOT NULL, `notificationLight` INTEGER NOT NULL, `defaultPostPrivacy` INTEGER NOT NULL, `defaultMediaSensitivity` INTEGER NOT NULL, `alwaysShowSensitiveMedia` INTEGER NOT NULL, `alwaysOpenSpoiler` INTEGER NOT NULL, `mediaPreviewEnabled` INTEGER NOT NULL, `lastNotificationId` TEXT NOT NULL, `lastNotificationMarkerId` TEXT NOT NULL, `activeNotifications` TEXT NOT NULL, `emojis` TEXT NOT NULL, `tabPreferences` TEXT NOT NULL, `notificationsFilter` TEXT NOT NULL, `defaultFormattingSyntax` TEXT NOT NULL, `oauthScopes` TEXT NOT NULL, `unifiedPushUrl` TEXT NOT NULL, `unifiedPushInstance` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -349,6 +349,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "lastNotificationMarkerId",
+            "columnName": "lastNotificationMarkerId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "activeNotifications",
             "columnName": "activeNotifications",
             "affinity": "TEXT",
@@ -387,6 +393,12 @@
           {
             "fieldPath": "unifiedPushUrl",
             "columnName": "unifiedPushUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unifiedPushInstance",
+            "columnName": "unifiedPushInstance",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1021,7 +1033,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6b2f61ea0b2f988937b8a80013d2766')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b47985dc6b764da54ac810c8389bd32b')"
     ]
   }
 }

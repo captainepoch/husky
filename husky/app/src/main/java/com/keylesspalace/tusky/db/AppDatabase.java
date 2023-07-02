@@ -443,6 +443,11 @@ public abstract class AppDatabase extends RoomDatabase {
                 "ALTER TABLE `AccountEntity` ADD COLUMN `oauthScopes`  TEXT NOT NULL DEFAULT ''");
             database.execSQL(
                 "ALTER TABLE `AccountEntity` ADD COLUMN `unifiedPushUrl`  TEXT NOT NULL DEFAULT ''");
+            database.execSQL(
+                "ALTER TABLE `AccountEntity` ADD COLUMN `unifiedPushInstance`  TEXT NOT NULL DEFAULT ''");
+            database.execSQL(
+                "ALTER TABLE `AccountEntity` ADD COLUMN `lastNotificationMarkerId`  TEXT NOT NULL DEFAULT '0'");
+            //
         }
     };
 }

@@ -25,6 +25,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.keylesspalace.tusky.TabData
+import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.defaultTabs
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.Status
@@ -43,10 +44,10 @@ data class AccountEntity(
     val domain: String,
     var accessToken: String,
     var isActive: Boolean,
-    var accountId: String = "",
-    var username: String = "",
-    var displayName: String = "",
-    var profilePictureUrl: String = "",
+    var accountId: String = String.Empty,
+    var username: String = String.Empty,
+    var displayName: String = String.Empty,
+    var profilePictureUrl: String = String.Empty,
     var notificationsEnabled: Boolean = false,
     // TODO: Drop notificationsStreamingEnabled
     var notificationsStreamingEnabled: Boolean = false,
@@ -69,14 +70,16 @@ data class AccountEntity(
     var alwaysOpenSpoiler: Boolean = false,
     var mediaPreviewEnabled: Boolean = true,
     var lastNotificationId: String = "0",
+    var lastNotificationMarkerId: String = "0",
     var activeNotifications: String = "[]",
     var emojis: List<Emoji> = emptyList(),
     var tabPreferences: List<TabData> = defaultTabs(),
     var notificationsFilter: String = "[]",
-    var defaultFormattingSyntax: String = "",
+    var defaultFormattingSyntax: String = String.Empty,
     // UnifiedPush Data
-    var oauthScopes: String = "",
-    var unifiedPushUrl: String = ""
+    var oauthScopes: String = String.Empty,
+    var unifiedPushUrl: String = String.Empty,
+    var unifiedPushInstance: String = String.Empty
 ) {
 
     val identifier: String
