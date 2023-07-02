@@ -1,33 +1,35 @@
-/* Copyright 2018 Conny Duck
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2018  Conny Duck
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.db
 
-import android.util.Log
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.settings.PrefKeys
+import timber.log.Timber
 import java.util.Locale
 
 /**
  * This class caches the account database and handles all account related operations
  * @author ConnyDuck
  */
-
-private const val TAG = "AccountManager"
-
 class AccountManager(db: AppDatabase) {
 
     @Volatile
@@ -55,7 +57,7 @@ class AccountManager(db: AppDatabase) {
     fun addAccount(accessToken: String, domain: String) {
         activeAccount?.let {
             it.isActive = false
-            Log.d(TAG, "addAccount: saving account with id " + it.id)
+            Timber.d("addAccount: saving account with id ${it.id}")
 
             accountDao.insertOrReplace(it)
         }
@@ -77,7 +79,8 @@ class AccountManager(db: AppDatabase) {
      */
     fun saveAccount(account: AccountEntity) {
         if (account.id != 0L) {
-            Log.d(TAG, "saveAccount: saving account with id " + account.id)
+            Timber.d("saveAccount: saving account with id ${account.id}")
+
             accountDao.insertOrReplace(account)
         }
     }
@@ -96,7 +99,9 @@ class AccountManager(db: AppDatabase) {
             if (accounts.size > 0) {
                 accounts[0].isActive = true
                 activeAccount = accounts[0]
-                Log.d(TAG, "logActiveAccountOut: saving account with id " + accounts[0].id)
+
+                Timber.d("logActiveAccountOut: saving account with id ${accounts[0].id}")
+
                 accountDao.insertOrReplace(accounts[0])
             } else {
                 activeAccount = null
@@ -120,7 +125,8 @@ class AccountManager(db: AppDatabase) {
             it.defaultMediaSensitivity = account.source?.sensitive ?: false
             it.emojis = account.emojis ?: emptyList()
 
-            Log.d(TAG, "updateActiveAccount: saving account with id " + it.id)
+            Timber.d("updateActiveAccount: saving account with id ${it.id}")
+
             it.id = accountDao.insertOrReplace(it)
 
             val accountIndex = accounts.indexOf(it)
@@ -142,7 +148,8 @@ class AccountManager(db: AppDatabase) {
      */
     fun setActiveAccount(accountId: Long) {
         activeAccount?.let {
-            Log.d(TAG, "setActiveAccount: saving account with id " + it.id)
+            Timber.d("setActiveAccount: saving account with id ${it.id}")
+
             it.isActive = false
             saveAccount(it)
         }
@@ -201,6 +208,10 @@ class AccountManager(db: AppDatabase) {
 
     fun hasNotificationsEnabled(): Boolean {
         return activeAccount?.notificationsEnabled ?: false
+    }
+
+    fun getAccountByUnifiedPushInstance(instance: String): AccountEntity? {
+        return accounts.firstOrNull { it.unifiedPushInstance.equals(instance, true) }
     }
 
     /**
