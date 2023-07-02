@@ -45,7 +45,6 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.emoji2.text.EmojiCompat
 import androidx.emoji2.text.EmojiCompat.InitCallback
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
@@ -87,7 +86,6 @@ import com.keylesspalace.tusky.interfaces.AccountSelectionListener
 import com.keylesspalace.tusky.interfaces.ActionButtonActivity
 import com.keylesspalace.tusky.interfaces.ReselectableFragment
 import com.keylesspalace.tusky.pager.MainPagerAdapter
-import com.keylesspalace.tusky.service.StreamingService
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.ViewPager2Fix
@@ -130,8 +128,6 @@ import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -331,19 +327,11 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     Timber.d("Permissions granted")
-                    // initPullNotifications()
 
-                    lifecycleScope.launch {
-                        NotificationHelper.createNotificationChannelsForAccount(
-                            accountManager.value.activeAccount!!,
-                            applicationContext
-                        )
-                        // UnifiedPushService.startService(applicationContext, "")
-                        UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
-                            this@MainActivity,
-                            accountManager.value.activeAccount
-                        )
-                    }
+                    UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
+                        this@MainActivity,
+                        accountManager.value.activeAccount
+                    )
                 }
             }
 
@@ -352,47 +340,6 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                 Timber.d("Super method is called")
             }
         }
-    }
-
-    /*private fun initPullNotifications(rebootPush: Boolean = false) {
-        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
-            Timber.d("Asking permissions on Tiramisu and newer")
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_DENIED
-            ) {
-                Timber.w("Permissions denied, requesting permissions for notifications")
-                requestPermissions(
-                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                    notificationPermissionsRequestCode
-                )
-
-                return
-            }
-        }
-
-        if (rebootPush) {
-            disablePushNotifications()
-        }
-
-        if (NotificationHelper.areNotificationsEnabled(this, accountManager.value)) {
-            if (accountManager.value.areNotificationsStreamingEnabled()) {
-                StreamingService.startStreaming(this)
-                NotificationHelper.disablePullNotifications(this)
-            } else {
-                StreamingService.stopStreaming(this)
-                NotificationHelper.enablePullNotifications(this)
-            }
-        } else {
-            disablePushNotifications()
-        }
-        draftWarning()
-    }*/
-
-    private fun disablePushNotifications() {
-        StreamingService.stopStreaming(this)
-        NotificationHelper.disablePullNotifications(this)
     }
 
     override fun onResume() {
@@ -844,7 +791,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
             this
         )
 
-        // initPullNotifications()
+        // enrollPushNotifications()
         initPushNotifications()
 
         // Show follow requests in the menu, if this is a locked account.
@@ -884,17 +831,10 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
             } else {
                 Timber.d("Notification permissions already granted")
 
-                lifecycleScope.launch {
-                    NotificationHelper.createNotificationChannelsForAccount(
-                        accountManager.value.activeAccount!!,
-                        applicationContext
-                    )
-                    // UnifiedPushService.startService(applicationContext, "")
-                    UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
-                        this@MainActivity,
-                        accountManager.value.activeAccount
-                    )
-                }
+                UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
+                    this@MainActivity,
+                    accountManager.value.activeAccount
+                )
             }
         }
     }
