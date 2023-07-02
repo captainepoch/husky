@@ -59,7 +59,6 @@ import com.keylesspalace.tusky.entity.Notification;
 import com.keylesspalace.tusky.entity.Poll;
 import com.keylesspalace.tusky.entity.PollOption;
 import com.keylesspalace.tusky.entity.Status;
-import com.keylesspalace.tusky.receiver.NotificationClearBroadcastReceiver;
 import com.keylesspalace.tusky.receiver.SendStatusBroadcastReceiver;
 import com.keylesspalace.tusky.util.StringUtils;
 import com.keylesspalace.tusky.viewdata.PollViewDataKt;
@@ -318,7 +317,7 @@ public class NotificationHelper {
                 pendingIntentFlags(false)
         );
 
-        // we have to switch account here
+        // We have to switch account here
         Intent eventResultIntent = new Intent(context, MainActivity.class);
         eventResultIntent.putExtra(ACCOUNT_ID, account.getId());
         TaskStackBuilder eventStackBuilder = TaskStackBuilder.create(context);
@@ -329,18 +328,10 @@ public class NotificationHelper {
                 (int) account.getId(),
                 pendingIntentFlags(false));
 
-        Intent deleteIntent = new Intent(context, NotificationClearBroadcastReceiver.class);
-        deleteIntent.putExtra(ACCOUNT_ID, account.getId());
-        PendingIntent deletePendingIntent = PendingIntent.getBroadcast(
-                context, summary ? (int) account.getId() : notificationId,
-                deleteIntent,
-                pendingIntentFlags(false));
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, getChannelId(account, body))
                 .setSmallIcon(R.drawable.ic_notify)
                 .setContentIntent(summary ? summaryResultPendingIntent : eventResultPendingIntent)
-                .setDeleteIntent(deletePendingIntent)
-                .setColor(BuildConfig.FLAVOR == "green" ? Color.parseColor("#19A341") : ContextCompat.getColor(context, R.color.tusky_blue))
+                //.setColor(BuildConfig.FLAVOR == "green" ? Color.parseColor("#19A341") : ContextCompat.getColor(context, R.color.tusky_orange))
                 .setGroup(account.getAccountId())
                 .setAutoCancel(true)
                 .setShortcutId(Long.toString(account.getId()))
