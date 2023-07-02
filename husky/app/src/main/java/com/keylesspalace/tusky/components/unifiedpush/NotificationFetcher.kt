@@ -85,9 +85,9 @@ class NotificationFetcher(
 
         Timber.d(
             "lastRemoteMarker[$lastRemoteMarker] " +
-            "lastReadNotificationId[$lastReadNotificationId] " +
-            "lastMarkerNotificationId[$lastMarkerNotificationId] " +
-            "minMarkerId[$minMarkerId]"
+                "lastReadNotificationId[$lastReadNotificationId] " +
+                "lastMarkerNotificationId[$lastMarkerNotificationId] " +
+                "minMarkerId[$minMarkerId]"
         )
 
         Timber.d("Getting Notifications for ${account.username} from id $minMarkerId")
@@ -98,17 +98,17 @@ class NotificationFetcher(
             minMarkerId
         )
 
-        if(notificationsResponse.isSuccessful && notificationsResponse.body() != null) {
+        if (notificationsResponse.isSuccessful && notificationsResponse.body() != null) {
             var newMarkerId = String.Empty
             Timber.d("Notifications not null")
             notificationsResponse.body()!!.reversed().forEach { notification ->
                 val currentId = notification.id
-                if(newMarkerId.isLessThan(currentId)) {
+                if (newMarkerId.isLessThan(currentId)) {
                     newMarkerId = currentId
                     account.lastNotificationId = currentId
                 }
 
-                if(lastReadNotificationId.isLessThan(currentId)) {
+                if (lastReadNotificationId.isLessThan(currentId)) {
                     Timber.d("Notification added")
                     notifications.add(notification)
                 }
@@ -120,7 +120,7 @@ class NotificationFetcher(
 
     private suspend fun fetchLastMarkerRemoteId(token: String, domain: String): String {
         val markersResponse = api.markersWithAuthCoroutine(token, domain, listOf("notifications"))
-        if(markersResponse.body() != null) {
+        if (markersResponse.body() != null) {
             val markersMap = markersResponse.body()!!
             val notificationMarker = markersMap["notifications"]
             Timber.d("Fetched markers [$notificationMarker]")

@@ -240,7 +240,7 @@ class StreamingService : Service(), KoinComponent {
                 when (event.event) {
                     StreamEvent.EventType.NOTIFICATION -> {
                         val notification = gson.fromJson(event.payload, Notification::class.java)
-                        //NotificationHelper.make(this@StreamingService, notification, account, true)
+                        // NotificationHelper.make(this@StreamingService, notification, account, true)
 
                         if (notification.type == Notification.Type.CHAT_MESSAGE) {
                             eventHub.dispatch(ChatMessageReceivedEvent(notification.chatMessage!!))

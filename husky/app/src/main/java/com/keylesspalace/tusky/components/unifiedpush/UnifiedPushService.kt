@@ -35,7 +35,6 @@ import com.keylesspalace.tusky.core.crypto.CryptoECKeyPair
 import com.keylesspalace.tusky.core.crypto.CryptoUtils
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
-import java.security.Security
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -44,6 +43,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.security.Security
 
 class UnifiedPushService : Service(), KoinComponent {
 
