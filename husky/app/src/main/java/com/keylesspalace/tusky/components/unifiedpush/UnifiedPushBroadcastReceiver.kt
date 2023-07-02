@@ -20,8 +20,10 @@
 package com.keylesspalace.tusky.components.unifiedpush
 
 import android.content.Context
-import androidx.work.OneTimeWorkRequest
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.keylesspalace.tusky.components.unifiedpush.UnifiedPushConstants.UNIFIED_PUSH_WORKER_INSTANCE
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
 
@@ -29,10 +31,14 @@ class UnifiedPushBroadcastReceiver : MessagingReceiver() {
 
     override fun onMessage(context: Context, message: ByteArray, instance: String) {
         super.onMessage(context, message, instance)
+
         Timber.d("New message for $instance")
 
+        val workerData = Data.Builder().putString(UNIFIED_PUSH_WORKER_INSTANCE, instance).build()
         WorkManager.getInstance(context).enqueue(
-            OneTimeWorkRequest.from(NotificationWorker::class.java)
+            OneTimeWorkRequestBuilder<NotificationWorker>().apply {
+                setInputData(workerData)
+            }.build()
         )
     }
 
@@ -40,16 +46,18 @@ class UnifiedPushBroadcastReceiver : MessagingReceiver() {
         super.onNewEndpoint(context, endpoint, instance)
         Timber.d("New endpoint for instance $instance")
 
-        UnifiedPushService.startService(context, endpoint)
+        UnifiedPushService.startService(context, endpoint, instance)
     }
 
     override fun onRegistrationFailed(context: Context, instance: String) {
         super.onRegistrationFailed(context, instance)
+
         Timber.d("Registration failed for $instance")
     }
 
     override fun onUnregistered(context: Context, instance: String) {
         super.onUnregistered(context, instance)
+
         Timber.d("Unregister for $instance")
     }
 }

@@ -25,15 +25,20 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class NotificationWorker(
     context: Context,
-    params: WorkerParameters,
+    private val params: WorkerParameters,
     private val notificationsFetcher: NotificationFetcher
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        notificationsFetcher.fetchAndShow()
+        params.inputData.getString(UnifiedPushConstants.UNIFIED_PUSH_WORKER_INSTANCE)?.let {
+            Timber.d("Instance[$it]")
+            notificationsFetcher.fetchAndShow(it)
+        }
+
         return@withContext Result.success()
     }
 }

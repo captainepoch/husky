@@ -35,6 +35,7 @@ import com.keylesspalace.tusky.core.crypto.CryptoECKeyPair
 import com.keylesspalace.tusky.core.crypto.CryptoUtils
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
+import java.security.Security
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -43,7 +44,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.security.Security
 
 class UnifiedPushService : Service(), KoinComponent {
 
@@ -88,11 +88,21 @@ class UnifiedPushService : Service(), KoinComponent {
 
             val endpoint = intent?.getStringExtra(ENDPOINT)
             if (endpoint.isNullOrEmpty() || endpoint.isBlank()) {
+                Timber.e("No endpoint for UnifiedPush is provided")
+
                 stopSelf()
             } else {
                 Timber.d("Subscribing to push notifications")
-                subscribeToPush(generateKeyPair(), getAuth(), endpoint)
-                Timber.d("Subscribed to push notifications")
+
+                val instance = intent.getStringExtra(INSTANCE)
+                if (instance.isNullOrEmpty() || instance.isBlank()) {
+                    Timber.e("No instance of UnifiedPush is provided")
+
+                    stopSelf()
+                } else {
+                    subscribeToPush(generateKeyPair(), getAuth(), endpoint, instance)
+                    Timber.d("Subscribed to push notifications")
+                }
             }
 
             serviceStarted = true
@@ -143,7 +153,12 @@ class UnifiedPushService : Service(), KoinComponent {
         return CryptoUtils.getSecureRandomStringBase64(16)
     }
 
-    private fun subscribeToPush(keyPair: CryptoECKeyPair, auth: String, endpoint: String) {
+    private fun subscribeToPush(
+        keyPair: CryptoECKeyPair,
+        auth: String,
+        endpoint: String,
+        instance: String
+    ) {
         scope.launch {
             Timber.d("Subscribing to the push notification service")
 
@@ -158,10 +173,14 @@ class UnifiedPushService : Service(), KoinComponent {
                 )
 
                 if (response.body() != null) {
-                    Timber.d("UnifiedPush registration for ${account.username}")
+                    Timber.d("UnifiedPush registration for ${account.fullName}")
 
-                    account.unifiedPushUrl = endpoint
-                    accountManager.saveAccount(account)
+                    accountManager.saveAccount(
+                        account.apply {
+                            unifiedPushUrl = endpoint
+                            unifiedPushInstance = instance
+                        }
+                    )
 
                     // TODO: Update push notification
 
@@ -181,6 +200,7 @@ class UnifiedPushService : Service(), KoinComponent {
                 null
             } ?: runCatching {
                 stopSelf()
+
                 return@launch
             }
         }
@@ -190,22 +210,29 @@ class UnifiedPushService : Service(), KoinComponent {
 
         private const val PUSH_SUBS_ID = 200
         private const val CHANNEL_ID = "2000"
-        private const val ENDPOINT = "ENDPOINT"
+        private const val ENDPOINT = "unifiedPushEndpoint"
+        private const val INSTANCE = "unifiedPushInstance"
 
-        fun startService(context: Context, endpoint: String) {
-            val intent = Intent(context, UnifiedPushService::class.java)
-            intent.putExtra(ENDPOINT, endpoint)
+        fun startService(context: Context, endpoint: String, instance: String) {
+            val intent = Intent(context, UnifiedPushService::class.java).apply {
+                putExtra(ENDPOINT, endpoint)
+                putExtra(INSTANCE, instance)
+            }
 
             if (VERSION.SDK_INT >= VERSION_CODES.O) {
                 context.startForegroundService(intent)
             } else {
                 context.startService(intent)
             }
+
+            Timber.d("Starting subscribing service to UnifiedPush")
         }
 
         fun stopService(context: Context) {
             val intent = Intent(context, UnifiedPushService::class.java)
             context.stopService(intent)
+
+            Timber.d("Stopping subscribing service to UnifiedPush")
         }
     }
 }
