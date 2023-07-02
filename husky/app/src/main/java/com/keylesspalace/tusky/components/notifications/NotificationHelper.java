@@ -140,7 +140,8 @@ public class NotificationHelper {
      * by setting this as false, it's possible to test legacy notification channels on newer devices
      */
     // public static final boolean NOTIFICATION_USE_CHANNELS = false;
-    public static final boolean NOTIFICATION_USE_CHANNELS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    public static final boolean NOTIFICATION_USE_CHANNELS =
+        (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
 
     /**
      * Takes a given Mastodon notification and either creates a new Android notification or updates
@@ -149,24 +150,29 @@ public class NotificationHelper {
      * @param context to access application preferences and services
      * @param body    a new Mastodon notification
      * @param account the account for which the notification should be shown
+     * @return An Android notification, null otherwise
      */
-
-    public static void make(final Context context, Notification body, AccountEntity account, boolean isFirstOfBatch) {
+    public static android.app.Notification make(
+        final Context context,
+        NotificationManagerCompat notificationManager,
+        Notification body,
+        AccountEntity account,
+        boolean isFirstOfBatch)
+    {
         body = Notification.rewriteToStatusTypeIfNeeded(body, account.getAccountId());
 
         if(!filterNotification(account, body, context)) {
-            return;
+            return null;
         }
 
         // Pleroma extension: don't notify about seen notifications
         if(body.getPleroma() != null && body.getPleroma().getSeen()) {
-            return;
+            return null;
         }
 
         if(body.getStatus() != null &&
-                (body.getStatus().isUserMuted() ||
-                        body.getStatus().isThreadMuted())) {
-            return;
+           (body.getStatus().isUserMuted() || body.getStatus().isThreadMuted())) {
+            return null;
         }
 
         String rawCurrentNotifications = account.getActiveNotifications();
@@ -200,26 +206,26 @@ public class NotificationHelper {
         notificationId++;
 
         builder.setContentTitle(titleForType(context, body, account))
-                .setContentText(bodyForType(body, context));
+            .setContentText(bodyForType(body, context));
 
-        if(body.getType() == Notification.Type.MENTION || body.getType() == Notification.Type.POLL) {
-            builder.setStyle(new NotificationCompat.BigTextStyle()
-                    .bigText(bodyForType(body, context)));
+        if(body.getType() == Notification.Type.MENTION ||
+           body.getType() == Notification.Type.POLL) {
+            builder.setStyle(
+                new NotificationCompat.BigTextStyle().bigText(bodyForType(body, context)));
         }
 
         //load the avatar synchronously
         Bitmap accountAvatar;
         try {
-            FutureTarget<Bitmap> target = Glide.with(context)
-                    .asBitmap()
-                    .load(body.getAccount().getAvatar())
-                    .transform(new RoundedCorners(20))
-                    .submit();
+            FutureTarget<Bitmap> target =
+                Glide.with(context).asBitmap().load(body.getAccount().getAvatar())
+                    .transform(new RoundedCorners(20)).submit();
 
             accountAvatar = target.get();
         } catch(ExecutionException | InterruptedException e) {
             Timber.e("Error loading account avatar %s", e);
-            accountAvatar = BitmapFactory.decodeResource(context.getResources(), R.drawable.avatar_default);
+            accountAvatar =
+                BitmapFactory.decodeResource(context.getResources(), R.drawable.avatar_default);
         }
 
         builder.setLargeIcon(accountAvatar);
@@ -227,40 +233,39 @@ public class NotificationHelper {
         // Reply to mention action; RemoteInput is available from KitKat Watch, but buttons are available from Nougat
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             if(body.getType() == Notification.Type.MENTION) {
-                RemoteInput replyRemoteInput = new RemoteInput.Builder(KEY_REPLY)
-                        .setLabel(context.getString(R.string.label_quick_reply))
-                        .build();
+                RemoteInput replyRemoteInput = new RemoteInput.Builder(KEY_REPLY).setLabel(
+                    context.getString(R.string.label_quick_reply)).build();
 
-                PendingIntent quickReplyPendingIntent = getStatusReplyIntent(REPLY_ACTION, context, body, account);
+                PendingIntent quickReplyPendingIntent =
+                    getStatusReplyIntent(REPLY_ACTION, context, body, account);
 
                 NotificationCompat.Action quickReplyAction =
-                        new NotificationCompat.Action.Builder(R.drawable.ic_reply_24dp,
-                                context.getString(R.string.action_quick_reply), quickReplyPendingIntent)
-                                .addRemoteInput(replyRemoteInput)
-                                .build();
+                    new NotificationCompat.Action.Builder(R.drawable.ic_reply_24dp,
+                        context.getString(R.string.action_quick_reply),
+                        quickReplyPendingIntent).addRemoteInput(replyRemoteInput).build();
 
                 builder.addAction(quickReplyAction);
 
-                PendingIntent composePendingIntent = getStatusReplyIntent(COMPOSE_ACTION, context, body, account);
+                PendingIntent composePendingIntent =
+                    getStatusReplyIntent(COMPOSE_ACTION, context, body, account);
 
                 NotificationCompat.Action composeAction =
-                        new NotificationCompat.Action.Builder(R.drawable.ic_reply_24dp,
-                                context.getString(R.string.action_compose_shortcut), composePendingIntent)
-                                .build();
+                    new NotificationCompat.Action.Builder(R.drawable.ic_reply_24dp,
+                        context.getString(R.string.action_compose_shortcut),
+                        composePendingIntent).build();
 
                 builder.addAction(composeAction);
             } else if(body.getType() == Notification.Type.CHAT_MESSAGE) {
-                RemoteInput replyRemoteInput = new RemoteInput.Builder(KEY_REPLY)
-                        .setLabel(context.getString(R.string.label_quick_reply))
-                        .build();
+                RemoteInput replyRemoteInput = new RemoteInput.Builder(KEY_REPLY).setLabel(
+                    context.getString(R.string.label_quick_reply)).build();
 
-                PendingIntent quickReplyPendingIntent = getStatusReplyIntent(CHAT_REPLY_ACTION, context, body, account);
+                PendingIntent quickReplyPendingIntent =
+                    getStatusReplyIntent(CHAT_REPLY_ACTION, context, body, account);
 
                 NotificationCompat.Action quickReplyAction =
-                        new NotificationCompat.Action.Builder(R.drawable.ic_reply_24dp,
-                                context.getString(R.string.action_quick_reply), quickReplyPendingIntent)
-                                .addRemoteInput(replyRemoteInput)
-                                .build();
+                    new NotificationCompat.Action.Builder(R.drawable.ic_reply_24dp,
+                        context.getString(R.string.action_quick_reply),
+                        quickReplyPendingIntent).addRemoteInput(replyRemoteInput).build();
 
                 builder.addAction(quickReplyAction);
             }
@@ -278,14 +283,15 @@ public class NotificationHelper {
 
         // Summary
         // =======
-        final NotificationCompat.Builder summaryBuilder = newNotification(context, body, account, true);
+        final NotificationCompat.Builder summaryBuilder =
+            newNotification(context, body, account, true);
 
         if(currentNotifications.length() != 1) {
             try {
-                String title = context.getString(R.string.notification_title_summary, currentNotifications.length());
+                String title = context.getString(R.string.notification_title_summary,
+                    currentNotifications.length());
                 String text = joinNames(context, currentNotifications);
-                summaryBuilder.setContentTitle(title)
-                        .setContentText(text);
+                summaryBuilder.setContentTitle(title).setContentText(text);
             } catch(JSONException e) {
                 Timber.e(e);
             }
@@ -297,14 +303,7 @@ public class NotificationHelper {
         summaryBuilder.setOnlyAlertOnce(true);
         summaryBuilder.setGroupSummary(true);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-        notificationManager.notify(notificationId, builder.build());
-        if(currentNotifications.length() == 1) {
-            notificationManager.notify((int) account.getId(), builder.setGroupSummary(true).build());
-        } else {
-            notificationManager.notify((int) account.getId(), summaryBuilder.build());
-        }
+        return builder.build();
     }
 
     private static NotificationCompat.Builder newNotification(Context context, Notification body, AccountEntity account, boolean summary) {
