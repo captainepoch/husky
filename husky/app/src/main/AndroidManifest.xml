@@ -202,10 +202,6 @@
 
         <activity android:name=".components.drafts.DraftsActivity" />
 
-        <!--<receiver
-            android:name=".receiver.NotificationClearBroadcastReceiver"
-            android:exported="false" />-->
-
         <receiver
             android:name=".receiver.SendStatusBroadcastReceiver"
             android:enabled="true"
