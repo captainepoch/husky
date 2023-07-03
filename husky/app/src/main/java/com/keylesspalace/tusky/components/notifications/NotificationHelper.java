@@ -1,6 +1,7 @@
 /*
  * Husky -- A Pleroma client for Android
  *
+ * Copyright (C) 2023  The Tusky Developers
  * Copyright (C) 2022  The Husky Developers
  * Copyright (C) 2022  Conny Duck
  * Copyright (C) 2018  Jeremiasz Nelz <remi6397(a)gmail.com>
@@ -32,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -172,7 +174,23 @@ public class NotificationHelper {
         // =========================
         notificationId++;
 
-        final NotificationCompat.Builder builder = newNotification(context, body, account);
+        int accountId = (int) account.getId();
+        String notificationId = body.getId();
+        // Check for an existing notification with the notification ID from the notification
+        android.app.Notification existingNotification = null;
+        StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+        for (StatusBarNotification sbNotification : activeNotifications) {
+            if (notificationId.equals(sbNotification.getTag()) && accountId == sbNotification.getId()) {
+                existingNotification = sbNotification.getNotification();
+            }
+        }
+
+        NotificationCompat.Builder builder;
+        if(existingNotification != null) {
+            builder = new NotificationCompat.Builder(context, existingNotification);
+        } else {
+            builder = newNotification(context, body, account);
+        }
 
         builder.setContentTitle(titleForType(context, body, account))
             .setContentText(bodyForType(body, context));
