@@ -132,10 +132,6 @@ public class NotificationHelper {
      */
     private static final String NOTIFICATION_PULL_TAG = "pullNotifications";
 
-    /**
-     * by setting this as false, it's possible to test legacy notification channels on newer devices
-     */
-    // public static final boolean NOTIFICATION_USE_CHANNELS = false;
     public static final boolean NOTIFICATION_USE_CHANNELS =
         (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
 
@@ -148,11 +144,13 @@ public class NotificationHelper {
      * @param account the account for which the notification should be shown
      * @return An Android notification, null otherwise
      */
-    public static android.app.Notification make(final Context context,
-        NotificationManagerCompat notificationManager,
+    public static android.app.Notification make(
+        final Context context,
+        NotificationManager notificationManager,
         Notification body,
         AccountEntity account,
-        boolean isFirstOfBatch)
+        boolean isFirstOfBatch
+    )
     {
         body = Notification.rewriteToStatusTypeIfNeeded(body, account.getAccountId());
 
@@ -170,35 +168,11 @@ public class NotificationHelper {
             return null;
         }
 
-        String rawCurrentNotifications = account.getActiveNotifications();
-        JSONArray currentNotifications;
-
-        try {
-            currentNotifications = new JSONArray(rawCurrentNotifications);
-        } catch(JSONException e) {
-            currentNotifications = new JSONArray();
-        }
-
-        for(int i = 0; i < currentNotifications.length(); i++) {
-            try {
-                if(currentNotifications.getString(i).equals(body.getAccount().getName())) {
-                    currentNotifications.remove(i);
-                    break;
-                }
-            } catch(JSONException e) {
-                Timber.e(e);
-            }
-        }
-
-        currentNotifications.put(body.getAccount().getName());
-
-        account.setActiveNotifications(currentNotifications.toString());
-
         // Notification group member
         // =========================
-        final NotificationCompat.Builder builder = newNotification(context, body, account, false);
-
         notificationId++;
+
+        final NotificationCompat.Builder builder = newNotification(context, body, account);
 
         builder.setContentTitle(titleForType(context, body, account))
             .setContentText(bodyForType(body, context));
@@ -279,22 +253,10 @@ public class NotificationHelper {
         return builder.build();
     }
 
-    private static NotificationCompat.Builder newNotification(Context context,
-        Notification body,
-        AccountEntity account,
-        boolean summary)
+    private static NotificationCompat.Builder newNotification(
+        Context context, Notification body, AccountEntity account
+    )
     {
-        Intent summaryResultIntent = new Intent(context, MainActivity.class);
-        summaryResultIntent.putExtra(ACCOUNT_ID, account.getId());
-        TaskStackBuilder summaryStackBuilder = TaskStackBuilder.create(context);
-        summaryStackBuilder.addParentStack(MainActivity.class);
-        summaryStackBuilder.addNextIntent(summaryResultIntent);
-
-        PendingIntent summaryResultPendingIntent =
-            summaryStackBuilder.getPendingIntent((int) (notificationId + account.getId() * 10000),
-                pendingIntentFlags(false));
-
-        // We have to switch account here
         Intent eventResultIntent = new Intent(context, MainActivity.class);
         eventResultIntent.putExtra(ACCOUNT_ID, account.getId());
         TaskStackBuilder eventStackBuilder = TaskStackBuilder.create(context);
@@ -306,8 +268,7 @@ public class NotificationHelper {
 
         NotificationCompat.Builder builder =
             new NotificationCompat.Builder(context, getChannelId(account, body)).setSmallIcon(
-                    R.drawable.ic_notify)
-                .setContentIntent(summary ? summaryResultPendingIntent : eventResultPendingIntent)
+                    R.drawable.ic_notify).setContentIntent(eventResultPendingIntent)
                 //.setColor(BuildConfig.FLAVOR == "green" ? Color.parseColor("#19A341") : ContextCompat.getColor(context, R.color.tusky_orange))
                 .setGroup(account.getAccountId()).setAutoCancel(true)
                 .setShortcutId(Long.toString(account.getId()))
@@ -318,10 +279,9 @@ public class NotificationHelper {
         return builder;
     }
 
-    private static PendingIntent getStatusReplyIntent(String action,
-        Context context,
-        Notification body,
-        AccountEntity account)
+    private static PendingIntent getStatusReplyIntent(
+        String action, Context context, Notification body, AccountEntity account
+    )
     {
         Intent replyIntent =
             new Intent(context, SendStatusBroadcastReceiver.class).setAction(action)
@@ -360,8 +320,9 @@ public class NotificationHelper {
             replyIntent, pendingIntentFlags(true));
     }
 
-    public static void createNotificationChannelsForAccount(@NonNull AccountEntity account,
-        @NonNull Context context)
+    public static void createNotificationChannelsForAccount(
+        @NonNull AccountEntity account, @NonNull Context context
+    )
     {
         if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager =
@@ -422,8 +383,9 @@ public class NotificationHelper {
         }
     }
 
-    public static void deleteNotificationChannelsForAccount(@NonNull AccountEntity account,
-        @NonNull Context context)
+    public static void deleteNotificationChannelsForAccount(
+        @NonNull AccountEntity account, @NonNull Context context
+    )
     {
         if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager =
@@ -434,8 +396,9 @@ public class NotificationHelper {
         }
     }
 
-    public static void deleteLegacyNotificationChannels(@NonNull Context context,
-        @NonNull AccountManager accountManager)
+    public static void deleteLegacyNotificationChannels(
+        @NonNull Context context, @NonNull AccountManager accountManager
+    )
     {
         if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager =
@@ -456,8 +419,9 @@ public class NotificationHelper {
         }
     }
 
-    public static boolean areNotificationsEnabled(@NonNull Context context,
-        @NonNull AccountManager accountManager)
+    public static boolean areNotificationsEnabled(
+        @NonNull Context context, @NonNull AccountManager accountManager
+    )
     {
         if(NOTIFICATION_USE_CHANNELS) {
             // on Android >= O, notifications are enabled, if at least one channel is enabled
@@ -504,8 +468,9 @@ public class NotificationHelper {
         Timber.d("Disabled notification checks");
     }
 
-    public static void clearNotificationsForActiveAccount(@NonNull Context context,
-        @NonNull AccountManager accountManager)
+    public static void clearNotificationsForActiveAccount(
+        @NonNull Context context, @NonNull AccountManager accountManager
+    )
     {
         AccountEntity account = accountManager.getActiveAccount();
         if(account != null && !account.getActiveNotifications().equals("[]")) {
@@ -522,9 +487,9 @@ public class NotificationHelper {
         }
     }
 
-    private static boolean filterNotification(AccountEntity account,
-        Notification notification,
-        Context context)
+    private static boolean filterNotification(
+        AccountEntity account, Notification notification, Context context
+    )
     {
         if(NOTIFICATION_USE_CHANNELS) {
             NotificationManager notificationManager =
@@ -636,9 +601,9 @@ public class NotificationHelper {
     }
 
     @Nullable
-    private static String titleForType(Context context,
-        Notification notification,
-        AccountEntity account)
+    private static String titleForType(
+        Context context, Notification notification, AccountEntity account
+    )
     {
         String accountName = StringUtils.unicodeWrap(notification.getAccount().getName());
         switch(notification.getType()) {
