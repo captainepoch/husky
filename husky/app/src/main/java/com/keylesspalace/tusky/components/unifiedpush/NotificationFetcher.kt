@@ -20,8 +20,8 @@
 package com.keylesspalace.tusky.components.unifiedpush
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.content.Context
-import androidx.core.app.NotificationManagerCompat
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.db.AccountEntity
@@ -42,7 +42,8 @@ class NotificationFetcher(
     private val context: Context
 ) {
 
-    private val notificationManager = NotificationManagerCompat.from(context)
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     @SuppressLint("MissingPermission")
