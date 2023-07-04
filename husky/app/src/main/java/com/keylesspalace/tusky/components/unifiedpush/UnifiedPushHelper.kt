@@ -24,13 +24,6 @@ import android.content.Context
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.entity.Notification.Type
-import com.keylesspalace.tusky.entity.Notification.Type.FAVOURITE
-import com.keylesspalace.tusky.entity.Notification.Type.FOLLOW
-import com.keylesspalace.tusky.entity.Notification.Type.FOLLOW_REQUEST
-import com.keylesspalace.tusky.entity.Notification.Type.MENTION
-import com.keylesspalace.tusky.entity.Notification.Type.POLL
-import com.keylesspalace.tusky.entity.Notification.Type.REBLOG
-import com.keylesspalace.tusky.entity.Notification.Type.STATUS
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 
@@ -58,10 +51,10 @@ object UnifiedPushHelper {
         account: AccountEntity?
     ): Map<String, Boolean> {
         return buildMap {
-            Type.asList.forEach {
+            Type.asList.forEach {type ->
                 put(
-                    "data[alerts][${it.presentation}]",
-                    filterNotificationType(notificationManager, account, it)
+                    "data[alerts][${type.presentation}]",
+                    NotificationHelper.filterNotification(account, type, notificationManager)
                 )
             }
         }
@@ -69,42 +62,5 @@ object UnifiedPushHelper {
 
     private fun createNotificationsChannels(account: AccountEntity, applicationContext: Context) {
         NotificationHelper.createNotificationChannelsForAccount(account, applicationContext)
-    }
-
-    private fun filterNotificationType(
-        notificationManager: NotificationManager,
-        account: AccountEntity?,
-        type: Type
-    ): Boolean {
-        if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
-            val channelId = getChannelId(account, type) ?: return false
-
-            val channel = notificationManager.getNotificationChannel(channelId)
-            return (channel != null && channel.importance > NotificationManager.IMPORTANCE_NONE)
-        }
-
-        return when (type) {
-            MENTION -> account?.notificationsMentioned ?: false
-            STATUS -> account?.notificationsSubscriptions ?: false
-            FOLLOW -> account?.notificationsFollowed ?: false
-            FOLLOW_REQUEST -> account?.notificationsFollowRequested ?: false
-            REBLOG -> account?.notificationsReblogged ?: false
-            FAVOURITE -> account?.notificationsFavorited ?: false
-            POLL -> account?.notificationsPolls ?: false
-            else -> false
-        }
-    }
-
-    private fun getChannelId(account: AccountEntity?, type: Type): String? {
-        return when (type) {
-            MENTION -> NotificationHelper.CHANNEL_MENTION + account?.identifier
-            STATUS -> NotificationHelper.CHANNEL_SUBSCRIPTIONS + account?.identifier
-            FOLLOW -> NotificationHelper.CHANNEL_FOLLOW + account?.identifier
-            FOLLOW_REQUEST -> NotificationHelper.CHANNEL_FOLLOW_REQUEST + account?.identifier
-            REBLOG -> NotificationHelper.CHANNEL_BOOST + account?.identifier
-            FAVOURITE -> NotificationHelper.CHANNEL_FAVOURITE + account?.identifier
-            POLL -> NotificationHelper.CHANNEL_POLL + account?.identifier
-            else -> null
-        }
     }
 }
