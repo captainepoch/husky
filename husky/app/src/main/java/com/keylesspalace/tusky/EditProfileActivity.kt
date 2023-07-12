@@ -27,6 +27,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -307,14 +309,27 @@ class EditProfileActivity : BaseActivity() {
         }
 
         currentlyPicking = pickType
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+
+        val askForPermissions = if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+            arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_AUDIO
+            )
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        val permissions = askForPermissions.mapNotNull { permission ->
+            permission.takeIf {
+                ContextCompat.checkSelfPermission(this@EditProfileActivity, it) ==
+                    PackageManager.PERMISSION_DENIED
+            }
+        }.toTypedArray()
+
+        if (permissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                this@EditProfileActivity,
+                permissions,
                 PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
             )
         } else {
