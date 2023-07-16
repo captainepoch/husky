@@ -82,8 +82,6 @@ public class NotificationHelper {
      */
     public static final String ACCOUNT_ID = "account_id";
 
-    private static final String TAG = "NotificationHelper";
-
     public static final String REPLY_ACTION = "REPLY_ACTION";
 
     public static final String COMPOSE_ACTION = "COMPOSE_ACTION";
@@ -307,7 +305,7 @@ public class NotificationHelper {
                 .putExtra(KEY_SENDER_ACCOUNT_FULL_NAME, account.getFullName())
                 .putExtra(KEY_NOTIFICATION_ID, notificationId);
 
-        if(action == CHAT_REPLY_ACTION) {
+        if(action.equalsIgnoreCase(CHAT_REPLY_ACTION)) {
             replyIntent.putExtra(KEY_CHAT_ID, body.getChatMessage().getChatId());
         } else {
             Status status = body.getStatus();
@@ -375,17 +373,15 @@ public class NotificationHelper {
 
             NotificationChannelGroup channelGroup =
                 new NotificationChannelGroup(account.getIdentifier(), account.getFullName());
-
-            //noinspection ConstantConditions
             notificationManager.createNotificationChannelGroup(channelGroup);
 
             for(int i = 0; i < channelIds.length; i++) {
                 String id = channelIds[i];
                 String name = context.getString(channelNames[i]);
                 String description = context.getString(channelDescriptions[i]);
-                int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                NotificationChannel channel = new NotificationChannel(id, name, importance);
 
+                NotificationChannel channel =
+                    new NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT);
                 channel.setDescription(description);
                 channel.enableLights(true);
                 channel.setLightColor(0xFF2B90D9);
@@ -406,7 +402,6 @@ public class NotificationHelper {
             NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            //noinspection ConstantConditions
             notificationManager.deleteNotificationChannelGroup(account.getIdentifier());
         }
     }
@@ -419,7 +414,6 @@ public class NotificationHelper {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             // used until Tusky 1.4
-            //noinspection ConstantConditions
             notificationManager.deleteNotificationChannel(CHANNEL_MENTION);
             notificationManager.deleteNotificationChannel(CHANNEL_FAVOURITE);
             notificationManager.deleteNotificationChannel(CHANNEL_BOOST);
@@ -441,7 +435,6 @@ public class NotificationHelper {
             NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            //noinspection ConstantConditions
             if(notificationManager.areNotificationsEnabled()) {
                 for(NotificationChannel channel : notificationManager.getNotificationChannels()) {
                     if(channel.getImportance() > NotificationManager.IMPORTANCE_NONE) {
@@ -455,7 +448,7 @@ public class NotificationHelper {
             return false;
         } else {
             // on Android < O, notifications are enabled, if at least one account has notification enabled
-            return accountManager.areNotificationsEnabled();
+            return accountManager.hasNotificationsEnabled();
         }
     }
 
@@ -492,7 +485,6 @@ public class NotificationHelper {
 
                 NotificationManager notificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                //noinspection ConstantConditions
                 notificationManager.cancel((int) account.getId());
                 return true;
             }).subscribeOn(Schedulers.io()).subscribe();
