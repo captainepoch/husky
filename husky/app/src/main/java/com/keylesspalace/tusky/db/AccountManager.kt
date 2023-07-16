@@ -57,7 +57,7 @@ class AccountManager(db: AppDatabase) {
     fun addAccount(accessToken: String, domain: String) {
         activeAccount?.let {
             it.isActive = false
-            Timber.d("addAccount: saving account with id ${it.id}")
+            Timber.d("Saving account with id ${it.id}")
 
             accountDao.insertOrReplace(it)
         }
@@ -79,7 +79,7 @@ class AccountManager(db: AppDatabase) {
      */
     fun saveAccount(account: AccountEntity) {
         if (account.id != 0L) {
-            Timber.d("saveAccount: saving account with id ${account.id}")
+            Timber.d("Saving account with id ${account.id}")
 
             accountDao.insertOrReplace(account)
         }
@@ -100,7 +100,7 @@ class AccountManager(db: AppDatabase) {
                 accounts[0].isActive = true
                 activeAccount = accounts[0]
 
-                Timber.d("logActiveAccountOut: saving account with id ${accounts[0].id}")
+                Timber.d("Saving account with id ${accounts[0].id}")
 
                 accountDao.insertOrReplace(accounts[0])
             } else {
@@ -148,7 +148,7 @@ class AccountManager(db: AppDatabase) {
      */
     fun setActiveAccount(accountId: Long) {
         activeAccount?.let {
-            Timber.d("setActiveAccount: saving account with id ${it.id}")
+            Timber.d("Saving account with id ${it.id}")
 
             it.isActive = false
             saveAccount(it)
