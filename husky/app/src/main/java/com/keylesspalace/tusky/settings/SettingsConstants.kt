@@ -79,6 +79,7 @@ object PrefKeys {
     const val LIVE_NOTIFICATIONS = "liveNotifications"
 
     const val PUSH_NOTIFICATIONS_INFO_DIALOG = "pushNotificationsInfoDialog"
+    const val UNIFIEDPUSH_ENROLL_DIALOG = "unifiedPushEnrollDialog"
 
     const val NOTIFICATIONS_ENABLED = "notificationsEnabled"
     const val NOTIFICATION_ALERT_LIGHT = "notificationAlertLight"

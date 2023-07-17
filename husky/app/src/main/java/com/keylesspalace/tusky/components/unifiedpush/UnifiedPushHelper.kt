@@ -35,7 +35,7 @@ import timber.log.Timber
 object UnifiedPushHelper {
 
     fun hasUnifiedPushProviders(context: Context): Boolean {
-        return UnifiedPush.getDistributor(context).isNotEmpty()
+        return UnifiedPush.getDistributors(context).isNotEmpty()
     }
 
     fun hasUnifiedPushEnrolled(account: AccountEntity): Boolean {
@@ -49,7 +49,7 @@ object UnifiedPushHelper {
         Timber.d("Registering UnifiedPush for ${account?.username}")
 
         account?.let {
-            createNotificationsChannels(account, context)
+            NotificationHelper.createNotificationChannelsForAccount(account, context)
 
             UnifiedPush.registerAppWithDialog(
                 context,
@@ -61,20 +61,23 @@ object UnifiedPushHelper {
 
     fun showUnifiedPushDialog(
         activity: Activity,
-        onPositiveAction: (Boolean) -> Unit
+        onPositiveAction: (Boolean) -> Unit,
+        onHideDialogAction: (Boolean) -> Unit
     ) {
         val hasProviders = hasUnifiedPushProviders(activity)
         val binding = BottomSheetTwoOptionsBinding.inflate(activity.layoutInflater)
 
         val message = SpannableStringBuilder()
             .append(activity.getString(R.string.unifiedpush_info_dialog_text))
-
-        /*if(!hasProviders) {
+        if (!hasProviders) {
             message
                 .append("\n\n")
                 .append(activity.getString(R.string.unifiedpush_info_dialog_text_no_provider))
             binding.stopShowing.isChecked = true
-        }*/
+        }
+        message
+            .append("\n\n")
+            .append(activity.getString(R.string.unifiedpush_info_dialog_text_reminder))
         binding.dialogDesc.text = message
 
         val dialog = AlertDialog.Builder(activity)
@@ -82,13 +85,9 @@ object UnifiedPushHelper {
             .setView(binding.root)
             .setPositiveButton(R.string.unifiedpush_info_dialog_ok) { _, _ ->
                 onPositiveAction(hasProviders)
+                onHideDialogAction(binding.stopShowing.isChecked)
             }
-
-        /*.setPositiveButton(R.string.filter_dialog_update_button) { _, _ ->
-        }
-        .setNegativeButton(R.string.filter_dialog_remove_button) { _, _ ->
-        }
-        .setNeutralButton(android.R.string.cancel, null)*/
+            .setNeutralButton(activity.getString(R.string.unifiedpush_info_dialog_cancel), null)
 
         dialog.create().show()
     }
@@ -120,9 +119,5 @@ object UnifiedPushHelper {
                 )
             }
         }
-    }
-
-    private fun createNotificationsChannels(account: AccountEntity, applicationContext: Context) {
-        NotificationHelper.createNotificationChannelsForAccount(account, applicationContext)
     }
 }

@@ -20,6 +20,7 @@
 
 package com.keylesspalace.tusky.db
 
+import com.keylesspalace.tusky.core.extensions.orEmpty
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.settings.PrefKeys
@@ -193,8 +194,17 @@ class AccountManager(db: AppDatabase) {
         } ?: PrefKeys.LIVE_NOTIFICATIONS
     }
 
+    fun hideUnifiedPushEnrollDialogPrefKey(): String {
+        return activeAccount?.let { account ->
+            "${PrefKeys.UNIFIEDPUSH_ENROLL_DIALOG}+${account.fullName}"
+        } ?: PrefKeys.UNIFIEDPUSH_ENROLL_DIALOG
+    }
+
     fun hasNotificationsEnabled(): Boolean {
-        return activeAccount?.notificationsEnabled ?: true
+        return (
+            activeAccount?.unifiedPushUrl?.isNotBlank().orEmpty() &&
+                activeAccount?.unifiedPushInstance?.isNotBlank().orEmpty()
+            )
     }
 
     fun getAccountByUnifiedPushInstance(instance: String): AccountEntity? {

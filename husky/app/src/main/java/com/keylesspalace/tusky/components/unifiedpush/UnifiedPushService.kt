@@ -39,7 +39,6 @@ import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.koin.core.component.KoinComponent
@@ -180,7 +179,6 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
 
                 accountManager.saveAccount(
                     account.apply {
-                        notificationsEnabled = true
                         unifiedPushUrl = endpoint
                         unifiedPushInstance = instance
                     }
