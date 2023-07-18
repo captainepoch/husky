@@ -197,6 +197,9 @@ dependencies {
     implementation deps.androidx.lifecycle.reactiveStreamsKtx
     implementation deps.androidx.lifecycle.viewmodelKtx
 
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+
     // Glide dependencies
     implementation deps.glide.glide
     kapt deps.glide.glideCompiler
@@ -207,7 +210,6 @@ dependencies {
 
     // Google dependencies
     implementation deps.google.flexbox
-    implementation deps.google.exoplayer
     implementation deps.google.materialDesign
 
     // Koin dependencies

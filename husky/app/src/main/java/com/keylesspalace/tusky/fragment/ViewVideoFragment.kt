@@ -32,17 +32,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import androidx.media3.common.MediaItem.Builder
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewVideoBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.util.visible
 import timber.log.Timber
 
+@UnstableApi
 class ViewVideoFragment : ViewMediaFragment() {
 
     // TODO(ViewBinding): Remove lateinit in favor of the extension
@@ -71,10 +73,6 @@ class ViewVideoFragment : ViewMediaFragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         // Start/pause/resume video playback as fragment is shown/hidden
         super.setUserVisibleHint(isVisibleToUser)
-
-        if (binding.videoView == null) {
-            return
-        }
 
         if (isVisibleToUser) {
             if (mediaActivity.isToolbarVisible) {
@@ -130,7 +128,7 @@ class ViewVideoFragment : ViewMediaFragment() {
             .also { player ->
                 binding.videoView.player = player
 
-                val mediaItem = MediaItem.Builder()
+                val mediaItem = Builder()
                     .setUri(Uri.parse(url))
                     .build()
                 player.setMediaItem(mediaItem)
@@ -175,7 +173,7 @@ class ViewVideoFragment : ViewMediaFragment() {
     }
 
     override fun onToolbarVisibilityChange(visible: Boolean) {
-        if (binding.videoView == null || binding.mediaDescription == null || !userVisibleHint) {
+        if (!userVisibleHint) {
             return
         }
 
@@ -190,7 +188,7 @@ class ViewVideoFragment : ViewMediaFragment() {
         binding.mediaDescription.animate().alpha(alpha)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    binding.mediaDescription?.visible(isDescriptionVisible)
+                    binding.mediaDescription.visible(isDescriptionVisible)
                     animation.removeListener(this)
                 }
             })
