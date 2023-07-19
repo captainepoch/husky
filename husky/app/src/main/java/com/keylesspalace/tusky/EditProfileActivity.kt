@@ -44,10 +44,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.canhub.cropper.CropImage
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.adapter.AccountFieldEditAdapter
 import com.keylesspalace.tusky.adapter.MutableStringPair
 import com.keylesspalace.tusky.components.instance.data.models.data.InstanceInfo
+import com.keylesspalace.tusky.core.extensions.notNull
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.extensions.viewObserve
 import com.keylesspalace.tusky.databinding.ActivityEditProfileBinding
@@ -63,7 +65,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
-import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -116,7 +117,7 @@ class EditProfileActivity : BaseActivity() {
 
         binding.addFieldButton.setOnClickListener {
             viewModel.addField()
-            if (accountFieldEditAdapter.itemCount >= viewModel.instanceData.value.maxBioFields) {
+            if(accountFieldEditAdapter.itemCount >= viewModel.instanceData.value.maxBioFields) {
                 it.isEnabled = false
             }
 
@@ -161,10 +162,10 @@ class EditProfileActivity : BaseActivity() {
 
     private fun handleProfileData(result: Resource<Account>?) {
         result?.let { profile ->
-            when (profile) {
+            when(profile) {
                 is Success -> {
                     val me = profile.data
-                    if (me != null) {
+                    if(me != null) {
                         binding.displayNameEditText.setText(me.displayName)
                         binding.noteEditText.setText(me.source?.note)
                         binding.lockedCheckBox.isChecked = me.locked
@@ -177,11 +178,11 @@ class EditProfileActivity : BaseActivity() {
 
                         binding.addFieldButton.isEnabled =
                             (
-                            me.source?.fields?.size
+                                me.source?.fields?.size
                                 ?: 0
                             ) < viewModel.instanceData.value.maxBioFields
 
-                        if (viewModel.avatarData.value == null) {
+                        if(viewModel.avatarData.value == null) {
                             Glide.with(this)
                                 .load(me.avatar)
                                 .placeholder(R.drawable.avatar_default)
@@ -191,7 +192,7 @@ class EditProfileActivity : BaseActivity() {
                                 ).into(binding.avatarPreview)
                         }
 
-                        if (viewModel.headerData.value == null) {
+                        if(viewModel.headerData.value == null) {
                             Glide.with(this)
                                 .load(me.header)
                                 .into(binding.headerPreview)
@@ -218,7 +219,7 @@ class EditProfileActivity : BaseActivity() {
 
     private fun handleSaveData(result: Resource<Nothing>?) {
         result?.let { resource ->
-            when (resource) {
+            when(resource) {
                 is Success -> {
                     finish()
                 }
@@ -235,8 +236,8 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun handleInstanceInfo(instanceInfo: InstanceInfo) {
-        if (instanceInfo.isLoadingInfo.not()) {
-            if (instanceInfo.maxBioLength > 0) {
+        if(instanceInfo.isLoadingInfo.not()) {
+            if(instanceInfo.maxBioLength > 0) {
                 binding.noteEditTextLayout.counterMaxLength = instanceInfo.maxBioLength
             }
 
@@ -252,7 +253,7 @@ class EditProfileActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
 
-        if (!isFinishing) {
+        if(!isFinishing) {
             viewModel.updateProfile(
                 binding.displayNameEditText.text.toString(),
                 binding.noteEditText.text.toString(),
@@ -269,12 +270,12 @@ class EditProfileActivity : BaseActivity() {
         roundedCorners: Boolean
     ) {
         liveData.observe(this) {
-            when (it) {
+            when(it) {
                 is Success -> {
                     val glide = Glide.with(imageView)
                         .load(it.data)
 
-                    if (roundedCorners) {
+                    if(roundedCorners) {
                         glide.transform(
                             FitCenter(),
                             RoundedCorners(resources.getDimensionPixelSize(R.dimen.avatar_radius_80dp))
@@ -293,7 +294,7 @@ class EditProfileActivity : BaseActivity() {
 
                 is Error -> {
                     progressBar.hide()
-                    if (!it.consumed) {
+                    if(!it.consumed) {
                         onResizeFailure()
                         it.consumed = true
                     }
@@ -303,14 +304,14 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun onMediaPick(pickType: PickType) {
-        if (currentlyPicking != PickType.NOTHING) {
+        if(currentlyPicking != PickType.NOTHING) {
             // Ignore inputs if another pick operation is still occurring.
             return
         }
 
         currentlyPicking = pickType
 
-        val askForPermissions = if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+        val askForPermissions = if(VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
             arrayOf(
                 Manifest.permission.READ_MEDIA_IMAGES,
                 Manifest.permission.READ_MEDIA_VIDEO,
@@ -326,7 +327,7 @@ class EditProfileActivity : BaseActivity() {
             }
         }.toTypedArray()
 
-        if (permissions.isNotEmpty()) {
+        if(permissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this@EditProfileActivity,
                 permissions,
@@ -342,10 +343,10 @@ class EditProfileActivity : BaseActivity() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        when (requestCode) {
+        when(requestCode) {
             PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if(grantResults.isNotEmpty() &&
+                   grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     initiateMediaPicking()
                 } else {
@@ -368,7 +369,7 @@ class EditProfileActivity : BaseActivity() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "image/*"
-        when (currentlyPicking) {
+        when(currentlyPicking) {
             PickType.AVATAR -> {
                 startActivityForResult(intent, AVATAR_PICK_RESULT)
             }
@@ -388,7 +389,7 @@ class EditProfileActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        when(item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true
@@ -403,7 +404,7 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun save() {
-        if (currentlyPicking != PickType.NOTHING) {
+        if(currentlyPicking != PickType.NOTHING) {
             return
         }
 
@@ -423,7 +424,7 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun beginMediaPicking() {
-        when (currentlyPicking) {
+        when(currentlyPicking) {
             PickType.AVATAR -> {
                 binding.avatarProgressBar.visibility = View.VISIBLE
                 binding.avatarPreview.visibility = View.INVISIBLE
@@ -449,9 +450,9 @@ class EditProfileActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
+        when(requestCode) {
             AVATAR_PICK_RESULT -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
+                if(resultCode == Activity.RESULT_OK && data != null) {
                     CropImage.activity(data.data)
                         .setInitialCropWindowPaddingRatio(0f)
                         .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
@@ -463,7 +464,7 @@ class EditProfileActivity : BaseActivity() {
             }
 
             HEADER_PICK_RESULT -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
+                if(resultCode == Activity.RESULT_OK && data != null) {
                     CropImage.activity(data.data)
                         .setInitialCropWindowPaddingRatio(0f)
                         .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
@@ -476,8 +477,15 @@ class EditProfileActivity : BaseActivity() {
 
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
-                when (resultCode) {
-                    Activity.RESULT_OK -> beginResize(result.uri)
+                when(resultCode) {
+                    Activity.RESULT_OK -> {
+                        result?.uri?.let { uri ->
+                            Timber.d("Crop Image Activity Request OK, " +
+                                     "URI null[${uri.notNull()}]")
+                            beginResize(uri)
+                        } ?: Timber.w("URI null")
+                    }
+
                     CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> onResizeFailure()
                     else -> endMediaPicking()
                 }
@@ -488,7 +496,7 @@ class EditProfileActivity : BaseActivity() {
     private fun beginResize(uri: Uri) {
         beginMediaPicking()
 
-        when (currentlyPicking) {
+        when(currentlyPicking) {
             PickType.AVATAR -> {
                 viewModel.newAvatar(uri, this)
             }

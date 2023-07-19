@@ -1,6 +1,0 @@
-[versions]
-androidx-media3 = "1.1.0"
-
-[libraries]
-androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
-androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }

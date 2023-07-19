@@ -182,6 +182,8 @@ dependencies {
     implementation deps.androidx.emoji2ViewsHelper
     implementation deps.androidx.exifInterface
     implementation deps.androidx.fragmentKtx
+    implementation deps.androidx.media3Exoplayer
+    implementation deps.androidx.media3Ui
     implementation deps.androidx.pagingRuntimeKtx
     implementation deps.androidx.preferenceKtx
     implementation deps.androidx.recyclerView
@@ -196,9 +198,6 @@ dependencies {
     implementation deps.androidx.lifecycle.liveDataKtx
     implementation deps.androidx.lifecycle.reactiveStreamsKtx
     implementation deps.androidx.lifecycle.viewmodelKtx
-
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.ui)
 
     // Glide dependencies
     implementation deps.glide.glide
