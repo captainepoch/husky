@@ -41,7 +41,6 @@ import com.keylesspalace.tusky.viewmodel.AccountsInListViewModel
 import com.keylesspalace.tusky.viewmodel.State
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.extensions.LayoutContainer
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -65,7 +64,9 @@ class AccountsInListFragment : DialogFragment() {
         }
     }
 
-    private val binding by viewBinding(FragmentAccountsInListBinding::bind)
+    // TODO(ViewBinding): Remove lateinit in favor of the extension
+    // private val binding by viewBinding(FragmentAccountsInListBinding::bind)
+    private lateinit var binding: FragmentAccountsInListBinding
     private val viewModel: AccountsInListViewModel by viewModel()
 
     private lateinit var listId: String
@@ -105,6 +106,7 @@ class AccountsInListFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentAccountsInListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
