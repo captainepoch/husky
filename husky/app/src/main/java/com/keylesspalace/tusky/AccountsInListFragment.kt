@@ -105,7 +105,7 @@ class AccountsInListFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAccountsInListBinding.inflate(inflater, container, false)
         return binding.root
     }

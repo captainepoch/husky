@@ -1,0 +1,4 @@
+Husky 1.4.4
+
+Changelog:
+  - Fix: Crash while editing a list.
