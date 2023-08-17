@@ -44,34 +44,31 @@ class NotificationFetcher(
 
     private val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     @SuppressLint("MissingPermission")
-    fun fetchAndShow(instance: String) {
-        scope.launch {
-            accountManager.getAccountByUnifiedPushInstance(instance)?.let { account ->
-                fetchNotifications(account).forEachIndexed { index, notification ->
-                    val androidNotification = NotificationHelper.make(
-                        context,
-                        notificationManager,
-                        notification,
-                        account,
-                        index == 0
+    suspend fun fetchAndShow(instance: String) {
+        accountManager.getAccountByUnifiedPushInstance(instance)?.let { account ->
+            fetchNotifications(account).forEachIndexed { index, notification ->
+                val androidNotification = NotificationHelper.make(
+                    context,
+                    notificationManager,
+                    notification,
+                    account,
+                    index == 0
+                )
+
+                Timber.d("Notification $index made")
+
+                androidNotification?.let { pushNotification ->
+                    notificationManager.notify(
+                        notification.id,
+                        account.id.toInt(),
+                        pushNotification
                     )
-
-                    Timber.d("Notification $index made")
-
-                    androidNotification?.let { pushNotification ->
-                        notificationManager.notify(
-                            notification.id,
-                            account.id.toInt(),
-                            pushNotification
-                        )
-                    }
-
-                    // Delay pushing notifications too fast because of Android limits
-                    delay(500)
                 }
+
+                // Delay pushing notifications too fast because of Android limit
+                delay(500)
             }
         }
     }
