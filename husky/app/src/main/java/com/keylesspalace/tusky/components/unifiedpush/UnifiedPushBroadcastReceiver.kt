@@ -20,9 +20,9 @@
 package com.keylesspalace.tusky.components.unifiedpush
 
 import android.content.Context
-import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.keylesspalace.tusky.components.unifiedpush.UnifiedPushConstants.UNIFIED_PUSH_WORKER_INSTANCE
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
@@ -34,11 +34,12 @@ class UnifiedPushBroadcastReceiver : MessagingReceiver() {
 
         Timber.d("New message for $instance")
 
-        val workerData = Data.Builder().putString(UNIFIED_PUSH_WORKER_INSTANCE, instance).build()
         WorkManager.getInstance(context).enqueue(
-            OneTimeWorkRequestBuilder<NotificationWorker>().apply {
-                setInputData(workerData)
-            }.build()
+            OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInputData(
+                    workDataOf(UNIFIED_PUSH_WORKER_INSTANCE to instance)
+                )
+                .build()
         )
     }
 
