@@ -57,7 +57,7 @@
     <string name="pref_title_hide_live_notification_description">Hide Live Notification username</string>
     <string name="pref_title_hide_live_notification_description_toast">This will be changed once you go back to the timeline.</string>
     <string name="pref_title_live_notifications">Live notifications</string>
-    <string name="pref_summary_live_notifications">May slightly increase power consumption</string>
+    <string name="pref_summary_live_notifications">Press to set up which notifications you desire to receive.</string>
     <string name="pref_title_default_formatting">Default formatting syntax(if supported by instance)</string>
     <string name="pref_title_notification_filter_emoji">my posts are reacted with emojis</string>
     <string name="pref_title_notification_filter_chat_messages">received a chat message</string>
