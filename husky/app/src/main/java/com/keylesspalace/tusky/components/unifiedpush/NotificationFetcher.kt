@@ -29,11 +29,7 @@ import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.isLessThan
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class NotificationFetcher(
