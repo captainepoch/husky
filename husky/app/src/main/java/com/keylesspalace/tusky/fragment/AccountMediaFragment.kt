@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.fragment
 
@@ -27,8 +32,10 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.keylesspalace.tusky.BaseActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
+import com.keylesspalace.tusky.ViewThreadActivity
 import com.keylesspalace.tusky.databinding.FragmentTimelineBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Status
@@ -118,10 +125,10 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
 
                 val body = response.body()
                 body?.let { fetched ->
-                    // filter muted statuses if needed
+                    // Filter muted statuses if needed
                     val filtered = fetched.filter { !(filterMuted && it.muted) }
                     statuses.addAll(0, filtered)
-                    // flatMap requires iterable but I don't want to box each array into list
+                    // FlatMap requires iterable but I don't want to box each array into list
                     val result = mutableListOf<AttachmentViewData>()
                     for (status in filtered) {
                         result.addAll(AttachmentViewData.list(status))
@@ -160,12 +167,12 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
                     Timber.d("First: ${fetched.first().id}, last: ${fetched.last().id}")
                 }
 
-                // filter muted statuses if needed
+                // Filter muted statuses if needed
                 val filtered = fetched.filter { !(filterMuted && it.muted) }
 
                 statuses.addAll(filtered)
                 Timber.d("There are ${statuses.size} statuses")
-                // flatMap requires iterable but I don't want to box each array into list
+                // FlatMap requires iterable but I don't want to box each array into list
                 val result = mutableListOf<AttachmentViewData>()
                 for (status in filtered) {
                     result.addAll(AttachmentViewData.list(status))
@@ -280,6 +287,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         if (isAdded) {
             binding.statusView.hide()
         }
+
         if (fetchingStatus == FetchingStatus.NOT_FETCHING && statuses.isEmpty()) {
             fetchingStatus = FetchingStatus.INITIAL_FETCHING
             currentCall = api.accountStatuses(accountId, null, null, null, null, true, null)
@@ -307,10 +315,21 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
                     startActivity(intent)
                 }
             }
+
             Attachment.Type.UNKNOWN -> {
                 LinkHelper.openLink(items[currentIndex].attachment.url, context)
             }
         }
+    }
+
+    private fun viewStatus(item: AttachmentViewData) {
+        (requireActivity() as BaseActivity).startActivityWithSlideInAnimation(
+            ViewThreadActivity.startIntent(
+                requireActivity(),
+                item.statusId,
+                item.statusUrl
+            )
+        )
     }
 
     private enum class FetchingStatus {
@@ -331,7 +350,9 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         }
 
         fun addBottom(newItems: List<AttachmentViewData>) {
-            if (newItems.isEmpty()) return
+            if (newItems.isEmpty()) {
+                return
+            }
 
             val oldLen = items.size
             items.addAll(newItems)
@@ -355,24 +376,26 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
             itemBgBaseHSV[2] = random.nextFloat() * (1f - 0.3f) + 0.3f
             holder.imageView.setBackgroundColor(Color.HSVToColor(itemBgBaseHSV))
-            val item = items[position]
 
             Glide.with(holder.imageView)
-                .load(item.attachment.previewUrl)
+                .load(items[position].attachment.previewUrl)
                 .centerInside()
                 .into(holder.imageView)
         }
 
         inner class MediaViewHolder(val imageView: ImageView) :
-            RecyclerView.ViewHolder(imageView),
-            View.OnClickListener {
-            init {
-                itemView.setOnClickListener(this)
-            }
+            RecyclerView.ViewHolder(imageView) {
 
-            // saving some allocations
-            override fun onClick(v: View?) {
-                viewMedia(items, adapterPosition, imageView)
+            init {
+                itemView.setOnClickListener {
+                    viewMedia(items, adapterPosition, imageView)
+                }
+
+                itemView.setOnLongClickListener {
+                    viewStatus(items[adapterPosition])
+
+                    true
+                }
             }
         }
     }
