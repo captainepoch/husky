@@ -215,7 +215,7 @@
     <string name="visibility_private">Followers-Only: Post to followers only</string>
     <string name="visibility_direct">Direct: Post to mentioned users only</string>
 
-    <string name="pref_title_edit_notification_settings">Notifications</string>
+    <string name="pref_title_edit_notification_settings">Personalize notifications</string>
     <string name="pref_title_notifications_enabled">Notifications</string>
     <string name="pref_title_notification_alerts">Alerts</string>
     <string name="pref_title_notification_alert_sound">Notify with a sound</string>

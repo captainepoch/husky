@@ -41,6 +41,7 @@
     <string name="notification_move_name">Move</string>
     <string name="notification_move_description">Notifications when somebody you\'re following migrated to another profile</string>
 
+    <string name="pref_title_notifications">Notifications</string>
     <string name="pref_title_other">Other</string>
     <string name="pref_title_privacy">Privacy</string>
 
