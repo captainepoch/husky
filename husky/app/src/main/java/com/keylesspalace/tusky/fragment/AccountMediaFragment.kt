@@ -17,7 +17,6 @@ package com.keylesspalace.tusky.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,14 +45,9 @@ import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.io.IOException
 import java.util.Random
-
-/**
- * Created by charlag on 26/10/2017.
- *
- * Fragment with multiple columns of media previews for the specified account.
- */
 
 class AccountMediaFragment : BaseFragment(), RefreshableFragment {
 
@@ -76,7 +70,6 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         }
 
         private const val ACCOUNT_ID_ARG = "account_id"
-        private const val TAG = "AccountMediaFragment"
         private const val ARG_ENABLE_SWIPE_TO_REFRESH = "arg.enable.swipe.to.refresh"
     }
 
@@ -94,13 +87,13 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
     private lateinit var accountId: String
 
     private val callback = object : Callback<List<Status>> {
-        override fun onFailure(call: Call<List<Status>>?, t: Throwable?) {
+        override fun onFailure(call: Call<List<Status>>, t: Throwable) {
             fetchingStatus = FetchingStatus.NOT_FETCHING
 
             if (isAdded) {
                 binding.swipeRefreshLayout.isRefreshing = false
                 binding.progressBar.visibility = View.GONE
-                binding.topProgressBar?.hide()
+                binding.topProgressBar.hide()
                 binding.statusView.show()
                 if (t is IOException) {
                     binding.statusView.setup(R.drawable.elephant_offline, R.string.error_network) {
@@ -113,7 +106,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
                 }
             }
 
-            Log.d(TAG, "Failed to fetch account media", t)
+            Timber.e("Failed to fetch account media", t)
         }
 
         override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
@@ -121,7 +114,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
             if (isAdded) {
                 binding.swipeRefreshLayout.isRefreshing = false
                 binding.progressBar.visibility = View.GONE
-                binding.topProgressBar?.hide()
+                binding.topProgressBar.hide()
 
                 val body = response.body()
                 body?.let { fetched ->
@@ -152,29 +145,26 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
     }
 
     private val bottomCallback = object : Callback<List<Status>> {
-        override fun onFailure(call: Call<List<Status>>?, t: Throwable?) {
+        override fun onFailure(call: Call<List<Status>>, t: Throwable) {
             fetchingStatus = FetchingStatus.NOT_FETCHING
 
-            Log.d(TAG, "Failed to fetch account media", t)
+            Timber.e("Failed to fetch account media", t)
         }
 
         override fun onResponse(call: Call<List<Status>>, response: Response<List<Status>>) {
             fetchingStatus = FetchingStatus.NOT_FETCHING
             val body = response.body()
             body?.let { fetched ->
-                Log.d(TAG, "fetched ${fetched.size} statuses")
+                Timber.d("Fetched ${fetched.size} statuses")
                 if (fetched.isNotEmpty()) {
-                    Log.d(
-                        TAG,
-                        "first: ${fetched.first().id}, last: ${fetched.last().id}"
-                    )
+                    Timber.d("First: ${fetched.first().id}, last: ${fetched.last().id}")
                 }
 
                 // filter muted statuses if needed
                 val filtered = fetched.filter { !(filterMuted && it.muted) }
 
                 statuses.addAll(filtered)
-                Log.d(TAG, "now there are ${statuses.size} statuses")
+                Timber.d("There are ${statuses.size} statuses")
                 // flatMap requires iterable but I don't want to box each array into list
                 val result = mutableListOf<AttachmentViewData>()
                 for (status in filtered) {
@@ -224,7 +214,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
 
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-            override fun onScrolled(recycler_view: RecyclerView, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
                     val itemCount = layoutManager.itemCount
                     val lastItem = layoutManager.findLastCompletelyVisibleItemPosition()
@@ -232,8 +222,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
                         fetchingStatus == FetchingStatus.NOT_FETCHING
                     ) {
                         statuses.lastOrNull()?.let { last ->
-                            Log.d(
-                                TAG,
+                            Timber.d(
                                 "Requesting statuses with " +
                                     "max_id: ${last.id}, (bottom)"
                             )
@@ -283,7 +272,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         currentCall?.enqueue(callback)
 
         if (!isSwipeToRefreshEnabled) {
-            binding.topProgressBar?.show()
+            binding.topProgressBar.show()
         }
     }
 
@@ -328,8 +317,7 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
         NOT_FETCHING, INITIAL_FETCHING, FETCHING_BOTTOM, REFRESHING
     }
 
-    inner class MediaGridAdapter :
-        RecyclerView.Adapter<MediaGridAdapter.MediaViewHolder>() {
+    inner class MediaGridAdapter : RecyclerView.Adapter<MediaGridAdapter.MediaViewHolder>() {
 
         var baseItemColor = Color.BLACK
 
@@ -350,10 +338,10 @@ class AccountMediaFragment : BaseFragment(), RefreshableFragment {
             notifyItemRangeInserted(oldLen, newItems.size)
         }
 
-        override fun onAttachedToRecyclerView(recycler_view: RecyclerView) {
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             val hsv = FloatArray(3)
             Color.colorToHSV(baseItemColor, hsv)
-            super.onAttachedToRecyclerView(recycler_view)
+            super.onAttachedToRecyclerView(recyclerView)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
