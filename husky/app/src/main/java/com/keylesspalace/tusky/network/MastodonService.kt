@@ -114,31 +114,12 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.notifications(maxId, sinceId, limit, excludes, withMuted)
     }
 
-    @Deprecated("New API with Coroutines")
-    override fun markersWithAuth(
-        auth: String,
-        domain: String,
-        timelines: List<String>
-    ): Single<Map<String, Marker>> {
-        return api.markersWithAuth(auth, domain, timelines)
-    }
-
     override suspend fun markersWithAuthCoroutine(
         auth: String,
         domain: String,
         timelines: List<String>
     ): Response<Map<String, Marker>> {
         return api.markersWithAuthCoroutine(auth, domain, timelines)
-    }
-
-    @Deprecated("New API with Coroutines")
-    override fun notificationsWithAuth(
-        auth: String,
-        domain: String,
-        sinceId: String?,
-        includeTypes: List<String>?
-    ): Single<List<Notification>> {
-        return api.notificationsWithAuth(auth, domain, sinceId, includeTypes)
     }
 
     override suspend fun notificationsWithAuthCoroutine(
