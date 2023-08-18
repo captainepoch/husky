@@ -17,7 +17,6 @@ package com.keylesspalace.tusky.components.preference
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +25,6 @@ import com.keylesspalace.tusky.AccountListActivity.Type.BLOCKS
 import com.keylesspalace.tusky.AccountListActivity.Type.MUTES
 import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.FiltersActivity
-import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.R.anim
 import com.keylesspalace.tusky.R.array
 import com.keylesspalace.tusky.R.attr
@@ -38,13 +36,12 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.components.instancemute.InstanceListActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Filter
-import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.entity.Status.Visibility
-import com.keylesspalace.tusky.entity.Status.Visibility.PUBLIC
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.settings.listPreference
@@ -62,6 +59,7 @@ import org.koin.android.ext.android.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
@@ -70,20 +68,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
     private val eventHub: EventHub by inject()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val context = requireContext()
         makePreferenceScreen {
-            preference {
-                setTitle(string.pref_title_edit_notification_settings)
-                icon = IconicsDrawable(context, gmd_notifications).apply {
-                    sizeRes = dimen.preference_icon_size
-                    colorInt = ThemeUtils.getColor(context, attr.iconColor)
-                }
-                setOnPreferenceClickListener {
-                    openNotificationPrefs()
-                    true
-                }
-            }
-
             preference {
                 setTitle(string.title_tab_preferences)
                 setIcon(drawable.ic_tabs)
@@ -153,7 +138,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     key = PrefKeys.DEFAULT_POST_PRIVACY
                     setSummaryProvider { entry }
                     val visibility = accountManager.activeAccount?.defaultPostPrivacy
-                        ?: PUBLIC
+                        ?: Visibility.PUBLIC
                     value = visibility.serverString()
                     setIcon(getIconForVisibility(visibility))
                     setOnPreferenceChangeListener { _, newValue ->
@@ -170,8 +155,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     setEntryValues(array.formatting_syntax_values)
                     key = PrefKeys.DEFAULT_FORMATTING_SYNTAX
                     setSummaryProvider { entry }
-                    val syntax = accountManager.activeAccount?.defaultFormattingSyntax
-                        ?: ""
+                    val syntax = accountManager.activeAccount?.defaultFormattingSyntax ?: String.Empty
                     value = when (syntax) {
                         "text/markdown" -> "Markdown"
                         "text/bbcode" -> "BBCode"
@@ -180,14 +164,14 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     }
                     setIcon(getIconForSyntax(syntax))
                     setOnPreferenceChangeListener { _, newValue ->
-                        val syntax = when (newValue) {
+                        val newSyntax = when (newValue) {
                             "Markdown" -> "text/markdown"
                             "BBCode" -> "text/bbcode"
                             "HTML" -> "text/html"
-                            else -> ""
+                            else -> String.Empty
                         }
-                        setIcon(getIconForSyntax(syntax))
-                        updateAccount { it.defaultFormattingSyntax = syntax }
+                        setIcon(getIconForSyntax(newSyntax))
+                        updateAccount { it.defaultFormattingSyntax = newSyntax }
                         eventHub.dispatch(PreferenceChangedEvent(key))
                         true
                     }
@@ -198,8 +182,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     setIcon(drawable.ic_eye_24dp)
                     key = PrefKeys.DEFAULT_MEDIA_SENSITIVITY
                     isSingleLineTitle = false
-                    val sensitivity = accountManager.activeAccount?.defaultMediaSensitivity
-                        ?: false
+                    val sensitivity = accountManager.activeAccount?.defaultMediaSensitivity ?: false
                     setDefaultValue(sensitivity)
                     setIcon(getIconForSensitivity(sensitivity))
                     setOnPreferenceChangeListener { _, newValue ->
@@ -249,16 +232,32 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                 }
             }
 
-            preferenceCategory(string.pref_title_other) {
-                switchPreference {
-                    key = accountManager.pushNotificationPrefKey()
-                    setTitle(string.pref_title_live_notifications)
+            preferenceCategory(string.pref_title_notifications) {
+                if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
+                    switchPreference {
+                        key = accountManager.pushNotificationPrefKey()
+                        setTitle(string.pref_title_live_notifications)
+                        isSingleLineTitle = false
+                        isChecked = accountManager.hasNotificationsEnabled()
+                        setOnPreferenceChangeListener { _, newValue ->
+                            updateAccount { it.notificationsEnabled = newValue as Boolean }
+                            eventHub.dispatch(PreferenceChangedEvent(key))
+
+                            true
+                        }
+                    }
+                }
+
+                preference {
+                    setTitle(string.pref_title_edit_notification_settings)
                     setSummary(string.pref_summary_live_notifications)
-                    isSingleLineTitle = false
-                    isChecked = accountManager.hasNotificationsEnabled()
-                    setOnPreferenceChangeListener { _, newValue ->
-                        updateAccount { it.notificationsEnabled = newValue as Boolean }
-                        eventHub.dispatch(PreferenceChangedEvent(key))
+                    icon = IconicsDrawable(context, gmd_notifications).apply {
+                        sizeRes = dimen.preference_icon_size
+                        colorInt = ThemeUtils.getColor(context, attr.iconColor)
+                    }
+                    setOnPreferenceClickListener {
+                        openNotificationPrefs()
+
                         true
                     }
                 }
@@ -316,16 +315,18 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
     private fun openNotificationPrefs() {
         if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
-            val intent = Intent()
-            intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-            intent.putExtra("android.provider.extra.APP_PACKAGE", BuildConfig.APPLICATION_ID)
-            startActivity(intent)
+            startActivity(
+                Intent().apply {
+                    action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                    putExtra("android.provider.extra.APP_PACKAGE", BuildConfig.APPLICATION_ID)
+                }
+            )
         } else {
             activity?.let {
                 val intent =
                     PreferencesActivity.newIntent(it, PreferencesActivity.NOTIFICATION_PREFERENCES)
                 it.startActivity(intent)
-                it.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                it.overridePendingTransition(anim.slide_from_right, anim.slide_to_left)
             }
         }
     }
@@ -344,19 +345,20 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     val account = response.body()
                     if (response.isSuccessful && account != null) {
                         accountManager.activeAccount?.let {
-                            it.defaultPostPrivacy = account.source?.privacy
-                                ?: Status.Visibility.PUBLIC
+                            it.defaultPostPrivacy = account.source?.privacy ?: Visibility.PUBLIC
                             it.defaultMediaSensitivity = account.source?.sensitive ?: false
                             accountManager.saveAccount(it)
                         }
                     } else {
-                        Log.e("AccountPreferences", "failed updating settings on server")
+                        Timber.e("Failed updating settings on server")
+
                         showErrorSnackbar(visibility, sensitive)
                     }
                 }
 
                 override fun onFailure(call: Call<Account>, t: Throwable) {
-                    Log.e("AccountPreferences", "failed updating settings on server", t)
+                    Timber.e("failed updating settings on server", t)
+
                     showErrorSnackbar(visibility, sensitive)
                 }
             })
@@ -364,41 +366,41 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
     private fun showErrorSnackbar(visibility: String?, sensitive: Boolean?) {
         view?.let { view ->
-            Snackbar.make(view, R.string.pref_failed_to_sync, Snackbar.LENGTH_LONG)
-                .setAction(R.string.action_retry) { syncWithServer(visibility, sensitive) }
+            Snackbar.make(view, string.pref_failed_to_sync, Snackbar.LENGTH_LONG)
+                .setAction(string.action_retry) { syncWithServer(visibility, sensitive) }
                 .show()
         }
     }
 
     @DrawableRes
-    private fun getIconForVisibility(visibility: Status.Visibility): Int {
+    private fun getIconForVisibility(visibility: Visibility): Int {
         return when (visibility) {
-            Status.Visibility.PRIVATE -> R.drawable.ic_lock_outline_24dp
+            Visibility.PRIVATE -> drawable.ic_lock_outline_24dp
 
-            Status.Visibility.UNLISTED -> R.drawable.ic_lock_open_24dp
+            Visibility.UNLISTED -> drawable.ic_lock_open_24dp
 
-            Status.Visibility.DIRECT -> R.drawable.ic_email_24dp
+            Visibility.DIRECT -> drawable.ic_email_24dp
 
-            Status.Visibility.LOCAL -> R.drawable.ic_local_24dp
+            Visibility.LOCAL -> drawable.ic_local_24dp
 
-            else -> R.drawable.ic_public_24dp
+            else -> drawable.ic_public_24dp
         }
     }
 
     @DrawableRes
     private fun getIconForSensitivity(sensitive: Boolean): Int {
         return if (sensitive) {
-            R.drawable.ic_hide_media_24dp
+            drawable.ic_hide_media_24dp
         } else {
-            R.drawable.ic_eye_24dp
+            drawable.ic_eye_24dp
         }
     }
 
     private fun getIconForSyntax(syntax: String): Int {
         return when (syntax) {
-            "text/html" -> R.drawable.ic_html_24dp
-            "text/bbcode" -> R.drawable.ic_bbcode_24dp
-            "text/markdown" -> R.drawable.ic_markdown
+            "text/html" -> drawable.ic_html_24dp
+            "text/bbcode" -> drawable.ic_bbcode_24dp
+            "text/markdown" -> drawable.ic_markdown
             else -> android.R.color.transparent
         }
     }
@@ -408,7 +410,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
         intent.putExtra(FiltersActivity.FILTERS_CONTEXT, filterContext)
         intent.putExtra(FiltersActivity.FILTERS_TITLE, getString(titleResource))
         activity?.startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+        activity?.overridePendingTransition(anim.slide_from_right, anim.slide_to_left)
     }
 
     companion object {
