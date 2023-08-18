@@ -34,6 +34,7 @@ import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.core.crypto.CryptoConstants
 import com.keylesspalace.tusky.core.crypto.CryptoECKeyPair
 import com.keylesspalace.tusky.core.crypto.CryptoUtils
+import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
@@ -174,11 +175,12 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
                 UnifiedPushHelper.buildPushDataMap(notificationManager, account)
             )
 
-            if (response.body() != null) {
+            if (response.isSuccessful && response.body() != null) {
                 Timber.d("UnifiedPush registration for ${account.fullName}")
 
                 accountManager.saveAccount(
                     account.apply {
+                        notificationsEnabled = true
                         unifiedPushUrl = endpoint
                         unifiedPushInstance = instance
                     }
@@ -188,12 +190,18 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
 
                 stopSelf()
                 return@let
-            }
-
-            if (response.errorBody() != null) {
+            } else {
                 Timber.e("Error in the response [${response.raw().message}]")
 
-                // TODO: See what to do with an error
+                accountManager.saveAccount(
+                    account.apply {
+                        notificationsEnabled = false
+                        unifiedPushUrl = String.Empty
+                        unifiedPushInstance = String.Empty
+                    }
+                )
+
+                // TODO: Update push notification showing an error message
 
                 stopSelf()
                 return@let
