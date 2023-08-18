@@ -5,6 +5,6 @@ package com.keylesspalace.tusky.core.extensions
  *
  * @return False if null, the value otherwise.
  */
-fun Boolean?.orEmpty(): Boolean {
+fun Boolean?.orFalse(): Boolean {
     return (this ?: false)
 }
