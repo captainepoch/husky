@@ -35,11 +35,9 @@ class UnifiedPushBroadcastReceiver : MessagingReceiver() {
         Timber.d("New message for $instance")
 
         WorkManager.getInstance(context).enqueue(
-            OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInputData(
-                    workDataOf(UNIFIED_PUSH_WORKER_INSTANCE to instance)
-                )
-                .build()
+            OneTimeWorkRequestBuilder<NotificationWorker>().setInputData(
+                workDataOf(UNIFIED_PUSH_WORKER_INSTANCE to instance)
+            ).build()
         )
     }
 
