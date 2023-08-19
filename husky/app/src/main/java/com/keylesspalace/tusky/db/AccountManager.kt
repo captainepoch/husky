@@ -20,12 +20,14 @@
 
 package com.keylesspalace.tusky.db
 
-import com.keylesspalace.tusky.core.extensions.orEmpty
+import com.keylesspalace.tusky.components.unifiedpush.UnifiedPushHelper
+import com.keylesspalace.tusky.core.extensions.orFalse
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.settings.PrefKeys
 import timber.log.Timber
 import java.util.Locale
+import org.unifiedpush.android.connector.UnifiedPush
 
 /**
  * This class caches the account database and handles all account related operations
@@ -79,7 +81,7 @@ class AccountManager(db: AppDatabase) {
      * @param account the account to save
      */
     fun saveAccount(account: AccountEntity) {
-        if (account.id != 0L) {
+        if(account.id != 0L) {
             Timber.d("Saving account with id ${account.id}")
 
             accountDao.insertOrReplace(account)
@@ -91,13 +93,13 @@ class AccountManager(db: AppDatabase) {
      * @return the new active account, or null if no other account was found
      */
     fun logActiveAccountOut(): AccountEntity? {
-        if (activeAccount == null) {
+        if(activeAccount == null) {
             return null
         } else {
             accounts.remove(activeAccount!!)
             accountDao.delete(activeAccount!!)
 
-            if (accounts.size > 0) {
+            if(accounts.size > 0) {
                 accounts[0].isActive = true
                 activeAccount = accounts[0]
 
@@ -132,7 +134,7 @@ class AccountManager(db: AppDatabase) {
 
             val accountIndex = accounts.indexOf(it)
 
-            if (accountIndex != -1) {
+            if(accountIndex != -1) {
                 // in case the user was already logged in with this account, remove the
                 // old information
                 accounts.removeAt(accountIndex)
@@ -170,15 +172,13 @@ class AccountManager(db: AppDatabase) {
      */
     fun getAllAccountsOrderedByActive(): List<AccountEntity> {
         val accountsCopy = accounts.toMutableList()
-        accountsCopy.sortWith(
-            Comparator { l, r ->
-                when {
-                    l.isActive && !r.isActive -> -1
-                    r.isActive && !l.isActive -> 1
-                    else -> 0
-                }
+        accountsCopy.sortWith { l, r ->
+            when {
+                l.isActive && !r.isActive -> -1
+                r.isActive && !l.isActive -> 1
+                else -> 0
             }
-        )
+        }
 
         return accountsCopy
     }
@@ -201,10 +201,13 @@ class AccountManager(db: AppDatabase) {
     }
 
     fun hasNotificationsEnabled(): Boolean {
-        return (
-            activeAccount?.unifiedPushUrl?.isNotBlank().orEmpty() &&
-                activeAccount?.unifiedPushInstance?.isNotBlank().orEmpty()
-            )
+        return activeAccount?.notificationsEnabled.orFalse()
+    }
+
+    fun isUnifiedPushEnrolled(): Boolean {
+        return activeAccount?.let { account ->
+            UnifiedPushHelper.hasUnifiedPushEnrolled(account)
+        }.orFalse()
     }
 
     fun getAccountByUnifiedPushInstance(instance: String): AccountEntity? {

@@ -234,14 +234,15 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
             }
 
             preferenceCategory(string.pref_title_notifications) {
-                if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
+                if(NotificationHelper.NOTIFICATION_USE_CHANNELS) {
                     switchPreference {
                         key = accountManager.pushNotificationPrefKey()
                         setTitle(string.pref_title_live_notifications)
                         isSingleLineTitle = false
-                        isChecked = accountManager.hasNotificationsEnabled()
+                        isChecked = (accountManager.hasNotificationsEnabled()
+                                     && accountManager.isUnifiedPushEnrolled())
                         setOnPreferenceChangeListener { _, newValue ->
-                            if ((newValue as Boolean)) {
+                            if((newValue as Boolean)) {
                                 UnifiedPushHelper.enrollUnifiedPushForAccount(
                                     requireActivity(),
                                     accountManager.activeAccount
