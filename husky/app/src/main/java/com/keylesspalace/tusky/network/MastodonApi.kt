@@ -779,4 +779,10 @@ interface MastodonApi {
         @Field("subscription[keys][auth]") authKey: String?,
         @FieldMap pushData: Map<String, Boolean>?
     ): Response<PushNotificationResponse>
+
+    @DELETE("api/v1/push/subscription")
+    suspend fun unsubscribePushNotifications(
+        @Header("Authorization") auth: String,
+        @Header(DOMAIN_HEADER) domain: String
+    ): Response<ResponseBody>
 }

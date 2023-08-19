@@ -36,6 +36,7 @@ import com.keylesspalace.tusky.core.crypto.CryptoECKeyPair
 import com.keylesspalace.tusky.core.crypto.CryptoUtils
 import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
+import com.keylesspalace.tusky.core.extensions.orFalse
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
 import kotlinx.coroutines.Dispatchers
@@ -77,33 +78,10 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
         super.onStartCommand(intent, flags, startId)
 
         if (!serviceStarted) {
-            Timber.d("Service not created")
-            createServiceNotification()
-            Timber.d("Create push notification")
-
-            modifySecurityProvider(true)
-            modifySecurityProvider()
-
-            val endpoint = intent?.getStringExtra(ENDPOINT)
-            if (endpoint.isNullOrEmpty() || endpoint.isBlank()) {
-                Timber.e("No endpoint for UnifiedPush is provided")
-
-                stopSelf()
+            if (intent?.getBooleanExtra(UNSUBSCRIBE_PUSH, false).orFalse()) {
+                startUnenrollUnifiedPush()
             } else {
-                Timber.d("Subscribing to push notifications")
-
-                val instance = intent.getStringExtra(INSTANCE)
-                if (instance.isNullOrEmpty() || instance.isBlank()) {
-                    Timber.e("No instance for UnifiedPush is provided")
-
-                    stopSelf()
-                } else {
-                    Timber.d("Instance for UnifiedPush is provided[$instance]")
-
-                    job = lifecycleScope.launch(Dispatchers.IO) {
-                        subscribeToPush(generateKeyPair(), getAuth(), endpoint, instance)
-                    }
-                }
+                startEnrollUnifiedPush(intent)
             }
 
             serviceStarted = true
@@ -112,7 +90,48 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
         return START_STICKY
     }
 
-    private fun createServiceNotification() {
+    private fun startEnrollUnifiedPush(intent: Intent?) {
+        Timber.d("Service not created")
+        createServiceNotification()
+        Timber.d("Create push notification")
+
+        modifySecurityProvider(true)
+        modifySecurityProvider()
+
+        val endpoint = intent?.getStringExtra(ENDPOINT)
+        if (endpoint.isNullOrEmpty() || endpoint.isBlank()) {
+            Timber.e("No endpoint for UnifiedPush is provided")
+
+            stopSelf()
+        } else {
+            Timber.d("Subscribing to push notifications")
+
+            val instance = intent.getStringExtra(INSTANCE)
+            if (instance.isNullOrEmpty() || instance.isBlank()) {
+                Timber.e("No instance for UnifiedPush is provided")
+
+                stopSelf()
+            } else {
+                Timber.d("Instance for UnifiedPush is provided[$instance]")
+
+                job = lifecycleScope.launch(Dispatchers.IO) {
+                    subscribeToPush(generateKeyPair(), getAuth(), endpoint, instance)
+                }
+            }
+        }
+    }
+
+    private fun startUnenrollUnifiedPush() {
+        Timber.d("Service not created")
+        createServiceNotification(true)
+        Timber.d("Create push notification")
+
+        job = lifecycleScope.launch(Dispatchers.IO) {
+            unsubscribePush()
+        }
+    }
+
+    private fun createServiceNotification(isUnsubscribing: Boolean = false) {
         if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
@@ -123,9 +142,15 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
             notificationManager.createNotificationChannel(channel)
         }
 
+        val msgId = if (isUnsubscribing) {
+            R.string.unifiedpush_service_foreground_text_unsubscription
+        } else {
+            R.string.unifiedpush_service_foreground_text_subscription
+        }
+
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.unifiedpush_service_foreground_title))
-            .setContentText(getString(R.string.unifiedpush_service_foreground_text))
+            .setContentText(getString(msgId))
             .setSmallIcon(R.drawable.ic_husky)
 
         if (VERSION.SDK_INT >= VERSION_CODES.S) {
@@ -209,6 +234,41 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
         }
     }
 
+    private suspend fun unsubscribePush() {
+        Timber.d("Unsubscribing to the push notification service")
+
+        accountManager.activeAccount?.let { account ->
+            val response = api.unsubscribePushNotifications(
+                "Bearer ${account.accessToken}",
+                account.domain
+            )
+
+            if (response.isSuccessful && response.body() != null) {
+                Timber.d("Unregistering UnifiedPush for ${account.fullName}")
+
+                accountManager.saveAccount(
+                    account.apply {
+                        notificationsEnabled = false
+                        unifiedPushUrl = String.Empty
+                        unifiedPushInstance = String.Empty
+                    }
+                )
+
+                // TODO: Update push notification
+
+                stopSelf()
+                return@let
+            } else {
+                Timber.e("Error in the response [${response.raw().message}]")
+
+                // TODO: Update push notification showing an error message
+
+                stopSelf()
+                return@let
+            }
+        }
+    }
+
     private fun destroyJob() {
         job.cancelIfActive()
         job = null
@@ -222,11 +282,18 @@ class UnifiedPushService : LifecycleService(), KoinComponent {
         private const val CHANNEL_ID = "2000"
         private const val ENDPOINT = "unifiedPushEndpoint"
         private const val INSTANCE = "unifiedPushInstance"
+        private const val UNSUBSCRIBE_PUSH = "unsubscribePush"
 
-        fun startService(context: Context, endpoint: String, instance: String) {
+        fun startService(
+            context: Context,
+            endpoint: String,
+            instance: String,
+            unsubscribeUnifiedPush: Boolean = false
+        ) {
             val intent = Intent(context, UnifiedPushService::class.java).apply {
                 putExtra(ENDPOINT, endpoint)
                 putExtra(INSTANCE, instance)
+                putExtra(UNSUBSCRIBE_PUSH, unsubscribeUnifiedPush)
             }
 
             if (VERSION.SDK_INT >= VERSION_CODES.O) {

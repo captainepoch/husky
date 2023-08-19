@@ -686,4 +686,11 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
             pushData
         )
     }
+
+    override suspend fun unsubscribePushNotifications(
+        auth: String,
+        domain: String
+    ): Response<ResponseBody> {
+        return api.unsubscribePushNotifications(auth, domain)
+    }
 }

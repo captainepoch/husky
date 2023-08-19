@@ -26,6 +26,7 @@ import android.text.SpannableStringBuilder
 import androidx.appcompat.app.AlertDialog
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.databinding.BottomSheetTwoOptionsBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.entity.Notification.Type
@@ -42,7 +43,7 @@ object UnifiedPushHelper {
         return (account.unifiedPushUrl.isNotBlank() && account.unifiedPushInstance.isNotBlank())
     }
 
-    fun enableUnifiedPushNotificationsForAccount(
+    fun enrollUnifiedPushForAccount(
         context: Context,
         account: AccountEntity?
     ) {
@@ -57,6 +58,23 @@ object UnifiedPushHelper {
                 features = arrayListOf(UnifiedPush.FEATURE_BYTES_MESSAGE)
             )
         } ?: Timber.e("Account cannot be null")
+    }
+
+    fun unenrollUnifiedPushForAccount(
+        context: Context,
+        account: AccountEntity?
+    ) {
+        Timber.d("Unregistering UnifiedPush for account ${account?.username}")
+
+        account?.let {
+            UnifiedPush.unregisterApp(context, it.unifiedPushInstance)
+            UnifiedPushService.startService(
+                context,
+                String.Empty,
+                account.unifiedPushInstance,
+                true
+            )
+        }
     }
 
     fun showUnifiedPushDialog(

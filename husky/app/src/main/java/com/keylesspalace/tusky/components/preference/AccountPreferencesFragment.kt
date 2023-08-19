@@ -36,6 +36,7 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.components.instancemute.InstanceListActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.components.unifiedpush.UnifiedPushHelper
 import com.keylesspalace.tusky.core.extensions.Empty
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
@@ -240,8 +241,17 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                         isSingleLineTitle = false
                         isChecked = accountManager.hasNotificationsEnabled()
                         setOnPreferenceChangeListener { _, newValue ->
-                            updateAccount { it.notificationsEnabled = newValue as Boolean }
-                            eventHub.dispatch(PreferenceChangedEvent(key))
+                            if ((newValue as Boolean)) {
+                                UnifiedPushHelper.enrollUnifiedPushForAccount(
+                                    requireActivity(),
+                                    accountManager.activeAccount
+                                )
+                            } else {
+                                UnifiedPushHelper.unenrollUnifiedPushForAccount(
+                                    requireContext(),
+                                    accountManager.activeAccount
+                                )
+                            }
 
                             true
                         }

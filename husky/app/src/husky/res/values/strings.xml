@@ -163,7 +163,8 @@
 
     <string name="unifiedpush_service_foreground_channel">UnifiedPush Subscription</string>
     <string name="unifiedpush_service_foreground_title">UnifiedPush</string>
-    <string name="unifiedpush_service_foreground_text">Subscribing to an UnifiedPush provider</string>
+    <string name="unifiedpush_service_foreground_text_subscription">Subscribing to an UnifiedPush provider</string>
+    <string name="unifiedpush_service_foreground_text_unsubscription">Unsubscribing to an UnifiedPush provider</string>
     <string name="unifiedpush_info_dialog_title">Husky and UnifiedPush</string>
     <string name="unifiedpush_info_dialog_text">Husky now provides support for push notifications using an UnifiedPush provider.</string>
     <string name="unifiedpush_info_dialog_text_no_provider">You don\'t have any UnifiedPush provider installed. Please install one (i.e. ntfy from F-Droid).</string>
