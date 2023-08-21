@@ -46,11 +46,11 @@ import java.util.regex.Pattern
 /**
  * Replaces emoji shortcodes in a text with EmojiSpans.
  *
- * @param text the text containing custom emojis.
  * @param emojis a list of the custom emojis (nullable for backward compatibility with old
  * mastodon instances).
  * @param view a reference to the a view the emojis will be shown in (should be the TextView,
  * but parents of the TextView are also acceptable).
+ * @param forceSmallEmoji force emojis to have a smaller size (default: false).
  *
  * @return The text with the shortcodes replaced by EmojiSpans
  */
@@ -86,7 +86,7 @@ fun CharSequence.emojify(emojis: List<Emoji>?, view: View): CharSequence {
 }
 
 fun createEmojiSpan(
-    emoji_url: String,
+    emojiUrl: String,
     view: View,
     forceSmallEmoji: Boolean = false
 ): EmojiSpan {
@@ -94,26 +94,26 @@ fun createEmojiSpan(
     val smallEmojis = forceSmallEmoji || !pm.getBoolean(PrefKeys.BIG_EMOJIS, true)
     val animate = pm.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
 
-    return createEmojiSpan(emoji_url, view, smallEmojis, animate)
+    return createEmojiSpan(emojiUrl, view, smallEmojis, animate)
 }
 
 private fun createEmojiSpan(
-    emoji_url: String,
+    emojiUrl: String,
     view: View,
     smallEmojis: Boolean = false,
     animate: Boolean = false
 ): EmojiSpan {
     val span = if (smallEmojis) {
-        SmallEmojiSpan(WeakReference<View>(view))
+        SmallEmojiSpan(WeakReference<View>(view), 1.0)
     } else {
         EmojiSpan(WeakReference<View>(view))
     }
 
-    var glideRequest = Glide.with(view).load(emoji_url)
+    var glideRequest = Glide.with(view).load(emojiUrl)
         .set(AnimationDecoderOption.DISABLE_ANIMATION_GIF_DECODER, !animate)
         .set(AnimationDecoderOption.DISABLE_ANIMATION_WEBP_DECODER, !animate)
         .set(AnimationDecoderOption.DISABLE_ANIMATION_APNG_DECODER, !animate)
-    val mimetype = getMimeType(emoji_url)
+    val mimetype = getMimeType(emojiUrl)
     if (mimetype == MIME.SVG) {
         glideRequest = glideRequest
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -124,7 +124,10 @@ private fun createEmojiSpan(
     return span
 }
 
-open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSpan() {
+open class EmojiSpan(
+    val viewWeakReference: WeakReference<View>,
+    private val aspectRatio: Double = 2.0
+) : ReplacementSpan() {
 
     var imageDrawable: Drawable? = null
 
@@ -145,7 +148,7 @@ open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSp
             fm.bottom = (metrics.bottom * 3.5f).toInt()
         }
 
-        return (paint.textSize * 2.0).toInt()
+        return (paint.textSize * aspectRatio).toInt()
     }
 
     override fun draw(
@@ -162,11 +165,27 @@ open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSp
         imageDrawable?.let { drawable ->
             canvas.save()
 
-            val emojiSize = getSize(paint, text, start, end, null)
-            drawable.setBounds(0, 0, emojiSize, emojiSize)
+            // Start with a width relative to the text size
+            var emojiWidth = paint.textSize * aspectRatio
 
-            var transY = bottom - drawable.bounds.bottom
-            transY -= paint.fontMetricsInt.descent / 2
+            // Calculate the height, keeping the aspect ratio correct
+            val drawableWidth = drawable.intrinsicWidth
+            val drawableHeight = drawable.intrinsicHeight
+            var emojiHeight = emojiWidth / drawableWidth * drawableHeight
+
+            // How much vertical space there is draw the emoji
+            val drawableSpace = (bottom - top).toDouble()
+
+            // In case the calculated height is bigger than the available space,
+            // scale the emoji down, preserving aspect ratio
+            if (emojiHeight > drawableSpace) {
+                emojiWidth *= drawableSpace / emojiHeight
+                emojiHeight = drawableSpace
+            }
+            drawable.setBounds(0, 0, emojiWidth.toInt(), emojiHeight.toInt())
+
+            // Vertically center the emoji in the line
+            val transY = top + (drawableSpace / 2 - emojiHeight / 2)
 
             canvas.translate(x, transY.toFloat())
             drawable.draw(canvas)
@@ -209,7 +228,8 @@ open class EmojiSpan(val viewWeakReference: WeakReference<View>) : ReplacementSp
     }
 }
 
-class SmallEmojiSpan(viewWeakReference: WeakReference<View>) : EmojiSpan(viewWeakReference) {
+class SmallEmojiSpan(viewWeakReference: WeakReference<View>, aspectRatio: Double) : EmojiSpan(viewWeakReference, aspectRatio) {
+
     override fun getSize(
         paint: Paint,
         text: CharSequence,
