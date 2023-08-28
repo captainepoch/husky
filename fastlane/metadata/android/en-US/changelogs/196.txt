@@ -1,0 +1,8 @@
+Husky 1.4.5
+
+Changelog:
+  - Update deps
+  - Migrate Exoplayer to Media3 library
+  - Migrate libraries to new ones
+  - Long click to open a post
+  - Show emojis with the correct aspect ratio

@@ -1,3 +1,10 @@
+Husky 1.4.5 - 2023-08-28
+  - Update deps
+  - Migrate Exoplayer to Media3 library
+  - Migrate libraries to new ones
+  - Long click to open a post
+  - Show emojis with the correct aspect ratio
+
 Husky 1.4.4 - 2023-07-19
   - Fix: Crash while editing a list.
 
