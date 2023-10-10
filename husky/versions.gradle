@@ -10,7 +10,7 @@ gradle.gradlePluginVersions = "0.47.0"
 gradle.ktlintGradle = "11.5.0"
 versions.gradle = gradle
 
-versions.androidImageCropper = "2.0.0"
+versions.androidImageCropper = "4.5.0"
 versions.androidSvg = "1.4"
 versions.appcompat = "1.6.1"
 versions.autodispose = "1.4.0"

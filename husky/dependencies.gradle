@@ -99,7 +99,7 @@ testing.roomTesting = "androidx.room:room-testing:${versions.testing.roomTesting
 deps.testing = testing
 
 deps.androidSvg = "com.caverock:androidsvg-aar:${versions.androidSvg}"
-deps.androidImageCropper = "com.github.CanHub:Android-Image-Cropper:${versions.androidImageCropper}"
+deps.androidImageCropper = "com.vanniktech:android-image-cropper:${versions.androidImageCropper}"
 deps.autodispose = "com.uber.autodispose:autodispose:${versions.autodispose}"
 deps.autodisposeAndroidArchComp = "com.uber.autodispose:autodispose-android-archcomponents:${versions.autodispose}"
 deps.bigImageViewer = "com.github.piasy:BigImageViewer:${versions.bigImageViewer}"
