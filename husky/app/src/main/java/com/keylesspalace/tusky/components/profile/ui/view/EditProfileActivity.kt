@@ -21,7 +21,6 @@
 package com.keylesspalace.tusky.components.profile.ui.view
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -33,6 +32,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -43,6 +44,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.BaseActivity
 import com.keylesspalace.tusky.R
@@ -57,6 +61,8 @@ import com.keylesspalace.tusky.components.profile.models.PickType
 import com.keylesspalace.tusky.components.profile.models.PickType.AVATAR
 import com.keylesspalace.tusky.components.profile.models.PickType.HEADER
 import com.keylesspalace.tusky.components.profile.models.PickType.NOTHING
+import com.keylesspalace.tusky.components.profile.ui.viewmodel.EditProfileViewModel
+import com.keylesspalace.tusky.core.extensions.notNull
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.extensions.viewObserve
 import com.keylesspalace.tusky.databinding.ActivityEditProfileBinding
@@ -67,7 +73,6 @@ import com.keylesspalace.tusky.util.Resource
 import com.keylesspalace.tusky.util.Success
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import com.keylesspalace.tusky.components.profile.ui.viewmodel.EditProfileViewModel
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
@@ -82,6 +87,33 @@ class EditProfileActivity : BaseActivity() {
     private val viewModel: EditProfileViewModel by viewModel()
     private var currentlyPicking: PickType = NOTHING
     private val accountFieldEditAdapter = AccountFieldEditAdapter()
+
+    private val takeImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        if (it.notNull()) {
+            cropImage.launch(
+                CropImageContractOptions(
+                    it,
+                    CropImageOptions(
+                        fixAspectRatio = (currentlyPicking == AVATAR)
+                    )
+                )
+            )
+        } else {
+            endMediaPicking()
+        }
+    }
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            result.uriContent?.let { uri ->
+                beginResize(uri)
+            } ?: endMediaPicking()
+        } else {
+            Timber.e("Error cropping image: ${result.error?.message}")
+
+            endMediaPicking()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -352,6 +384,7 @@ class EditProfileActivity : BaseActivity() {
                     initiateMediaPicking()
                 } else {
                     endMediaPicking()
+
                     Snackbar.make(
                         binding.avatarButton,
                         string.error_media_upload_permission,
@@ -367,21 +400,9 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun initiateMediaPicking() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "image/*"
-        when (currentlyPicking) {
-            AVATAR -> {
-                startActivityForResult(intent, AVATAR_PICK_RESULT)
-            }
-
-            HEADER -> {
-                startActivityForResult(intent, HEADER_PICK_RESULT)
-            }
-
-            NOTHING -> {
-            }
-        }
+        takeImage.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -449,53 +470,6 @@ class EditProfileActivity : BaseActivity() {
         currentlyPicking = NOTHING
     }
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            AVATAR_PICK_RESULT -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    CropImage.activity(data.data)
-                        .setInitialCropWindowPaddingRatio(0f)
-                        .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                        .setAspectRatio(AVATAR_SIZE, AVATAR_SIZE)
-                        .start(this)
-                } else {
-                    endMediaPicking()
-                }
-            }
-
-            HEADER_PICK_RESULT -> {
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    CropImage.activity(data.data)
-                        .setInitialCropWindowPaddingRatio(0f)
-                        .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                        .setAspectRatio(HEADER_WIDTH, HEADER_HEIGHT)
-                        .start(this)
-                } else {
-                    endMediaPicking()
-                }
-            }
-
-            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-                val result = CropImage.getActivityResult(data)
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        result?.uri?.let { uri ->
-                            Timber.d(
-                                "Crop Image Activity Request OK, " +
-                                    "URI null[${uri.notNull()}]"
-                            )
-                            beginResize(uri)
-                        } ?: Timber.w("URI null")
-                    }
-
-                    CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE -> onResizeFailure()
-                    else -> endMediaPicking()
-                }
-            }
-        }
-    }*/
-
     private fun beginResize(uri: Uri) {
         beginMediaPicking()
 
@@ -531,8 +505,6 @@ class EditProfileActivity : BaseActivity() {
         const val HEADER_WIDTH = 1500
         const val HEADER_HEIGHT = 500
 
-        private const val AVATAR_PICK_RESULT = 1
-        private const val HEADER_PICK_RESULT = 2
         private const val PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
 
         private const val BUNDLE_CURRENTLY_PICKING = "BUNDLE_CURRENTLY_PICKING"
