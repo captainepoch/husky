@@ -18,10 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.keylesspalace.tusky
+package com.keylesspalace.tusky.components.profile.ui.view
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -44,12 +43,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.canhub.cropper.CropImage
 import com.google.android.material.snackbar.Snackbar
+import com.keylesspalace.tusky.BaseActivity
+import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.R.dimen
+import com.keylesspalace.tusky.R.drawable
+import com.keylesspalace.tusky.R.id
+import com.keylesspalace.tusky.R.string
 import com.keylesspalace.tusky.adapter.AccountFieldEditAdapter
 import com.keylesspalace.tusky.adapter.MutableStringPair
 import com.keylesspalace.tusky.components.instance.data.models.data.InstanceInfo
-import com.keylesspalace.tusky.core.extensions.notNull
+import com.keylesspalace.tusky.components.profile.models.PickType
+import com.keylesspalace.tusky.components.profile.models.PickType.AVATAR
+import com.keylesspalace.tusky.components.profile.models.PickType.HEADER
+import com.keylesspalace.tusky.components.profile.models.PickType.NOTHING
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.extensions.viewObserve
 import com.keylesspalace.tusky.databinding.ActivityEditProfileBinding
@@ -60,7 +67,7 @@ import com.keylesspalace.tusky.util.Resource
 import com.keylesspalace.tusky.util.Success
 import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
-import com.keylesspalace.tusky.viewmodel.EditProfileViewModel
+import com.keylesspalace.tusky.components.profile.ui.viewmodel.EditProfileViewModel
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
@@ -73,14 +80,8 @@ class EditProfileActivity : BaseActivity() {
 
     private val binding by viewBinding(ActivityEditProfileBinding::inflate)
     private val viewModel: EditProfileViewModel by viewModel()
-    private var currentlyPicking: PickType = PickType.NOTHING
+    private var currentlyPicking: PickType = NOTHING
     private val accountFieldEditAdapter = AccountFieldEditAdapter()
-
-    private enum class PickType {
-        NOTHING,
-        AVATAR,
-        HEADER
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,15 +94,15 @@ class EditProfileActivity : BaseActivity() {
 
         setSupportActionBar(binding.includedToolbar.toolbar)
         supportActionBar?.run {
-            setTitle(R.string.title_edit_profile)
+            setTitle(string.title_edit_profile)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
 
         setupObservers()
 
-        binding.avatarButton.setOnClickListener { onMediaPick(PickType.AVATAR) }
-        binding.headerButton.setOnClickListener { onMediaPick(PickType.HEADER) }
+        binding.avatarButton.setOnClickListener { onMediaPick(AVATAR) }
+        binding.headerButton.setOnClickListener { onMediaPick(HEADER) }
 
         binding.fieldList.layoutManager = LinearLayoutManager(this)
         binding.fieldList.adapter = accountFieldEditAdapter
@@ -185,10 +186,10 @@ class EditProfileActivity : BaseActivity() {
                         if (viewModel.avatarData.value == null) {
                             Glide.with(this)
                                 .load(me.avatar)
-                                .placeholder(R.drawable.avatar_default)
+                                .placeholder(drawable.avatar_default)
                                 .transform(
                                     FitCenter(),
-                                    RoundedCorners(resources.getDimensionPixelSize(R.dimen.avatar_radius_80dp))
+                                    RoundedCorners(resources.getDimensionPixelSize(dimen.avatar_radius_80dp))
                                 ).into(binding.avatarPreview)
                         }
 
@@ -203,10 +204,10 @@ class EditProfileActivity : BaseActivity() {
                 is Error -> {
                     Snackbar.make(
                         binding.avatarButton,
-                        R.string.error_generic,
+                        string.error_generic,
                         Snackbar.LENGTH_LONG
                     ).apply {
-                        setAction(R.string.action_retry) {
+                        setAction(string.action_retry) {
                             viewModel.obtainProfile()
                         }
                     }.show()
@@ -278,7 +279,7 @@ class EditProfileActivity : BaseActivity() {
                     if (roundedCorners) {
                         glide.transform(
                             FitCenter(),
-                            RoundedCorners(resources.getDimensionPixelSize(R.dimen.avatar_radius_80dp))
+                            RoundedCorners(resources.getDimensionPixelSize(dimen.avatar_radius_80dp))
                         )
                     }
 
@@ -304,7 +305,7 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun onMediaPick(pickType: PickType) {
-        if (currentlyPicking != PickType.NOTHING) {
+        if (currentlyPicking != NOTHING) {
             // Ignore inputs if another pick operation is still occurring.
             return
         }
@@ -353,7 +354,7 @@ class EditProfileActivity : BaseActivity() {
                     endMediaPicking()
                     Snackbar.make(
                         binding.avatarButton,
-                        R.string.error_media_upload_permission,
+                        string.error_media_upload_permission,
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
@@ -370,15 +371,15 @@ class EditProfileActivity : BaseActivity() {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "image/*"
         when (currentlyPicking) {
-            PickType.AVATAR -> {
+            AVATAR -> {
                 startActivityForResult(intent, AVATAR_PICK_RESULT)
             }
 
-            PickType.HEADER -> {
+            HEADER -> {
                 startActivityForResult(intent, HEADER_PICK_RESULT)
             }
 
-            PickType.NOTHING -> {
+            NOTHING -> {
             }
         }
     }
@@ -395,7 +396,7 @@ class EditProfileActivity : BaseActivity() {
                 return true
             }
 
-            R.id.action_save -> {
+            id.action_save -> {
                 save()
                 return true
             }
@@ -404,7 +405,7 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun save() {
-        if (currentlyPicking != PickType.NOTHING) {
+        if (currentlyPicking != NOTHING) {
             return
         }
 
@@ -418,26 +419,26 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun onSaveFailure(msg: String?) {
-        val errorMsg = msg ?: getString(R.string.error_media_upload_sending)
+        val errorMsg = msg ?: getString(string.error_media_upload_sending)
         Snackbar.make(binding.avatarButton, errorMsg, Snackbar.LENGTH_LONG).show()
         binding.saveProgressBar.visibility = View.GONE
     }
 
     private fun beginMediaPicking() {
         when (currentlyPicking) {
-            PickType.AVATAR -> {
+            AVATAR -> {
                 binding.avatarProgressBar.visibility = View.VISIBLE
                 binding.avatarPreview.visibility = View.INVISIBLE
                 binding.avatarButton.setImageDrawable(null)
             }
 
-            PickType.HEADER -> {
+            HEADER -> {
                 binding.headerProgressBar.visibility = View.VISIBLE
                 binding.headerPreview.visibility = View.INVISIBLE
                 binding.headerButton.setImageDrawable(null)
             }
 
-            PickType.NOTHING -> Unit
+            NOTHING -> Unit
         }
     }
 
@@ -445,10 +446,10 @@ class EditProfileActivity : BaseActivity() {
         binding.avatarProgressBar.visibility = View.GONE
         binding.headerProgressBar.visibility = View.GONE
 
-        currentlyPicking = PickType.NOTHING
+        currentlyPicking = NOTHING
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             AVATAR_PICK_RESULT -> {
@@ -493,17 +494,17 @@ class EditProfileActivity : BaseActivity() {
                 }
             }
         }
-    }
+    }*/
 
     private fun beginResize(uri: Uri) {
         beginMediaPicking()
 
         when (currentlyPicking) {
-            PickType.AVATAR -> {
+            AVATAR -> {
                 viewModel.newAvatar(uri, this)
             }
 
-            PickType.HEADER -> {
+            HEADER -> {
                 viewModel.newHeader(uri, this)
             }
 
@@ -512,13 +513,13 @@ class EditProfileActivity : BaseActivity() {
             }
         }
 
-        currentlyPicking = PickType.NOTHING
+        currentlyPicking = NOTHING
     }
 
     private fun onResizeFailure() {
         Snackbar.make(
             binding.avatarButton,
-            R.string.error_media_upload_sending,
+            string.error_media_upload_sending,
             Snackbar.LENGTH_LONG
         ).show()
 

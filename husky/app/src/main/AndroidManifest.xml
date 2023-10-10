@@ -152,7 +152,7 @@
             android:name=".AccountActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize" />
 
-        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".components.profile.ui.view.EditProfileActivity" />
 
         <activity android:name=".components.preference.PreferencesActivity" />
 

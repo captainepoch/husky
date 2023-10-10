@@ -58,6 +58,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.keylesspalace.tusky.adapter.AccountFieldAdapter
 import com.keylesspalace.tusky.components.chat.ChatActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity
 import com.keylesspalace.tusky.components.report.ReportActivity
 import com.keylesspalace.tusky.core.extensions.DefaultTextWatcher
 import com.keylesspalace.tusky.core.extensions.viewBinding
