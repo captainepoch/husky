@@ -1,0 +1,6 @@
+Husky 1.4.6
+
+Changelog:
+  - Fix: Downgrade lib to fix animation on small emojis
+  - Fix: Migrate to a new cropping library, the avatar and the header can be
+  updated now.
