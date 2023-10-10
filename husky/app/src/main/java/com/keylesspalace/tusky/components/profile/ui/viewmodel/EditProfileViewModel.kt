@@ -18,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.keylesspalace.tusky.viewmodel
+package com.keylesspalace.tusky.components.profile.ui.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -27,9 +27,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.keylesspalace.tusky.EditProfileActivity.Companion.AVATAR_SIZE
-import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_HEIGHT
-import com.keylesspalace.tusky.EditProfileActivity.Companion.HEADER_WIDTH
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.AVATAR_SIZE
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.HEADER_HEIGHT
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
 import com.keylesspalace.tusky.components.instance.data.models.data.InstanceInfo
