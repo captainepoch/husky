@@ -27,14 +27,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.AVATAR_SIZE
-import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.HEADER_HEIGHT
-import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.ProfileEditedEvent
 import com.keylesspalace.tusky.components.instance.data.models.data.InstanceInfo
 import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository
 import com.keylesspalace.tusky.components.profile.domain.EditProfileRepository
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.AVATAR_SIZE
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.HEADER_HEIGHT
+import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity.Companion.HEADER_WIDTH
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
