@@ -1,17 +1,22 @@
-/* Copyright 2018 Conny Duck
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2018  Conny Duck
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.components.preference
 
@@ -34,6 +39,7 @@ import com.keylesspalace.tusky.databinding.ActivityPreferencesBinding
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.ThemeUtils
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class PreferencesActivity :
     BaseActivity(),
@@ -115,12 +121,12 @@ class PreferencesActivity :
         super.onSaveInstanceState(outState)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
             "appTheme" -> {
                 val theme =
-                    sharedPreferences.getNonNullString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
-                Log.d("activeTheme", theme)
+                    sharedPreferences?.getNonNullString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
+                Timber.d("Theme: $theme")
                 ThemeUtils.setAppNightMode(theme)
 
                 restartActivitiesOnExit = true
@@ -136,6 +142,7 @@ class PreferencesActivity :
                 restartActivitiesOnExit = true
                 this.restartCurrentActivity()
             }
+            else -> return
         }
 
         eventHub.dispatch(PreferenceChangedEvent(key))
