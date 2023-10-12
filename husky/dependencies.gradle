@@ -55,10 +55,10 @@ google.materialDesign = "com.google.android.material:material:${versions.materia
 deps.google = google
 
 def koin = [:]
-koin.android = "io.insert-koin:koin-android:${versions.koinAndroid}"
+koin.android = "io.insert-koin:koin-android:${versions.koin}"
 koin.core = "io.insert-koin:koin-core:${versions.koin}"
-koin.java = "io.insert-koin:koin-android-compat:${versions.koinAndroid}"
-koin.workManager = "io.insert-koin:koin-androidx-workmanager:${versions.koinAndroid}"
+koin.java = "io.insert-koin:koin-android-compat:${versions.koin}"
+koin.workManager = "io.insert-koin:koin-androidx-workmanager:${versions.koin}"
 deps.koin = koin
 
 def kotlin = [:]
