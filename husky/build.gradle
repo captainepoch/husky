@@ -1,50 +1,28 @@
-apply plugin: "com.github.ben-manes.versions"
-
 buildscript {
     apply from: "appinfo.gradle"
-    apply from: "versions.gradle"
-    apply from: "dependencies.gradle"
-
     apply from: "instance.gradle"
+}
 
-    addRepos(repositories)
-
-    dependencies {
-        classpath deps.androidGradlePlugin
-        classpath deps.kotlinGradlePlugin
-
-        classpath deps.gradlePluginVersions
-        classpath deps.ktlintGradle
-    }
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.ktlint)
 }
 
 allprojects {
-    addRepos(repositories)
-
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding(buildVersions.encoding)
-        options.compilerArgs += [
-            "-Xlint:all",
-            "-Xlint:unchecked",
-            "-Xlint:-deprecation",
-        ]
+        options.compilerArgs += ["-Xlint:all",
+                                 "-Xlint:unchecked",
+                                 "-Xlint:-deprecation",]
     }
-
-    apply plugin: com.github.benmanes.gradle.versions.VersionsPlugin
-    tasks.named("dependencyUpdates").configure {
-        gradleReleaseChannel = "current"
-
-        rejectVersionIf {
-            isNonStable(it.candidate.version)
-        }
-    }
-
-    apply plugin: "org.jlleitschuh.gradle.ktlint"
 }
 
-task clean(type: Delete) {
-    delete(rootProject.buildDir)
-    delete("${rootProject.buildDir}/app/huskyBeta")
-    delete("${rootProject.buildDir}/app/huskyStable")
-    delete("${rootProject.buildDir}/app/huskyDev")
+tasks.register("clean", Delete) {
+    delete(rootProject.layout.buildDirectory)
+    delete("${rootProject}/app/huskyBeta")
+    delete("${rootProject}/app/huskyStable")
+    delete("${rootProject}/app/huskyDev")
 }

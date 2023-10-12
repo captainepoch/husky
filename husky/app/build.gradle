@@ -1,10 +1,8 @@
 plugins {
-    id "com.android.application"
-
-    id "kotlin-android"
-    id "kotlin-kapt"
-
-    id "kotlin-parcelize"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -22,7 +20,7 @@ android {
         versionCode buildVersions.versionCode
         versionName buildVersions.versionName
 
-        testInstrumentationRunner deps.testinstrunner
+        testInstrumentationRunner buildVersions.testinstrunner
 
         buildConfigField("String", "APPLICATION_NAME", "\"$APP_NAME\"")
         buildConfigField("String", "CUSTOM_LOGO_URL", "\"$CUSTOM_LOGO_URL\"")
@@ -52,7 +50,6 @@ android {
 
             minifyEnabled false
             shrinkResources false
-            zipAlignEnabled false
 
             signingConfig signingConfigs.debug
         }
@@ -62,14 +59,13 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            zipAlignEnabled true
 
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                "proguard-rules.pro"
         }
     }
 
-    flavorDimensions buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release
+    flavorDimensions = [buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release]
     productFlavors {
         husky {
             dimension buildVersions.flavorDimensions.husky
@@ -104,7 +100,7 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         variant.outputs.each { output ->
             def filename = output.outputFileName.split("\\.")
             if(filename.size() == 2) {
@@ -172,98 +168,96 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
     // AndroidX dependencies
-    implementation deps.androidx.appCompat
-    implementation deps.androidx.browser
-    implementation deps.androidx.cardView
-    implementation deps.androidx.constraintLayout
-    implementation deps.androidx.coreKtx
-    implementation deps.androidx.emoji2
-    implementation deps.androidx.emoji2Views
-    implementation deps.androidx.emoji2ViewsHelper
-    implementation deps.androidx.exifInterface
-    implementation deps.androidx.fragmentKtx
-    implementation deps.androidx.media3Exoplayer
-    implementation deps.androidx.media3Ui
-    implementation deps.androidx.pagingRuntimeKtx
-    implementation deps.androidx.preferenceKtx
-    implementation deps.androidx.recyclerView
-    kapt deps.androidx.roomCompiler
-    implementation deps.androidx.roomRuntime
-    implementation deps.androidx.roomRxJava
-    implementation deps.androidx.shareTarget
-    implementation deps.androidx.swipeRefreshLayout
-    implementation deps.androidx.viewpager2
-    implementation deps.androidx.workRuntimeKtx
-    implementation deps.androidx.lifecycle.commonJava
-    implementation deps.androidx.lifecycle.liveDataKtx
-    implementation deps.androidx.lifecycle.reactiveStreamsKtx
-    implementation deps.androidx.lifecycle.viewmodelKtx
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.constraintLayout)
+    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.emoji2)
+    implementation(libs.androidx.emoji2.views)
+    implementation(libs.androidx.emoji2.views.helper)
+    implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.fragmentKtx)
+    implementation(libs.androidx.lifecycle.commonJava)
+    implementation(libs.androidx.lifecycle.livedataKtx)
+    implementation(libs.androidx.lifecycle.reactiveStreamsKtx)
+    implementation(libs.androidx.lifecycle.viewmodelKtx)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.preferenceKtx)
+    implementation(libs.androidx.recyclerview)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.rxjava)
+    implementation(libs.androidx.sharetarget)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.workKtx)
 
     // Glide dependencies
-    implementation deps.glide.glide
-    kapt deps.glide.glideCompiler
-    implementation deps.glide.glideImage
-    implementation deps.glide.glideImageViewFactory
-    implementation deps.glide.glideOkhttp
-    implementation deps.glide.glidePluginAnimation
-
-    // Google dependencies
-    implementation deps.google.flexbox
-    implementation deps.google.materialDesign
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
+    implementation(libs.glide.image)
+    implementation(libs.glide.image.factory)
+    implementation(libs.glide.okhttp)
+    implementation(libs.glide.plugin.animation)
 
     // Koin dependencies
-    implementation deps.koin.android
-    implementation deps.koin.core
-    implementation deps.koin.java
-    implementation deps.koin.workManager
+    implementation(libs.koin)
+    implementation(libs.koin.android)
+    implementation(libs.koin.java)
+    implementation(libs.koin.workmanager)
 
     // Kotlin dependencies
-    implementation deps.kotlin.stdlib
-    implementation deps.kotlin.stdlibJdk
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.stdlib.jdk)
 
     // KotlinX dependencies
-    implementation deps.kotlinx.coroutinesCore
-    implementation deps.kotlinx.coroutinesAndroid
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.android)
 
     // RxJava dependencies
-    implementation deps.rxjava.rxAndroid
-    implementation deps.rxjava.rxJava
-    implementation deps.rxjava.rxKotlin
+    implementation(libs.rx.android)
+    implementation(libs.rx.java)
+    implementation(libs.rx.kotlin)
 
     // Square dependencies
-    implementation deps.square.retrofit
-    implementation deps.square.retrofitAdapterRxJ2
-    implementation deps.square.retrofitConvGson
-    implementation deps.square.logginInterceptor
-    implementation deps.square.okhttp
-    implementation deps.square.okhttpBrotli
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.rxjava)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.brotli)
+    implementation(libs.okhttp.logginginterceptor)
 
     // Other dependencies
-    implementation deps.androidImageCropper
-    implementation deps.androidSvg
-    implementation deps.autodispose
-    implementation deps.autodisposeAndroidArchComp
-    implementation deps.bigImageViewer
-    implementation deps.conscryptAndroid
-    implementation deps.filemojiCompat
-    implementation deps.filemojiCompatDefaults
-    implementation deps.filemojiCompatUi
-    implementation deps.fragmentviewbindingdelegateKt
-    implementation deps.markdownEdit
-    implementation deps.materialDrawer
-    implementation deps.materialDrawerIconics
-    implementation deps.materialDrawerTypeface
-    implementation deps.sparkButton
-    implementation deps.timber
+    implementation(libs.androidSvg)
+    implementation(libs.autodispose)
+    implementation(libs.autodispose.androidarch)
+    implementation(libs.bigImageViewer)
+    implementation(libs.conscrypt)
+    implementation(libs.filemoji.compat)
+    implementation(libs.filemoji.compat.defaults)
+    implementation(libs.filemoji.compat.ui)
+    implementation(libs.flexbox)
+    implementation(libs.fragmentviewbindingdelegateKt)
+    implementation(libs.imageCropper)
+    implementation(libs.markdownEdit)
+    implementation(libs.material)
+    implementation(libs.material.drawer)
+    implementation(libs.material.drawer.iconics)
+    implementation(libs.material.drawer.typeface)
+    implementation(libs.sparkbutton)
+    implementation(libs.timber)
 
     // Testing dependencies
-    testImplementation deps.testing.extJunit
-    testImplementation deps.testing.junit
-    testImplementation deps.testing.mockitoInline
-    testImplementation deps.testing.mockitoKotlin
-    testImplementation deps.testing.roboelectric
+    testImplementation(libs.testing.androidx.junit)
+    testImplementation(libs.testing.junit)
+    testImplementation(libs.testing.mockito.inline)
+    testImplementation(libs.testing.mockito.kotlin)
+    testImplementation(libs.testing.robolectric)
 
-    androidTestImplementation deps.testing.espresso
-    androidTestImplementation deps.testing.junit
-    androidTestImplementation deps.testing.roomTesting
+    androidTestImplementation(libs.testing.androidx.espresso)
+    androidTestImplementation(libs.testing.androidx.junit)
+    androidTestImplementation(libs.testing.androidx.room)
 }

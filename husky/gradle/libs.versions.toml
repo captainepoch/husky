@@ -1,0 +1,144 @@
+[versions]
+agp = "8.1.2"
+androidSvg = "1.4"
+androidx-activity = "1.7.2"
+androidx-appcompat = "1.6.1"
+androidx-browser = "1.5.0"
+androidx-cardview = "1.0.0"
+androidx-constraintLayout = "2.1.4"
+androidx-coreKtx = "1.9.0"
+androidx-emoji2 = "1.3.0"
+androidx-exifinterface = "1.3.6"
+androidx-fragmentKtx = "1.6.1"
+androidx-lifecycle = "2.6.2"
+androidx-media3 = "1.1.1"
+androidx-paging = "2.1.2"
+androidx-preferenceKtx = "1.2.1"
+androidx-recyclerview = "1.3.1"
+androidx-room = "2.5.2"
+androidx-sharetarget = "1.2.0"
+androidx-splashscreen = "1.0.1"
+androidx-swiperefreshlayout = "1.1.0"
+androidx-testing = "2.2.0"
+androidx-viewpager2 = "1.0.0"
+androidx-workKtx = "2.8.1"
+autodispose = "1.4.0"
+bigImageViewer = "1.8.1"
+conscrypt = "2.5.2"
+emoji2 = "1.3.0"
+filemoji-compat = "3.2.7"
+flexbox = "3.0.0"
+fragmentviewbindingdelegateKt = "1.0.2"
+glide = "4.16.0"
+glide-image = "1.8.1"
+# Do not update: https://codeberg.org/husky/husky/pulls/121
+glide-plugin-animation = "2.23.0"
+gradle-ktlint = "11.6.1"
+koin = "3.5.0"
+kotlin = "1.9.0"
+kotlinx = "1.7.3"
+ktlint = "11.6.1"
+imageCropper = "4.5.0"
+markdownEdit = "1.0.0"
+material = "1.9.0"
+material-drawer = "8.4.5"
+material-drawer-typeface = "4.0.0.2-kotlin"
+material-typeface = "4.0.0.2-kotlin"
+media3 = "1.1.1"
+networkresult-calladapter = "1.0.0"
+okhttp = "4.11.0"
+retrofit = "2.9.0"
+rx-android = "2.1.1"
+rx-java = "2.2.21"
+rx-kotlin = "2.4.0"
+sparkbutton = "4.2.0"
+testing-androidx-junit = "1.1.5"
+testing-androidx-espresso = "3.5.1"
+testing-junit = "4.13.2"
+testing-mockito-inline = "5.2.0"
+testing-mockito-kotlin = "2.2.0"
+testing-robolectric = "4.10.3"
+timber = "5.0.1"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+
+[libraries]
+androidSvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidSvg" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "androidx-cardview" }
+androidx-constraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintLayout" }
+androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-coreKtx" }
+androidx-emoji2 = { module = "androidx.emoji2:emoji2", version.ref = "androidx-emoji2" }
+androidx-emoji2-views = { module = "androidx.emoji2:emoji2-views", version.ref = "androidx-emoji2" }
+androidx-emoji2-views-helper = { module = "androidx.emoji2:emoji2-views-helper", version.ref = "androidx-emoji2" }
+androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "androidx-exifinterface" }
+androidx-fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragmentKtx" }
+androidx-lifecycle-commonJava = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-reactiveStreamsKtx = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
+androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
+androidx-paging = { module = "androidx.paging:paging-runtime-ktx", version.ref = "androidx-paging" }
+androidx-preferenceKtx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preferenceKtx" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
+androidx-room-rxjava = { module = "androidx.room:room-rxjava2", version.ref = "androidx-room" }
+androidx-sharetarget = { module = "androidx.sharetarget:sharetarget", version.ref = "androidx-sharetarget" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidx-swiperefreshlayout" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
+androidx-workKtx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-workKtx" }
+autodispose = { module = "com.uber.autodispose:autodispose", version.ref = "autodispose" }
+autodispose-androidarch = { module = "com.uber.autodispose:autodispose-android-archcomponents", version.ref = "autodispose" }
+bigImageViewer = { module = "com.github.piasy:BigImageViewer", version.ref = "bigImageViewer" }
+conscrypt = { module = "org.conscrypt:conscrypt-android", version.ref = "conscrypt" }
+filemoji-compat = { module = "de.c1710:filemojicompat", version.ref = "filemoji-compat" }
+filemoji-compat-defaults = { module = "de.c1710:filemojicompat-defaults", version.ref = "filemoji-compat" }
+filemoji-compat-ui = { module = "de.c1710:filemojicompat-ui", version.ref = "filemoji-compat" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+fragmentviewbindingdelegateKt = { module = "com.github.Zhuinden:fragmentviewbindingdelegate-kt", version.ref = "fragmentviewbindingdelegateKt" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide-image = { module = "com.github.piasy:GlideImageLoader", version.ref = "glide-image" }
+glide-image-factory = { module = "com.github.piasy:GlideImageViewFactory", version.ref = "glide-image" }
+glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
+glide-plugin-animation = { module = "com.github.penfeizhou.android.animation:glide-plugin", version.ref = "glide-plugin-animation" }
+imageCropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-java = { module = "io.insert-koin:koin-android-compat", version.ref = "koin" }
+koin-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlib-jdk = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx" }
+markdownEdit = { module = "com.github.Tunous:MarkdownEdit", version.ref = "markdownEdit" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+material-drawer = { module = "com.mikepenz:materialdrawer", version.ref = "material-drawer" }
+material-drawer-iconics = { module = "com.mikepenz:materialdrawer-iconics", version.ref = "material-drawer" }
+material-drawer-typeface = { module = "com.mikepenz:google-material-typeface", version.ref = "material-drawer-typeface" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-brotli = { module = "com.squareup.okhttp3:okhttp-brotli", version.ref = "okhttp" }
+okhttp-logginginterceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+retrofit-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
+rx-android = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rx-android" }
+rx-java = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rx-java" }
+rx-kotlin = { module = "io.reactivex.rxjava2:rxkotlin", version.ref = "rx-kotlin" }
+sparkbutton = { module = "at.connyduck.sparkbutton:sparkbutton", version.ref = "sparkbutton" }
+testing-androidx-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "testing-androidx-espresso" }
+testing-androidx-junit = { module = "androidx.test.ext:junit", version.ref = "testing-androidx-junit" }
+testing-androidx-room = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
+testing-junit = { module = "junit:junit", version.ref = "testing-junit" }
+testing-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "testing-mockito-inline" }
+testing-mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "testing-mockito-kotlin" }
+testing-robolectric = { module = "org.robolectric:robolectric", version.ref = "testing-robolectric" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
