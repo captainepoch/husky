@@ -1,7 +1,7 @@
 when:
   event: [ pull_request ]
 
-pipeline:
+steps:
   style:
     image: ghcr.io/alvr/alpine-android:android-33-jdk17
     group: check
