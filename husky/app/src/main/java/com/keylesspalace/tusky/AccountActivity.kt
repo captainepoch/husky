@@ -58,6 +58,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.keylesspalace.tusky.adapter.AccountFieldAdapter
 import com.keylesspalace.tusky.components.chat.ChatActivity
 import com.keylesspalace.tusky.components.compose.ComposeActivity
+import com.keylesspalace.tusky.components.lists.account.ui.view.ListsForAccountFragment
 import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity
 import com.keylesspalace.tusky.components.report.ReportActivity
 import com.keylesspalace.tusky.core.extensions.DefaultTextWatcher
@@ -84,9 +85,9 @@ import com.keylesspalace.tusky.viewmodel.AccountViewModel
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from
 import com.uber.autodispose.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.NumberFormat
 import kotlin.math.abs
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AccountActivity :
     BottomSheetActivity(),
@@ -310,57 +311,57 @@ class AccountActivity :
 
         // Add a listener to change the toolbar icon color when it enters/exits its collapsed state.
         binding.accountAppBarLayout.addOnOffsetChangedListener(object :
-                AppBarLayout.OnOffsetChangedListener {
+            AppBarLayout.OnOffsetChangedListener {
 
-                override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                    if (verticalOffset == oldOffset) {
-                        return
-                    }
-                    oldOffset = verticalOffset
-
-                    if (titleVisibleHeight + verticalOffset < 0) {
-                        supportActionBar?.setDisplayShowTitleEnabled(true)
-                    } else {
-                        supportActionBar?.setDisplayShowTitleEnabled(false)
-                    }
-
-                    if (hideFab && !viewModel.isSelf && !blocking) {
-                        if (verticalOffset > oldOffset) {
-                            binding.accountFloatingActionButton.show()
-                        }
-                        if (verticalOffset < oldOffset) {
-                            hideFabMenu()
-                            binding.accountFloatingActionButton.hide()
-                        }
-                    }
-
-                    val scaledAvatarSize = (avatarSize + verticalOffset) / avatarSize
-
-                    binding.accountAvatarImageView.scaleX = scaledAvatarSize
-                    binding.accountAvatarImageView.scaleY = scaledAvatarSize
-
-                    binding.accountAvatarImageView.visible(scaledAvatarSize > 0)
-
-                    val transparencyPercent =
-                        (abs(verticalOffset) / titleVisibleHeight.toFloat()).coerceAtMost(1f)
-
-                    window.statusBarColor = argbEvaluator.evaluate(
-                        transparencyPercent,
-                        statusBarColorTransparent,
-                        statusBarColorOpaque
-                    ) as Int
-
-                    val evaluatedToolbarColor = argbEvaluator.evaluate(
-                        transparencyPercent,
-                        Color.TRANSPARENT,
-                        toolbarColor
-                    ) as Int
-
-                    toolbarBackground.fillColor = ColorStateList.valueOf(evaluatedToolbarColor)
-
-                    binding.swipeToRefreshLayout.isEnabled = verticalOffset == 0
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (verticalOffset == oldOffset) {
+                    return
                 }
-            })
+                oldOffset = verticalOffset
+
+                if (titleVisibleHeight + verticalOffset < 0) {
+                    supportActionBar?.setDisplayShowTitleEnabled(true)
+                } else {
+                    supportActionBar?.setDisplayShowTitleEnabled(false)
+                }
+
+                if (hideFab && !viewModel.isSelf && !blocking) {
+                    if (verticalOffset > oldOffset) {
+                        binding.accountFloatingActionButton.show()
+                    }
+                    if (verticalOffset < oldOffset) {
+                        hideFabMenu()
+                        binding.accountFloatingActionButton.hide()
+                    }
+                }
+
+                val scaledAvatarSize = (avatarSize + verticalOffset) / avatarSize
+
+                binding.accountAvatarImageView.scaleX = scaledAvatarSize
+                binding.accountAvatarImageView.scaleY = scaledAvatarSize
+
+                binding.accountAvatarImageView.visible(scaledAvatarSize > 0)
+
+                val transparencyPercent =
+                    (abs(verticalOffset) / titleVisibleHeight.toFloat()).coerceAtMost(1f)
+
+                window.statusBarColor = argbEvaluator.evaluate(
+                    transparencyPercent,
+                    statusBarColorTransparent,
+                    statusBarColorOpaque
+                ) as Int
+
+                val evaluatedToolbarColor = argbEvaluator.evaluate(
+                    transparencyPercent,
+                    Color.TRANSPARENT,
+                    toolbarColor
+                ) as Int
+
+                toolbarBackground.fillColor = ColorStateList.valueOf(evaluatedToolbarColor)
+
+                binding.swipeToRefreshLayout.isEnabled = verticalOffset == 0
+            }
+        })
     }
 
     private fun makeNotificationBarTransparent() {
@@ -386,6 +387,7 @@ class AccountActivity :
                         .setAction(R.string.action_retry) { viewModel.refresh() }
                         .show()
                 }
+
                 else -> {}
             }
         }
@@ -586,7 +588,7 @@ class AccountActivity :
                 .translationY(0.0f)
                 .alpha(1.0f)
                 .setListener(object :
-                        AnimatorListenerAdapter() {}) // seems listener is saved, so reset it here
+                    AnimatorListenerAdapter() {}) // seems listener is saved, so reset it here
                 .start()
         } else {
             animate().setDuration(200)
@@ -683,9 +685,11 @@ class AccountActivity :
                     FollowState.NOT_FOLLOWING -> {
                         viewModel.changeFollowState()
                     }
+
                     FollowState.REQUESTED -> {
                         showFollowRequestPendingDialog()
                     }
+
                     FollowState.FOLLOWING -> {
                         showUnfollowWarningDialog()
                     }
@@ -757,9 +761,11 @@ class AccountActivity :
             FollowState.NOT_FOLLOWING -> {
                 binding.accountFollowButton.setText(R.string.action_follow)
             }
+
             FollowState.REQUESTED -> {
                 binding.accountFollowButton.setText(R.string.state_follow_requested)
             }
+
             FollowState.FOLLOWING -> {
                 binding.accountFollowButton.setText(R.string.action_unfollow)
             }
@@ -877,6 +883,7 @@ class AccountActivity :
             menu.removeItem(R.id.action_mute_domain)
             menu.removeItem(R.id.action_show_reblogs)
             menu.removeItem(R.id.action_report)
+            menu.removeItem(R.id.action_add_to_list)
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -973,10 +980,12 @@ class AccountActivity :
                 onBackPressed()
                 return true
             }
+
             R.id.action_mention -> {
                 mention()
                 return true
             }
+
             R.id.action_open_in_web -> {
                 // If the account isn't loaded yet, eat the input.
                 if (loadedAccount != null) {
@@ -984,26 +993,32 @@ class AccountActivity :
                 }
                 return true
             }
+
             R.id.action_follow -> {
                 viewModel.changeFollowState()
                 return true
             }
+
             R.id.action_block -> {
                 toggleBlock()
                 return true
             }
+
             R.id.action_mute -> {
                 toggleMute()
                 return true
             }
+
             R.id.action_mute_domain -> {
                 toggleBlockDomain(domain)
                 return true
             }
+
             R.id.action_show_reblogs -> {
                 viewModel.changeShowReblogsState()
                 return true
             }
+
             R.id.action_report -> {
                 if (loadedAccount != null) {
                     startActivity(
@@ -1015,6 +1030,12 @@ class AccountActivity :
                     )
                 }
                 return true
+            }
+
+            R.id.action_add_to_list -> {
+                ListsForAccountFragment.newInstance(viewModel.accountId).show(
+                    supportFragmentManager, ""
+                )
             }
         }
         return super.onOptionsItemSelected(item)
