@@ -89,6 +89,7 @@
     <string name="action_hide_reblogs">Hide boosts</string>
     <string name="action_show_reblogs">Show boosts</string>
     <string name="action_report">Report</string>
+    <string name="action_add_to_list">Add to list</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_delete_and_redraft">Delete and re-draft</string>
@@ -377,7 +378,6 @@
     <string name="action_delete_list">Delete the list</string>
     <string name="action_edit_list">Edit the list</string>
     <string name="hint_search_people_list">Search for people you follow</string>
-    <string name="action_add_to_list">Add account to the list</string>
     <string name="action_remove_from_list">Remove account from the list</string>
 
     <string name="compose_active_account_description">Posting with account %1$s</string>

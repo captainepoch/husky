@@ -2,38 +2,50 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_open_in_web"
+    <item
+        android:id="@+id/action_open_in_web"
         android:icon="@drawable/ic_exit_to_app_24px"
         android:iconTint="@color/textColorPrimary"
         android:title="@string/action_open_in_web"
         app:showAsAction="always" />
 
-    <item android:id="@+id/action_mention"
+    <item
+        android:id="@+id/action_mention"
         android:title="@string/action_mention"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_follow"
+    <item
+        android:id="@+id/action_follow"
         android:title="@string/action_follow"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_mute"
+    <item
+        android:id="@+id/action_mute"
         android:title="@string/action_mute"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_block"
+    <item
+        android:id="@+id/action_block"
         android:title="@string/action_block"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_mute_domain"
+    <item
+        android:id="@+id/action_mute_domain"
         android:title="@string/action_mute_domain"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_show_reblogs"
+    <item
+        android:id="@+id/action_show_reblogs"
         android:title="@string/action_hide_reblogs"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_report"
         android:title="@string/action_report"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_to_list"
+        android:title="@string/action_add_to_list"
         app:showAsAction="never" />
 </menu>
