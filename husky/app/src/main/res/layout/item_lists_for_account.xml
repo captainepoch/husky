@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:gravity="center_vertical"
-	android:orientation="horizontal">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
-	<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/ic_list" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_list" />
 
-	<TextView
-		android:id="@+id/listName"
-		android:layout_width="0dp"
-		android:layout_height="60dp"
-		android:layout_weight="1"
-		android:background="?selectableItemBackground"
-		android:drawablePadding="8dp"
-		android:gravity="center_vertical"
-		android:paddingLeft="16dp"
-		android:paddingRight="16dp"
-		android:textSize="?attr/status_text_medium"
-		tools:text="Example list" />
+    <TextView
+        android:id="@+id/listName"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:background="?selectableItemBackground"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="?attr/status_text_medium"
+        tools:text="Example list" />
 
-	<ImageButton
-		android:id="@+id/btnAddOrRemove"
-		style="@style/TuskyImageButton"
-		android:layout_width="36dp"
-		android:layout_height="wrap_content"
-		android:layout_margin="8dp"
-		android:background="?selectableItemBackgroundBorderless"
-		android:contentDescription="@string/action_more"
-		android:paddingLeft="8dp"
-		android:paddingRight="8dp"
-		android:src="@drawable/ic_more_horiz_24dp" />
+    <ImageButton
+        android:id="@+id/btnAddOrRemove"
+        style="@style/TuskyImageButton"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_more"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:src="@drawable/ic_more_horiz_24dp" />
 </LinearLayout>
