@@ -72,10 +72,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
-/**
- * for documentation of the Mastodon REST API see https://docs.joinmastodon.org/api/
+/*
+ * For documentation of the Mastodon REST API see https://docs.joinmastodon.org/api/
  */
-
 @JvmSuppressWildcards
 interface MastodonApi {
 
@@ -87,6 +86,14 @@ interface MastodonApi {
 
     @GET("/api/v1/lists")
     fun getLists(): Single<List<MastoList>>
+
+    @GET("/api/v1/lists")
+    suspend fun coGetLists(): Response<List<MastoList>>
+
+    @GET("/api/v1/accounts/{id}/lists")
+    suspend fun getListsIncludesAccount(
+        @Path("id") accountId: String
+    ): Response<List<MastoList>>
 
     @GET("/api/v1/custom_emojis")
     fun getCustomEmojis(): Single<List<Emoji>>

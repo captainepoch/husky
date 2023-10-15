@@ -46,6 +46,14 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.getLists()
     }
 
+    override suspend fun coGetLists(): Response<List<MastoList>> {
+        return api.coGetLists()
+    }
+
+    override suspend fun getListsIncludesAccount(accountId: String): Response<List<MastoList>> {
+        return api.getListsIncludesAccount(accountId)
+    }
+
     override fun getCustomEmojis(): Single<List<Emoji>> {
         return api.getCustomEmojis()
     }
