@@ -10,19 +10,20 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:src="@drawable/ic_list"
         app:tint="@color/textColorTertiary" />
 
     <TextView
         android:id="@+id/listName"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="?selectableItemBackground"
-        android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="16dp"
         android:textSize="?attr/status_text_medium"
         tools:text="Example list" />
 
@@ -37,4 +38,5 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:src="@drawable/ic_more_horiz_24dp" />
+
 </LinearLayout>
