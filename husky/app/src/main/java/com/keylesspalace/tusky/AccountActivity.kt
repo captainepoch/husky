@@ -1034,8 +1034,10 @@ class AccountActivity :
 
             R.id.action_add_to_list -> {
                 ListsForAccountFragment.newInstance(viewModel.accountId).show(
-                    supportFragmentManager, ""
+                    supportFragmentManager, ListsForAccountFragment::class.simpleName
                 )
+
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
