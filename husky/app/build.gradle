@@ -181,6 +181,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.commonJava)
     implementation(libs.androidx.lifecycle.livedataKtx)
     implementation(libs.androidx.lifecycle.reactiveStreamsKtx)
+    implementation(libs.androidx.lifecycle.runtimeKtx)
     implementation(libs.androidx.lifecycle.viewmodelKtx)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
