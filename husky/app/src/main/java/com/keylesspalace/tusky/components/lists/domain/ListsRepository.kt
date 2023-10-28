@@ -8,5 +8,13 @@ import kotlinx.coroutines.flow.Flow
 interface ListsRepository {
 
     suspend fun getLists(): Flow<Either<CustomError, List<MastoList>>>
-    suspend fun getListsIncludesAccount(userAccountId: String): Flow<Either<CustomError, List<MastoList>>>
+
+    suspend fun getListsIncludesAccount(
+        userAccountId: String
+    ): Flow<Either<CustomError, List<MastoList>>>
+
+    suspend fun addAccountToList(
+        listId: String,
+        accountIds: List<String>
+    ): Flow<Either<CustomError, Unit>>
 }

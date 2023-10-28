@@ -95,6 +95,13 @@ interface MastodonApi {
         @Path("id") accountId: String
     ): Response<List<MastoList>>
 
+    @FormUrlEncoded
+    @POST("api/v1/lists/{listId}/accounts")
+    suspend fun coAddAccountToList(
+        @Path("listId") listId: String,
+        @Field("account_ids[]") accountIds: List<String>
+    ): Response<Unit>
+
     @GET("/api/v1/custom_emojis")
     fun getCustomEmojis(): Single<List<Emoji>>
 
