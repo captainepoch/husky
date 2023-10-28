@@ -9,6 +9,7 @@ import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
 import com.keylesspalace.tusky.entity.MastoList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,17 +27,18 @@ class ListsForAccountViewModel(
     private val _state = MutableStateFlow(ListsForAccountState())
     val state = _state.asStateFlow()
 
-    fun loadLists(userAccountId: String) {
+    var userAccountId = ""
+
+    fun loadLists() {
         job.cancelIfActive()
-        job = viewModelScope.launch {
+        job = viewModelScope.launch(Dispatchers.IO) {
             repository.getLists()
                 .onStart {
                 }.catch {
                 }.collect { result ->
                     when (result) {
                         is Right -> {
-                            Timber.d("empty: ${result.value.isEmpty()}")
-                            loadListsForAccount(result.value, userAccountId)
+                            loadListsForAccount(result.value)
                         }
 
                         is Left -> {
@@ -47,12 +49,10 @@ class ListsForAccountViewModel(
         }
     }
 
-    private suspend fun loadListsForAccount(lists: List<MastoList>, userAccountId: String) {
+    private suspend fun loadListsForAccount(lists: List<MastoList>) {
         repository.getListsIncludesAccount(userAccountId)
             .onStart {
-
             }.catch {
-
             }.collect { result ->
                 when (result) {
                     is Right -> {
@@ -73,5 +73,35 @@ class ListsForAccountViewModel(
                     }
                 }
             }
+    }
+
+    fun addAccountToList(listId: String) {
+        job.cancelIfActive()
+        job = viewModelScope.launch {
+            repository.addAccountToList(listId, listOf(userAccountId))
+                .onStart {
+                }.catch {
+                    Timber.d("Error: ${it.cause?.message}")
+                }.collect { result ->
+                    when (result) {
+                        is Right -> {
+                            val newState = ListsForAccountState(
+                                listsForAccount = _state.value.listsForAccount.map { listItem ->
+                                    if (listId == listItem.list.id) {
+                                        listItem.accountIsIncluded = true
+                                    }
+
+                                    listItem
+                                }
+                            )
+                            _state.value = newState
+                        }
+
+                        is Left -> {
+                            Timber.e("Result is error [${result.value}]")
+                        }
+                    }
+                }
+        }
     }
 }
