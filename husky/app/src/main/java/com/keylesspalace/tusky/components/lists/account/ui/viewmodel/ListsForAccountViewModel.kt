@@ -85,16 +85,15 @@ class ListsForAccountViewModel(
                 }.collect { result ->
                     when (result) {
                         is Right -> {
-                            val newState = ListsForAccountState(
+                            _state.value = ListsForAccountState(
                                 listsForAccount = _state.value.listsForAccount.map { listItem ->
                                     if (listId == listItem.list.id) {
-                                        listItem.accountIsIncluded = true
+                                        listItem.copy(accountIsIncluded = true)
+                                    } else {
+                                        listItem
                                     }
-
-                                    listItem
                                 }
                             )
-                            _state.value = newState
                         }
 
                         is Left -> {
