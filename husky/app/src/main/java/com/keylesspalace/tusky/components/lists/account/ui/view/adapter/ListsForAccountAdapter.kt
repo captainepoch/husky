@@ -36,10 +36,8 @@ class ListsForAccountAdapter : ListAdapter<ListForAccount, ListsForAccountAdapte
             binding.listName.text = item.list.title
             binding.btnAddOrRemove.isChecked = item.accountIsIncluded
 
-            binding.btnAddOrRemove.setOnCheckedChangeListener { _, isChecked ->
-                binding.btnAddOrRemove.isChecked = !isChecked
-
-                onListCheckClick(item.list.id, isChecked)
+            binding.itemLayout.setOnClickListener {
+                onListCheckClick(item.list.id, item.accountIsIncluded)
             }
         }
     }
