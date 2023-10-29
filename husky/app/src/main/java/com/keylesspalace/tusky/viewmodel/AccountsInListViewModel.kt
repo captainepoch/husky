@@ -46,7 +46,7 @@ class AccountsInListViewModel(private val api: MastodonApi) : RxAwareViewModel()
     }
 
     fun addAccountToList(listId: String, account: Account) {
-        api.addCountToList(listId, listOf(account.id))
+        api.addAccountToList(listId, listOf(account.id))
             .subscribe({
                 updateState {
                     copy(accounts = accounts.map { it + account })

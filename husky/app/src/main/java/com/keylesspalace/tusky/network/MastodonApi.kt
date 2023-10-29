@@ -84,32 +84,6 @@ interface MastodonApi {
         const val PLACEHOLDER_DOMAIN = "dummy.placeholder"
     }
 
-    @GET("/api/v1/lists")
-    fun getLists(): Single<List<MastoList>>
-
-    @GET("/api/v1/lists")
-    suspend fun coGetLists(): Response<List<MastoList>>
-
-    @GET("/api/v1/accounts/{id}/lists")
-    suspend fun getListsIncludesAccount(
-        @Path("id") accountId: String
-    ): Response<List<MastoList>>
-
-    @FormUrlEncoded
-    @POST("api/v1/lists/{listId}/accounts")
-    suspend fun coAddAccountToList(
-        @Path("listId") listId: String,
-        @Field("account_ids[]") accountIds: List<String>
-    ): Response<Unit>
-
-    @FormUrlEncoded
-    // @DELETE doesn't support fields
-    @HTTP(method = "DELETE", path = "api/v1/lists/{listId}/accounts", hasBody = true)
-    suspend fun coDeleteAccountFromList(
-        @Path("listId") listId: String,
-        @Field("account_ids[]") accountIds: List<String>
-    ): Response<Unit>
-
     @GET("/api/v1/custom_emojis")
     fun getCustomEmojis(): Single<List<Emoji>>
 
@@ -537,6 +511,17 @@ interface MastodonApi {
         @Field("grant_type") grantType: String
     ): Call<AccessToken>
 
+    @GET("/api/v1/lists")
+    fun getLists(): Single<List<MastoList>>
+
+    @GET("/api/v1/lists")
+    suspend fun coGetLists(): Response<List<MastoList>>
+
+    @GET("/api/v1/accounts/{id}/lists")
+    suspend fun getListsIncludesAccount(
+        @Path("id") accountId: String
+    ): Response<List<MastoList>>
+
     @FormUrlEncoded
     @POST("api/v1/lists")
     fun createList(
@@ -564,6 +549,14 @@ interface MastodonApi {
     @FormUrlEncoded
     // @DELETE doesn't support fields
     @HTTP(method = "DELETE", path = "api/v1/lists/{listId}/accounts", hasBody = true)
+    suspend fun coDeleteAccountFromList(
+        @Path("listId") listId: String,
+        @Field("account_ids[]") accountIds: List<String>
+    ): Response<Unit>
+
+    @FormUrlEncoded
+    // @DELETE doesn't support fields
+    @HTTP(method = "DELETE", path = "api/v1/lists/{listId}/accounts", hasBody = true)
     fun deleteAccountFromList(
         @Path("listId") listId: String,
         @Field("account_ids[]") accountIds: List<String>
@@ -571,7 +564,14 @@ interface MastodonApi {
 
     @FormUrlEncoded
     @POST("api/v1/lists/{listId}/accounts")
-    fun addCountToList(
+    suspend fun coAddAccountToList(
+        @Path("listId") listId: String,
+        @Field("account_ids[]") accountIds: List<String>
+    ): Response<Unit>
+
+    @FormUrlEncoded
+    @POST("api/v1/lists/{listId}/accounts")
+    fun addAccountToList(
         @Path("listId") listId: String,
         @Field("account_ids[]") accountIds: List<String>
     ): Completable

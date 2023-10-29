@@ -42,32 +42,6 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
 
     private val api by lazy { retrofit.create(MastodonApi::class.java) }
 
-    override fun getLists(): Single<List<MastoList>> {
-        return api.getLists()
-    }
-
-    override suspend fun coGetLists(): Response<List<MastoList>> {
-        return api.coGetLists()
-    }
-
-    override suspend fun getListsIncludesAccount(accountId: String): Response<List<MastoList>> {
-        return api.getListsIncludesAccount(accountId)
-    }
-
-    override suspend fun coAddAccountToList(
-        listId: String,
-        accountIds: List<String>
-    ): Response<Unit> {
-        return api.coAddAccountToList(listId, accountIds)
-    }
-
-    override suspend fun coDeleteAccountFromList(
-        listId: String,
-        accountIds: List<String>
-    ): Response<Unit> {
-        return api.coDeleteAccountFromList(listId, accountIds)
-    }
-
     override fun getCustomEmojis(): Single<List<Emoji>> {
         return api.getCustomEmojis()
     }
@@ -471,6 +445,18 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.fetchOAuthToken(domain, clientId, clientSecret, redirectUri, code, grantType)
     }
 
+    override fun getLists(): Single<List<MastoList>> {
+        return api.getLists()
+    }
+
+    override suspend fun coGetLists(): Response<List<MastoList>> {
+        return api.coGetLists()
+    }
+
+    override suspend fun getListsIncludesAccount(accountId: String): Response<List<MastoList>> {
+        return api.getListsIncludesAccount(accountId)
+    }
+
     override fun createList(title: String): Single<MastoList> {
         return api.createList(title)
     }
@@ -487,12 +473,26 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.getAccountsInList(listId, limit)
     }
 
+    override suspend fun coDeleteAccountFromList(
+        listId: String,
+        accountIds: List<String>
+    ): Response<Unit> {
+        return api.coDeleteAccountFromList(listId, accountIds)
+    }
+
     override fun deleteAccountFromList(listId: String, accountIds: List<String>): Completable {
         return api.deleteAccountFromList(listId, accountIds)
     }
 
-    override fun addCountToList(listId: String, accountIds: List<String>): Completable {
-        return api.addCountToList(listId, accountIds)
+    override suspend fun coAddAccountToList(
+        listId: String,
+        accountIds: List<String>
+    ): Response<Unit> {
+        return api.coAddAccountToList(listId, accountIds)
+    }
+
+    override fun addAccountToList(listId: String, accountIds: List<String>): Completable {
+        return api.addAccountToList(listId, accountIds)
     }
 
     override fun getConversations(maxId: String?, limit: Int): Call<List<Conversation>> {
