@@ -6,6 +6,7 @@ import com.keylesspalace.tusky.components.lists.account.model.ListForAccount
 import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountState
 import com.keylesspalace.tusky.components.lists.domain.ListsRepository
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
+import com.keylesspalace.tusky.core.functional.CustomError
 import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
 import com.keylesspalace.tusky.entity.MastoList
@@ -34,6 +35,7 @@ class ListsForAccountViewModel(
         job = viewModelScope.launch(Dispatchers.IO) {
             repository.getLists()
                 .onStart {
+                    resetState(true)
                 }.catch {
                 }.collect { result ->
                     when (result) {
@@ -52,19 +54,18 @@ class ListsForAccountViewModel(
     private suspend fun loadListsForAccount(lists: List<MastoList>) {
         repository.getListsIncludesAccount(userAccountId)
             .onStart {
+                resetState(true)
             }.catch {
             }.collect { result ->
                 when (result) {
                     is Right -> {
-                        _state.emit(
-                            ListsForAccountState(
-                                listsForAccount = lists.map { list ->
-                                    ListForAccount(
-                                        list = list,
-                                        accountIsIncluded = result.value.any { it.id == list.id }
-                                    )
-                                }
-                            )
+                        _state.value = ListsForAccountState(
+                            listsForAccount = lists.map { list ->
+                                ListForAccount(
+                                    list = list,
+                                    accountIsIncluded = result.value.any { it.id == list.id }
+                                )
+                            }
                         )
                     }
 
@@ -80,6 +81,7 @@ class ListsForAccountViewModel(
         job = viewModelScope.launch(Dispatchers.IO) {
             repository.addAccountToList(listId, listOf(userAccountId))
                 .onStart {
+                    resetState(true)
                 }.catch {
                     Timber.d("Error: ${it.cause?.message}")
                 }.collect { result ->
@@ -101,6 +103,7 @@ class ListsForAccountViewModel(
         job = viewModelScope.launch(Dispatchers.IO) {
             repository.removeAccountFromList(listId, listOf(userAccountId))
                 .onStart {
+                    resetState(true)
                 }.catch {
                     Timber.d("Error: ${it.cause?.message}")
                 }.collect { result ->
@@ -115,6 +118,13 @@ class ListsForAccountViewModel(
                     }
                 }
         }
+    }
+
+    private fun resetState(isLoading: Boolean, error: CustomError? = null) {
+        _state.value = _state.value.copy(
+            isLoading = isLoading,
+            error = error
+        )
     }
 
     private fun updateAccountList(listId: String, accountIsIncluded: Boolean) {

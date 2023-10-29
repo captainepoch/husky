@@ -99,7 +99,7 @@ class ListsForAccountFragment : DialogFragment() {
     }
 
     private fun handleState(state: ListsForAccountState) {
-        //showProgressBar(state.isLoading)
+        binding.progressBar.visible(state.isLoading)
 
         if (state.error != null) {
             Timber.e("Status: Error[${state.error}]")
@@ -109,10 +109,6 @@ class ListsForAccountFragment : DialogFragment() {
 
         listsAccountAdapter.submitList(state.listsForAccount)
         binding.accountLists.visible()
-    }
-
-    private fun showProgressBar(isLoading: Boolean) {
-        binding.progressBar.visible(isLoading)
     }
 
     companion object {
