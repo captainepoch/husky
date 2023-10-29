@@ -6,10 +6,8 @@ import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
 import com.keylesspalace.tusky.entity.MastoList
 import com.keylesspalace.tusky.network.MastodonApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 
 class ListsRepositoryImpl(
@@ -52,6 +50,20 @@ class ListsRepositoryImpl(
         accountIds: List<String>
     ): Flow<Either<CustomError, Unit>> = flow {
         service.coAddAccountToList(listId, accountIds).run {
+            val body = body()
+            if (isSuccessful && body != null) {
+                emit(Right(Unit))
+            } else {
+                emit(Left(CustomError.GenericError))
+            }
+        }
+    }
+
+    override suspend fun removeAccountFromList(
+        listId: String,
+        accountIds: List<String>
+    ): Flow<Either<CustomError, Unit>> = flow {
+        service.coDeleteAccountFromList(listId, accountIds).run {
             val body = body()
             if (isSuccessful && body != null) {
                 emit(Right(Unit))

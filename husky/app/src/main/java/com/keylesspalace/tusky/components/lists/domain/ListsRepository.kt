@@ -17,4 +17,9 @@ interface ListsRepository {
         listId: String,
         accountIds: List<String>
     ): Flow<Either<CustomError, Unit>>
+
+    suspend fun removeAccountFromList(
+        listId: String,
+        accountIds: List<String>
+    ): Flow<Either<CustomError, Unit>>
 }

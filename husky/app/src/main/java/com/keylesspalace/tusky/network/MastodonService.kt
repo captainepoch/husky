@@ -61,6 +61,13 @@ class MastodonService(private val retrofit: Retrofit) : MastodonApi {
         return api.coAddAccountToList(listId, accountIds)
     }
 
+    override suspend fun coDeleteAccountFromList(
+        listId: String,
+        accountIds: List<String>
+    ): Response<Unit> {
+        return api.coDeleteAccountFromList(listId, accountIds)
+    }
+
     override fun getCustomEmojis(): Single<List<Emoji>> {
         return api.getCustomEmojis()
     }

@@ -102,6 +102,14 @@ interface MastodonApi {
         @Field("account_ids[]") accountIds: List<String>
     ): Response<Unit>
 
+    @FormUrlEncoded
+    // @DELETE doesn't support fields
+    @HTTP(method = "DELETE", path = "api/v1/lists/{listId}/accounts", hasBody = true)
+    suspend fun coDeleteAccountFromList(
+        @Path("listId") listId: String,
+        @Field("account_ids[]") accountIds: List<String>
+    ): Response<Unit>
+
     @GET("/api/v1/custom_emojis")
     fun getCustomEmojis(): Single<List<Emoji>>
 
