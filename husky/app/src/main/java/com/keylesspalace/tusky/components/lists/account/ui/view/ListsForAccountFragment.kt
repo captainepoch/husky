@@ -75,13 +75,13 @@ class ListsForAccountFragment : DialogFragment() {
     }
 
     private fun setupListeners() {
-        listsAccountAdapter.onListCheckClick = { listId, isChecked ->
-            Timber.d("isChecked: $isChecked")
+        listsAccountAdapter.onListItemClick = { listId, accountIsIncluded ->
+            Timber.d("Account in list $listId: $accountIsIncluded")
 
-            if (isChecked) {
-                viewModel.addAccountToList(listId)
-            } else {
+            if (accountIsIncluded) {
                 // REMOVE
+            } else {
+                viewModel.addAccountToList(listId)
             }
         }
     }

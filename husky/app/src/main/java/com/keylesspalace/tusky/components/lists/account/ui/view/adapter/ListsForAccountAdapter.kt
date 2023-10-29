@@ -12,7 +12,7 @@ class ListsForAccountAdapter : ListAdapter<ListForAccount, ListsForAccountAdapte
     ListDiffer
 ) {
 
-    var onListCheckClick: ((String, Boolean) -> Unit) = { _, _ -> }
+    var onListItemClick: ((String, Boolean) -> Unit) = { _, _ -> }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -37,7 +37,7 @@ class ListsForAccountAdapter : ListAdapter<ListForAccount, ListsForAccountAdapte
             binding.btnAddOrRemove.isChecked = item.accountIsIncluded
 
             binding.itemLayout.setOnClickListener {
-                onListCheckClick(item.list.id, item.accountIsIncluded)
+                onListItemClick(item.list.id, item.accountIsIncluded)
             }
         }
     }
