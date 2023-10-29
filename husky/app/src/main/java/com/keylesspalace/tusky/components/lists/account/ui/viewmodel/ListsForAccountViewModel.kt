@@ -103,4 +103,33 @@ class ListsForAccountViewModel(
                 }
         }
     }
+
+    fun removeAccountFromList(listId: String) {
+        job.cancelIfActive()
+        job = viewModelScope.launch(Dispatchers.IO) {
+            repository.removeAccountFromList(listId, listOf(userAccountId))
+                .onStart {
+                }.catch {
+                    Timber.d("Error: ${it.cause?.message}")
+                }.collect { result ->
+                    when (result) {
+                        is Right -> {
+                            _state.value = ListsForAccountState(
+                                listsForAccount = _state.value.listsForAccount.map { listItem ->
+                                    if (listId == listItem.list.id) {
+                                        listItem.copy(accountIsIncluded = false)
+                                    } else {
+                                        listItem
+                                    }
+                                }
+                            )
+                        }
+
+                        is Left -> {
+                            Timber.e("Result is error [${result.value}]")
+                        }
+                    }
+                }
+        }
+    }
 }
