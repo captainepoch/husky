@@ -4,5 +4,5 @@ import com.keylesspalace.tusky.entity.MastoList
 
 data class ListForAccount(
     val list: MastoList,
-    var accountIsIncluded: Boolean
+    val accountIsIncluded: Boolean
 )
