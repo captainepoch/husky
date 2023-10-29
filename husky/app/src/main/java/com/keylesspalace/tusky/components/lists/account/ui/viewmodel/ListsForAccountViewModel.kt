@@ -85,15 +85,7 @@ class ListsForAccountViewModel(
                 }.collect { result ->
                     when (result) {
                         is Right -> {
-                            _state.value = ListsForAccountState(
-                                listsForAccount = _state.value.listsForAccount.map { listItem ->
-                                    if (listId == listItem.list.id) {
-                                        listItem.copy(accountIsIncluded = true)
-                                    } else {
-                                        listItem
-                                    }
-                                }
-                            )
+                            updateAccountList(listId, true)
                         }
 
                         is Left -> {
@@ -114,15 +106,7 @@ class ListsForAccountViewModel(
                 }.collect { result ->
                     when (result) {
                         is Right -> {
-                            _state.value = ListsForAccountState(
-                                listsForAccount = _state.value.listsForAccount.map { listItem ->
-                                    if (listId == listItem.list.id) {
-                                        listItem.copy(accountIsIncluded = false)
-                                    } else {
-                                        listItem
-                                    }
-                                }
-                            )
+                            updateAccountList(listId, false)
                         }
 
                         is Left -> {
@@ -131,5 +115,17 @@ class ListsForAccountViewModel(
                     }
                 }
         }
+    }
+
+    private fun updateAccountList(listId: String, accountIsIncluded: Boolean) {
+        _state.value = ListsForAccountState(
+            listsForAccount = _state.value.listsForAccount.map { listItem ->
+                if (listId == listItem.list.id) {
+                    listItem.copy(accountIsIncluded = accountIsIncluded)
+                } else {
+                    listItem
+                }
+            }
+        )
     }
 }
