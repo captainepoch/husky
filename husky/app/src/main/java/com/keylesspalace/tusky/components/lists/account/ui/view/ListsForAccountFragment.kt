@@ -79,7 +79,7 @@ class ListsForAccountFragment : DialogFragment() {
             Timber.d("Account in list $listId: $accountIsIncluded")
 
             if (accountIsIncluded) {
-                // REMOVE
+                viewModel.removeAccountFromList(listId)
             } else {
                 viewModel.addAccountToList(listId)
             }
