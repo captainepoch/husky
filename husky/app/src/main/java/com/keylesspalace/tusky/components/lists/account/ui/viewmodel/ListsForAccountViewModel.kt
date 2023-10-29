@@ -77,7 +77,7 @@ class ListsForAccountViewModel(
 
     fun addAccountToList(listId: String) {
         job.cancelIfActive()
-        job = viewModelScope.launch {
+        job = viewModelScope.launch(Dispatchers.IO) {
             repository.addAccountToList(listId, listOf(userAccountId))
                 .onStart {
                 }.catch {
