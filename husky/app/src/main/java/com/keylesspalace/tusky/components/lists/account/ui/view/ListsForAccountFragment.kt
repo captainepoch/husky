@@ -12,15 +12,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.components.lists.account.model.ListForAccountError
+import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountErrorAction
 import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountState
 import com.keylesspalace.tusky.components.lists.account.ui.view.adapter.ListsForAccountAdapter
 import com.keylesspalace.tusky.components.lists.account.ui.viewmodel.ListsForAccountViewModel
+import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.core.extensions.visible
 import com.keylesspalace.tusky.databinding.FragmentListsForAccountBinding
+import com.keylesspalace.tusky.util.hide
+import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.util.visible
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class ListsForAccountFragment : DialogFragment() {
 
@@ -46,7 +50,7 @@ class ListsForAccountFragment : DialogFragment() {
         dialog?.window?.apply {
             setLayout(
                 ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
+                ConstraintLayout.LayoutParams.MATCH_PARENT
             )
         }
     }
@@ -76,8 +80,6 @@ class ListsForAccountFragment : DialogFragment() {
 
     private fun setupListeners() {
         listsAccountAdapter.onListItemClick = { listId, accountIsIncluded ->
-            Timber.d("Account in list $listId: $accountIsIncluded")
-
             if (accountIsIncluded) {
                 viewModel.removeAccountFromList(listId)
             } else {
@@ -90,8 +92,6 @@ class ListsForAccountFragment : DialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect { state ->
-                    Timber.d("State collected $state")
-
                     handleState(state)
                 }
             }
@@ -101,14 +101,73 @@ class ListsForAccountFragment : DialogFragment() {
     private fun handleState(state: ListsForAccountState) {
         binding.progressBar.visible(state.isLoading)
 
+        if (state.isLoading) {
+            return
+        }
+
         if (state.error != null) {
-            Timber.e("Status: Error[${state.error}]")
+            binding.accountLists.gone()
+            handleError(state.error)
 
             return
         }
 
         listsAccountAdapter.submitList(state.listsForAccount)
         binding.accountLists.visible()
+    }
+
+    private fun handleError(error: ListForAccountError?) {
+        when (error) {
+            is ListForAccountError.UnknownError -> {
+                manageGenericError(error.listId, error.action)
+                binding.messageView.show()
+            }
+
+            is ListForAccountError.NetworkError -> {
+                manageNetworkError(error.listId, error.action)
+                binding.messageView.show()
+            }
+
+            else -> Unit
+        }
+    }
+
+    private fun manageGenericError(listId: String, action: ListsForAccountErrorAction) {
+        binding.messageView.setup(
+            R.drawable.elephant_error,
+            when (action) {
+                ListsForAccountErrorAction.LOAD -> R.string.add_account_error_loading_list
+                ListsForAccountErrorAction.ADD -> R.string.add_account_error_adding_to_list
+                ListsForAccountErrorAction.DEL -> R.string.add_account_error_removing_from_list
+                else -> R.string.error_generic
+            },
+            setupErrorMessageListener(listId, action)
+        )
+    }
+
+    private fun manageNetworkError(listId: String, action: ListsForAccountErrorAction) {
+        binding.messageView.setup(
+            R.drawable.elephant_offline,
+            when (action) {
+                ListsForAccountErrorAction.LOAD -> R.string.add_account_network_error_loading_list
+                ListsForAccountErrorAction.ADD -> R.string.add_account_network_error_adding_to_list
+                ListsForAccountErrorAction.DEL -> R.string.add_account_network_error_removing_from_list
+                else -> R.string.error_generic
+            },
+            setupErrorMessageListener(listId, action)
+        )
+    }
+
+    private fun setupErrorMessageListener(
+        listId: String,
+        action: ListsForAccountErrorAction
+    ): (View) -> Unit = { _: View ->
+        binding.messageView.hide()
+        when (action) {
+            ListsForAccountErrorAction.LOAD -> viewModel.loadLists()
+            ListsForAccountErrorAction.ADD -> viewModel.addAccountToList(listId)
+            ListsForAccountErrorAction.DEL -> viewModel.removeAccountFromList(listId)
+        }
     }
 
     companion object {

@@ -3,10 +3,10 @@ package com.keylesspalace.tusky.components.lists.account.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keylesspalace.tusky.components.lists.account.model.ListForAccount
+import com.keylesspalace.tusky.components.lists.account.model.ListForAccountError
 import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountState
 import com.keylesspalace.tusky.components.lists.domain.ListsRepository
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
-import com.keylesspalace.tusky.core.functional.CustomError
 import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
 import com.keylesspalace.tusky.entity.MastoList
@@ -44,7 +44,7 @@ class ListsForAccountViewModel(
                         }
 
                         is Left -> {
-
+                            resetState(false, result.value)
                         }
                     }
                 }
@@ -70,7 +70,7 @@ class ListsForAccountViewModel(
                     }
 
                     is Left -> {
-
+                        resetState(false, result.value)
                     }
                 }
             }
@@ -83,7 +83,6 @@ class ListsForAccountViewModel(
                 .onStart {
                     resetState(true)
                 }.catch {
-                    Timber.d("Error: ${it.cause?.message}")
                 }.collect { result ->
                     when (result) {
                         is Right -> {
@@ -91,7 +90,7 @@ class ListsForAccountViewModel(
                         }
 
                         is Left -> {
-                            Timber.e("Result is error [${result.value}]")
+                            resetState(false, result.value)
                         }
                     }
                 }
@@ -105,7 +104,6 @@ class ListsForAccountViewModel(
                 .onStart {
                     resetState(true)
                 }.catch {
-                    Timber.d("Error: ${it.cause?.message}")
                 }.collect { result ->
                     when (result) {
                         is Right -> {
@@ -113,14 +111,14 @@ class ListsForAccountViewModel(
                         }
 
                         is Left -> {
-                            Timber.e("Result is error [${result.value}]")
+                            resetState(false, result.value)
                         }
                     }
                 }
         }
     }
 
-    private fun resetState(isLoading: Boolean, error: CustomError? = null) {
+    private fun resetState(isLoading: Boolean, error: ListForAccountError? = null) {
         _state.value = _state.value.copy(
             isLoading = isLoading,
             error = error
