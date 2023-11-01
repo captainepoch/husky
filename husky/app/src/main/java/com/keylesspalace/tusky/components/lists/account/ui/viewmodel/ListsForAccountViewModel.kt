@@ -4,12 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.keylesspalace.tusky.components.lists.account.model.ListForAccount
 import com.keylesspalace.tusky.components.lists.account.model.ListForAccountError
+import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountErrorAction
+import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountErrorAction.ADD
+import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountErrorAction.DEL
+import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountErrorAction.LOAD
 import com.keylesspalace.tusky.components.lists.account.model.ListsForAccountState
 import com.keylesspalace.tusky.components.lists.domain.ListsRepository
 import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.core.functional.Either.Left
 import com.keylesspalace.tusky.core.functional.Either.Right
 import com.keylesspalace.tusky.entity.MastoList
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ListsForAccountViewModel(
     private val repository: ListsRepository
@@ -36,7 +40,8 @@ class ListsForAccountViewModel(
             repository.getLists()
                 .onStart {
                     resetState(true)
-                }.catch {
+                }.catch { failure ->
+                    checkIfNetworkError(failure, "", LOAD)
                 }.collect { result ->
                     when (result) {
                         is Right -> {
@@ -55,7 +60,8 @@ class ListsForAccountViewModel(
         repository.getListsIncludesAccount(userAccountId)
             .onStart {
                 resetState(true)
-            }.catch {
+            }.catch { failure ->
+                checkIfNetworkError(failure, "", LOAD)
             }.collect { result ->
                 when (result) {
                     is Right -> {
@@ -82,7 +88,8 @@ class ListsForAccountViewModel(
             repository.addAccountToList(listId, listOf(userAccountId))
                 .onStart {
                     resetState(true)
-                }.catch {
+                }.catch { failure ->
+                    checkIfNetworkError(failure, listId, ADD)
                 }.collect { result ->
                     when (result) {
                         is Right -> {
@@ -103,7 +110,8 @@ class ListsForAccountViewModel(
             repository.removeAccountFromList(listId, listOf(userAccountId))
                 .onStart {
                     resetState(true)
-                }.catch {
+                }.catch { failure ->
+                    checkIfNetworkError(failure, listId, DEL)
                 }.collect { result ->
                     when (result) {
                         is Right -> {
@@ -123,6 +131,18 @@ class ListsForAccountViewModel(
             isLoading = isLoading,
             error = error
         )
+    }
+
+    private fun checkIfNetworkError(
+        throwable: Throwable?,
+        listId: String = "",
+        action: ListsForAccountErrorAction
+    ) {
+        if (throwable is IOException) {
+            resetState(false, ListForAccountError.NetworkError(listId, action))
+        } else {
+            resetState(false, ListForAccountError.UnknownError(listId, action))
+        }
     }
 
     private fun updateAccountList(listId: String, accountIsIncluded: Boolean) {
