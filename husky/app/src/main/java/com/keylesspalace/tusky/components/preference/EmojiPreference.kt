@@ -238,7 +238,7 @@ class EmojiPreference(
                         context,
                         0x1f973, // This is the codepoint of the party face emoji :D
                         launchIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
                     val mgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     mgr.set(
