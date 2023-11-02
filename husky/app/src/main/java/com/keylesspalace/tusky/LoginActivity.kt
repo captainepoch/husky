@@ -150,10 +150,18 @@ class LoginActivity : BaseActivity() {
     private fun onButtonClick() {
         binding.loginButton.isEnabled = false
 
-        val domain = canonicalizeDomain(binding.domainEditText.text.toString())
+        // Hack for Play Store releases
+        val domainField = binding.domainEditText.text.toString()
+        val domainSplit = domainField.split("@")
+        val domain = if (domainSplit.isEmpty() || domainSplit.size < 2) {
+            domainField
+        } else {
+            domainSplit[1]
+        }
 
+        val oauthDomain = canonicalizeDomain(domain)
         try {
-            HttpUrl.Builder().host(domain).scheme("https").build()
+            HttpUrl.Builder().host(oauthDomain).scheme("https").build()
         } catch (e: IllegalArgumentException) {
             setLoading(false)
             binding.domainTextInputLayout.error = getString(R.string.error_invalid_domain)
@@ -178,12 +186,12 @@ class LoginActivity : BaseActivity() {
                 val clientSecret = credentials.clientSecret
 
                 preferences.edit()
-                    .putString("domain", domain)
+                    .putString("domain", oauthDomain)
                     .putString("clientId", clientId)
                     .putString("clientSecret", clientSecret)
                     .apply()
 
-                redirectUserToAuthorizeAndLogin(domain, clientId)
+                redirectUserToAuthorizeAndLogin(oauthDomain, clientId)
             }
 
             override fun onFailure(call: Call<AppCredentials>, t: Throwable) {
@@ -204,7 +212,7 @@ class LoginActivity : BaseActivity() {
 
         mastodonApi
             .authenticateApp(
-                domain,
+                oauthDomain,
                 appname,
                 oauthRedirectUri,
                 OAUTH_SCOPES,
