@@ -1,0 +1,4 @@
+Husky 1.5.0
+
+Changelog:
+  - Fix: Add: Add any user to a list from the profile.

@@ -1,0 +1,63 @@
+Adolfo Santiago (61):
+      Downgrade lib to fix animation on small emojis
+      Move EditActivity to a more correct package
+      Move enum to a correct package
+      Move EditViewModel to a more correct package
+      Change cropping library
+      Apply ktlint
+      Migrate to a new cropping library
+      Release 1.4.6
+      Update Gradle
+      Update deps. versions
+      Change koinAndroid to koin
+      Changes in the Glide lib
+      Changes in the Preferences lib
+      Migrate to Gradle catalog
+      Fix pipeline steps
+      Remove duplicated entry in dependencies list
+      Add methods to get lists with Coroutines
+      Update project's formatting rules
+      Create CustomError class for error responses
+      Create Repository for the lists module
+      Create fragment to show the lists
+      Create models for the list for an account
+      Create views for the list for an account
+      Create adapter for the list of lists
+      Create ViewModel
+      Add the dependencies to the modules
+      Navigate to the lists for an account
+      Add item to the menu of an account to add to a list
+      Format XML
+      Tint list icon
+      Change some theming options at item_lists_for_account
+      Clean unused dependencies
+      Update Kotlin to 1.9.10
+      Add tag to Fragment
+      Disable loading view
+      Changes in each item of the list
+      Add runtime-ktx dependency
+      Modifiable accountIsIncluded
+      Add listener for each item of the RV
+      Add user to list service
+      Add user to list service called in ViewModel
+      Add reactive flow to the DialogFragment
+      Fix sending a correct state to the view
+      Launch on IO
+      Make accountIsIncluded immutable
+      Implement ripple effect on the whole item
+      Add listener to the whole view
+      Rename listener for clarity
+      Service for removing an user from a list
+      Call service from ViewModel
+      Call ViewModel to remove user from list
+      Reorder methods of the API interface
+      Reduce duplicated code
+      Show loader when calling services
+      Update RecyclerView dependency
+      Add error strings
+      Create custom error class
+      Add error management
+      Check for network errors
+      Improve error mapping
+      Hack for Play Store releases
+
