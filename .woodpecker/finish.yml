@@ -1,0 +1,10 @@
+depends_on:
+  - check_style
+  - run_tests
+
+run_on: [ success, failure ]
+skip_clone: true
+
+when:
+  event: [ push ]
+  branch: master
