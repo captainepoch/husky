@@ -6,18 +6,19 @@ run_on: [ success, failure ]
 skip_clone: true
 
 steps:
-- name: notify-matrix
-  image: plugins/matrix
-  settings:
-    homeserver:
-      from_secret: matrix_homeserver
-    password:
-      from_secret: matrix_password
-    roomid:
-      from_secret: matrix_roomid
-    template: "{{#success build.status}} ✅  Build #{{build.number}} of `{{repo.name}}` succeeded.\n\nCommit by {{commit.author}}:\n``` {{commit.message}} ```{{else}} ❌  Build #{{build.number}} of `{{repo.name}}` failed.\n\n📝 Commit by {{commit.author}}:\n``` {{commit.message}} ```{{/success}}\n"
-    username:
-      from_secret: matrix_username
-  when:
-    event: [ push ]
-    branch: master
+  notify-matrix:
+    image: plugins/matrix
+    group: check
+    settings:
+      homeserver:
+        from_secret: matrix_homeserver
+      password:
+        from_secret: matrix_password
+      roomid:
+        from_secret: matrix_roomid
+      template: "{{#success build.status}} ✅  Build #{{build.number}} of `{{repo.name}}` succeeded.\n\nCommit by {{commit.author}}:\n``` {{commit.message}} ```{{else}} ❌  Build #{{build.number}} of `{{repo.name}}` failed.\n\n📝 Commit by {{commit.author}}:\n``` {{commit.message}} ```{{/success}}\n"
+      username:
+        from_secret: matrix_username
+    when:
+      event: [ push ]
+      branch: master
