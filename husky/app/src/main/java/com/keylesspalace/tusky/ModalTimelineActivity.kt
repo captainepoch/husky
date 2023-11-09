@@ -56,10 +56,13 @@ class ModalTimelineActivity : BottomSheetActivity(), ActionButtonActivity {
     override fun getActionButton(): FloatingActionButton? = null
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressed()
-            return true
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressedDispatcher.onBackPressed()
+
+                return true
+            }
         }
-        return false
+        return super.onOptionsItemSelected(item)
     }
 }

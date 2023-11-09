@@ -112,7 +112,8 @@ public final class SavedTootActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home: {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
+
                 return true;
             }
         }

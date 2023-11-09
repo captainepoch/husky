@@ -101,7 +101,8 @@ public class ViewThreadActivity extends BottomSheetActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home: {
-                onBackPressed();
+                getOnBackPressedDispatcher().onBackPressed();
+
                 return true;
             }
             case R.id.action_reveal: {

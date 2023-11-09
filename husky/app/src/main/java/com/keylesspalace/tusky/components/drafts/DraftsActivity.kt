@@ -100,7 +100,8 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
+
                 return true
             }
             R.id.action_old_drafts -> {
