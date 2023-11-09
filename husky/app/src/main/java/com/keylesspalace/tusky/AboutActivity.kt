@@ -22,17 +22,11 @@ package com.keylesspalace.tusky
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
-import android.text.style.URLSpan
-import android.text.util.Linkify
 import android.view.MenuItem
-import android.widget.TextView
-import androidx.annotation.StringRes
 import com.keylesspalace.tusky.core.extensions.gone
+import com.keylesspalace.tusky.core.extensions.setClickableTextWithoutUnderlines
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityAboutBinding
-import com.keylesspalace.tusky.util.CustomURLSpan
 
 class AboutActivity : BottomSheetActivity() {
 
@@ -82,36 +76,4 @@ class AboutActivity : BottomSheetActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-}
-
-private fun TextView.setClickableTextWithoutUnderlines(@StringRes textId: Int) {
-    val text = SpannableString(context.getText(textId))
-
-    Linkify.addLinks(text, Linkify.WEB_URLS)
-
-    text.getSpans(0, text.length, URLSpan::class.java).forEach { span ->
-        val start = text.getSpanStart(span)
-        val end = text.getSpanEnd(span)
-        val flags = text.getSpanFlags(span)
-
-        val customSpan = object : CustomURLSpan(span.url) {}
-
-        text.removeSpan(span)
-        text.setSpan(customSpan, start, end, flags)
-    }
-    /*val urlSpans = text.getSpans(0, text.length, URLSpan::class.java)
-    for (span in urlSpans) {
-        val start = text.getSpanStart(span)
-        val end = text.getSpanEnd(span)
-        val flags = text.getSpanFlags(span)
-
-        val customSpan = object : CustomURLSpan(span.url) {}
-
-        text.removeSpan(span)
-        text.setSpan(customSpan, start, end, flags)
-    }*/
-
-    setText(text)
-    linksClickable = true
-    movementMethod = LinkMovementMethod.getInstance()
 }
