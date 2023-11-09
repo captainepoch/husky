@@ -77,6 +77,7 @@ android {
             applicationId buildVersions.dev.applicationId
 
             minSdkVersion buildVersions.dev.minSdk
+            compileSdkVersion buildVersions.dev.compileSdk
             targetSdkVersion buildVersions.dev.targetSdk
 
             versionCode buildVersions.dev.versionCode
