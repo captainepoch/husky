@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2023  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky;
 
@@ -22,8 +27,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,11 +51,11 @@ import java.util.HashMap;
 import java.util.List;
 import kotlin.Lazy;
 import static org.koin.java.KoinJavaComponent.inject;
+import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     public Lazy<AccountManager> accountManager = inject(AccountManager.class);
-
     private static final int REQUESTER_NONE = Integer.MAX_VALUE;
     private HashMap<Integer, PermissionRequester> requesters;
 
@@ -63,12 +69,12 @@ public abstract class BaseActivity extends AppCompatActivity {
          * runtime, just individual activities. So, each activity has to set its theme before any
          * views are created. */
         String theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT);
-        Log.d("activeTheme", theme);
+        Timber.d("Active Theme [" + theme + "]");
         if(theme.equals("black")) {
             setTheme(R.style.TuskyBlackTheme);
         }
 
-        /* set the taskdescription programmatically, the theme would turn it blue */
+        // Set the taskdescription programmatically, the theme would turn it blue
         String appName = getString(R.string.app_name);
         Bitmap appIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         int recentsBackgroundColor = ThemeUtils.getColor(this, R.attr.colorSurface);
@@ -96,37 +102,32 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private static int textStyle(String name) {
-        int style;
-        switch(name) {
-            case "smallest":
-                style = R.style.TextSizeSmallest;
-                break;
-            case "small":
-                style = R.style.TextSizeSmall;
-                break;
-            case "medium":
-            default:
-                style = R.style.TextSizeMedium;
-                break;
-            case "large":
-                style = R.style.TextSizeLarge;
-                break;
-            case "largest":
-                style = R.style.TextSizeLargest;
-                break;
-        }
-        return style;
+        return switch(name) {
+            case "smallest" -> R.style.TextSizeSmallest;
+            case "small" -> R.style.TextSizeSmall;
+            default -> R.style.TextSizeMedium;
+            case "large" -> R.style.TextSizeLarge;
+            case "largest" -> R.style.TextSizeLargest;
+        };
     }
 
     public void startActivityWithSlideInAnimation(Intent intent) {
         super.startActivity(intent);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        if(VERSION.SDK_INT < VERSION_CODES.TIRAMISU) {
+            Timber.d("Execute enter transition");
+
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        }
     }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        if(VERSION.SDK_INT < VERSION_CODES.TIRAMISU) {
+            Timber.d("Execute exit transition");
+
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+        }
     }
 
     public void finishWithoutSlideOutAnimation() {
@@ -163,10 +164,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         AccountEntity activeAccount = accountManager.getValue().getActiveAccount();
 
         switch(accounts.size()) {
-            case 1:
+            case 1 -> {
                 listener.onAccountSelected(activeAccount);
                 return;
-            case 2:
+            }
+            case 2 -> {
                 if(!showActiveAccount) {
                     for(AccountEntity account : accounts) {
                         if(activeAccount != account) {
@@ -175,7 +177,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         }
                     }
                 }
-                break;
+            }
         }
 
         if(!showActiveAccount && activeAccount != null) {
