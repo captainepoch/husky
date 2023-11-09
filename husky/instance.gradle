@@ -11,4 +11,4 @@ ext.CUSTOM_LOGO_URL = ""
 ext.CUSTOM_INSTANCE = ""
 
 // link to your support account. Will be linked on the about page when not empty.
-ext.SUPPORT_ACCOUNT_URL = "https://stereophonic.space/users/captainepoch"
+ext.SUPPORT_ACCOUNT_URL = "https://stereophonic.space/users/husky"
