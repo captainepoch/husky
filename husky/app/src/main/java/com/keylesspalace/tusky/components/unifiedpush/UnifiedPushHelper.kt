@@ -35,7 +35,7 @@ import timber.log.Timber
 
 object UnifiedPushHelper {
 
-    private fun hasUnifiedPushProviders(context: Context): Boolean {
+    fun hasUnifiedPushProviders(context: Context): Boolean {
         return UnifiedPush.getDistributors(context).isNotEmpty()
     }
 

@@ -172,6 +172,12 @@
     <string name="unifiedpush_info_dialog_ok">OK</string>
     <string name="unifiedpush_info_dialog_cancel">Cancel</string>
 
+    <string name="unifiedpush_pref_no_provider_title">No UnifiedPush Provider</string>
+    <string name="unifiedpush_pref_no_provider_text">You don\'t have any UnifiedPush provider installed. Please install one (i.e. ntfy from F-Droid).</string>
+
+    <string name="unifiedpush_pref_no_provider_available_title">UnifiedPush provider changes</string>
+    <string name="unifiedpush_pref_no_provider_available_text">You modified your UnifiedPush providers installed on your phone and changes may need to be applied.\n\nPlease, restart the application.</string>
+
     <!--
     <string name="about_tusky_version">Husky %s</string>
     <string name="about_powered_by_tusky">Powered by Husky</string>
