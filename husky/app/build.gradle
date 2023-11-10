@@ -171,6 +171,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedataKtx)
     implementation(libs.androidx.lifecycle.reactiveStreamsKtx)
     implementation(libs.androidx.lifecycle.runtimeKtx)
+    implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.viewmodelKtx)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
@@ -225,6 +226,7 @@ dependencies {
     implementation(libs.autodispose)
     implementation(libs.autodispose.androidarch)
     implementation(libs.bigImageViewer)
+    implementation(libs.bouncyCastle)
     implementation(libs.conscrypt)
     implementation(libs.filemoji.compat)
     implementation(libs.filemoji.compat.defaults)
@@ -239,6 +241,7 @@ dependencies {
     implementation(libs.material.drawer.typeface)
     implementation(libs.sparkbutton)
     implementation(libs.timber)
+    implementation(libs.unifiedpush)
 
     // Testing dependencies
     testImplementation(libs.testing.androidx.junit)

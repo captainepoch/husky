@@ -21,6 +21,7 @@ androidx-viewpager2 = "1.0.0"
 androidx-workKtx = "2.8.1"
 autodispose = "1.4.0"
 bigImageViewer = "1.8.1"
+bouncyCastle = "1.76"
 conscrypt = "2.5.2"
 filemoji-compat = "3.2.7"
 flexbox = "3.0.0"
@@ -54,6 +55,7 @@ testing-mockito-inline = "5.2.0"
 testing-mockito-kotlin = "2.2.0"
 testing-robolectric = "4.11.1"
 timber = "5.0.1"
+unifiedpush = "2.1.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -79,6 +81,7 @@ androidx-lifecycle-commonJava = { module = "androidx.lifecycle:lifecycle-common-
 androidx-lifecycle-livedataKtx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-reactiveStreamsKtx = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
@@ -95,6 +98,7 @@ androidx-workKtx = { module = "androidx.work:work-runtime-ktx", version.ref = "a
 autodispose = { module = "com.uber.autodispose:autodispose", version.ref = "autodispose" }
 autodispose-androidarch = { module = "com.uber.autodispose:autodispose-android-archcomponents", version.ref = "autodispose" }
 bigImageViewer = { module = "com.github.piasy:BigImageViewer", version.ref = "bigImageViewer" }
+bouncyCastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncyCastle" }
 conscrypt = { module = "org.conscrypt:conscrypt-android", version.ref = "conscrypt" }
 filemoji-compat = { module = "de.c1710:filemojicompat", version.ref = "filemoji-compat" }
 filemoji-compat-defaults = { module = "de.c1710:filemojicompat-defaults", version.ref = "filemoji-compat" }
@@ -139,3 +143,4 @@ testing-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = 
 testing-mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "testing-mockito-kotlin" }
 testing-robolectric = { module = "org.robolectric:robolectric", version.ref = "testing-robolectric" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+unifiedpush = { module = "com.github.UnifiedPush:android-connector", version.ref = "unifiedpush" }
