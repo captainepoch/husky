@@ -845,6 +845,10 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
     }
 
     private fun enrollPushNotifications() {
+        UnifiedPushHelper.enrollUnifiedPushForAccount(
+            this@MainActivity,
+            accountManager.value.activeAccount
+        )
         accountManager.value.activeAccount?.let { account ->
             if (accountManager.value.hasNotificationsEnabled() &&
                 !UnifiedPushHelper.hasUnifiedPushEnrolled(account) &&
@@ -859,7 +863,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                         // TODO: Move to a ViewModel
                         lifecycleScope.launch(Dispatchers.IO) {
                             if (result) {
-                                UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
+                                UnifiedPushHelper.enrollUnifiedPushForAccount(
                                     this@MainActivity,
                                     accountManager.value.activeAccount
                                 )

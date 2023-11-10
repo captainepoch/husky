@@ -40,8 +40,6 @@ import com.keylesspalace.tusky.components.instancemute.InstanceListActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.components.unifiedpush.UnifiedPushHelper
 import com.keylesspalace.tusky.core.extensions.Empty
-import com.keylesspalace.tusky.core.extensions.gone
-import com.keylesspalace.tusky.databinding.BottomSheetTwoOptionsBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Account
@@ -85,7 +83,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
     override fun onResume() {
         super.onResume()
 
-        if(viewModel.verifyHasUnifiedPushProviders(requireContext())) {
+        if (viewModel.verifyHasUnifiedPushProviders(requireContext())) {
             AlertDialog.Builder(requireActivity())
                 .setCancelable(false)
                 .setTitle(requireActivity().getString(string.unifiedpush_pref_no_provider_available_title))
@@ -166,7 +164,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     key = PrefKeys.DEFAULT_POST_PRIVACY
                     setSummaryProvider { entry }
                     val visibility = accountManager.activeAccount?.defaultPostPrivacy
-                                     ?: Visibility.PUBLIC
+                        ?: Visibility.PUBLIC
                     value = visibility.serverString()
                     setIcon(getIconForVisibility(visibility))
                     setOnPreferenceChangeListener { _, newValue ->
@@ -185,7 +183,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     setSummaryProvider { entry }
                     val syntax =
                         accountManager.activeAccount?.defaultFormattingSyntax ?: String.Empty
-                    value = when(syntax) {
+                    value = when (syntax) {
                         "text/markdown" -> "Markdown"
                         "text/bbcode" -> "BBCode"
                         "text/html" -> "HTML"
@@ -193,7 +191,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     }
                     setIcon(getIconForSyntax(syntax))
                     setOnPreferenceChangeListener { _, newValue ->
-                        val newSyntax = when(newValue) {
+                        val newSyntax = when (newValue) {
                             "Markdown" -> "text/markdown"
                             "BBCode" -> "text/bbcode"
                             "HTML" -> "text/html"
@@ -262,16 +260,18 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
             }
 
             preferenceCategory(string.pref_title_notifications) {
-                if(viewModel.hasUnifiedPushProviders) {
-                    if(NotificationHelper.NOTIFICATION_USE_CHANNELS) {
+                if (viewModel.hasUnifiedPushProviders) {
+                    if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
                         switchPreference {
                             key = accountManager.pushNotificationPrefKey()
                             setTitle(string.pref_title_live_notifications)
                             isSingleLineTitle = false
-                            isChecked = (accountManager.hasNotificationsEnabled()
-                                         && accountManager.isUnifiedPushEnrolled())
+                            isChecked = (
+                                accountManager.hasNotificationsEnabled() &&
+                                    accountManager.isUnifiedPushEnrolled()
+                                )
                             setOnPreferenceChangeListener { _, newValue ->
-                                if((newValue as Boolean)) {
+                                if ((newValue as Boolean)) {
                                     UnifiedPushHelper.enrollUnifiedPushForAccount(
                                         requireActivity(),
                                         accountManager.activeAccount
@@ -303,8 +303,8 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     }
                 } else {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        if(accountManager.hasNotificationsEnabled() &&
-                           accountManager.isUnifiedPushEnrolled()
+                        if (accountManager.hasNotificationsEnabled() &&
+                            accountManager.isUnifiedPushEnrolled()
                         ) {
                             UnifiedPushHelper.unenrollUnifiedPushForAccount(
                                 requireContext(),
@@ -374,7 +374,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun openNotificationPrefs() {
-        if(NotificationHelper.NOTIFICATION_USE_CHANNELS) {
+        if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
             startActivity(
                 Intent().apply {
                     action = "android.settings.APP_NOTIFICATION_SETTINGS"
@@ -403,7 +403,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
             .enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
                     val account = response.body()
-                    if(response.isSuccessful && account != null) {
+                    if (response.isSuccessful && account != null) {
                         accountManager.activeAccount?.let {
                             it.defaultPostPrivacy = account.source?.privacy ?: Visibility.PUBLIC
                             it.defaultMediaSensitivity = account.source?.sensitive ?: false
@@ -434,7 +434,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
     @DrawableRes
     private fun getIconForVisibility(visibility: Visibility): Int {
-        return when(visibility) {
+        return when (visibility) {
             Visibility.PRIVATE -> drawable.ic_lock_outline_24dp
 
             Visibility.UNLISTED -> drawable.ic_lock_open_24dp
@@ -449,7 +449,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
 
     @DrawableRes
     private fun getIconForSensitivity(sensitive: Boolean): Int {
-        return if(sensitive) {
+        return if (sensitive) {
             drawable.ic_hide_media_24dp
         } else {
             drawable.ic_eye_24dp
@@ -457,7 +457,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun getIconForSyntax(syntax: String): Int {
-        return when(syntax) {
+        return when (syntax) {
             "text/html" -> drawable.ic_html_24dp
             "text/bbcode" -> drawable.ic_bbcode_24dp
             "text/markdown" -> drawable.ic_markdown
