@@ -22,22 +22,24 @@ package com.keylesspalace.tusky.components.unifiedpush
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.core.crypto.CryptoConstants
 import com.keylesspalace.tusky.core.crypto.CryptoECKeyPair
 import com.keylesspalace.tusky.core.crypto.CryptoUtils
+import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.network.MastodonApi
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.koin.core.component.KoinComponent
@@ -45,11 +47,9 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.security.Security
 
-class UnifiedPushService : Service(), KoinComponent {
+class UnifiedPushService : LifecycleService(), KoinComponent {
 
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
-
+    private var job: Job? = null
     private lateinit var notificationManager: NotificationManager
     private val api by inject<MastodonApi>()
     private val accountManager by inject<AccountManager>()
@@ -64,20 +64,18 @@ class UnifiedPushService : Service(), KoinComponent {
     }
 
     override fun onDestroy() {
+        destroyJob()
+
         super.onDestroy()
 
         Timber.d("Destroy service")
 
         serviceStarted = false
-        job.cancel()
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        Timber.d("Binding the service")
-        return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
         if (!serviceStarted) {
             Timber.d("Service not created")
             createServiceNotification()
@@ -96,12 +94,15 @@ class UnifiedPushService : Service(), KoinComponent {
 
                 val instance = intent.getStringExtra(INSTANCE)
                 if (instance.isNullOrEmpty() || instance.isBlank()) {
-                    Timber.e("No instance of UnifiedPush is provided")
+                    Timber.e("No instance for UnifiedPush is provided")
 
                     stopSelf()
                 } else {
-                    subscribeToPush(generateKeyPair(), getAuth(), endpoint, instance)
-                    Timber.d("Subscribed to push notifications")
+                    Timber.d("Instance for UnifiedPush is provided[$instance]")
+
+                    job = lifecycleScope.launch(Dispatchers.IO) {
+                        subscribeToPush(generateKeyPair(), getAuth(), endpoint, instance)
+                    }
                 }
             }
 
@@ -112,7 +113,7 @@ class UnifiedPushService : Service(), KoinComponent {
     }
 
     private fun createServiceNotification() {
-        if (VERSION.SDK_INT >= VERSION_CODES.O) {
+        if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 getString(R.string.unifiedpush_service_foreground_channel),
@@ -122,13 +123,16 @@ class UnifiedPushService : Service(), KoinComponent {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.unifiedpush_service_foreground_title))
             .setContentText(getString(R.string.unifiedpush_service_foreground_text))
             .setSmallIcon(R.drawable.ic_husky)
-            .build()
 
-        startForeground(PUSH_SUBS_ID, notification)
+        if (VERSION.SDK_INT >= VERSION_CODES.S) {
+            notification.foregroundServiceBehavior = Notification.FOREGROUND_SERVICE_IMMEDIATE
+        }
+
+        startForeground(PUSH_SUBS_ID, notification.build())
     }
 
     private fun modifySecurityProvider(delete: Boolean = false) {
@@ -153,57 +157,57 @@ class UnifiedPushService : Service(), KoinComponent {
         return CryptoUtils.getSecureRandomStringBase64(16)
     }
 
-    private fun subscribeToPush(
+    private suspend fun subscribeToPush(
         keyPair: CryptoECKeyPair,
         auth: String,
         endpoint: String,
         instance: String
     ) {
-        scope.launch {
-            Timber.d("Subscribing to the push notification service")
+        Timber.d("Subscribing to the push notification service")
 
-            accountManager.activeAccount?.let { account ->
-                val response = api.subscribePushNotifications(
-                    "Bearer ${account.accessToken}",
-                    account.domain,
-                    endpoint,
-                    keyPair.pubKey,
-                    auth,
-                    UnifiedPushHelper.buildPushDataMap(notificationManager, account)
+        accountManager.activeAccount?.let { account ->
+            val response = api.subscribePushNotifications(
+                "Bearer ${account.accessToken}",
+                account.domain,
+                endpoint,
+                keyPair.pubKey,
+                auth,
+                UnifiedPushHelper.buildPushDataMap(notificationManager, account)
+            )
+
+            if (response.body() != null) {
+                Timber.d("UnifiedPush registration for ${account.fullName}")
+
+                accountManager.saveAccount(
+                    account.apply {
+                        notificationsEnabled = true
+                        unifiedPushUrl = endpoint
+                        unifiedPushInstance = instance
+                    }
                 )
 
-                if (response.body() != null) {
-                    Timber.d("UnifiedPush registration for ${account.fullName}")
+                // TODO: Update push notification
 
-                    accountManager.saveAccount(
-                        account.apply {
-                            unifiedPushUrl = endpoint
-                            unifiedPushInstance = instance
-                        }
-                    )
-
-                    // TODO: Update push notification
-
-                    stopSelf()
-                    return@launch
-                }
-
-                if (response.errorBody() != null) {
-                    Timber.e("Error in the response [${response.raw().message}]")
-
-                    // TODO: See what to do with an error
-
-                    stopSelf()
-                    return@launch
-                }
-
-                null
-            } ?: runCatching {
                 stopSelf()
+                return@let
+            }
 
-                return@launch
+            if (response.errorBody() != null) {
+                Timber.e("Error in the response [${response.raw().message}]")
+
+                // TODO: See what to do with an error
+
+                stopSelf()
+                return@let
             }
         }
+    }
+
+    private fun destroyJob() {
+        job.cancelIfActive()
+        job = null
+
+        Timber.d("Job destroyed")
     }
 
     companion object {
