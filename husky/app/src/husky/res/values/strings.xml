@@ -155,6 +155,10 @@
     <string name="add_account_network_error_adding_to_list">A network error occurred while adding this user to the list. Please, try again.</string>
     <string name="add_account_network_error_removing_from_list">A network error occurred while removing this user from the list. Please, try again.</string>
 
+    <string name="unifiedpush_service_foreground_channel">UnifiedPush Subscription</string>
+    <string name="unifiedpush_service_foreground_title">UnifiedPush</string>
+    <string name="unifiedpush_service_foreground_text">Subscribing to an UnifiedPush provider</string>
+
     <!--
     <string name="about_tusky_version">Husky %s</string>
     <string name="about_powered_by_tusky">Powered by Husky</string>
@@ -185,4 +189,3 @@
 
     <string name="warning_scheduling_interval">Mastodon/Pleroma has a minimum scheduling interval of 5 minutes.</string> -->
 </resources>
-
