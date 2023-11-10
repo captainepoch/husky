@@ -3,7 +3,7 @@ when:
 
 steps:
   style:
-    image: ghcr.io/alvr/alpine-android:android-33-jdk17
+    image: ghcr.io/alvr/alpine-android:android-34-jdk17
     group: check
     commands:
       - cd husky
