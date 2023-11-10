@@ -48,9 +48,8 @@ data class AccountEntity(
     var username: String = String.Empty,
     var displayName: String = String.Empty,
     var profilePictureUrl: String = String.Empty,
-    var notificationsEnabled: Boolean = false,
-    // TODO: Drop notificationsStreamingEnabled
-    var notificationsStreamingEnabled: Boolean = false,
+    var notificationsEnabled: Boolean = true,
+    var notificationsStreamingEnabled: Boolean = false, // Deprecated to notificationsEnabled !!
     var notificationsMentioned: Boolean = true,
     var notificationsFollowed: Boolean = true,
     var notificationsFollowRequested: Boolean = false,

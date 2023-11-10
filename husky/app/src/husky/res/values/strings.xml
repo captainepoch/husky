@@ -148,6 +148,11 @@
 
     <string name="visibility_local">Local: Do not federate this post</string>
 
+    <string name="push_notifications_info_title">Push notifications</string>
+    <string name="push_notifications_info_text">Husky shows you some push notifications regarding some events (i.e. sending a new status).\n\nPlease consider giving permissions to Husky to show those push notifications.</string>
+    <string name="push_notifications_info_check">Do not show this dialog again</string>
+    <string name="push_notifications_info_ok">OK</string>
+
     <string name="add_account_error_loading_list">An error occurred while loading the list. Please, try again.</string>
     <string name="add_account_error_adding_to_list">An error occurred while adding this user to the list. Please, try again.</string>
     <string name="add_account_error_removing_from_list">An error occurred while removing this user from the list. Please, try again.</string>
@@ -158,6 +163,11 @@
     <string name="unifiedpush_service_foreground_channel">UnifiedPush Subscription</string>
     <string name="unifiedpush_service_foreground_title">UnifiedPush</string>
     <string name="unifiedpush_service_foreground_text">Subscribing to an UnifiedPush provider</string>
+    <string name="unifiedpush_info_dialog_title">Husky and UnifiedPush</string>
+    <string name="unifiedpush_info_dialog_text">Husky now provides support for push notifications using a UnifiedPush provider.</string>
+    <string name="unifiedpush_info_dialog_text_no_provider">You don\'t have any UnifiedPush provider installed. Please install one, and go to "Account preferences" and start the enroll process manually.</string>
+    <string name="unifiedpush_info_dialog_ok">OK</string>
+    <string name="unifiedpush_info_dialog_cancel">Cancel</string>
 
     <!--
     <string name="about_tusky_version">Husky %s</string>

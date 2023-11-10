@@ -183,19 +183,6 @@ class AccountManager(db: AppDatabase) {
     }
 
     /**
-     * @return true if at least one account has notifications enabled
-     */
-    @Deprecated(
-        "Notifications will be enabled individually",
-        ReplaceWith("hasNotificationsEnabled()")
-    )
-    fun areNotificationsEnabled(): Boolean {
-        return accounts.any {
-            it.notificationsEnabled
-        }
-    }
-
-    /**
      * Get the correct key to save the preference for push notifications per account
      *
      * @return Key + username and instance, key if account is null
@@ -207,7 +194,7 @@ class AccountManager(db: AppDatabase) {
     }
 
     fun hasNotificationsEnabled(): Boolean {
-        return activeAccount?.notificationsEnabled ?: false
+        return activeAccount?.notificationsEnabled ?: true
     }
 
     fun getAccountByUnifiedPushInstance(instance: String): AccountEntity? {

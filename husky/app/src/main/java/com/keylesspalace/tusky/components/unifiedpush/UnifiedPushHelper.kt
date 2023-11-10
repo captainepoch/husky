@@ -19,15 +19,28 @@
 
 package com.keylesspalace.tusky.components.unifiedpush
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
+import android.text.SpannableStringBuilder
+import androidx.appcompat.app.AlertDialog
+import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.databinding.BottomSheetTwoOptionsBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.entity.Notification.Type
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 
 object UnifiedPushHelper {
+
+    fun hasUnifiedPushProviders(context: Context): Boolean {
+        return UnifiedPush.getDistributor(context).isNotEmpty()
+    }
+
+    fun hasUnifiedPushEnrolled(account: AccountEntity): Boolean {
+        return (account.unifiedPushUrl.isNotBlank() && account.unifiedPushInstance.isNotBlank())
+    }
 
     fun enableUnifiedPushNotificationsForAccount(
         context: Context,
@@ -46,12 +59,61 @@ object UnifiedPushHelper {
         } ?: Timber.e("Account cannot be null")
     }
 
+    fun showUnifiedPushDialog(
+        activity: Activity,
+        onPositiveAction: (Boolean) -> Unit
+    ) {
+        val hasProviders = hasUnifiedPushProviders(activity)
+        val binding = BottomSheetTwoOptionsBinding.inflate(activity.layoutInflater)
+
+        val message = SpannableStringBuilder()
+            .append(activity.getString(R.string.unifiedpush_info_dialog_text))
+
+        /*if(!hasProviders) {
+            message
+                .append("\n\n")
+                .append(activity.getString(R.string.unifiedpush_info_dialog_text_no_provider))
+            binding.stopShowing.isChecked = true
+        }*/
+        binding.dialogDesc.text = message
+
+        val dialog = AlertDialog.Builder(activity)
+            .setTitle(R.string.unifiedpush_info_dialog_title)
+            .setView(binding.root)
+            .setPositiveButton(R.string.unifiedpush_info_dialog_ok) { _, _ ->
+                onPositiveAction(hasProviders)
+            }
+
+        /*.setPositiveButton(R.string.filter_dialog_update_button) { _, _ ->
+        }
+        .setNegativeButton(R.string.filter_dialog_remove_button) { _, _ ->
+        }
+        .setNeutralButton(android.R.string.cancel, null)*/
+
+        dialog.create().show()
+    }
+
+    fun showPushNotificationInfoDialog(activity: Activity, onPositiveAction: (Boolean) -> Unit) {
+        val binding = BottomSheetTwoOptionsBinding.inflate(activity.layoutInflater)
+        binding.dialogDesc.text = activity.getString(R.string.push_notifications_info_text)
+        binding.stopShowing.text = activity.getString(R.string.push_notifications_info_check)
+
+        AlertDialog.Builder(activity)
+            .setTitle(activity.getString(R.string.push_notifications_info_title))
+            .setView(binding.root)
+            .setPositiveButton(activity.getString(R.string.push_notifications_info_ok)) { _, _ ->
+                onPositiveAction(binding.stopShowing.isChecked)
+            }
+            .create()
+            .show()
+    }
+
     fun buildPushDataMap(
         notificationManager: NotificationManager,
         account: AccountEntity?
     ): Map<String, Boolean> {
         return buildMap {
-            Type.asList.forEach {type ->
+            Type.asList.forEach { type ->
                 put(
                     "data[alerts][${type.presentation}]",
                     NotificationHelper.filterNotification(account, type, notificationManager)
