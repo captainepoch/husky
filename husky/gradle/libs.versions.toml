@@ -40,7 +40,7 @@ material = "1.10.0"
 #noinspection GradleDependency
 material-drawer = "8.4.5"
 material-drawer-typeface = "4.0.0.2-kotlin"
-okhttp = "4.11.0"
+okhttp = "4.12.0"
 retrofit = "2.9.0"
 rx-android = "2.1.1"
 rx-java = "2.2.21"
@@ -51,7 +51,7 @@ testing-androidx-espresso = "3.5.1"
 testing-junit = "4.13.2"
 testing-mockito-inline = "5.2.0"
 testing-mockito-kotlin = "2.2.0"
-testing-robolectric = "4.10.3"
+testing-robolectric = "4.11.1"
 timber = "5.0.1"
 
 [plugins]
