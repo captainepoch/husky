@@ -46,6 +46,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
@@ -118,16 +119,16 @@ import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.parcel.Parcelize
-import me.thanel.markdownedit.MarkdownEdit
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.android.parcel.Parcelize
+import me.thanel.markdownedit.MarkdownEdit
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class ComposeActivity :
     BaseActivity(),
@@ -163,6 +164,31 @@ class ComposeActivity :
 
     private lateinit var preferences: SharedPreferences
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            // Acting like a teen: deliberately ignoring parent.
+            if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+                addMediaBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+                emojiBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+                scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+                stickerBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
+                previewBehavior.state == BottomSheetBehavior.STATE_EXPANDED
+            ) {
+                composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+                return
+            }
+
+            handleCloseButton()
+        }
+    }
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -171,6 +197,7 @@ class ComposeActivity :
             setTheme(R.style.TuskyDialogActivityBlackTheme)
         }
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         setupActionBar()
         // do not do anything when not logged in, activity will be finished in super.onCreate() anyway
@@ -1394,42 +1421,20 @@ class ComposeActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        // Acting like a teen: deliberately ignoring parent.
-        if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-            addMediaBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-            emojiBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-            scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-            stickerBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-            previewBehavior.state == BottomSheetBehavior.STATE_EXPANDED
-        ) {
-            composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-            return
-        }
-
-        handleCloseButton()
-    }
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Timber.d(event.toString())
 
         if (event.action == KeyEvent.ACTION_UP) {
             if (event.isCtrlPressed) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    // send toot by pressing CTRL + ENTER
+                    // Send toot by pressing CTRL + ENTER
                     this.onSendClicked(false)
                     return true
                 }
             }
 
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
         }
