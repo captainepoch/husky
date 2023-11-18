@@ -38,6 +38,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.arch.core.util.Function
@@ -122,12 +123,12 @@ import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class ChatActivity :
     BottomSheetActivity(),
@@ -254,6 +255,24 @@ class ChatActivity :
 
     private lateinit var preferences: SharedPreferences
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            // Acting like a teen: deliberately ignoring parent.
+            if (addMediaBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
+                emojiBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
+                stickerBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+            ) {
+                addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                return
+            }
+
+            finish()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -274,6 +293,7 @@ class ChatActivity :
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         subscribeToUpdates()
 
@@ -732,17 +752,16 @@ class ChatActivity :
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initiateMediaPicking()
             } else {
-                val bar = Snackbar.make(
+                Snackbar.make(
                     binding.activityChat,
                     R.string.error_media_upload_permission,
                     Snackbar.LENGTH_SHORT
                 ).apply {
-                }
-                bar.setAction(R.string.action_retry) { onMediaPick() }
-                // necessary so snackbar is shown over everything
-                bar.view.elevation =
-                    resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
-                bar.show()
+                    setAction(R.string.action_retry) { onMediaPick() }
+                    // Necessary so snackbar is shown over everything
+                    view.elevation =
+                        resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
+                }.show()
             }
         }
     }
@@ -1173,26 +1192,12 @@ class ChatActivity :
             }
 
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
+
                 return true
             }
         }
         return super.onKeyDown(keyCode, event)
-    }
-
-    override fun onBackPressed() {
-        // Acting like a teen: deliberately ignoring parent.
-        if (addMediaBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
-            emojiBehavior.state != BottomSheetBehavior.STATE_HIDDEN ||
-            stickerBehavior.state != BottomSheetBehavior.STATE_HIDDEN
-        ) {
-            addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            return
-        }
-
-        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
