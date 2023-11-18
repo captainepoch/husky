@@ -24,8 +24,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.keylesspalace.tusky.BaseActivity
@@ -49,9 +49,28 @@ class PreferencesActivity :
     private val eventHub: EventHub by inject()
     private var restartActivitiesOnExit: Boolean = false
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            if (restartActivitiesOnExit) {
+                startActivityWithSlideInAnimation(
+                    Intent(
+                        this@PreferencesActivity,
+                        MainActivity::class.java
+                    ).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                )
+            } else {
+                finish()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         setSupportActionBar(binding.includedToolbar.toolbar)
         supportActionBar?.run {
@@ -157,20 +176,6 @@ class PreferencesActivity :
         startActivityWithSlideInAnimation(intent)
         finish()
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-    }
-
-    override fun onBackPressed() {
-        /* Switching themes won't actually change the theme of activities on the back stack.
-         * Either the back stack activities need to all be recreated, or do the easier thing, which
-         * is hijack the back button press and use it to launch a new MainActivity and clear the
-         * back stack. */
-        if (restartActivitiesOnExit) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivityWithSlideInAnimation(intent)
-        } else {
-            super.onBackPressed()
-        }
     }
 
     companion object {
