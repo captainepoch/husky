@@ -22,10 +22,10 @@ package com.keylesspalace.tusky
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.isVisible
@@ -54,8 +54,9 @@ import com.uber.autodispose.autoDispose
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.koin.android.ext.android.inject
 import java.util.regex.Pattern
+import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
 
@@ -76,9 +77,21 @@ class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
         )
     }
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            if (binding.actionButton.isVisible) {
+                finish()
+            } else {
+                toggleFab(false)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         setSupportActionBar(binding.includedToolbar.toolbar)
 
@@ -127,20 +140,20 @@ class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val temp = currentTabs[viewHolder.adapterPosition]
-                currentTabs[viewHolder.adapterPosition] = currentTabs[target.adapterPosition]
-                currentTabs[target.adapterPosition] = temp
+                val temp = currentTabs[viewHolder.bindingAdapterPosition]
+                currentTabs[viewHolder.bindingAdapterPosition] = currentTabs[target.bindingAdapterPosition]
+                currentTabs[target.bindingAdapterPosition] = temp
 
                 currentTabsAdapter.notifyItemMoved(
-                    viewHolder.adapterPosition,
-                    target.adapterPosition
+                    viewHolder.bindingAdapterPosition,
+                    target.bindingAdapterPosition
                 )
                 saveTabs()
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                onTabRemoved(viewHolder.adapterPosition)
+                onTabRemoved(viewHolder.bindingAdapterPosition)
             }
 
             override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
@@ -238,6 +251,8 @@ class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
         binding.actionButton.visible(!expand)
         binding.sheet.visible(expand)
         binding.scrim.visible(expand)
+
+        onBackPressedCallback.isEnabled = expand
     }
 
     private fun showAddHashtagDialog(tab: TabData? = null, tabPosition: Int = 0) {
@@ -290,7 +305,7 @@ class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
                     adapter.addAll(lists)
                 },
                 { throwable ->
-                    Log.e("TabPreferenceActivity", "failed to load lists", throwable)
+                    Timber.e("Failed to load lists", throwable)
                 }
             )
 
@@ -372,14 +387,6 @@ class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
                 .subscribe()
         }
         tabsChanged = true
-    }
-
-    override fun onBackPressed() {
-        if (binding.actionButton.isVisible) {
-            super.onBackPressed()
-        } else {
-            toggleFab(false)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
