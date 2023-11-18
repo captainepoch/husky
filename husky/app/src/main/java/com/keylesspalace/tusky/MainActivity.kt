@@ -381,20 +381,6 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         NotificationHelper.clearNotificationsForActiveAccount(this, accountManager.value)
     }
 
-    /*override fun onBackPressed() {
-        when {
-            binding.mainDrawerLayout.isOpen -> {
-                binding.mainDrawerLayout.close()
-            }
-            binding.viewPager.currentItem != 0 -> {
-                binding.viewPager.currentItem = 0
-            }
-            else -> {
-                super.onBackPressed()
-            }
-        }
-    }*/
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
             KeyEvent.KEYCODE_MENU -> {
