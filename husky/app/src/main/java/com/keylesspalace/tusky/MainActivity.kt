@@ -35,6 +35,7 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -157,6 +158,25 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         }
     }
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            when {
+                binding.mainDrawerLayout.isOpen -> {
+                    binding.mainDrawerLayout.close()
+                }
+
+                binding.viewPager.currentItem != 0 -> {
+                    binding.viewPager.currentItem = 0
+                }
+
+                else -> {
+                    finish()
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -216,6 +236,8 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         // Do not draw a status bar, the DrawerLayout and the MaterialDrawerLayout have their own
         window.statusBarColor = Color.TRANSPARENT
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
         ViewPager2Fix.reduceVelocity(binding.viewPager, 2.0f)
 
         glide = Glide.with(this)
@@ -359,7 +381,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         NotificationHelper.clearNotificationsForActiveAccount(this, accountManager.value)
     }
 
-    override fun onBackPressed() {
+    /*override fun onBackPressed() {
         when {
             binding.mainDrawerLayout.isOpen -> {
                 binding.mainDrawerLayout.close()
@@ -371,7 +393,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                 super.onBackPressed()
             }
         }
-    }
+    }*/
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
