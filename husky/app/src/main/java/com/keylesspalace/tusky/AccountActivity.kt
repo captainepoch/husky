@@ -475,7 +475,6 @@ class AccountActivity :
      */
     private fun updateAccountAvatar() {
         loadedAccount?.let { account ->
-
             loadAvatar(
                 account.avatar,
                 binding.accountAvatarImageView,

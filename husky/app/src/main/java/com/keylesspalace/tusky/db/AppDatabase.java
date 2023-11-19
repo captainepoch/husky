@@ -30,7 +30,7 @@ import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEn
  */
 @Database(entities = {TootEntity.class, DraftEntity.class, AccountEntity.class,
     InstanceEntity.class, TimelineStatusEntity.class, TimelineAccountEntity.class,
-    ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 29)
+    ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 30)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract TootDao tootDao();
@@ -431,6 +431,56 @@ public abstract class AppDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `maxBioLength` INTEGER DEFAULT -1");
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `maxBioFields` INTEGER DEFAULT -1");
+        }
+    };
+
+    public static final Migration MIGRATION_29_30 = new Migration(29, 30) {
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            String defaultTabs =
+                TabDataKt.HOME + ";" + TabDataKt.NOTIFICATIONS + ";" + TabDataKt.LOCAL + ";" +
+                    TabDataKt.FEDERATED;
+
+            database.execSQL("CREATE TABLE `AccountEntityTemp` (" +
+                "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "`domain` TEXT NOT NULL, `accessToken` TEXT NOT NULL, " +
+                "`isActive` INTEGER NOT NULL, `accountId` TEXT NOT NULL, " +
+                "`username` TEXT NOT NULL, `displayName` TEXT NOT NULL, " +
+                "`profilePictureUrl` TEXT, " +
+                "`notificationsEnabled` INTEGER NOT NULL, " +
+                "`notificationsStreamingEnabled` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationsMentioned` INTEGER NOT NULL, " +
+                "`notificationsFollowed` INTEGER NOT NULL, " +
+                "`notificationsFollowRequested` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationsReblogged` INTEGER NOT NULL, " +
+                "`notificationsFavorited` INTEGER NOT NULL, " +
+                "`notificationsPolls` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationsEmojiReactions` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationsChatMessages` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationsSubscriptions` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationsMove` INTEGER NOT NULL DEFAULT 1, " +
+                "`notificationSound` INTEGER NOT NULL, " +
+                "`notificationVibration` INTEGER NOT NULL, " +
+                "`notificationLight` INTEGER NOT NULL, " +
+                "`defaultPostPrivacy` INTEGER NOT NULL DEFAULT 1, " +
+                "`defaultMediaSensitivity` INTEGER NOT NULL DEFAULT 0, " +
+                "`alwaysShowSensitiveMedia` INTEGER NOT NULL DEFAULT 0, " +
+                "`alwaysOpenSpoiler` INTEGER NOT NULL DEFAULT 0, " +
+                "`mediaPreviewEnabled` INTEGER NOT NULL DEFAULT 0, " +
+                "`lastNotificationId` TEXT NOT NULL, " +
+                "`activeNotifications` TEXT NOT NULL, " +
+                "`emojis` TEXT NOT NULL DEFAULT '[]', " +
+                "`tabPreferences` TEXT NOT NULL DEFAULT '" + defaultTabs + "', " +
+                "`notificationsFilter` TEXT NOT NULL DEFAULT '[]', " +
+                "`defaultFormattingSyntax` TEXT NOT NULL DEFAULT '')");
+
+            database.execSQL("INSERT INTO AccountEntityTemp SELECT * FROM AccountEntity;");
+            database.execSQL("DROP TABLE AccountEntity;");
+            database.execSQL("ALTER TABLE AccountEntityTemp RENAME TO AccountEntity;");
+
+            database.execSQL(
+                "CREATE UNIQUE INDEX `index_AccountEntity_domain_accountId` ON `AccountEntity` (`domain`, `accountId`)");
         }
     };
 }

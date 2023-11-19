@@ -112,6 +112,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import com.mikepenz.materialdrawer.model.interfaces.descriptionRes
 import com.mikepenz.materialdrawer.model.interfaces.descriptionText
+import com.mikepenz.materialdrawer.model.interfaces.iconDrawable
 import com.mikepenz.materialdrawer.model.interfaces.iconRes
 import com.mikepenz.materialdrawer.model.interfaces.iconUrl
 import com.mikepenz.materialdrawer.model.interfaces.nameRes
@@ -847,17 +848,14 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
     }
 
     @SuppressLint("CheckResult")
-    private fun loadDrawerAvatar(avatarUrl: String, showPlaceholder: Boolean) {
+    private fun loadDrawerAvatar(avatarUrl: String?, showPlaceholder: Boolean) {
         val navIconSize = resources.getDimensionPixelSize(R.dimen.avatar_toolbar_nav_icon_size)
 
         Glide.with(this).asDrawable()
             .load(avatarUrl)
+            .placeholder(R.drawable.avatar_default)
             .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.avatar_radius_36dp)))
-            .apply {
-                if (showPlaceholder) {
-                    placeholder(R.drawable.avatar_default)
-                }
-            }.into(object : CustomTarget<Drawable>(navIconSize, navIconSize) {
+            .into(object : CustomTarget<Drawable>(navIconSize, navIconSize) {
 
                 override fun onLoadStarted(placeholder: Drawable?) {
                     if (placeholder != null) {
@@ -910,7 +908,14 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                 ProfileDrawerItem().apply {
                     isSelected = acc.isActive
                     nameText = emojifiedName ?: acc.displayName
-                    iconUrl = acc.profilePictureUrl
+                    if(acc.profilePictureUrl.isNullOrBlank()) {
+                        iconDrawable = ContextCompat.getDrawable(
+                            this@MainActivity,
+                            R.drawable.avatar_default
+                        )
+                    } else {
+                        iconUrl = acc.profilePictureUrl!!
+                    }
                     isNameShown = true
                     identifier = acc.id
                     descriptionText = acc.fullName
