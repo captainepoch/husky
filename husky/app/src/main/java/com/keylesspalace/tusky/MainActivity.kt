@@ -357,11 +357,6 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        NotificationHelper.clearNotificationsForActiveAccount(this, accountManager.value)
-    }
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
             KeyEvent.KEYCODE_MENU -> {
@@ -764,8 +759,8 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     cacheUpdater.clearForUser(activeAccount.id)
                     conversationRepository.deleteCacheForAccount(activeAccount.id)
                     removeShortcut(this, activeAccount)
+
                     val newAccount = accountManager.value.logActiveAccountOut()
-                    // initPullNotifications()
                     val intent = if (newAccount == null) {
                         LoginActivity.getIntent(this, false)
                     } else {
