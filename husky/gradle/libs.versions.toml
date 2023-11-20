@@ -21,7 +21,7 @@ androidx-viewpager2 = "1.0.0"
 androidx-workKtx = "2.8.1"
 autodispose = "1.4.0"
 bigImageViewer = "1.8.1"
-bouncyCastle = "1.76"
+bouncyCastle = "1.77"
 conscrypt = "2.5.2"
 filemoji-compat = "3.2.7"
 flexbox = "3.0.0"
@@ -55,7 +55,7 @@ testing-mockito-inline = "5.2.0"
 testing-mockito-kotlin = "2.2.0"
 testing-robolectric = "4.11.1"
 timber = "5.0.1"
-unifiedpush = "2.1.1"
+unifiedpush = "2.2.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
