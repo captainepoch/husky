@@ -45,6 +45,7 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.emoji2.text.EmojiCompat
 import androidx.emoji2.text.EmojiCompat.InitCallback
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
@@ -74,6 +75,7 @@ import com.keylesspalace.tusky.components.preference.PreferencesActivity
 import com.keylesspalace.tusky.components.profile.ui.view.EditProfileActivity
 import com.keylesspalace.tusky.components.scheduled.ScheduledTootActivity
 import com.keylesspalace.tusky.components.search.SearchActivity
+import com.keylesspalace.tusky.components.unifiedpush.UnifiedPushHelper
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.utils.ApplicationUtils
 import com.keylesspalace.tusky.databinding.ActivityMainBinding
@@ -128,6 +130,8 @@ import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.uber.autodispose.android.lifecycle.autoDispose
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -286,13 +290,15 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     is PreferenceChangedEvent -> {
                         when (event.preferenceKey) {
                             PrefKeys.LIVE_NOTIFICATIONS -> {
-                                //initPullNotifications()
+                                // initPullNotifications()
                             }
+
                             PrefKeys.HIDE_LIVE_NOTIFICATION_DESCRIPTION -> {
-                                //initPullNotifications(rebootPush = true)
+                                // initPullNotifications(rebootPush = true)
                             }
                         }
                     }
+
                     is AnnouncementReadEvent -> {
                         unreadAnnouncementsCount--
                         updateAnnouncementsBadge()
@@ -320,14 +326,27 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
     ) {
         when (requestCode) {
             notificationPermissionsRequestCode -> {
-                Timber.d("Notifications permissions are requested")
+                Timber.d("Notifications permissions were requested")
                 if (grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    Timber.d("Permissions are granted")
-                    //initPullNotifications()
+                    Timber.d("Permissions granted")
+                    // initPullNotifications()
+
+                    lifecycleScope.launch {
+                        NotificationHelper.createNotificationChannelsForAccount(
+                            accountManager.value.activeAccount!!,
+                            applicationContext
+                        )
+                        // UnifiedPushService.startService(applicationContext, "")
+                        UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
+                            this@MainActivity,
+                            accountManager.value.activeAccount
+                        )
+                    }
                 }
             }
+
             else -> {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults)
                 Timber.d("Super method is called")
@@ -335,7 +354,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         }
     }
 
-    private fun initPullNotifications(rebootPush: Boolean = false) {
+    /*private fun initPullNotifications(rebootPush: Boolean = false) {
         if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
             Timber.d("Asking permissions on Tiramisu and newer")
             if (ContextCompat.checkSelfPermission(
@@ -369,7 +388,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
             disablePushNotifications()
         }
         draftWarning()
-    }
+    }*/
 
     private fun disablePushNotifications() {
         StreamingService.stopStreaming(this)
@@ -391,6 +410,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                 }
                 return true
             }
+
             KeyEvent.KEYCODE_SEARCH -> {
                 startActivityWithSlideInAnimation(SearchActivity.getIntent(this))
                 return true
@@ -783,7 +803,7 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
                     conversationRepository.deleteCacheForAccount(activeAccount.id)
                     removeShortcut(this, activeAccount)
                     val newAccount = accountManager.value.logActiveAccountOut()
-                    //initPullNotifications()
+                    // initPullNotifications()
                     val intent = if (newAccount == null) {
                         LoginActivity.getIntent(this, false)
                     } else {
@@ -824,7 +844,8 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
             this
         )
 
-        //initPullNotifications()
+        // initPullNotifications()
+        initPushNotifications()
 
         // Show follow requests in the menu, if this is a locked account.
         if (me.locked && binding.mainDrawer.getDrawerItem(DRAWER_ITEM_FOLLOW_REQUESTS) == null) {
@@ -842,8 +863,40 @@ class MainActivity : BottomSheetActivity(), ActionButtonActivity {
         } else if (!me.locked) {
             binding.mainDrawer.removeItems(DRAWER_ITEM_FOLLOW_REQUESTS)
         }
+
         updateProfiles()
         updateShortcut(this, accountManager.value.activeAccount!!)
+    }
+
+    private fun initPushNotifications() {
+        if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+            Timber.d("Asking permissions on Tiramisu and newer")
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                Timber.w("Permissions denied, requesting permissions for notifications")
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    notificationPermissionsRequestCode
+                )
+            } else {
+                Timber.d("Notification permissions already granted")
+
+                lifecycleScope.launch {
+                    NotificationHelper.createNotificationChannelsForAccount(
+                        accountManager.value.activeAccount!!,
+                        applicationContext
+                    )
+                    // UnifiedPushService.startService(applicationContext, "")
+                    UnifiedPushHelper.enableUnifiedPushNotificationsForAccount(
+                        this@MainActivity,
+                        accountManager.value.activeAccount
+                    )
+                }
+            }
+        }
     }
 
     @SuppressLint("CheckResult")
