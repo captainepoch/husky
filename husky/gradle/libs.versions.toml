@@ -34,6 +34,7 @@ gradle-ktlint = "11.6.1"
 koin = "3.5.0"
 kotlin = "1.9.20"
 kotlinx = "1.7.3"
+ksp = "1.9.20-1.0.13"
 imageCropper = "4.5.0"
 markdownEdit = "1.0.0"
 material = "1.10.0"
@@ -56,6 +57,7 @@ timber = "5.0.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
@@ -100,7 +102,7 @@ filemoji-compat-ui = { module = "de.c1710:filemojicompat-ui", version.ref = "fil
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 fragmentviewbindingdelegateKt = { module = "com.github.Zhuinden:fragmentviewbindingdelegate-kt", version.ref = "fragmentviewbindingdelegateKt" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+glide-compiler = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 glide-image = { module = "com.github.piasy:GlideImageLoader", version.ref = "glide-image" }
 glide-image-factory = { module = "com.github.piasy:GlideImageViewFactory", version.ref = "glide-image" }
 glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }

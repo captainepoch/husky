@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.ksp)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
 }
 
@@ -28,11 +28,9 @@ android {
         buildConfigField("String", "SUPPORT_ACCOUNT_URL", "\"$SUPPORT_ACCOUNT_URL\"")
     }
 
-    kapt {
-        arguments {
-            arg("room.schemaLocation", "$projectDir/schemas")
-            arg("room.incremental", "true")
-        }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
     }
 
     signingConfigs {
@@ -179,7 +177,7 @@ dependencies {
     implementation(libs.androidx.paging)
     implementation(libs.androidx.preferenceKtx)
     implementation(libs.androidx.recyclerview)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.rxjava)
     implementation(libs.androidx.sharetarget)
@@ -189,7 +187,7 @@ dependencies {
 
     // Glide dependencies
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    ksp(libs.glide.compiler)
     implementation(libs.glide.image)
     implementation(libs.glide.image.factory)
     implementation(libs.glide.okhttp)
