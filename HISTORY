@@ -1,3 +1,9 @@
+Husky 1.5.1 - 2023-11-21
+  - Update up to Android 14 (API 34).
+  - Fix: Allow the instance to not have a default profile image (causing some
+  issues when login in the first time).
+  - Fix: Null issue when opening an attachment from another instance.
+
 Husky 1.5.0 - 2023-11-02
   - Add: Add any user to a list from the profile.
 

@@ -1,0 +1,7 @@
+Husky 1.5.1
+
+Changelog:
+  - Update up to Android 14 (API 34).
+  - Fix: Allow the instance to not have a default profile image (causing some
+  issues when login in the first time).
+  - Fix: Null issue when opening an attachment from another instance.
