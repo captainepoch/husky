@@ -1,0 +1,4 @@
+Husky 1.5.1
+
+Changelog:
+  - Fix: Sending a status caused the Sharing dialog to appear.

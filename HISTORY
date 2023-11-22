@@ -1,3 +1,6 @@
+Husky 1.5.1 - 2023-11-22
+  - Fix: Sending a status caused the Sharing dialog to appear.
+
 Husky 1.5.1 - 2023-11-21
   - Update up to Android 14 (API 34).
   - Fix: Allow the instance to not have a default profile image (causing some
