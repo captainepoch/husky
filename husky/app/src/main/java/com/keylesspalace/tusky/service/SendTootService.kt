@@ -28,7 +28,10 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.IBinder
 import android.os.Parcelable
 import androidx.core.app.NotificationCompat
@@ -51,16 +54,16 @@ import com.keylesspalace.tusky.entity.NewStatus
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.SaveTootHelper
+import java.util.Timer
+import java.util.TimerTask
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 import kotlinx.android.parcel.Parcelize
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Timer
-import java.util.TimerTask
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
 
 class SendTootService : Service(), KoinComponent {
 
@@ -117,7 +120,18 @@ class SendTootService : Service(), KoinComponent {
 
         if (tootsToSend.size == 0 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-            startForeground(sendingNotificationId, builder.build())
+            if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+                startForeground(
+                    sendingNotificationId,
+                    builder.build(),
+                    FOREGROUND_SERVICE_TYPE_DATA_SYNC
+                )
+            } else {
+                startForeground(
+                    sendingNotificationId,
+                    builder.build()
+                )
+            }
         } else {
             notificationManager.notify(sendingNotificationId, builder.build())
         }
