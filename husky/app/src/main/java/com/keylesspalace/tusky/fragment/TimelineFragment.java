@@ -65,6 +65,7 @@ import com.keylesspalace.tusky.appstore.ReblogEvent;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent;
 import com.keylesspalace.tusky.appstore.UnfollowEvent;
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Filter;
 import com.keylesspalace.tusky.entity.Poll;
@@ -137,7 +138,8 @@ public class TimelineFragment extends SFragment
     private EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
     private TimelineRepository timelineRepo =
         (TimelineRepository) inject(TimelineRepository.class).getValue();
-
+    private InstanceRepository instanceRepo =
+        (InstanceRepository) inject(InstanceRepository.class).getValue();
     private boolean eventRegistered = false;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -166,7 +168,7 @@ public class TimelineFragment extends SFragment
     private boolean alwaysOpenSpoiler;
     private boolean initialUpdateFailed = false;
 
-    private PairedList<Either<Placeholder, Status>, StatusViewData> statuses =
+    private final PairedList<Either<Placeholder, Status>, StatusViewData> statuses =
         new PairedList<>(new Function<>() {
             @Override
             public StatusViewData apply(Either<Placeholder, Status> input) {
@@ -223,6 +225,14 @@ public class TimelineFragment extends SFragment
         if(kind == Kind.TAG) {
             tags = arguments.getStringArrayList(HASHTAGS_ARG);
         }
+
+        instanceRepo.getInstanceInfoRx()
+            .observeOn(AndroidSchedulers.mainThread())
+            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+            .subscribe(instance -> {
+                    Timber.d("Has quoting posts [%s]", instance.getQuotePosting());
+                }
+            );
 
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(getActivity());
