@@ -21,10 +21,12 @@ package com.keylesspalace.tusky.components.instance.domain.repository
 
 import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
 import com.keylesspalace.tusky.core.functional.Either
+import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 
 interface InstanceRepository {
 
     fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>>
+    fun getInstanceInfoRx(): Single<InstanceEntity>
     fun getInstanceInfoDb(): InstanceEntity
 }
