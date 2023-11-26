@@ -70,7 +70,8 @@ class AnnouncementsViewModel(
                     either.asRight().maxBioChars,
                     either.asRight().pleroma?.metadata?.fieldsLimits?.maxFields,
                     either.asRight().version,
-                    either.asRight().chatLimit
+                    either.asRight().chatLimit,
+                    false
                 )
         }
             .doOnSuccess {

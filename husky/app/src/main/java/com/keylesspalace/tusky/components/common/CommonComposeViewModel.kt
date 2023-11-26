@@ -12,6 +12,7 @@
  *
  * You should have received a copy of the GNU General Public License along with Tusky; if not,
  * see <http://www.gnu.org/licenses>. */
+
 package com.keylesspalace.tusky.components.common
 
 import android.net.Uri
@@ -21,6 +22,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
+import com.keylesspalace.tusky.components.instance.data.models.InstanceFeatures
+import com.keylesspalace.tusky.components.instance.data.models.InstanceFeatures.QUOTE_POSTING
 import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
 import com.keylesspalace.tusky.components.search.SearchType
 import com.keylesspalace.tusky.core.functional.Either
@@ -115,6 +118,10 @@ open class CommonComposeViewModel(
 
     init {
         Singles.zip(api.getCustomEmojis(), api.getInstance()) { emojis, instance ->
+            val features = instance.pleroma?.metadata?.features?.mapNotNull {
+                InstanceFeatures.getInstanceFeature(it)
+            } ?: listOf()
+
             InstanceEntity(
                 instance = accountManager.activeAccount?.domain!!,
                 emojiList = emojis,
@@ -124,7 +131,8 @@ open class CommonComposeViewModel(
                 version = instance.version,
                 chatLimit = instance.chatLimit,
                 maxBioLength = instance.descriptionLimit,
-                maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields
+                maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
+                quotePosting = features.contains(QUOTE_POSTING)
             )
         }
             .doOnSuccess {
