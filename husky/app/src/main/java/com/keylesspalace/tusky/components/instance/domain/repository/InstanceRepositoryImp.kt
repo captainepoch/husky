@@ -19,12 +19,15 @@
 
 package com.keylesspalace.tusky.components.instance.domain.repository
 
+import com.keylesspalace.tusky.components.instance.data.models.InstanceFeatures
+import com.keylesspalace.tusky.components.instance.data.models.InstanceFeatures.QUOTE_POSTING
+import com.keylesspalace.tusky.components.instance.data.models.data.Instance
 import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
-import com.keylesspalace.tusky.core.extensions.notNull
 import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.network.MastodonService
+import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -36,25 +39,45 @@ class InstanceRepositoryImp(
 
     override fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
         service.getInstanceData().run {
-            val response = if (isSuccessful && body().notNull()) {
-                val instance = body()!!
-                InstanceEntity(
-                    instance = accountManager.activeAccount?.domain!!,
-                    emojiList = null,
-                    maximumTootCharacters = instance.maxTootChars,
-                    maxPollOptions = instance.pollLimits?.maxOptions,
-                    maxPollOptionLength = instance.pollLimits?.maxOptionChars,
-                    maxBioLength = instance.descriptionLimit,
-                    maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
-                    version = instance.version,
-                    chatLimit = instance.chatLimit
-                )
+            val instanceBody = body()
+            val instance = if (isSuccessful && instanceBody != null) {
+                parseInstance(instanceBody)
             } else {
                 getInstanceInfoDb()
             }
 
-            emit(Either.Right(response))
+            // TODO: get CustomEmojis before saving the instance
+            //db.instanceDao().insertOrReplace(instance)
+            emit(Either.Right(instance))
         }
+    }
+
+    override fun getInstanceInfoRx(): Single<InstanceEntity> {
+        return service.getInstance().map {
+            parseInstance(it)
+        }.onErrorReturn {
+            getInstanceInfoDb()
+        }
+    }
+
+    private fun parseInstance(instanceRemote: Instance): InstanceEntity {
+        val features: List<InstanceFeatures> =
+            instanceRemote.pleroma?.metadata?.features?.mapNotNull {
+                InstanceFeatures.getInstanceFeature(it)
+            } ?: listOf()
+
+        return InstanceEntity(
+            instance = accountManager.activeAccount?.domain!!,
+            emojiList = null,
+            maximumTootCharacters = instanceRemote.maxTootChars,
+            maxPollOptions = instanceRemote.pollLimits?.maxOptions,
+            maxPollOptionLength = instanceRemote.pollLimits?.maxOptionChars,
+            maxBioLength = instanceRemote.descriptionLimit,
+            maxBioFields = instanceRemote.pleroma?.metadata?.fieldsLimits?.maxFields,
+            version = instanceRemote.version,
+            chatLimit = instanceRemote.chatLimit,
+            quotePosting = features.contains(QUOTE_POSTING)
+        )
     }
 
     override fun getInstanceInfoDb(): InstanceEntity {
