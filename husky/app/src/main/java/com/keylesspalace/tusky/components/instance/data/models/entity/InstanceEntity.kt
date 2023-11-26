@@ -34,14 +34,16 @@ data class InstanceEntity(
     val maxBioLength: Int?,
     val maxBioFields: Int?,
     val version: String?,
-    val chatLimit: Int?
+    val chatLimit: Int?,
+    val quotePosting: Boolean = false
 ) {
 
     fun toInstanceInfo(): InstanceInfo {
         return InstanceInfo(
             maxTootLength = maximumTootCharacters ?: InstanceConstants.DEFAULT_CHARACTER_LIMIT,
             maxBioLength = maxBioLength ?: InstanceConstants.DEFAULT_BIO_LENGTH,
-            maxBioFields = maxBioFields ?: InstanceConstants.DEFAULT_BIO_MAX_FIELDS
+            maxBioFields = maxBioFields ?: InstanceConstants.DEFAULT_BIO_MAX_FIELDS,
+            quotePosting = quotePosting
         )
     }
 }
