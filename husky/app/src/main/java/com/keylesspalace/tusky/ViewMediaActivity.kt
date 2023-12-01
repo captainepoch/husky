@@ -24,10 +24,12 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -43,6 +45,7 @@ import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -65,12 +68,12 @@ import com.uber.autodispose.autoDispose
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale
+import timber.log.Timber
 
 typealias ToolbarVisibilityListener = (isVisible: Boolean) -> Unit
 
@@ -80,7 +83,6 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         private const val EXTRA_ATTACHMENTS = "attachments"
         private const val EXTRA_ATTACHMENT_INDEX = "index"
         private const val EXTRA_AVATAR_URL = "avatar"
-        private const val TAG = "ViewMediaActivity"
 
         @JvmStatic
         fun newIntent(
@@ -117,9 +119,22 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     private var attachments: ArrayList<AttachmentViewData>? = null
     private val toolbarVisibilityListeners = mutableListOf<ToolbarVisibilityListener>()
     private var avatarUrl: String? = null
+    private var downloadId: Long = 0
 
     var isToolbarVisible = true
         private set
+
+    private val onDownloadComplete: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent) {
+            Timber.d("Intent [$intent]")
+            val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if (downloadId == id) {
+                Timber.d("Downloaded file")
+                // TODO: Run a job to move the file, avoiding being killed by the system
+            }
+        }
+    }
 
     fun addToolbarVisibilityListener(listener: ToolbarVisibilityListener): Function0<Boolean> {
         this.toolbarVisibilityListeners.add(listener)
@@ -130,6 +145,13 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        ContextCompat.registerReceiver(
+            this,
+            onDownloadComplete,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         supportPostponeEnterTransition()
 
@@ -189,6 +211,12 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unregisterReceiver(onDownloadComplete)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.view_media_toolbar, menu)
         return true
@@ -227,8 +255,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     binding.toolbar.visibility = visibility
                     animation.removeListener(this)
                 }
-            })
-            .start()
+            }).start()
     }
 
     fun getToolbar(): Toolbar {
@@ -257,7 +284,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             Environment.DIRECTORY_PICTURES,
             getString(R.string.app_name) + "/" + filename
         )
-        downloadManager.enqueue(request)
+        downloadId = downloadManager.enqueue(request)
     }
 
     private fun requestDownloadMedia() {
@@ -281,7 +308,13 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     private fun onOpenStatus() {
         if (attachments != null) {
             val attach = attachments!![binding.viewPager.currentItem]
-            startActivityWithSlideInAnimation(ViewThreadActivity.startIntent(this, attach.statusId, attach.statusUrl))
+            startActivityWithSlideInAnimation(
+                ViewThreadActivity.startIntent(
+                    this,
+                    attach.statusId,
+                    attach.statusUrl
+                )
+            )
         } else {
             Snackbar.make(
                 binding.root,
@@ -317,6 +350,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                 Attachment.Type.AUDIO,
                 Attachment.Type.VIDEO,
                 Attachment.Type.GIFV -> shareMediaFile(directory, attachment.url)
+
                 else -> Timber.e("Unknown media format to share")
             }
         }
