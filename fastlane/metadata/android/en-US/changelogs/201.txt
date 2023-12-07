@@ -1,0 +1,7 @@
+Husky 1.5.3
+
+Changelog:
+  - Fix: Starting the application with the notifications permissions would crash
+  the application.
+  - Fix: DownloadManager should not delete downloaded media after 7+ days.
+  - Updated dependencies

@@ -1,4 +1,10 @@
-Husky 1.5.1 - 2023-11-22
+Husky 1.5.3 - 2023-12-07
+  - Fix: Starting the application with the notifications permissions would crash
+  the application.
+  - Fix: DownloadManager should not delete downloaded media after 7+ days.
+  - Updated dependencies
+
+Husky 1.5.2 - 2023-11-22
   - Fix: Sending a status caused the Sharing dialog to appear.
 
 Husky 1.5.1 - 2023-11-21
