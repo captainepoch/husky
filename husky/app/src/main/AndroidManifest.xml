@@ -229,7 +229,9 @@
             android:name=".service.SendTootService"
             android:foregroundServiceType="dataSync" />
 
-        <service android:name=".service.StreamingService" />
+        <service
+            android:name=".service.StreamingService"
+            android:foregroundServiceType="dataSync" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
