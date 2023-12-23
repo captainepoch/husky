@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.keylesspalace.tusky.fragment.StatusReblogQuoteItem
+        android:id="@+id/statusReblog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:icon="@drawable/arrows_clockwise"
+        app:text="Reblog" />
+
+    <com.keylesspalace.tusky.fragment.StatusReblogQuoteItem
+        android:id="@+id/statusQuote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/quotes"
+        app:text="Quote" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
