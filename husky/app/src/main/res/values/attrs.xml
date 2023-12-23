@@ -8,6 +8,11 @@
         <attr name="description" format="string|reference" />
     </declare-styleable>
 
+    <declare-styleable name="StatusReblogQuoteItem">
+        <attr name="icon" format="reference" />
+        <attr name="text" format="string|reference" />
+    </declare-styleable>
+
     <!--Themed Attributes-->
     <attr name="colorBackgroundAccent" format="reference|color" />
     <attr name="textColorDisabled" format="reference|color" />
