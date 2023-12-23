@@ -57,7 +57,6 @@ class ComposeViewModel(
 
     private var replyingStatusAuthor: String? = null
     private var replyingStatusContent: String? = null
-    internal var startingText: String? = null
     private var savedTootUid: Int = 0
     private var draftId: Int = 0
     private var scheduledTootId: String? = null
@@ -66,10 +65,13 @@ class ComposeViewModel(
     private var startingVisibility: Status.Visibility = Status.Visibility.UNKNOWN
     private var contentWarningStateChanged: Boolean = false
     private var modifiedInitialState: Boolean = false
+    private val isEditingScheduledToot
+        get() = !scheduledTootId.isNullOrEmpty()
 
+    internal var startingText: String? = null
+    var quotePostId: String? = null
     val markMediaAsSensitive =
         mutableLiveData(accountManager.activeAccount?.defaultMediaSensitivity ?: false)
-
     val statusVisibility = mutableLiveData(Status.Visibility.UNKNOWN)
     val showContentWarning = mutableLiveData(false)
     val setupComplete = mutableLiveData(false)
@@ -78,8 +80,6 @@ class ComposeViewModel(
     val postExpiresIn: MutableLiveData<Int?> = mutableLiveData(null)
     val formattingSyntax: MutableLiveData<String> = mutableLiveData("")
     val composeWithZwsp: MutableLiveData<Boolean> = mutableLiveData(false)
-
-    private val isEditingScheduledToot get() = !scheduledTootId.isNullOrEmpty()
 
     fun toggleMarkSensitive() {
         this.markMediaAsSensitive.value = this.markMediaAsSensitive.value != true
@@ -186,7 +186,8 @@ class ComposeViewModel(
                     savedTootUid = savedTootUid,
                     draftId = draftId,
                     idempotencyKey = randomAlphanumericString(16),
-                    retries = 0
+                    retries = 0,
+                    quoteId = quotePostId
                 )
 
                 serviceClient.sendToot(tootToSend)
