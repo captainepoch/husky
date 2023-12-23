@@ -61,7 +61,6 @@ import androidx.core.view.inputmethod.InputContentInfoCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
@@ -124,7 +123,7 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import me.thanel.markdownedit.MarkdownEdit
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -162,7 +161,7 @@ class ComposeActivity :
     private val maxUploadMediaNumber = 4
     private var mediaCount = 0
 
-    private lateinit var preferences: SharedPreferences
+    private val preferences: SharedPreferences by inject()
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
 
@@ -191,7 +190,7 @@ class ComposeActivity :
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferences = PreferenceManager.getDefaultSharedPreferences(this)
+
         val theme = preferences.getString("appTheme", ThemeUtils.APP_THEME_DEFAULT)
         if (theme == "black") {
             setTheme(R.style.TuskyDialogActivityBlackTheme)
@@ -254,6 +253,7 @@ class ComposeActivity :
 
         viewModel.composeWithZwsp.value =
             preferences.getBoolean(PrefKeys.COMPOSING_ZWSP_CHAR, false)
+        viewModel.quotePostId = composeOptions?.quotePostId
 
         setupComposeField(viewModel.startingText)
         setupContentWarningField(composeOptions?.contentWarning)
@@ -402,8 +402,8 @@ class ComposeActivity :
         }
 
         // work around Android platform bug -> https://issuetracker.google.com/issues/67102093
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
+        if (VERSION.SDK_INT == VERSION_CODES.O ||
+            VERSION.SDK_INT == VERSION_CODES.O_MR1
         ) {
             binding.composeEditField.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
@@ -1610,7 +1610,8 @@ class ComposeActivity :
         var sensitive: Boolean? = null,
         var poll: NewPoll? = null,
         var formattingSyntax: String? = null,
-        var modifiedInitialState: Boolean? = null
+        var modifiedInitialState: Boolean? = null,
+        var quotePostId: String? = null
     ) : Parcelable
 
     companion object {
