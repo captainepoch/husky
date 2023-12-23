@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/reblogIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/quotes" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/reblogText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="?attr/status_text_medium"
+        app:layout_constraintBottom_toBottomOf="@id/reblogIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/reblogIcon"
+        app:layout_constraintTop_toTopOf="@id/reblogIcon"
+        tools:text="Text" />
+
+</merge>
