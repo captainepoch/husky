@@ -29,7 +29,6 @@ import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.IBinder
@@ -58,7 +57,7 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import retrofit2.Call
@@ -118,7 +117,7 @@ class SendTootService : Service(), KoinComponent {
                 cancelSendingIntent(sendingNotificationId)
             )
 
-        if (tootsToSend.size == 0 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (tootsToSend.size == 0 || VERSION.SDK_INT >= VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
             if (VERSION.SDK_INT >= VERSION_CODES.Q) {
                 startForeground(
@@ -159,8 +158,7 @@ class SendTootService : Service(), KoinComponent {
         postToSend.incrementRetries()
 
         if (postToSend is TootToSend) {
-            val contentType: String? =
-                if (postToSend.formattingSyntax.isNotEmpty()) postToSend.formattingSyntax else null
+            val contentType: String? = postToSend.formattingSyntax.ifEmpty { null }
             val preview: Boolean? = if (postToSend.preview) true else null
 
             val newStatus = NewStatus(
@@ -174,7 +172,8 @@ class SendTootService : Service(), KoinComponent {
                 postToSend.expiresIn,
                 postToSend.poll,
                 contentType,
-                preview
+                preview,
+                postToSend.quoteId
             )
 
             val sendCall = mastodonApi.createStatus(
@@ -373,7 +372,7 @@ class SendTootService : Service(), KoinComponent {
         val intent = Intent(this, SendTootService::class.java)
         intent.putExtra(KEY_CANCEL, tootId)
         val flags =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (VERSION.SDK_INT >= VERSION_CODES.S) {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             } else {
                 PendingIntent.FLAG_UPDATE_CURRENT
@@ -485,7 +484,8 @@ data class TootToSend(
     val savedTootUid: Int,
     val draftId: Int,
     val idempotencyKey: String,
-    var retries: Int
+    var retries: Int,
+    val quoteId: String?
 ) : Parcelable, PostToSend {
 
     override fun getNotificationText(): String {
