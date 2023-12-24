@@ -34,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.core.util.Pair;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.AsyncDifferConfig;
@@ -65,6 +66,8 @@ import com.keylesspalace.tusky.appstore.ReblogEvent;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent;
 import com.keylesspalace.tusky.appstore.UnfollowEvent;
+import com.keylesspalace.tusky.components.compose.ComposeActivity;
+import com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
 import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Filter;
@@ -611,12 +614,40 @@ public class TimelineFragment extends SFragment
 
     @Override
     public void onReblog(final boolean reblog, final int position) {
-        final Status status = statuses.get(position).asRight();
-        timelineCases.getValue().reblog(status, reblog).observeOn(AndroidSchedulers.mainThread())
-            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-            .subscribe((newStatus) -> setRebloggedForStatus(position, status, reblog),
-                (err) -> Timber.e(
-                    "Failed to reblog status " + status.getId() + ", Error[" + err + "]"));
+        Timber.d("onReblog %s", statuses.get(position).asRight());
+
+        FragmentActivity activity = getActivity();
+        if(activity != null) {
+            final Status status = statuses.get(position).asRight();
+
+            final StatusReblogQuoteDialog dialog = new StatusReblogQuoteDialog(getActivity());
+            dialog.setOnStatusActionListener(type -> {
+                if(type == StatusReblogQuoteType.QUOTE) {
+                    Timber.d("QUOTE");
+
+                    ComposeOptions options = new ComposeOptions();
+                    options.setQuotePostId(status.getId());
+                    startActivity(ComposeActivity.startIntent(activity, options));
+                } else {
+                    Timber.d("REBLOG");
+
+                    timelineCases.getValue().reblog(status, reblog)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+                        .subscribe(
+                            (newStatus) -> setRebloggedForStatus(position, status, reblog),
+                            (err) -> Timber.e(err,
+                                "Failed to reblog status %s, Error[%s]",
+                                status.getId(),
+                                err.getMessage()
+                            )
+                        );
+                }
+
+                return null;
+            });
+            dialog.show();
+        }
     }
 
     private void setRebloggedForStatus(int position, Status status, boolean reblog) {
