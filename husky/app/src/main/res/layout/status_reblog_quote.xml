@@ -9,7 +9,7 @@
         android:id="@+id/statusReblog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:background="?attr/selectableItemBackground"
         app:icon="@drawable/arrows_clockwise"
         app:text="Reblog" />
 
@@ -17,6 +17,7 @@
         android:id="@+id/statusQuote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
         app:icon="@drawable/quotes"
         app:text="Quote" />
 

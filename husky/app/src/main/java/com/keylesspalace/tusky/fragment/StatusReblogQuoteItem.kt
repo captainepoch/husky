@@ -16,7 +16,8 @@ class StatusReblogQuoteItem @JvmOverloads constructor(
 
     private val binding = StatusReblogQuoteItemBinding.inflate(
         LayoutInflater.from(context),
-        this
+        this,
+        true
     )
     private var buttonIcon: Drawable? = null
     private var buttonText: String? = null
