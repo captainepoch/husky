@@ -621,7 +621,6 @@
     <string name="debug_status_message">A debug build has enabled logs and debugging information for the application. Information might leak. Please use it carefully.</string>
     <string name="debug_status_message_close">Close</string>
 
-
     <!-- HUSKY SPECIFIC STRINGS -->
     <string name="chats">Chats</string>
     <string name="chat_our_last_message"><b>You</b></string>
@@ -726,4 +725,7 @@
     <string name="add_account_network_error_loading_list">A network error occurred while loading the list. Please, try again.</string>
     <string name="add_account_network_error_adding_to_list">A network error occurred while adding this user to the list. Please, try again.</string>
     <string name="add_account_network_error_removing_from_list">A network error occurred while removing this user from the list. Please, try again.</string>
+
+    <string name="reblog_action_dialog_message">Do you want to reblog this status?</string>
+
 </resources>

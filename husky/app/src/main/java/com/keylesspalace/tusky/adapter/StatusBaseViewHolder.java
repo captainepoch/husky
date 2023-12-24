@@ -671,13 +671,14 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 listener.onReply(position);
             }
         });
+
         if (reblogButton != null) {
             reblogButton.setEventListener((button, buttonState) -> {
-                // return true to play animaion
-                int position = getAdapterPosition();
+                // Return true to play animaion
+                int position = getAbsoluteAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     if (statusDisplayOptions.confirmReblogs()) {
-                        showConfirmReblogDialog(listener, statusContent, buttonState, position);
+                        showConfirmReblogDialog(listener, buttonState, position);
                         return false;
                     } else {
                         listener.onReblog(!buttonState, position);
@@ -727,20 +728,18 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void showConfirmReblogDialog(StatusActionListener listener,
-                                         String statusContent,
                                          boolean buttonState,
                                          int position) {
         int okButtonTextId = buttonState ? R.string.action_unreblog : R.string.action_reblog;
         new AlertDialog.Builder(reblogButton.getContext())
-                .setMessage(statusContent)
+                .setMessage(R.string.reblog_action_dialog_message)
                 .setPositiveButton(okButtonTextId, (__, ___) -> {
                     listener.onReblog(!buttonState, position);
                     if (!buttonState) {
                         // Play animation only when it's reblog, not unreblog
                         reblogButton.playAnimation();
                     }
-                })
-                .show();
+                }).show();
     }
 
     private void setEmojiReactions(@Nullable List<EmojiReaction> reactions, final StatusActionListener listener, final String statusId) {
