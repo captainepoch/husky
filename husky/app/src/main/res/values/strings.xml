@@ -621,4 +621,7 @@
     <string name="debug_status">Debug build</string>
     <string name="debug_status_message">A debug build has enabled logs and debugging information for the application. Information might leak. Please use it carefully.</string>
     <string name="debug_status_message_close">Close</string>
+
+    <string name="reblog_action_dialog_message">Do you want to reblog this status?</string>
+
 </resources>
