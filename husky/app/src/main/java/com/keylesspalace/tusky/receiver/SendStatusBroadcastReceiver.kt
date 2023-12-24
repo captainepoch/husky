@@ -23,7 +23,6 @@ package com.keylesspalace.tusky.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
@@ -39,8 +38,7 @@ import com.keylesspalace.tusky.service.TootToSend
 import com.keylesspalace.tusky.util.randomAlphanumericString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-
-private const val TAG = "SendStatusBR"
+import timber.log.Timber
 
 class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
 
@@ -68,7 +66,7 @@ class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
             val message = getReplyMessage(intent)
 
             if (account == null) {
-                Log.w(TAG, "Account \"$senderId\" not found in database. Aborting quick reply!")
+                Timber.w("Account [$senderId] not found in database. Aborting quick reply!")
 
                 val builder = NotificationCompat.Builder(
                     context,
@@ -113,7 +111,8 @@ class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
                         retries = 0,
                         formattingSyntax = "",
                         preview = false,
-                        savedTootUid = -1
+                        savedTootUid = -1,
+                        quoteId = null
                     )
                 )
 
