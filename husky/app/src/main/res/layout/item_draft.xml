@@ -59,16 +59,31 @@
         android:id="@+id/deleteButton"
         style="@style/TuskyImageButton"
         android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_margin="12dp"
         android:contentDescription="@string/action_delete"
         android:padding="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
         app:srcCompat="@drawable/ic_clear_24dp" />
+
+    <ImageView
+        android:id="@+id/quoteIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:padding="4dp"
+        android:src="@drawable/quotes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteButton"
+        app:layout_constraintVertical_bias="0"
+        app:tint="?android:attr/textColorTertiary"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/draftMediaPreview"
