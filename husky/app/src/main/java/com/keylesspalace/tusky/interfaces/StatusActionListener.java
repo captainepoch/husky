@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 public interface StatusActionListener extends LinkListener {
     void onReply(int position);
     void onReblog(final boolean reblog, final int position);
+    void onQuote(final boolean reblog, final int position);
     void onFavourite(final boolean favourite, final int position);
     void onBookmark(final boolean bookmark, final int position);
     void onMore(@NonNull View view, final int position);
@@ -64,7 +65,7 @@ public interface StatusActionListener extends LinkListener {
     default void onShowFavs(int position) {}
 
     void onVoteInPoll(int position, @NonNull List<Integer> choices);
-    
+
     default void onMute(int position, boolean isMuted) {}
     default void onEmojiReact(@NonNull final boolean react, @NonNull final String emoji, @NonNull final String statusId) {};
     default void onEmojiReactMenu(@NonNull View view, @NonNull final EmojiReaction emoji, @NonNull final String statusId) {};
