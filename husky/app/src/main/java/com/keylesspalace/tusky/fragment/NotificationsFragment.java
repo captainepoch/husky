@@ -494,6 +494,11 @@ public class NotificationsFragment extends SFragment
                     "Failed to reblog status: " + status.getId(), t));
     }
 
+    @Override
+    public void onQuote(boolean reblog, int position) {
+
+    }
+
     private void setReblogForStatus(int position, Status status, boolean reblog) {
         status.setReblogged(reblog);
 
