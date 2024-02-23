@@ -650,6 +650,11 @@ public class TimelineFragment extends SFragment
         }
     }
 
+    @Override
+    public void onQuote(boolean reblog, int position) {
+
+    }
+
     private void setRebloggedForStatus(int position, Status status, boolean reblog) {
         status.setReblogged(reblog);
 

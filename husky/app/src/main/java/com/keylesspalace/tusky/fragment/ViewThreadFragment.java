@@ -245,6 +245,11 @@ public final class ViewThreadFragment extends SFragment
     }
 
     @Override
+    public void onQuote(boolean reblog, int position) {
+
+    }
+
+    @Override
     public void onFavourite(final boolean favourite, final int position) {
         final Status status = statuses.get(position);
 
