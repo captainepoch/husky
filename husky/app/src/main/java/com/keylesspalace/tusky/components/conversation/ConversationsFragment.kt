@@ -122,7 +122,11 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
     }
 
     override fun onReblog(reblog: Boolean, position: Int) {
-        // its impossible to reblog private messages
+        // Reblog private post is not possible
+    }
+
+    override fun onQuote(reblog: Boolean, position: Int) {
+        // Quote private post is not possible
     }
 
     override fun onFavourite(favourite: Boolean, position: Int) {
