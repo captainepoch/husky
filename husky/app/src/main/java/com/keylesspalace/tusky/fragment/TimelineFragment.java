@@ -138,11 +138,13 @@ public class TimelineFragment extends SFragment
         TOP, BOTTOM, MIDDLE
     }
 
-    private EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
-    private TimelineRepository timelineRepo =
+    private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
+    private final TimelineRepository timelineRepo =
         (TimelineRepository) inject(TimelineRepository.class).getValue();
-    private InstanceRepository instanceRepo =
+    private final InstanceRepository instanceRepo =
         (InstanceRepository) inject(InstanceRepository.class).getValue();
+    private final SharedPreferences preferences =
+        (SharedPreferences) inject(SharedPreferences.class).getValue();
     private boolean eventRegistered = false;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -237,8 +239,6 @@ public class TimelineFragment extends SFragment
                 }
             );
 
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(getActivity());
         StatusDisplayOptions statusDisplayOptions =
             new StatusDisplayOptions(preferences.getBoolean("animateGifAvatars", false),
                 accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
@@ -376,7 +376,6 @@ public class TimelineFragment extends SFragment
             accountManager.getValue().getActiveAccount().getAlwaysShowSensitiveMedia();
         alwaysOpenSpoiler = accountManager.getValue().getActiveAccount().getAlwaysOpenSpoiler();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean filter = preferences.getBoolean("tabFilterHomeReplies", true);
         filterRemoveReplies = kind == Kind.HOME && !filter;
 
@@ -466,9 +465,6 @@ public class TimelineFragment extends SFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         /* This is delayed until onActivityCreated solely because MainActivity.composeButton isn't
          * guaranteed to be set until then. */
@@ -1650,8 +1646,6 @@ public class TimelineFragment extends SFragment
      * Auto dispose observable on pause
      */
     private void startUpdateTimestamp() {
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false);
         if(!useAbsoluteTime) {
             Observable.interval(1, TimeUnit.MINUTES).observeOn(AndroidSchedulers.mainThread())
