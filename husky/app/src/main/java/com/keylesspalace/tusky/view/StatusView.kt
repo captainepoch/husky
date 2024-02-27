@@ -48,7 +48,6 @@ class StatusView @JvmOverloads constructor(
     class DummyStatusActionListener : StatusActionListener {
         override fun onReply(position: Int) {}
         override fun onReblog(reblog: Boolean, position: Int) {}
-        override fun onQuote(reblog: Boolean, position: Int) {}
         override fun onFavourite(favourite: Boolean, position: Int) {}
         override fun onBookmark(bookmark: Boolean, position: Int) {}
         override fun onMore(view: View, position: Int) {}
