@@ -226,11 +226,6 @@ class SearchStatusesFragment :
         }
     }
 
-    override fun onQuote(reblog: Boolean, position: Int) {
-        searchAdapter.getItem(position)?.let { status ->
-        }
-    }
-
     companion object {
         fun newInstance() = SearchStatusesFragment()
     }
