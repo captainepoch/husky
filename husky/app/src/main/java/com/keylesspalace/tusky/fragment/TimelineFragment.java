@@ -286,11 +286,21 @@ public class TimelineFragment extends SFragment
     }
 
     private void sendInitialRequest() {
-        if(this.kind == Kind.HOME) {
-            this.tryCache();
-        } else {
-            sendFetchTimelineRequest(null, null, null, FetchEnd.BOTTOM, -1);
-        }
+        instanceRepo.getInstanceInfoRx()
+            .observeOn(AndroidSchedulers.mainThread())
+            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+            .subscribe(instance -> {
+                    Timber.d("Has quoting posts [%s]", instance.getQuotePosting());
+
+                    //adapter.setCanQuoteStatus(instance.getQuotePosting());
+
+                    if(this.kind == Kind.HOME) {
+                        this.tryCache();
+                    } else {
+                        sendFetchTimelineRequest(null, null, null, FetchEnd.BOTTOM, -1);
+                    }
+                }
+            );
     }
 
     private void tryCache() {
