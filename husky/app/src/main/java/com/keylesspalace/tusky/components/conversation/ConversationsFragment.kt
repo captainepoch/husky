@@ -125,10 +125,6 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
         // Reblog private post is not possible
     }
 
-    override fun onQuote(reblog: Boolean, position: Int) {
-        // Quote private post is not possible
-    }
-
     override fun onFavourite(favourite: Boolean, position: Int) {
         viewModel.favourite(favourite, position)
     }
