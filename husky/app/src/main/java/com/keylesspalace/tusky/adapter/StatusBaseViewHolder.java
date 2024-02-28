@@ -64,57 +64,50 @@ import java.util.Locale;
 import kotlin.collections.CollectionsKt;
 
 public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
+
     public static class Key {
         public static final String KEY_CREATED = "created";
     }
 
-    private TextView displayName;
-    private TextView username;
-    private TextView replyInfo;
-    private ImageButton replyButton;
-    private SparkButton reblogButton;
-    private SparkButton favouriteButton;
-    private SparkButton bookmarkButton;
-    private ImageButton reactButton;
-    private ImageButton moreButton;
+    private final TextView displayName;
+    private final TextView username;
+    private final TextView replyInfo;
+    private final ImageButton replyButton;
+    private final SparkButton reblogButton;
+    private final SparkButton favouriteButton;
+    private final SparkButton bookmarkButton;
+    private final ImageButton reactButton;
+    private final ImageButton moreButton;
+    private final ImageView[] mediaOverlays;
+    private final TextView sensitiveMediaWarning;
+    private final View sensitiveMediaShow;
+    private final MaterialButton contentWarningButton;
+    private final ImageView avatarInset;
+    private final RecyclerView pollOptions;
+    private final TextView pollDescription;
+    private final Button pollButton;
+    private final LinearLayout cardView;
+    private final LinearLayout cardInfo;
+    private final ImageView cardImage;
+    private final TextView cardTitle;
+    private final TextView cardDescription;
+    private final TextView cardUrl;
+    private final PollAdapter pollAdapter;
+    private final SimpleDateFormat shortSdf;
+    private final SimpleDateFormat longSdf;
+    private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
+    private final int avatarRadius36dp;
+    private final int avatarRadius24dp;
+    private final Drawable mediaPreviewUnloaded;
+    private final RecyclerView emojiReactionsView;
+    protected int avatarRadius48dp;
     protected MediaPreviewImageView[] mediaPreviews;
-    private ImageView[] mediaOverlays;
-    private TextView sensitiveMediaWarning;
-    private View sensitiveMediaShow;
     protected TextView[] mediaLabels;
     protected CharSequence[] mediaDescriptions;
-    private MaterialButton contentWarningButton;
-    private ImageView avatarInset;
-
+    public TextView contentWarningDescription;
     public ImageView avatar;
     public TextView timestampInfo;
     public TextView content;
-    public TextView contentWarningDescription;
-
-    private RecyclerView pollOptions;
-    private TextView pollDescription;
-    private Button pollButton;
-
-    private LinearLayout cardView;
-    private LinearLayout cardInfo;
-    private ImageView cardImage;
-    private TextView cardTitle;
-    private TextView cardDescription;
-    private TextView cardUrl;
-    private PollAdapter pollAdapter;
-
-    private SimpleDateFormat shortSdf;
-    private SimpleDateFormat longSdf;
-
-    private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
-
-    protected int avatarRadius48dp;
-    private int avatarRadius36dp;
-    private int avatarRadius24dp;
-
-    private final Drawable mediaPreviewUnloaded;
-
-    private RecyclerView emojiReactionsView;
 
     protected StatusBaseViewHolder(View itemView) {
         super(itemView);
