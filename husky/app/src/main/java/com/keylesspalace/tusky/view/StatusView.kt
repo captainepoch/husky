@@ -35,7 +35,8 @@ class StatusView @JvmOverloads constructor(
             cardViewMode = CardViewMode.NONE,
             confirmReblogs = preferences.getBoolean("confirmReblogs", true),
             renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-            hideStats = false
+            hideStats = false,
+            canQuotePosts = false // TODO(Get from Instance config [REVIEW THIS])
         )
         viewHolder = StatusViewHolder(this)
     }

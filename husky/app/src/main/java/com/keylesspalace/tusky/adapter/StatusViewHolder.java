@@ -48,7 +48,7 @@ public class StatusViewHolder extends StatusBaseViewHolder {
         super(itemView);
         statusInfo = itemView.findViewById(R.id.status_info);
         contentCollapseButton = itemView.findViewById(R.id.button_toggle_content);
-        toggleVisibility = itemView.findViewById(R.id.status_toggle_mute); 
+        toggleVisibility = itemView.findViewById(R.id.status_toggle_mute);
     }
 
     @Override
@@ -62,7 +62,6 @@ public class StatusViewHolder extends StatusBaseViewHolder {
                                    StatusDisplayOptions statusDisplayOptions,
                                    @Nullable Object payloads) {
         if (payloads == null) {
-
             setupCollapsedState(status, listener);
 
             String rebloggedByDisplayName = status.getRebloggedByUsername();
@@ -72,7 +71,7 @@ public class StatusViewHolder extends StatusBaseViewHolder {
                 setRebloggedByDisplayName(rebloggedByDisplayName, status);
                 statusInfo.setOnClickListener(v -> listener.onOpenReblog(getAdapterPosition()));
             }
-            
+
             if(status.isUserMuted() || status.isThreadMuted()) {
                 toggleVisibility.setVisibility(View.VISIBLE);
                 toggleVisibility.setOnClickListener(v -> listener.onMute(getAdapterPosition(), true));
@@ -82,7 +81,6 @@ public class StatusViewHolder extends StatusBaseViewHolder {
 
         }
         super.setupWithStatus(status, listener, statusDisplayOptions, payloads);
-
     }
 
     private void setRebloggedByDisplayName(final CharSequence name, final StatusViewData.Concrete status) {
