@@ -248,14 +248,17 @@ public class NotificationsFragment extends SFragment
             new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
         StatusDisplayOptions statusDisplayOptions =
-            new StatusDisplayOptions(preferences.getBoolean("animateGifAvatars", false),
+            new StatusDisplayOptions(
+                preferences.getBoolean("animateGifAvatars", false),
                 accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
                 preferences.getBoolean("absoluteTimeView", false),
                 preferences.getBoolean("showBotOverlay", true),
                 preferences.getBoolean("useBlurhash", true), CardViewMode.NONE,
                 preferences.getBoolean("confirmReblogs", true),
                 preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false));
+                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
+                false // TODO(Get from Instance config [REVIEW THIS])
+            );
         withMuted = !preferences.getBoolean(PrefKeys.HIDE_MUTED_USERS, false);
 
         adapter =
