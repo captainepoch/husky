@@ -99,7 +99,8 @@ class SearchStatusesFragment :
             cardViewMode = CardViewMode.NONE,
             confirmReblogs = preferences.getBoolean("confirmReblogs", true),
             renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-            hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false)
+            hideStats = preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
+            canQuotePosts = false // TODO(Get from Instance config)
         )
 
         searchRecyclerView.addItemDecoration(

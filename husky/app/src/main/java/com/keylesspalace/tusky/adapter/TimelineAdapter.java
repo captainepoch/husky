@@ -60,15 +60,16 @@ public final class TimelineAdapter extends RecyclerView.Adapter {
 
     public void setMediaPreviewEnabled(boolean mediaPreviewEnabled) {
         this.statusDisplayOptions = statusDisplayOptions.copy(
-                statusDisplayOptions.animateAvatars(),
-                mediaPreviewEnabled,
-                statusDisplayOptions.useAbsoluteTime(),
-                statusDisplayOptions.showBotOverlay(),
-                statusDisplayOptions.useBlurhash(),
-                statusDisplayOptions.cardViewMode(),
-                statusDisplayOptions.confirmReblogs(),
-                statusDisplayOptions.renderStatusAsMention(),
-                statusDisplayOptions.hideStats()
+            statusDisplayOptions.animateAvatars(),
+            mediaPreviewEnabled,
+            statusDisplayOptions.useAbsoluteTime(),
+            statusDisplayOptions.showBotOverlay(),
+            statusDisplayOptions.useBlurhash(),
+            statusDisplayOptions.cardViewMode(),
+            statusDisplayOptions.confirmReblogs(),
+            statusDisplayOptions.renderStatusAsMention(),
+            statusDisplayOptions.hideStats(),
+            statusDisplayOptions.canQuotePosts()
         );
     }
 

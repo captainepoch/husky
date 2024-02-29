@@ -216,7 +216,8 @@ class ChatsFragment :
             cardViewMode = CardViewMode.NONE,
             confirmReblogs = false,
             renderStatusAsMention = false,
-            hideStats = false
+            hideStats = false,
+            canQuotePosts = false
         )
 
         adapter = ChatsAdapter(

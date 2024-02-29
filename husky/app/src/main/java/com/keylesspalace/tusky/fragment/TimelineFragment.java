@@ -231,26 +231,6 @@ public class TimelineFragment extends SFragment
             tags = arguments.getStringArrayList(HASHTAGS_ARG);
         }
 
-        instanceRepo.getInstanceInfoRx()
-            .observeOn(AndroidSchedulers.mainThread())
-            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-            .subscribe(instance -> {
-                    Timber.d("Has quoting posts [%s]", instance.getQuotePosting());
-                }
-            );
-
-        StatusDisplayOptions statusDisplayOptions =
-            new StatusDisplayOptions(preferences.getBoolean("animateGifAvatars", false),
-                accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
-                preferences.getBoolean("absoluteTimeView", false),
-                preferences.getBoolean("showBotOverlay", true),
-                preferences.getBoolean("useBlurhash", true),
-                preferences.getBoolean("showCardsInTimelines", false) ? CardViewMode.INDENTED :
-                    CardViewMode.NONE, preferences.getBoolean("confirmReblogs", true),
-                preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false));
-        adapter = new TimelineAdapter(dataSource, statusDisplayOptions, this);
-
         isSwipeToRefreshEnabled = arguments.getBoolean(ARG_ENABLE_SWIPE_TO_REFRESH, true);
     }
 
@@ -266,9 +246,9 @@ public class TimelineFragment extends SFragment
         statusView = rootView.findViewById(R.id.statusView);
         topProgressBar = rootView.findViewById(R.id.topProgressBar);
 
+        layoutManager = new LinearLayoutManager(getContext());
+
         setupSwipeRefreshLayout();
-        setupRecyclerView();
-        updateAdapter();
         setupTimelinePreferences();
 
         if(statuses.isEmpty()) {
@@ -278,7 +258,7 @@ public class TimelineFragment extends SFragment
         } else {
             progressBar.setVisibility(View.GONE);
             if(isNeedRefresh) {
-                onRefresh();
+                this.onRefresh();
             }
         }
 
@@ -292,6 +272,9 @@ public class TimelineFragment extends SFragment
             .subscribe(instance -> {
                     Timber.d("Has quoting posts [%s]", instance.getQuotePosting());
 
+                    createTimelineAdapter(instance.getQuotePosting());
+                    setupRecyclerView();
+                    updateAdapter();
                     //adapter.setCanQuoteStatus(instance.getQuotePosting());
 
                     if(this.kind == Kind.HOME) {
@@ -301,6 +284,22 @@ public class TimelineFragment extends SFragment
                     }
                 }
             );
+    }
+
+    private void createTimelineAdapter(final boolean canQuotePosts) {
+        StatusDisplayOptions statusDisplayOptions = new StatusDisplayOptions(
+            preferences.getBoolean("animateGifAvatars", false),
+            accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
+            preferences.getBoolean("absoluteTimeView", false),
+            preferences.getBoolean("showBotOverlay", true),
+            preferences.getBoolean("useBlurhash", true),
+            preferences.getBoolean("showCardsInTimelines", false) ? CardViewMode.INDENTED :
+                CardViewMode.NONE, preferences.getBoolean("confirmReblogs", true),
+            preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
+            preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
+            canQuotePosts
+        );
+        adapter = new TimelineAdapter(dataSource, statusDisplayOptions, this);
     }
 
     private void tryCache() {
@@ -441,7 +440,6 @@ public class TimelineFragment extends SFragment
             new ListStatusAccessibilityDelegate(recyclerView, this, statuses::getPairedItemOrNull));
         Context context = recyclerView.getContext();
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration divider =
             new DividerItemDecoration(context, layoutManager.getOrientation());

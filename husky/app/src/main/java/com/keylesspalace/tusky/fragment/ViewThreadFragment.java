@@ -120,7 +120,8 @@ public final class ViewThreadFragment extends SFragment
             PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         StatusDisplayOptions statusDisplayOptions =
-            new StatusDisplayOptions(preferences.getBoolean("animateGifAvatars", false),
+            new StatusDisplayOptions(
+                preferences.getBoolean("animateGifAvatars", false),
                 accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
                 preferences.getBoolean("absoluteTimeView", false),
                 preferences.getBoolean("showBotOverlay", true),
@@ -128,7 +129,9 @@ public final class ViewThreadFragment extends SFragment
                 preferences.getBoolean("showCardsInTimelines", false) ? CardViewMode.INDENTED :
                     CardViewMode.NONE, preferences.getBoolean("confirmReblogs", true),
                 preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false));
+                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
+                false // TODO(Get from Instance config [REVIEW THIS])
+            );
         adapter = new ThreadAdapter(statusDisplayOptions, this);
     }
 
