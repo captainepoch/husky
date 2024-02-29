@@ -275,15 +275,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
 
     public void setMediaPreviewEnabled(boolean mediaPreviewEnabled) {
         this.statusDisplayOptions = statusDisplayOptions.copy(
-                statusDisplayOptions.animateAvatars(),
-                mediaPreviewEnabled,
-                statusDisplayOptions.useAbsoluteTime(),
-                statusDisplayOptions.showBotOverlay(),
-                statusDisplayOptions.useBlurhash(),
-                CardViewMode.NONE,
-                statusDisplayOptions.confirmReblogs(),
-                statusDisplayOptions.renderStatusAsMention(),
-                statusDisplayOptions.hideStats()
+            statusDisplayOptions.animateAvatars(),
+            mediaPreviewEnabled,
+            statusDisplayOptions.useAbsoluteTime(),
+            statusDisplayOptions.showBotOverlay(),
+            statusDisplayOptions.useBlurhash(),
+            CardViewMode.NONE,
+            statusDisplayOptions.confirmReblogs(),
+            statusDisplayOptions.renderStatusAsMention(),
+            statusDisplayOptions.hideStats(),
+            statusDisplayOptions.canQuotePosts()
         );
     }
 

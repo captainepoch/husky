@@ -835,7 +835,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                         setCreatedAt(status.getCreatedAt(), status.getEditedAt(), statusDisplayOptions);
                     }
                 }
-
         }
     }
 
