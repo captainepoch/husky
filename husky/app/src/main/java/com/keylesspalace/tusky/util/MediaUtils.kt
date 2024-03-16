@@ -159,15 +159,18 @@ fun reorientBitmap(bitmap: Bitmap?, orientation: Int): Bitmap? {
             matrix.setRotate(180.0f)
             matrix.postScale(-1.0f, 1.0f)
         }
+
         ExifInterface.ORIENTATION_TRANSPOSE -> {
             matrix.setRotate(90.0f)
             matrix.postScale(-1.0f, 1.0f)
         }
+
         ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90.0f)
         ExifInterface.ORIENTATION_TRANSVERSE -> {
             matrix.setRotate(-90.0f)
             matrix.postScale(-1.0f, 1.0f)
         }
+
         ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90.0f)
         else -> return bitmap
     }
@@ -251,9 +254,9 @@ fun deleteStaleCachedMedia(mediaDirectory: File?) {
 
 fun getTemporaryMediaFilename(extension: String): String {
     return "${MEDIA_TEMP_PREFIX}_${
-    SimpleDateFormat(
-        "yyyyMMdd_HHmmss",
-        Locale.US
-    ).format(Date())
+        SimpleDateFormat(
+            "yyyyMMdd_HHmmss",
+            Locale.US
+        ).format(Date())
     }.$extension"
 }

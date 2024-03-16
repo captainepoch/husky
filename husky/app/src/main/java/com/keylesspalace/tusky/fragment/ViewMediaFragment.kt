@@ -17,6 +17,8 @@ package com.keylesspalace.tusky.fragment
 
 import android.os.Bundle
 import android.text.TextUtils
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.entity.Attachment
 
@@ -46,8 +48,12 @@ abstract class ViewMediaFragment : BaseFragment() {
         @JvmStatic
         protected val ARG_AVATAR_URL = "avatarUrl"
 
+        @OptIn(UnstableApi::class)
         @JvmStatic
-        fun newInstance(attachment: Attachment, shouldStartPostponedTransition: Boolean): ViewMediaFragment {
+        fun newInstance(
+            attachment: Attachment,
+            shouldStartPostponedTransition: Boolean
+        ): ViewMediaFragment {
             val arguments = Bundle(2)
             arguments.putParcelable(ARG_ATTACHMENT, attachment)
             arguments.putBoolean(ARG_START_POSTPONED_TRANSITION, shouldStartPostponedTransition)
@@ -57,6 +63,7 @@ abstract class ViewMediaFragment : BaseFragment() {
                 Attachment.Type.VIDEO,
                 Attachment.Type.GIFV,
                 Attachment.Type.AUDIO -> ViewVideoFragment()
+
                 else -> ViewImageFragment() // it probably won't show anything, but its better than crashing
             }
             fragment.arguments = arguments
@@ -82,7 +89,12 @@ abstract class ViewMediaFragment : BaseFragment() {
 
         showingDescription = !TextUtils.isEmpty(description)
         isDescriptionVisible = showingDescription
-        setupMediaView(url, previewUrl, description, showingDescription && mediaActivity.isToolbarVisible)
+        setupMediaView(
+            url,
+            previewUrl,
+            description,
+            showingDescription && mediaActivity.isToolbarVisible
+        )
 
         toolbarVisibiltyDisposable = (activity as ViewMediaActivity)
             .addToolbarVisibilityListener { isVisible ->

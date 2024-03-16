@@ -123,10 +123,12 @@ class ViewImageFragment : ViewMediaFragment() {
                     swipeStartedWithOneFinger = true
                     lastY = event.rawY
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     onGestureEnd()
                     swipeStartedWithOneFinger = false
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     if (swipeStartedWithOneFinger &&
                         (

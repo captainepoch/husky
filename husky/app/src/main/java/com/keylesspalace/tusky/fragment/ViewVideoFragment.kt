@@ -234,12 +234,14 @@ class ViewVideoFragment : ViewMediaFragment() {
                 Player.STATE_BUFFERING -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
+
                 Player.STATE_READY,
                 Player.STATE_ENDED -> {
                     binding.progressBar.visibility = View.GONE
                     binding.videoControls.show()
                     binding.videoControls.visibility = View.VISIBLE
                 }
+
                 else -> Unit
             }
         }
