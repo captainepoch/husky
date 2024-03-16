@@ -1,3 +1,6 @@
+Husky 1.5.4 - 2024-03-16
+  - Fix: Opening an image in an external app won't crash the application.
+
 Husky 1.5.3 - 2023-12-07
   - Fix: Starting the application with the notifications permissions would crash
   the application.

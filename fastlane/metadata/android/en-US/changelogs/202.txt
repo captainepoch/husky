@@ -1,0 +1,4 @@
+Husky 1.5.4
+
+Changelog:
+  - Fix: Opening an image in an external app won't crash the application.
