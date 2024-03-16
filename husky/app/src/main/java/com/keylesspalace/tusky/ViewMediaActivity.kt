@@ -24,6 +24,7 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -345,24 +346,27 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     }
 
     private fun openInExternalApp() {
-        val url = avatarUrl ?: attachments!![binding.viewPager.currentItem].attachment.url
-        val intent = Intent(Intent.ACTION_VIEW)
-        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-        if (extension != null) {
-            intent.setDataAndType(
-                Uri.parse(url),
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-            )
-        } else {
-            intent.data = Uri.parse(url)
+        val directory = applicationContext.getExternalFilesDir("Husky")
+        if (directory == null || !(directory.exists())) {
+            Toast.makeText(
+                this,
+                "Cannot open this in an external application.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            return
         }
 
-        startActivity(intent)
+        shareImage(
+            directory,
+            avatarUrl ?: attachments!![binding.viewPager.currentItem].attachment.url,
+            true
+        )
     }
 
     private var isCreating: Boolean = false
 
-    private fun shareImage(directory: File, url: String) {
+    private fun shareImage(directory: File, url: String, openExternal: Boolean = false) {
         isCreating = true
         binding.progressBarShare.visibility = View.VISIBLE
         invalidateOptionsMenu()
@@ -396,7 +400,11 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     invalidateOptionsMenu()
                     binding.progressBarShare.visibility = View.GONE
                     if (result) {
-                        shareFile(file, "image/png")
+                        if (openExternal) {
+                            openImageInExternalApp(file)
+                        } else {
+                            shareFile(file, "image/png")
+                        }
                     }
                 },
                 { error ->
@@ -423,6 +431,30 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         downloadManager.enqueue(request)
 
         shareFile(file, mimeType)
+    }
+
+    private fun openImageInExternalApp(file: File) {
+        try {
+            startActivity(
+                Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    setDataAndType(
+                        FileProvider.getUriForFile(
+                            applicationContext,
+                            "$APPLICATION_ID.fileprovider",
+                            file
+                        ),
+                        "image/png"
+                    )
+                }
+            )
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(
+                this,
+                "No app available to open images",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }
 
