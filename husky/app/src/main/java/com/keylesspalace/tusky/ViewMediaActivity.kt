@@ -446,9 +446,12 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                         ),
                         "image/png"
                     )
+                    flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
                 }
             )
         } catch (e: ActivityNotFoundException) {
+            Timber.e("Not app available: ${e.message}", e)
+
             Toast.makeText(
                 this,
                 "No app available to open images",
