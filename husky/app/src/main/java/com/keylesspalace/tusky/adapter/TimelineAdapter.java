@@ -111,8 +111,7 @@ public final class TimelineAdapter extends RecyclerView.Adapter {
         if (status instanceof StatusViewData.Placeholder) {
             PlaceholderViewHolder holder = (PlaceholderViewHolder) viewHolder;
             holder.setup(statusListener, ((StatusViewData.Placeholder) status).isLoading());
-        } else if (status instanceof StatusViewData.Concrete) {
-            StatusViewData.Concrete concrete = (StatusViewData.Concrete)status;
+        } else if (status instanceof StatusViewData.Concrete concrete) {
             if(concrete.isMuted()) {
                 MutedStatusViewHolder holder = (MutedStatusViewHolder) viewHolder;
                 holder.setupWithStatus(concrete, statusListener, statusDisplayOptions,
