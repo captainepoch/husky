@@ -752,22 +752,19 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         }
 
         if(emojiReactionsView != null ) {
-            if(reactions != null && reactions.size() > 0) {
+            if(reactions != null && !reactions.isEmpty()) {
                 emojiReactionsView.setVisibility(View.VISIBLE);
                 FlexboxLayoutManager lm = new FlexboxLayoutManager(emojiReactionsView.getContext());
                 emojiReactionsView.setLayoutManager(lm);
                 emojiReactionsView.setAdapter(new EmojiReactionsAdapter(reactions, listener, statusId));
-                emojiReactionsView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if(event.getAction() == MotionEvent.ACTION_POINTER_UP ||
-                            event.getAction() == MotionEvent.ACTION_UP) {
-                            int position = getAdapterPosition();
-                            if(position != RecyclerView.NO_POSITION)
-                                listener.onViewThread(position);
-                        }
-                        return false;
+                emojiReactionsView.setOnTouchListener((v, event) -> {
+                    if(event.getAction() == MotionEvent.ACTION_POINTER_UP ||
+                        event.getAction() == MotionEvent.ACTION_UP) {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION)
+                            listener.onViewThread(position);
                     }
+                    return false;
                 });
             } else {
                 emojiReactionsView.setVisibility(View.GONE);
