@@ -126,7 +126,12 @@ public abstract class StatusViewData {
                 // https://github.com/tuskyapp/Tusky/issues/563
                 this.content = replaceCrashingCharacters(content);
                 this.spoilerText = spoilerText == null ? null : replaceCrashingCharacters(spoilerText).toString();
-                this.nickname = replaceCrashingCharacters(nickname).toString();
+                CharSequence nicknameReplaced = replaceCrashingCharacters(nickname);
+                if(nicknameReplaced != null) {
+                    this.nickname = nicknameReplaced.toString();
+                } else {
+                    this.nickname = null;
+                }
             } else {
                 this.content = content;
                 this.spoilerText = spoilerText;
@@ -404,7 +409,12 @@ public abstract class StatusViewData {
             return (Spanned) replaceCrashingCharacters((CharSequence) content);
         }
 
+        @Nullable
         static CharSequence replaceCrashingCharacters(CharSequence content) {
+            if(content == null) {
+                return null;
+            }
+
             boolean replacing = false;
             SpannableStringBuilder builder = null;
             int length = content.length();

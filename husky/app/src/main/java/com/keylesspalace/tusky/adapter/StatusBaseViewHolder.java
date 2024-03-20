@@ -204,7 +204,8 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
     protected void setUsername(String name) {
         Context context = username.getContext();
-        String usernameText = context.getString(R.string.status_username_format, name);
+        String usernameText = (name == null) ?
+            "" : context.getString(R.string.status_username_format, name);
         username.setText(usernameText);
     }
 
