@@ -167,13 +167,11 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     setOnPreferenceClickListener {
                         activity?.let { activity ->
                             val intent = PreferencesActivity.newIntent(
-                                activity,
-                                PreferencesActivity.TAB_FILTER_PREFERENCES
+                                activity, PreferencesActivity.TAB_FILTER_PREFERENCES
                             )
                             activity.startActivity(intent)
                             activity.overridePendingTransition(
-                                R.anim.slide_from_right,
-                                R.anim.slide_to_left
+                                R.anim.slide_from_right, R.anim.slide_to_left
                             )
                         }
                         true
@@ -239,6 +237,15 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 }
             }
 
+            preferenceCategory(R.string.pref_videoplayer) {
+                switchPreference {
+                    setDefaultValue(false)
+                    key = PrefKeys.REPLAY_VIDEO
+                    setTitle(R.string.pref_videoplayer_replay_title)
+                    isSingleLineTitle = false
+                }
+            }
+
             preferenceCategory(R.string.pref_title_privacy) {
                 switchPreference {
                     setDefaultValue(false)
@@ -281,13 +288,11 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     setOnPreferenceClickListener {
                         activity?.let { activity ->
                             val intent = PreferencesActivity.newIntent(
-                                activity,
-                                PreferencesActivity.TAB_FILTER_PREFERENCES
+                                activity, PreferencesActivity.TAB_FILTER_PREFERENCES
                             )
                             activity.startActivity(intent)
                             activity.overridePendingTransition(
-                                R.anim.slide_from_right,
-                                R.anim.slide_to_left
+                                R.anim.slide_from_right, R.anim.slide_to_left
                             )
                         }
                         true
@@ -341,13 +346,11 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                     setOnPreferenceClickListener {
                         activity?.let { activity ->
                             val intent = PreferencesActivity.newIntent(
-                                activity,
-                                PreferencesActivity.PROXY_PREFERENCES
+                                activity, PreferencesActivity.PROXY_PREFERENCES
                             )
                             activity.startActivity(intent)
                             activity.overridePendingTransition(
-                                R.anim.slide_from_right,
-                                R.anim.slide_to_left
+                                R.anim.slide_from_right, R.anim.slide_to_left
                             )
                         }
                         true
@@ -392,12 +395,13 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateHttpProxySummary() {
         val sharedPreferences = preferenceManager.sharedPreferences
-        val httpProxyEnabled = sharedPreferences?.getBoolean(PrefKeys.HTTP_PROXY_ENABLED, false) ?: false
+        val httpProxyEnabled =
+            sharedPreferences?.getBoolean(PrefKeys.HTTP_PROXY_ENABLED, false) ?: false
         val httpServer = sharedPreferences?.getNonNullString(PrefKeys.HTTP_PROXY_SERVER, "") ?: ""
 
         try {
-            val httpPort = sharedPreferences?.getNonNullString(PrefKeys.HTTP_PROXY_PORT, "-1")
-                ?.toInt() ?: -1
+            val httpPort =
+                sharedPreferences?.getNonNullString(PrefKeys.HTTP_PROXY_PORT, "-1")?.toInt() ?: -1
 
             if (httpProxyEnabled && httpServer.isNotBlank() && httpPort > 0 && httpPort < 65535) {
                 httpProxyPref?.summary = "$httpServer:$httpPort"

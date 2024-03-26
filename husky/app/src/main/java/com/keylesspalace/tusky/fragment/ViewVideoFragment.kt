@@ -23,6 +23,7 @@ package com.keylesspalace.tusky.fragment
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -35,13 +36,17 @@ import android.widget.MediaController
 import androidx.media3.common.MediaItem.Builder
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.Player.REPEAT_MODE_OFF
+import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewVideoBinding
 import com.keylesspalace.tusky.entity.Attachment
+import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.visible
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 @UnstableApi
@@ -70,6 +75,8 @@ class ViewVideoFragment : ViewMediaFragment() {
     private var currentWindow = 0
     private var playbackPosition = 0L
 
+    private val preferences: SharedPreferences by inject()
+
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         // Start/pause/resume video playback as fragment is shown/hidden
         super.setUserVisibleHint(isVisibleToUser)
@@ -88,10 +95,7 @@ class ViewVideoFragment : ViewMediaFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun setupMediaView(
-        url: String,
-        previewUrl: String?,
-        description: String?,
-        showingDescription: Boolean
+        url: String, previewUrl: String?, description: String?, showingDescription: Boolean
     ) {
         binding.mediaDescription.text = description
         binding.mediaDescription.visible(showingDescription)
@@ -121,24 +125,30 @@ class ViewVideoFragment : ViewMediaFragment() {
             setParameters(buildUponParameters().setMaxVideoSizeSd())
         }
 
-        exoPlayer = ExoPlayer.Builder(requireActivity())
-            .setUsePlatformDiagnostics(false)
-            .setTrackSelector(trackSelector)
-            .build()
-            .also { player ->
-                binding.videoView.player = player
-
-                val mediaItem = Builder()
-                    .setUri(Uri.parse(url))
+        exoPlayer =
+            ExoPlayer.Builder(requireActivity())
+                    .setUsePlatformDiagnostics(false)
+                    .setTrackSelector(trackSelector)
                     .build()
-                player.setMediaItem(mediaItem)
+                    .also { player ->
+                        binding.videoView.player = player
 
-                player.addListener(playbackStateListener)
-                player.seekTo(currentWindow, playbackPosition)
-                player.playWhenReady = playWhenReady
+                        val mediaItem = Builder().setUri(Uri.parse(url)).build()
+                        player.setMediaItem(mediaItem)
 
-                player.prepare()
-            }
+                        player.addListener(playbackStateListener)
+                        player.seekTo(currentWindow, playbackPosition)
+                        player.playWhenReady = playWhenReady
+
+                        player.repeatMode =
+                            if (preferences.getBoolean(PrefKeys.REPLAY_VIDEO, false)) {
+                                REPEAT_MODE_ONE
+                            } else {
+                                REPEAT_MODE_OFF
+                            }
+
+                        player.prepare()
+                    }
 
         binding.videoControls.player = binding.videoView.player
 
@@ -152,9 +162,7 @@ class ViewVideoFragment : ViewMediaFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mediaActivity = (activity as ViewMediaActivity)
         toolbar = mediaActivity.getToolbar()
@@ -165,8 +173,9 @@ class ViewVideoFragment : ViewMediaFragment() {
     override fun onStart() {
         super.onStart()
 
-        val attachment = arguments?.getParcelable<Attachment>(ARG_ATTACHMENT)
-            ?: throw IllegalArgumentException("attachment has to be set")
+        val attachment =
+            arguments?.getParcelable<Attachment>(ARG_ATTACHMENT)
+                ?: throw IllegalArgumentException("attachment has to be set")
 
         isAudio = (attachment.type == Attachment.Type.AUDIO)
         finalizeViewSetup(attachment.url, attachment.previewUrl, attachment.description)
@@ -185,14 +194,15 @@ class ViewVideoFragment : ViewMediaFragment() {
             binding.mediaDescription.visible(isDescriptionVisible)
         }
 
-        binding.mediaDescription.animate().alpha(alpha)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    binding.mediaDescription.visible(isDescriptionVisible)
-                    animation.removeListener(this)
-                }
-            })
-            .start()
+        binding.mediaDescription.animate()
+                .alpha(alpha)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.mediaDescription.visible(isDescriptionVisible)
+                        animation.removeListener(this)
+                    }
+                })
+                .start()
 
         if (visible && (binding.videoView.player?.isPlaying == true) && !isAudio) {
             hideToolbarAfterDelay(TOOLBAR_HIDE_DELAY_MS)
@@ -235,8 +245,7 @@ class ViewVideoFragment : ViewMediaFragment() {
                     binding.progressBar.visibility = View.VISIBLE
                 }
 
-                Player.STATE_READY,
-                Player.STATE_ENDED -> {
+                Player.STATE_READY, Player.STATE_ENDED -> {
                     binding.progressBar.visibility = View.GONE
                     binding.videoControls.show()
                     binding.videoControls.visibility = View.VISIBLE
