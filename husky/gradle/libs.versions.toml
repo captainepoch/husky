@@ -107,6 +107,7 @@ glide-image = { module = "com.github.piasy:GlideImageLoader", version.ref = "gli
 glide-image-factory = { module = "com.github.piasy:GlideImageViewFactory", version.ref = "glide-image" }
 glide-okhttp = { module = "com.github.bumptech.glide:okhttp3-integration", version.ref = "glide" }
 glide-plugin-animation = { module = "com.github.penfeizhou.android.animation:glide-plugin", version.ref = "glide-plugin-animation" }
+glide-plugin-avif = { module = "com.github.bumptech.glide:avif-integration", version.ref = "glide" }
 imageCropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

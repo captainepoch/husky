@@ -1,24 +1,23 @@
 package com.keylesspalace.tusky.adapter;
 
+import static com.keylesspalace.tusky.viewdata.PollViewDataKt.buildDescription;
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
-import android.graphics.Paint;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,41 +26,42 @@ import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import at.connyduck.sparkbutton.SparkButton;
+import at.connyduck.sparkbutton.helpers.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.material.button.MaterialButton;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.entity.Attachment;
 import com.keylesspalace.tusky.entity.Attachment.Focus;
 import com.keylesspalace.tusky.entity.Attachment.MetaData;
 import com.keylesspalace.tusky.entity.Card;
 import com.keylesspalace.tusky.entity.Emoji;
-import com.keylesspalace.tusky.entity.Status;
 import com.keylesspalace.tusky.entity.EmojiReaction;
+import com.keylesspalace.tusky.entity.Status;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
-import com.keylesspalace.tusky.util.*;
-import com.keylesspalace.tusky.view.MediaPreviewImageView;
+import com.keylesspalace.tusky.util.CardViewMode;
+import com.keylesspalace.tusky.util.CustomEmojiHelper;
+import com.keylesspalace.tusky.util.ImageLoadingHelper;
+import com.keylesspalace.tusky.util.LinkHelper;
+import com.keylesspalace.tusky.util.StatusDisplayOptions;
+import com.keylesspalace.tusky.util.ThemeUtils;
+import com.keylesspalace.tusky.util.TimestampUtils;
 import com.keylesspalace.tusky.view.EmojiKeyboard;
+import com.keylesspalace.tusky.view.MediaPreviewImageView;
 import com.keylesspalace.tusky.viewdata.PollOptionViewData;
 import com.keylesspalace.tusky.viewdata.PollViewData;
 import com.keylesspalace.tusky.viewdata.PollViewDataKt;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import at.connyduck.sparkbutton.SparkButton;
-import at.connyduck.sparkbutton.helpers.Utils;
 import kotlin.collections.CollectionsKt;
-
-import static com.keylesspalace.tusky.viewdata.PollViewDataKt.buildDescription;
 
 public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     public static class Key {
@@ -452,41 +452,43 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         return ImageLoadingHelper.decodeBlurHash(this.avatar.getContext(), blurhash);
     }
 
-    private void loadImage(MediaPreviewImageView imageView,
-                           @Nullable String previewUrl,
-                           @Nullable MetaData meta,
-                           @Nullable String blurhash) {
-
+    private void loadImage(
+            MediaPreviewImageView imageView,
+            @Nullable String previewUrl,
+            @Nullable MetaData meta,
+            @Nullable String blurhash
+    ) {
         Drawable placeholder = blurhash != null ? decodeBlurHash(blurhash) : mediaPreviewUnloaded;
 
         if (TextUtils.isEmpty(previewUrl)) {
             imageView.removeFocalPoint();
 
             Glide.with(imageView)
-                    .load(placeholder)
-                    .centerInside()
-                    .into(imageView);
-
+                 .load(placeholder)
+                 .centerInside()
+                 .into(imageView);
         } else {
-            Focus focus = meta != null ? meta.getFocus() : null;
+            Focus focus = (meta != null) ? meta.getFocus() : null;
 
-            if (focus != null) { // If there is a focal point for this attachment:
+            if (focus != null && (focus.getX() != 0.0 && focus.getY() != 0.0)) {
+                // If there is a focal point for this attachment
                 imageView.setFocalPoint(focus);
 
                 Glide.with(imageView)
-                        .load(previewUrl)
-                        .placeholder(placeholder)
-                        .centerInside()
-                        .addListener(imageView)
-                        .into(imageView);
+                     .load(previewUrl)
+                     .placeholder(placeholder)
+                     .centerInside()
+                     .addListener(imageView)
+                     .into(imageView);
             } else {
                 imageView.removeFocalPoint();
 
                 Glide.with(imageView)
-                        .load(previewUrl)
-                        .placeholder(placeholder)
-                        .centerInside()
-                        .into(imageView);
+                     .load(previewUrl)
+                     .placeholder(placeholder)
+                     .centerInside()
+                     .addListener(imageView)
+                     .into(imageView);
             }
         }
     }
@@ -496,7 +498,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                                     boolean useBlurhash) {
         Context context = itemView.getContext();
         final int n = Math.min(attachments.size(), Status.MAX_MEDIA_ATTACHMENTS);
-
 
         final int mediaPreviewHeight = getMediaPreviewHeight(context);
 

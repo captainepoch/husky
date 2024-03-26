@@ -59,11 +59,12 @@ android {
             shrinkResources true
 
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    "proguard-rules.pro"
         }
     }
 
-    flavorDimensions = [buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release]
+    flavorDimensions =
+            [buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release]
     productFlavors {
         husky {
             dimension buildVersions.flavorDimensions.husky
@@ -192,6 +193,7 @@ dependencies {
     implementation(libs.glide.image.factory)
     implementation(libs.glide.okhttp)
     implementation(libs.glide.plugin.animation)
+    implementation(libs.glide.plugin.avif)
 
     // Koin dependencies
     implementation(libs.koin)
