@@ -20,8 +20,10 @@
 
 package com.keylesspalace.tusky.view
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.text.LineBreaker
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.text.Layout
 import android.text.Spannable
 import android.util.AttributeSet
@@ -37,24 +39,22 @@ import timber.log.Timber
  */
 class CustomEmojiTextView
 @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : EmojiTextView(context, attrs, defStyleAttr) {
 
-    private var oldBreakStrategy = Layout.BREAK_STRATEGY_SIMPLE
+    private val spanLimit = 100
+    private var oldBreakStrategy = getBreakStrategyByAPI()
 
-    @SuppressLint("WrongConstant")
     override fun setText(text: CharSequence?, type: BufferType?) {
         var overridden = false
 
         // Do not change if break strategy is already Layout.BREAK_STRATEGY_HIGH_QUALITY
-        if (text is Spannable && breakStrategy != Layout.BREAK_STRATEGY_SIMPLE) {
+        if (text is Spannable && (breakStrategy != Layout.BREAK_STRATEGY_HIGH_QUALITY || breakStrategy != LineBreaker.BREAK_STRATEGY_HIGH_QUALITY)) {
             val spans = text.getSpans(0, text.length, EmojiSpan::class.java)
 
-            if (spans.size >= SPAN_LIMIT) {
+            if (spans.size >= spanLimit) {
                 oldBreakStrategy = breakStrategy
-                breakStrategy = Layout.BREAK_STRATEGY_SIMPLE
+                breakStrategy = getBreakStrategyByAPI()
                 overridden = true
 
                 Timber.d("Break strategy overridden!")
@@ -71,7 +71,13 @@ class CustomEmojiTextView
     }
 
     private companion object {
-        // Heuristics
-        const val SPAN_LIMIT = 100
+
+        private fun getBreakStrategyByAPI(): Int {
+            return if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+                LineBreaker.BREAK_STRATEGY_SIMPLE
+            } else {
+                Layout.BREAK_STRATEGY_SIMPLE
+            }
+        }
     }
 }
