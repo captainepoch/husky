@@ -26,9 +26,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView.BufferType.SPANNABLE
-import androidx.emoji2.widget.EmojiButton
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.keylesspalace.tusky.R.layout
+import com.keylesspalace.tusky.databinding.ItemEmojiReactionBinding
 import com.keylesspalace.tusky.entity.EmojiReaction
 import com.keylesspalace.tusky.interfaces.StatusActionListener
 import com.keylesspalace.tusky.util.createEmojiSpan
@@ -39,33 +38,35 @@ class EmojiReactionsAdapter internal constructor(
     private val statusId: String
 ) : Adapter<SingleViewHolder>() {
 
+    private lateinit var binding: ItemEmojiReactionBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(layout.item_emoji_reaction, parent, false)
-        return SingleViewHolder(view)
+        binding = ItemEmojiReactionBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return SingleViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: SingleViewHolder, position: Int) {
         val reaction = reactions[position]
         val builder = SpannableStringBuilder("${reaction.name} ${reaction.count}")
-        val btn = holder.itemView as EmojiButton
 
-        val url = reaction.url
-        if (url != null) {
+        reaction.url?.let { url ->
             builder.setSpan(
-                createEmojiSpan(url, btn, true),
-                0, reaction.name.length,
+                createEmojiSpan(url, binding.emojiReactionButton, true),
+                0,
+                reaction.name.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
 
-        btn.apply {
+        binding.emojiReactionButton.apply {
             setText(builder, SPANNABLE)
             isActivated = reaction.me
             setOnClickListener { v: View? ->
-                listener.onEmojiReactMenu(
-                    v!!, reaction, statusId
-                )
+                v?.let {
+                    listener.onEmojiReactMenu(it, reaction, statusId)
+                }
             }
         }
     }

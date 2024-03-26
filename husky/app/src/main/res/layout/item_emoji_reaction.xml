@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.emoji2.widget.EmojiButton xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="2dp"
-    android:layout_marginBottom="1dp"
-    android:lines="1"
-    android:minWidth="0dp"
-    android:textAlignment="viewStart"
-    android:textColor="?android:attr/textColorPrimary"
-    android:textSize="?attr/status_text_medium"
-    app:backgroundTint="@color/emoji_reaction_button"
-    tools:text="A 0" />
+    android:layout_height="wrap_content">
+
+    <androidx.emoji2.widget.EmojiButton
+        android:id="@+id/emojiReactionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="1dp"
+        android:lines="1"
+        android:minWidth="0dp"
+        android:textAlignment="viewStart"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="?attr/status_text_medium"
+        app:backgroundTint="@color/emoji_reaction_button"
+        tools:text="A 0" />
+
+</FrameLayout>
