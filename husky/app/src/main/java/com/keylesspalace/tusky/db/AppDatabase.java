@@ -30,7 +30,7 @@ import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEn
  */
 @Database(entities = {TootEntity.class, DraftEntity.class, AccountEntity.class,
     InstanceEntity.class, TimelineStatusEntity.class, TimelineAccountEntity.class,
-    ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 30)
+    ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 31)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract TootDao tootDao();
@@ -481,6 +481,15 @@ public abstract class AppDatabase extends RoomDatabase {
 
             database.execSQL(
                 "CREATE UNIQUE INDEX `index_AccountEntity_domain_accountId` ON `AccountEntity` (`domain`, `accountId`)");
+        }
+    };
+
+    public static final Migration MIGRATION_30_31 = new Migration(30, 31) {
+
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "ALTER TABLE `AccountEntity` ADD COLUMN `postExpiresIn` INTEGER NOT NULL DEFAULT 0");
         }
     };
 }

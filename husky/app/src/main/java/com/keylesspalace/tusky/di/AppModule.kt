@@ -93,7 +93,8 @@ val appModule = module {
                 AppDatabase.MIGRATION_26_27,
                 AppDatabase.MIGRATION_27_28,
                 AppDatabase.MIGRATION_28_29,
-                AppDatabase.MIGRATION_29_30
+                AppDatabase.MIGRATION_29_30,
+                AppDatabase.MIGRATION_30_31
             ).build()
     } bind AppDatabase::class
 

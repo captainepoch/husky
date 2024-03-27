@@ -30,16 +30,14 @@ import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.Status
 
 @Entity(
-    indices = [
-        Index(
-            value = ["domain", "accountId"],
-            unique = true
-        )
-    ]
+    indices = [Index(
+        value = ["domain", "accountId"], unique = true
+    )]
 )
 @TypeConverters(Converters::class)
 data class AccountEntity(
-    @field:PrimaryKey(autoGenerate = true) var id: Long,
+    @field:PrimaryKey(autoGenerate = true)
+    var id: Long,
     val domain: String,
     var accessToken: String,
     var isActive: Boolean,
@@ -72,7 +70,8 @@ data class AccountEntity(
     var emojis: List<Emoji> = emptyList(),
     var tabPreferences: List<TabData> = defaultTabs(),
     var notificationsFilter: String = "[]",
-    var defaultFormattingSyntax: String = ""
+    var defaultFormattingSyntax: String = "",
+    var postExpiresIn: Int = 0
 ) {
 
     val identifier: String
