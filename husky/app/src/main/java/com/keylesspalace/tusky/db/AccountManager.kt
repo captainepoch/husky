@@ -1,31 +1,34 @@
-/* Copyright 2018 Conny Duck
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2018  Conny Duck
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky.db
 
-import android.util.Log
 import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Status
-import java.util.Locale
+import com.keylesspalace.tusky.settings.PrefKeys
+import timber.log.Timber
 
 /**
  * This class caches the account database and handles all account related operations
  * @author ConnyDuck
  */
-
-private const val TAG = "AccountManager"
 
 class AccountManager(db: AppDatabase) {
 
@@ -54,7 +57,7 @@ class AccountManager(db: AppDatabase) {
     fun addAccount(accessToken: String, domain: String) {
         activeAccount?.let {
             it.isActive = false
-            Log.d(TAG, "addAccount: saving account with id " + it.id)
+            Timber.d("addAccount: saving account with id [${it.id}]")
 
             accountDao.insertOrReplace(it)
         }
@@ -63,7 +66,7 @@ class AccountManager(db: AppDatabase) {
         val newAccountId = maxAccountId + 1
         activeAccount = AccountEntity(
             id = newAccountId,
-            domain = domain.toLowerCase(Locale.ROOT),
+            domain = domain.lowercase(),
             accessToken = accessToken,
             isActive = true
         )
@@ -76,7 +79,7 @@ class AccountManager(db: AppDatabase) {
      */
     fun saveAccount(account: AccountEntity) {
         if (account.id != 0L) {
-            Log.d(TAG, "saveAccount: saving account with id " + account.id)
+            Timber.d("saveAccount: saving account with id [${account.id}]")
             accountDao.insertOrReplace(account)
         }
     }
@@ -95,7 +98,7 @@ class AccountManager(db: AppDatabase) {
             if (accounts.size > 0) {
                 accounts[0].isActive = true
                 activeAccount = accounts[0]
-                Log.d(TAG, "logActiveAccountOut: saving account with id " + accounts[0].id)
+                Timber.d("logActiveAccountOut: saving account with id [${accounts[0].id}]")
                 accountDao.insertOrReplace(accounts[0])
             } else {
                 activeAccount = null
@@ -119,7 +122,7 @@ class AccountManager(db: AppDatabase) {
             it.defaultMediaSensitivity = account.source?.sensitive ?: false
             it.emojis = account.emojis ?: emptyList()
 
-            Log.d(TAG, "updateActiveAccount: saving account with id " + it.id)
+            Timber.d("updateActiveAccount: saving account with id [${it.id}]")
             it.id = accountDao.insertOrReplace(it)
 
             val accountIndex = accounts.indexOf(it)
@@ -141,14 +144,12 @@ class AccountManager(db: AppDatabase) {
      */
     fun setActiveAccount(accountId: Long) {
         activeAccount?.let {
-            Log.d(TAG, "setActiveAccount: saving account with id " + it.id)
+            Timber.d("setActiveAccount: saving account with id [${it.id}]")
             it.isActive = false
             saveAccount(it)
         }
 
-        activeAccount = accounts.find { (id) ->
-            id == accountId
-        }
+        activeAccount = accounts.find { (id) -> id == accountId }
 
         activeAccount?.let {
             it.isActive = true
@@ -161,15 +162,13 @@ class AccountManager(db: AppDatabase) {
      */
     fun getAllAccountsOrderedByActive(): List<AccountEntity> {
         val accountsCopy = accounts.toMutableList()
-        accountsCopy.sortWith(
-            Comparator { l, r ->
-                when {
-                    l.isActive && !r.isActive -> -1
-                    r.isActive && !l.isActive -> 1
-                    else -> 0
-                }
+        accountsCopy.sortWith { l, r ->
+            when {
+                l.isActive && !r.isActive -> -1
+                r.isActive && !l.isActive -> 1
+                else -> 0
             }
-        )
+        }
 
         return accountsCopy
     }
@@ -191,8 +190,10 @@ class AccountManager(db: AppDatabase) {
      * @return the requested account or null if it was not found
      */
     fun getAccountById(accountId: Long): AccountEntity? {
-        return accounts.find { (id) ->
-            id == accountId
-        }
+        return accounts.find { (id) -> id == accountId }
+    }
+
+    fun getSettingsPostExpiresInPrefKey(): String {
+        return "${PrefKeys.DEFAULT_POST_EXPIRES_IN}_${activeAccount!!.username}"
     }
 }

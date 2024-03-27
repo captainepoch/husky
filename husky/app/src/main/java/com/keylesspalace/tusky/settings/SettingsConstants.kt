@@ -72,6 +72,7 @@ object PrefKeys {
     const val DEFAULT_POST_PRIVACY = "defaultPostPrivacy"
     const val DEFAULT_MEDIA_SENSITIVITY = "defaultMediaSensitivity"
     const val DEFAULT_FORMATTING_SYNTAX = "defaultFormattingSyntax"
+    const val DEFAULT_POST_EXPIRES_IN = "postExpiresIn"
     const val MEDIA_PREVIEW_ENABLED = "mediaPreviewEnabled"
     const val ALWAYS_SHOW_SENSITIVE_MEDIA = "alwaysShowSensitiveMedia"
     const val ALWAYS_OPEN_SPOILER = "alwaysOpenSpoiler"
