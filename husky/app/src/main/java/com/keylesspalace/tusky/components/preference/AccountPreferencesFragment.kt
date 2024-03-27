@@ -41,6 +41,7 @@ import com.keylesspalace.tusky.entity.Status.Visibility
 import com.keylesspalace.tusky.entity.Status.Visibility.PUBLIC
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.settings.PrefKeys
+import com.keylesspalace.tusky.settings.editTextPreference
 import com.keylesspalace.tusky.settings.listPreference
 import com.keylesspalace.tusky.settings.makePreferenceScreen
 import com.keylesspalace.tusky.settings.preference
@@ -195,6 +196,35 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                         syncWithServer(sensitive = newValue)
                         eventHub.dispatch(PreferenceChangedEvent(key))
                         true
+                    }
+                }
+
+                editTextPreference {
+                    setTitle(R.string.pref_default_post_expire_in)
+                    setSummary(R.string.pref_default_post_expire_in_summary)
+                    setIcon(R.drawable.ic_hourglass_medium)
+                    key = accountManager.getSettingsPostExpiresInPrefKey()
+
+                    setOnPreferenceChangeListener { _, newValue ->
+                        try {
+                            val value = (newValue as String)
+                            val expiresIn = if (value.isBlank()) {
+                                0
+                            } else {
+                                value.toInt()
+                            }
+                            updateAccount { it.postExpiresIn = expiresIn }
+
+                            true
+                        } catch (e: NumberFormatException) {
+                            view?.let {
+                                Snackbar.make(
+                                    it, "The value '$newValue' is not valid", Snackbar.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            false
+                        }
                     }
                 }
             }
