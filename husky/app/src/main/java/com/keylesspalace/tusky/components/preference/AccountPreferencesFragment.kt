@@ -211,7 +211,8 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                             val expiresIn = if (value.isBlank()) {
                                 0
                             } else {
-                                value.toInt()
+                                // Days to seconds
+                                (value.toInt() * (24 * 60 * 60))
                             }
                             updateAccount { it.postExpiresIn = expiresIn }
 
