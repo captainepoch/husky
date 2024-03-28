@@ -165,6 +165,7 @@ public final class SavedTootActivity extends BaseActivity
             /*mediaAttachments*/null,
             /*draftAttachments*/null,
             /*scheduledAt*/null,
+            /*expiresIn*/0,
             /*sensitive*/null,
             /*poll*/null, item.getFormattingSyntax(),
             /* modifiedInitialState */ true);

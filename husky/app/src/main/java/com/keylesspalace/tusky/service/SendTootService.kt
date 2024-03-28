@@ -171,6 +171,7 @@ class SendTootService : Service(), KoinComponent {
                 postToSend.sensitive,
                 postToSend.mediaIds,
                 postToSend.scheduledAt,
+                postToSend.expiresIn,
                 postToSend.poll,
                 contentType,
                 preview
@@ -473,6 +474,7 @@ data class TootToSend(
     val mediaUris: List<String>,
     val mediaDescriptions: List<String>,
     val scheduledAt: String?,
+    val expiresIn: Int?,
     val inReplyToId: String?,
     val poll: NewPoll?,
     val replyingStatusContent: String?,

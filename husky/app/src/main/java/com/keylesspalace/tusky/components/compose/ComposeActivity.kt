@@ -215,6 +215,8 @@ class ComposeActivity :
             },
             onRemove = this::removeMediaFromQueue
         )
+        viewModel.postExpiresIn.value = activeAccount.postExpiresIn.takeIf { it > 0 }
+
         binding.composeMediaPreviewBar.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.composeMediaPreviewBar.adapter = mediaAdapter
@@ -551,6 +553,20 @@ class ComposeActivity :
                     setIconForSyntax(it, enable)
                 }
             }
+
+            viewModel.postExpiresIn.observe { postExpiresIn ->
+                @ColorInt
+                val color = ThemeUtils.getColor(
+                    this@ComposeActivity,
+                    if (postExpiresIn != null) {
+                        R.attr.colorPrimary
+                    } else {
+                        android.R.attr.textColorTertiary
+                    }
+                )
+                binding.postExpiresInButton.drawable.colorFilter =
+                    PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
+            }
         }
     }
 
@@ -579,6 +595,7 @@ class ComposeActivity :
         binding.composeScheduleView.setResetOnClickListener { resetSchedule() }
         binding.composeFormattingSyntax.setOnClickListener { toggleFormattingMode() }
         binding.composeFormattingSyntax.setOnLongClickListener { selectFormattingSyntax() }
+        binding.postExpiresInButton.setOnClickListener { togglePostExpiresIn() }
         binding.composeStickerButton.setOnClickListener { showStickers() }
         binding.atButton.setOnClickListener { atButtonClicked() }
         binding.hashButton.setOnClickListener { hashButtonClicked() }
@@ -750,6 +767,15 @@ class ComposeActivity :
         menu.show()
 
         return true
+    }
+
+    private fun togglePostExpiresIn() {
+        viewModel.postExpiresIn.value =
+            if (viewModel.postExpiresIn.value != null || viewModel.postExpiresIn.value == 0) {
+                null
+            } else {
+                accountManager.value.activeAccount!!.postExpiresIn
+            }
     }
 
     private fun enableMarkdownWYSIWYGButtons(visible: Boolean) {
@@ -1570,6 +1596,7 @@ class ComposeActivity :
         var mediaAttachments: List<Attachment>? = null,
         var draftAttachments: List<DraftAttachment>? = null,
         var scheduledAt: String? = null,
+        var expiresIn: Int = 0,
         var sensitive: Boolean? = null,
         var poll: NewPoll? = null,
         var formattingSyntax: String? = null,

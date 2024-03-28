@@ -75,6 +75,7 @@ class ComposeViewModel(
     val setupComplete = mutableLiveData(false)
     val poll: MutableLiveData<NewPoll?> = mutableLiveData(null)
     val scheduledAt: MutableLiveData<String?> = mutableLiveData(null)
+    val postExpiresIn: MutableLiveData<Int?> = mutableLiveData(null)
     val formattingSyntax: MutableLiveData<String> = mutableLiveData("")
     val composeWithZwsp: MutableLiveData<Boolean> = mutableLiveData(false)
 
@@ -174,6 +175,7 @@ class ComposeViewModel(
                     mediaUris = mediaUris.map { it.toString() },
                     mediaDescriptions = mediaDescriptions,
                     scheduledAt = scheduledAt.value,
+                    expiresIn = postExpiresIn.value,
                     inReplyToId = inReplyToId,
                     poll = poll.value,
                     replyingStatusContent = null,

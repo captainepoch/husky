@@ -102,6 +102,7 @@ class SendStatusBroadcastReceiver : BroadcastReceiver(), KoinComponent {
                         mediaUris = emptyList(),
                         mediaDescriptions = emptyList(),
                         scheduledAt = null,
+                        expiresIn = accountManager.activeAccount?.postExpiresIn,
                         inReplyToId = citedStatusId,
                         poll = null,
                         replyingStatusContent = null,
