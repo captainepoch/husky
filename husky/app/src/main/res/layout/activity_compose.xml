@@ -412,6 +412,17 @@
                     app:tooltipText="@string/action_schedule_toot" />
 
                 <ImageButton
+                    android:id="@+id/postExpiresInButton"
+                    style="@style/TuskyImageButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@string/action_expires_in_toot"
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/ic_hourglass_medium"
+                    app:tooltipText="@string/action_expires_in_toot" />
+
+                <ImageButton
                     android:id="@+id/composeFormattingSyntax"
                     style="@style/TuskyImageButton"
                     android:layout_width="36dp"
@@ -434,7 +445,9 @@
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_sticker"
                     app:tooltipText="@string/action_sticker" />
+
             </LinearLayout>
+
         </HorizontalScrollView>
 
         <TextView

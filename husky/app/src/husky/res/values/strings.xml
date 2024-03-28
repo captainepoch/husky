@@ -85,6 +85,7 @@
     <!-- REPLACEMENT FOR TUSKY STRINGS -->
     <string name="action_toggle_visibility">Post visibility</string>
     <string name="action_schedule_toot">Schedule post</string>
+    <string name="action_expires_in_toot">Post expires in</string>
     <string name="action_reblog">Repeat</string>
     <string name="action_unreblog">Remove repeat</string>
     <string name="action_hide_reblogs">Hide repeats</string>
