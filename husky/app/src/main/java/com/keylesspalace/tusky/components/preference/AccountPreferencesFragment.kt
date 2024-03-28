@@ -204,7 +204,6 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
                     setSummary(R.string.pref_default_post_expire_in_summary)
                     setIcon(R.drawable.ic_hourglass_medium)
                     key = accountManager.getSettingsPostExpiresInPrefKey()
-
                     setOnPreferenceChangeListener { _, newValue ->
                         try {
                             val value = (newValue as String)
