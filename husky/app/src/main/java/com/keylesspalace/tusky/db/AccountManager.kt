@@ -194,6 +194,6 @@ class AccountManager(db: AppDatabase) {
     }
 
     fun getSettingsPostExpiresInPrefKey(): String {
-        return "${PrefKeys.DEFAULT_POST_EXPIRES_IN}_${activeAccount!!.username}"
+        return "${PrefKeys.DEFAULT_POST_EXPIRES_IN}_${activeAccount!!.username}@${activeAccount!!.domain}"
     }
 }
