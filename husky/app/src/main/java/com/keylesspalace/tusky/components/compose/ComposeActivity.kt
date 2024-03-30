@@ -596,6 +596,7 @@ class ComposeActivity :
         binding.composeFormattingSyntax.setOnClickListener { toggleFormattingMode() }
         binding.composeFormattingSyntax.setOnLongClickListener { selectFormattingSyntax() }
         binding.postExpiresInButton.setOnClickListener { togglePostExpiresIn() }
+        binding.postExpiresInButton.setOnLongClickListener { showInfoPostExpiresIn() }
         binding.composeStickerButton.setOnClickListener { showStickers() }
         binding.atButton.setOnClickListener { atButtonClicked() }
         binding.hashButton.setOnClickListener { hashButtonClicked() }
@@ -776,6 +777,15 @@ class ComposeActivity :
             } else {
                 accountManager.value.activeAccount!!.postExpiresIn
             }
+    }
+
+    private fun showInfoPostExpiresIn(): Boolean {
+        AlertDialog.Builder(this)
+                .setMessage(R.string.pref_default_post_expire_in_explanation)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+
+        return true
     }
 
     private fun enableMarkdownWYSIWYGButtons(visible: Boolean) {
