@@ -11,6 +11,7 @@ androidx-exifinterface = "1.3.7"
 androidx-fragmentKtx = "1.6.2"
 androidx-lifecycle = "2.7.0"
 androidx-media3 = "1.3.0"
+#noinspection GradleDependency
 androidx-paging = "2.1.2"
 androidx-preferenceKtx = "1.2.1"
 androidx-recyclerview = "1.3.2"
@@ -30,7 +31,7 @@ glide-image = "1.8.1"
 # Do not update: https://codeberg.org/husky/husky/pulls/121
 #noinspection GradleDependency
 glide-plugin-animation = "2.23.0"
-gradle-ktlint = "11.6.1"
+gradle-ktlint = "12.1.0"
 koin = "3.5.3"
 kotlin = "1.9.23"
 kotlinx = "1.8.0"
@@ -59,7 +60,6 @@ timber = "5.0.1"
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "gradle-ktlint" }
 
