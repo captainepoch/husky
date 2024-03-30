@@ -20,10 +20,13 @@
 
 package com.keylesspalace.tusky.service
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build.VERSION_CODES
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
+import androidx.core.service.quicksettings.PendingIntentActivityWrapper
+import androidx.core.service.quicksettings.TileServiceCompat
 import com.keylesspalace.tusky.MainActivity
 
 /**
@@ -36,11 +39,16 @@ import com.keylesspalace.tusky.MainActivity
 class HuskyTileService : TileService() {
 
     override fun onClick() {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            action = Intent.ACTION_SEND
-            type = "text/plain"
+        Intent(this, MainActivity::class.java).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            it.action = Intent.ACTION_SEND
+            it.type = "text/plain"
+
+            TileServiceCompat.startActivityAndCollapse(
+                this@HuskyTileService, PendingIntentActivityWrapper(
+                    this@HuskyTileService, 0, it, PendingIntent.FLAG_UPDATE_CURRENT, true
+                )
+            )
         }
-        startActivityAndCollapse(intent)
     }
 }
