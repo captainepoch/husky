@@ -126,6 +126,10 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
         // Reblog private post is not possible
     }
 
+    override fun onMenuReblog(reblog: Boolean, position: Int) {
+        // Reblog private post is not possible
+    }
+
     override fun onFavourite(favourite: Boolean, position: Int) {
         viewModel.favourite(favourite, position)
     }
