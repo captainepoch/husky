@@ -90,7 +90,7 @@ public abstract class SFragment extends BaseFragment {
 
     protected abstract void removeItem(int position);
 
-    protected abstract void onReblog(final boolean reblog, final int position);
+    protected abstract void onMenuReblog(final boolean reblog, final int position);
 
     private BottomSheetActivity bottomSheetActivity;
 
@@ -354,11 +354,11 @@ public abstract class SFragment extends BaseFragment {
                     return true;
                 }
                 case R.id.status_unreblog_private: {
-                    onReblog(false, position);
+                    onMenuReblog(false, position);
                     return true;
                 }
                 case R.id.status_reblog_private: {
-                    onReblog(true, position);
+                    onMenuReblog(true, position);
                     return true;
                 }
                 case R.id.status_delete: {
