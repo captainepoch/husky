@@ -69,6 +69,7 @@ import com.keylesspalace.tusky.appstore.UnfollowEvent;
 import com.keylesspalace.tusky.components.compose.ComposeActivity;
 import com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
 import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
+import com.keylesspalace.tusky.core.functional.Either;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Filter;
 import com.keylesspalace.tusky.entity.Poll;
@@ -82,7 +83,6 @@ import com.keylesspalace.tusky.repository.TimelineRepository;
 import com.keylesspalace.tusky.repository.TimelineRequestMode;
 import com.keylesspalace.tusky.settings.PrefKeys;
 import com.keylesspalace.tusky.util.CardViewMode;
-import com.keylesspalace.tusky.core.functional.Either;
 import com.keylesspalace.tusky.util.HttpHeaderLink;
 import com.keylesspalace.tusky.util.LinkHelper;
 import com.keylesspalace.tusky.util.ListStatusAccessibilityDelegate;
@@ -614,6 +614,11 @@ public class TimelineFragment extends SFragment
     @Override
     public void onReply(int position) {
         super.reply(statuses.get(position).asRight());
+    }
+
+    @Override
+    public void onMenuReblog(final boolean reblog, final int position) {
+        onReblog(reblog, position);
     }
 
     @Override
