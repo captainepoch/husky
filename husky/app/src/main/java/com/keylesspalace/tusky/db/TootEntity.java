@@ -33,6 +33,7 @@ import androidx.room.TypeConverters;
 @Entity
 @TypeConverters(TootEntity.Converters.class)
 public class TootEntity {
+
     @PrimaryKey(autoGenerate = true)
     private final int uid;
 
@@ -65,19 +66,25 @@ public class TootEntity {
     @Nullable
     @ColumnInfo(name = "poll")
     private final NewPoll poll;
-    
+
     @NonNull
     @ColumnInfo(name = "formattingSyntax")
     private final String formattingSyntax;
-    
+
     /* DEPRECATED */
     @Nullable
     @ColumnInfo(name = "markdownMode")
     public Boolean markdownMode = false;
 
-    public TootEntity(int uid, String text, String urls, String descriptions, String contentWarning, String inReplyToId,
-                      @Nullable String inReplyToText, @Nullable String inReplyToUsername,
-                      Status.Visibility visibility, @Nullable NewPoll poll, String formattingSyntax) {
+    @Nullable
+    @ColumnInfo(name = "quoteId")
+    private final String quoteId;
+
+    public TootEntity(int uid, String text, String urls, String descriptions, String contentWarning,
+                      String inReplyToId, @Nullable String inReplyToText,
+                      @Nullable String inReplyToUsername, Status.Visibility visibility,
+                      @Nullable NewPoll poll, @NonNull String formattingSyntax,
+                      @Nullable String quoteId) {
         this.uid = uid;
         this.text = text;
         this.urls = urls;
@@ -89,6 +96,7 @@ public class TootEntity {
         this.visibility = visibility;
         this.poll = poll;
         this.formattingSyntax = formattingSyntax;
+        this.quoteId = quoteId;
     }
 
     public String getText() {
@@ -133,14 +141,19 @@ public class TootEntity {
     public NewPoll getPoll() {
         return poll;
     }
-    
+
     public String getFormattingSyntax() {
         return formattingSyntax;
     }
-    
+
     @Nullable
     public Boolean getMarkdownMode() {
         return markdownMode;
+    }
+
+    @Nullable
+    public String getQuoteId() {
+        return quoteId;
     }
 
     public static final class Converters {

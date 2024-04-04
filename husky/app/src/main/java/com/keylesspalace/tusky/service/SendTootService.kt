@@ -364,7 +364,8 @@ class SendTootService : Service(), KoinComponent {
             mediaDescriptions = toot.mediaDescriptions,
             poll = toot.poll,
             formattingSyntax = toot.formattingSyntax,
-            failedToSend = true
+            failedToSend = true,
+            quoteId = toot.quoteId
         ).subscribe()
     }
 

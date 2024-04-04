@@ -16,6 +16,7 @@
 package com.keylesspalace.tusky.adapter;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class SavedTootAdapter extends RecyclerView.Adapter {
         handler = (SavedTootAction) context;
     }
 
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -48,7 +50,7 @@ public class SavedTootAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         TootViewHolder holder = (TootViewHolder) viewHolder;
         holder.bind(getItem(position));
     }
@@ -113,9 +115,10 @@ public class SavedTootAdapter extends RecyclerView.Adapter {
 
                 suppr.setOnClickListener(v -> {
                     v.setEnabled(false);
-                    handler.delete(getAdapterPosition(), item);
+                    handler.delete(getAbsoluteAdapterPosition(), item);
                 });
-                view.setOnClickListener(v -> handler.click(getAdapterPosition(), item));
+
+                view.setOnClickListener(v -> handler.click(getAbsoluteAdapterPosition(), item));
             }
         }
     }
