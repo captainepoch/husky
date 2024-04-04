@@ -52,7 +52,8 @@ class DraftHelper(private val context: Context, private val db: AppDatabase) {
         mediaDescriptions: List<String?>,
         poll: NewPoll?,
         formattingSyntax: String,
-        failedToSend: Boolean
+        failedToSend: Boolean,
+        quoteId: String?
     ): Completable {
         return Single.fromCallable {
             val draftDirectory = context.getExternalFilesDir("Tusky")
@@ -104,7 +105,8 @@ class DraftHelper(private val context: Context, private val db: AppDatabase) {
                 attachments = attachments,
                 poll = poll,
                 formattingSyntax = formattingSyntax,
-                failedToSend = failedToSend
+                failedToSend = failedToSend,
+                quoteId = quoteId
             )
         }.flatMapCompletable { draft ->
             draftDao.insertOrReplace(draft)

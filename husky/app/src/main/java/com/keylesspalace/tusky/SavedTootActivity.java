@@ -137,7 +137,6 @@ public final class SavedTootActivity extends BaseActivity
 
     @Override
     public void delete(int position, TootEntity item) {
-
         saveTootHelper.deleteDraft(item);
 
         toots.remove(position);
@@ -157,18 +156,30 @@ public final class SavedTootActivity extends BaseActivity
         List<String> descriptions = gson.fromJson(item.getDescriptions(), stringListType);
 
         ComposeOptions composeOptions = new ComposeOptions(
-            /*scheduledTootUid*/null, item.getUid(),
-            /*drafId*/null, item.getText(), jsonUrls, descriptions,
-            /*mentionedUsernames*/null, item.getInReplyToId(),
-            /*replyVisibility*/null, item.getVisibility(), item.getContentWarning(),
-            item.getInReplyToUsername(), item.getInReplyToText(),
+            /*scheduledTootUid*/null,
+            item.getUid(),
+            /*drafId*/null,
+            item.getText(),
+            jsonUrls,
+            descriptions,
+            /*mentionedUsernames*/null,
+            item.getInReplyToId(),
+            /*replyVisibility*/null,
+            item.getVisibility(),
+            item.getContentWarning(),
+            item.getInReplyToUsername(),
+            item.getInReplyToText(),
             /*mediaAttachments*/null,
             /*draftAttachments*/null,
             /*scheduledAt*/null,
             /*expiresIn*/0,
             /*sensitive*/null,
-            /*poll*/null, item.getFormattingSyntax(),
-            /* modifiedInitialState */ true);
+            /*poll*/null,
+            item.getFormattingSyntax(),
+            /*modifiedInitialState*/ true,
+            /*quoteId*/item.getQuoteId()
+        );
+
         Intent intent = ComposeActivity.startIntent(this, composeOptions);
         startActivity(intent);
     }
