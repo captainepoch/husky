@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 32,
-    "identityHash": "bf057e32aeb1d7c6d7b8f71e64d53e69",
+    "identityHash": "d7aee4507b39c66718c2700803d3c67c",
     "entities": [
       {
         "tableName": "TootEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `text` TEXT, `urls` TEXT, `descriptions` TEXT, `contentWarning` TEXT, `inReplyToId` TEXT, `inReplyToText` TEXT, `inReplyToUsername` TEXT, `visibility` INTEGER, `poll` TEXT, `formattingSyntax` TEXT NOT NULL, `markdownMode` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `text` TEXT, `urls` TEXT, `descriptions` TEXT, `contentWarning` TEXT, `inReplyToId` TEXT, `inReplyToText` TEXT, `inReplyToUsername` TEXT, `visibility` INTEGER, `poll` TEXT, `formattingSyntax` TEXT NOT NULL, `markdownMode` INTEGER, `quoteId` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -79,6 +79,12 @@
             "columnName": "markdownMode",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "quoteId",
+            "columnName": "quoteId",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -92,7 +98,7 @@
       },
       {
         "tableName": "DraftEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `accountId` INTEGER NOT NULL, `inReplyToId` TEXT, `content` TEXT, `contentWarning` TEXT, `sensitive` INTEGER NOT NULL, `visibility` INTEGER NOT NULL, `attachments` TEXT NOT NULL, `poll` TEXT, `formattingSyntax` TEXT NOT NULL, `failedToSend` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `accountId` INTEGER NOT NULL, `inReplyToId` TEXT, `content` TEXT, `contentWarning` TEXT, `sensitive` INTEGER NOT NULL, `visibility` INTEGER NOT NULL, `attachments` TEXT NOT NULL, `poll` TEXT, `formattingSyntax` TEXT NOT NULL, `failedToSend` INTEGER NOT NULL, `quoteId` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -159,6 +165,12 @@
             "columnName": "failedToSend",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "quoteId",
+            "columnName": "quoteId",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1021,7 +1033,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bf057e32aeb1d7c6d7b8f71e64d53e69')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd7aee4507b39c66718c2700803d3c67c')"
     ]
   }
 }
