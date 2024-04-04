@@ -70,6 +70,7 @@ import com.keylesspalace.tusky.appstore.MuteConversationEvent;
 import com.keylesspalace.tusky.appstore.MuteEvent;
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent;
 import com.keylesspalace.tusky.appstore.ReblogEvent;
+import com.keylesspalace.tusky.core.functional.Either;
 import com.keylesspalace.tusky.db.AccountEntity;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Notification;
@@ -82,7 +83,6 @@ import com.keylesspalace.tusky.interfaces.ReselectableFragment;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.settings.PrefKeys;
 import com.keylesspalace.tusky.util.CardViewMode;
-import com.keylesspalace.tusky.core.functional.Either;
 import com.keylesspalace.tusky.util.HttpHeaderLink;
 import com.keylesspalace.tusky.util.ListStatusAccessibilityDelegate;
 import com.keylesspalace.tusky.util.ListUtils;
@@ -483,6 +483,11 @@ public class NotificationsFragment extends SFragment
     @Override
     public void onReply(int position) {
         super.reply(notifications.get(position).asRight().getStatus());
+    }
+
+    @Override
+    public void onMenuReblog(final boolean reblog, final int position) {
+        onReblog(reblog, position);
     }
 
     @Override

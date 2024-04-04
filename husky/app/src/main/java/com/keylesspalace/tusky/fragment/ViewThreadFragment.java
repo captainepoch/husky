@@ -238,6 +238,11 @@ public final class ViewThreadFragment extends SFragment
     }
 
     @Override
+    public void onMenuReblog(final boolean reblog, final int position) {
+        onReblog(reblog, position);
+    }
+
+    @Override
     public void onReblog(final boolean reblog, final int position) {
         final Status status = statuses.get(position);
 
