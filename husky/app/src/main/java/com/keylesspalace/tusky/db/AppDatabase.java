@@ -30,7 +30,7 @@ import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEn
  */
 @Database(entities = {TootEntity.class, DraftEntity.class, AccountEntity.class,
     InstanceEntity.class, TimelineStatusEntity.class, TimelineAccountEntity.class,
-    ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 33)
+    ConversationEntity.class, ChatEntity.class, ChatMessageEntity.class}, version = 32)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract TootDao tootDao();
@@ -498,13 +498,6 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `quotePosting` INTEGER NOT NULL DEFAULT 0");
-        }
-    };
-
-    public static final Migration MIGRATION_32_33 = new Migration(32, 33) {
-
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE `TootEntity` ADD COLUMN `quoteId` TEXT");
             database.execSQL("ALTER TABLE `DraftEntity` ADD COLUMN `quoteId` TEXT");
         }
