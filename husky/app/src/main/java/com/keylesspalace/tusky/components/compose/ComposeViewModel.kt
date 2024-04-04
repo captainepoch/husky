@@ -134,7 +134,8 @@ class ComposeViewModel(
             mediaDescriptions = mediaDescriptions,
             poll = poll.value,
             formattingSyntax = formattingSyntax.value!!,
-            failedToSend = false
+            failedToSend = false,
+            quoteId = quotePostId
         ).subscribe()
     }
 

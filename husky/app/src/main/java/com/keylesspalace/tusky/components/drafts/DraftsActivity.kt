@@ -131,7 +131,8 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
                         poll = draft.poll,
                         sensitive = draft.sensitive,
                         visibility = draft.visibility,
-                        formattingSyntax = draft.formattingSyntax
+                        formattingSyntax = draft.formattingSyntax,
+                        quotePostId = draft.quoteId
                     )
 
                     bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
@@ -167,7 +168,8 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
             poll = draft.poll,
             sensitive = draft.sensitive,
             visibility = draft.visibility,
-            formattingSyntax = draft.formattingSyntax
+            formattingSyntax = draft.formattingSyntax,
+            quotePostId = draft.quoteId
         )
 
         startActivity(ComposeActivity.startIntent(this, composeOptions))

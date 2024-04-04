@@ -23,7 +23,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.keylesspalace.tusky.entity.NewPoll
 import com.keylesspalace.tusky.entity.Status
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Entity
 @TypeConverters(Converters::class)
@@ -38,7 +38,8 @@ data class DraftEntity(
     val attachments: List<DraftAttachment>,
     val poll: NewPoll?,
     val formattingSyntax: String,
-    val failedToSend: Boolean
+    val failedToSend: Boolean,
+    val quoteId: String?
 )
 
 @Parcelize
