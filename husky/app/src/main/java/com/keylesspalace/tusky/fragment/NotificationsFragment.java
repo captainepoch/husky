@@ -24,6 +24,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -41,6 +43,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.arch.core.util.Function;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.util.Pair;
+import androidx.core.util.Predicate;
 import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.AsyncDifferConfig;
@@ -126,7 +129,7 @@ public class NotificationsFragment extends SFragment
     private int maxPlaceholderId = 0;
 
 
-    private Set<Notification.Type> notificationFilter = new HashSet<>();
+    private final Set<Notification.Type> notificationFilter = new HashSet<>();
 
     private enum FetchEnd {
         TOP, BOTTOM, MIDDLE
@@ -148,7 +151,7 @@ public class NotificationsFragment extends SFragment
         }
     }
 
-    private EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
+    private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -1352,7 +1355,26 @@ public class NotificationsFragment extends SFragment
     }
 
     private void updateAdapter() {
-        differ.submitList(notifications.getPairedCopy());
+        // Filter null values that come from the server
+        // TODO: This should be done in the ViewModel before sending it to the view (future).
+        List<NotificationViewData> newList =
+                CollectionsKt.mapNotNull(
+                        CollectionsKt.filterIsInstance(
+                                notifications.getPairedCopy(),
+                                NotificationViewData.Concrete.class
+                        ),
+                        notificationViewData -> {
+                            if (notificationViewData.getStatusViewData() == null &&
+                                    notificationViewData.getType() != Notification.Type.FOLLOW) {
+                                return null;
+                            } else {
+                                return notificationViewData;
+                            }
+
+                        }
+                );
+
+        differ.submitList(newList);
     }
 
     private final ListUpdateCallback listUpdateCallback = new ListUpdateCallback() {
