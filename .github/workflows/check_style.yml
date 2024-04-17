@@ -25,9 +25,9 @@ jobs:
         uses: gradle/wrapper-validation-action@v3
 
       - name: Gradle Setup
-      - uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Run ktlint
-      - run: |
+        run: |
           cd husky
           ./gradlew ktlintCheck
