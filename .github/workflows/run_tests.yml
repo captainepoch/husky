@@ -5,7 +5,7 @@ permissions:
 
 on:
   workflow_run:
-    workflows: [check_style]
+    workflows: [check-style]
     types:
       - completed
 
