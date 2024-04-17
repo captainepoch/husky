@@ -28,6 +28,6 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Run ktlint
-        run: |
+      - run: |
           cd husky
           ./gradlew ktlintCheck
