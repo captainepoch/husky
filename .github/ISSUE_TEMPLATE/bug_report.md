@@ -1,7 +1,10 @@
 ---
-name: Default Template
-about: This is a default template for opening an issue.
+name: Bug report
+labels: "bug"
+assignees: ""
+about: Create a report to help us improve
 ---
+
 <!--
 You acknowledge, opening this issue, that you read Codeberg's ToS and the
 content you upload meets to the requirements.
@@ -16,15 +19,20 @@ Please use `Preview` tab above to see final rendering of your report before
 You can delete anything if it is not needed.
 -->
 
+## General description of the issue
+
+...
+
 ## Husky information
 
 - Husky version: ...
 - Android version: ...
-- Instance: ...
 
 If you think it is an instance-related issue, please specify the instance.
 
-## Describe your issue (steps to reproduce it)
+- Instance: ...
+
+## Steps to reproduce it
 
 Please, describe the steps to reproduce the issue:
 
@@ -35,7 +43,7 @@ Please, describe the steps to reproduce the issue:
 
 ## Where did you get Husky from:
 
-* [ ] F-Droid.
-* [ ] Self-releases.
-* [ ] Play Store.
-* [ ] Self-compiled (specify tag/commit).
+- [ ] F-Droid.
+- [ ] Self-releases.
+- [ ] Play Store.
+- [ ] Self-compiled (specify tag/commit).

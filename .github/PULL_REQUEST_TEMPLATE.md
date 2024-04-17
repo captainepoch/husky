@@ -3,9 +3,11 @@ Thank you for your contribution!
 Please make sure that you:
 
 - Use `git rebase` to update your branch with `master`. Do not use a merge
-  commit for that.
+  commit.
 
 - If you **really** need to add logs, use `Timber`.
+
+- If this PR references an issue, link the issue.
 
 **Please erase this message from this PR, thank you!**
 
