@@ -5,13 +5,12 @@ permissions:
 
 on:
   workflow_run:
-    workflows: [check-style]
+    workflows: [Check style]
     types:
       - completed
 
 jobs:
   run-tests:
-    needs: [check-style]
     runs-on: ubuntu-latest
     steps:
       - name: Run tests
