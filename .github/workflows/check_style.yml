@@ -3,6 +3,9 @@ name: Check style
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   check-style:
     name: Ktlint check
@@ -16,6 +19,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
 
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v3
