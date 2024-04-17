@@ -1,3 +1,14 @@
+name: Run tests
+
+permissions:
+  contents: read
+
+on:
+  workflow_run:
+    workflows: [check_style]
+    types:
+      - completed
+
 jobs:
   run-tests:
     needs: [check-style]
