@@ -9,8 +9,8 @@ about: Suggest a feature for Husky.
 You acknowledge, opening this issue, that you read Codeberg's ToS and the
 content you upload meets to the requirements.
 
-Please see
-https://codeberg.org/husky/husky-man/src/branch/master/contributing.md.
+Please see <CONTRIBUTING>.
+
 -->
 
 <!--
