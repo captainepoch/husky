@@ -1,7 +1,10 @@
 ---
 name: Feature request
+labels: "enhancement"
+assignees: ""
 about: Suggest a feature for Husky.
 ---
+
 <!--
 You acknowledge, opening this issue, that you read Codeberg's ToS and the
 content you upload meets to the requirements.
@@ -22,8 +25,8 @@ You can delete anything if it is not needed.
 
 <!-- You can attach any media you consider. -->
 
-## Other information
+## Other relevant information
 
-Please, point which backend this feature came from.
+Please, point to which backend this feature came from.
 
-- Software (Pleroma, Mastodon...): ...
+- Back-end (Pleroma, Mastodon...): ...
