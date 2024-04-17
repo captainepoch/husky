@@ -1,6 +1,8 @@
 jobs:
   run-tests:
     needs: [check-style]
+    runs-on: ubuntu-latest
+    steps:
       - name: Run tests
         run: |
           cd husky
