@@ -1,4 +1,4 @@
-name: Check style
+name: CI Jobs
 
 on:
   pull_request:
@@ -31,3 +31,13 @@ jobs:
         run: |
           cd husky
           ./gradlew ktlintCheck
+
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: [check-style]
+    steps:
+      - name: Run stable tests
+        run: |
+          cd husky
+          ./gradlew testHuskyStableReleaseUnitTest
