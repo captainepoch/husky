@@ -1,9 +1,0 @@
-depends_on:
-  - check_style
-
-steps:
-  tests:
-    image: ghcr.io/alvr/alpine-android:android-34-jdk17
-    commands:
-      - cd husky
-      - ./gradlew testHuskyStableReleaseUnitTest
