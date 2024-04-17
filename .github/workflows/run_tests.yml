@@ -1,0 +1,7 @@
+jobs:
+  run-tests:
+    needs: [check-style]
+      - name: Run tests
+        run: |
+          cd husky
+          ./gradlew testHuskyStableReleaseUnitTest
