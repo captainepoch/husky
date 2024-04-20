@@ -2,6 +2,8 @@
 
 [![Download F-Droid](https://img.shields.io/badge/Download-F--Droid-blue)][husky_fdroid]
 [![Download Google Play](https://img.shields.io/badge/Download-Play-blue)][husky_playstore]
+[![Translation
+status](https://hosted.weblate.org/widget/husky/translations/svg-badge.svg)](https://hosted.weblate.org/engage/husky/)
 
 Husky is a fork of [Tusky][tusky_github] aimed to support [Pleroma's Mastodon
 API extensions][mastodon_api_extensions] and whatever could add value to the
