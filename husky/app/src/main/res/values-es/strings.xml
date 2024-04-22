@@ -510,9 +510,9 @@
     <string name="limit_notifications">Limitar notificaciones de cronología</string>
     <string name="app_name">Husky</string>
     <string name="title_public_bubble">Burbuja</string>
-    <string name="pref_default_post_expire_in">Establecer una hora de caducidad para todas las publicaciones publicadas</string>
+    <string name="pref_default_post_expire_in">Establecer una hora de caducidad para todas las entradas publicadas</string>
     <string name="pref_default_post_expire_in_summary">El valor mínimo es 1 día, 0 para desactivar.</string>
-    <string name="pref_default_post_expire_in_explanation">Configure un mínimo de 1 día para que las publicaciones expiren y el servidor las elimine automáticamente.
+    <string name="pref_default_post_expire_in_explanation">Establezca un mínimo de 1 día para que los mensajes caduquen y sean borrados automáticamente por el servidor.
 \n
 \nEsto se puede configurar en las \"Preferencias de la cuenta\".</string>
     <string name="debug_status">compilación de depuración</string>
