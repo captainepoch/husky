@@ -1,3 +1,13 @@
+Husky 1.6.0 - 2024-XX-YY
+  - Add: AVIF support.
+  - Add: Expiring posts per account.
+  - Add: Replay videos preference (Global).
+  - Fix: Emoji reactions not showing.
+  - Fix: Possible fix for null notifications.
+  - Updated translations.
+  - Restore beta builds.
+  - Update dependencies.
+
 Husky 1.5.4 - 2024-03-16
   - Fix: Opening an image in an external app won't crash the application.
 
