@@ -32,6 +32,9 @@ You can support the project by contributing to it. Look at the
 [Contributing][husky_man_contributing] documentation on how to open issues or
 fix issues.
 
+Previous issue tracker is at
+[codeberg.org/husky/husky/issues][husky_codeberg_issues].
+
 Original tracker with issues is at
 [git.mentality.rip/FWGS/Husky/issues][husky_original_issues].
 
@@ -50,14 +53,15 @@ The original app was developed by
 [GNU GPL v3][copying].
 
 [copying]: ./COPYING
+[husky_codeberg_issues]: https://codeberg.org/husky/husky/issues
 [husky_fdroid]: https://f-droid.org/repository/browse/?fdid=su.xash.husky
 [husky_maintainer]: https://stereophonic.space/captainepoch
-[husky_man]: https://codeberg.org/husky/husky-man
-[husky_man_contributing]: https://codeberg.org/husky/husky-man/src/branch/master/contributing.md
+[husky_man]: https://github.com/captainepoch/husky/wiki
+[husky_man_contributing]: https://github.com/captainepoch/husky/wiki/Contributing-to-Husky
 [husky_original_issues]: https://git.mentality.rip/FWGS/Husky/issues
 [husky_playstore]: https://play.google.com/store/apps/details?id=su.xash.husky
 [husky_previous_maintainer]: https://suya.place/users/a1ba
-[husky_todo]: https://codeberg.org/husky/husky/issues
+[husky_todo]: https://github.com/captainepoch/husky/issues
 [mastodon_api_extensions]: https://docs-develop.pleroma.social/backend/development/API/differences_in_mastoapi_responses/
 [tusky_github]: https://github.com/tuskyapp/Tusky
 [tusky_maintainer]: https://chaos.social/@ConnyDuck
