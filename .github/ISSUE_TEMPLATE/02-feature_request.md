@@ -6,11 +6,10 @@ about: Suggest a feature for Husky.
 ---
 
 <!--
-You acknowledge, opening this issue, that you read Codeberg's ToS and the
+You acknowledge, opening this issue, that you read GitHub's ToS and the
 content you upload meets to the requirements.
 
-Please see <CONTRIBUTING>.
-
+Please see https://github.com/captainepoch/husky/wiki/Contributing-to-Husky.
 -->
 
 <!--
