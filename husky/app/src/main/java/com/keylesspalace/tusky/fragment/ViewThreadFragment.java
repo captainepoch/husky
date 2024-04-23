@@ -15,6 +15,9 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import static org.koin.java.KoinJavaComponent.inject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -65,14 +68,11 @@ import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.ConversationLineItemDecoration;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -239,11 +239,11 @@ public final class ViewThreadFragment extends SFragment
 
     @Override
     public void onMenuReblog(final boolean reblog, final int position) {
-        onReblog(reblog, position);
+        onReblog(reblog, position, false); // TODO
     }
 
     @Override
-    public void onReblog(final boolean reblog, final int position) {
+    public void onReblog(final boolean reblog, final int position, final boolean canQuote) {
         final Status status = statuses.get(position);
 
         timelineCases.getValue().reblog(statuses.get(position), reblog)
