@@ -20,6 +20,9 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import static org.koin.java.KoinJavaComponent.inject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,6 +49,7 @@ import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import at.connyduck.sparkbutton.SparkButton;
 import at.connyduck.sparkbutton.helpers.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.keylesspalace.tusky.AccountListActivity;
@@ -94,8 +98,6 @@ import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.io.IOException;
@@ -109,16 +111,16 @@ import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.functions.Function1;
-import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
 public class TimelineFragment extends SFragment
-    implements SwipeRefreshLayout.OnRefreshListener, StatusActionListener, ReselectableFragment,
-    RefreshableFragment
-{
+        implements SwipeRefreshLayout.OnRefreshListener,
+        StatusActionListener,
+        ReselectableFragment,
+        RefreshableFragment {
 
     private static final String KIND_ARG = "kind";
     private static final String ID_ARG = "id";
@@ -275,7 +277,6 @@ public class TimelineFragment extends SFragment
                     createTimelineAdapter(instance.getQuotePosting());
                     setupRecyclerView();
                     updateAdapter();
-                    //adapter.setCanQuoteStatus(instance.getQuotePosting());
 
                     if(this.kind == Kind.HOME) {
                         this.tryCache();
@@ -618,45 +619,56 @@ public class TimelineFragment extends SFragment
 
     @Override
     public void onMenuReblog(final boolean reblog, final int position) {
-        onReblog(reblog, position);
+        onReblog(reblog, position, false);
     }
 
     @Override
-    public void onReblog(final boolean reblog, final int position) {
-        Timber.d("onReblog %s", statuses.get(position).asRight());
+    public void onReblog(final boolean reblog, final int position, final boolean canQuote) {
+        Status status = statuses.get(position).asRight();
 
-        FragmentActivity activity = getActivity();
-        if(activity != null) {
-            final Status status = statuses.get(position).asRight();
-
-            final StatusReblogQuoteDialog dialog = new StatusReblogQuoteDialog(getActivity());
-            dialog.setOnStatusActionListener(type -> {
-                if(type == StatusReblogQuoteType.QUOTE) {
-                    Timber.d("QUOTE");
-
-                    ComposeOptions options = new ComposeOptions();
-                    options.setQuotePostId(status.getId());
-                    startActivity(ComposeActivity.startIntent(activity, options));
-                } else {
-                    Timber.d("REBLOG");
-
-                    timelineCases.getValue().reblog(status, reblog)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-                        .subscribe(
-                            (newStatus) -> setRebloggedForStatus(position, status, reblog),
-                            (err) -> Timber.e(err,
-                                "Failed to reblog status %s, Error[%s]",
-                                status.getId(),
-                                err.getMessage()
-                            )
-                        );
-                }
-
-                return null;
-            });
-            dialog.show();
+        if(!reblog) {
+            callReblogService(status, reblog, position);
+            return;
         }
+
+        if(!canQuote) {
+            Timber.d("Reblog, user cannot quote");
+            callReblogService(status, reblog, position);
+        } else {
+            Timber.d("Quotes are enabled");
+
+            FragmentActivity activity = getActivity();
+            if(activity != null) {
+                final StatusReblogQuoteDialog dialog = new StatusReblogQuoteDialog(activity);
+                dialog.setOnStatusActionListener(type -> {
+                    if(type == StatusReblogQuoteType.QUOTE) {
+                        ComposeOptions options = new ComposeOptions();
+                        options.setQuotePostId(status.getId());
+                        startActivity(ComposeActivity.startIntent(activity, options));
+                    } else {
+                        callReblogService(status, reblog, position);
+                    }
+
+                    return null;
+                });
+                dialog.show();
+            }
+        }
+    }
+
+    private void callReblogService(final Status status, final boolean reblog, final int position) {
+        timelineCases.getValue().reblog(status, reblog)
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+                     .subscribe(
+                             (newStatus) -> setRebloggedForStatus(position, status, reblog),
+                             (err) -> Timber.e(
+                                     err,
+                                     "Failed to reblog status %s, Error[%s]",
+                                     status.getId(),
+                                     err.getMessage()
+                             )
+                     );
     }
 
     private void setRebloggedForStatus(int position, Status status, boolean reblog) {
