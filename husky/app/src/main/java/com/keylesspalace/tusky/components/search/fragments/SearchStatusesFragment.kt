@@ -221,7 +221,7 @@ class SearchStatusesFragment :
         }
     }
 
-    override fun onReblog(reblog: Boolean, position: Int) {
+    override fun onReblog(reblog: Boolean, position: Int, canQuote: Boolean) {
         searchAdapter.getItem(position)?.let { status ->
             viewModel.reblog(status, reblog)
         }
@@ -379,11 +379,11 @@ class SearchStatusesFragment :
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_unreblog_private -> {
-                    onReblog(false, position)
+                    onReblog(false, position, false) // TODO
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_reblog_private -> {
-                    onReblog(true, position)
+                    onReblog(true, position, false) // TODO
                     return@setOnMenuItemClickListener true
                 }
                 R.id.status_delete -> {

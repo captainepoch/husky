@@ -20,6 +20,10 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import static org.koin.java.KoinJavaComponent.inject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -89,14 +93,11 @@ import com.keylesspalace.tusky.util.ListUtils;
 import com.keylesspalace.tusky.util.NotificationTypeConverterKt;
 import com.keylesspalace.tusky.util.PairedList;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
-import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
 import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
 import com.keylesspalace.tusky.viewdata.NotificationViewData;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -113,7 +114,6 @@ import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.functions.Function1;
 import okhttp3.ResponseBody;
-import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -487,11 +487,11 @@ public class NotificationsFragment extends SFragment
 
     @Override
     public void onMenuReblog(final boolean reblog, final int position) {
-        onReblog(reblog, position);
+        onReblog(reblog, position, false); // TODO
     }
 
     @Override
-    public void onReblog(final boolean reblog, final int position) {
+    public void onReblog(final boolean reblog, final int position, final boolean canQuote) {
         final Notification notification = notifications.get(position).asRight();
         final Status status = notification.getStatus();
         Objects.requireNonNull(status, "Reblog on notification without status");
