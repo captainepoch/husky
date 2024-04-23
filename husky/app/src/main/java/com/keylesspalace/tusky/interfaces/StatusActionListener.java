@@ -16,17 +16,15 @@
 package com.keylesspalace.tusky.interfaces;
 
 import android.view.View;
-
-import java.util.List;
-import com.keylesspalace.tusky.entity.EmojiReaction;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.keylesspalace.tusky.entity.EmojiReaction;
+import java.util.List;
 
 public interface StatusActionListener extends LinkListener {
 
     void onReply(int position);
-    void onReblog(final boolean reblog, final int position);
+    void onReblog(final boolean reblog, final int position, final boolean canQuote);
     void onFavourite(final boolean favourite, final int position);
     void onBookmark(final boolean bookmark, final int position);
     void onMore(@NonNull View view, final int position);
