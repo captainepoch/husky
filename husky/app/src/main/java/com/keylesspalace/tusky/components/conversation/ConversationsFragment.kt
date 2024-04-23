@@ -122,7 +122,7 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
         binding.recyclerView.scrollToPosition(0)
     }
 
-    override fun onReblog(reblog: Boolean, position: Int) {
+    override fun onReblog(reblog: Boolean, position: Int, canQuote: Boolean) {
         // Reblog private post is not possible
     }
 

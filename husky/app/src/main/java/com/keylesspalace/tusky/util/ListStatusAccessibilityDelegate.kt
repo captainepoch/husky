@@ -80,7 +80,7 @@ class ListStatusAccessibilityDelegate(
                 if (getLinks(status).any()) info.addAction(linksAction)
 
                 val mentions = status.mentions
-                if (mentions != null && mentions.isNotEmpty()) info.addAction(mentionsAction)
+                if (!mentions.isNullOrEmpty()) info.addAction(mentionsAction)
 
                 if (getHashtags(status).any()) info.addAction(hashtagsAction)
                 if (!status.rebloggedByUsername.isNullOrEmpty()) {
@@ -108,8 +108,8 @@ class ListStatusAccessibilityDelegate(
                 R.id.action_unfavourite -> statusActionListener.onFavourite(false, pos)
                 R.id.action_bookmark -> statusActionListener.onBookmark(true, pos)
                 R.id.action_unbookmark -> statusActionListener.onBookmark(false, pos)
-                R.id.action_reblog -> statusActionListener.onReblog(true, pos)
-                R.id.action_unreblog -> statusActionListener.onReblog(false, pos)
+                R.id.action_reblog -> statusActionListener.onReblog(true, pos, false)
+                R.id.action_unreblog -> statusActionListener.onReblog(false, pos, false)
                 R.id.action_open_profile -> {
                     interrupt()
                     statusActionListener.onViewAccount(
