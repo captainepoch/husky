@@ -56,6 +56,7 @@ import com.keylesspalace.tusky.viewdata.PollOptionViewData;
 import com.keylesspalace.tusky.viewdata.PollViewData;
 import com.keylesspalace.tusky.viewdata.PollViewDataKt;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
+import com.keylesspalace.tusky.viewdata.StatusViewData.Concrete;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -671,10 +672,19 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 int position = getAbsoluteAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     if (statusDisplayOptions.confirmReblogs()) {
-                        showConfirmReblogDialog(listener, buttonState, position);
+                        showConfirmReblogDialog(
+                                listener,
+                                buttonState,
+                                position,
+                                statusDisplayOptions.canQuotePosts()
+                        );
                         return false;
                     } else {
-                        listener.onReblog(!buttonState, position);
+                        listener.onReblog(
+                                !buttonState,
+                                position,
+                                statusDisplayOptions.canQuotePosts()
+                        );
                         return true;
                     }
                 } else {
@@ -720,15 +730,18 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(viewThreadListener);
     }
 
-    private void showConfirmReblogDialog(StatusActionListener listener,
-                                         boolean buttonState,
-                                         int position) {
+    private void showConfirmReblogDialog(
+            StatusActionListener listener,
+            boolean buttonState,
+            int position,
+            boolean canQuotePosts
+    ) {
         int okButtonTextId = buttonState ? R.string.action_unreblog : R.string.action_reblog;
         new AlertDialog.Builder(reblogButton.getContext())
                 .setMessage(R.string.reblog_action_dialog_message)
                 .setPositiveButton(okButtonTextId, (__, ___) -> {
-                    listener.onReblog(!buttonState, position);
-                    if (!buttonState) {
+                    listener.onReblog(!buttonState, position, canQuotePosts);
+                    if (!buttonState && !canQuotePosts) {
                         // Play animation only when it's reblog, not unreblog
                         reblogButton.playAnimation();
                     }
@@ -772,10 +785,12 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         this.setupWithStatus(status, listener, statusDisplayOptions, null);
     }
 
-    protected void setupWithStatus(StatusViewData.Concrete status,
-                                   final StatusActionListener listener,
-                                   StatusDisplayOptions statusDisplayOptions,
-                                   @Nullable Object payloads) {
+    protected void setupWithStatus(
+            Concrete status,
+            final StatusActionListener listener,
+            StatusDisplayOptions statusDisplayOptions,
+            @Nullable Object payloads
+    ) {
         if (payloads == null) {
             setDisplayName(status.getUserFullName(), status.getAccountEmojis());
             setUsername(status.getNickname());
@@ -791,7 +806,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             if (statusDisplayOptions.mediaPreviewEnabled() && hasPreviewableAttachment(attachments)) {
                 setMediaPreviews(attachments, sensitive, listener, status.isShowingContent(), statusDisplayOptions.useBlurhash());
 
-                if (attachments.size() == 0) {
+                if (attachments.isEmpty()) {
                     hideSensitiveMediaWarning();
                 }
                 // Hide the unused label.
