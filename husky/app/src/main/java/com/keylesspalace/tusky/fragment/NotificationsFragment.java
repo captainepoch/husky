@@ -49,6 +49,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.util.Pair;
 import androidx.core.util.Predicate;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Lifecycle.Event;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.AsyncListDiffer;
@@ -74,6 +75,7 @@ import com.keylesspalace.tusky.appstore.MuteConversationEvent;
 import com.keylesspalace.tusky.appstore.MuteEvent;
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent;
 import com.keylesspalace.tusky.appstore.ReblogEvent;
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
 import com.keylesspalace.tusky.core.functional.Either;
 import com.keylesspalace.tusky.db.AccountEntity;
 import com.keylesspalace.tusky.entity.EmojiReaction;
@@ -117,6 +119,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class NotificationsFragment extends SFragment
     implements SwipeRefreshLayout.OnRefreshListener, StatusActionListener,
@@ -151,7 +154,10 @@ public class NotificationsFragment extends SFragment
         }
     }
 
+    private final SharedPreferences preferences = (SharedPreferences) inject(SharedPreferences.class).getValue();
     private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
+    private final InstanceRepository instanceRepo =
+            (InstanceRepository) inject(InstanceRepository.class).getValue();
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -207,7 +213,7 @@ public class NotificationsFragment extends SFragment
             inflater.inflate(R.layout.fragment_timeline_notifications, container, false);
 
         @NonNull Context context = inflater.getContext(); // from inflater to silence warning
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        layoutManager = new LinearLayoutManager(context);
 
         boolean showNotificationsFilterSetting =
             preferences.getBoolean("showNotificationsFilter", true);
@@ -229,51 +235,15 @@ public class NotificationsFragment extends SFragment
 
         loadNotificationsFilter();
 
-        // Setup the RecyclerView.
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAccessibilityDelegateCompat(
-            new ListStatusAccessibilityDelegate(recyclerView, this, (pos) -> {
-                NotificationViewData notification = notifications.getPairedItemOrNull(pos);
-                // We support replies only for now
-                if(notification instanceof NotificationViewData.Concrete) {
-                    return ((NotificationViewData.Concrete) notification).getStatusViewData();
-                } else {
-                    return null;
-                }
-            }));
-
-        recyclerView.addItemDecoration(
-            new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-
-        StatusDisplayOptions statusDisplayOptions =
-            new StatusDisplayOptions(
-                preferences.getBoolean("animateGifAvatars", false),
-                accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
-                preferences.getBoolean("absoluteTimeView", false),
-                preferences.getBoolean("showBotOverlay", true),
-                preferences.getBoolean("useBlurhash", true), CardViewMode.NONE,
-                preferences.getBoolean("confirmReblogs", true),
-                preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
-                false // TODO(Get from Instance config [REVIEW THIS])
-            );
-        withMuted = !preferences.getBoolean(PrefKeys.HIDE_MUTED_USERS, false);
-
-        adapter =
-            new NotificationsAdapter(accountManager.getValue().getActiveAccount().getAccountId(),
-                dataSource, statusDisplayOptions, this, this, this);
         alwaysShowSensitiveMedia =
             accountManager.getValue().getActiveAccount().getAlwaysShowSensitiveMedia();
         alwaysOpenSpoiler = accountManager.getValue().getActiveAccount().getAlwaysOpenSpoiler();
-        recyclerView.setAdapter(adapter);
+
+        withMuted = !preferences.getBoolean(PrefKeys.HIDE_MUTED_USERS, false);
 
         topLoading = false;
         bottomLoading = false;
         bottomId = null;
-
-        updateAdapter();
 
         Button buttonClear = rootView.findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(v -> confirmClearNotifications());
@@ -282,7 +252,7 @@ public class NotificationsFragment extends SFragment
 
         if(notifications.isEmpty()) {
             swipeRefreshLayout.setEnabled(false);
-            sendFetchNotificationsRequest(null, null, FetchEnd.BOTTOM, -1);
+            sendInitialRequest();
         } else {
             progressBar.setVisibility(View.GONE);
         }
@@ -292,6 +262,60 @@ public class NotificationsFragment extends SFragment
         updateFilterVisibility();
 
         return rootView;
+    }
+
+    private void sendInitialRequest() {
+        instanceRepo.getInstanceInfoRx()
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(autoDisposable(from(this, Event.ON_DESTROY)))
+                .subscribe(instance -> {
+                    Timber.d("Has quoting posts [%s]", instance.getQuotePosting());
+
+                    createNotificationsAdapter(instance.getQuotePosting());
+                    setupRecyclerView();
+                    updateAdapter();
+
+                    sendFetchNotificationsRequest(null, null, FetchEnd.BOTTOM, -1);
+                });
+    }
+
+    private void createNotificationsAdapter(boolean canQuotePosts) {
+        StatusDisplayOptions statusDisplayOptions =
+                new StatusDisplayOptions(
+                        preferences.getBoolean("animateGifAvatars", false),
+                        accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
+                        preferences.getBoolean("absoluteTimeView", false),
+                        preferences.getBoolean("showBotOverlay", true),
+                        preferences.getBoolean("useBlurhash", true), CardViewMode.NONE,
+                        preferences.getBoolean("confirmReblogs", true),
+                        preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
+                        preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
+                        canQuotePosts
+                );
+
+        adapter = new NotificationsAdapter(accountManager.getValue().getActiveAccount().getAccountId(),
+                        dataSource, statusDisplayOptions, this, this, this);
+    }
+
+    private void setupRecyclerView() {
+        // Setup the RecyclerView.
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAccessibilityDelegateCompat(
+                new ListStatusAccessibilityDelegate(recyclerView, this, (pos) -> {
+                    NotificationViewData notification = notifications.getPairedItemOrNull(pos);
+                    // We support replies only for now
+                    if(notification instanceof NotificationViewData.Concrete) {
+                        return ((NotificationViewData.Concrete) notification).getStatusViewData();
+                    } else {
+                        return null;
+                    }
+                }));
+
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(scrollListener);
     }
 
     private void updateFilterVisibility() {
@@ -413,7 +437,6 @@ public class NotificationsFragment extends SFragment
          * guaranteed to be set until then.
          * Use a modified scroll listener that both loads more notificationsEnabled as it goes, and hides
          * the compose button on down-scroll. */
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         hideFab = preferences.getBoolean("fabHide", false);
         scrollListener = new EndlessOnScrollListener(layoutManager) {
             @Override
@@ -441,8 +464,6 @@ public class NotificationsFragment extends SFragment
                 NotificationsFragment.this.onLoadMore();
             }
         };
-
-        recyclerView.addOnScrollListener(scrollListener);
 
         eventHub.getEvents().observeOn(AndroidSchedulers.mainThread())
             .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY))).subscribe(event -> {
@@ -995,12 +1016,9 @@ public class NotificationsFragment extends SFragment
     }
 
     private void onPreferenceChanged(String key) {
-        SharedPreferences sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(getContext());
-
         switch(key) {
             case "fabHide": {
-                hideFab = sharedPreferences.getBoolean("fabHide", false);
+                hideFab = preferences.getBoolean("fabHide", false);
                 break;
             }
             case "mediaPreviewEnabled": {
@@ -1014,13 +1032,13 @@ public class NotificationsFragment extends SFragment
             case "showNotificationsFilter": {
                 if(isAdded()) {
                     showNotificationsFilter =
-                        sharedPreferences.getBoolean("showNotificationsFilter", true);
+                            preferences.getBoolean("showNotificationsFilter", true);
                     updateFilterVisibility();
                     fullyRefreshWithProgressBar(true);
                 }
             }
             case PrefKeys.HIDE_MUTED_USERS: {
-                withMuted = !sharedPreferences.getBoolean(PrefKeys.HIDE_MUTED_USERS, false);
+                withMuted = !preferences.getBoolean(PrefKeys.HIDE_MUTED_USERS, false);
                 fullyRefresh();
             }
         }
@@ -1485,8 +1503,6 @@ public class NotificationsFragment extends SFragment
      * Auto dispose observable on pause
      */
     private void startUpdateTimestamp() {
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false);
         if(!useAbsoluteTime) {
             Observable.interval(1, TimeUnit.MINUTES).observeOn(AndroidSchedulers.mainThread())
