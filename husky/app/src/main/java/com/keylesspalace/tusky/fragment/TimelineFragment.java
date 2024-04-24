@@ -20,6 +20,7 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import static com.keylesspalace.tusky.util.MediaUtilsKt.deleteStaleCachedMedia;
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -47,6 +48,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import at.connyduck.sparkbutton.SparkButton;
@@ -56,6 +58,7 @@ import com.keylesspalace.tusky.AccountListActivity;
 import com.keylesspalace.tusky.BaseActivity;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.adapter.StatusBaseViewHolder;
+import com.keylesspalace.tusky.adapter.StatusViewHolder;
 import com.keylesspalace.tusky.adapter.TimelineAdapter;
 import com.keylesspalace.tusky.appstore.BlockEvent;
 import com.keylesspalace.tusky.appstore.BookmarkEvent;
@@ -99,7 +102,9 @@ import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,6 +112,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
@@ -589,7 +595,6 @@ public class TimelineFragment extends SFragment
         }
 
         this.loadAbove();
-
     }
 
     private void loadAbove() {
@@ -672,6 +677,13 @@ public class TimelineFragment extends SFragment
     }
 
     private void setRebloggedForStatus(int position, Status status, boolean reblog) {
+        if (reblog && recyclerView != null) {
+            ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
+            if (holder instanceof StatusViewHolder) {
+                ((StatusViewHolder) holder).reblogButtonAnimate();
+            }
+        }
+
         status.setReblogged(reblog);
 
         if(status.getReblog() != null) {

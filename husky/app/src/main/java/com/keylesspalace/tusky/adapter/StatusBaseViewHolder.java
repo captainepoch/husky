@@ -741,10 +741,12 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 .setMessage(R.string.reblog_action_dialog_message)
                 .setPositiveButton(okButtonTextId, (__, ___) -> {
                     listener.onReblog(!buttonState, position, canQuotePosts);
-                    if (!buttonState && !canQuotePosts) {
+                    // This is called on the main View now
+                    // TODO: refactor this to stop making hacks
+                    /*if (!buttonState && !canQuotePosts) {
                         // Play animation only when it's reblog, not unreblog
                         reblogButton.playAnimation();
-                    }
+                    }*/
                 }).show();
     }
 
@@ -1180,4 +1182,9 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         return String.format("%d:%02d:%02d", hours, minutes, seconds);
     }
 
+    public void reblogButtonAnimate() {
+        if(reblogButton != null) {
+            reblogButton.playAnimation();
+        }
+    }
 }
