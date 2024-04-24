@@ -83,8 +83,8 @@ public final class ViewThreadFragment extends SFragment
 
     private static final String TAG = "ViewThreadFragment";
 
-    public EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
-
+    private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
+    private final SharedPreferences preferences = (SharedPreferences) inject(SharedPreferences.class).getValue();
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ThreadAdapter adapter;
@@ -116,8 +116,6 @@ public final class ViewThreadFragment extends SFragment
         super.onCreate(savedInstanceState);
 
         thisThreadsStatusId = getArguments().getString("id");
-        SharedPreferences preferences =
-            PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         StatusDisplayOptions statusDisplayOptions =
             new StatusDisplayOptions(
@@ -160,7 +158,7 @@ public final class ViewThreadFragment extends SFragment
         alwaysShowSensitiveMedia =
             accountManager.getValue().getActiveAccount().getAlwaysShowSensitiveMedia();
         alwaysOpenSpoiler = accountManager.getValue().getActiveAccount().getAlwaysOpenSpoiler();
-        reloadFilters(PreferenceManager.getDefaultSharedPreferences(context), false);
+        reloadFilters(preferences, false);
 
         recyclerView.setAdapter(adapter);
 
