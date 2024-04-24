@@ -36,7 +36,7 @@ class StatusView @JvmOverloads constructor(
             confirmReblogs = preferences.getBoolean("confirmReblogs", true),
             renderStatusAsMention = preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
             hideStats = false,
-            canQuotePosts = false // TODO(Get from Instance config [REVIEW THIS])
+            canQuotePosts = false
         )
         viewHolder = StatusViewHolder(this)
     }
