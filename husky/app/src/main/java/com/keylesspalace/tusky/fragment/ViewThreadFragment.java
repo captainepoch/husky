@@ -31,11 +31,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.core.util.Pair;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Lifecycle.Event;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,6 +46,7 @@ import com.keylesspalace.tusky.BaseActivity;
 import com.keylesspalace.tusky.BuildConfig;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.ViewThreadActivity;
+import com.keylesspalace.tusky.adapter.StatusViewHolder;
 import com.keylesspalace.tusky.adapter.ThreadAdapter;
 import com.keylesspalace.tusky.appstore.BlockEvent;
 import com.keylesspalace.tusky.appstore.BookmarkEvent;
@@ -54,6 +57,8 @@ import com.keylesspalace.tusky.appstore.MuteEvent;
 import com.keylesspalace.tusky.appstore.ReblogEvent;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent;
+import com.keylesspalace.tusky.components.compose.ComposeActivity;
+import com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
 import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Filter;
@@ -263,17 +268,60 @@ public final class ViewThreadFragment extends SFragment
 
     @Override
     public void onMenuReblog(final boolean reblog, final int position) {
-        onReblog(reblog, position, false); // TODO
+        onReblog(reblog, position, false);
     }
 
     @Override
     public void onReblog(final boolean reblog, final int position, final boolean canQuote) {
         final Status status = statuses.get(position);
 
-        timelineCases.getValue().reblog(statuses.get(position), reblog)
-            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newStatus) -> updateStatus(position, newStatus),
-                (t) -> Log.d(TAG, "Failed to reblog status: " + status.getId(), t));
+        if(status == null) {
+            return;
+        }
+
+        if(!reblog) {
+            callReblogService(status, reblog, position);
+            return;
+        }
+
+        if(!canQuote) {
+            Timber.d("Reblog, user cannot quote");
+            callReblogService(status, reblog, position);
+        } else {
+            Timber.d("Quotes are enabled");
+
+            FragmentActivity activity = getActivity();
+            if(activity != null) {
+                final StatusReblogQuoteDialog dialog = new StatusReblogQuoteDialog(activity);
+                dialog.setOnStatusActionListener(type -> {
+                    if(type == StatusReblogQuoteType.QUOTE) {
+                        ComposeOptions options = new ComposeOptions();
+                        options.setQuotePostId(status.getId());
+                        startActivity(ComposeActivity.startIntent(activity, options));
+                    } else {
+                        callReblogService(status, reblog, position);
+                    }
+
+                    return null;
+                });
+                dialog.show();
+            }
+        }
+    }
+
+    private void callReblogService(final Status status, final boolean reblog, final int position) {
+        timelineCases.getValue().reblog(status, reblog)
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+                     .subscribe(
+                             (newStatus) -> updateStatus(position, status),
+                             (err) -> Timber.e(
+                                     err,
+                                     "Failed to reblog status %s, Error[%s]",
+                                     status.getId(),
+                                     err.getMessage()
+                             )
+                     );
     }
 
     @Override
@@ -300,6 +348,13 @@ public final class ViewThreadFragment extends SFragment
         if(position >= 0 && position < statuses.size()) {
             Status actionableStatus = status.getActionableStatus();
 
+            if (!actionableStatus.getReblogged() && recyclerView != null) {
+                ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
+                if (holder instanceof StatusViewHolder) {
+                    ((StatusViewHolder) holder).reblogButtonAnimate();
+                }
+            }
+
             StatusViewData.Concrete viewData =
                 new StatusViewData.Builder(statuses.getPairedItem(position)).setReblogged(
                         actionableStatus.getReblogged())
@@ -311,7 +366,6 @@ public final class ViewThreadFragment extends SFragment
             statuses.setPairedItem(position, viewData);
 
             adapter.setItem(position, viewData, true);
-
         }
     }
 
