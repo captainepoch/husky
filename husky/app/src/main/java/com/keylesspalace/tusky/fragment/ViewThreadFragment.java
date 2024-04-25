@@ -32,7 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.core.util.Pair;
 import androidx.lifecycle.Lifecycle;
-import androidx.preference.PreferenceManager;
+import androidx.lifecycle.Lifecycle.Event;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +54,7 @@ import com.keylesspalace.tusky.appstore.MuteEvent;
 import com.keylesspalace.tusky.appstore.ReblogEvent;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent;
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
 import com.keylesspalace.tusky.entity.EmojiReaction;
 import com.keylesspalace.tusky.entity.Filter;
 import com.keylesspalace.tusky.entity.Poll;
@@ -76,6 +77,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public final class ViewThreadFragment extends SFragment
     implements SwipeRefreshLayout.OnRefreshListener, StatusActionListener
@@ -84,6 +86,7 @@ public final class ViewThreadFragment extends SFragment
     private static final String TAG = "ViewThreadFragment";
 
     private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
+    private final InstanceRepository instanceRepo = (InstanceRepository) inject(InstanceRepository.class).getValue();
     private final SharedPreferences preferences = (SharedPreferences) inject(SharedPreferences.class).getValue();
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -116,21 +119,6 @@ public final class ViewThreadFragment extends SFragment
         super.onCreate(savedInstanceState);
 
         thisThreadsStatusId = getArguments().getString("id");
-
-        StatusDisplayOptions statusDisplayOptions =
-            new StatusDisplayOptions(
-                preferences.getBoolean("animateGifAvatars", false),
-                accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
-                preferences.getBoolean("absoluteTimeView", false),
-                preferences.getBoolean("showBotOverlay", true),
-                preferences.getBoolean("useBlurhash", true),
-                preferences.getBoolean("showCardsInTimelines", false) ? CardViewMode.INDENTED :
-                    CardViewMode.NONE, preferences.getBoolean("confirmReblogs", true),
-                preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
-                preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
-                false // TODO(Get from Instance config [REVIEW THIS])
-            );
-        adapter = new ThreadAdapter(statusDisplayOptions, this);
     }
 
     @Override
@@ -138,29 +126,8 @@ public final class ViewThreadFragment extends SFragment
         @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_view_thread, container, false);
-
-        Context context = getContext();
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue);
-
         recyclerView = rootView.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAccessibilityDelegateCompat(
-            new ListStatusAccessibilityDelegate(recyclerView, this, statuses::getPairedItemOrNull));
-        DividerItemDecoration divider =
-            new DividerItemDecoration(context, layoutManager.getOrientation());
-        recyclerView.addItemDecoration(divider);
-
-        recyclerView.addItemDecoration(new ConversationLineItemDecoration(context));
-        alwaysShowSensitiveMedia =
-            accountManager.getValue().getActiveAccount().getAlwaysShowSensitiveMedia();
-        alwaysOpenSpoiler = accountManager.getValue().getActiveAccount().getAlwaysOpenSpoiler();
-        reloadFilters(preferences, false);
-
-        recyclerView.setAdapter(adapter);
 
         statuses.clear();
 
@@ -169,11 +136,11 @@ public final class ViewThreadFragment extends SFragment
         return rootView;
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        onRefresh();
+
+        getInstanceInfo();
 
         eventHub.getEvents().observeOn(AndroidSchedulers.mainThread())
             .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY))).subscribe(event -> {
@@ -201,6 +168,61 @@ public final class ViewThreadFragment extends SFragment
         }
     }
 
+    private void getInstanceInfo() {
+        instanceRepo.getInstanceInfoRx()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .as(autoDisposable(from(this, Event.ON_DESTROY)))
+                    .subscribe(instance -> {
+                        Timber.d("Has quoting posts [%s]", instance.getQuotePosting());
+
+                        createAdapter(instance.getQuotePosting());
+                        setupRecyclerView();
+                        updateAdapter();
+
+                        makeRequests();
+                    });
+    }
+
+    private void createAdapter(boolean canQuotePosts) {
+        StatusDisplayOptions statusDisplayOptions =
+                new StatusDisplayOptions(
+                        preferences.getBoolean("animateGifAvatars", false),
+                        accountManager.getValue().getActiveAccount().getMediaPreviewEnabled(),
+                        preferences.getBoolean("absoluteTimeView", false),
+                        preferences.getBoolean("showBotOverlay", true),
+                        preferences.getBoolean("useBlurhash", true),
+                        preferences.getBoolean("showCardsInTimelines", false) ? CardViewMode.INDENTED :
+                                CardViewMode.NONE, preferences.getBoolean("confirmReblogs", true),
+                        preferences.getBoolean(PrefKeys.RENDER_STATUS_AS_MENTION, true),
+                        preferences.getBoolean(PrefKeys.WELLBEING_HIDE_STATS_POSTS, false),
+                        canQuotePosts
+                );
+        adapter = new ThreadAdapter(statusDisplayOptions, this);
+    }
+
+    private void setupRecyclerView() {
+        Context context = getContext();
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.tusky_blue);
+
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAccessibilityDelegateCompat(
+                new ListStatusAccessibilityDelegate(recyclerView, this, statuses::getPairedItemOrNull));
+        DividerItemDecoration divider =
+                new DividerItemDecoration(context, layoutManager.getOrientation());
+        recyclerView.addItemDecoration(divider);
+
+        recyclerView.addItemDecoration(new ConversationLineItemDecoration(context));
+        alwaysShowSensitiveMedia =
+                accountManager.getValue().getActiveAccount().getAlwaysShowSensitiveMedia();
+        alwaysOpenSpoiler = accountManager.getValue().getActiveAccount().getAlwaysOpenSpoiler();
+        reloadFilters(preferences, false);
+
+        recyclerView.setAdapter(adapter);
+    }
+
     public void onRevealPressed() {
         boolean allExpanded = allExpanded();
         for(int i = 0; i < statuses.size(); i++) {
@@ -224,10 +246,14 @@ public final class ViewThreadFragment extends SFragment
         return allExpanded;
     }
 
-    @Override
-    public void onRefresh() {
+    private void makeRequests() {
         sendStatusRequest(thisThreadsStatusId);
         sendThreadRequest(thisThreadsStatusId);
+    }
+
+    @Override
+    public void onRefresh() {
+        makeRequests();
     }
 
     @Override
