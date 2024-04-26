@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-class StatusDetailedViewHolder extends StatusBaseViewHolder {
+public class StatusDetailedViewHolder extends StatusBaseViewHolder {
     private TextView reblogs;
     private TextView favourites;
     private View infoDivider;
