@@ -727,5 +727,6 @@
     <string name="add_account_network_error_removing_from_list">A network error occurred while removing this user from the list. Please, try again.</string>
 
     <string name="reblog_action_dialog_message">Do you want to reblog this status?</string>
+    <string name="reblog_quote_action_dialog_message">Do you want to reblog/quote this status?</string>
 
 </resources>
