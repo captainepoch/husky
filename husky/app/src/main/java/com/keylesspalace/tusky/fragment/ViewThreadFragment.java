@@ -46,6 +46,8 @@ import com.keylesspalace.tusky.BaseActivity;
 import com.keylesspalace.tusky.BuildConfig;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.ViewThreadActivity;
+import com.keylesspalace.tusky.adapter.StatusBaseViewHolder;
+import com.keylesspalace.tusky.adapter.StatusDetailedViewHolder;
 import com.keylesspalace.tusky.adapter.StatusViewHolder;
 import com.keylesspalace.tusky.adapter.ThreadAdapter;
 import com.keylesspalace.tusky.appstore.BlockEvent;
@@ -79,6 +81,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -350,8 +353,8 @@ public final class ViewThreadFragment extends SFragment
 
             if (!actionableStatus.getReblogged() && recyclerView != null) {
                 ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
-                if (holder instanceof StatusViewHolder) {
-                    ((StatusViewHolder) holder).reblogButtonAnimate();
+                if (holder instanceof StatusViewHolder || holder instanceof StatusDetailedViewHolder) {
+                    ((StatusBaseViewHolder) holder).reblogButtonAnimate();
                 }
             }
 
