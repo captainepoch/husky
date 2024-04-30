@@ -211,13 +211,13 @@
     <string name="dialog_download_image">داگرتن</string>
     <string name="dialog_message_uploading_media">بارکردن…</string>
     <string name="dialog_title_finishing_media_upload">تەواوکردنی بارکردنی میدیا</string>
-    <string name="dialog_whats_an_instance">ناونیشان یان دۆمەینی هەر نمونەیەک دەکرێت لێرە تێبنووسرێت، وەک <a href="https://instances.social">فرەتر!</a> 
+    <string name="dialog_whats_an_instance">ناونیشان یان دۆمەینی هەر نموونەیەک دەتوانرێت لێرەدا داخڵ \u0020 بکرێت، وەک mastodon.social، icosahedron.website، social.tchncs.de، و<a href="https://instances.social">زیاتر!</a>
 \n
-\nئەگەر هێشتا ئەژمێرێکت نیە، دەتوانیت ناوی ئەو نمونەیە داخڵ بکەیت کە دەتەوێت بیبەستیت و ئەژمێرێک دروست بکەیت لەوێ.
-\n
-\nنموونەیەک تاکە شوێنە کە ئەژمێرەکەت میوانداری کراوە، بەڵام دەتوانیت بە ئاسانی پەیوەندی لەگەڵ بکەیت و دوای ئەو خەڵکانە بکەویت لە نمونەکانی تر وەک ئەوەی تۆ لە هەمان سایت دابیت. 
-\n
-\nزانیاری زیاتر دەتوانرێت بدۆزرێتەوە لە <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
+\nئەگەر هێشتا ئەکاونتت نییە، دەتوانیت ناوی ئەو نموونەیە دابنێیت \u0020کە دەتەوێت بەشداری بکەیت و لەوێ ئەکاونتێک دروست بکەیت.
+\n \u0020
+\nنموونە یەک شوێنە کە ئەکاونتەکەت \u0020 تێیدا هۆست دەکرێت، بەڵام دەتوانیت بە ئاسانی پەیوەندی لەگەڵ خەڵکدا بکەیت و شوێنیان بکەویت لە نموونەکانی تردا وەک ئەوەی \u0020 لە هەمان سایتدا بیت.
+\n 
+\nزانیاری زیاتر دەتوانرێت لەم لینکەدا بدۆزرێتەوە <a href="https://joinmastodon.org">joinmastodon.org</a> \u0020</string>
     <string name="login_connection">گرێدان…</string>
     <string name="link_whats_an_instance">نموونەیەک چییە؟</string>
     <string name="label_header">سەرپەڕە</string>
@@ -248,7 +248,7 @@
 \nکارتێکردنی ئاگانامەکانی پاڵپێوەنان، بەڵام دەتوانیت بە پەسەندکردنە ئاگانامەکانت دا بخشێنیەوە بە دەستی.</string>
     <string name="account_note_saved">ڕزگارکرا</string>
     <string name="account_note_hint">تێبینی تایبەتی تۆ دەربارەی ئەم ئەژمێرە</string>
-    <string name="pref_title_wellbeing_mode">Wellbeing</string>
+    <string name="pref_title_wellbeing_mode">خۆشگوزەرانی</string>
     <string name="pref_title_hide_top_toolbar">شاردنەوەی ناونیشانی شریتی ئامڕازی سەرەوە</string>
     <string name="pref_title_confirm_reblogs">پیشاندانی دیالۆگی دووپاتکردنەوە پێش بەهێزکردن</string>
     <string name="pref_title_show_cards_in_timelines">نیشاندانی پێشاندانی بەستەر لە هێڵی کات</string>
@@ -296,11 +296,11 @@
     <string name="poll_info_time_absolute">کۆتایی دێت لە %s</string>
     <plurals name="poll_info_people">
         <item quantity="one">%s کەس</item>
-        <item quantity="other">%s کەس</item>
+        <item quantity="other">%s خەڵک</item>
     </plurals>
     <plurals name="poll_info_votes">
         <item quantity="one">%s دەنگ</item>
-        <item quantity="other">%s دەنگ</item>
+        <item quantity="other">%s دەنگەکان</item>
     </plurals>
     <string name="poll_info_format"> <!-- 15 دەنگ • 1 کاتژمێر ماوە --> %1$s • %2$s</string>
     <string name="compose_preview_image_description">کارەکان بۆ وێنە %s</string>
@@ -476,4 +476,34 @@
     <string name="pref_failed_to_sync">سەرکەوتوو نەبوو لە هاودەمکردنی ڕێکبەندەکان</string>
     <string name="pref_publishing">بڵاوکردنەوە (هاوکاتکراوە لەگەڵ سێرڤەر)</string>
     <string name="pref_default_media_sensitivity">هەمیشە میدیا وەک هەستیار نیشان بکە</string>
+    <string name="app_name">هاسکی</string>
+    <string name="title_public_bubble">بڵق</string>
+    <string name="title_drafts">ڕەشنووسەکان</string>
+    <string name="pref_default_post_expire_in">کاتی بەسەرچوون بۆ هەموو پۆستە بڵاوکراوەکان دابنێ</string>
+    <string name="pref_default_post_expire_in_summary">کەمترین بەها ١ ڕۆژە، ٠ بۆ لەکارخستنی.</string>
+    <string name="pref_default_post_expire_in_explanation">لانیکەم 1 ڕۆژ ڕێکبخە بۆ ئەوەی پۆستەکان بگەڕێن و لەلایەن سێرڤەرەوە بە شێوەیەکی ئۆتۆماتیکی بسڕدرێنەوە 
+\n 
+\nدەتوانرێت ئەمە لە \"هەڵبژاردەکانی ئەژمێر\" ڕێکبخرێت.</string>
+    <string name="status_media_audio">دەنگ</string>
+    <string name="status_media_attachments">هاوپێچەکان</string>
+    <string name="label_duration">ماوە</string>
+    <string name="duration_indefinite">کاتێکی نادیار</string>
+    <string name="duration_5_min">٥ خوله‌ک</string>
+    <string name="duration_30_min">٣٠ خولەک</string>
+    <string name="duration_1_hour">١ کاتژمێر</string>
+    <string name="duration_6_hours">٦ کاتژمێر</string>
+    <string name="duration_1_day">١ ڕۆژ</string>
+    <string name="duration_3_days">٣ ڕۆژ</string>
+    <string name="duration_7_days">٧ ڕۆژ</string>
+    <string name="dialog_delete_list_warning">بەڕاستی دەتەوێت لیستی %s بسڕیتەوە؟</string>
+    <string name="old_drafts">ڕەشنووسە کۆنەکان</string>
+    <string name="drafts_failed_loading_reply">بارکردنی شکستی هێنا زانیاری وەڵامدانەوە</string>
+    <string name="draft_deleted">ڕەشنووسەکە سڕاوەتەوە</string>
+    <string name="drafts_toot_reply_removed">ئەو تووتەی کە وەڵامت بۆ داڕشتووە لابرا</string>
+    <string name="debug_status">دروستکردنی دیباگ</string>
+    <string name="debug_status_message">دروستکردنی دیباگ لۆگ و زانیارییەکانی دیباگکردنی بۆ بەرنامەکە چالاک کردووە. لەوانەیە زانیاری دزە بکات. تکایە بە وریاییەوە بەکاری بهێنە.</string>
+    <string name="debug_status_message_close">داخستن</string>
+    <string name="drafts_toot_failed_to_send">ئەم تووتە شکستی هێنا لە ناردن!</string>
+    <string name="new_drafts_warning">تایبەتمەندی ڕەشنووسی ناو توسکی بە تەواوی دیزاین کراوەتەوە بۆ ئەوەی خێراتر و بەکارهێنەر دۆستتر و کەمتر هەڵە بێت 
+\n هێشتا دەتوانیت لە ڕێگەی دوگمەیەکەوە لە شاشەی ڕەشنووسە نوێیەکان دەستت بگات بە ڕەشنووسە کۆنەکانت، بەڵام لە نوێکردنەوەیەکی داهاتوودا لا دەبرێن!</string>
 </resources>
