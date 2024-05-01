@@ -62,7 +62,7 @@
     <string name="action_unfavourite">Nuligi stelumon</string>
     <string name="action_more">Pli</string>
     <string name="action_compose">Verki</string>
-    <string name="action_login">Ensaluti al Mastodon</string>
+    <string name="action_login">Ensaluti al Pleroma</string>
     <string name="action_logout">Elsaluti</string>
     <string name="action_logout_confirm">Ĉu vi certas ke vi volas elsaluti el konto %1$s?</string>
     <string name="action_follow">Sekvi</string>
@@ -142,8 +142,8 @@
     <string name="label_header">Fonbildo</string>
     <string name="link_whats_an_instance">Kio estas nodo?</string>
     <string name="login_connection">Konektante…</string>
-    <string name="dialog_whats_an_instance">La adreso aŭ domajno de iu ajn nodo povas esti enmetitaĉi tie, kiel mastodon.social, icosahedron.website, social.tchncs.de, kaj
-        <a href="https://instances.social">pli!</a>
+    <string name="dialog_whats_an_instance">La adreso aŭ domajno de iu ajn nodo povas esti enmetitaĉi tie, kiel shitposter.club, blob.cat, expired.mentality.rip, kaj
+        <a href="https://fediverse.network/pleroma?count=peers">pli!</a>
         \n\nSe vi ne ankoraŭ havas konton, vi povas enmeti la nomon de la nodo ke vi volas aliĝi kaj krei konton tie.\n\nNodo estas unika loko kie via konto estas gastigita, sed vi povas facile komuniki kun kaj sekvi homojn ĉe aliaj nodoj kiel vi estus ĉe la sama retejo.
         \n\nPliaj informoj troviĝas ĉe <a href="https://joinmastodon.org">joinmastodon.org</a>.
     </string>
@@ -219,8 +219,8 @@
     <string name="notification_title_summary">%d novaj interagoj</string>
     <string name="description_account_locked">Ŝlosita konto</string>
     <string name="about_title_activity">Pri</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky estas libera kaj malfermitkoda programo.
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky estas libera kaj malfermitkoda programo.
         Ĝi estas publikigita laŭ la permesilo «GNU General Public License Version 3».
         Vi povas vidi la permesilon ĉi tie: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
@@ -229,13 +229,13 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">        Paĝaro de projekto:\n
-        https://tusky.app
+    <string name="about_project_site">Paĝaro de projekto:\n
+        https://husky.adol.pw
     </string>
-    <string name="about_bug_feature_request_site">        Raportoj de cimo kaj petoj de funkcio:\n
-        https://github.com/tuskyapp/Tusky/issues
+    <string name="about_bug_feature_request_site">Raportoj de cimo kaj petoj de funkcio:\n
+        https://github.com/captainepoch/husky/issues
     </string>
-    <string name="about_tusky_account">Profilo de Tusky</string>
+    <string name="about_tusky_account">Profilo de Husky</string>
     <string name="status_share_content">Konigi enhavon de la mesaĝo</string>
     <string name="status_share_link">Konigi ligilon al mesaĝo</string>
     <string name="status_media_images">Bildoj</string>
@@ -265,7 +265,7 @@
     <string name="filter_dialog_update_button">Akualigi</string>
     <string name="filter_add_description">Frazo filtrota</string>
     <string name="add_account_name">Aldoni konton</string>
-    <string name="add_account_description">Aldoni novan Mastodon konton</string>
+    <string name="add_account_description">Aldoni novan Pleroma konton</string>
     <string name="action_lists">Listoj</string>
     <string name="title_lists">Listoj</string>
     <string name="title_list_timeline">Tempolinio de la listo</string>
@@ -302,7 +302,7 @@
     <string name="expand_collapse_all_statuses">Pligrandigi/malgrandigi ĉiujn mesaĝojn</string>
     <string name="action_open_toot">Malfermi mesaĝon</string>
     <string name="restart_required">Restartigo necesas</string>
-    <string name="restart_emoji">Vi devos restartigi Tusky por apliki ĉi tiujn ŝanĝojn</string>
+    <string name="restart_emoji">Vi devos restartigi Husky por apliki ĉi tiujn ŝanĝojn</string>
     <string name="later">Poste</string>
     <string name="restart">Restartigi</string>
     <string name="caption_systememoji">Dekomenca emoĝiaro de via aparato</string>
@@ -313,7 +313,7 @@
     <string name="account_moved_description">%1$s moviĝis al:</string>
     <string name="reblog_private">Diskonigi al la originala atentaro</string>
     <string name="unreblog_private">Eksdiskonigi</string>
-    <string name="license_description">Tusky enhavas kodon kaj risurcojn el la sekvantaj malfermitkodaj projetkoj:</string>
+    <string name="license_description">Husky enhavas kodon kaj risurcojn el la sekvantaj malfermitkodaj projetkoj:</string>
     <string name="license_apache_2">Laŭ la permesilo «Apache License» (kopio sube)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -426,7 +426,7 @@
     <string name="action_access_scheduled_toot">Planitaj mesaĝoj</string>
     <string name="action_schedule_toot">Plani mesaĝon</string>
     <string name="action_reset_schedule">Restarigi</string>
-    <string name="about_powered_by_tusky">Funkciigita de Tusky</string>
+    <string name="about_powered_by_tusky">Funkciigita de Husky</string>
     <string name="description_status_bookmarked">Aldonita al la legosignoj</string>
     <string name="select_list_title">Elekti la liston</string>
     <string name="list">Listo</string>
@@ -481,5 +481,5 @@
     <string name="pref_title_confirm_reblogs">Montri konfirman fenestron antaŭ ol diskonigi</string>
     <string name="no_announcements">Estas neniu anonco.</string>
     <string name="pref_title_enable_swipe_for_tabs">Ebligi ŝovumadon por ŝanĝi inter la langetoj</string>
-    <string name="warning_scheduling_interval">Mastodon havas minimuman intervalon de planado de 5 minutoj.</string>
+    <string name="warning_scheduling_interval">Pleroma havas minimuman intervalon de planado de 5 minutoj.</string>
 </resources>
