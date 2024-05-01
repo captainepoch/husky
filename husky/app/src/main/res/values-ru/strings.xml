@@ -56,8 +56,8 @@
     <string name="report_comment_hint">Дополнительные комментарии?</string>
     <string name="action_quick_reply">Быстрый ответ</string>
     <string name="action_reply">Ответить</string>
-    <string name="action_reblog">Продвинуть</string>
-    <string name="action_unreblog">Убрать продвижение</string>
+    <string name="action_reblog">Повторить</string>
+    <string name="action_unreblog">Отменить повторение</string>
     <string name="action_favourite">Нравится</string>
     <string name="action_unfavourite">Не нравится</string>
     <string name="action_more">Развернуть</string>
@@ -69,13 +69,13 @@
     <string name="action_unfollow">Отписаться</string>
     <string name="action_block">Заблокировать</string>
     <string name="action_unblock">Разблокировать</string>
-    <string name="action_hide_reblogs">Скрыть продвижения</string>
-    <string name="action_show_reblogs">Показывать продвижения</string>
+    <string name="action_hide_reblogs">Скрыть повторения</string>
+    <string name="action_show_reblogs">Показать повторения</string>
     <string name="action_report">Пожаловаться</string>
     <string name="action_delete">Удалить</string>
     <string name="action_delete_and_redraft">Удалить и исправить</string>
-    <string name="action_send">ТРУБИТЬ</string>
-    <string name="action_send_public">ТРУБИТЬ!</string>
+    <string name="action_send">ОТПРАВИТЬ</string>
+    <string name="action_send_public">ОТПРАВИТЬ!</string>
     <string name="action_retry">Повторить</string>
     <string name="action_close">Закрыть</string>
     <string name="action_view_profile">Профиль</string>
@@ -111,7 +111,7 @@
     <string name="action_mentions">Упоминания</string>
     <string name="action_hashtags">Хэштеги</string>
     <string name="action_open_reblogger">Перейти к автору</string>
-    <string name="action_open_reblogged_by">Показывать продвижения</string>
+    <string name="action_open_reblogged_by">Показать повторения</string>
     <string name="action_open_faved_by">Показать, кому нравится</string>
     <string name="title_hashtags_dialog">Хэштеги</string>
     <string name="title_mentions_dialog">Упоминания</string>
@@ -143,19 +143,16 @@
     <string name="label_header">Заголовок</string>
     <string name="link_whats_an_instance">Что такое узел?</string>
     <string name="login_connection">Соединение…</string>
-    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, mastodon.social, icosahedron.website, social.tchncs.de и <a href="https://instances.social/">других</a>!
-\n
-\nЕсли у вас еще нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.
-\n
-\n \u0020Узел - это то место, где размещен ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.
-\n
-\n \u0020Чтобы получить больше информации посетите <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
+    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, shitposter.club, blob.cat, expired.mentality.rip и <a href="https://fediverse.network/pleroma?count=peers/">других</a>!\n\nЕсли у вас еще нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.\n\n
+  Узел - это то место, где размещен ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.\n
+  \n
+  Чтобы получить больше информации посетите <a href="https://joinmastodon.org">joinmastodon.org</a>.</string>
     <string name="dialog_title_finishing_media_upload">Завершается загрузка медиаконтента</string>
     <string name="dialog_message_uploading_media">Загружается…</string>
     <string name="dialog_download_image">Скачать</string>
     <string name="dialog_message_cancel_follow_request">Отменить запрос на подписку?</string>
     <string name="dialog_unfollow_warning">Отписаться от этого аккаунта?</string>
-    <string name="dialog_delete_toot_warning">Удалить статус?</string>
+    <string name="dialog_delete_toot_warning">Удалить запись\?</string>
     <string name="dialog_redraft_toot_warning">Удалить статус и превратить его в черновик?</string>
     <string name="visibility_public">Публичный: Показать в публичных лентах</string>
     <string name="visibility_unlisted">Скрытый: Не показывать в лентах</string>
@@ -225,14 +222,16 @@
     <string name="notification_title_summary">Новых событий: %d</string>
     <string name="description_account_locked">Закрытый аккаунт</string>
     <string name="about_title_activity">О приложении</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky – это бесплатное приложение с открытым исходным кодом. Выпускается по лицензии GNU General Public License Version 3. Вы можете прочитать текст лицензии по ссылке: https://www.gnu.org/licenses/gpl-3.0.ru.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky – это бесплатное приложение с открытым исходным кодом.
+        Выпускается по лицензии GNU General Public License Version 3.
+        Вы можете прочитать текст лицензии по ссылке: https://www.gnu.org/licenses/gpl-3.0.ru.html</string>
     <!-- note to translators: the url can be changed to link to the localized version of the license -->
     <string name="about_project_site">Веб-сайт проекта:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">Отчеты об ошибках и пожелания:
 \n https://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Профиль Tusky</string>
+    <string name="about_tusky_account">Профиль Husky</string>
     <string name="status_share_content">Поделиться содержанием поста</string>
     <string name="status_share_link">Поделиться ссылкой на пост</string>
     <string name="status_media_images">Изображения</string>
@@ -287,7 +286,7 @@
     <string name="filter_dialog_update_button">Обновить</string>
     <string name="filter_add_description">Слово или фраза</string>
     <string name="add_account_name">Добавить аккаунт</string>
-    <string name="add_account_description">Добавить новый акканут Mastodon</string>
+    <string name="add_account_description">Добавить новый акканут Pleroma</string>
     <string name="action_lists">Списки</string>
     <string name="title_lists">Списки</string>
     <string name="title_list_timeline">Лента списка</string>
@@ -322,9 +321,9 @@
     <string name="download_fonts">Для начала эти наборы эмодзи нужно скачать</string>
     <string name="performing_lookup_title">Производится поиск…</string>
     <string name="expand_collapse_all_statuses">Раскрыть/свернуть все статусы</string>
-    <string name="action_open_toot">Перейти к статусу</string>
+    <string name="action_open_toot">Открыть запись</string>
     <string name="restart_required">Необходимо перезапустить приложение</string>
-    <string name="restart_emoji">Вам нужно перезапустить Tusky для применения изменений</string>
+    <string name="restart_emoji">Вам нужно перезапустить Husky для применения изменений</string>
     <string name="later">Не сейчас</string>
     <string name="restart">Перезапустить</string>
     <string name="caption_systememoji">Набор эмодзи по умолчанию</string>
@@ -333,9 +332,9 @@
     <string name="download_failed">Загрузка не удалась</string>
     <string name="profile_badge_bot_text">Бот</string>
     <string name="account_moved_description">%1$s переехал(а) на:</string>
-    <string name="reblog_private">Продвинуть для исходной аудитории</string>
-    <string name="unreblog_private">Убрать продвижение</string>
-    <string name="license_description">Tusky содержит код и элементы из следующих приложений с открытым исходным кодом:</string>
+    <string name="reblog_private">Повторить в оригинальной версии</string>
+    <string name="unreblog_private">Удалить повторение</string>
+    <string name="license_description">Husky содержит код и элементы из следующих приложений с открытым исходным кодом:</string>
     <string name="license_apache_2">Используется лицензия Apache License (копия ниже)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -374,7 +373,7 @@
     <string name="description_status_media_no_description_placeholder">
         Без описания
     </string>
-    <string name="description_status_reblogged">Продвинуто</string>
+    <string name="description_status_reblogged">Повторенно</string>
     <string name="description_status_favourited">
         Нравится
     </string>
@@ -393,7 +392,7 @@
     <string name="notifications_clear">Очистить</string>
     <string name="notifications_apply_filter">Фильтр</string>
     <string name="filter_apply">Применить</string>
-    <string name="compose_shortcut_long_label">Написать пост</string>
+    <string name="compose_shortcut_long_label">Сделать запись</string>
     <string name="compose_shortcut_short_label">Написать</string>
     <string name="pref_title_bot_overlay">Показывать индикатор ботов</string>
     <string name="notification_clear_text">Вы действительно хотите безвозвратно удалить все уведомления?</string>
@@ -453,13 +452,13 @@
     <string name="edit_poll">Изменить</string>
     <string name="title_scheduled_toot">Отложенные записи</string>
     <string name="action_edit">Редактировать</string>
-    <string name="action_access_scheduled_toot">Отложенные записи</string>
-    <string name="action_schedule_toot">Отложить запись</string>
+    <string name="action_access_scheduled_toot">Записи по расписанию</string>
+    <string name="action_schedule_toot">Отложить пост</string>
     <string name="action_reset_schedule">Сброс</string>
     <string name="title_bookmarks">Закладки</string>
     <string name="action_bookmark">Добавить в закладки</string>
     <string name="action_view_bookmarks">Закладки</string>
-    <string name="about_powered_by_tusky">Под управлением Tusky</string>
+    <string name="about_powered_by_tusky">Под управлением Husky</string>
     <string name="description_status_bookmarked">Добавлено в закладки</string>
     <string name="select_list_title">Выбрать список</string>
     <string name="list">Список</string>
@@ -467,7 +466,7 @@
     <string name="post_lookup_error_format">Ошибка поиска поста %s</string>
     <string name="no_saved_status">У вас нет черновиков.</string>
     <string name="no_scheduled_status">У вас нет запланированный постов.</string>
-    <string name="warning_scheduling_interval">Минимальный интервал планирования в Mastodon составляет 5 минут.</string>
+    <string name="warning_scheduling_interval">Минимальный интервал планирования в Pleroma составляет 5 минут.</string>
     <string name="pref_title_confirm_reblogs">Показвать диалог подтверждения перед продвижением</string>
     <string name="pref_title_show_cards_in_timelines">Показывать предосмотр ссылок в лентах</string>
     <string name="pref_title_enable_swipe_for_tabs">Включить переключение между вкладками смахиванием</string>
@@ -501,4 +500,36 @@
     <string name="pref_title_hide_top_toolbar">Скрыть заголовок в верхней панели</string>
     <string name="no_announcements">Объявлений нет.</string>
     <string name="title_announcements">Объявления</string>
+
+    <string name="chats">Чаты</string>
+    <string name="action_mark_as_read">Пометить как прочитанное</string>
+    <string name="action_reply_to">Ответ на</string>
+    <!--<string name="action_mute_conversation">Заглушить разговор</string>
+    <string name="action_unmute_conversation">Отменить глушение разговора</string>-->
+    <string name="action_emoji_react">Добавить реакцию</string>
+    <string name="action_emoji_unreact">Удалить реакцию</string>
+    <string name="action_emoji_reacted_by">Реакции</string>
+    <string name="action_enable_formatting_syntax">Включить %s</string>
+    <string name="action_disable_formatting_syntax">Отключить %s</string>
+    <string name="title_emoji_reacted_by">%s реакции</string>
+    <string name="hint_appname">Название приложения</string>
+    <string name="hint_website">Вебсайт приложения</string>
+    <string name="admin">Администратор</string>
+    <string name="moderator">Модератор</string>
+    <string name="error_media_upload_size">Размер файла превышает лимиты инстанса</string>
+    <string name="notification_emoji_format">%s среагировал с %s на ваш пост</string>
+    <string name="notification_emoji_name">Эмодзи реакции</string>
+    <string name="notification_emoji_description">Уведомления о новых эмодзи реакциях</string>
+    <string name="notification_chat_message_format">%s отправил вам сообщение</string>
+    <string name="notification_chat_message_name">Сообщения</string>
+    <string name="notification_chat_message_description">Уведомления о новых сообщениях</string>
+    <string name="pref_title_default_formatting">Синтаксис форматирования по умолчанию(если поддерживается)</string>
+    <string name="pref_title_notification_filter_emoji">на мои посты отреагировали</string>
+    <string name="pref_title_notification_filter_chat_messages">получено новое сообщение</string>
+    <string name="pref_title_hide_muted_users">Скрывать заглушенных пользователей</string>
+    <string name="error_sticker_fetch">Произошла ошибка при загрузке стикера</string>
+    <string name="action_sticker">Стикеры</string>
+    <string name="pref_title_enable_experimental_stickers">Включить эксперементальные стикеры Pleroma-FE (если доступны)</string>
+    <string name="pref_title_enable_big_emojis">Включить большие пользовательские эмодзи</string>
+    <string name="link">Ссылка</string>
 </resources>
