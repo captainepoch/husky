@@ -62,7 +62,7 @@
     <string name="action_unfavourite">Supprimer le favori</string>
     <string name="action_more">Plus</string>
     <string name="action_compose">Écrire</string>
-    <string name="action_login">Se connecter à Mastodon</string>
+    <string name="action_login">Se connecter à Pleroma</string>
     <string name="action_logout">Déconnexion</string>
     <string name="action_logout_confirm">Êtes-vous certain·e· de vouloir déconnecter le compte %1$s ?</string>
     <string name="action_follow">Suivre</string>
@@ -142,13 +142,15 @@
     <string name="label_header">Image d’en-tête</string>
     <string name="link_whats_an_instance">Qu’est-ce qu’une instance ?</string>
     <string name="login_connection">Connexion en cours…</string>
-    <string name="dialog_whats_an_instance">Indiquer ici l’adresse ou le domaine d’une instance, \u0020comme mastodon.social, icosahedron.website, social.tchncs.de, \u0020<a href="https://instances.social">et bien d’autres encore</a> (en anglais) ! 
-\n
-\nSi vous ne disposez d’aucun compte, vous pouvez renseigner le nom de l’instance que vous souhaitez rejoindre \u0020et y créer un compte.
-\n
-\nUne instance est l’endroit où votre compte est \u0020hébergé, mais vous pouvez facilement suivre des personnes d’autres instances et communiquer avec elles \u0020comme si vous étiez sur le même site. 
-\n
-\nPour plus d’informations, consultez <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
+    <string name="dialog_whats_an_instance">Indiquer ici l’adresse ou le domaine d’une instance,
+        comme shitposter.club, blob.cat, expired.mentality.rip,
+        <a href="https://fediverse.network/pleroma?count=peers">et bien d’autres encore</a> (en anglais) !
+        \n\nSi vous ne disposez d’aucun compte, vous pouvez renseigner le nom de l’instance que vous souhaitez rejoindre
+        et y créer un compte.\n\nUne instance est l’endroit où votre compte est
+        hébergé, mais vous pouvez facilement suivre des personnes d’autres instances et communiquer avec elles
+        comme si vous étiez sur le même site.
+        \n\nPour plus d’informations, consultez <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
     <string name="dialog_title_finishing_media_upload">Mise en ligne des médias</string>
     <string name="dialog_message_uploading_media">Téléversement en cours…</string>
     <string name="dialog_download_image">Télécharger</string>
@@ -221,19 +223,23 @@
     <string name="notification_title_summary">%d nouvelles interactions</string>
     <string name="description_account_locked">Compte verrouillé</string>
     <string name="about_title_activity">À propos</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky est une application libre et open source. Elle est publiée sous licence publique générale GNU version 3. Vous pouvez consulter la licence ici : https://www.gnu.org/licenses/gpl-3.0.fr.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky est une application libre et open source.
+        Elle est publiée sous licence publique générale GNU version 3.
+        Vous pouvez consulter la licence ici : https://www.gnu.org/licenses/gpl-3.0.fr.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Site du projet :
-\n https://tusky.app</string>
-    <string name="about_bug_feature_request_site">Rapports d’anomalies &amp; demandes de fonctionnalités :
-\n https://github.com/tuskyapp/Tusky/issues</string>
-    <string name="about_tusky_account">Profil de Tusky</string>
+    <string name="about_project_site">Site du projet :\n
+      https://husky.adol.pw
+    </string>
+    <string name="about_bug_feature_request_site">Rapports d’anomalies &amp; demandes de fonctionnalités :\n
+      https://github.com/captainepoch/husky/issues
+    </string>
+    <string name="about_tusky_account">Profil de Husky</string>
     <string name="status_share_content">Partager le contenu du pouet</string>
     <string name="status_share_link">Partager le lien du pouet</string>
     <string name="status_media_images">Images</string>
@@ -263,7 +269,7 @@
     <string name="filter_dialog_update_button">Mettre à jour</string>
     <string name="filter_add_description">Phrase à filtrer</string>
     <string name="add_account_name">Ajouter un compte</string>
-    <string name="add_account_description">Ajouter un nouveau compte Mastodon</string>
+    <string name="add_account_description">Ajouter un nouveau compte Pleroma</string>
     <string name="action_lists">Listes</string>
     <string name="title_lists">Listes</string>
     <string name="title_list_timeline">Fil de la liste</string>
@@ -301,7 +307,7 @@
     <string name="expand_collapse_all_statuses">Déplier/replier tout les statuts</string>
     <string name="action_open_toot">Ouvrir le pouet</string>
     <string name="restart_required">Un redémarrage de l’application est nécessaire</string>
-    <string name="restart_emoji">Vous devrez redémarrer Tusky pour appliquer ces modifications</string>
+    <string name="restart_emoji">Vous devrez redémarrer Husky pour appliquer ces modifications</string>
     <string name="later">Plus tard</string>
     <string name="restart">Redémarrer</string>
     <string name="caption_systememoji">Votre jeu d’émojis par défaut</string>
@@ -312,7 +318,7 @@
     <string name="account_moved_description">%1$s a déménagé vers :</string>
     <string name="reblog_private">Partager à l’audience originale</string>
     <string name="unreblog_private">Annuler le partage</string>
-    <string name="license_description">Tusky contient du code et des ressources issus des projets open source suivants :</string>
+    <string name="license_description">Husky contient du code et des ressources issus des projets open source suivants :</string>
     <string name="license_apache_2">Sous licence Apache (copie ci-dessous)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -436,7 +442,7 @@
     <string name="action_schedule_toot">Planifier le pouet</string>
     <string name="action_reset_schedule">Réinitialiser</string>
     <string name="post_lookup_error_format">Erreur lors de la recherche du post %s</string>
-    <string name="about_powered_by_tusky">Propulsé par Tusky</string>
+    <string name="about_powered_by_tusky">Propulsé par Husky</string>
     <string name="title_bookmarks">Signets</string>
     <string name="action_bookmark">Marquer comme signet</string>
     <string name="action_view_bookmarks">Signets</string>
@@ -446,7 +452,7 @@
     <string name="error_audio_upload_size">Les fichiers audio doivent avoir moins de 40 Mo.</string>
     <string name="no_saved_status">Vous n’avez aucun brouillon.</string>
     <string name="no_scheduled_status">Vous n’avez aucun pouet planifié.</string>
-    <string name="warning_scheduling_interval">L’intervalle minimum de planification sur Mastodon est de 5 minutes.</string>
+    <string name="warning_scheduling_interval">L’intervalle minimum de planification sur Pleroma est de 5 minutes.</string>
     <string name="notification_follow_request_name">Demandes d\'abonnement</string>
     <string name="dialog_block_warning">Bloquer @%s \?</string>
     <string name="pref_title_confirm_reblogs">Afficher une fenêtre de confirmation avant de partager</string>
@@ -499,4 +505,23 @@
     <string name="limit_notifications">Limiter les notifications de la timeline</string>
     <string name="wellbeing_hide_stats_profile">Cacher les statistiques quantitatives sur les profils</string>
     <string name="wellbeing_hide_stats_posts">Cacher les statistiques quantitatives sur les publications</string>
+
+    <string name="notification_emoji_format">%s a réagi avec %s à votre message</string>
+    <string name="notification_emoji_description">Notification pour les reactions par emojis</string>
+    <string name="title_emoji_reacted_by">%s a réagi avec</string>
+    <string name="hint_website">Site internet de l\'application</string>
+    <string name="pref_title_notification_filter_emoji">mes messages peuvent recevoir des réactions</string>
+    <string name="action_reply_to">Répondre à</string>
+    <string name="action_emoji_react">Réagir</string>
+    <string name="action_emoji_unreact">Supprimer la réaction</string>
+    <string name="action_emoji_reacted_by">Réaction de</string>
+    <string name="pref_title_hide_muted_users">Cacher totalement les utilisateurs et utilisatrices masqués</string>
+    <string name="moderator">Modérateur•rice</string>
+    <string name="hint_appname">Nom de l\'appliction</string>
+    <string name="notification_emoji_name">Réactions</string>
+    <string name="error_media_upload_size">La taille du fichier dépasse la limite de l\'instance</string>
+    <string name="action_enable_formatting_syntax">Activer %s</string>
+    <string name="action_disable_formatting_syntax">Désactiver %s</string>
+    <string name="admin">Administrateur•rice</string>
+    <string name="pref_title_default_formatting">Syntaxe de formatage par défaut (si supportée par l\'instance)</string>
 </resources>
