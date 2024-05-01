@@ -54,7 +54,7 @@
     <string name="action_favourite">Ffefryn</string>
     <string name="action_more">Mwy</string>
     <string name="action_compose">Creu</string>
-    <string name="action_login">Mewngofnodi â Mastodon</string>
+    <string name="action_login">Mewngofnodi â Pleroma</string>
     <string name="action_logout">Allgofnodi</string>
     <string name="action_logout_confirm">Ydych chi\'n siŵr eich bod am allgofnodi o\'r cyfrif %1$s?</string>
     <string name="action_follow">Dilyn</string>
@@ -119,10 +119,10 @@
     <string name="link_whats_an_instance">Beth yw achos?</string>
     <string name="login_connection">Yn cysylltu …</string>
     <string name="dialog_whats_an_instance">Gallwch nodi cyfeiriad neu barth unrhyw achos
-        yma, fel mastodon.social, twt.cymru, social.tchncs.de, a
-        <a href="https://instances.social">mwy!</a>
+        yma, fel shitposter.club, twt.cymru, expired.mentality.rip, a
+        <a href="https://fediverse.network/pleroma?count=peers">mwy!</a>
         \n\n Os nad oes gennych gyfrif, gallwch nodi enw\'r achos yr hoffech ymuno
-        Ag ef a chreu cyfrif yno.\n\nAchos yw un lle yn lle mae\'ch cyfrif wedi\'i 
+        Ag ef a chreu cyfrif yno.\n\nAchos yw un lle yn lle mae\'ch cyfrif wedi\'i
         gynnal, ond gallwch yn hawdd gyfathrebu â phobl a\'u dilyn ar achosion eraill fel petasech chi
         ar yr un safle.
         \n\nRhagor o wybodaeth yn <a href="https://joinmastodon.org">joinmastodon.org</a>.
@@ -193,7 +193,7 @@
     <string name="notification_title_summary">%d rhyngweithiad newydd</string>
     <string name="description_account_locked">Cyfrif wedi\'i gloi </string>
     <string name="about_title_activity">Amdano</string>
-    <string name="about_tusky_license">Mae Tusky yn feddalwedd ffynhonnell agored barn rydd.
+    <string name="about_tusky_license">Mae Husky yn feddalwedd ffynhonnell agored barn rydd.
         Fe\'i trwyddedir dan Drwydded Gyhoeddus Gyffredinol GNU Fersiwn 3.
         Gallwch weld y drwydded yma: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
@@ -202,13 +202,13 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">        Gwefan y prosiect:\n
-        https://tusky.app
+    <string name="about_project_site">Gwefan y prosiect:\n
+        https://husky.adol.pw
     </string>
-    <string name="about_bug_feature_request_site">        Adrodd byg &amp; ceisiadau nodwedd:\n
-        https://github.com/tuskyapp/Tusky/issues
+    <string name="about_bug_feature_request_site">Adrodd byg &amp; ceisiadau nodwedd:\n
+        https://github.com/captainepoch/husky/issues
     </string>
-    <string name="about_tusky_account">Proffil Tusky</string>
+    <string name="about_tusky_account">Proffil Husky</string>
     <string name="status_share_content">Rhannu cynnwys tŵt</string>
     <string name="status_share_link">Rhannu dolen i\'r tŵt</string>
     <string name="status_media_images">Delweddau</string>
@@ -231,7 +231,7 @@
     <string name="replying_to">Yn ateb i @%s</string>
     <string name="load_more_placeholder_text">llwytho mwy</string>
     <string name="add_account_name">Ychwanegu cyfrif</string>
-    <string name="add_account_description">Ychwanegu cyfrif Mastodon newydd</string>
+    <string name="add_account_description">Ychwanegu cyfrif Pleroma newydd</string>
     <string name="action_lists">Rhestri</string>
     <string name="title_lists">Rhestri</string>
     <string name="title_list_timeline">Amserlen rhestri</string>
@@ -257,7 +257,7 @@
     <string name="expand_collapse_all_statuses">Chwyddo/lleihau pob statws </string>
     <string name="action_open_toot">Agor tŵt</string>
     <string name="restart_required">Angen ailddechrau\'r app</string>
-    <string name="restart_emoji">Bydd angen ailddechrau Tusky i roi\'r newidiadau ar waith</string>
+    <string name="restart_emoji">Bydd angen ailddechrau Husky i roi\'r newidiadau ar waith</string>
     <string name="later">Nes ymlaen</string>
     <string name="restart">Ailddechrau</string>
     <string name="caption_systememoji">Dewiswyd emoji ragosodedig i\'ch dyfais </string>
@@ -267,7 +267,7 @@
     <string name="account_moved_description">%1$s wedi symud i:</string>
     <string name="reblog_private">Hwb i\'r gynulleidfa wreiddiol</string>
     <string name="unreblog_private">Dad-hybu</string>
-    <string name="license_description">Mae gan Tusky god ac asedau o\'r prosiectau ffynhonnell agored canlynol:</string>
+    <string name="license_description">Mae gan Husky god ac asedau o\'r prosiectau ffynhonnell agored canlynol:</string>
     <string name="license_apache_2">Trwyddedir dan Drwydded Apache (copi isod)</string>
     <string name="profile_metadata_label">Metaddata proffil</string>
     <string name="profile_metadata_add">ychwanegu data</string>
