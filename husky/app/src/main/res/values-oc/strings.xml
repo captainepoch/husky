@@ -53,7 +53,7 @@
     <string name="action_favourite">Aimar</string>
     <string name="action_more">Mai</string>
     <string name="action_compose">Redactar</string>
-    <string name="action_login">Començar la session amb Mastodon</string>
+    <string name="action_login">Començar la session amb Pleroma</string>
     <string name="action_logout">Tampar la session</string>
     <string name="action_logout_confirm">Volètz vertadièrament vos desconnectar del compte %1$s ?</string>
     <string name="action_follow">Seguir</string>
@@ -116,13 +116,13 @@
     <string name="label_header">Bandièra</string>
     <string name="link_whats_an_instance">Que es una instància ?</string>
     <string name="login_connection">Connexion…</string>
-    <string name="dialog_whats_an_instance">Aquí podètz picar l\'adreça o domini de quina que siá instància, \u0020coma mastodont.cat, mastodon.social, icosahedron.website o \u0020<a href="https://instances.social">fòrca mai !</a>
-\n
-\nSi encara non avètz cap de compte, podètz picar lo nom de l’instància ont vos agradariá \u0020anar e crear un compte enlà.
-\n
-\n
-\n
-\nAvètz mas d’informacins a <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
+    <string name="dialog_whats_an_instance">Aquí podètz picar l\'adreça o domini de quina que siá instància,
+        coma mastodont.cat, shitposter.club, blob.cat o
+        <a href="https://fediverse.network/pleroma?count=peers">fòrca mai !</a>
+        \n\nSi encara non avètz cap de compte, podètz picar lo nom de l’instància ont vos agradariá
+        anar e crear un compte enlà.\n\n
+        \n\nAvètz mas d’informacins a <a href="https://joinmastodon.org">joinmastodon.org</a>.
+    </string>
     <string name="dialog_title_finishing_media_upload">Finalizacion del mandadís del mèdia</string>
     <string name="dialog_message_uploading_media">Mandadís…</string>
     <string name="dialog_download_image">Telecargar</string>
@@ -188,18 +188,22 @@
     <string name="notification_title_summary">%d interaccions nòvas</string>
     <string name="description_account_locked">Compte blocat</string>
     <string name="about_title_activity">A prepaus</string>
-    <string name="about_tusky_license">Tusky es programa gratuït, liure e de còdi dobèrt. Es publicat jols tèrms de la licéncia publica generala GNU version 3. Podeu trobar les llicència aquí: https://www.gnu.org/licenses/gpl-3.0.ca.html</string>
+    <string name="about_tusky_license">Husky es programa gratuït, liure e de còdi dobèrt.
+        Es publicat jols tèrms de la licéncia publica generala GNU version 3.
+        Podeu trobar les llicència aquí: https://www.gnu.org/licenses/gpl-3.0.ca.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Site web del projècte :
-\n https://tusky.app</string>
-    <string name="about_bug_feature_request_site">Rapòrts d\'errors e demandas de foncionalitats :
-\n https://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Perfil de Tusky</string>
+    <string name="about_project_site">Site web del projècte :\n
+        https://husky.adol.pw
+    </string>
+    <string name="about_bug_feature_request_site">Rapòrts d\'errors e demandas de foncionalitats:
+\n https://github.com/captainepoch/husky/issues
+    </string>
+    <string name="about_tusky_account">Perfil de Husky</string>
     <string name="status_share_content">Partejar lo contengut del tut</string>
     <string name="status_share_link">Partejar lo ligam del tut</string>
     <string name="status_media_images">Imatges</string>
@@ -218,7 +222,7 @@
     <string name="replying_to">En responsa a @%s</string>
     <string name="load_more_placeholder_text">cargar mai</string>
     <string name="add_account_name">Apondre un compte</string>
-    <string name="add_account_description">Apondre un nòu compte Mastodon</string>
+    <string name="add_account_description">Apondre un nòu compte Pleroma</string>
     <string name="action_lists">Listas</string>
     <string name="title_lists">Listas</string>
     <string name="title_list_timeline">Flux de la lista</string>
@@ -244,7 +248,7 @@
     <string name="expand_collapse_all_statuses">Desplegar/Plegar totes los estatuts</string>
     <string name="action_open_toot">Dobrir lo tut</string>
     <string name="restart_required">Reaviada necessària</string>
-    <string name="restart_emoji">Vos caldrà reaviar Tusky per aplicar aquestes cambiaments</string>
+    <string name="restart_emoji">Vos caldrà reaviar Husky per aplicar aquestes cambiaments</string>
     <string name="later">Mai tard</string>
     <string name="restart">Reaviar</string>
     <string name="caption_systememoji">Los emoji per defaut de vòstre aparelh</string>
@@ -255,7 +259,7 @@
     <string name="account_moved_description">%1$s mudèt los catons a :</string>
     <string name="reblog_private">Partejar al public d’origina</string>
     <string name="unreblog_private">Quitar de partejar</string>
-    <string name="license_description">Tusky content de còdis e compausants dels projèctes liures seguents :</string>
+    <string name="license_description">Husky content de còdis e compausants dels projèctes liures seguents :</string>
     <string name="license_apache_2">Licéncia Apache License (còpia çai-jos)</string>
     <string name="profile_metadata_label">Metadonada del perfil</string>
     <string name="profile_metadata_add">Contengut</string>
@@ -297,7 +301,7 @@
     <string name="pref_title_proxy_settings">Servidor mandatari</string>
     <string name="pref_default_media_sensitivity">Totjorn marcar los mèdias coma sensibles</string>
     <string name="pref_failed_to_sync">Fracàs de la sincronizacion dels paramètres</string>
-    <string name="about_tusky_version">Tusky %s</string>
+    <string name="about_tusky_version">Husky %s</string>
     <string name="abbreviated_days_ago">%dd</string>
     <string name="abbreviated_hours_ago">%dh</string>
     <string name="abbreviated_minutes_ago">%dm</string>
@@ -432,7 +436,7 @@
     <string name="action_schedule_toot">Planificar de tuts</string>
     <string name="action_reset_schedule">Escafar</string>
     <string name="post_lookup_error_format">Error en cercant la publicacion %s</string>
-    <string name="about_powered_by_tusky">Propulsat per Tusky</string>
+    <string name="about_powered_by_tusky">Propulsat per Husky</string>
     <string name="title_bookmarks">Marcapaginas</string>
     <string name="action_bookmark">Ajustar als marcapaginas</string>
     <string name="action_view_bookmarks">Marcapaginas</string>
@@ -442,7 +446,7 @@
     <string name="error_audio_upload_size">Los fichièrs àudio devon èsser inferiors a 40 Mo.</string>
     <string name="no_saved_status">Avètz pas cap de borrolhon.</string>
     <string name="no_scheduled_status">Avètz pas cap de tut planificat.</string>
-    <string name="warning_scheduling_interval">L’interval minimum de planificacion sus Mastodon e de 5 minutas.</string>
+    <string name="warning_scheduling_interval">L’interval minimum de planificacion sus Pleroma e de 5 minutas.</string>
     <string name="notification_follow_request_name">Demandas d’abonament</string>
     <string name="hashtags">Etiquetas</string>
     <string name="action_mute_notifications_desc">Desactivar las notificacions per %s</string>
