@@ -181,14 +181,14 @@
     <string name="title_favourites">Roghaí</string>
     <string name="error_failed_app_registration">Theip ar fhíordheimhniú leis an gcás sin.</string>
     <string name="link_whats_an_instance">Cad is sampla ann\?</string>
-    <string name="action_login">Logáil isteach le Mastodon</string>
+    <string name="action_login">Logáil isteach le Pleroma</string>
     <string name="status_media_images">Íomhánna</string>
     <string name="status_share_link">Comhroinn nasc le tút</string>
     <string name="status_share_content">Comhroinn ábhar na tút</string>
-    <string name="about_tusky_account">Próifíl Tusky</string>
-    <string name="about_tusky_license">Is bogearraí foinse oscailte agus saor in aisce é Tusky. Tá sé ceadúnaithe faoi Leagan 3. Ceadúnas Poiblí Ginearálta GNU 3. Is féidir leat an ceadúnas a fheiceáil anseo: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
-    <string name="about_powered_by_tusky">Cumhachtaithe ag Tusky</string>
-    <string name="about_tusky_version">Tusky %s</string>
+    <string name="about_tusky_account">Próifíl Husky</string>
+    <string name="about_tusky_license">Is bogearraí foinse oscailte agus saor in aisce é Husky. Tá sé ceadúnaithe faoi Leagan 3. Ceadúnas Poiblí Ginearálta GNU 3. Is féidir leat an ceadúnas a fheiceáil anseo: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_powered_by_tusky">Cumhachtaithe ag Husky</string>
+    <string name="about_tusky_version">Husky %s</string>
     <string name="description_account_locked">Cuntas faoi Ghlas</string>
     <string name="notification_title_summary">%d idirghníomhaíochtaí nua</string>
     <string name="notification_summary_small">%1$s agus %2$s</string>
@@ -257,17 +257,17 @@
     <string name="action_mute_conversation">Comhrá tost</string>
     <string name="action_hashtags">Clibeanna hash</string>
     <string name="title_hashtags_dialog">Hashtags</string>
-    <string name="dialog_whats_an_instance">Is féidir seoladh nó fearann aon cháis a iontráil anseo, mar shampla mastodon.social, icosahedron.website, social.tchncs.de, agus <a href="https://instances.social"> níos mó! </a> 
-\n 
-\nMura bhfuil cuntas agat fós, is féidir leat ainm an cháis ar mhaith leat a bheith páirteach ann agus cuntas a chruthú ann. 
-\n 
-\nIs áit amháin é sampla ina ndéantar do chuntas a óstáil, ach is féidir leat cumarsáid a dhéanamh go héasca le daoine eile agus iad a leanúint ar chásanna eile mar a bheadh tú ar an suíomh céanna. 
-\n 
+    <string name="dialog_whats_an_instance">Is féidir seoladh nó fearann aon cháis a iontráil anseo, mar shampla shitposter.club, blob.cat, expired.mentality.rip, agus <a href="https://fediverse.network/pleroma?count=peers"> níos mó! </a>
+\n
+\nMura bhfuil cuntas agat fós, is féidir leat ainm an cháis ar mhaith leat a bheith páirteach ann agus cuntas a chruthú ann.
+\n
+\nIs áit amháin é sampla ina ndéantar do chuntas a óstáil, ach is féidir leat cumarsáid a dhéanamh go héasca le daoine eile agus iad a leanúint ar chásanna eile mar a bheadh tú ar an suíomh céanna.
+\n
 \nIs féidir tuilleadh faisnéise a fháil ag <a href="https://joinmastodon.org"> joinmastodon.org </a>. </string>
     <string name="about_project_site">Suíomh Gréasáin an tionscadail:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">Tuarascálacha ar fhabhtanna &amp; iarratais ar ghnéithe:
-\n https://github.com/tuskyapp/Tusky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="status_media_video">Físeán</string>
     <string name="state_follow_requested">Lean iarrtha</string>
     <string name="follows_you">Leanann tú</string>
@@ -286,9 +286,9 @@
     <string name="filter_dialog_remove_button">Bain</string>
     <string name="pref_title_public_filter_keywords">Amlínte poiblí</string>
     <string name="expand_collapse_all_statuses">Gach stádas a leathnú/a thit amach</string>
-    <string name="restart_emoji">Beidh ort Tusky a atosú chun na hathruithe seo a chur i bhfeidhm</string>
+    <string name="restart_emoji">Beidh ort Husky a atosú chun na hathruithe seo a chur i bhfeidhm</string>
     <string name="caption_notoemoji">Sraith emoji reatha Google</string>
-    <string name="license_description">Tá cód agus sócmhainní ó na tionscadail foinse oscailte seo a leanas i Tusky:</string>
+    <string name="license_description">Tá cód agus sócmhainní ó na tionscadail foinse oscailte seo a leanas i Husky:</string>
     <string name="label_remote_account">Féadfaidh an fhaisnéis thíos próifíl an úsáideora a léiriú go neamhiomlán. Brúigh chun próifíl iomlán a oscailt sa bhrabhsálaí.</string>
     <string name="max_tab_number_reached">uasmhéid de chluaisíní %1$d sroichte</string>
     <string name="description_poll">Vótaíocht le roghanna: %1$s, %2$s, %3$s, %4$s; %5$s</string>
@@ -305,7 +305,7 @@
     </plurals>
     <string name="failed_fetch_statuses">Theip ar stádas a fháil</string>
     <string name="report_description_1">Seolfar an tuarascáil chuig do mhodhnóir freastalaí. Féadfaidh tú míniú a thabhairt ar an bhfáth go bhfuil tú ag tuairisciú an chuntais seo thíos:</string>
-    <string name="add_account_description">Cuir Cuntas Mastodon nua leis</string>
+    <string name="add_account_description">Cuir Cuntas Pleroma nua leis</string>
     <string name="title_list_timeline">Liostaigh amlíne</string>
     <string name="error_create_list">Níorbh fhéidir liosta a chruthú</string>
     <string name="error_rename_list">Níorbh fhéidir an liosta a athainmniú</string>
@@ -459,7 +459,7 @@
     <string name="post_lookup_error_format">Earráid agus an post á lorg %s</string>
     <string name="no_saved_status">Níl aon dréachtaí agat.</string>
     <string name="no_scheduled_status">Níl aon stádas sceidealta agat.</string>
-    <string name="warning_scheduling_interval">Tá eatramh sceidealaithe íosta 5 nóiméad ag Mastodon.</string>
+    <string name="warning_scheduling_interval">Tá eatramh sceidealaithe íosta 5 nóiméad ag Pleroma.</string>
     <string name="pref_title_show_cards_in_timelines">Taispeáin réamhamhairc nasc in amlínte</string>
     <string name="pref_title_confirm_reblogs">Taispeáin dialóg dearbhaithe sula ndéantar borradh faoi</string>
     <string name="title_tab_preferences">Cluaisíní</string>
