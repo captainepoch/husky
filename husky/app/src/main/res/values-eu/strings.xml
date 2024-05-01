@@ -119,12 +119,12 @@
     <string name="label_header">Goiburua</string>
     <string name="link_whats_an_instance">Zer da instantzia?</string>
     <string name="login_connection">Konektatzen…</string>
-    <string name="dialog_whats_an_instance"> Sartu hemen helbidea edo mastodon.eus, mastodon.jalgi.eus, mastodon.social bezalako <a href="https://instances.social">edozein instantzia</a>, \u0020
-\n 
-\n Oraindik ez baduzu konturik, instantziaren izena sartu eta bertan kontua sortu dezakezu. \u0020
-\n 
-\nInstantzia zure kontua dagoen gunea da, baino beste instantzietako erabiltzaileak zurean egongo balira bezala jarraitu ditzakezu. \u0020
-\n 
+    <string name="dialog_whats_an_instance"> Sartu hemen helbidea edo mastodon.eus, mastodon.jalgi.eus, shitposter.club bezalako <a href="https://fediverse.network/pleroma?count=peers">edozein instantzia</a>,
+\n
+\n Oraindik ez baduzu konturik, instantziaren izena sartu eta bertan kontua sortu dezakezu.
+\n
+\nInstantzia zure kontua dagoen gunea da, baino beste instantzietako erabiltzaileak zurean egongo balira bezala jarraitu ditzakezu.
+\n
 \nInformazio gehiago <a href="https://joinmastodon.org">joinmastodon.org</a> helbidean topatuko duzu. </string>
     <string name="dialog_title_finishing_media_upload">Mediaren igoera bukatzen</string>
     <string name="dialog_message_uploading_media">Igotzen…</string>
@@ -195,18 +195,21 @@
     <string name="notification_title_summary">%d interakzio berri</string>
     <string name="description_account_locked">Kontu babestua</string>
     <string name="about_title_activity">Honi buruz</string>
-    <string name="about_tusky_license">Tusky software libre eta kode askekoa da. \"GNU General Public License Version 3\" lizentziapean zabaldua. Lizentzia hontaz gehiago irakurtzeko: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_license">Husky software libre eta kode askekoa da.
+        \"GNU General Public License Version 3\" lizentziapean zabaldua.
+        Lizentzia hontaz gehiago irakurtzeko: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Proiektuaren gunea:
-\n https://tusky.app</string>
+    <string name="about_project_site">        Proiektuaren gunea:\n
+        https://husky.adol.pw
+    </string>
     <string name="about_bug_feature_request_site">Akatsen berri-emateak eta hobekuntza-eskariak:
-\n https://github.com/tuskyapp/Tusky/issues</string>
-    <string name="about_tusky_account">Tuskyren profila</string>
+\n https://github.com/captainepoch/husky/issues</string>
+    <string name="about_tusky_account">Huskyren profila</string>
     <string name="status_share_content">Partekatu tutaren edukia</string>
     <string name="status_share_link">Partekatu tutaren lotura</string>
     <string name="status_media_images">Irudiak</string>
@@ -226,7 +229,7 @@
     <string name="replying_to">\@%s-ri erantzuten</string>
     <string name="load_more_placeholder_text">Gehiago erakutsi</string>
     <string name="add_account_name">Gehitu kontua</string>
-    <string name="add_account_description">Mastodon kontua gehitu</string>
+    <string name="add_account_description">Pleroma kontua gehitu</string>
     <string name="action_lists">Zerrendak</string>
     <string name="title_lists">Zerrendak</string>
     <string name="title_list_timeline">Zerrenda denbora-lerroa</string>
@@ -264,7 +267,7 @@
     <string name="account_moved_description">%1$s hona mugitu da:</string>
     <string name="reblog_private">Berriz bultzatu</string>
     <string name="unreblog_private">Bultzatzea utzi</string>
-    <string name="license_description">Tusky-k ondorengo proiektuetako kode eta baliabideak ditu:</string>
+    <string name="license_description">Husky-k ondorengo proiektuetako kode eta baliabideak ditu:</string>
     <string name="license_apache_2">Apache Lizentziapean (testua zerrendaren azpian)</string>
     <string name="profile_metadata_label">Informazio gehigarria</string>
     <string name="profile_metadata_add">Eremua gehitu</string>
@@ -316,10 +319,10 @@
     <string name="pref_title_animate_gif_avatars">GIF abatarrak animatu</string>
     <string name="notification_poll_name">Galdeketak</string>
     <string name="notification_poll_description">Bukatutako galdeketen jakinarazpenak</string>
-    <string name="about_tusky_version">Tusky %s</string>
+    <string name="about_tusky_version">Husky %s</string>
     <string name="action_hashtags">Traolak</string>
     <string name="title_hashtags_dialog">Traolak</string>
-    <string name="about_powered_by_tusky">Tusky-k sustatuta</string>
+    <string name="about_powered_by_tusky">Husky-k sustatuta</string>
     <string name="abbreviated_hours_ago">%dh</string>
     <string name="abbreviated_minutes_ago">%dm</string>
     <string name="abbreviated_seconds_ago">%ds</string>
@@ -437,7 +440,7 @@
     <string name="list">Zerrenda</string>
     <string name="no_saved_status">Ez duzu zirriborrorik.</string>
     <string name="no_scheduled_status">Ez duzu tut programaturik.</string>
-    <string name="warning_scheduling_interval">Mastodonek gutxienez 5 minutuko programazio-tartea du.</string>
+    <string name="warning_scheduling_interval">Pleromaek gutxienez 5 minutuko programazio-tartea du.</string>
     <string name="notification_follow_request_name">Eskakizunak</string>
     <string name="notification_follow_request_description">Jarraitzeko eskaereri buruzko jakinarazpenak</string>
     <string name="dialog_mute_warning">\@%s isildu\?</string>
