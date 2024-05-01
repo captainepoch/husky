@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Husky</string>
+    <string name="app_name" translatable="false">Husky</string>
 
     <string name="error_generic">An error occurred.</string>
     <string name="error_network">A network error occurred! Please check your connection and try again!</string>
