@@ -47,7 +47,7 @@
     <string name="action_favourite">Preferit</string>
     <string name="action_more">Més</string>
     <string name="action_compose">Escriure</string>
-    <string name="action_login">Inicia sessió amb Mastodon</string>
+    <string name="action_login">Inicia sessió amb Pleroma</string>
     <string name="action_logout">Tanca sessió</string>
     <string name="action_follow">Segueix</string>
     <string name="action_unfollow">Deixa de seguir</string>
@@ -100,8 +100,8 @@
     <string name="link_whats_an_instance">Què és una instància?</string>
     <string name="login_connection">S\'està connectant…</string>
     <string name="dialog_whats_an_instance">Aquí pots introduir l\'adreça o domini de qualsevol instància,
-        com ara mastodont.cat, mastodon.social, icosahedron.website o
-        <a href="https://instances.social">molts més!</a>
+        com ara mastodont.cat, shitposter.club, blob.cat o
+        <a href="https://fediverse.network/pleroma?count=peers">molts més!</a>
         \n\nSi encara no tens cap copte, pots introduir el nom de la instància on t\'agradaria
         unir-te i crear un compte allà.\n\nUna instànica és un únic lloc on el teu compte s\'hostatja
         , però pots comunicar-te fàcilment i seguir amics d\'altres instàncies com si fossiu en el mateix lloc.
@@ -156,20 +156,20 @@
     <string name="notification_title_summary">%d interaccions noves</string>
     <string name="description_account_locked">Compte blocat</string>
     <string name="about_title_activity">Quant a</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky és programari gratuït, lliure i de codi obert.
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky és programari gratuït, lliure i de codi obert.
         Està llicenciat en els termes de la Llicència Pública General GNU versió 3.
         Podeu trobar les llicència aquí: https://www.gnu.org/licenses/gpl-3.0.ca.html</string>
     <!-- note to translators: the url can be changed to link to the localized version of the license -->
     <string name="about_project_site">
         Lloc web del projecte:\n
-        https://tusky.app
+        https://husky.adol.pw
     </string>
     <string name="about_bug_feature_request_site">
         Informes d\'errors i peticions de funcionalitats:\n
-        https://github.com/tuskyapp/Tusky/issues
+        https://github.com/captainepoch/husky/issues
     </string>
-    <string name="about_tusky_account">Perfil del Tusky</string>
+    <string name="about_tusky_account">Perfil del Husky</string>
     <string name="status_share_content">Comparteix el contingut del toot</string>
     <string name="status_share_link">Comparteix l\'enllaç al toot</string>
     <string name="status_media_images">Imatges</string>
@@ -270,7 +270,7 @@
     <string name="pref_title_public_filter_keywords">Línia de temps públiques</string>
     <string name="filter_dialog_update_button">Actualització</string>
     <string name="filter_add_description">Frase per filtrar</string>
-    <string name="add_account_description">Afegir un compte de Mastodont</string>
+    <string name="add_account_description">Afegir un compte de Pleromat</string>
     <string name="action_lists">Llistes</string>
     <string name="title_lists">Llistes</string>
     <string name="title_list_timeline">Cronologia de la llista</string>
@@ -319,7 +319,7 @@
     <string name="account_moved_description">%1$s s\'ha trasllat a:</string>
     <string name="reblog_private">Tornar a impulsar</string>
     <string name="unreblog_private">No impulsar</string>
-    <string name="license_description">Tusky conté codi i recursos dels següents projectes:</string>
+    <string name="license_description">Husky conté codi i recursos dels següents projectes:</string>
     <string name="license_apache_2">Sota llicencia Apache (text a sota)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -416,7 +416,7 @@
     <string name="action_access_scheduled_toot">Toots programats</string>
     <string name="action_schedule_toot">Programar el toot</string>
     <string name="action_reset_schedule">Reiniciar</string>
-    <string name="about_powered_by_tusky">Desenvolupat per Tusky</string>
+    <string name="about_powered_by_tusky">Desenvolupat per Husky</string>
     <string name="description_status_bookmarked">Afegit a les adreces d\'interès.</string>
     <string name="select_list_title">Seleccionar la llista</string>
     <string name="list">Llista</string>
@@ -424,7 +424,7 @@
     <string name="no_scheduled_status">No tens cap estat planificat.</string>
     <string name="error_audio_upload_size">Els fitxers d\'àudio han de ser més petits que 40MB.</string>
     <string name="no_saved_status">No tens cap esborrany</string>
-    <string name="warning_scheduling_interval">L\'interval mínim de planificació a Mastodon és de 5 minuts.</string>
+    <string name="warning_scheduling_interval">L\'interval mínim de planificació a Pleroma és de 5 minuts.</string>
     <string name="notification_follow_request_name">Peticions de seguiment</string>
     <string name="pref_title_confirm_reblogs">Mostra el diàleg de confirmació abans de promoure</string>
     <string name="pref_title_show_cards_in_timelines">Mostra les previsualitzacions dels enllaços en els fils</string>
@@ -451,4 +451,30 @@
     <string name="action_mute_notifications_desc">Desactivar les notificacions per %s</string>
     <string name="action_unmute_notifications_desc">Activar les notificacions per %s</string>
     <string name="action_unmute_desc">Deixar de silenciar %s</string>
+
+    <string name="action_reply_to">Respondre a</string>
+    <!-- In the Spanish translation, I changed "mute" and "unmute" for "hide" and "show". Here, I did the same. -->
+    <string name="action_emoji_react">Reaccionar</string>
+    <string name="action_emoji_unreact">Suprimir reacció</string>
+    <string name="action_emoji_reacted_by">Qui va reaccionar</string>
+    <string name="action_enable_formatting_syntax">Activa %s</string>
+    <string name="action_disable_formatting_syntax">Desactiva %s</string>
+
+    <string name="title_emoji_reacted_by">%s va reaccionar amb</string>
+
+    <string name="hint_appname">Nom de l\'aplicació</string>
+    <string name="hint_website">Pàgina web de l\'aplicació</string>
+
+    <string name="admin">Administrador/a</string>
+    <string name="moderator">Moderador/a</string>
+
+    <string name="error_media_upload_size">L\'arxiu és massa gran</string>
+
+    <string name="notification_emoji_format">%s va reaccionar amb %s a la teva publicació</string>
+    <string name="notification_emoji_name">Reaccions</string>
+    <string name="notification_emoji_description">Notificacions sobre noves reaccions</string>
+
+    <string name="pref_title_default_formatting">Sintaxi de format per defecte(si l\'instancia és compatible)</string>
+    <string name="pref_title_notification_filter_emoji">els usuaris poden reaccionar a les meves publicacions</string>
+    <string name="pref_title_hide_muted_users">Ocultar usuaris silenciats</string>
 </resources>
