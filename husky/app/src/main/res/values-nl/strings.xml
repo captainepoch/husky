@@ -140,12 +140,12 @@
     <string name="label_header">Omslagfoto</string>
     <string name="link_whats_an_instance">Wat is een Mastodonserver?</string>
     <string name="login_connection">Aan het verbinden…</string>
-    <string name="dialog_whats_an_instance">Het adres of domein van elke Mastodonserver kan hier worden ingevoerd, zoals mastodon.social, mastodon.nl, octodon.social en <a href="https://instances.social">nog veel meer!</a> \u0020
-\n \u0020
-\nWanneer je nog geen account hebt, kun je de naam van de Mastodonserver waar jij je graag wil registeren invoeren, waarna je daar een account kunt aanmaken. \u0020
-\n \u0020
-\nEen Mastodonserver (Engels: instance) is een computerserver waar jouw account zich bevindt (vergelijk het met een e-mailserver). Je kan eenvoudig mensen van andere servers volgen en met ze communiceren, alsof jullie met elkaar op dezelfde website zitten. \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">Het adres of domein van elke Mastodonserver kan hier worden ingevoerd, zoals shitposter.club, mastodon.nl, octodon.social en <a href="https://fediverse.network/pleroma?count=peers">nog veel meer!</a>
+\n
+\nWanneer je nog geen account hebt, kun je de naam van de Mastodonserver waar jij je graag wil registeren invoeren, waarna je daar een account kunt aanmaken.
+\n
+\nEen Mastodonserver (Engels: instance) is een computerserver waar jouw account zich bevindt (vergelijk het met een e-mailserver). Je kan eenvoudig mensen van andere servers volgen en met ze communiceren, alsof jullie met elkaar op dezelfde website zitten.
+\n
 \n Meer informatie kun je vinden op <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Uploaden media bijna voltooid</string>
     <string name="dialog_message_uploading_media">Aan het uploaden…</string>
@@ -218,8 +218,8 @@
     <string name="notification_title_summary">%d nieuwe interacties</string>
     <string name="description_account_locked">Besloten account</string>
     <string name="about_title_activity">Over</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky is opensource- en vrije software. De licentie valt onder de GNU Algemene Publieke Licentie versie 3. Je kunt de licentie hier bekijken: https://www.gnu.org/licenses/gpl-3.0.nl.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky is opensource- en vrije software. De licentie valt onder de GNU Algemene Publieke Licentie versie 3. Je kunt de licentie hier bekijken: https://www.gnu.org/licenses/gpl-3.0.nl.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
@@ -227,10 +227,10 @@
          * the url can be changed to link to the localized version of the license.
     -->
     <string name="about_project_site">Projectwebsite:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">Foutmeldingen &amp; nieuwe functies aanvragen:
 \n https://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Tusky\'s profiel</string>
+    <string name="about_tusky_account">Husky\'s profiel</string>
     <string name="status_share_content">Deel de inhoud van de toot</string>
     <string name="status_share_link">Deel de link van de toot</string>
     <string name="status_media_images">Afbeeldingen</string>
@@ -253,7 +253,7 @@
     <string name="replying_to">Aan het reageren op @%s</string>
     <string name="load_more_placeholder_text">meer laden</string>
     <string name="add_account_name">Account toevoegen</string>
-    <string name="add_account_description">Een nieuw Mastodonaccount toevoegen</string>
+    <string name="add_account_description">Een nieuw Pleromaaccount toevoegen</string>
     <string name="action_lists">Lijsten</string>
     <string name="title_lists">Lijsten</string>
     <string name="title_list_timeline">Tijdlijn lijst</string>
@@ -280,7 +280,7 @@
     <string name="expand_collapse_all_statuses">Alle toots in- of uitklappen</string>
     <string name="action_open_toot">Toot openen</string>
     <string name="restart_required">Herstarten app vereist</string>
-    <string name="restart_emoji">Je moet Tusky herstarten om deze veranderingen te kunnen doorvoeren</string>
+    <string name="restart_emoji">Je moet Husky herstarten om deze veranderingen te kunnen doorvoeren</string>
     <string name="later">Later</string>
     <string name="restart">Herstarten</string>
     <string name="caption_systememoji">Standaard emojiset van jouw apparaat</string>
@@ -291,7 +291,7 @@
     <string name="account_moved_description">%1$s is verhuisd naar:</string>
     <string name="reblog_private">Boost naar oorspronkelijke ontvangers</string>
     <string name="unreblog_private">Niet langer boosten</string>
-    <string name="license_description">Tusky bevat broncode en onderdelen van de volgende opensourceprojecten:</string>
+    <string name="license_description">Husky bevat broncode en onderdelen van de volgende opensourceprojecten:</string>
     <string name="license_apache_2">Gelicenseerd onder de Apache-licentie (kopie hieronder)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -438,7 +438,7 @@
     <string name="action_access_scheduled_toot">Ingeplande toots</string>
     <string name="action_schedule_toot">Ingeplande toot</string>
     <string name="action_reset_schedule">Herstellen</string>
-    <string name="about_powered_by_tusky">Powered by Tusky</string>
+    <string name="about_powered_by_tusky">Powered by Husky</string>
     <string name="pref_title_alway_open_spoiler">Altijd toots met tekstwaarschuwingen uitklappen</string>
     <string name="description_status_bookmarked">Als bladwijzer toegevoegd</string>
     <string name="select_list_title">Kies een lijst</string>
@@ -449,7 +449,7 @@
     <string name="post_lookup_error_format">Fout tijdens opzoeken toot %s</string>
     <string name="no_saved_status">Je hebt nog geen concepten</string>
     <string name="no_scheduled_status">Je hebt nog geen ingeplande toots</string>
-    <string name="warning_scheduling_interval">Om in te plannen moet je in Mastodon een minimum interval van 5 minuten gebruiken.</string>
+    <string name="warning_scheduling_interval">Om in te plannen moet je in Pleroma een minimum interval van 5 minuten gebruiken.</string>
     <string name="notification_follow_request_name">Volgverzoeken</string>
     <string name="hashtags">Hashtags</string>
 </resources>
