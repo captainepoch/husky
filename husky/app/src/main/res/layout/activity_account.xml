@@ -124,7 +124,7 @@
                         android:textStyle="normal|bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Tusky Mastodon Client " />
+                        tools:text="Husky Mastodon Client " />
 
                     <TextView
                         android:id="@+id/accountUsernameTextView"
@@ -137,7 +137,7 @@
                         android:textSize="?attr/status_text_medium"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/accountDisplayNameTextView"
-                        tools:text="\@Tusky" />
+                        tools:text="\@Husky" />
 
                     <ImageView
                         android:id="@+id/accountLockedImageView"

@@ -14,8 +14,8 @@
     <string name="error_video_upload_size">影片大小限制 40MB</string>
     <string name="error_media_upload_type">無法上傳此類型的檔案</string>
     <string name="error_media_upload_opening">此檔案無法開啟</string>
-    <string name="error_media_upload_permission">需要授予 Tusky 讀取媒體檔案的權限</string>
-    <string name="error_media_download_permission">需要授予 Tusky 寫入儲存空間的權限</string>
+    <string name="error_media_upload_permission">需要授予 Husky 讀取媒體檔案的權限</string>
+    <string name="error_media_download_permission">需要授予 Husky 寫入儲存空間的權限</string>
     <string name="error_media_upload_image_or_video">無法在嘟文中同時插入影片和圖片</string>
     <string name="error_media_upload_sending">媒體檔案上傳失敗</string>
     <string name="error_sender_account_gone">嘟文發送時出錯</string>
@@ -219,7 +219,7 @@
     <string name="notification_summary_small">%1$s 和 %2$s</string>
     <string name="notification_title_summary">%d 個新互動</string>
     <string name="description_account_locked">鎖嘟用戶</string>
-    <string name="about_title_activity">關於 Tusky</string>
+    <string name="about_title_activity">關於 Husky</string>
     <string name="about_tusky_license">Husky 是基於 GNU General Public License Version 3 許可證開源的自由軟體完整的許可證協議：https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.

@@ -607,7 +607,7 @@
     <string name="drafts_toot_failed_to_send">This post failed to send!</string>
 
     <string name="new_drafts_warning">
-        The draft feature in Tusky has been completely redesigned to be faster, more user friendly and less buggy.\n
+        The draft feature in Husky has been completely redesigned to be faster, more user friendly and less buggy.\n
         You can still access your old drafts via a button on the new drafts screen,
         but they will be removed in a future update!
     </string>

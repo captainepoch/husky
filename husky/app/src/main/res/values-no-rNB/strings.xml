@@ -493,7 +493,7 @@
     <string name="draft_deleted">Kladd slettet</string>
     <string name="drafts_failed_loading_reply">Lasting av svarinformasjon feilet</string>
     <string name="old_drafts">Gamle kladder</string>
-    <string name="new_drafts_warning">KladdfunksjonaLiteten i Tusky er skrevet om og er nå kjappere, mer brukervennlig, og med færre feil.
+    <string name="new_drafts_warning">KladdfunksjonaLiteten i Husky er skrevet om og er nå kjappere, mer brukervennlig, og med færre feil.
 \nGamle kladder er fortsatt tilgjengelige via en knapp på den nye kladdskjermen, men de vil bli fjernet i en fremtidig oppdatering!</string>
     <string name="drafts_toot_failed_to_send">Sending av toot feilet!</string>
     <string name="debug_status_message_close">Lukk</string>
