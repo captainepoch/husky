@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="notification_favourite_format">%s favourited your post</string>
-    <string name="action_access_scheduled_toot">Scheduled posts</string>
-    <string name="action_reply_to">Reply to</string>
-</resources>
