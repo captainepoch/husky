@@ -14,8 +14,8 @@
     <string name="error_video_upload_size">视频文件大小限制 40MB</string>
     <string name="error_media_upload_type">无法上传此类型的文件</string>
     <string name="error_media_upload_opening">此文件无法打开</string>
-    <string name="error_media_upload_permission">需要授予 Tusky 读取媒体文件的权限</string>
-    <string name="error_media_download_permission">需要授予 Tusky 写入存储空间的权限</string>
+    <string name="error_media_upload_permission">需要授予 Husky 读取媒体文件的权限</string>
+    <string name="error_media_download_permission">需要授予 Husky 写入存储空间的权限</string>
     <string name="error_media_upload_image_or_video">无法在嘟文中同时插入视频和图片</string>
     <string name="error_media_upload_sending">媒体文件上传失败</string>
     <string name="error_sender_account_gone">嘟文发送时出错</string>
@@ -145,7 +145,7 @@
     <string name="login_connection">正在连接…</string>
     <string name="dialog_whats_an_instance">请输入你帐号所在的 Mastodon 站点的域名，比如 shitposter.club，blob.cat，expired.mentality.rip，<a href="https://fediverse.network/pleroma?count=peers">等等</a> 。
 \n
-\n还没有 Mastodon 帐号？你也可以输入想注册的 Mastodon 站点的域名，然后在该服务器创建新的帐号并授权 Tusky 登入。
+\n还没有 Mastodon 帐号？你也可以输入想注册的 Mastodon 站点的域名，然后在该服务器创建新的帐号并授权 Husky 登入。
 \n
 \n在 Mastodon 里，你的账号信息储存在某一特定实例当中，但 Mastodon 可使跨站互动和站内互动一样简单。
 \n
@@ -225,7 +225,7 @@
     <string name="notification_summary_small">%1$s 和 %2$s</string>
     <string name="notification_title_summary">%d 个新互动</string>
     <string name="description_account_locked">锁嘟用户</string>
-    <string name="about_title_activity">关于 Tusky</string>
+    <string name="about_title_activity">关于 Husky</string>
     <string name="about_tusky_version">Husky %s</string>
     <string name="about_tusky_license">Husky 是基于 GNU General Public License Version 3 许可证开源的自由软件。完整的许可证协议：https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:

@@ -219,8 +219,8 @@
     <string name="notification_title_summary">%d nya interaktioner</string>
     <string name="description_account_locked">Låst konto</string>
     <string name="about_title_activity">Om</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky är fri programvara med öppen källkod. Det är licensierat under GNU General Public License version 3. Du kan läsa mer om licensen här: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky är fri programvara med öppen källkod. Det är licensierat under GNU General Public License version 3. Du kan läsa mer om licensen här: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
@@ -298,7 +298,7 @@
     <string name="expand_collapse_all_statuses">Expandera/Dölj alla statusar</string>
     <string name="action_open_toot">Öppna toot</string>
     <string name="restart_required">Omstart av appen krävs</string>
-    <string name="restart_emoji">Du måste starta om Tusky för att tillämpa ändringarna</string>
+    <string name="restart_emoji">Du måste starta om Husky för att tillämpa ändringarna</string>
     <string name="later">Senare</string>
     <string name="restart">Starta om</string>
     <string name="caption_systememoji">Standard-emojis för din enhet</string>
@@ -309,7 +309,7 @@
     <string name="account_moved_description">%1$s har flyttat till:</string>
     <string name="reblog_private">Knuffa till ursprunglig målgrupp</string>
     <string name="unreblog_private">Ta bort knuff</string>
-    <string name="license_description">Tusky innehåller kod och tillgångar från följande öppen källkodsprojekt:</string>
+    <string name="license_description">Husky innehåller kod och tillgångar från följande öppen källkodsprojekt:</string>
     <string name="license_apache_2">Licensierad under the Apache License (kopia nedanför)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -441,7 +441,7 @@
     <string name="title_bookmarks">Bokmärken</string>
     <string name="action_bookmark">Bokmärk</string>
     <string name="action_view_bookmarks">Bokmärken</string>
-    <string name="about_powered_by_tusky">Drivs av Tusky</string>
+    <string name="about_powered_by_tusky">Drivs av Husky</string>
     <string name="description_status_bookmarked">Bokmärkt</string>
     <string name="select_list_title">Välj lista</string>
     <string name="list">Lista</string>

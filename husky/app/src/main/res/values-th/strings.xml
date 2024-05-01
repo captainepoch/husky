@@ -94,7 +94,7 @@
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_apache_2">ภายใต้สัญญาอนุญาต Apache License (คัดลอกด้านล่าง)</string>
-    <string name="license_description">Tusky มีโค้ดและสินทรัพย์จากโครงการโอเพนซอร์สต่อไปนี้:</string>
+    <string name="license_description">Husky มีโค้ดและสินทรัพย์จากโครงการโอเพนซอร์สต่อไปนี้:</string>
     <string name="unreblog_private">ยกเลิกบูสต์</string>
     <string name="reblog_private">บูสต์โพสต์ต้นฉบับ</string>
     <string name="account_moved_description">%1$s ได้ย้ายไปที่ :</string>
@@ -106,7 +106,7 @@
     <string name="caption_systememoji">ชุดเริ่มต้นในอุปกรณ์คุณ</string>
     <string name="restart">เริ่มใหม่</string>
     <string name="later">ภายหลัง</string>
-    <string name="restart_emoji">จำเป็นต้องเริ่ม Tusky ใหม่ เพื่อใช้การเปลี่ยนแปลงเหล่านี้</string>
+    <string name="restart_emoji">จำเป็นต้องเริ่ม Husky ใหม่ เพื่อใช้การเปลี่ยนแปลงเหล่านี้</string>
     <string name="restart_required">จำเป็นต้องเริ่มแอปใหม่</string>
     <string name="action_open_toot">เปิด Toot</string>
     <string name="expand_collapse_all_statuses">ขยาย/ย่อทั้งหมด</string>
@@ -174,14 +174,14 @@
     <string name="status_media_images">ภาพ</string>
     <string name="status_share_link">แบ่งปันลิงก์ Toot</string>
     <string name="status_share_content">แบ่งปันเนื้อหา Toot</string>
-    <string name="about_tusky_account">บัญชีทางการของ Tusky</string>
+    <string name="about_tusky_account">บัญชีทางการของ Husky</string>
     <string name="about_bug_feature_request_site">รายงานช่องโหว่ และ ขอฟีเจอร์ (ภาษาอังกฤษ):
 \nhttps://github.com/captainepoch/husky/issues</string>
     <string name="about_project_site">เว็บไซต์โปรเจกต์:
 \nhttps://tusky.app</string>
-    <string name="about_tusky_license">Tusky คือซอฟต์แวร์เสรีและโอเพนซอร์ส ภายใต้สัญญาอนุญาต GNU General Public License Version 3 ดูสัญญาที่ : https://www.gnu.org/licenses/gpl-3.0.ja.html</string>
-    <string name="about_powered_by_tusky">ขับเคลื่อนด้วย Tusky</string>
-    <string name="about_tusky_version">Tusky %s</string>
+    <string name="about_tusky_license">Husky คือซอฟต์แวร์เสรีและโอเพนซอร์ส ภายใต้สัญญาอนุญาต GNU General Public License Version 3 ดูสัญญาที่ : https://www.gnu.org/licenses/gpl-3.0.ja.html</string>
+    <string name="about_powered_by_tusky">ขับเคลื่อนด้วย Husky</string>
+    <string name="about_tusky_version">Husky %s</string>
     <string name="description_account_locked">บัญชีไม่สาธารณะ</string>
     <string name="notification_title_summary">การโต้ตอบใหม่จำนวน %d</string>
     <string name="notification_summary_small">%1$s และ %2$s</string>

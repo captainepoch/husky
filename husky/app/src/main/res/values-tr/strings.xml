@@ -204,8 +204,8 @@
     <string name="notification_title_summary">%d yeni etkileşim</string>
     <string name="description_account_locked">Kitli Hesap</string>
     <string name="about_title_activity">Hakkında</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky özgür ve açık kaynak bir yazılımdır. GNU Genel Kamu Lisansı sürüm 3 altında lisanslanmıştır. Lisansı buradan görüntüleyebilirsiniz: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky özgür ve açık kaynak bir yazılımdır. GNU Genel Kamu Lisansı sürüm 3 altında lisanslanmıştır. Lisansı buradan görüntüleyebilirsiniz: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
@@ -216,7 +216,7 @@
 \n https://tusky.app</string>
     <string name="about_bug_feature_request_site">&amp; özellik istekleri hata raporları:
 \n https://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Tusky\'nin Profili</string>
+    <string name="about_tusky_account">Husky\'nin Profili</string>
     <string name="status_share_content">İletinin içeriğini paylaş</string>
     <string name="status_share_link">İletinin adresini paylaş</string>
     <string name="status_media_images">Görseller</string>
@@ -265,7 +265,7 @@
     <string name="expand_collapse_all_statuses">Tüm durumları Genişlet/Küçült</string>
     <string name="action_open_toot">Durumu aç</string>
     <string name="restart_required">Uygulamayı yeniden başlatmanız lazım</string>
-    <string name="restart_emoji">Bu değişiklikleri uygulamak için Tusky\'yi yeniden başlatmanız gerekecek</string>
+    <string name="restart_emoji">Bu değişiklikleri uygulamak için Husky\'yi yeniden başlatmanız gerekecek</string>
     <string name="later">Sonra</string>
     <string name="restart">Yeniden başlat</string>
     <string name="caption_systememoji">Cihazınızın varsayılan ifade paketi</string>
@@ -274,7 +274,7 @@
     <string name="download_failed">İndirme başarısız</string>
     <string name="account_moved_description">%1$s buraya taşındı:</string>
     <string name="unreblog_private">Yükseltmeyi geri çek</string>
-    <string name="license_description">Tusky aşağıdakı açık kaynaklı projelerden kod ve materyal içeriyor:</string>
+    <string name="license_description">Husky aşağıdakı açık kaynaklı projelerden kod ve materyal içeriyor:</string>
     <string name="license_apache_2">Apache Lisansı altında lisanslanmıştır (kopya aşağıda)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -411,7 +411,7 @@
     <string name="action_reset_schedule">Sıfırla</string>
     <string name="dialog_redraft_toot_warning">Bu durumu silip yeniden düzenlemek istiyor musunuz?</string>
     <string name="pref_title_bot_overlay">Botlar için işaret göster</string>
-    <string name="about_powered_by_tusky">Tusky tarafından desteklenmektedir</string>
+    <string name="about_powered_by_tusky">Husky tarafından desteklenmektedir</string>
     <string name="description_status_bookmarked">Yerimine eklendi</string>
     <string name="select_list_title">Liste seç</string>
     <string name="list">Liste</string>

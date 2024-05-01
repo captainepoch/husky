@@ -485,7 +485,7 @@
     <string name="old_drafts">Tút lên lịch cũ</string>
     <string name="draft_deleted">Tút lên lịch đã xóa</string>
     <string name="drafts_failed_loading_reply">Chưa tải được bình luận</string>
-    <string name="new_drafts_warning">Tính năng lên lịch đăng tút của Tusky sẽ được thiết kế lại hoàn toàn để nhanh hơn, thân thiện và ít lỗi hơn.
+    <string name="new_drafts_warning">Tính năng lên lịch đăng tút của Husky sẽ được thiết kế lại hoàn toàn để nhanh hơn, thân thiện và ít lỗi hơn.
 \nBạn vẫn có thể xem lại bản nháp cũ nhưng chúng sẽ bị xóa bỏ trong bản cập nhật tương lai!</string>
     <string name="drafts_toot_failed_to_send">Đăng tút không thành công!</string>
 </resources>
