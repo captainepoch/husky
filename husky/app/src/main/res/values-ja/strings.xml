@@ -54,19 +54,19 @@
     <string name="report_comment_hint">コメント</string>
     <string name="action_quick_reply">クイック返信</string>
     <string name="action_reply">返信</string>
-    <string name="action_reblog">ブースト</string>
+    <string name="action_reblog">リピート</string>
     <string name="action_favourite">お気に入り</string>
     <string name="action_more">その他</string>
     <string name="action_compose">新規投稿</string>
-    <string name="action_login">Mastodonでログイン</string>
+    <string name="action_login">Pleromaでログイン</string>
     <string name="action_logout">ログアウト</string>
     <string name="action_logout_confirm">アカウント %1$s からログアウトしてもよろしいですか？</string>
     <string name="action_follow">フォローする</string>
     <string name="action_unfollow">フォロー解除</string>
     <string name="action_block">ブロック</string>
     <string name="action_unblock">ブロック解除</string>
-    <string name="action_hide_reblogs">ブーストを非表示</string>
-    <string name="action_show_reblogs">ブーストを表示</string>
+    <string name="action_hide_reblogs">リピートを隠す</string>
+    <string name="action_show_reblogs">リピートを表示</string>
     <string name="action_report">通報</string>
     <string name="action_delete">削除</string>
     <string name="action_delete_and_redraft">削除して編集</string>
@@ -131,19 +131,19 @@
     <string name="label_header">ヘッダー</string>
     <string name="link_whats_an_instance">インスタンスとは？</string>
     <string name="login_connection">接続中…</string>
-    <string name="dialog_whats_an_instance">mastodon.social, icosahedron.website, social.tchncs.deや<a href="https://instances.social">その他</a> のような、あらゆるインスタンスのアドレスやドメインを入力できます。 \u0020
-\n \u0020
-\nまだアカウントをお持ちでない場合は、参加したいインスタンスの名前を入力することで そのインスタンスにアカウントを作成できます。 \u0020
-\n \u0020
-\nインスタンスはあなたのアカウントが提供される単独の場所ですが、他のインスタンスのユーザーとあたかも同じ場所にいるように簡単にコミュニケーションをとったりフォローしたりできます。 \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">shitposter.club, blob.cat, expired.mentality.ripや<a href="https://fediverse.network/pleroma?count=peers">その他</a> のような、あらゆるインスタンスのアドレスやドメインを入力できます。
+\n
+\nまだアカウントをお持ちでない場合は、参加したいインスタンスの名前を入力することで そのインスタンスにアカウントを作成できます。
+\n
+\nインスタンスはあなたのアカウントが提供される単独の場所ですが、他のインスタンスのユーザーとあたかも同じ場所にいるように簡単にコミュニケーションをとったりフォローしたりできます。
+\n
 \nさらに詳しい情報は<a href="https://joinmastodon.org">joinmastodon.org</a>でご覧いただけます。 </string>
     <string name="dialog_title_finishing_media_upload">メディアをアップロードしています</string>
     <string name="dialog_message_uploading_media">アップロード中…</string>
     <string name="dialog_download_image">ダウンロード</string>
     <string name="dialog_message_cancel_follow_request">フォローリクエストを取り消しますか？</string>
     <string name="dialog_unfollow_warning">このアカウントをフォロー解除しますか？</string>
-    <string name="dialog_delete_toot_warning">本当に削除しますか？</string>
+    <string name="dialog_delete_toot_warning">削除しますか\?</string>
     <string name="visibility_public">公開：公開タイムラインに投稿する</string>
     <string name="visibility_unlisted">未収載：公開タイムラインには表示しない</string>
     <string name="visibility_private">フォロワー限定：フォロワーだけに公開</string>
@@ -209,8 +209,8 @@
     <string name="notification_title_summary">%d件の新しい通知</string>
     <string name="description_account_locked">非公開アカウント</string>
     <string name="about_title_activity">このアプリについて</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tuskyは無料のオープンソースソフトウェアです。<!--
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Huskyは無料のオープンソースソフトウェアです。<!--
      -->GNU General Public License Version 3 の下で使用許諾されています。<!--
      -->ライセンスはここからご覧いただけます： https://www.gnu.org/licenses/gpl-3.0.ja.html</string>
     <!-- note to translators:
@@ -219,11 +219,13 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">プロジェクトのWebサイト（英語）：
-\n https://tusky.app</string>
-    <string name="about_bug_feature_request_site">バグ報告 &amp; 機能リクエスト（英語）：
-\n https://github.com/tuskyapp/Tusky/issues</string>
-    <string name="about_tusky_account">Tusky公式アカウント</string>
+    <string name="about_project_site">プロジェクトのWebサイト（英語）：\n
+        https://husky.adol.pw
+    </string>
+    <string name="about_bug_feature_request_site">バグ報告 &amp; 機能リクエスト（英語）：\n
+        https://github.com/captainepoch/husky/issues
+    </string>
+    <string name="about_tusky_account">Husky公式アカウント</string>
     <string name="status_share_content">トゥートの内容を共有</string>
     <string name="status_share_link">トゥートへのリンクを共有</string>
     <string name="status_media_images">画像</string>
@@ -248,7 +250,7 @@
     <string name="filter_addition_dialog_title">フィルターを追加</string>
     <string name="filter_edit_dialog_title">フィルターを編集</string>
     <string name="add_account_name">アカウントを追加</string>
-    <string name="add_account_description">新しいMastodonアカウントを追加</string>
+    <string name="add_account_description">新しいPleromaアカウントを追加</string>
     <string name="action_lists">リスト</string>
     <string name="title_lists">リスト</string>
     <string name="title_list_timeline">リストタイムライン</string>
@@ -277,7 +279,7 @@
     <string name="expand_collapse_all_statuses">全て開く/閉じる</string>
     <string name="action_open_toot">トゥートを開く</string>
     <string name="restart_required">アプリの再起動が必要です</string>
-    <string name="restart_emoji">これらの変更を適用するには、Tuskyの再起動が必要になります</string>
+    <string name="restart_emoji">これらの変更を適用するには、Huskyの再起動が必要になります</string>
     <string name="later">後で</string>
     <string name="restart">再起動</string>
     <string name="caption_systememoji">あなたのデバイスのデフォルト絵文字セットです</string>
@@ -287,8 +289,8 @@
     <string name="profile_badge_bot_text">ボット</string>
     <string name="account_moved_description">%1$s は引っ越しました:</string>
     <string name="reblog_private">ブースト</string>
-    <string name="unreblog_private">ブーストを解除</string>
-    <string name="license_description">Tuskyは、以下のオープンソース プロジェクトからのコードとアセットを含んでいます:</string>
+    <string name="unreblog_private">リピートを削除</string>
+    <string name="license_description">Huskyは、以下のオープンソース プロジェクトからのコードとアセットを含んでいます:</string>
     <string name="license_apache_2">Apache Licenseの下にライセンスされています（下記をコピー）</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -318,9 +320,9 @@
     <string name="hint_list_name">リスト名</string>
     <string name="error_network">ネットワークエラーが発生しました！接続を確認してもう一度試してください！</string>
     <string name="status_username_format">\@%s</string>
-    <string name="action_unreblog">ブーストを解除</string>
+    <string name="action_unreblog">リピートを削除</string>
     <string name="action_unfavourite">お気に入りを解除</string>
-    <string name="action_open_reblogged_by">ブーストを表示</string>
+    <string name="action_open_reblogged_by">リピートを表示</string>
     <string name="download_media">メディアをダウンロード</string>
     <string name="downloading_media">メディアをダウンロード中</string>
     <string name="app_theme_system">システムの設定を利用</string>
@@ -453,5 +455,19 @@
     <plurals name="poll_info_people">
         <item quantity="other">%s人</item>
     </plurals>
-    <string name="warning_scheduling_interval">Mastodonにおける予約までの最小間隔は5分です。</string>
+    <string name="warning_scheduling_interval">Pleromaにおける予約までの最小間隔は5分です。</string>
+    <string name="action_reply_to">返信</string>
+    <string name="action_emoji_react">絵文字反応</string>
+    <string name="action_emoji_reacted_by">誰が反応したか</string>
+    <string name="action_enable_formatting_syntax">可能にする %s</string>
+    <string name="action_disable_formatting_syntax">無効にする %s</string>
+    <string name="hint_appname">アプリの名前</string>
+    <string name="hint_website">アプリのウェブサイト</string>
+    <string name="admin">管理者</string>
+    <string name="moderator">モデレーター</string>
+    <string name="action_emoji_unreact">反応を削除</string>
+    <string name="error_media_upload_size">ファイルが大きすぎます</string>
+    <string name="notification_emoji_name">絵文字反応</string>
+    <string name="title_emoji_reacted_by">%s 誰が反応したか</string>
+    <string name="pref_title_hide_muted_users">ミュートされたユーザーを隠す</string>
 </resources>
