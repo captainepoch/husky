@@ -18,7 +18,7 @@
     <string name="error_media_download_permission">Se requiere permiso para descargar al almacenamiento.</string>
     <string name="error_media_upload_image_or_video">No se pueden adjuntar imágenes y vídeos en el mismo estado.</string>
     <string name="error_media_upload_sending">La subida falló.</string>
-    <string name="error_sender_account_gone">Error al publicar.</string>
+    <string name="error_sender_account_gone">Error al enviar la publicación.</string>
     <string name="title_home">Inicio</string>
     <string name="title_notifications">Notificaciones</string>
     <string name="title_public_local">Local</string>
@@ -39,7 +39,7 @@
     <string name="title_drafts">Borradores</string>
     <string name="title_licenses">Licencias</string>
     <string name="status_username_format">\@%s</string>
-    <string name="status_boosted_format">%s compartió</string>
+    <string name="status_boosted_format">%s repetido</string>
     <string name="status_sensitive_media_title">Contenido sensible</string>
     <string name="status_media_hidden_title">Material oculto</string>
     <string name="status_sensitive_media_directions">Pulsa para ver</string>
@@ -49,14 +49,14 @@
     <string name="status_content_show_less">Ocultar</string>
     <string name="message_empty">Nada aquí.</string>
     <string name="footer_empty">Nada por aquí. ¡Arrastra hacia abajo para recargar!</string>
-    <string name="notification_reblog_format">%s impulsó tu toot</string>
-    <string name="notification_favourite_format">%s marcó favorito</string>
+    <string name="notification_reblog_format">%s repitió tu publicación</string>
+    <string name="notification_favourite_format">%s le encanto tu publicación</string>
     <string name="notification_follow_format">%s te siguió</string>
     <string name="report_username_format">Reportar @%s</string>
     <string name="report_comment_hint">¿Información adicional?</string>
     <string name="action_quick_reply">Respuesta rápida</string>
     <string name="action_reply">Responder</string>
-    <string name="action_reblog">Compartir</string>
+    <string name="action_reblog">Repetir</string>
     <string name="action_favourite">Favorito</string>
     <string name="action_more">Más</string>
     <string name="action_compose">Redactar</string>
@@ -67,12 +67,12 @@
     <string name="action_unfollow">Dejar de seguir</string>
     <string name="action_block">Bloquear</string>
     <string name="action_unblock">Desbloquear</string>
-    <string name="action_hide_reblogs">Ocultar impulsos</string>
-    <string name="action_show_reblogs">Mostrar impulsos</string>
+    <string name="action_hide_reblogs">Ocultar repeticiones</string>
+    <string name="action_show_reblogs">Mostrar repeticiones</string>
     <string name="action_report">Reportar</string>
     <string name="action_delete">Borrar</string>
     <string name="action_send">Enviar</string>
-    <string name="action_send_public">¡Publicar!</string>
+    <string name="action_send_public">¡Publicado!</string>
     <string name="action_retry">Reintentar</string>
     <string name="action_close">Cerrar</string>
     <string name="action_view_profile">Perfil</string>
@@ -100,7 +100,7 @@
     <string name="action_reject">Rechazar</string>
     <string name="action_search">Buscar</string>
     <string name="action_access_saved_toot">Borradores</string>
-    <string name="action_toggle_visibility">Visibilidad del estado</string>
+    <string name="action_toggle_visibility">Visibilidad de las publicaciones</string>
     <string name="action_content_warning">Aviso de contenido</string>
     <string name="action_emoji_keyboard">Teclado de emojis</string>
     <string name="action_add_tab">Añadir pestaña</string>
@@ -109,7 +109,7 @@
     <string name="action_open_as">Abrir como %s</string>
     <string name="action_share_as">Compartir como…</string>
     <string name="send_status_link_to">Compartir URL…</string>
-    <string name="send_status_content_to">Compartir contenido…</string>
+    <string name="send_status_content_to">Compartir publicación con…</string>
     <string name="send_media_to">Compartir medios a…</string>
     <string name="confirmation_reported">¡Enviado!</string>
     <string name="confirmation_unblocked">El usuario ya no está bloqueado</string>
@@ -142,7 +142,7 @@
     <string name="dialog_download_image">Descargar</string>
     <string name="dialog_message_cancel_follow_request">¿Cancelar petición de amistad?</string>
     <string name="dialog_unfollow_warning">¿Dejar de seguir esta cuenta?</string>
-    <string name="dialog_delete_toot_warning">¿Eliminar este toot\?</string>
+    <string name="dialog_delete_toot_warning">¿Borrar esta publicación\?</string>
     <string name="visibility_public">Público: Mostrar en historias públicas</string>
     <string name="visibility_unlisted">Oculto: No mostrar en historias públicas</string>
     <string name="visibility_private">Privado: Sólo visible para seguidores</string>
@@ -156,7 +156,7 @@
     <string name="pref_title_notification_filters">Notificar cuando</string>
     <string name="pref_title_notification_filter_mentions">me mencionan</string>
     <string name="pref_title_notification_filter_follows">me siguen</string>
-    <string name="pref_title_notification_filter_reblogs">mis posts son impulsados</string>
+    <string name="pref_title_notification_filter_reblogs">Mis publicaciones están repetidas</string>
     <string name="pref_title_notification_filter_favourites">me dan favorito</string>
     <string name="pref_title_appearance_settings">Apariencia</string>
     <string name="pref_title_app_theme">Tema</string>
@@ -170,7 +170,7 @@
     <string name="pref_title_hide_follow_button">Ocultar botón de redacción al bajar</string>
     <string name="pref_title_status_filter">Filtros de cronología</string>
     <string name="pref_title_status_tabs">Pestañas</string>
-    <string name="pref_title_show_boosts">Mostrar impulsos</string>
+    <string name="pref_title_show_boosts">Mostrar repeticiones</string>
     <string name="pref_title_show_replies">Mostrar respuestas</string>
     <string name="pref_title_show_media_preview">Previsualizar multimedia</string>
     <string name="pref_title_proxy_settings">Proxy</string>
@@ -195,10 +195,10 @@
     <string name="notification_mention_descriptions">Notificaciones de nuevas menciones</string>
     <string name="notification_follow_name">Nuevos seguidores</string>
     <string name="notification_follow_description">Notificaciones de nuevos seguidores</string>
-    <string name="notification_boost_name">Impulsos</string>
-    <string name="notification_boost_description">Notificaciones de estados que fueron compartidos</string>
+    <string name="notification_boost_name">Repeticiones</string>
+    <string name="notification_boost_description">Notificarte cuando tus publicaciones se repitan</string>
     <string name="notification_favourite_name">Favoritos</string>
-    <string name="notification_favourite_description">Notificaciones de estados que recibieron favorito</string>
+    <string name="notification_favourite_description">Notificarte cuando tus publicaciones sean marcadas como favoritas</string>
     <string name="notification_mention_format">%s te mencionó</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s y %4$d otros</string>
     <string name="notification_summary_medium">%1$s, %2$s, y %3$s</string>
@@ -258,7 +258,7 @@
     <string name="lock_account_label_description">Tendrá que admitir los seguidores manualmente</string>
     <string name="compose_save_draft">¿Guardar borrador?</string>
     <string name="send_toot_notification_title">Enviando estado…</string>
-    <string name="send_toot_notification_error_title">Error al enviar el estado</string>
+    <string name="send_toot_notification_error_title">Ha habido un error al enviar la publicación</string>
     <string name="send_toot_notification_channel_name">Enviando estado</string>
     <string name="send_toot_notification_cancel_title">Envío cancelado</string>
     <string name="send_toot_notification_saved_content">Una copia del estado se ha guardado en borradores</string>
@@ -270,7 +270,7 @@
     <string name="download_fonts">Tendrás que descargarlos primero</string>
     <string name="performing_lookup_title">Buscando…</string>
     <string name="expand_collapse_all_statuses">Expandir/ocultar todos los estados</string>
-    <string name="action_open_toot">Abrir</string>
+    <string name="action_open_toot">Abrir publicación</string>
     <string name="restart_required">Reinicio requerido</string>
     <string name="restart_emoji">Tendrás que reiniciar la aplicación para aplicar estos cambios</string>
     <string name="later">Más tarde</string>
@@ -281,8 +281,8 @@
     <string name="download_failed">Descarga fallida</string>
     <string name="profile_badge_bot_text">Bot</string>
     <string name="account_moved_description">%1$s se trasladó a:</string>
-    <string name="reblog_private">Volver a compartir</string>
-    <string name="unreblog_private">Dejar de compartir</string>
+    <string name="reblog_private">Repetir para la audencia original</string>
+    <string name="unreblog_private">Deshacer repetición</string>
     <string name="license_description">Husky contiene código y recursos de los siguientes proyectos:</string>
     <string name="license_apache_2">Licenciado bajo Apache License (texto bajo la lista)</string>
     <string name="license_cc_by_4">CC BY 4.0</string>
@@ -299,11 +299,7 @@
         <item quantity="one">&lt;b&gt;%1$s&lt;/b&gt; Favorito</item>
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; Favoritos</item>
     </plurals>
-    <plurals name="reblogs">
-        <item quantity="one"><b>%s</b> impulso</item>
-        <item quantity="other"><b>%s</b> impulsos</item>
-    </plurals>
-    <string name="title_reblogged_by">Impulsado por</string>
+    <string name="title_reblogged_by">Repetido por</string>
     <string name="title_favourited_by">Marcado como favorito por</string>
     <string name="conversation_1_recipients">%1$s</string>
     <string name="conversation_2_recipients">%1$s y %2$s</string>
@@ -315,7 +311,7 @@
     <string name="download_media">Descargar multimedia</string>
     <string name="app_theme_system">Usar tema del sistema</string>
     <string name="pref_title_language">Idioma</string>
-    <string name="action_unreblog">Dejar de impulsar</string>
+    <string name="action_unreblog">Deshacer repetición</string>
     <string name="action_unfavourite">Eliminar favorito</string>
     <string name="pref_title_timeline_filters">Filtros</string>
     <string name="notification_poll_name">Encuestas</string>
@@ -358,7 +354,7 @@
     <string name="title_links_dialog">Enlaces</string>
     <string name="action_open_media_n">Abrir contenido #%d</string>
     <string name="downloading_media">Descargando contenido</string>
-    <string name="dialog_redraft_toot_warning">¿Eliminar y devolver a borradores este toot\?</string>
+    <string name="dialog_redraft_toot_warning">¿Borrar y editar esta publicación\?</string>
     <string name="pref_title_notification_filter_poll">encuestas han terminado</string>
     <string name="notification_poll_description">Notificaciones sobre encuestas que han terminado</string>
     <string name="pref_title_public_filter_keywords">Cronologías públicas</string>
@@ -376,7 +372,7 @@
     <string name="description_status_media">Contenido: %s</string>
     <string name="description_status_cw">Aviso de contenido: %s</string>
     <string name="description_status_media_no_description_placeholder">Sin descripción</string>
-    <string name="description_status_reblogged">Compartido</string>
+    <string name="description_status_reblogged">Repetido</string>
     <string name="description_visiblity_public">Público</string>
     <string name="description_visiblity_unlisted">Sin listar</string>
     <string name="description_visiblity_direct">Directo</string>
@@ -384,15 +380,15 @@
     <string name="edit_hashtag_hint">Etiqueta sin #</string>
     <string name="notifications_clear">Limpiar</string>
     <string name="notifications_apply_filter">Filtro</string>
-    <string name="compose_shortcut_long_label">Componer toot</string>
+    <string name="compose_shortcut_long_label">Crear publicación</string>
     <string name="compose_shortcut_short_label">Redactar</string>
     <string name="notification_clear_text">¿Estás seguro de que quieres eliminar permanentemente todas tus notificaciones\?</string>
     <string name="compose_preview_image_description">Acciones para la imagen %s</string>
     <string name="poll_info_time_absolute">termina en %s</string>
     <string name="poll_ended_voted">Una encuesta en la que has votado ha terminado</string>
     <string name="poll_ended_created">Una encuesta que has creado ha terminado</string>
-    <string name="action_open_reblogger">Abrir autor del impulso</string>
-    <string name="action_open_reblogged_by">Mostrar compartidos</string>
+    <string name="action_open_reblogger">Abrir repeticiones</string>
+    <string name="action_open_reblogged_by">Mostrar repeticiones</string>
     <string name="title_domain_mutes">Dominios ocultos</string>
     <string name="action_view_domain_mutes">Dominios ocultos</string>
     <string name="action_mute_domain">Silenciar %s</string>
@@ -415,7 +411,7 @@
     <string name="report_description_1">El reporte será enviado a un moderador de tu servidor. Puedes añadir una explicación de por qué estás reportando esta cuenta a continuación:</string>
     <string name="report_description_remote_instance">La cuenta es de otro servidor. ¿Enviar una copia anónima del reporte\?</string>
     <string name="pref_title_show_notifications_filter">Mostrar filtro de notificaciones</string>
-    <string name="pref_title_alway_open_spoiler">Mostrar siempre toots marcados con avisos de contenido</string>
+    <string name="pref_title_alway_open_spoiler">Siempre expandir publicaciones marcadas con avisos de contenido</string>
     <string name="title_accounts">Cuentas</string>
     <string name="failed_search">Error al buscar</string>
     <string name="action_add_poll">Añadir encuesta</string>
@@ -431,7 +427,7 @@
     <string name="poll_allow_multiple_choices">Opciones múltiples</string>
     <string name="poll_new_choice_hint">Opción %d</string>
     <string name="edit_poll">Editar</string>
-    <string name="title_scheduled_toot">Estados programados</string>
+    <string name="title_scheduled_toot">Publicaciones programadas</string>
     <string name="action_edit">Editar</string>
     <string name="action_access_scheduled_toot">Estados programados</string>
     <string name="action_schedule_toot">Programar estado</string>
@@ -455,7 +451,7 @@
     <string name="action_unmute_conversation">Dejar de silenciar conversación</string>
     <string name="notification_follow_request_description">Notificaciones de solicitudes</string>
     <string name="pref_title_notification_filter_follow_requests">solicitud de seguimiento</string>
-    <string name="pref_title_confirm_reblogs">Mostrar diálogo de confirmación antes de impulsar</string>
+    <string name="pref_title_confirm_reblogs">Mostrar mensaje de confimarción antes de repetir</string>
     <string name="pref_title_show_cards_in_timelines">Mostrar previsualización de enlaces en la cronología</string>
     <string name="pref_title_enable_swipe_for_tabs">Habilitar gesto de deslizar para alternar entre pestañas</string>
     <plurals name="poll_info_people">
@@ -508,7 +504,6 @@
     <string name="status_media_attachments">Adjuntos</string>
     <string name="status_media_audio">Audio</string>
     <string name="limit_notifications">Limitar notificaciones de cronología</string>
-    <string name="app_name">Husky</string>
     <string name="title_public_bubble">Burbuja</string>
     <string name="pref_default_post_expire_in">Establecer una hora de caducidad para todas las entradas publicadas</string>
     <string name="pref_default_post_expire_in_summary">El valor mínimo es 1 día, 0 para desactivar.</string>
@@ -518,4 +513,33 @@
     <string name="debug_status">compilación de depuración</string>
     <string name="debug_status_message">Una compilación de depuración ha habilitado registros e información de depuración para la aplicación. Podría filtrarse información. Por favor úselo con cuidado.</string>
     <string name="debug_status_message_close">Cerrar</string>
+
+    <string name="action_reply_to">Responder a</string>
+    <string name="action_emoji_react">Reaccionar</string>
+    <string name="action_emoji_unreact">Eliminar la reacción</string>
+    <string name="action_emoji_reacted_by">Quién ha reaccionado</string>
+    <string name="action_enable_formatting_syntax">Activar %s</string>
+    <string name="action_disable_formatting_syntax">Desactivar %s</string>
+    <string name="title_emoji_reacted_by">%s ha reaccionado con</string>
+    <string name="hint_appname">Nombre de la aplicación</string>
+    <string name="hint_website">Página web de la aplicación</string>
+    <string name="admin">Administrador/a</string>
+    <!-- "Admin" in Spanish is a gendered word. I used "masculine/femenine" since it is the more conservative option and should avoid more complaints than the informal neutral. -->
+    <string name="moderator">Moderador/a</string>
+    <string name="error_media_upload_size">El archivo es demasiado grande</string>
+    <string name="notification_emoji_format">%s ha reaccionado con %s a tu publicación</string>
+    <string name="notification_emoji_name">Reacciones</string>
+    <string name="notification_emoji_description">Notificaciones acerca de reacciones nuevas</string>
+    <string name="pref_title_default_formatting">
+    Sintaxis de formato por defecto(si la instancia los admite)</string>
+    <string name="pref_title_notification_filter_emoji">se pueden enviar reacciones a mis publicaciones</string>
+    <string name="pref_title_hide_muted_users">Ocultar a los usuarios silenciados</string>
+    <string name="error_sticker_fetch">Se produjo un error al buscar el sticker</string>
+    <string name="pref_title_enable_experimental_stickers">Habilitar reacciones experimentales de Pleroma-FE (si está disponible)</string>
+    <string name="action_sticker">Stickers</string>
+    <string name="pref_title_enable_big_emojis">Habilitar emojis personalizados más grandes</string>
+    <plurals name="reblogs">
+        <item quantity="one"><b>%s</b> Repetir</item>
+        <item quantity="other"><b>%s</b> Repeticiones</item>
+    </plurals>
 </resources>
