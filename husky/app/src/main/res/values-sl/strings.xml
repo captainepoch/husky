@@ -58,7 +58,7 @@
     <string name="action_favourite">Vzljubi</string>
     <string name="action_more">Več</string>
     <string name="action_compose">Sestavi</string>
-    <string name="action_login">Prijavite se z Mastodonom</string>
+    <string name="action_login">Prijavite se z Pleromaom</string>
     <string name="action_logout">Odjava</string>
     <string name="action_logout_confirm">Ali ste prepričani, da se želite odjaviti iz računa %1$s\?</string>
     <string name="action_follow">Sledi</string>
@@ -141,7 +141,7 @@
     <string name="confirmation_unmuted">Prekinjeno utišanje uporabnika</string>
     <string name="hint_domain">Katero vozlišče\?</string>
     <string name="link_whats_an_instance">Kaj je instanca\?</string>
-    <string name="dialog_whats_an_instance">Tu lahko vnesete naslov ali domeno katerega koli vozlišča, na primer mastodon.social, icosahedron.website, social.tchncs.de in <a href="https://instances.social"> več! </a>
+    <string name="dialog_whats_an_instance">Tu lahko vnesete naslov ali domeno katerega koli vozlišča, na primer shitposter.club, blob.cat, expired.mentality.rip in <a href="https://fediverse.network/pleroma?count=peers"> več! </a>
 \n
 \nČe še nimate računa, lahko vnesete ime vozlišča, kateremu bi se radi pridružili, in tam ustvarite račun.
 \n
@@ -207,13 +207,13 @@
     <string name="notification_title_summary">%d novih interakcij</string>
     <string name="description_account_locked">Zaklenjen račun</string>
     <string name="about_title_activity">O aplikaciji</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky je prosta in odprtokodna programska oprema. Licencirana je pod licenco GNU General Public License različice 3. Licenco si lahko ogledate tukaj: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky je prosta in odprtokodna programska oprema. Licencirana je pod licenco GNU General Public License različice 3. Licenco si lahko ogledate tukaj: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <string name="about_project_site">Spletna stran projekta:
-\nhttps://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">Poročila o napakah in želje za nove funkcije:
-\nhttps://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Profil Tusky</string>
+\n https://github.com/captainepoch/husky/issues</string>
+    <string name="about_tusky_account">Profil Husky</string>
     <string name="status_share_content">Deli vsebino tuta</string>
     <string name="status_share_link">Deli povezavo do tuta</string>
     <string name="status_media_images">Slike</string>
@@ -242,7 +242,7 @@
     <string name="filter_dialog_update_button">Posodobi</string>
     <string name="filter_add_description">Filtriraj frazo</string>
     <string name="add_account_name">Dodaj račun</string>
-    <string name="add_account_description">Dodaj nov Mastodon račun</string>
+    <string name="add_account_description">Dodaj nov Pleroma račun</string>
     <string name="action_lists">Seznami</string>
     <string name="title_lists">Seznami</string>
     <string name="title_list_timeline">Seznam časovnice</string>
@@ -280,7 +280,7 @@
     <string name="expand_collapse_all_statuses">Razširi/Strni vse statuse</string>
     <string name="action_open_toot">Odpri tut</string>
     <string name="restart_required">Potreben je ponovni zagon aplikacije</string>
-    <string name="restart_emoji">Če želite uveljaviti te spremembe, morate znova zagnati Tusky</string>
+    <string name="restart_emoji">Če želite uveljaviti te spremembe, morate znova zagnati Husky</string>
     <string name="later">Kasneje</string>
     <string name="restart">Znova zaženi</string>
     <string name="caption_systememoji">"Privzeti komplet emotikonov vaše naprave "</string>
@@ -291,7 +291,7 @@
     <string name="account_moved_description">%1$s se je prestavil/a na:</string>
     <string name="reblog_private">Spodbudi izvirnemu občinstvu</string>
     <string name="unreblog_private">Prekini spodbudo</string>
-    <string name="license_description">Tusky vsebuje kodo in sredstva iz naslednjih odprtokodnih projektov:</string>
+    <string name="license_description">Husky vsebuje kodo in sredstva iz naslednjih odprtokodnih projektov:</string>
     <string name="license_apache_2">Licencirano pod licenco Apache (spodaj)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -432,7 +432,7 @@
     <string name="action_reset_schedule">Ponastavi</string>
     <string name="action_schedule_toot">Napovej tut</string>
     <string name="post_lookup_error_format">Napaka pri iskanju objave %s</string>
-    <string name="about_powered_by_tusky">Poganja ga Tusky</string>
+    <string name="about_powered_by_tusky">Poganja ga Husky</string>
     <string name="status_boosted_format">%s spodbudil</string>
     <string name="hashtags">Ključniki</string>
     <string name="notification_follow_request_name">Zahteve za Sledenje</string>
