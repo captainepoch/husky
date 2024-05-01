@@ -148,7 +148,7 @@
 \nЕсли у вас еще нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.
 \n
 \n \u0020Узел - это то место, где размещен ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.
-\n 
+\n
 \n \u0020Чтобы получить больше информации посетите <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
     <string name="dialog_title_finishing_media_upload">Завершается загрузка медиаконтента</string>
     <string name="dialog_message_uploading_media">Загружается…</string>
@@ -231,7 +231,7 @@
     <string name="about_project_site">Веб-сайт проекта:
 \n https://tusky.app</string>
     <string name="about_bug_feature_request_site">Отчеты об ошибках и пожелания:
-\n https://github.com/tuskyapp/Tusky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="about_tusky_account">Профиль Tusky</string>
     <string name="status_share_content">Поделиться содержанием поста</string>
     <string name="status_share_link">Поделиться ссылкой на пост</string>

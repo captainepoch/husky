@@ -143,11 +143,11 @@
     <string name="link_whats_an_instance">Hva er en instans\?</string>
     <string name="login_connection">Kobler til…</string>
     <string name="dialog_whats_an_instance"><a href="https://instances.social">more!</a> \u0020
-\n 
-\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to join and create an account there. 
-\n 
+\n
+\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to join and create an account there.
+\n
 \nAn instance is a single place where your account is hosted, but you can easily communicate with and follow folks on other instances as though you were on the same site. \u0020
-\n 
+\n
 \nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Media opplasting er ferdig</string>
     <string name="dialog_message_uploading_media">Laster opp…</string>
@@ -207,7 +207,7 @@
     <string name="about_title_activity">Om</string>
     <string name="about_tusky_version">Tusky %s</string>
     <string name="about_bug_feature_request_site">Rapporter feil og ønsker om funksjonalitet her:
-\n https://github.com/tuskyapp/Tusky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="about_tusky_account">Tuskys Mastodon-profil</string>
     <string name="status_share_content">Del inneholdet i tootet</string>
     <string name="status_share_link">Del link til toot</string>

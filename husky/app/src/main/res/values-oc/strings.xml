@@ -116,11 +116,11 @@
     <string name="label_header">Bandièra</string>
     <string name="link_whats_an_instance">Que es una instància ?</string>
     <string name="login_connection">Connexion…</string>
-    <string name="dialog_whats_an_instance">Aquí podètz picar l\'adreça o domini de quina que siá instància, \u0020coma mastodont.cat, mastodon.social, icosahedron.website o \u0020<a href="https://instances.social">fòrca mai !</a> 
+    <string name="dialog_whats_an_instance">Aquí podètz picar l\'adreça o domini de quina que siá instància, \u0020coma mastodont.cat, mastodon.social, icosahedron.website o \u0020<a href="https://instances.social">fòrca mai !</a>
 \n
 \nSi encara non avètz cap de compte, podètz picar lo nom de l’instància ont vos agradariá \u0020anar e crear un compte enlà.
 \n
-\n 
+\n
 \n
 \nAvètz mas d’informacins a <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
     <string name="dialog_title_finishing_media_upload">Finalizacion del mandadís del mèdia</string>
@@ -198,7 +198,7 @@
     <string name="about_project_site">Site web del projècte :
 \n https://tusky.app</string>
     <string name="about_bug_feature_request_site">Rapòrts d\'errors e demandas de foncionalitats :
-\n https://github.com/tuskyapp/Tusky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="about_tusky_account">Perfil de Tusky</string>
     <string name="status_share_content">Partejar lo contengut del tut</string>
     <string name="status_share_link">Partejar lo ligam del tut</string>
