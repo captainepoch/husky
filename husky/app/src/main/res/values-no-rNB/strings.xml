@@ -18,14 +18,14 @@
     <string name="error_media_download_permission">Trenger tillatelse for å lagre media.</string>
     <string name="error_media_upload_image_or_video">Bilder og videoer kan ikke kobles til samme status.</string>
     <string name="error_media_upload_sending">Opplastingen feilet.</string>
-    <string name="error_sender_account_gone">En feil oppsto under sending av tootet.</string>
+    <string name="error_sender_account_gone">Feil ved sending av innlegg.</string>
     <string name="title_home">Hjem</string>
     <string name="title_notifications">Varsler</string>
     <string name="title_public_local">Lokal</string>
     <string name="title_public_federated">Forent</string>
     <string name="title_direct_messages">Direktemeldinger</string>
     <string name="title_tab_preferences">Faner</string>
-    <string name="title_view_thread">Toot</string>
+    <string name="title_view_thread">Innlegg</string>
     <string name="title_statuses">Toots</string>
     <string name="title_statuses_with_replies">Med svar</string>
     <string name="title_statuses_pinned">Festet</string>
@@ -39,7 +39,7 @@
     <string name="title_drafts">Kladder</string>
     <string name="title_licenses">Lisenser</string>
     <string name="status_username_format">\@%s</string>
-    <string name="status_boosted_format">%s boosted</string>
+    <string name="status_boosted_format">%s delte</string>
     <string name="status_sensitive_media_title">Sensitivt innhold</string>
     <string name="status_media_hidden_title">Media skjult</string>
     <string name="status_sensitive_media_directions">Klikk for å vise</string>
@@ -49,32 +49,32 @@
     <string name="status_content_show_less">Kollaps</string>
     <string name="message_empty">Her er det ingenting.</string>
     <string name="footer_empty">Her er det ingenting. Dra ned for å oppdatere!</string>
-    <string name="notification_reblog_format">%s boostet tootet ditt</string>
-    <string name="notification_favourite_format">%s favoriserte tootet ditt</string>
+    <string name="notification_reblog_format">%s delte innlegget ditt</string>
+    <string name="notification_favourite_format">%s likte innlegget ditt</string>
     <string name="notification_follow_format">%s følger deg</string>
     <string name="report_username_format">Rapporter @%s</string>
     <string name="report_comment_hint">Ytterligere kommentarer\?</string>
     <string name="action_quick_reply">Hurtigsvar</string>
     <string name="action_reply">Svar</string>
-    <string name="action_reblog">Boost</string>
-    <string name="action_unreblog">Fjern boost</string>
+    <string name="action_reblog">Del</string>
+    <string name="action_unreblog">Fjern deling</string>
     <string name="action_favourite">Legg til i favoritter</string>
     <string name="action_unfavourite">Fjern favoritt</string>
     <string name="action_more">Mer</string>
     <string name="action_compose">Skriv</string>
-    <string name="action_login">Logg inn med Mastodon</string>
+    <string name="action_login">Logg inn med Pleroma</string>
     <string name="action_logout">Logg ut</string>
     <string name="action_logout_confirm">Er du sikker på at du vil logge ut fra kontoen %1$s\?</string>
     <string name="action_follow">Følg</string>
     <string name="action_unfollow">Slutt å følge</string>
     <string name="action_block">Blokker</string>
     <string name="action_unblock">Fjern blokkering</string>
-    <string name="action_hide_reblogs">Skjul boosts</string>
-    <string name="action_show_reblogs">Vis boosts</string>
+    <string name="action_hide_reblogs">Skjul delinger</string>
+    <string name="action_show_reblogs">Vis delinger</string>
     <string name="action_report">Rapporter</string>
     <string name="action_delete">Slett</string>
-    <string name="action_send">TOOT</string>
-    <string name="action_send_public">TOOT!</string>
+    <string name="action_send">POST</string>
+    <string name="action_send_public">POST!</string>
     <string name="action_retry">Prøv igjen</string>
     <string name="action_close">Steng</string>
     <string name="action_view_profile">Profil</string>
@@ -102,15 +102,15 @@
     <string name="action_reject">Avvis</string>
     <string name="action_search">Søk</string>
     <string name="action_access_saved_toot">Kladder</string>
-    <string name="action_toggle_visibility">Toot-synlighet</string>
+    <string name="action_toggle_visibility">Innleggs synlighet</string>
     <string name="action_content_warning">Innholdsadvarsel</string>
     <string name="action_emoji_keyboard">Emoji-tastatur</string>
     <string name="action_add_tab">Legg til fane</string>
     <string name="action_links">Linker</string>
     <string name="action_mentions">Nevner</string>
     <string name="action_hashtags">Stikkord</string>
-    <string name="action_open_reblogger">Åpne toot-forfatter</string>
-    <string name="action_open_reblogged_by">Vis boosts</string>
+    <string name="action_open_reblogger">Åpne innleggs deler</string>
+    <string name="action_open_reblogged_by">Vis delinger</string>
     <string name="action_open_faved_by">Vis favoritter</string>
     <string name="title_hashtags_dialog">Stikkord</string>
     <string name="title_mentions_dialog">Nevner</string>
@@ -122,8 +122,8 @@
     <string name="action_share_as">Del som …</string>
     <string name="download_media">Last ned media</string>
     <string name="downloading_media">Laster ned media</string>
-    <string name="send_status_link_to">Del toot-URL til…</string>
-    <string name="send_status_content_to">Del toot til…</string>
+    <string name="send_status_link_to">Del innlegg URL til…</string>
+    <string name="send_status_content_to">Del innlegg til…</string>
     <string name="send_media_to">Del media til…</string>
     <string name="confirmation_reported">Sendt!</string>
     <string name="confirmation_unblocked">Fjernet blokkering av bruker</string>
@@ -142,11 +142,11 @@
     <string name="label_header">Overskrift</string>
     <string name="link_whats_an_instance">Hva er en instans\?</string>
     <string name="login_connection">Kobler til…</string>
-    <string name="dialog_whats_an_instance"><a href="https://instances.social">more!</a> \u0020
+    <string name="dialog_whats_an_instance"><a href="https://fediverse.network/pleroma?count=peers">more!</a>
 \n
 \nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to join and create an account there.
 \n
-\nAn instance is a single place where your account is hosted, but you can easily communicate with and follow folks on other instances as though you were on the same site. \u0020
+\nAn instance is a single place where your account is hosted, but you can easily communicate with and follow folks on other instances as though you were on the same site.
 \n
 \nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Media opplasting er ferdig</string>
@@ -154,7 +154,7 @@
     <string name="dialog_download_image">Last ned</string>
     <string name="dialog_message_cancel_follow_request">Trekk tilbake følgeforespørselen\?</string>
     <string name="dialog_unfollow_warning">Slutte å følge denne kontoen\?</string>
-    <string name="dialog_delete_toot_warning">Slette dette tootet?</string>
+    <string name="dialog_delete_toot_warning">Slett dette innlegget\?</string>
     <string name="visibility_public">Offentlig: Vis i offentlig tidslinjer</string>
     <string name="visibility_unlisted">Ikke oppført: Ikke vis i offentlige tidslinjer</string>
     <string name="visibility_private">Bare følgere: Vis bare til følgere</string>
@@ -168,7 +168,7 @@
     <string name="pref_title_notification_filters">Varsle meg når</string>
     <string name="pref_title_notification_filter_mentions">nevnt</string>
     <string name="pref_title_notification_filter_follows">fulgt</string>
-    <string name="pref_title_notification_filter_reblogs">tootene mine blir boostet</string>
+    <string name="pref_title_notification_filter_reblogs">mine innlegg blir delt</string>
     <string name="pref_title_notification_filter_favourites">tootene mine blir favorisert</string>
     <string name="pref_title_appearance_settings">Utseende</string>
     <string name="pref_title_app_theme">Apptema</string>
@@ -180,7 +180,7 @@
     <string name="pref_title_language">Språk</string>
     <string name="pref_title_status_filter">Tidslinjefiltrering</string>
     <string name="pref_title_status_tabs">Faner</string>
-    <string name="pref_title_show_boosts">Vis boosts</string>
+    <string name="pref_title_show_boosts">Vis delinger</string>
     <string name="pref_title_show_replies">Vis svar</string>
     <string name="pref_title_show_media_preview">Last ned forhåndsvisning av media</string>
     <string name="pref_title_proxy_settings">Proxy</string>
@@ -194,10 +194,10 @@
     <string name="pref_status_text_size">Størrelse på statustekst</string>
     <string name="notification_follow_name">Nye følgere</string>
     <string name="notification_follow_description">Varsler om nye følgere</string>
-    <string name="notification_boost_name">Boosts</string>
-    <string name="notification_boost_description">Varsler når tootene dine blir boostet</string>
+    <string name="notification_boost_name">Delinger</string>
+    <string name="notification_boost_description">Notifikasjoner når innleggene dine deles</string>
     <string name="notification_favourite_name">Favoritter</string>
-    <string name="notification_favourite_description">Varsler når tootene dine blir favorisert</string>
+    <string name="notification_favourite_description">Notifikasjon når innleggene dine favoriseres</string>
     <string name="notification_mention_format">%s nevnte deg</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s og %4$d anre</string>
     <string name="notification_summary_medium">%1$s, %2$s, og %3$s</string>
@@ -205,12 +205,12 @@
     <string name="notification_title_summary">%d nye interaksjoner</string>
     <string name="description_account_locked">Låst konto</string>
     <string name="about_title_activity">Om</string>
-    <string name="about_tusky_version">Tusky %s</string>
+    <string name="about_tusky_version">Husky %s</string>
     <string name="about_bug_feature_request_site">Rapporter feil og ønsker om funksjonalitet her:
 \n https://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Tuskys Mastodon-profil</string>
-    <string name="status_share_content">Del inneholdet i tootet</string>
-    <string name="status_share_link">Del link til toot</string>
+    <string name="about_tusky_account">Huskys Mastodon-profil</string>
+    <string name="status_share_content">Del innhold av innlegg</string>
+    <string name="status_share_link">Del link til innlegg</string>
     <string name="status_media_images">Bilder</string>
     <string name="status_media_video">Video</string>
     <string name="state_follow_requested">Forespørsel sendt</string>
@@ -236,7 +236,7 @@
     <string name="filter_dialog_update_button">Oppdater</string>
     <string name="filter_add_description">Frase å filtere</string>
     <string name="add_account_name">Legg til konto</string>
-    <string name="add_account_description">Legg til ny Mastodon-konto</string>
+    <string name="add_account_description">Legg til ny Pleroma-konto</string>
     <string name="action_lists">Lister</string>
     <string name="title_lists">Lister</string>
     <string name="title_list_timeline">Listetidslinje</string>
@@ -253,9 +253,9 @@
     <string name="pref_default_post_privacy">Standard proxy-personvern</string>
     <string name="notification_mention_name">Nye omtaler</string>
     <string name="notification_mention_descriptions">Varsler om nye omtaler</string>
-    <string name="about_tusky_license">Tusky er fri og åpen kildekode. Applikasjonen er lisensiert under GNU General Public License versjon 3. Du kan se lisensen her: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_license">Husky er fri og åpen kildekode. Applikasjonen er lisensiert under GNU General Public License versjon 3. Du kan se lisensen her: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <string name="about_project_site">Hjemmeside:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="abbreviated_in_years">om %dy</string>
     <string name="compose_active_account_description">Poster med konto %1$s</string>
     <string name="error_failed_set_caption">Klarte ikke å sette bildetekst</string>
@@ -266,11 +266,11 @@
     <string name="lock_account_label">Lås konto</string>
     <string name="lock_account_label_description">Krever at du manuelt godkjenner nye følgere</string>
     <string name="compose_save_draft">Lagre kladd\?</string>
-    <string name="send_toot_notification_title">Sender Toot…</string>
-    <string name="send_toot_notification_error_title">Det oppsto en feil under sending av tootet</string>
-    <string name="send_toot_notification_channel_name">Sender Toots</string>
+    <string name="send_toot_notification_title">Sender innlegg…</string>
+    <string name="send_toot_notification_error_title">Feil ved sending av innlegg</string>
+    <string name="send_toot_notification_channel_name">Sender innlegg</string>
     <string name="send_toot_notification_cancel_title">Sending avbrutt</string>
-    <string name="send_toot_notification_saved_content">En kopi av tootet er lagret i kladdene dine</string>
+    <string name="send_toot_notification_saved_content">En kopi av innlegget er lagret i utkastene dine</string>
     <string name="action_compose_shortcut">Skriv</string>
     <string name="error_no_custom_emojis">Instansen %s har ingen egendefinerte emojis</string>
     <string name="copy_to_clipboard_success">Kopiert til utklippstavlen</string>
@@ -279,9 +279,9 @@
     <string name="download_fonts">Du må laste ned emoji-samlingene før de kan brukes</string>
     <string name="performing_lookup_title">Gjennomfører oppslag…</string>
     <string name="expand_collapse_all_statuses">Utvid/kollaps alle statuser</string>
-    <string name="action_open_toot">Åpne toot</string>
+    <string name="action_open_toot">Åpne innlegg</string>
     <string name="restart_required">Omstart av applikasjonen er påkrevd</string>
-    <string name="restart_emoji">Du må starte Tusky på nytt for at endringene skal bli aktive</string>
+    <string name="restart_emoji">Du må starte Husky på nytt for at endringene skal bli aktive</string>
     <string name="later">Senere</string>
     <string name="restart">Start på nytt</string>
     <string name="caption_systememoji">Din enhets standard emoji-samling</string>
@@ -290,9 +290,9 @@
     <string name="download_failed">Nedlasting feilet</string>
     <string name="profile_badge_bot_text">Robot</string>
     <string name="account_moved_description">%1$s har flyttet til:</string>
-    <string name="reblog_private">Boost til opprinnelig publikum</string>
-    <string name="unreblog_private">Fjern boost</string>
-    <string name="license_description">Tusky inneholder programkode og elementer fra følgende åpen kildekode-prosjekter:</string>
+    <string name="reblog_private">Del med den orginale målgruppen</string>
+    <string name="unreblog_private">Fjern deling</string>
+    <string name="license_description">Husky inneholder programkode og elementer fra følgende åpen kildekode-prosjekter:</string>
     <string name="license_apache_2">Lisensiert under Apache License (kopi under)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -309,10 +309,10 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; Favoritter</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one"><b>%s</b> Boost</item>
-        <item quantity="other"><b>%s</b> Boosts</item>
+        <item quantity="one"><b>%s</b> Deling</item>
+        <item quantity="other"><b>%</b> Delinger</item>
     </plurals>
-    <string name="title_reblogged_by">Boostet av</string>
+    <string name="title_reblogged_by">Delt av</string>
     <string name="title_favourited_by">Favorisert av</string>
     <string name="conversation_1_recipients">%1$s</string>
     <string name="conversation_2_recipients">%1$s og %2$s</string>
@@ -321,7 +321,7 @@
     <string name="description_status_media">Media: %s</string>
     <string name="description_status_cw">Innholdsadvarsel: %s</string>
     <string name="description_status_media_no_description_placeholder">Ingen beskrivelse</string>
-    <string name="description_status_reblogged">Reblogged</string>
+    <string name="description_status_reblogged">Delte</string>
     <string name="description_status_favourited">Favorisert</string>
     <string name="description_visiblity_public">Offentlig</string>
     <string name="description_visiblity_unlisted">Ikke listet</string>
@@ -332,12 +332,12 @@
     <string name="notifications_clear">Fjern</string>
     <string name="notifications_apply_filter">Filter</string>
     <string name="filter_apply">Bruk</string>
-    <string name="compose_shortcut_long_label">Skriv Toot</string>
+    <string name="compose_shortcut_long_label">Lag Innlegg</string>
     <string name="compose_shortcut_short_label">Skriv</string>
     <string name="pref_title_bot_overlay">Vis at konto er en robot</string>
     <string name="notification_clear_text">Er du sikker på at du vil slette alle varsler\?</string>
     <string name="action_delete_and_redraft">Slett og skriv på nytt</string>
-    <string name="dialog_redraft_toot_warning">Vil du slette dette tottet og skrive det på nytt?</string>
+    <string name="dialog_redraft_toot_warning">Slett og rediger dette innlegget\?</string>
     <string name="poll_info_format"> <!-- 15 votes • 1 hour left --> %1$s • %2$s</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s stemme</item>
@@ -405,7 +405,7 @@
     <string name="filter_dialog_whole_word_description">Når nøkkelordet kun inneholder bokstaver og tall, vil det bare brukes dersom det stemmer overens med hele ordet</string>
     <string name="title_accounts">Kontoer</string>
     <string name="failed_search">Klarte ikke å søke</string>
-    <string name="pref_title_alway_open_spoiler">Ekspander alltid toots markert med innholdsadvarsel</string>
+    <string name="pref_title_alway_open_spoiler">Alltid utvid innlegg markert med sensitivt innhold</string>
     <string name="action_add_poll">Legg til avstemming</string>
     <string name="create_poll_title">Avstemming</string>
     <string name="duration_5_min">5 minutter</string>
@@ -419,13 +419,13 @@
     <string name="poll_allow_multiple_choices">Flere valg</string>
     <string name="poll_new_choice_hint">Valg %d</string>
     <string name="edit_poll">Endre</string>
-    <string name="title_scheduled_toot">Planlagte toots</string>
+    <string name="title_scheduled_toot">Planlagte innlegg</string>
     <string name="action_edit">Rediger</string>
     <string name="action_access_scheduled_toot">Planlagte toots</string>
-    <string name="action_schedule_toot">Planlegg toot</string>
+    <string name="action_schedule_toot">Utsett publisering</string>
     <string name="action_reset_schedule">Tilbakestill</string>
     <string name="post_lookup_error_format">Det oppsto en feil under henting av %s</string>
-    <string name="about_powered_by_tusky">Drevet av Tusky</string>
+    <string name="about_powered_by_tusky">Drevet av Husky</string>
     <string name="title_bookmarks">Bokmerker</string>
     <string name="action_bookmark">Bokmerke</string>
     <string name="action_view_bookmarks">Bokmerker</string>
@@ -435,9 +435,9 @@
     <string name="no_scheduled_status">Du har ingen planlagte statuser.</string>
     <string name="no_saved_status">Du har ikke lagret noen kladder.</string>
     <string name="error_audio_upload_size">Lydfiler må være mindre enn 40MB.</string>
-    <string name="warning_scheduling_interval">Mastodon har et minimums planleggingsinterval på 5 minutter.</string>
+    <string name="warning_scheduling_interval">Pleroma har et minimums planleggingsinterval på 5 minutter.</string>
     <string name="pref_title_show_cards_in_timelines">Vis forhåndsvisning av linker i tidslinjer</string>
-    <string name="pref_title_confirm_reblogs">Vis bekreftelsesdialog før boosting</string>
+    <string name="pref_title_confirm_reblogs">Vis bekreftelses melding før deling av innlegg</string>
     <string name="pref_title_enable_swipe_for_tabs">Skru på sveiping for å bytte mellom faner</string>
     <plurals name="poll_info_people">
         <item quantity="one">%s person</item>
@@ -497,4 +497,27 @@
 \nGamle kladder er fortsatt tilgjengelige via en knapp på den nye kladdskjermen, men de vil bli fjernet i en fremtidig oppdatering!</string>
     <string name="drafts_toot_failed_to_send">Sending av toot feilet!</string>
     <string name="debug_status_message_close">Lukk</string>
+
+    <string name="notification_emoji_description">Notifikasjoner om nye emoji reaksjoner</string>
+    <string name="pref_title_default_formatting">Standard formatering syntaks(hvis støttet av instansen)</string>
+    <string name="action_emoji_unreact">Fjern reaksjon</string>
+    <string name="action_emoji_reacted_by">Hvem reagerte</string>
+    <string name="action_disable_formatting_syntax">Deaktiver %s</string>
+    <string name="action_sticker">Klistremerker</string>
+    <string name="hint_appname">Applikasjons navn</string>
+    <string name="hint_website">Applikasjons nettside</string>
+    <string name="admin">Admin</string>
+    <string name="error_sticker_fetch">An feil oppsto under henting av klistremerke</string>
+    <string name="notification_emoji_format">%s reagerte med %s på innlegget ditt</string>
+    <string name="pref_title_enable_experimental_stickers">Aktiver eksperimentelle Pleroma-FE klistremerker(hvis tilgjengelig)</string>
+    <string name="action_reply_to">Svar på</string>
+    <string name="action_enable_formatting_syntax">Aktiver %s</string>
+    <string name="moderator">Moderator</string>
+    <string name="title_emoji_reacted_by">%s reagerte med</string>
+    <string name="notification_emoji_name">Emoji Reaksjoner</string>
+    <string name="action_emoji_react">Reager</string>
+    <string name="error_media_upload_size">Filen er større enn instansen tillater</string>
+    <string name="pref_title_notification_filter_emoji">postene mine får emoji-reaksjoner</string>
+    <string name="pref_title_hide_muted_users">Skjul dempede brukere</string>
+    <string name="pref_title_enable_big_emojis">Aktiver større tilpassede emoji</string>
 </resources>
