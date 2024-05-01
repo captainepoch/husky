@@ -62,7 +62,7 @@
     <string name="action_unfavourite">Rimuovi preferito</string>
     <string name="action_more">Di più</string>
     <string name="action_compose">Componi</string>
-    <string name="action_login">Accedi con Mastodon</string>
+    <string name="action_login">Accedi con Pleroma</string>
     <string name="action_logout">Disconnettiti</string>
     <string name="action_logout_confirm">Sei sicuro di volerti disconnettere dall\'account %1$s?</string>
     <string name="action_follow">Segui</string>
@@ -140,12 +140,12 @@
     <string name="label_header">Intestazione</string>
     <string name="link_whats_an_instance">Cos\'è un\'istanza?</string>
     <string name="login_connection">Connessione…</string>
-    <string name="dialog_whats_an_instance">L\'indirizzo o il dominio di qualsiasi istanza può essere inserito qui, come mastodon.social, icosahedron.website, social.tchncs.de, e <a href="https://instances.social">altro!</a> \u0020
-\n \u0020
-\nSe non hai ancora un account, puoi inserire il nome di un\'istanza alla quale vuoi iscriverti e creare un account. \u0020
-\n \u0020
-\nUn\'istanza è il luogo dove l\'account è custodito, ma puoi facilmente comunicare e seguire gente su altre istanze come se fossero sullo stesso sito. \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">L\'indirizzo o il dominio di qualsiasi istanza può essere inserito qui, come shitposter.club, blob.cat, expired.mentality.rip, e <a href="https://fediverse.network/pleroma?count=peers">altro!</a>
+\n
+\nSe non hai ancora un account, puoi inserire il nome di un\'istanza alla quale vuoi iscriverti e creare un account.
+\n
+\nUn\'istanza è il luogo dove l\'account è custodito, ma puoi facilmente comunicare e seguire gente su altre istanze come se fossero sullo stesso sito.
+\n
 \nPiù info possono essere trovate su <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Terminando il caricamento dei media</string>
     <string name="dialog_message_uploading_media">Caricamento…</string>
@@ -219,19 +219,21 @@
     <string name="notification_title_summary">%d nuove interazioni</string>
     <string name="description_account_locked">Account bloccato</string>
     <string name="about_title_activity">A proposito</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky è un programma libero ed open source. È distribuito con licenza GNU General Public License Version 3. Puoi leggere la licenza qui: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky è un programma libero ed open source.
+		È distribuito con licenza GNU General Public License Version 3.
+		Puoi leggere la licenza qui: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Sito web del progetto:
-\n https://tusky.app</string>
-    <string name="about_bug_feature_request_site">Segnala problemi &amp; richiedi funzionalità:
-\n https://github.com/tuskyapp/Tusky/issues</string>
-    <string name="about_tusky_account">Profilo di Tusky</string>
+    <string name="about_project_site">Sito web del progetto:\n
+		https://husky.adol.pw</string>
+    <string name="about_bug_feature_request_site">Segnala problemi &amp; richiedi funzionalità:\n
+		https://github.com/captainepoch/husky/issues</string>
+    <string name="about_tusky_account">Profilo di Husky</string>
     <string name="status_share_content">Condividi contenuto del toot</string>
     <string name="status_share_link">Condividi link al toot</string>
     <string name="status_media_images">Immagini</string>
@@ -261,7 +263,7 @@
     <string name="filter_dialog_update_button">Aggiorna</string>
     <string name="filter_add_description">Frase da filtrare</string>
     <string name="add_account_name">Aggiungi Account</string>
-    <string name="add_account_description">Aggiungi un nuovo Account Mastodon</string>
+    <string name="add_account_description">Aggiungi un nuovo Account Pleroma</string>
     <string name="action_lists">Liste</string>
     <string name="title_lists">Liste</string>
     <string name="title_list_timeline">Timeline della lista</string>
@@ -298,7 +300,7 @@
     <string name="expand_collapse_all_statuses">Espandi/Riduci tutti gli stati</string>
     <string name="action_open_toot">Apri toot</string>
     <string name="restart_required">Riavvio dell\'app richiesto</string>
-    <string name="restart_emoji">Devi riavviare Tusky per applicare queste modifiche</string>
+    <string name="restart_emoji">Devi riavviare Husky per applicare queste modifiche</string>
     <string name="later">Più tardi</string>
     <string name="restart">Riavvia</string>
     <string name="caption_systememoji">Le emoji predefinite del tuo dispositivo</string>
@@ -309,7 +311,7 @@
     <string name="account_moved_description">%1$s si è spostato su:</string>
     <string name="reblog_private">Boost con la visibilità del post di origine</string>
     <string name="unreblog_private">Annulla boost</string>
-    <string name="license_description">Tusky contiene codice e risorse dai seguenti progetti open source:</string>
+    <string name="license_description">Husky contiene codice e risorse dai seguenti progetti open source:</string>
     <string name="license_apache_2">Licenziata sotto la Licenza Apache (copia sotto)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -390,7 +392,7 @@
     <string name="action_edit">Modifica</string>
     <string name="action_view_bookmarks">Segnalibri</string>
     <string name="action_add_poll">Aggiungi sondaggio</string>
-    <string name="about_powered_by_tusky">Fatto con Tusky</string>
+    <string name="about_powered_by_tusky">Fatto con Husky</string>
     <string name="pref_title_alway_open_spoiler">Espandi sempre i toot segnalati come contenuto sensibile</string>
     <string name="description_status_bookmarked">Messo nei segalibri</string>
     <string name="description_poll">Sondaggio con scelte: %1$s, %2$s, %3$s, %4$s; %5$s</string>
@@ -467,7 +469,7 @@
     <string name="pref_title_hide_top_toolbar">Nascondi il titolo della barra degli strumenti in alto</string>
     <string name="pref_title_confirm_reblogs">Mostra la finestra di dialogo di conferma prima del boosting</string>
     <string name="pref_title_show_cards_in_timelines">Mostra le anteprime dei collegamenti nelle timelines</string>
-    <string name="warning_scheduling_interval">Mastodon ha un intervallo minimo di programmazione di 5 minuti.</string>
+    <string name="warning_scheduling_interval">Pleroma ha un intervallo minimo di programmazione di 5 minuti.</string>
     <string name="no_announcements">Non ci sono annunci.</string>
     <string name="no_scheduled_status">Non hai stati pianificati.</string>
     <string name="pref_title_enable_swipe_for_tabs">Abilita il gesto di scorrimento per passare da una scheda all\'altra</string>
