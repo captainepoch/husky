@@ -60,7 +60,7 @@
     <string name="action_favourite">Kedvencnek jelölés</string>
     <string name="action_more">Több</string>
     <string name="action_compose">Szerkesztés</string>
-    <string name="action_login">Bejelentkezés Mastodon-nal</string>
+    <string name="action_login">Bejelentkezés Pleroma-nal</string>
     <string name="action_logout">Kijelentkezés</string>
     <string name="action_logout_confirm">Biztosan ki szeretnél jelentkezni a következőből: %1$s?</string>
     <string name="action_follow">Követés</string>
@@ -134,12 +134,12 @@
     <string name="label_header">Fejléc</string>
     <string name="link_whats_an_instance">Mi az a szerver\?</string>
     <string name="login_connection">Csatlakozás…</string>
-    <string name="dialog_whats_an_instance">Bármely példány címét vagy domain nevét beírhatod ide, mint a mastodon.social, az icosahedron.website, a social.tchncs.de és <a href="https://instances.social">mások!</a> \u0020
-\n \u0020
-\nHa még nincs fiókod, beírhatod annak a példánynak a címét, amelyhez csatlakoznál, majd azon létrehozhatsz egy fiókot. \u0020
-\n \u0020
-\nA példány az a hely, ahol a fiókadataidat tárolják, de ettől még ugyanúgy kommunikálhatsz más példányokon lévő emberekkel, mintha ugyanazon az oldalon lennétek. \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">Bármely példány címét vagy domain nevét beírhatod ide, mint a shitposter.club, az blob.cat, a expired.mentality.rip és <a href="https://fediverse.network/pleroma?count=peers">mások!</a>
+\n
+\nHa még nincs fiókod, beírhatod annak a példánynak a címét, amelyhez csatlakoznál, majd azon létrehozhatsz egy fiókot.
+\n
+\nA példány az a hely, ahol a fiókadataidat tárolják, de ettől még ugyanúgy kommunikálhatsz más példányokon lévő emberekkel, mintha ugyanazon az oldalon lennétek.
+\n
 \nTöbb információt találhatsz itt: <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Média feltöltés befejezése</string>
     <string name="dialog_message_uploading_media">Feltöltés…</string>
@@ -208,18 +208,20 @@
     <string name="notification_title_summary">%d új interakció</string>
     <string name="description_account_locked">Zárolt fiók</string>
     <string name="about_title_activity">Rólunk</string>
-    <string name="about_tusky_version">Tusky %s</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky ingyenes és nyílt forráskódú szoftver. A GNU General Public License Version 3 érvényes rá, amit itt tekinthetsz meg: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Projekt honlapja:
-\n https://tusky.app</string>
+    <string name="about_project_site">Projekt honlapja:\n
+        https://husky.adol.pw
+    </string>
     <string name="about_bug_feature_request_site">Hibajelentés &amp; új funkciók igénylése:
-\n https://github.com/tuskyapp/Tusky/issues</string>
-    <string name="about_tusky_account">Tusky profilja</string>
+\n https://github.com/captainepoch/husky/issues</string>
+    <string name="about_tusky_account">Husky profilja</string>
     <string name="status_share_content">Tülk tartalmának megosztása</string>
     <string name="status_share_link">Tülk linkjének megosztása</string>
     <string name="status_media_images">Képek</string>
@@ -231,7 +233,7 @@
     <string name="title_media">Média</string>
     <string name="load_more_placeholder_text">több betöltése</string>
     <string name="add_account_name">Fiók hozzáadása</string>
-    <string name="add_account_description">Új Mastodon fiók hozzáadása</string>
+    <string name="add_account_description">Új Pleroma fiók hozzáadása</string>
     <string name="action_lists">Listák</string>
     <string name="title_lists">Listák</string>
     <string name="action_remove">Törlés</string>
@@ -251,7 +253,7 @@
     <string name="performing_lookup_title">Keresés…</string>
     <string name="action_open_toot">Tülk megnyitása</string>
     <string name="restart_required">Az app újraindítása szükséges</string>
-    <string name="restart_emoji">A beállítások érvényesítéséhez újra kell indítani a Tusky-t</string>
+    <string name="restart_emoji">A beállítások érvényesítéséhez újra kell indítani a Husky-t</string>
     <string name="later">Később</string>
     <string name="restart">Újraindítás</string>
     <string name="caption_systememoji">Az eszközöd alapértelmezett emoji készlete</string>
@@ -260,7 +262,7 @@
     <string name="download_failed">Letöltés sikertelen</string>
     <string name="profile_badge_bot_text">Bot</string>
     <string name="account_moved_description">%1$s elköltözött:</string>
-    <string name="license_description">A Tusky a következő nyílt forráskódú projektekből tartalmaz programkódot és más elemeket:</string>
+    <string name="license_description">A Husky a következő nyílt forráskódú projektekből tartalmaz programkódot és más elemeket:</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
     <string name="profile_metadata_label">Profil metaadatok</string>
@@ -291,7 +293,6 @@
     <string name="pref_publishing">Közzététel (szerverrel szinkronizált)</string>
     <string name="notification_poll_name">Szavazások</string>
     <string name="notification_poll_description">Értesítés befejezett szavazásokról</string>
-    <string name="about_tusky_license">Tusky ingyenes és nyílt forráskódú szoftver. A GNU General Public License Version 3 érvényes rá, amit itt tekinthetsz meg: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <string name="abbreviated_in_years">%dé múlva</string>
     <string name="abbreviated_in_days">%dn múlva</string>
     <string name="abbreviated_in_hours">%dó múlva</string>
@@ -436,14 +437,14 @@
     <string name="title_bookmarks">Könyvjelzők</string>
     <string name="action_bookmark">Könyvjelzőzés</string>
     <string name="action_view_bookmarks">Könyvjelzők</string>
-    <string name="about_powered_by_tusky">Tusky által hajtva</string>
+    <string name="about_powered_by_tusky">Husky által hajtva</string>
     <string name="description_status_bookmarked">Könyvjelzőzve</string>
     <string name="select_list_title">Lista kiválasztása</string>
     <string name="list">Lista</string>
     <string name="error_audio_upload_size">A hangfájloknak kisebbnek kell lenniük, mint 40 MB.</string>
     <string name="no_saved_status">Nincs egy vázlatod sem.</string>
     <string name="no_scheduled_status">Nincs egy ütemezett tülköd sem.</string>
-    <string name="warning_scheduling_interval">A Mastodonban a legrövidebb ütemezhető időintervallum 5 perc.</string>
+    <string name="warning_scheduling_interval">A Pleromaban a legrövidebb ütemezhető időintervallum 5 perc.</string>
     <string name="notification_follow_request_name">Követési kérelmek</string>
     <string name="pref_title_confirm_reblogs">Jóváhagyó ablak mutatása megtolás előtt</string>
     <string name="pref_title_show_cards_in_timelines">Hivatkozás előnézetének mutatása idővonalakon</string>
