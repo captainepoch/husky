@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="action_reply_to">जवाब दे</string>
-    <string name="action_emoji_reacted_by">किसने प्रतिक्रिया व्यक्त की</string>
-    <string name="action_emoji_react">प्रतिक्रिया</string>
-    <string name="action_emoji_unreact">प्रतिक्रिया निकालें</string>
-</resources>

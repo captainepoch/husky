@@ -67,9 +67,9 @@
     <string name="restart_emoji">इन परिवर्तनों को लागू करने के लिए आपको टस्की को पुनः आरंभ करना होगा</string>
     <string name="about_tusky_account">टस्की की प्रोफाइल</string>
     <string name="about_bug_feature_request_site">बग रिपोर्ट और सुविधा अनुरोध:
-\n https://github.com/tuskyapp/Tusky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="about_project_site">परियोजना की वेबसाइट:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_tusky_license">टस्की स्वतंत्र और ओपन-सोर्स सॉफ्टवेयर है। यह GNU जनरल पब्लिक लाइसेंस संस्करण 3 के तहत लाइसेंस प्राप्त है। आप लाइसेंस यहां देख सकते हैं: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <string name="about_powered_by_tusky">टस्की द्वारा संचालित</string>
     <string name="about_tusky_version">टस्की %s</string>
@@ -405,4 +405,9 @@
     </plurals>
     <string name="error_compose_character_limit">पोस्ट बहुत लंबा है!</string>
     <string name="error_failed_app_registration">उस सर्वर से प्रमाणित करने में विफल।</string>
+
+    <string name="action_reply_to">जवाब दे</string>
+    <string name="action_emoji_reacted_by">किसने प्रतिक्रिया व्यक्त की</string>
+    <string name="action_emoji_react">प्रतिक्रिया</string>
+    <string name="action_emoji_unreact">प्रतिक्रिया निकालें</string>
 </resources>
