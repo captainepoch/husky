@@ -17,14 +17,14 @@
     <string name="error_media_download_permission">Permissão para armazenar mídia é necessária.</string>
     <string name="error_media_upload_image_or_video">Imagem e vídeo não podem ser anexados no mesmo toot.</string>
     <string name="error_media_upload_sending">Erro ao enviar.</string>
-    <string name="error_sender_account_gone">Erro ao enviar toot.</string>
+    <string name="error_sender_account_gone">Erro ao mandar o post.</string>
     <string name="title_home">Página inicial</string>
     <string name="title_notifications">Notificações</string>
     <string name="title_public_local">Linha local</string>
     <string name="title_public_federated">Linha global</string>
     <string name="title_direct_messages">Mensagens Diretas</string>
     <string name="title_tab_preferences">Editar abas</string>
-    <string name="title_view_thread">Conversa</string>
+    <string name="title_view_thread">Post</string>
     <string name="title_statuses">Toots</string>
     <string name="title_statuses_with_replies">Com respostas</string>
     <string name="title_follows">Segue</string>
@@ -36,39 +36,39 @@
     <string name="title_edit_profile">Editar perfil</string>
     <string name="title_drafts">Rascunhos</string>
     <string name="title_licenses">Licenças</string>
-    <string name="status_boosted_format">%s deu boost</string>
+    <string name="status_boosted_format">%s repetido</string>
     <string name="status_sensitive_media_title">Mídia sensível</string>
     <string name="status_media_hidden_title">Mídia sensível</string>
     <string name="status_sensitive_media_directions">Toque para ver</string>
     <string name="status_content_warning_show_more">Expandir</string>
     <string name="status_content_warning_show_less">Ocultar</string>
     <string name="footer_empty">Nada aqui. Arraste para atualizar!</string>
-    <string name="notification_reblog_format">%s deu boost no teu toot</string>
-    <string name="notification_favourite_format">%s favoritou teu toot</string>
+    <string name="notification_reblog_format">%s repetiu seu post</string>
+    <string name="notification_favourite_format">%s marcou seu post como favorito</string>
     <string name="notification_follow_format">%s te seguiu</string>
     <string name="report_username_format">Denunciar @%s</string>
     <string name="report_comment_hint">Comentários adicionais aqui</string>
     <string name="action_quick_reply">Resposta rápida</string>
     <string name="action_reply">Responder</string>
-    <string name="action_reblog">Dar boost</string>
-    <string name="action_unreblog">Desfazer boost</string>
+    <string name="action_reblog">Repetir</string>
+    <string name="action_unreblog">Remover Repetir</string>
     <string name="action_favourite">Favoritar</string>
     <string name="action_unfavourite">Desfavoritar</string>
     <string name="action_more">Mais</string>
     <string name="action_compose">Compor</string>
-    <string name="action_login">Entrar com Mastodon</string>
+    <string name="action_login">Entrar com Pleroma</string>
     <string name="action_logout">Sair</string>
     <string name="action_logout_confirm">Você tem certeza de que deseja sair da conta %1$s\?</string>
     <string name="action_follow">Seguir</string>
     <string name="action_unfollow">Deixar de seguir</string>
     <string name="action_block">Bloquear</string>
     <string name="action_unblock">Desbloquear</string>
-    <string name="action_hide_reblogs">Ocultar boosts</string>
-    <string name="action_show_reblogs">Mostrar boosts</string>
+    <string name="action_hide_reblogs">Esconder Repetidos</string>
+    <string name="action_show_reblogs">Mostrar Repitidos</string>
     <string name="action_report">Denunciar</string>
     <string name="action_delete">Excluir</string>
-    <string name="action_send">TOOT!</string>
-    <string name="action_send_public">TOOT!</string>
+    <string name="action_send">Post</string>
+    <string name="action_send_public">POST!</string>
     <string name="action_retry">Tentar novamente</string>
     <string name="action_close">Fechar</string>
     <string name="action_view_profile">Perfil</string>
@@ -95,13 +95,13 @@
     <string name="action_reject">Rejeitar</string>
     <string name="action_search">Pesquisar</string>
     <string name="action_access_saved_toot">Rascunhos</string>
-    <string name="action_toggle_visibility">Privacidade do toot</string>
+    <string name="action_toggle_visibility">Visibilidade do post</string>
     <string name="action_content_warning">Aviso de Conteúdo</string>
     <string name="action_emoji_keyboard">Teclado de emojis</string>
     <string name="action_add_tab">Adicionar aba</string>
     <string name="action_links">Links</string>
     <string name="action_mentions">Menções</string>
-    <string name="action_open_reblogged_by">Mostrar boosts</string>
+    <string name="action_open_reblogged_by">Mostrar Repetidos</string>
     <string name="action_open_faved_by">Mostrar favoritos</string>
     <string name="title_mentions_dialog">Menções</string>
     <string name="title_links_dialog">Links</string>
@@ -109,8 +109,8 @@
     <string name="action_copy_link">Copiar link</string>
     <string name="action_open_as">Abrir como %s</string>
     <string name="action_share_as">Compartilhar como…</string>
-    <string name="send_status_link_to">Compartilhar link do toot em…</string>
-    <string name="send_status_content_to">Compartilhar toot em…</string>
+    <string name="send_status_link_to">Compartilhar o url post para…</string>
+    <string name="send_status_content_to">Compartilhar post para…</string>
     <string name="send_media_to">Compartilhar mídia via…</string>
     <string name="confirmation_reported">Enviado!</string>
     <string name="confirmation_unblocked">Usuário desbloqueado</string>
@@ -129,19 +129,19 @@
     <string name="label_header">Capa</string>
     <string name="link_whats_an_instance">O que é uma instância?</string>
     <string name="login_connection">Conectando…</string>
-    <string name="dialog_whats_an_instance">O domínio de qualquer instância pode ser inserido aqui, como mastodon.social, masto.donte.com.br, colorid.es ou qualquer <a href="https://instances.social">outro!</a> \u0020
-\n \u0020
-\n Se você não tem uma conta ainda, você pode inserir o nome da instância a qual você gostaria de participar e criar uma conta lá. \u0020
-\n \u0020
-\n Uma instância é um lugar onde sua conta é hospedada, mas você pode facilmente se comunicar e seguir pessoas de outras instâncias como se vocês estivessem no mesmo site. \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">O domínio de qualquer instância pode ser inserido aqui, como shitposter.club, masto.donte.com.br, colorid.es ou qualquer <a href="https://fediverse.network/pleroma?count=peers">outro!</a>
+\n
+\n Se você não tem uma conta ainda, você pode inserir o nome da instância a qual você gostaria de participar e criar uma conta lá.
+\n
+\n Uma instância é um lugar onde sua conta é hospedada, mas você pode facilmente se comunicar e seguir pessoas de outras instâncias como se vocês estivessem no mesmo site.
+\n
 \n Mais informações podem ser encontradas em <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Envio de mídia terminando</string>
     <string name="dialog_message_uploading_media">Enviando…</string>
     <string name="dialog_download_image">Baixar</string>
     <string name="dialog_message_cancel_follow_request">Cancelar solicitação para seguir\?</string>
     <string name="dialog_unfollow_warning">Deixar de seguir esta conta?</string>
-    <string name="dialog_delete_toot_warning">Excluir este toot?</string>
+    <string name="dialog_delete_toot_warning">Deletar esse post\?</string>
     <string name="visibility_public">Público: Postar em linhas públicas</string>
     <string name="visibility_unlisted">Não-listado: Não postar em linhas públicas</string>
     <string name="visibility_private">Privado: Postar só para seguidores</string>
@@ -155,7 +155,7 @@
     <string name="pref_title_notification_filters">Notifique-me quando</string>
     <string name="pref_title_notification_filter_mentions">me mencionarem</string>
     <string name="pref_title_notification_filter_follows">me seguirem</string>
-    <string name="pref_title_notification_filter_reblogs">derem boosts nos meus toots</string>
+    <string name="pref_title_notification_filter_reblogs">meus post são repetidos</string>
     <string name="pref_title_notification_filter_favourites">favoritarem meus toots</string>
     <string name="pref_title_appearance_settings">Aparência</string>
     <string name="pref_title_app_theme">Temas</string>
@@ -170,7 +170,7 @@
     <string name="pref_title_hide_follow_button">Ocultar compositor ao rolar a tela</string>
     <string name="pref_title_status_filter">Filtro da linha do tempo</string>
     <string name="pref_title_status_tabs">Abas</string>
-    <string name="pref_title_show_boosts">Mostrar boosts</string>
+    <string name="pref_title_show_boosts">Mostrar repetidos</string>
     <string name="pref_title_show_replies">Mostrar respostas</string>
     <string name="pref_title_show_media_preview">Mostrar prévias de mídia</string>
     <string name="pref_title_proxy_settings">Proxy</string>
@@ -194,10 +194,10 @@
     <string name="notification_mention_descriptions">Notificações sobre menções</string>
     <string name="notification_follow_name">Seguidores</string>
     <string name="notification_follow_description">Notificações sobre seguidores</string>
-    <string name="notification_boost_name">Boosts</string>
-    <string name="notification_boost_description">Notificações sobre boosts recebidos</string>
+    <string name="notification_boost_name">Repetidos</string>
+    <string name="notification_boost_description">Notificar quando seus post ficarem repetidos</string>
     <string name="notification_favourite_name">Favoritos</string>
-    <string name="notification_favourite_description">Notificações sobre favoritos recebidos</string>
+    <string name="notification_favourite_description">Notificar quando seus post foram marcado como favorito</string>
     <string name="notification_mention_format">%s te mencionou</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s e %4$d outros</string>
     <string name="notification_summary_medium">%1$s, %2$s, e %3$s</string>
@@ -205,8 +205,10 @@
     <string name="notification_title_summary">%d novas interações</string>
     <string name="description_account_locked">Conta trancada</string>
     <string name="about_title_activity">Sobre</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky é um software livre e de código aberto. Ele é licenciado sob a versão 3 da Licença Pública Geral GNU. Você pode ler a licença aqui: https://www.gnu.org/licenses/gpl-3.0.pt-br.html</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_tusky_license">Husky é um software livre e de código aberto.
+        Ele é licenciado sob a versão 3 da Licença Pública Geral GNU.
+        Você pode ler a licença aqui: https://www.gnu.org/licenses/gpl-3.0.pt-br.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
@@ -214,12 +216,11 @@
          * the url can be changed to link to the localized version of the license.
     -->
     <string name="about_project_site">Site do projeto:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">Reporte bugs e solicite funcionalidades:
 \n https://github.com/captainepoch/husky/issues</string>
-    <string name="about_tusky_account">Perfil do Tusky</string>
-    <string name="status_share_content">Compartilhar conteúdo do toot</string>
-    <string name="status_share_link">Compartilhar link do toot</string>
+    <string name="about_tusky_account">Perfil do Husky</string>
+    <string name="status_share_link">Compartilhar link para postar</string>
     <string name="status_media_images">Imagens</string>
     <string name="status_media_video">Vídeo</string>
     <string name="state_follow_requested">Solicitação enviada</string>
@@ -240,7 +241,7 @@
     <string name="replying_to">Respondendo @%s</string>
     <string name="load_more_placeholder_text">carregar mais</string>
     <string name="add_account_name">Adicionar conta</string>
-    <string name="add_account_description">Adicionar nova conta Mastodon</string>
+    <string name="add_account_description">Adicionar nova conta Pleroma</string>
     <string name="action_lists">Listas</string>
     <string name="title_lists">Listas</string>
     <string name="title_list_timeline">Linha da lista</string>
@@ -251,11 +252,11 @@
     <string name="lock_account_label">Trancar conta</string>
     <string name="lock_account_label_description">Requer aprovação manual de seguidores</string>
     <string name="compose_save_draft">Salvar rascunho?</string>
-    <string name="send_toot_notification_title">Enviando toot…</string>
-    <string name="send_toot_notification_error_title">Erro ao enviar toot</string>
-    <string name="send_toot_notification_channel_name">Enviando toots</string>
+    <string name="send_toot_notification_title">Enviando post…</string>
+    <string name="send_toot_notification_error_title">Erro ao enviar post</string>
+    <string name="send_toot_notification_channel_name">Enviando posts</string>
     <string name="send_toot_notification_cancel_title">Envio cancelado</string>
-    <string name="send_toot_notification_saved_content">Uma cópia do toot foi salva nos seus rascunhos</string>
+    <string name="send_toot_notification_saved_content">Uma cópia da postagem foi salva nos seus rascunhos</string>
     <string name="action_compose_shortcut">Compor</string>
     <string name="error_no_custom_emojis">A sua instância %s não possui emojis personalizados</string>
     <string name="copy_to_clipboard_success">Copiado para a área de transferência</string>
@@ -264,7 +265,7 @@
     <string name="download_fonts">É necessário baixar estes pacotes de emojis primeiro</string>
     <string name="performing_lookup_title">Carregando…</string>
     <string name="expand_collapse_all_statuses">Expandir/Ocultar todos os toots</string>
-    <string name="action_open_toot">Abrir toot</string>
+    <string name="action_open_toot">Abrir Post</string>
     <string name="restart_required">É necessário reiniciar o aplicativo</string>
     <string name="restart_emoji">É necessário reiniciar o aplicativo para aplicar as alterações</string>
     <string name="later">Depois</string>
@@ -275,16 +276,16 @@
     <string name="download_failed">Erro ao baixar</string>
     <string name="profile_badge_bot_text">Robô</string>
     <string name="account_moved_description">%1$s mudou-se para:</string>
-    <string name="reblog_private">Dar boost para o mesmo público</string>
-    <string name="unreblog_private">Desfazer boost</string>
-    <string name="license_description">O Tusky contém código e recursos dos seguintes projetos de código aberto:</string>
+    <string name="reblog_private">Repetir para audiência original</string>
+    <string name="unreblog_private">Remover Repetidos</string>
+    <string name="license_description">O Husky contém código e recursos dos seguintes projetos de código aberto:</string>
     <string name="license_apache_2">Licenciado sob a licença Apache (cópia abaixo)</string>
     <string name="profile_metadata_label">Metadados do perfil</string>
     <string name="profile_metadata_add">Adicionar</string>
     <string name="profile_metadata_label_label">Rótulo</string>
     <string name="profile_metadata_content_label">Conteúdo</string>
     <string name="pref_title_absolute_time">Usar tempo absoluto</string>
-    <string name="title_reblogged_by">Levou boost de</string>
+    <string name="title_reblogged_by">Repetido por</string>
     <string name="title_favourited_by">Favoritado por</string>
     <string name="description_visiblity_public">Público    </string>
     <string name="description_visiblity_private">Privado</string>
@@ -297,12 +298,12 @@
     <string name="action_delete_and_redraft">Excluir e rascunhar</string>
     <string name="action_view_account_preferences">Preferências da conta</string>
     <string name="action_hashtags">Hashtags</string>
-    <string name="action_open_reblogger">Ver quem deu boost</string>
+    <string name="action_open_reblogger">Autor de repetição aberto</string>
     <string name="title_hashtags_dialog">Hashtags</string>
     <string name="action_open_media_n">Abrir mídia #%d</string>
     <string name="download_media">Baixar mídia</string>
     <string name="downloading_media">Baixando mídia</string>
-    <string name="dialog_redraft_toot_warning">Excluir e rascunhar este toot?</string>
+    <string name="dialog_redraft_toot_warning">Deletar e Refazer esse post\?</string>
     <string name="pref_title_notification_filter_poll">enquetes terminarem</string>
     <string name="pref_title_timeline_filters">Filtros</string>
     <string name="pref_title_language">Idioma</string>
@@ -338,9 +339,8 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; Favoritos</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one"><b>%s</b> Boost</item>
-        <item quantity="many"></item>
-        <item quantity="other"><b>%s</b> Boosts</item>
+        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Repetido</item>
+        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Repetidos</item>
     </plurals>
     <string name="conversation_1_recipients">%1$s</string>
     <string name="conversation_2_recipients">%1$s e %2$s</string>
@@ -349,7 +349,7 @@
     <string name="description_status_media">Mídia: %s</string>
     <string name="description_status_cw">Aviso de Conteúdo: %s</string>
     <string name="description_status_media_no_description_placeholder">Sem descrição</string>
-    <string name="description_status_reblogged">Você deu boost</string>
+    <string name="description_status_reblogged">Repetido</string>
     <string name="description_status_favourited">Favoritado</string>
     <string name="description_visiblity_unlisted">Não-listado</string>
     <string name="description_visiblity_direct">Direto</string>
@@ -358,7 +358,7 @@
     <string name="notifications_clear">Limpar</string>
     <string name="notifications_apply_filter">Filtro</string>
     <string name="filter_apply">Salvar</string>
-    <string name="compose_shortcut_long_label">Compor toot</string>
+    <string name="compose_shortcut_long_label">Compor Post</string>
     <string name="compose_shortcut_short_label">Compor</string>
     <string name="pref_title_bot_overlay">Mostrar indicador de robôs</string>
     <string name="notification_clear_text">Você tem certeza de que quer limpar permanentemente todas as suas notificações\?</string>
@@ -412,7 +412,7 @@
     <string name="filter_dialog_whole_word">Toda palavra</string>
     <string name="filter_dialog_whole_word_description">Se for apenas alfanumérico, só se aplicará se combinar com a palavra inteira</string>
     <string name="action_add_poll">Adicionar enquete</string>
-    <string name="pref_title_alway_open_spoiler">Sempre expandir toots com Aviso de Conteúdo</string>
+    <string name="pref_title_alway_open_spoiler">Sempre expanda postagens marcadas com avisos de conteúdo</string>
     <string name="title_accounts">Contas</string>
     <string name="failed_search">Erro ao pesquisar</string>
     <string name="create_poll_title">Enquete</string>
@@ -427,23 +427,23 @@
     <string name="poll_allow_multiple_choices">Múltiplas opções</string>
     <string name="poll_new_choice_hint">Opção %d</string>
     <string name="edit_poll">Editar</string>
-    <string name="title_scheduled_toot">Agendados</string>
+    <string name="title_scheduled_toot">Posts Agendados</string>
     <string name="action_edit">Editar</string>
     <string name="action_access_scheduled_toot">Agendados</string>
-    <string name="action_schedule_toot">Agendar toot</string>
+    <string name="action_schedule_toot">Agendar postagem</string>
     <string name="action_reset_schedule">Cancelar</string>
     <string name="post_lookup_error_format">Erro ao pesquisar %s</string>
     <string name="title_bookmarks">Salvos</string>
     <string name="action_bookmark">Salvar</string>
     <string name="action_view_bookmarks">Salvos</string>
-    <string name="about_powered_by_tusky">Desenvolvido por Tusky</string>
+    <string name="about_powered_by_tusky">Desenvolvido por Husky</string>
     <string name="description_status_bookmarked">Salvo</string>
     <string name="select_list_title">Selecionar lista</string>
     <string name="list">Lista</string>
     <string name="no_scheduled_status">Sem toots agendados.</string>
     <string name="error_audio_upload_size">O áudio deve ser menor que 40MB.</string>
     <string name="no_saved_status">Sem rascunhos.</string>
-    <string name="warning_scheduling_interval">Mastodon possui um intervalo mínimo de 5 minutos para agendar.</string>
+    <string name="warning_scheduling_interval">Pleroma possui um intervalo mínimo de 5 minutos para agendar.</string>
     <string name="notification_follow_request_name">Seguidores pendentes</string>
     <string name="notification_follow_request_format">%s quer te seguir</string>
     <string name="action_mute_conversation">Silenciar conversa</string>
@@ -458,7 +458,7 @@
     </plurals>
     <string name="pref_title_enable_swipe_for_tabs">Ativar deslizar para alternar entre abas</string>
     <string name="pref_title_show_cards_in_timelines">Mostrar prévias de links nas linhas</string>
-    <string name="pref_title_confirm_reblogs">Solicitar confirmação antes de dar boost</string>
+    <string name="pref_title_confirm_reblogs">Mostrar confirmação de dialogo antes de repetir</string>
     <string name="hashtags">Hashtags</string>
     <string name="add_hashtag_title">Adicionar hashtag</string>
     <string name="pref_title_gradient_for_media">Mostrar blur em mídia sensível</string>
@@ -471,4 +471,27 @@
     <string name="action_mute_notifications_desc">Silencie notificações de %s</string>
     <string name="action_unmute_notifications_desc">Dessilencie notificações de %s</string>
     <string name="pref_title_hide_top_toolbar">Ocultar o título da barra superior de tarefas</string>
+    <string name="action_emoji_unreact">Remover Ação</string>
+    <string name="hint_appname">Nome Do App</string>
+    <string name="admin">Admin</string>
+    <string name="moderator">Moderador</string>
+    <string name="notification_emoji_format">%s reagiu com %s no seu post</string>
+    <string name="notification_emoji_name">Reações de emoji</string>
+    <string name="notification_emoji_description">Notificações sobre novas reações de emoji</string>
+    <string name="pref_title_notification_filter_emoji">meus posts foram reagidos com emojis</string>
+    <string name="pref_title_hide_muted_users">Esconder usuários silenciados</string>
+    <string name="pref_title_enable_big_emojis">Ligar Emojis Gigante Customizado</string>
+    <string name="pref_title_enable_experimental_stickers">Ativar adesivos experimentais Pleroma-FE (se disponíveis)</string>
+    <string name="action_reply_to">Responder Para</string>
+    <string name="action_emoji_react">Reagir</string>
+    <string name="action_emoji_reacted_by">Quem Reagiu</string>
+    <string name="action_enable_formatting_syntax">Ativar %s</string>
+    <string name="action_disable_formatting_syntax">Desativar %s</string>
+    <string name="action_sticker">Figurinhas</string>
+    <string name="title_emoji_reacted_by">%s Reagido por</string>
+    <string name="hint_website">Site do app</string>
+    <string name="error_media_upload_size">O tamanho do arquivo excede os limites da instância</string>
+    <string name="error_sticker_fetch">Ocorreu um erro ao buscar a figurinha</string>
+    <string name="pref_title_default_formatting">Sintaxe de formatação padrão (se suportada pela instância)</string>
+    <string name="status_share_content">Compartilhar conteúdo do toot</string>
 </resources>
