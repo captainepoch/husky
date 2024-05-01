@@ -18,7 +18,7 @@
     <string name="error_media_download_permission">Eine Berechtigung wird zum Speichern des Mediums benötigt.</string>
     <string name="error_media_upload_image_or_video">Bilder und Videos können nicht beide gleichzeitig an einen Beitrag angehängt werden.</string>
     <string name="error_media_upload_sending">Die Mediendatei konnte nicht hochgeladen werden.</string>
-    <string name="error_sender_account_gone">Fehler beim Senden des Beitrags.</string>
+    <string name="error_sender_account_gone">Fehler beim Senden des Beitrages.</string>
     <string name="title_home">Start</string>
     <string name="title_notifications">Benachrichtigungen</string>
     <string name="title_public_local">Lokal</string>
@@ -39,7 +39,7 @@
     <string name="title_drafts">Entwürfe</string>
     <string name="title_licenses">Lizenzen</string>
     <string name="status_username_format">\@%s</string>
-    <string name="status_boosted_format">%s teilte</string>
+    <string name="status_boosted_format">%s wiederholte</string>
     <string name="status_sensitive_media_title">Heikle Inhalte</string>
     <string name="status_media_hidden_title">Medien versteckt</string>
     <string name="status_sensitive_media_directions">Zum Anzeigen tippen</string>
@@ -49,32 +49,32 @@
     <string name="status_content_show_less">Weniger</string>
     <string name="message_empty">Hier ist nichts.</string>
     <string name="footer_empty">Noch keine Beiträge hier! Ziehe nach unten um zu aktualisieren!</string>
-    <string name="notification_reblog_format">%s teilte deinen Beitrag</string>
-    <string name="notification_favourite_format">%s favorisierte deinen Beitrag</string>
+    <string name="notification_reblog_format">%s hat deinen Beitrag wiederholt</string>
+    <string name="notification_favourite_format">%s hat deinen Beitrag favorisiert</string>
     <string name="notification_follow_format">%s folgt dir</string>
     <string name="report_username_format">\@%s melden</string>
     <string name="report_comment_hint">Irgendwelche Anmerkungen?</string>
     <string name="action_quick_reply">Schnell antworten</string>
     <string name="action_reply">Antworten</string>
-    <string name="action_reblog">Teilen</string>
-    <string name="action_unreblog">Boost entfernen</string>
+    <string name="action_reblog">Wiederholen</string>
+    <string name="action_unreblog">Wiederholung entfernen</string>
     <string name="action_favourite">Favorisieren</string>
     <string name="action_unfavourite">Favorisierung entfernen</string>
     <string name="action_more">Mehr</string>
     <string name="action_compose">Beitrag erstellen</string>
-    <string name="action_login">Anmelden mit Mastodon</string>
+    <string name="action_login">Anmelden mit Pleroma</string>
     <string name="action_logout">Ausloggen</string>
-    <string name="action_logout_confirm">Bist du sicher, dass du dich aus dem Konto %1$s ausloggen möchtest\?</string>
+    <string name="action_logout_confirm">Bist du sicher, dass du dich aus dem Konto %1$s ausloggen möchtest?</string>
     <string name="action_follow">Folgen</string>
     <string name="action_unfollow">Entfolgen</string>
     <string name="action_block">Blockieren</string>
     <string name="action_unblock">Entblockieren</string>
-    <string name="action_hide_reblogs">Geteilte Beiträge verbergen</string>
-    <string name="action_show_reblogs">Zeige Boosts</string>
+    <string name="action_hide_reblogs">Widerholungen verbergen</string>
+    <string name="action_show_reblogs">Wiederholungen anzeigen</string>
     <string name="action_report">Melden</string>
     <string name="action_delete">Löschen</string>
-    <string name="action_send">TRÖT</string>
-    <string name="action_send_public">TRÖT!</string>
+    <string name="action_send">POSTEN</string>
+    <string name="action_send_public">POSTEN!</string>
     <string name="action_retry">Erneut versuchen</string>
     <string name="action_close">Schließen</string>
     <string name="action_view_profile">Profil</string>
@@ -109,7 +109,7 @@
     <string name="action_links">Verlinkungen</string>
     <string name="action_mentions">Erwähnungen</string>
     <string name="action_hashtags">Hashtags</string>
-    <string name="action_open_reblogged_by">Boosts anzeigen</string>
+    <string name="action_open_reblogged_by">Wiederholungen anzeigen</string>
     <string name="action_open_faved_by">Favoriten anzeigen</string>
     <string name="title_hashtags_dialog">Hashtags</string>
     <string name="title_mentions_dialog">Erwähnungen</string>
@@ -119,8 +119,8 @@
     <string name="action_copy_link">Link kopieren</string>
     <string name="action_open_as">Öffnen als %s</string>
     <string name="action_share_as">Teilen als …</string>
-    <string name="send_status_link_to">Beitragslink teilen…</string>
-    <string name="send_status_content_to">Beitragsinhalt teilen…</string>
+    <string name="send_status_link_to">Beitrags-URL teilen mit…</string>
+    <string name="send_status_content_to">Beitrag teilen mit…</string>
     <string name="send_media_to">Mediendatei teilen…</string>
     <string name="confirmation_reported">Gesendet!</string>
     <string name="confirmation_unblocked">entblockt</string>
@@ -140,8 +140,8 @@
     <string name="link_whats_an_instance">Was ist eine Instanz?</string>
     <string name="login_connection">Verbinden …</string>
     <string name="dialog_whats_an_instance">Die Adresse einer Instanz oder Domain kann
-        hier eingegeben werden, wie z.B. mastodon.social, icosahedron.website, social.tchncs.de, und
-        <a href="https://instances.social">mehr!</a>
+        hier eingegeben werden, wie z.B. shitposter.club, blob.cat, expired.mentality.rip, und
+        <a href="https://fediverse.network/pleroma?count=peers">mehr!</a>
         \n\nWenn du bis jetzt kein Konto hast, kannst du hier den Namen einer Instanz eingeben
         und dort ein Konto einrichten.\n\nEine Instanz ist ein einziger Ort, wo dein Konto
         gehostet ist, aber du kannst dennoch mit anderen Leuten reden und mit ihnen interagieren, als
@@ -167,7 +167,7 @@
     <string name="pref_title_notification_filters">Benachrichtigen wenn</string>
     <string name="pref_title_notification_filter_mentions">Ich erwähnt werde</string>
     <string name="pref_title_notification_filter_follows">Mir jemand folgt</string>
-    <string name="pref_title_notification_filter_reblogs">Jemand meine Posts teilt</string>
+    <string name="pref_title_notification_filter_reblogs">Meine Beiträge wurden wiederholt</string>
     <string name="pref_title_notification_filter_favourites">Jemandem meine Posts gefallen</string>
     <string name="pref_title_appearance_settings">Aussehen</string>
     <string name="pref_title_app_theme">App-Thema</string>
@@ -184,7 +184,7 @@
     <string name="pref_title_language">Sprache</string>
     <string name="pref_title_status_filter">Timeline-Filter</string>
     <string name="pref_title_status_tabs">Tabs</string>
-    <string name="pref_title_show_boosts">Geteilte Beiträge anzeigen</string>
+    <string name="pref_title_show_boosts">Wiederholungen anzeigen</string>
     <string name="pref_title_show_replies">Zeige Antworten</string>
     <string name="pref_title_show_media_preview">Medienvorschauen herunterladen</string>
     <string name="pref_title_proxy_settings">Proxy</string>
@@ -209,10 +209,10 @@
     <string name="notification_mention_descriptions">Benachrichtigungen über neue Erwähnungen</string>
     <string name="notification_follow_name">Neue Folgende</string>
     <string name="notification_follow_description">Benachrichtigunen über neue Folgende</string>
-    <string name="notification_boost_name">Geteilte Beiträge</string>
-    <string name="notification_boost_description">Benachrichtigungen wenn deine Beiträge geteilt werden</string>
+    <string name="notification_boost_name">Wiederholt</string>
+    <string name="notification_boost_description">Benachrichtigungen, wenn deine Beiträge wiederholt werden</string>
     <string name="notification_favourite_name">Favorisierte Beiträge</string>
-    <string name="notification_favourite_description">Benachrichtigungen wenn deine Beiträge favorisiert werden</string>
+    <string name="notification_favourite_description">Benachrichigungen, wenn deine Beiträge favorisiert wurden</string>
     <string name="notification_mention_format">%s hat dich erwähnt</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s und %4$d andere</string>
     <string name="notification_summary_medium">%1$s, %2$s, und %3$s</string>
@@ -220,21 +220,21 @@
     <string name="notification_title_summary">%d neue Interaktionen</string>
     <string name="description_account_locked">Gesperrtes Profil</string>
     <string name="about_title_activity">Über</string>
-    <string name="about_tusky_license">Tusky ist freie und quelloffene Software. Es ist lizenziert unter der GNU General Public License Version 3. Du kannst dir die Lizenz hier anschauen: https://www.gnu.org/licenses/gpl-3.0.de.html</string>
+    <string name="about_tusky_license">Husky ist freie und quelloffene Software. Es ist lizenziert unter der GNU General Public License Version 3. Du kannst dir die Lizenz hier anschauen: https://www.gnu.org/licenses/gpl-3.0.de.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Website des Projekts: 
-\n https://tusky.app</string>
+    <string name="about_project_site">Website des Projekts:
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">        Fehlermeldungen &amp; Verbesserungsvorschläge:\n
-        https://github.com/tuskyapp/Tusky/issues
+        https://github.com/captainepoch/husky/issues
     </string>
-    <string name="about_tusky_account">Tuskys Profil</string>
-    <string name="status_share_content">Inhalt teilen</string>
-    <string name="status_share_link">Link teilen</string>
+    <string name="about_tusky_account">Huskys Profil</string>
+    <string name="status_share_content">Inhalt des Beitrages teilen</string>
+    <string name="status_share_link">Link zum Beitrag teilen</string>
     <string name="status_media_images">Bilder</string>
     <string name="status_media_video">Video</string>
     <string name="state_follow_requested">Folgeanfrage gesendet</string>
@@ -250,7 +250,7 @@
     <string name="filter_dialog_remove_button">Entfernen</string>
     <string name="filter_dialog_update_button">Aktualisieren</string>
     <string name="add_account_name">Konto hinzufügen</string>
-    <string name="add_account_description">Neues Mastodon-Konto hinzufügen</string>
+    <string name="add_account_description">Neues Pleroma-Konto hinzufügen</string>
     <string name="action_lists">Listen</string>
     <string name="title_lists">Listen</string>
     <string name="title_list_timeline">Liste</string>
@@ -267,11 +267,11 @@
     <string name="lock_account_label">Gesperrtes Profil</string>
     <string name="lock_account_label_description">Wer dir folgen möchte, muss um deine Erlaubnis bitten</string>
     <string name="compose_save_draft">Entwurf speichern?</string>
-    <string name="send_toot_notification_title">Beitrag senden…</string>
-    <string name="send_toot_notification_error_title">Fehler beim Senden</string>
-    <string name="send_toot_notification_channel_name">Beiträge senden</string>
+    <string name="send_toot_notification_title">Beitrag wird gesendet…</string>
+    <string name="send_toot_notification_error_title">Fehler beim Senden des Beitrages</string>
+    <string name="send_toot_notification_channel_name">Beiträge werden gesendet</string>
     <string name="send_toot_notification_cancel_title">Senden abgebrochen</string>
-    <string name="send_toot_notification_saved_content">Eine Kopie des Beitrags wurde in deine Entwürfe gespeichert</string>
+    <string name="send_toot_notification_saved_content">Eine Kopier des Beitrages wurde in den Entwurfen gesichert</string>
     <string name="action_compose_shortcut">Beitrag erstellen</string>
     <string name="error_no_custom_emojis">Deine Instanz %s hat keine Emojis definiert</string>
     <string name="copy_to_clipboard_success">In die Zwischenablage kopiert</string>
@@ -282,7 +282,7 @@
     <string name="expand_collapse_all_statuses">Alle Beiträge aus-/einklappen</string>
     <string name="action_open_toot">Beitrag öffnen</string>
     <string name="restart_required">App-Neustart erforderlich</string>
-    <string name="restart_emoji">Du musst Tusky neustarten um die Änderungen anzuwenden</string>
+    <string name="restart_emoji">Du musst Husky neustarten um die Änderungen anzuwenden</string>
     <string name="later">Später</string>
     <string name="restart">Neustarten</string>
     <string name="caption_systememoji">Die Standard-Emojis deines Geräts</string>
@@ -292,9 +292,9 @@
     <string name="download_failed">Download fehlgeschlagen.</string>
     <string name="profile_badge_bot_text">Bot</string>
     <string name="account_moved_description">%1$s ist umgezogen auf:</string>
-    <string name="reblog_private">An ursprüngliches Publikum teilen</string>
-    <string name="unreblog_private">nicht mehr teilen</string>
-    <string name="license_description">Tusky enthält Code und Inhalte von den folgenden Open-Source-Projekten:</string>
+    <string name="reblog_private">Für originale Audienz wiederholen</string>
+    <string name="unreblog_private">Wiederholung entfernen</string>
+    <string name="license_description">Husky enthält Code und Inhalte von den folgenden Open-Source-Projekten:</string>
     <string name="license_apache_2">Lizenziert unter der Apache-Lizenz (s. u.)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -326,29 +326,29 @@
     <string name="hint_search_people_list">Suche nach Leuten denen du folgst</string>
     <string name="action_remove_from_list">Von der Liste entfernen</string>
     <string name="edit_hashtag_hint">Hashtag ohne #</string>
-    <string name="action_open_reblogger">Öffne Autor des geteilten Beitrages</string>
+    <string name="action_open_reblogger">Wiederholungsauthor anzeigen</string>
     <string name="pref_title_public_filter_keywords">Öffentliche Zeitleisten</string>
     <plurals name="favs">
         <item quantity="one"><b>%1$s</b> Favorit</item>
         <item quantity="other"><b>%1$s</b> Favoriten</item>
     </plurals>
-    <string name="title_reblogged_by">Geteilt von</string>
+    <string name="title_reblogged_by">Wiederholt von</string>
     <string name="description_status_media">Medien: %s</string>
     <string name="description_status_cw">Inhaltswarnung: %s</string>
-    <string name="description_status_reblogged">Geteilt</string>
+    <string name="description_status_reblogged">Wiederholt</string>
     <string name="description_visiblity_unlisted">Ungelistet</string>
     <string name="action_delete_and_redraft">Löschen und neu erstellen</string>
-    <string name="dialog_redraft_toot_warning">Bist du dir sicher, dass du diesen Beitrag löschen und neu erstellen möchtest\?</string>
+    <string name="dialog_redraft_toot_warning">Löschen und Beitrag neu verfassen?</string>
     <string name="pref_title_notification_filter_poll">Umfragen beendet sind</string>
     <string name="notification_poll_name">Umfragen</string>
     <string name="notification_poll_description">Benachrichtigungen über beendete Umfragen</string>
     <string name="notifications_clear">Löschen</string>
     <string name="notifications_apply_filter">Filtern</string>
     <string name="filter_apply">Anwenden</string>
-    <string name="compose_shortcut_long_label">Beitrag erstellen</string>
+    <string name="compose_shortcut_long_label">Beitrag verfassen</string>
     <string name="compose_shortcut_short_label">Beitrag erstellen</string>
     <string name="pref_title_bot_overlay">Bot-Hinweis anzeigen</string>
-    <string name="notification_clear_text">Bist du dir sicher, dass du alle deine Benachrichtigungen dauerhaft löschen möchtest\?</string>
+    <string name="notification_clear_text">Bist du dir sicher, dass du alle deine Benachrichtigungen dauerhaft löschen möchtest?</string>
     <string name="poll_info_format">" %1$s • %2$s"</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s Stimme</item>
@@ -379,7 +379,7 @@
     <string name="action_view_domain_mutes">Versteckte Domains</string>
     <string name="action_mute_domain">%s verstecken</string>
     <string name="confirmation_domain_unmuted">%s nicht mehr versteckt</string>
-    <string name="mute_domain_warning">Bist du dir sicher, dass du die Domain %s blockieren willst\? Nach der Blockierung wirst du nichts mehr von dieser Domain in öffentlichen Zeitleisten oder Benachrichtigungen sehen. Deine Follower von dieser Domain werden entfernt.</string>
+    <string name="mute_domain_warning">Bist du dir sicher, dass du die Domain %s blockieren willst? Nach der Blockierung wirst du nichts mehr von dieser Domain in öffentlichen Zeitleisten oder Benachrichtigungen sehen. Deine Follower von dieser Domain werden entfernt.</string>
     <string name="mute_domain_warning_dialog_ok">Ganze Domain verbergen</string>
     <string name="pref_title_animate_gif_avatars">GIF-Avatare animieren</string>
     <string name="filter_dialog_whole_word">Ganzes Wort</string>
@@ -392,7 +392,7 @@
     <string name="report_remote_instance">An %s weiterleiten</string>
     <string name="failed_report">Beim Melden ist ein Fehler aufgetreten</string>
     <string name="report_description_1">Der Bericht wird an die Moderatoren des Servers geschickt. Du kannst hier eine Erklärung angeben, warum du dieses Konto meldest:</string>
-    <string name="report_description_remote_instance">Dieses Konto ist von einem anderen Server. Soll eine anonymisierte Kopie des Berichts auch dorthin geschickt werden\?</string>
+    <string name="report_description_remote_instance">Dieses Konto ist von einem anderen Server. Soll eine anonymisierte Kopie des Berichts auch dorthin geschickt werden?</string>
     <string name="pref_title_show_notifications_filter">Benachrichtigungsfilter anzeigen</string>
     <string name="create_poll_title">Umfrage</string>
     <string name="duration_5_min">5 Minuten</string>
@@ -405,7 +405,7 @@
     <string name="edit_poll">Editieren</string>
     <string name="about_tusky_version">test %s</string>
     <string name="action_add_poll">Umfrage hinzufügen</string>
-    <string name="pref_title_alway_open_spoiler">Beiträge mit Inhaltswarnungen immer ausklappen</string>
+    <string name="pref_title_alway_open_spoiler">Beiträge mit sensiblen Inhalten immer anzeigen</string>
     <string name="description_poll">Umfrage mit den Möglichkeiten: %1$s, %2$s, %3$s, %4$s; %5$s</string>
     <string name="compose_preview_image_description">Aktionen für Bild %s</string>
     <string name="failed_fetch_statuses">Fehler beim Holen der Beiträge</string>
@@ -416,14 +416,14 @@
     <string name="poll_new_choice_hint">Möglichkeit %d</string>
     <string name="title_scheduled_toot">Geplante Beiträge</string>
     <string name="action_edit">Editieren</string>
-    <string name="action_access_scheduled_toot">Geplante Beiträge</string>
-    <string name="action_schedule_toot">Plane Beitrag</string>
+    <string name="action_access_scheduled_toot">Geplante Beiträe</string>
+    <string name="action_schedule_toot">Beitrag planen</string>
     <string name="action_reset_schedule">Zurücksetzen</string>
     <string name="error_audio_upload_size">Audiodateien müssen kleiner als 40 MB sein.</string>
     <string name="title_bookmarks">Lesezeichen</string>
     <string name="action_bookmark">Lesezeichen</string>
     <string name="action_view_bookmarks">Lesezeichen</string>
-    <string name="about_powered_by_tusky">Angetrieben durch Tusky</string>
+    <string name="about_powered_by_tusky">Angetrieben durch Husky</string>
     <string name="description_status_bookmarked">Als Lesezeichen gespeichert</string>
     <string name="select_list_title">Liste auswählen</string>
     <string name="list">Liste</string>
@@ -434,14 +434,14 @@
     <string name="notification_follow_request_description">Benachrichtigungen über neue Folgeanfragen</string>
     <string name="pref_title_notification_filter_follow_requests">Neue Folgeanfragen</string>
     <string name="notification_follow_request_name">Folgeanfragen</string>
-    <string name="dialog_mute_warning">Bist du dir sicher, dass du @%s stummschalten möchtest\?</string>
-    <string name="dialog_block_warning">Bist du dir sicher, dass du @%s blockieren möchtest\?</string>
+    <string name="dialog_mute_warning">Bist du dir sicher, dass du @%s stummschalten möchtest?</string>
+    <string name="dialog_block_warning">Bist du dir sicher, dass du @%s blockieren möchtest?</string>
     <string name="action_unmute_conversation">Stummschaltung der Konversation aufheben</string>
     <string name="action_mute_conversation">Konversation stummschalten</string>
     <string name="notification_follow_request_format">%s möchte dir folgen</string>
     <string name="hashtags">Hashtags</string>
     <string name="add_hashtag_title">Hashtag hinzufügen</string>
-    <string name="pref_title_confirm_reblogs">Bestätigungsdialog vor dem Teilen eines Beitrags</string>
+    <string name="pref_title_confirm_reblogs">Bestätigung vor dem Löschen anzeigen</string>
     <string name="pref_title_show_cards_in_timelines">Linkvorschauen in Timelines anzeigen</string>
     <string name="pref_title_enable_swipe_for_tabs">Wischgeste zum Wechseln zwischen Tabs</string>
     <plurals name="poll_info_people">
@@ -453,8 +453,8 @@
     <string name="pref_main_nav_position_option_top">Oben</string>
     <string name="action_unmute_domain">%s nicht mehr verstecken</string>
     <plurals name="reblogs">
-        <item quantity="one"><b>%s</b> Boost</item>
-        <item quantity="other"><b>%s</b> Boosts</item>
+        <item quantity="one"><b>%s</b> wiederholt</item>
+        <item quantity="other"><b>%s</b> wiederholten</item>
     </plurals>
     <string name="pref_main_nav_position">Hauptnavigations-Position</string>
     <string name="dialog_mute_hide_notifications">Benachrichtigungen ausblenden</string>
@@ -470,4 +470,27 @@
     <string name="pref_title_hide_top_toolbar">Titel der Hauptnavigation verstecken</string>
     <string name="no_announcements">Im Moment gibt es keine Ankündigungen.</string>
     <string name="title_announcements">Ankündigungen</string>
+
+    <string name="action_disable_formatting_syntax">%s deaktivieren</string>
+    <string name="action_emoji_react">Reagieren</string>
+    <string name="action_emoji_unreact">Reaktion entfernen</string>
+    <string name="action_emoji_reacted_by">Wer hat reagiert</string>
+    <string name="title_emoji_reacted_by">%s-Reaktionen von</string>
+    <string name="hint_appname">Programmname</string>
+    <string name="admin">Administrator</string>
+    <string name="error_media_upload_size">Dateigröße über dem Limit der Instanz</string>
+    <string name="action_enable_formatting_syntax">%s aktivieren</string>
+    <string name="hint_website">Programmwebseite</string>
+    <string name="moderator">Moderator</string>
+    <string name="notification_emoji_format">%s hat mit %s auf deinen Post reagiert</string>
+    <string name="notification_emoji_name">Emojireaktionen</string>
+    <string name="notification_emoji_description">Benachrictigungen über neue Emojireaktionen</string>
+    <string name="pref_title_default_formatting">Standardformatierungssyntax (wenn von der Instanz unterstützt)</string>
+    <string name="pref_title_hide_muted_users">Ignorierte Nutzer verstecken</string>
+    <string name="pref_title_notification_filter_emoji">Reaktionen auf meine Nachrichten</string>
+    <string name="action_reply_to">Antwort auf</string>
+    <string name="action_sticker">Sticker</string>
+    <string name="pref_title_enable_big_emojis">Große eigene Emoji aktivieren</string>
+    <string name="pref_title_enable_experimental_stickers">Experimentelle Pleroma-FE Sticker aktiveren (wenn verfügbar)</string>
+    <string name="error_sticker_fetch">Es passierte ein Fehler bei dem Empfang des Stickers</string>
 </resources>
