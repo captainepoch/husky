@@ -128,19 +128,19 @@
     <string name="label_header">Üstlük</string>
     <string name="link_whats_an_instance">Sunucu nedir\?</string>
     <string name="login_connection">Bağlantı kuruluyor…</string>
-    <string name="dialog_whats_an_instance">Burada her hangi bir Mastodon sunucusunun adresi (mastodon.social, icosahedron.website, social.tchncs.de, ve <a href="https://github.com/tootsuite/mastodon/blob/master/docs/Using-Mastodon/List-of-Mastodon-instances.md">daha fazla!</a>) girilebiliri. 
-\n
-\nEğer hesabınız henüz yok ise katılmak istediğiniz sunucunun adresini girerek hesap yaratabilirsin. 
-\n
-\nHer bir sunucu hesaplar ağırlayan bir yer olur ancak diğer sunucularda bulunan insanlarla aynı sitede olmuşcasına iletişime geçip takip edebilirsiniz. 
-\n
+    <string name="dialog_whats_an_instance">Burada her hangi bir Mastodon sunucusunun adresi (mastodon.social, icosahedron.website, social.tchncs.de, ve <a href="https://github.com/tootsuite/mastodon/blob/master/docs/Using-Mastodon/List-of-Mastodon-instances.md">daha fazla!</a>) girilebiliri. \u0020
+\n 
+\nEğer hesabınız henüz yok ise katılmak istediğiniz sunucunun adresini girerek hesap yaratabilirsin. \u0020
+\n 
+\nHer bir sunucu hesaplar ağırlayan bir yer olur ancak diğer sunucularda bulunan insanlarla aynı sitede olmuşcasına iletişime geçip takip edebilirsiniz. \u0020
+\n 
 \nDaha fazla bilgi için <a href="https://mastodon.social/about">mastodon.social</a>. </string>
     <string name="dialog_title_finishing_media_upload">Medya yüklemesi tamamlanıyor</string>
     <string name="dialog_message_uploading_media">Yükleniyor…</string>
     <string name="dialog_download_image">İndir</string>
     <string name="dialog_message_cancel_follow_request">Takip isteğini iptal et\?</string>
     <string name="dialog_unfollow_warning">Takibi bırakmak istiyor musun\?</string>
-    <string name="dialog_delete_toot_warning">Bu durumu silmek istiyor musunuz\?</string>
+    <string name="dialog_delete_toot_warning">Bu durumu silmek istiyor musunuz?</string>
     <string name="visibility_public">Kamu: Herkese açık ve sosyal çizelgelerinde çıkar</string>
     <string name="visibility_unlisted">Listelenmemiş: Genel zaman çizelgelerinde gösterme</string>
     <string name="visibility_private">Özel: Sadece takipçiler ve bahsedilenlere açık</string>
@@ -212,7 +212,7 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Projenin internet sitesi: 
+    <string name="about_project_site">Projenin internet sitesi:
 \n https://tusky.app</string>
     <string name="about_bug_feature_request_site">&amp; özellik istekleri hata raporları:
 \n https://github.com/tuskyapp/Tusky/issues</string>
@@ -409,7 +409,7 @@
     <string name="action_access_scheduled_toot">Zamanlanmış tootlar</string>
     <string name="action_schedule_toot">Tootu zamanla</string>
     <string name="action_reset_schedule">Sıfırla</string>
-    <string name="dialog_redraft_toot_warning">Bu durumu silip yeniden düzenlemek istiyor musunuz\?</string>
+    <string name="dialog_redraft_toot_warning">Bu durumu silip yeniden düzenlemek istiyor musunuz?</string>
     <string name="pref_title_bot_overlay">Botlar için işaret göster</string>
     <string name="about_powered_by_tusky">Tusky tarafından desteklenmektedir</string>
     <string name="description_status_bookmarked">Yerimine eklendi</string>

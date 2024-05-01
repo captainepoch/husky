@@ -86,8 +86,8 @@
     <string name="action_send_public">TOOT!</string>
     <string name="action_toggle_visibility">Viditeľnosť tootu</string>
     <string name="action_schedule_toot">Naplánovať toot</string>
-    <string name="dialog_delete_toot_warning">Vymazať tento toot\?</string>
-    <string name="dialog_redraft_toot_warning">Vymazať a prepísať tento toot\?</string>
+    <string name="dialog_delete_toot_warning">Vymazať tento toot?</string>
+    <string name="dialog_redraft_toot_warning">Vymazať a prepísať tento toot?</string>
     <string name="status_share_content">Zdieľať obsah tootu</string>
     <string name="status_share_link">Zdieľať odkaz tootu</string>
     <string name="send_toot_notification_title">Odosielanie tootu…</string>

@@ -159,20 +159,20 @@
     <string name="label_avatar">Auðkennismynd</string>
     <string name="label_header">Haus</string>
     <string name="login_connection">Tengist…</string>
-    <string name="dialog_whats_an_instance">Hægt er að setja hér inn vistfang eða lén á hvaða tilviki sem er, svo sem mastodon.social, icosahedron.website, social.tchncs.de og <a href="https://instances.social">fleiri!</a> 
-\n
-\nEf þú ert ekki ennþá með notandaaðgang, geturðu sett inn nafnið á því tilviki sem þú vilt tilheyra og búið til aðgang þar.
-\n
-\nTilvik er ákveðinn einn vefþjónn þar sem notandaaðgangurinn þinn er hýstur, en eftir sem áður er auðvelt fyrir þig að eiga í samskiptum við fólk og fylgjast með einstaklingum á öðrum tilvikum, rétt eins og þið væruð á sama vefsvæðinu. 
-\n
+    <string name="dialog_whats_an_instance">Hægt er að setja hér inn vistfang eða lén á hvaða tilviki sem er, svo sem mastodon.social, icosahedron.website, social.tchncs.de og <a href="https://instances.social">fleiri!</a> \u0020
+\n 
+\nEf þú ert ekki ennþá með notandaaðgang, geturðu sett inn nafnið á því tilviki sem þú vilt tilheyra og búið til aðgang þar. 
+\n 
+\nTilvik er ákveðinn einn vefþjónn þar sem notandaaðgangurinn þinn er hýstur, en eftir sem áður er auðvelt fyrir þig að eiga í samskiptum við fólk og fylgjast með einstaklingum á öðrum tilvikum, rétt eins og þið væruð á sama vefsvæðinu. \u0020
+\n 
 \nNánari upplýsingar má finna á <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Klára innsendingu myndefnis</string>
     <string name="dialog_message_uploading_media">Sendi inn…</string>
     <string name="dialog_download_image">Sækja</string>
     <string name="dialog_message_cancel_follow_request">Afturkalla beiðni um að fylgjast með\?</string>
     <string name="dialog_unfollow_warning">Hætta að fylgjast með þessum aðgangi\?</string>
-    <string name="dialog_delete_toot_warning">Eyða þessu tísti\?</string>
-    <string name="dialog_redraft_toot_warning">Eyða og endurvinna þetta tíst\?</string>
+    <string name="dialog_delete_toot_warning">Eyða þessu tísti?</string>
+    <string name="dialog_redraft_toot_warning">Eyða og endurvinna þetta tíst?</string>
     <string name="mute_domain_warning">Ertu alveg algjörlega viss um að þú viljir loka á allt %s\? Þú munt ekki sjá efni frá þessu léni í neinum opinberum tímalínum eða í tilkynningunum þínum. Fylgjendur þínir frá þessu léni verða fjarlægðir.</string>
     <string name="mute_domain_warning_dialog_ok">Fela allt lénið</string>
     <string name="visibility_public">Opinbert: Senda á opinberar tímalínur</string>

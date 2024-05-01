@@ -143,11 +143,13 @@
     <string name="label_header">Заголовок</string>
     <string name="link_whats_an_instance">Что такое узел?</string>
     <string name="login_connection">Соединение…</string>
-    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, mastodon.social, icosahedron.website, social.tchncs.de и <a href="https://instances.social/">других</a>!\n\nЕсли у вас еще нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.\n\n
-  Узел - это то место, где размещен ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.\n
-  \n
-  Чтобы получить больше информации посетите <a href="https://joinmastodon.org">joinmastodon.org</a>.
-  </string>
+    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, mastodon.social, icosahedron.website, social.tchncs.de и <a href="https://instances.social/">других</a>!
+\n
+\nЕсли у вас еще нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.
+\n
+\n \u0020Узел - это то место, где размещен ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.
+\n 
+\n \u0020Чтобы получить больше информации посетите <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
     <string name="dialog_title_finishing_media_upload">Завершается загрузка медиаконтента</string>
     <string name="dialog_message_uploading_media">Загружается…</string>
     <string name="dialog_download_image">Скачать</string>
@@ -224,16 +226,12 @@
     <string name="description_account_locked">Закрытый аккаунт</string>
     <string name="about_title_activity">О приложении</string>
     <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky – это бесплатное приложение с открытым исходным кодом.
-        Выпускается по лицензии GNU General Public License Version 3.
-        Вы можете прочитать текст лицензии по ссылке: https://www.gnu.org/licenses/gpl-3.0.ru.html</string>
+    <string name="about_tusky_license">Tusky – это бесплатное приложение с открытым исходным кодом. Выпускается по лицензии GNU General Public License Version 3. Вы можете прочитать текст лицензии по ссылке: https://www.gnu.org/licenses/gpl-3.0.ru.html</string>
     <!-- note to translators: the url can be changed to link to the localized version of the license -->
-    <string name="about_project_site">
-           Веб-сайт проекта:\n
-           https://tusky.app</string>
-    <string name="about_bug_feature_request_site">
-            Отчеты об ошибках и пожелания:\n
-            https://github.com/tuskyapp/Tusky/issues</string>
+    <string name="about_project_site">Веб-сайт проекта:
+\n https://tusky.app</string>
+    <string name="about_bug_feature_request_site">Отчеты об ошибках и пожелания:
+\n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Профиль Tusky</string>
     <string name="status_share_content">Поделиться содержанием поста</string>
     <string name="status_share_link">Поделиться ссылкой на пост</string>
@@ -356,10 +354,10 @@
         <item quantity="other"><b>%1$s</b> Понравилось</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Продвинул(а)</item>
-        <item quantity="few">&lt;b&gt;%s&lt;/b&gt; Продвинули</item>
-        <item quantity="many">&lt;b&gt;%s&lt;/b&gt; Продвинули</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Продвинули</item>
+        <item quantity="one"><b>%s</b> Продвинул(а)</item>
+        <item quantity="few"><b>%s</b> Продвинули</item>
+        <item quantity="many"><b>%s</b> Продвинули</item>
+        <item quantity="other"><b>%s</b> Продвинули</item>
     </plurals>
     <string name="title_reblogged_by">Продвинули</string>
     <string name="title_favourited_by">Понравилось</string>
@@ -376,9 +374,7 @@
     <string name="description_status_media_no_description_placeholder">
         Без описания
     </string>
-    <string name="description_status_reblogged">
-        Продвинуто
-    </string>
+    <string name="description_status_reblogged">Продвинуто</string>
     <string name="description_status_favourited">
         Нравится
     </string>

@@ -140,12 +140,12 @@
     <string name="label_header">Omslagfoto</string>
     <string name="link_whats_an_instance">Wat is een Mastodonserver?</string>
     <string name="login_connection">Aan het verbinden…</string>
-    <string name="dialog_whats_an_instance">Het adres of domein van elke Mastodonserver kan hier worden ingevoerd, zoals mastodon.social, mastodon.nl, octodon.social en <a href="https://instances.social">nog veel meer!</a> 
-\n 
-\nWanneer je nog geen account hebt, kun je de naam van de Mastodonserver waar jij je graag wil registeren invoeren, waarna je daar een account kunt aanmaken. 
-\n 
-\nEen Mastodonserver (Engels: instance) is een computerserver waar jouw account zich bevindt (vergelijk het met een e-mailserver). Je kan eenvoudig mensen van andere servers volgen en met ze communiceren, alsof jullie met elkaar op dezelfde website zitten. 
-\n 
+    <string name="dialog_whats_an_instance">Het adres of domein van elke Mastodonserver kan hier worden ingevoerd, zoals mastodon.social, mastodon.nl, octodon.social en <a href="https://instances.social">nog veel meer!</a> \u0020
+\n \u0020
+\nWanneer je nog geen account hebt, kun je de naam van de Mastodonserver waar jij je graag wil registeren invoeren, waarna je daar een account kunt aanmaken. \u0020
+\n \u0020
+\nEen Mastodonserver (Engels: instance) is een computerserver waar jouw account zich bevindt (vergelijk het met een e-mailserver). Je kan eenvoudig mensen van andere servers volgen en met ze communiceren, alsof jullie met elkaar op dezelfde website zitten. \u0020
+\n \u0020
 \n Meer informatie kun je vinden op <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Uploaden media bijna voltooid</string>
     <string name="dialog_message_uploading_media">Aan het uploaden…</string>
@@ -226,10 +226,10 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Projectwebsite:\n
-                    https://tusky.app</string>
-    <string name="about_bug_feature_request_site">Foutmeldingen &amp; nieuwe functies aanvragen:\n
-                    https://github.com/tuskyapp/Tusky/issues</string>
+    <string name="about_project_site">Projectwebsite:
+\n https://tusky.app</string>
+    <string name="about_bug_feature_request_site">Foutmeldingen &amp; nieuwe functies aanvragen:
+\n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Tusky\'s profiel</string>
     <string name="status_share_content">Deel de inhoud van de toot</string>
     <string name="status_share_link">Deel de link van de toot</string>
@@ -308,8 +308,8 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; favorieten</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; boost</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; boosts</item>
+        <item quantity="one"><b>%s</b> boost</item>
+        <item quantity="other"><b>%s</b> boosts</item>
     </plurals>
     <string name="title_reblogged_by">Geboost door</string>
     <string name="title_favourited_by">Aan favorieten toegevoegd door</string>
@@ -323,8 +323,7 @@
     </string>
     <string name="description_status_media_no_description_placeholder">        Geen omschrijving
     </string>
-    <string name="description_status_reblogged">        Geboost
-    </string>
+    <string name="description_status_reblogged">Geboost</string>
     <string name="description_status_favourited">        Aan favorieten toegevoegd
     </string>
     <string name="description_visiblity_public">        Openbaar
@@ -358,7 +357,7 @@
     <string name="hint_list_name">Naam van lijst</string>
     <string name="edit_hashtag_hint">Hashtag zonder #</string>
     <string name="action_delete_and_redraft">Verwijderen en herschrijven</string>
-    <string name="dialog_redraft_toot_warning">Deze toot verwijderen en herschrijven\?</string>
+    <string name="dialog_redraft_toot_warning">Deze toot verwijderen en herschrijven?</string>
     <string name="notifications_clear">Leegmaken</string>
     <string name="notifications_apply_filter">Filter</string>
     <string name="filter_apply">Toepassen</string>

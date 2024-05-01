@@ -146,7 +146,7 @@
     <string name="pref_title_notification_filters">Rhowch wybod i mi bryd</string>
     <string name="pref_title_notification_filter_mentions">soniodd</string>
     <string name="pref_title_notification_filter_follows">dilynodd</string>
-    <string name="pref_title_notification_filter_reblogs">fy negeseuon wedi\'u hybu </string>
+    <string name="pref_title_notification_filter_reblogs">fy negeseuon wedi\'u hybu</string>
     <string name="pref_title_notification_filter_favourites">fy mhyst sy\'n ffefrynnau</string>
     <string name="pref_title_appearance_settings">Gwedd</string>
     <string name="pref_title_app_theme">Thema\'r App</string>
@@ -183,9 +183,9 @@
     <string name="notification_follow_name">Dilynwyr Newydd</string>
     <string name="notification_follow_description">Hysbysiadau am ddilynwyr newydd </string>
     <string name="notification_boost_name">Hybiadau</string>
-    <string name="notification_boost_description">Hysbysiadau pan gaiff eich tŵtiau eu hybu </string>
+    <string name="notification_boost_description">Hysbysiadau pan gaiff eich tŵtiau eu hybu</string>
     <string name="notification_favourite_name">Ffefrynnau</string>
-    <string name="notification_favourite_description">Hysbysiadau pan fo\'r tŵtiau wedi\'u marcio fel ffefryn </string>
+    <string name="notification_favourite_description">Hysbysiadau pan fo\'r tŵtiau wedi\'u marcio fel ffefryn</string>
     <string name="notification_mention_format">Soniodd %s amdanoch </string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s a %4$d eraill</string>
     <string name="notification_summary_medium">%1$s, %2$s, a %3$s</string>
@@ -244,9 +244,9 @@
     <string name="compose_save_draft">Cadw drafft?</string>
     <string name="send_toot_notification_title">Yn anfon Tŵt…</string>
     <string name="send_toot_notification_error_title">Gwall wrth anfon Tŵt</string>
-    <string name="send_toot_notification_channel_name">Yn anfon Tŵtiau </string>
+    <string name="send_toot_notification_channel_name">Yn anfon Tŵtiau</string>
     <string name="send_toot_notification_cancel_title">Canslo anfon </string>
-    <string name="send_toot_notification_saved_content">Cadwyd copi o\'r tŵt i\'ch drafftiau </string>
+    <string name="send_toot_notification_saved_content">Cadwyd copi o\'r tŵt i\'ch drafftiau</string>
     <string name="action_compose_shortcut">Creu</string>
     <string name="error_no_custom_emojis">Nid oes gan eich achos %s emoji bersonol</string>
     <string name="copy_to_clipboard_success">Copïwyd i\'r clipfwrdd</string>

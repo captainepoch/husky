@@ -114,12 +114,12 @@
     <string name="label_header">Nagłówek</string>
     <string name="link_whats_an_instance">Czym jest instancja?</string>
     <string name="login_connection">Łączenie…</string>
-    <string name="dialog_whats_an_instance">Tutaj można wprowadzić domenę lub adres instancji, np. mastodon.social, icosahedron.website, social.tchncs.de, i <a href="https://instances.social">wiele więcej!</a> 
-\n
-\nJeżeli nie posiadasz jeszcze konta, wprowadź tu nazwę instancji, na której chcesz się zarejestrować.
-\n
-\nInstancja jest miejscem, na którym znajduje się twoje konto, lecz komunikując się z innymi serwerami, działa tak, jakby były jednym portalem.
-\n
+    <string name="dialog_whats_an_instance">Tutaj można wprowadzić domenę lub adres instancji, np. mastodon.social, icosahedron.website, social.tchncs.de, i <a href="https://instances.social">wiele więcej!</a> \u0020
+\n 
+\nJeżeli nie posiadasz jeszcze konta, wprowadź tu nazwę instancji, na której chcesz się zarejestrować. 
+\n 
+\nInstancja jest miejscem, na którym znajduje się twoje konto, lecz komunikując się z innymi serwerami, działa tak, jakby były jednym portalem. 
+\n 
 \nWięcej informacji można znaleźć na <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Kończenie wysyłania treści</string>
     <string name="dialog_message_uploading_media">Wysyłanie…</string>
@@ -192,12 +192,10 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">        Strona projektu:\n
-        https://tusky.app
-    </string>
-    <string name="about_bug_feature_request_site">        Zgłoszenia błędów i propozycje funkcji:\n
-        https://github.com/tuskyapp/Tusky/issues
-    </string>
+    <string name="about_project_site">Strona projektu:
+\n https://tusky.app</string>
+    <string name="about_bug_feature_request_site">Zgłoszenia błędów i propozycje funkcji:
+\n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Profil Tusky’ego</string>
     <string name="status_share_content">Udostępnij zawartość wpisu</string>
     <string name="status_share_link">Udostępnij link do postu</string>
@@ -297,8 +295,8 @@
     <string name="downloading_media">Pobieranie mediów</string>
     <string name="send_media_to">Wyślij media do…</string>
     <string name="confirmation_domain_unmuted">Domena %s nie jest już schowana</string>
-    <string name="dialog_delete_toot_warning">Usunąć ten wpis\?</string>
-    <string name="dialog_redraft_toot_warning">Usunąć i napisać ponownie ten wpis\?</string>
+    <string name="dialog_delete_toot_warning">Usunąć ten wpis?</string>
+    <string name="dialog_redraft_toot_warning">Usunąć i napisać ponownie ten wpis?</string>
     <string name="mute_domain_warning">Czy jesteś pewien/pewna że chcesz zablokować wszystko z domeny %s\? Nie będziesz widzieć zawartości z tej domeny w żadnej osi czasu ani w twoich powiadomieniach. Twoi obserwujący z tej domeny nie będą usunięci.</string>
     <string name="mute_domain_warning_dialog_ok">Schowaj całą domenę</string>
     <string name="pref_title_notification_filter_poll">głosowania zostały zakończone</string>
@@ -351,9 +349,10 @@
         <item quantity="other"><b>%1$s</b> polubień</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; podbicie</item>
-        <item quantity="few">&lt;b&gt;%s&lt;/b&gt; podbicia</item>
-        <item quantity="many">&lt;b&gt;%s&lt;/b&gt; podbić</item>
+        <item quantity="one"><b>%s</b> podbicie</item>
+        <item quantity="few"><b>%s</b> podbicia</item>
+        <item quantity="many"><b>%s</b> podbić</item>
+        <item quantity="other"><b>%s</b> podbić</item>
     </plurals>
     <string name="title_reblogged_by">Podbite przez</string>
     <string name="title_favourited_by">Polubione przez</string>

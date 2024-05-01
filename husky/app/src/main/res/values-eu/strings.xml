@@ -119,19 +119,19 @@
     <string name="label_header">Goiburua</string>
     <string name="link_whats_an_instance">Zer da instantzia?</string>
     <string name="login_connection">Konektatzen…</string>
-    <string name="dialog_whats_an_instance"> Sartu hemen helbidea edo mastodon.eus, mastodon.jalgi.eus, mastodon.social bezalako <a href="https://instances.social">edozein instantzia</a>, 
-\n
-\n Oraindik ez baduzu konturik, instantziaren izena sartu eta bertan kontua sortu dezakezu. 
-\n
-\nInstantzia zure kontua dagoen gunea da, baino beste instantzietako erabiltzaileak zurean egongo balira bezala jarraitu ditzakezu. 
-\n
+    <string name="dialog_whats_an_instance"> Sartu hemen helbidea edo mastodon.eus, mastodon.jalgi.eus, mastodon.social bezalako <a href="https://instances.social">edozein instantzia</a>, \u0020
+\n 
+\n Oraindik ez baduzu konturik, instantziaren izena sartu eta bertan kontua sortu dezakezu. \u0020
+\n 
+\nInstantzia zure kontua dagoen gunea da, baino beste instantzietako erabiltzaileak zurean egongo balira bezala jarraitu ditzakezu. \u0020
+\n 
 \nInformazio gehiago <a href="https://joinmastodon.org">joinmastodon.org</a> helbidean topatuko duzu. </string>
     <string name="dialog_title_finishing_media_upload">Mediaren igoera bukatzen</string>
     <string name="dialog_message_uploading_media">Igotzen…</string>
     <string name="dialog_download_image">Jaitsi</string>
     <string name="dialog_message_cancel_follow_request">Jarraipen-eskakizunari uko egin\?</string>
     <string name="dialog_unfollow_warning">Kontu hau jarraitzeari utzi\?</string>
-    <string name="dialog_delete_toot_warning">Tuta ezabatu\?</string>
+    <string name="dialog_delete_toot_warning">Tuta ezabatu?</string>
     <string name="visibility_public">Publikoa: Istorio publikoetan erakutsi</string>
     <string name="visibility_unlisted">Ezkutukoa: Ez erakutsi istorio publikoetan</string>
     <string name="visibility_private">Pribatua: Jarraitzaileentzat soilik ikusgai</string>
@@ -195,18 +195,15 @@
     <string name="notification_title_summary">%d interakzio berri</string>
     <string name="description_account_locked">Kontu babestua</string>
     <string name="about_title_activity">Honi buruz</string>
-    <string name="about_tusky_license">Tusky software libre eta kode askekoa da.
-        \"GNU General Public License Version 3\" lizentziapean zabaldua.
-        Lizentzia hontaz gehiago irakurtzeko: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_license">Tusky software libre eta kode askekoa da. \"GNU General Public License Version 3\" lizentziapean zabaldua. Lizentzia hontaz gehiago irakurtzeko: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">        Proiektuaren gunea:\n
-        https://tusky.app
-    </string>
+    <string name="about_project_site">Proiektuaren gunea:
+\n https://tusky.app</string>
     <string name="about_bug_feature_request_site">Akatsen berri-emateak eta hobekuntza-eskariak:
 \n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Tuskyren profila</string>
@@ -308,7 +305,7 @@
     <string name="download_media">Media jaisten</string>
     <string name="downloading_media">Media jaisten</string>
     <string name="confirmation_domain_unmuted">%s ez dago ezkutatua</string>
-    <string name="dialog_redraft_toot_warning">Tut hau ezabatu eta zirriborro berria egin\?</string>
+    <string name="dialog_redraft_toot_warning">Tut hau ezabatu eta zirriborro berria egin?</string>
     <string name="mute_domain_warning">Ziur al zaude %s ezabatu nahi duzula\? Domeinu horretatik datorren edukia ez duzu denbora-lerro publikoetan edo jakinarazpenentan ikusiko. Domeinu horretan dituzun jarraitzaileak ezabatuko dira.</string>
     <string name="mute_domain_warning_dialog_ok">Domeinu osoa ezkutatu</string>
     <string name="pref_title_notification_filter_poll">Galdeketak bukatu dira</string>
@@ -353,8 +350,8 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; Gogoko</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Bultzada</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Bultzada</item>
+        <item quantity="one"><b>%s</b> Bultzada</item>
+        <item quantity="other"><b>%s</b> Bultzada</item>
     </plurals>
     <string name="title_reblogged_by">Bultzatuta</string>
     <string name="title_favourited_by">Gogokoa</string>
@@ -450,7 +447,6 @@
     <string name="hashtags">Traolak</string>
     <string name="dialog_mute_hide_notifications">Ez erakutsi jakinarazpenak</string>
     <string name="action_unmute_desc">Desmututu %s</string>
-
     <string name="pref_title_hide_top_toolbar">Ezkutatu goiko tresna-barraren izenburua</string>
     <string name="pref_title_confirm_reblogs">Erakutsi berrespen-abisua tuta bultzatu aurretik</string>
     <string name="pref_title_show_cards_in_timelines">Erakutsi esteken aurrebista denbora-lerroetan</string>

@@ -64,8 +64,8 @@
     <string name="dialog_block_warning">Bloc @%s\?</string>
     <string name="mute_domain_warning_dialog_ok">Folaigh an fearann iomlán</string>
     <string name="mute_domain_warning">An bhfuil tú cinnte gur mhaith leat gach %s a bhac\? Ní fheicfidh tú ábhar ón bhfearann sin in aon amlínte poiblí ná i d’fhógraí. Bainfear do leanúna ón bhfearann sin.</string>
-    <string name="dialog_redraft_toot_warning">An tút seo a scriosadh agus a dhréachtú\?</string>
-    <string name="dialog_delete_toot_warning">Scrios an tút seo\?</string>
+    <string name="dialog_redraft_toot_warning">An tút seo a scriosadh agus a dhréachtú?</string>
+    <string name="dialog_delete_toot_warning">Scrios an tút seo?</string>
     <string name="dialog_unfollow_warning">An cuntas seo a scaoileadh\?</string>
     <string name="dialog_message_cancel_follow_request">An iarraidh seo a leanas a chúlghairm\?</string>
     <string name="dialog_download_image">Íoslódáil</string>
@@ -257,12 +257,12 @@
     <string name="action_mute_conversation">Comhrá tost</string>
     <string name="action_hashtags">Clibeanna hash</string>
     <string name="title_hashtags_dialog">Hashtags</string>
-    <string name="dialog_whats_an_instance">Is féidir seoladh nó fearann aon cháis a iontráil anseo, mar shampla mastodon.social, icosahedron.website, social.tchncs.de, agus <a href="https://instances.social"> níos mó! </a>
-\n
-\nMura bhfuil cuntas agat fós, is féidir leat ainm an cháis ar mhaith leat a bheith páirteach ann agus cuntas a chruthú ann.
-\n
-\nIs áit amháin é sampla ina ndéantar do chuntas a óstáil, ach is féidir leat cumarsáid a dhéanamh go héasca le daoine eile agus iad a leanúint ar chásanna eile mar a bheadh tú ar an suíomh céanna.
-\n
+    <string name="dialog_whats_an_instance">Is féidir seoladh nó fearann aon cháis a iontráil anseo, mar shampla mastodon.social, icosahedron.website, social.tchncs.de, agus <a href="https://instances.social"> níos mó! </a> 
+\n 
+\nMura bhfuil cuntas agat fós, is féidir leat ainm an cháis ar mhaith leat a bheith páirteach ann agus cuntas a chruthú ann. 
+\n 
+\nIs áit amháin é sampla ina ndéantar do chuntas a óstáil, ach is féidir leat cumarsáid a dhéanamh go héasca le daoine eile agus iad a leanúint ar chásanna eile mar a bheadh tú ar an suíomh céanna. 
+\n 
 \nIs féidir tuilleadh faisnéise a fháil ag <a href="https://joinmastodon.org"> joinmastodon.org </a>. </string>
     <string name="about_project_site">Suíomh Gréasáin an tionscadail:
 \n https://tusky.app</string>

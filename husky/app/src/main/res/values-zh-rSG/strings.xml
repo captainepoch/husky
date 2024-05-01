@@ -143,10 +143,11 @@
     <string name="label_header">标题</string>
     <string name="link_whats_an_instance">需要帮助？</string>
     <string name="login_connection">正在连接…</string>
-    <string name="dialog_whats_an_instance">请输入你帐号所在的 Mastodon 站点的域名，比如 pawoo.net，acg.mn，wxw.moe，<a href="https://instances.social">等等</a> 。
-        \n\n还没有 Mastodon 帐号？你也可以输入想注册的 Mastodon 站点的域名，然后在该服务器创建新的帐号并授权 Tusky 登入。
-        \n\n在 Mastodon 里，跨站互动和站内互动一样简单。可以前往 <a href="https://joinmastodon.org">https://joinmastodon.org</a> 了解更多信息。
-    </string>
+    <string name="dialog_whats_an_instance">请输入你帐号所在的 Mastodon 站点的域名，比如 pawoo.net，acg.mn，wxw.moe，<a href="https://instances.social">等等</a> 。 
+\n
+\n还没有 Mastodon 帐号？你也可以输入想注册的 Mastodon 站点的域名，然后在该服务器创建新的帐号并授权 Tusky 登入。 
+\n
+\n在 Mastodon 里，跨站互动和站内互动一样简单。可以前往 <a href="https://joinmastodon.org">https://joinmastodon.org</a> 了解更多信息。 \u0020</string>
     <string name="dialog_title_finishing_media_upload">正在结束上传…</string>
     <string name="dialog_message_uploading_media">正在上传…</string>
     <string name="dialog_download_image">下载</string>
@@ -231,14 +232,10 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">
-        项目地址：\n
-        https://tusky.app
-    </string>
-    <string name="about_bug_feature_request_site">
-        问题反馈：\n
-        https://github.com/tuskyapp/Tusky/issues
-    </string>
+    <string name="about_project_site">项目地址：
+\n https://tusky.app</string>
+    <string name="about_bug_feature_request_site">问题反馈：
+\n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Tusky 官方帐号</string>
     <string name="status_share_content">分享嘟文内容</string>
     <string name="status_share_link">分享嘟文链接</string>
@@ -334,7 +331,7 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; 次收藏</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; 次转嘟</item>
+        <item quantity="other"><b>%s</b> 次转嘟</item>
     </plurals>
     <string name="title_reblogged_by">转嘟</string>
     <string name="title_favourited_by">收藏</string>
@@ -351,9 +348,7 @@
     <string name="description_status_media_no_description_placeholder">
         没有媒体描述信息
     </string>
-    <string name="description_status_reblogged">
-        被转嘟
-    </string>
+    <string name="description_status_reblogged">被转嘟</string>
     <string name="description_status_favourited">
         被收藏
     </string>
