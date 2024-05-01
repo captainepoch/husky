@@ -513,7 +513,6 @@
     <string name="debug_status">compilación de depuración</string>
     <string name="debug_status_message">Una compilación de depuración ha habilitado registros e información de depuración para la aplicación. Podría filtrarse información. Por favor úselo con cuidado.</string>
     <string name="debug_status_message_close">Cerrar</string>
-
     <string name="action_reply_to">Responder a</string>
     <string name="action_emoji_react">Reaccionar</string>
     <string name="action_emoji_unreact">Eliminar la reacción</string>

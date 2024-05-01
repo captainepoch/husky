@@ -351,8 +351,7 @@
     </string>
     <string name="description_status_media_no_description_placeholder">        Žádný popis
     </string>
-    <string name="description_status_reblogged">        Boostnutý
-    </string>
+    <string name="description_status_reblogged">Boostnutý</string>
     <string name="description_status_favourited">        Oblíbený
     </string>
     <string name="description_visiblity_public">Veřejný</string>
@@ -370,7 +369,7 @@
     <string name="pref_title_bot_overlay">Zobrazovat indikátor pro roboty</string>
     <string name="notification_clear_text">Jste si jistý/á, že chcete trvale vymazat všechna vaše oznámení\?</string>
     <string name="action_delete_and_redraft">Smazat a přepsat</string>
-    <string name="dialog_redraft_toot_warning">Smazat a přepsat tento toot\?</string>
+    <string name="dialog_redraft_toot_warning">Smazat a přepsat tento toot?</string>
     <string name="poll_info_format"> <!-- 15 hlasů • 1 hodin do konce --> %1$s • %2$s</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s hlas</item>
@@ -475,7 +474,6 @@
     <string name="action_unmute_notifications_desc">Odkrýt oznámení od %s</string>
     <string name="action_unmute_desc">Odkrýt %s</string>
     <string name="dialog_mute_warning">Ztišit @%s\?</string>
-
     <string name="notification_follow_request_format">%s požádal/a aby vás mohl/a sledovat</string>
     <string name="pref_title_confirm_reblogs">Zobrazit dialogové okno s potvrzením při boostování</string>
 </resources>

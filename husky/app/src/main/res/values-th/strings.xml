@@ -78,7 +78,7 @@
     <string name="title_favourited_by">ชื่นชอบโดย</string>
     <string name="title_reblogged_by">บูสต์โดย</string>
     <plurals name="reblogs">
-        <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; บูสต์</item>
+        <item quantity="other"><b>%1$s</b> บูสต์</item>
     </plurals>
     <plurals name="favs">
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; ชื่นชอบ</item>
@@ -259,19 +259,19 @@
     <string name="dialog_block_warning">บล็อก @%s\?</string>
     <string name="mute_domain_warning_dialog_ok">ซ่อนทั้งโดเมน</string>
     <string name="mute_domain_warning">ต้องการบล็อกทุกอย่างจาก %s \? คุณจะไม่เห็นเนื้อหาจากโดเมนนั้นในไทม์ไลน์สาธารณะหรือในการแจ้งเตือน ผู้ติดตามของคุณจากโดเมนนั้นจะถูกลบออก</string>
-    <string name="dialog_redraft_toot_warning">ลบ แล้ว ร่าง Toot นี้ใหม่\?</string>
-    <string name="dialog_delete_toot_warning">ลบ Toot นี้\?</string>
+    <string name="dialog_redraft_toot_warning">ลบ แล้ว ร่าง Toot นี้ใหม่?</string>
+    <string name="dialog_delete_toot_warning">ลบ Toot นี้?</string>
     <string name="dialog_unfollow_warning">เลิกติดตามผู้ใช้นี้\?</string>
     <string name="dialog_message_cancel_follow_request">ยกเลิกคำขอติดตาม\?</string>
     <string name="dialog_download_image">ดาวน์โหลด</string>
     <string name="dialog_message_uploading_media">กำลังอัปโหลด…</string>
     <string name="dialog_title_finishing_media_upload">กำลังอัปโหลดสื่อใกล้เสร็จ</string>
-    <string name="dialog_whats_an_instance">ใส่ที่อยู่หรือโดเมนของ Instance ได้ที่นี่ เช่น mastodon.social icosahedron.website social.tchncs.de และ <a href="https://instances.social">อีกมากมาย!</a>
-\n 
-\nถ้ายังไม่มีบัญชี สามารถใส่ชื่อ Instance ที่ต้องการจะร่วมแล้วสร้างบัญชีที่นั่น 
-\n 
-\nInstance คือที่ที่หนึ่งไว้โฮสต์บัญชีคุณ แต่คุณยังสามารถสื่อสาร ติดตามบุคคลบน Instance อื่นได้เหมือนอยู่บนไซต์เดียวกัน 
-\n 
+    <string name="dialog_whats_an_instance">ใส่ที่อยู่หรือโดเมนของ Instance ได้ที่นี่ เช่น mastodon.social icosahedron.website social.tchncs.de และ <a href="https://instances.social">อีกมากมาย!</a> 
+\n \u0020
+\nถ้ายังไม่มีบัญชี สามารถใส่ชื่อ Instance ที่ต้องการจะร่วมแล้วสร้างบัญชีที่นั่น \u0020
+\n \u0020
+\nInstance คือที่ที่หนึ่งไว้โฮสต์บัญชีคุณ แต่คุณยังสามารถสื่อสาร ติดตามบุคคลบน Instance อื่นได้เหมือนอยู่บนไซต์เดียวกัน \u0020
+\n \u0020
 \nพบข้อมูลเพิ่มเติมได้ที่ <a href="https://joinmastodon.org">joinmastodon.org</a> </string>
     <string name="label_header">ภาพหัวบน</string>
     <string name="login_connection">กำลังเชื่อมต่อ…</string>

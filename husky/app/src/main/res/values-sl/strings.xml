@@ -141,19 +141,19 @@
     <string name="confirmation_unmuted">Prekinjeno utišanje uporabnika</string>
     <string name="hint_domain">Katero vozlišče\?</string>
     <string name="link_whats_an_instance">Kaj je instanca\?</string>
-    <string name="dialog_whats_an_instance">Tu lahko vnesete naslov ali domeno katerega koli vozlišča, na primer mastodon.social, icosahedron.website, social.tchncs.de in <a href="https://instances.social"> več! </a>
-\n
-\nČe še nimate računa, lahko vnesete ime vozlišča, kateremu bi se radi pridružili, in tam ustvarite račun.
-\n
-\nVozlišče je ena lokacija, kjer je gostovanje vašega računa, vendar lahko preprosto komunicirate in sledite ljudem na drugih vozliščih, kot da bi bili na isti lokaciji.
-\n
+    <string name="dialog_whats_an_instance">Tu lahko vnesete naslov ali domeno katerega koli vozlišča, na primer mastodon.social, icosahedron.website, social.tchncs.de in <a href="https://instances.social"> več! </a> 
+\n 
+\nČe še nimate računa, lahko vnesete ime vozlišča, kateremu bi se radi pridružili, in tam ustvarite račun. 
+\n 
+\nVozlišče je ena lokacija, kjer je gostovanje vašega računa, vendar lahko preprosto komunicirate in sledite ljudem na drugih vozliščih, kot da bi bili na isti lokaciji. 
+\n 
 \nVeč informacij najdete na naslovu <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Dokončanje pošiljanja medija</string>
     <string name="dialog_message_uploading_media">Pošiljanje…</string>
     <string name="dialog_download_image">Prejmi</string>
     <string name="dialog_message_cancel_follow_request">Želite preklicati to zahtevo\?</string>
     <string name="dialog_unfollow_warning">Prenehajte slediti temu računu\?</string>
-    <string name="dialog_delete_toot_warning">Želite izbrisati ta tut\?</string>
+    <string name="dialog_delete_toot_warning">Želite izbrisati ta tut?</string>
     <string name="visibility_public">Javno: Objavi v javnih časovnicah</string>
     <string name="visibility_unlisted">Ni prikazano: Ne prikaže v javnih časovnicah</string>
     <string name="visibility_private">Samo sledilci: Objavi samo sledilcem</string>
@@ -304,10 +304,10 @@
     <string name="unpin_action">Odpni</string>
     <string name="pin_action">Pripni</string>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Spodbuda</item>
-        <item quantity="two">&lt;b&gt;%s&lt;/b&gt; Spodbudi</item>
-        <item quantity="few">&lt;b&gt;%s&lt;/b&gt; Spodbude</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Spodbud</item>
+        <item quantity="one"><b>%s</b> Spodbuda</item>
+        <item quantity="two"><b>%s</b> Spodbudi</item>
+        <item quantity="few"><b>%s</b> Spodbude</item>
+        <item quantity="other"><b>%s</b> Spodbud</item>
     </plurals>
     <string name="title_reblogged_by">Spodbudil/a</string>
     <string name="title_favourited_by">Vzljubil/a</string>
@@ -334,7 +334,7 @@
     <string name="pref_title_bot_overlay">Prikaži kazalnik za robote</string>
     <string name="notification_clear_text">Ali ste prepričani, da želite trajno izbrisati vsa obvestila\?</string>
     <string name="action_delete_and_redraft">Izbriši in preoblikuj</string>
-    <string name="dialog_redraft_toot_warning">Izbriši in preoblikuj tut\?</string>
+    <string name="dialog_redraft_toot_warning">Izbriši in preoblikuj tut?</string>
     <string name="poll_info_format"> <!-- 15 votes • 1 hour left --> %1$s • %2$s</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s glas</item>

@@ -116,19 +116,19 @@
     <string name="label_header">Bandièra</string>
     <string name="link_whats_an_instance">Que es una instància ?</string>
     <string name="login_connection">Connexion…</string>
-    <string name="dialog_whats_an_instance">Aquí podètz picar l\'adreça o domini de quina que siá instància,
-        coma mastodont.cat, mastodon.social, icosahedron.website o
-        <a href="https://instances.social">fòrca mai !</a>
-        \n\nSi encara non avètz cap de compte, podètz picar lo nom de l’instància ont vos agradariá
-        anar e crear un compte enlà.\n\n
-        \n\nAvètz mas d’informacins a <a href="https://joinmastodon.org">joinmastodon.org</a>.
-    </string>
+    <string name="dialog_whats_an_instance">Aquí podètz picar l\'adreça o domini de quina que siá instància, \u0020coma mastodont.cat, mastodon.social, icosahedron.website o \u0020<a href="https://instances.social">fòrca mai !</a> 
+\n
+\nSi encara non avètz cap de compte, podètz picar lo nom de l’instància ont vos agradariá \u0020anar e crear un compte enlà.
+\n
+\n 
+\n
+\nAvètz mas d’informacins a <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
     <string name="dialog_title_finishing_media_upload">Finalizacion del mandadís del mèdia</string>
     <string name="dialog_message_uploading_media">Mandadís…</string>
     <string name="dialog_download_image">Telecargar</string>
     <string name="dialog_message_cancel_follow_request">Anullar la demandar d’abonament ?</string>
     <string name="dialog_unfollow_warning">Volètz quitar de seguir aqueste compte ?</string>
-    <string name="dialog_delete_toot_warning">Suprimir aqueste tut \?</string>
+    <string name="dialog_delete_toot_warning">Suprimir aqueste tut ?</string>
     <string name="visibility_public">Publica : es visibla a la cronologia publica</string>
     <string name="visibility_unlisted">Pas listada :es pas visibla a las cronologias publicas</string>
     <string name="visibility_private">Solament seguidors : pas que visibla pels vòstres seguidors</string>
@@ -188,21 +188,17 @@
     <string name="notification_title_summary">%d interaccions nòvas</string>
     <string name="description_account_locked">Compte blocat</string>
     <string name="about_title_activity">A prepaus</string>
-    <string name="about_tusky_license">Tusky es programa gratuït, liure e de còdi dobèrt.
-        Es publicat jols tèrms de la licéncia publica generala GNU version 3.
-        Podeu trobar les llicència aquí: https://www.gnu.org/licenses/gpl-3.0.ca.html</string>
+    <string name="about_tusky_license">Tusky es programa gratuït, liure e de còdi dobèrt. Es publicat jols tèrms de la licéncia publica generala GNU version 3. Podeu trobar les llicència aquí: https://www.gnu.org/licenses/gpl-3.0.ca.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">        Site web del projècte :\n
-        https://tusky.app
-    </string>
-    <string name="about_bug_feature_request_site">        Rapòrts d\'errors e demandas de foncionalitats :\n
-        https://github.com/tuskyapp/Tusky/issues
-    </string>
+    <string name="about_project_site">Site web del projècte :
+\n https://tusky.app</string>
+    <string name="about_bug_feature_request_site">Rapòrts d\'errors e demandas de foncionalitats :
+\n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Perfil de Tusky</string>
     <string name="status_share_content">Partejar lo contengut del tut</string>
     <string name="status_share_link">Partejar lo ligam del tut</string>
@@ -355,7 +351,7 @@
     <string name="compose_shortcut_long_label">Escriure un tut</string>
     <string name="compose_shortcut_short_label">Redactar</string>
     <string name="action_delete_and_redraft">Suprimir e reformular</string>
-    <string name="dialog_redraft_toot_warning">Suprimir e reformular aqueste tut \?</string>
+    <string name="dialog_redraft_toot_warning">Suprimir e reformular aqueste tut ?</string>
     <string name="app_theme_system">Utilizar lo tèma sistèma</string>
     <string name="notifications_clear">Netejar</string>
     <string name="notifications_apply_filter">Filtrar</string>

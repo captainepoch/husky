@@ -134,12 +134,12 @@
     <string name="label_header">Fejléc</string>
     <string name="link_whats_an_instance">Mi az a szerver\?</string>
     <string name="login_connection">Csatlakozás…</string>
-    <string name="dialog_whats_an_instance">Bármely példány címét vagy domain nevét beírhatod ide, mint a mastodon.social, az icosahedron.website, a social.tchncs.de és <a href="https://instances.social">mások!</a> 
-\n 
-\nHa még nincs fiókod, beírhatod annak a példánynak a címét, amelyhez csatlakoznál, majd azon létrehozhatsz egy fiókot. 
-\n 
-\nA példány az a hely, ahol a fiókadataidat tárolják, de ettől még ugyanúgy kommunikálhatsz más példányokon lévő emberekkel, mintha ugyanazon az oldalon lennétek. 
-\n 
+    <string name="dialog_whats_an_instance">Bármely példány címét vagy domain nevét beírhatod ide, mint a mastodon.social, az icosahedron.website, a social.tchncs.de és <a href="https://instances.social">mások!</a> \u0020
+\n \u0020
+\nHa még nincs fiókod, beírhatod annak a példánynak a címét, amelyhez csatlakoznál, majd azon létrehozhatsz egy fiókot. \u0020
+\n \u0020
+\nA példány az a hely, ahol a fiókadataidat tárolják, de ettől még ugyanúgy kommunikálhatsz más példányokon lévő emberekkel, mintha ugyanazon az oldalon lennétek. \u0020
+\n \u0020
 \nTöbb információt találhatsz itt: <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Média feltöltés befejezése</string>
     <string name="dialog_message_uploading_media">Feltöltés…</string>
@@ -215,9 +215,8 @@
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">        Projekt honlapja:\n
-        https://tusky.app
-    </string>
+    <string name="about_project_site">Projekt honlapja:
+\n https://tusky.app</string>
     <string name="about_bug_feature_request_site">Hibajelentés &amp; új funkciók igénylése:
 \n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Tusky profilja</string>
@@ -284,7 +283,7 @@
     <string name="download_media">Média letöltése</string>
     <string name="downloading_media">Média letöltése</string>
     <string name="send_media_to">Média megosztása következővel…</string>
-    <string name="dialog_redraft_toot_warning">Törlöd és újraírod ezt a tülköt\?</string>
+    <string name="dialog_redraft_toot_warning">Törlöd és újraírod ezt a tülköt?</string>
     <string name="pref_title_notification_filter_poll">befejeződött egy szavazás</string>
     <string name="pref_title_timeline_filters">Szűrők</string>
     <string name="app_theme_system">Rendszer téma használata</string>
@@ -354,8 +353,8 @@
         <item quantity="other"><b>%1$s</b> Kedvenc</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Megtolás</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Megtolás</item>
+        <item quantity="one"><b>%s</b> Megtolás</item>
+        <item quantity="other"><b>%s</b> Megtolás</item>
     </plurals>
     <string name="conversation_1_recipients">%1$s</string>
     <string name="conversation_more_recipients">%1$s, %2$s és még %3$d</string>

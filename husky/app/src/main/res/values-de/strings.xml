@@ -470,7 +470,6 @@
     <string name="pref_title_hide_top_toolbar">Titel der Hauptnavigation verstecken</string>
     <string name="no_announcements">Im Moment gibt es keine Ankündigungen.</string>
     <string name="title_announcements">Ankündigungen</string>
-
     <string name="action_disable_formatting_syntax">%s deaktivieren</string>
     <string name="action_emoji_react">Reagieren</string>
     <string name="action_emoji_unreact">Reaktion entfernen</string>

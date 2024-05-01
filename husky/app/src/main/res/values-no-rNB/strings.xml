@@ -142,19 +142,19 @@
     <string name="label_header">Overskrift</string>
     <string name="link_whats_an_instance">Hva er en instans\?</string>
     <string name="login_connection">Kobler til…</string>
-    <string name="dialog_whats_an_instance"><a href="https://instances.social">more!</a> 
-\n
-\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to join and create an account there.
-\n
-\nAn instance is a single place where your account is hosted, but you can easily communicate with and follow folks on other instances as though you were on the same site. 
-\n
+    <string name="dialog_whats_an_instance"><a href="https://instances.social">more!</a> \u0020
+\n 
+\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to join and create an account there. 
+\n 
+\nAn instance is a single place where your account is hosted, but you can easily communicate with and follow folks on other instances as though you were on the same site. \u0020
+\n 
 \nMore info can be found at <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Media opplasting er ferdig</string>
     <string name="dialog_message_uploading_media">Laster opp…</string>
     <string name="dialog_download_image">Last ned</string>
     <string name="dialog_message_cancel_follow_request">Trekk tilbake følgeforespørselen\?</string>
     <string name="dialog_unfollow_warning">Slutte å følge denne kontoen\?</string>
-    <string name="dialog_delete_toot_warning">Slette dette tootet\?</string>
+    <string name="dialog_delete_toot_warning">Slette dette tootet?</string>
     <string name="visibility_public">Offentlig: Vis i offentlig tidslinjer</string>
     <string name="visibility_unlisted">Ikke oppført: Ikke vis i offentlige tidslinjer</string>
     <string name="visibility_private">Bare følgere: Vis bare til følgere</string>
@@ -206,7 +206,7 @@
     <string name="description_account_locked">Låst konto</string>
     <string name="about_title_activity">Om</string>
     <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_bug_feature_request_site">Rapporter feil og ønsker om funksjonalitet her: 
+    <string name="about_bug_feature_request_site">Rapporter feil og ønsker om funksjonalitet her:
 \n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Tuskys Mastodon-profil</string>
     <string name="status_share_content">Del inneholdet i tootet</string>
@@ -254,7 +254,7 @@
     <string name="notification_mention_name">Nye omtaler</string>
     <string name="notification_mention_descriptions">Varsler om nye omtaler</string>
     <string name="about_tusky_license">Tusky er fri og åpen kildekode. Applikasjonen er lisensiert under GNU General Public License versjon 3. Du kan se lisensen her: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
-    <string name="about_project_site">Hjemmeside: 
+    <string name="about_project_site">Hjemmeside:
 \n https://tusky.app</string>
     <string name="abbreviated_in_years">om %dy</string>
     <string name="compose_active_account_description">Poster med konto %1$s</string>
@@ -309,8 +309,8 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; Favoritter</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Boost</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Boosts</item>
+        <item quantity="one"><b>%s</b> Boost</item>
+        <item quantity="other"><b>%s</b> Boosts</item>
     </plurals>
     <string name="title_reblogged_by">Boostet av</string>
     <string name="title_favourited_by">Favorisert av</string>
@@ -337,7 +337,7 @@
     <string name="pref_title_bot_overlay">Vis at konto er en robot</string>
     <string name="notification_clear_text">Er du sikker på at du vil slette alle varsler\?</string>
     <string name="action_delete_and_redraft">Slett og skriv på nytt</string>
-    <string name="dialog_redraft_toot_warning">Vil du slette dette tottet og skrive det på nytt\?</string>
+    <string name="dialog_redraft_toot_warning">Vil du slette dette tottet og skrive det på nytt?</string>
     <string name="poll_info_format"> <!-- 15 votes • 1 hour left --> %1$s • %2$s</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s stemme</item>

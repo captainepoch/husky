@@ -140,12 +140,12 @@
     <string name="label_header">Intestazione</string>
     <string name="link_whats_an_instance">Cos\'è un\'istanza?</string>
     <string name="login_connection">Connessione…</string>
-    <string name="dialog_whats_an_instance">L\'indirizzo o il dominio di qualsiasi istanza può essere inserito qui, come mastodon.social, icosahedron.website, social.tchncs.de, e <a href="https://instances.social">altro!</a> 
-\n 
-\nSe non hai ancora un account, puoi inserire il nome di un\'istanza alla quale vuoi iscriverti e creare un account. 
-\n 
-\nUn\'istanza è il luogo dove l\'account è custodito, ma puoi facilmente comunicare e seguire gente su altre istanze come se fossero sullo stesso sito. 
-\n 
+    <string name="dialog_whats_an_instance">L\'indirizzo o il dominio di qualsiasi istanza può essere inserito qui, come mastodon.social, icosahedron.website, social.tchncs.de, e <a href="https://instances.social">altro!</a> \u0020
+\n \u0020
+\nSe non hai ancora un account, puoi inserire il nome di un\'istanza alla quale vuoi iscriverti e creare un account. \u0020
+\n \u0020
+\nUn\'istanza è il luogo dove l\'account è custodito, ma puoi facilmente comunicare e seguire gente su altre istanze come se fossero sullo stesso sito. \u0020
+\n \u0020
 \nPiù info possono essere trovate su <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="dialog_title_finishing_media_upload">Terminando il caricamento dei media</string>
     <string name="dialog_message_uploading_media">Caricamento…</string>
@@ -220,19 +220,17 @@
     <string name="description_account_locked">Account bloccato</string>
     <string name="about_title_activity">A proposito</string>
     <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_tusky_license">Tusky è un programma libero ed open source.
-		È distribuito con licenza GNU General Public License Version 3.
-		Puoi leggere la licenza qui: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_tusky_license">Tusky è un programma libero ed open source. È distribuito con licenza GNU General Public License Version 3. Puoi leggere la licenza qui: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
          * you should think of “free” as in “free speech,” not as in “free beer”.
            We sometimes call it “libre software,” borrowing the French or Spanish word for “free” as in freedom,
            to show we do not mean the software is gratis. Source: https://www.gnu.org/philosophy/free-sw.html
          * the url can be changed to link to the localized version of the license.
     -->
-    <string name="about_project_site">Sito web del progetto:\n
-		https://tusky.app</string>
-    <string name="about_bug_feature_request_site">Segnala problemi &amp; richiedi funzionalità:\n
-		https://github.com/tuskyapp/Tusky/issues</string>
+    <string name="about_project_site">Sito web del progetto:
+\n https://tusky.app</string>
+    <string name="about_bug_feature_request_site">Segnala problemi &amp; richiedi funzionalità:
+\n https://github.com/tuskyapp/Tusky/issues</string>
     <string name="about_tusky_account">Profilo di Tusky</string>
     <string name="status_share_content">Condividi contenuto del toot</string>
     <string name="status_share_link">Condividi link al toot</string>
@@ -328,8 +326,9 @@
         <item quantity="other"><b>%1$s</b> Mi piace</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Boost</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Boost</item>
+        <item quantity="one"><b>%s</b> Boost</item>
+        <item quantity="many"></item>
+        <item quantity="other"><b>%s</b> Boost</item>
     </plurals>
     <string name="title_reblogged_by">Boostato da</string>
     <string name="title_favourited_by">Preferito da</string>
@@ -343,8 +342,7 @@
     </string>
     <string name="description_status_media_no_description_placeholder">        Nessuna descrizione
     </string>
-    <string name="description_status_reblogged">        Ribloggato
-    </string>
+    <string name="description_status_reblogged">Ribloggato</string>
     <string name="description_status_favourited">        Apprezzato
     </string>
     <string name="description_visiblity_public">        Pubblico
@@ -366,7 +364,7 @@
     <string name="pref_title_bot_overlay">Mostra indicatore per bot</string>
     <string name="notification_clear_text">Sei sicuro di voler permanentemente eliminare tutte le tue notifiche\?</string>
     <string name="action_delete_and_redraft">Cancella e riscrivi</string>
-    <string name="dialog_redraft_toot_warning">Cancellare e riscrivere questo toot\?</string>
+    <string name="dialog_redraft_toot_warning">Cancellare e riscrivere questo toot?</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s voto</item>
         <item quantity="other">%s voti</item>

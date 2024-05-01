@@ -330,8 +330,8 @@
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; Stelumoj</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one">&lt;b&gt;%s&lt;/b&gt; Diskonigo</item>
-        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Diskonigoj</item>
+        <item quantity="one"><b>%s</b> Diskonigo</item>
+        <item quantity="other"><b>%s</b> Diskonigoj</item>
     </plurals>
     <string name="title_reblogged_by">Diskonigita de</string>
     <string name="title_favourited_by">Stelumita per</string>
@@ -345,8 +345,7 @@
     </string>
     <string name="description_status_media_no_description_placeholder">        Neniu priskribo
     </string>
-    <string name="description_status_reblogged">        Diskonigita
-    </string>
+    <string name="description_status_reblogged">Diskonigita</string>
     <string name="description_status_favourited">        Stelumita
     </string>
     <string name="description_visiblity_public">        Publika
@@ -357,7 +356,7 @@
     <string name="description_visiblity_direct">        Rekta    </string>
     <string name="hint_list_name">Nomo de la listo</string>
     <string name="action_delete_and_redraft">Forigi kaj reskribi</string>
-    <string name="dialog_redraft_toot_warning">Ĉu forigi kaj reskribi ĉi-tiun mesaĝon\?</string>
+    <string name="dialog_redraft_toot_warning">Ĉu forigi kaj reskribi ĉi-tiun mesaĝon?</string>
     <string name="pref_title_notification_filter_poll">enketoj finiĝis</string>
     <string name="pref_title_bot_overlay">Montri indikilon por robotoj</string>
     <string name="pref_title_animate_gif_avatars">Moviĝi GIF profilbildojn</string>
