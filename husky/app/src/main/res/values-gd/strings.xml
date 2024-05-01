@@ -25,7 +25,7 @@
     <string name="hint_note">Sgeul-beatha</string>
     <string name="label_quick_reply">Freagairt…</string>
     <string name="hint_search">Lorg…</string>
-    <string name="action_login">Clàraich a-steach le Mastodon</string>
+    <string name="action_login">Clàraich a-steach le Pleroma</string>
     <string name="action_send_public">TÚT!</string>
     <string name="action_emoji_keyboard">Meur-chlàr emoji</string>
     <string name="action_unfollow">Sguir a leantainn</string>
