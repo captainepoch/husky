@@ -211,13 +211,13 @@
     <string name="dialog_download_image">داگرتن</string>
     <string name="dialog_message_uploading_media">بارکردن…</string>
     <string name="dialog_title_finishing_media_upload">تەواوکردنی بارکردنی میدیا</string>
-    <string name="dialog_whats_an_instance">ناونیشان یان دۆمەینی هەر نموونەیەک دەتوانرێت لێرەدا داخڵ \u0020 بکرێت، وەک mastodon.social، icosahedron.website، social.tchncs.de، و<a href="https://instances.social">زیاتر!</a>
+    <string name="dialog_whats_an_instance">ناونیشان یان دۆمەینی هەر نمونەیەک دەکرێت لێرە تێبنووسرێت، وەک <a href="https://fediverse.network/pleroma?count=peers">فرەتر!</a>
 \n
-\nئەگەر هێشتا ئەکاونتت نییە، دەتوانیت ناوی ئەو نموونەیە دابنێیت \u0020کە دەتەوێت بەشداری بکەیت و لەوێ ئەکاونتێک دروست بکەیت.
-\n \u0020
-\nنموونە یەک شوێنە کە ئەکاونتەکەت \u0020 تێیدا هۆست دەکرێت، بەڵام دەتوانیت بە ئاسانی پەیوەندی لەگەڵ خەڵکدا بکەیت و شوێنیان بکەویت لە نموونەکانی تردا وەک ئەوەی \u0020 لە هەمان سایتدا بیت.
-\n 
-\nزانیاری زیاتر دەتوانرێت لەم لینکەدا بدۆزرێتەوە <a href="https://joinmastodon.org">joinmastodon.org</a> \u0020</string>
+\nئەگەر هێشتا ئەژمێرێکت نیە، دەتوانیت ناوی ئەو نمونەیە داخڵ بکەیت کە دەتەوێت بیبەستیت و ئەژمێرێک دروست بکەیت لەوێ.
+\n
+\nنموونەیەک تاکە شوێنە کە ئەژمێرەکەت میوانداری کراوە، بەڵام دەتوانیت بە ئاسانی پەیوەندی لەگەڵ بکەیت و دوای ئەو خەڵکانە بکەویت لە نمونەکانی تر وەک ئەوەی تۆ لە هەمان سایت دابیت.
+\n
+\nزانیاری زیاتر دەتوانرێت بدۆزرێتەوە لە <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="login_connection">گرێدان…</string>
     <string name="link_whats_an_instance">نموونەیەک چییە؟</string>
     <string name="label_header">سەرپەڕە</string>
@@ -434,9 +434,9 @@
     <string name="status_share_content">هاوبەشکردنی ناوەڕۆکی دووت</string>
     <string name="about_tusky_account">پرۆفایلی تاسکی</string>
     <string name="about_bug_feature_request_site">ڕاپۆرتەکانی هەڵەکان و داواکاریەکانی تایبەتمەندی:
-\nhttps://github.com/tuskyapp/Tusky/issues</string>
+\nhttps://github.com/captainepoch/husky/issues</string>
     <string name="about_project_site">وێبسایتی پڕۆژە:
-\nhttps://tusky.app</string>
+\nhttps://husky.adol.pw</string>
     <string name="about_tusky_license">توسکی سۆفتوێری ئازاد و سەرچاوەی کراوەیە مۆڵەتدراوە بە پێ نامەی گشتی GNU Public Version 3. دەتوانیت لێرە مۆڵەتەکە نیشان بدەی: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <string name="about_powered_by_tusky">لەلایەن تاسکیەوە دەست کراوە بە</string>
     <string name="about_tusky_version">توسکی %s</string>
@@ -481,8 +481,8 @@
     <string name="title_drafts">ڕەشنووسەکان</string>
     <string name="pref_default_post_expire_in">کاتی بەسەرچوون بۆ هەموو پۆستە بڵاوکراوەکان دابنێ</string>
     <string name="pref_default_post_expire_in_summary">کەمترین بەها ١ ڕۆژە، ٠ بۆ لەکارخستنی.</string>
-    <string name="pref_default_post_expire_in_explanation">لانیکەم 1 ڕۆژ ڕێکبخە بۆ ئەوەی پۆستەکان بگەڕێن و لەلایەن سێرڤەرەوە بە شێوەیەکی ئۆتۆماتیکی بسڕدرێنەوە 
-\n 
+    <string name="pref_default_post_expire_in_explanation">لانیکەم 1 ڕۆژ ڕێکبخە بۆ ئەوەی پۆستەکان بگەڕێن و لەلایەن سێرڤەرەوە بە شێوەیەکی ئۆتۆماتیکی بسڕدرێنەوە
+\n
 \nدەتوانرێت ئەمە لە \"هەڵبژاردەکانی ئەژمێر\" ڕێکبخرێت.</string>
     <string name="status_media_audio">دەنگ</string>
     <string name="status_media_attachments">هاوپێچەکان</string>
@@ -504,6 +504,6 @@
     <string name="debug_status_message">دروستکردنی دیباگ لۆگ و زانیارییەکانی دیباگکردنی بۆ بەرنامەکە چالاک کردووە. لەوانەیە زانیاری دزە بکات. تکایە بە وریاییەوە بەکاری بهێنە.</string>
     <string name="debug_status_message_close">داخستن</string>
     <string name="drafts_toot_failed_to_send">ئەم تووتە شکستی هێنا لە ناردن!</string>
-    <string name="new_drafts_warning">تایبەتمەندی ڕەشنووسی ناو توسکی بە تەواوی دیزاین کراوەتەوە بۆ ئەوەی خێراتر و بەکارهێنەر دۆستتر و کەمتر هەڵە بێت 
+    <string name="new_drafts_warning">تایبەتمەندی ڕەشنووسی ناو توسکی بە تەواوی دیزاین کراوەتەوە بۆ ئەوەی خێراتر و بەکارهێنەر دۆستتر و کەمتر هەڵە بێت
 \n هێشتا دەتوانیت لە ڕێگەی دوگمەیەکەوە لە شاشەی ڕەشنووسە نوێیەکان دەستت بگات بە ڕەشنووسە کۆنەکانت، بەڵام لە نوێکردنەوەیەکی داهاتوودا لا دەبرێن!</string>
 </resources>
