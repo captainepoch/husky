@@ -58,7 +58,7 @@
     <string name="filter_dialog_update_button">Cập nhật</string>
     <string name="filter_dialog_remove_button">NGƯNG</string>
     <string name="action_send">TÚT</string>
-    <string name="action_login">Đăng nhập Mastodon</string>
+    <string name="action_login">Đăng nhập Pleroma</string>
     <string name="dialog_redraft_toot_warning">Xóa và viết lại tút này?</string>
     <string name="dialog_delete_toot_warning">Xóa tút này?</string>
     <string name="dialog_unfollow_warning">Hủy theo dõi người này\?</string>
@@ -66,12 +66,12 @@
     <string name="dialog_download_image">Tải về</string>
     <string name="dialog_message_uploading_media">Đang tải…</string>
     <string name="dialog_title_finishing_media_upload">Đã tải xong tập tin</string>
-    <string name="dialog_whats_an_instance">Bạn phải nhập một tên miền, ví dụ mastodon.social, icosahedron.website, social.tchncs.de, và <a href="https://instances.social">nhiều hơn nữa!</a> \u0020
-\n \u0020
-\nNếu chưa có tài khoản, bạn phải tạo tài khoản trước ở đó. \u0020
-\n \u0020
-\nMáy chủ, nói cách khác là một cộng đồng nơi mà tài khoản của bạn lưu trữ trên đó, nhưng bạn vẫn có thể giao tiếp và theo dõi mọi người trên các máy chủ khác một cách dễ dàng. \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">Bạn phải nhập một tên miền, ví dụ shitposter.club, blob.cat, expired.mentality.rip, và <a href="https://fediverse.network/pleroma?count=peers">nhiều hơn nữa!</a>
+\n
+\nNếu chưa có tài khoản, bạn phải tạo tài khoản trước ở đó.
+\n
+\nMáy chủ, nói cách khác là một cộng đồng nơi mà tài khoản của bạn lưu trữ trên đó, nhưng bạn vẫn có thể giao tiếp và theo dõi mọi người trên các máy chủ khác một cách dễ dàng.
+\n
 \nTham khảo thêm tại <a href="https://joinmastodon.org">joinmastodon.org</a>. </string>
     <string name="login_connection">Đang kết nối…</string>
     <string name="label_header">Ảnh bìa</string>
@@ -271,12 +271,12 @@
     <string name="notification_boost_name">Chia sẻ</string>
     <string name="notification_follow_request_description">Thông báo về lượt yêu cầu theo dõi</string>
     <string name="about_bug_feature_request_site">Báo lỗi và đề xuất tính năng
-\nhttps://github.com/captainepoch/husky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="about_project_site">Trang chủ
-\nhttps://tusky.app</string>
-    <string name="about_tusky_license">Tusky là phần mềm mã nguồn mở, được phân phối với giấy phép GNU General Public License Version 3. Bạn có thể tham khảo thêm tại: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
-    <string name="about_powered_by_tusky">Powered by Tusky</string>
-    <string name="about_tusky_version">Tusky %s</string>
+\n https://husky.adol.pw</string>
+    <string name="about_tusky_license">Husky là phần mềm mã nguồn mở, được phân phối với giấy phép GNU General Public License Version 3. Bạn có thể tham khảo thêm tại: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="about_powered_by_tusky">Powered by Husky</string>
+    <string name="about_tusky_version">Husky %s</string>
     <string name="description_account_locked">Tài khoản bị khóa</string>
     <string name="notification_poll_description">Thông báo khi một cuộc bình chọn kết thúc</string>
     <string name="notification_poll_name">Bình chọn</string>
@@ -308,10 +308,10 @@
     <string name="status_media_images">Hình ảnh</string>
     <string name="status_share_link">URL tút</string>
     <string name="status_share_content">Nội dung của tút</string>
-    <string name="about_tusky_account">Trang cá nhân Tusky</string>
+    <string name="about_tusky_account">Trang cá nhân Husky</string>
     <string name="pref_title_confirm_reblogs">Hiện xác nhận trước khi chia sẻ</string>
     <string name="pref_title_show_cards_in_timelines">Hiện xem trước của link</string>
-    <string name="warning_scheduling_interval">Mastodon giới hạn tối thiểu 5 phút.</string>
+    <string name="warning_scheduling_interval">Pleroma giới hạn tối thiểu 5 phút.</string>
     <string name="no_scheduled_status">Bạn không có tút đã lên lịch.</string>
     <string name="no_saved_status">Bạn không có bản nháp nào.</string>
     <string name="edit_poll">Sửa</string>
@@ -406,7 +406,7 @@
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_apache_2">Licensed under the Apache License (sao chép bên dưới)</string>
-    <string name="license_description">Tusky có sử dụng mã nguồn từ những dự án mã nguồn mở sau:</string>
+    <string name="license_description">Husky có sử dụng mã nguồn từ những dự án mã nguồn mở sau:</string>
     <string name="unreblog_private">Hủy chia sẻ</string>
     <string name="reblog_private">Chia sẻ công khai</string>
     <string name="account_moved_description">%1$s đã dời sang:</string>
@@ -418,7 +418,7 @@
     <string name="caption_systememoji">Sử dụng emoji mặc định của thiết bị</string>
     <string name="restart">Khởi động lại</string>
     <string name="later">Để sau</string>
-    <string name="restart_emoji">Bạn cần khởi động lại Tusky để áp dụng các thiết lập</string>
+    <string name="restart_emoji">Bạn cần khởi động lại Husky để áp dụng các thiết lập</string>
     <string name="restart_required">Yêu cầu khởi động lại ứng dụng</string>
     <string name="action_open_toot">Mở tút</string>
     <string name="expand_collapse_all_statuses">Mở rộng/Thu gọn toàn bộ tút</string>
@@ -444,7 +444,7 @@
     <string name="action_rename_list">Đổi tên danh sách</string>
     <string name="action_create_list">Tạo danh sách</string>
     <string name="title_list_timeline">Danh sách bảng tin</string>
-    <string name="add_account_description">Thêm tài khoản Mastodon</string>
+    <string name="add_account_description">Thêm tài khoản Pleroma</string>
     <string name="add_account_name">Thêm tài khoản</string>
     <string name="filter_add_description">Thêm mô tả</string>
     <string name="filter_dialog_whole_word_description">Bất kể từ khóa là từ hoặc cụm từ, những kết quả hiện ra sẽ giống hệt như bạn nhập</string>
