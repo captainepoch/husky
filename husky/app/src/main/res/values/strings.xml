@@ -79,7 +79,7 @@
     <string name="action_unfavourite">Remove favorite</string>
     <string name="action_more">More</string>
     <string name="action_compose">Compose</string>
-    <string name="action_login">Login with Mastodon</string>
+    <string name="action_login">Login with Pleroma</string>
     <string name="action_logout">Log Out</string>
     <string name="action_logout_confirm">Are you sure you want to log out of the account %1$s?</string>
     <string name="action_follow">Follow</string>
@@ -189,8 +189,8 @@
     <string name="login_connection">Connecting…</string>
 
     <string name="dialog_whats_an_instance">The address or domain of any instance can be entered
-        here, such as mastodon.social, icosahedron.website, social.tchncs.de, and
-        <a href="https://instances.social">more!</a>
+        here, such as shitposter.club, blob.cat, expired.mentality.rip, and
+        <a href="https://fediverse.network/pleroma?count=peers">more!</a>
         \n\nIf you don\'t yet have an account, you can enter the name of the instance you\'d like to
         join and create an account there.\n\nAn instance is a single place where your account is
         hosted, but you can easily communicate with and follow folks on other instances as though
@@ -308,9 +308,9 @@
     <string name="description_account_locked">Locked Account</string>
 
     <string name="about_title_activity">About</string>
-    <string name="about_tusky_version">Tusky %s</string>
-    <string name="about_powered_by_tusky">Powered by Tusky</string>
-    <string name="about_tusky_license">Tusky is free and open-source software.
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_powered_by_tusky">Powered by Husky</string>
+    <string name="about_tusky_license">Husky is free and open-source software.
         It is licensed under the GNU General Public License Version 3.
         You can view the license here: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
     <!-- note to translators:
@@ -321,13 +321,13 @@
     -->
     <string name="about_project_site">
         Project website:\n
-        https://tusky.app
+        https://husky.adol.pw
     </string>
     <string name="about_bug_feature_request_site">
         Bug reports &amp; feature requests:\n
-        https://github.com/tuskyapp/Tusky/issues
+        https://github.com/captainepoch/husky/issues
     </string>
-    <string name="about_tusky_account">Tusky\'s Profile</string>
+    <string name="about_tusky_account">Husky\'s Profile</string>
 
     <string name="status_share_content">Share content of toot</string>
     <string name="status_share_link">Share link to toot</string>
@@ -368,7 +368,7 @@
     <string name="filter_add_description">Phrase to filter</string>
 
     <string name="add_account_name">Add Account</string>
-    <string name="add_account_description">Add new Mastodon Account</string>
+    <string name="add_account_description">Add new Pleroma Account</string>
 
     <string name="action_lists">Lists</string>
     <string name="title_lists">Lists</string>
@@ -408,7 +408,7 @@
     <string name="expand_collapse_all_statuses">Expand/Collapse all statuses</string>
     <string name="action_open_toot">Open toot</string>
     <string name="restart_required">App restart required</string>
-    <string name="restart_emoji">You\'ll need to restart Tusky in order to apply these changes</string>
+    <string name="restart_emoji">You\'ll need to restart Husky in order to apply these changes</string>
     <string name="later">Later</string>
     <string name="restart">Restart</string>
     <string name="caption_systememoji">Your device\'s default emoji set</string>
@@ -424,7 +424,7 @@
     <string name="reblog_private">Boost to original audience</string>
     <string name="unreblog_private">Unboost</string>
 
-    <string name="license_description">Tusky contains code and assets from the following open source projects:</string>
+    <string name="license_description">Husky contains code and assets from the following open source projects:</string>
     <string name="license_apache_2">Licensed under the Apache License (copy below)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
@@ -584,7 +584,7 @@
     <string name="no_saved_status">You don\'t have any drafts.</string>
     <string name="no_scheduled_status">You don\'t have any scheduled statuses.</string>
     <string name="no_announcements">There are no announcements.</string>
-    <string name="warning_scheduling_interval">Mastodon has a minimum scheduling interval of 5 minutes.</string>
+    <string name="warning_scheduling_interval">Pleroma has a minimum scheduling interval of 5 minutes.</string>
     <string name="pref_title_show_cards_in_timelines">Show link previews in timelines</string>
     <string name="pref_title_confirm_reblogs">Show confirmation dialog before boosting</string>
     <string name="pref_title_hide_top_toolbar">Hide the title of the top toolbar</string>
