@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "beta/*"
+    tags:
+      - "*-beta*"
 
 permissions:
   contents: read
@@ -27,13 +29,25 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Gradle Wrapper Validation
-        uses: gradle/actions/wrapper-validation@v3
-
-      - name: Gradle Setup
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Run ktlint
+      - name: Set output
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
-          cd husky
-          ./gradlew ktlintCheck
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
+
+      #- name: Gradle Wrapper Validation
+      #  uses: gradle/actions/wrapper-validation@v3
+
+      #- name: Gradle Setup
+      #  uses: gradle/actions/setup-gradle@v3
+
+      #- name: Run ktlint
+      #  run: |
+      #    cd husky
+      #    ./gradlew ktlintCheck
+
+# /husky/husky/app/build/outputs/apk/huskyBeta/debug/husky_{{tag}}.apk
