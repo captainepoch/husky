@@ -14,6 +14,12 @@ buildVersions.testinstrunner = "androidx.test.runner.AndroidJUnitRunner"
 buildVersions.versionCode = 202
 buildVersions.versionName = "1.5.4"
 
+// Beta version info
+def beta = [:]
+beta.suffix = "beta"
+beta.versionSuffix = "1"
+buildVersions.beta = beta
+
 // Dev version info
 def dev = [:]
 dev.suffix = "dev"
