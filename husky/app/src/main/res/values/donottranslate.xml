@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_app_version">%1$s %2$s</string>
+    <string name="about_app_version" translatable="false">%1$s %2$s</string>
 
     <string name="oauth_scheme" translatable="false">oauth2redirect</string>
     <string name="preferences_file_key" translatable="false">com.keylesspalace.tusky.PREFERENCES</string>
@@ -222,5 +222,4 @@
 
     <string name="status_timestamp_with_edited_indicator" translatable="false">%s *</string>
     <string name="timestamp_joiner" translatable="false">" • "</string>
-
 </resources>
