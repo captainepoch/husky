@@ -65,8 +65,11 @@ android {
         }
     }
 
-    flavorDimensions =
-            [buildVersions.flavorDimensions.husky, buildVersions.flavorDimensions.release]
+    flavorDimensions = [
+            buildVersions.flavorDimensions.husky,
+            buildVersions.flavorDimensions.release
+    ]
+
     productFlavors {
         husky {
             dimension buildVersions.flavorDimensions.husky
