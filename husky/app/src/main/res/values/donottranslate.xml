@@ -165,6 +165,9 @@
         <item>604800</item>
     </integer-array>
 
+    <string name="poll_percent_format"><!-- 15% --> &lt;b>%1$d%%&lt;/b></string>
+    <string name="tusky_website" translatable="false">https://husky.adol.pw</string>
+
     <!-- CrashHandler strings -->
     <string name="crashhandler_email" translatable="false">husky@nixnetmail.com</string>
     <string name="crashhandler_email_subject" translatable="false">Husky crashed</string>
