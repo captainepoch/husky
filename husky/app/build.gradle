@@ -82,10 +82,6 @@ android {
 
             applicationId buildVersions.dev.applicationId
 
-            minSdkVersion buildVersions.dev.minSdk
-            compileSdkVersion buildVersions.dev.compileSdk
-            targetSdkVersion buildVersions.dev.targetSdk
-
             versionCode buildVersions.dev.versionCode
             versionName buildVersions.dev.versionName
 
@@ -94,6 +90,11 @@ android {
 
         beta {
             dimension buildVersions.flavorDimensions.release
+
+            applicationId buildVersions.beta.applicationId
+
+            versionCode buildVersions.beta.versionCode
+            versionName buildVersions.beta.versionName
 
             versionNameSuffix = "-${buildVersions.beta.suffix}${buildVersions.beta.versionSuffix}"
         }
