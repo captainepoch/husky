@@ -18,14 +18,14 @@
     <string name="error_media_download_permission">Medya kaydetme izni gerekli.</string>
     <string name="error_media_upload_image_or_video">Görüntüler ve videolar aynı duruma eklenemez.</string>
     <string name="error_media_upload_sending">Yükleme başarısız oldu.</string>
-    <string name="error_sender_account_gone">Toot gönderilirken hata oluştu.</string>
+    <string name="error_sender_account_gone">Gönderi gönderilirken hata oluştu.</string>
     <string name="title_home">Ana sayfa</string>
     <string name="title_notifications">Bildirimler</string>
     <string name="title_public_local">Yerel</string>
     <string name="title_public_federated">Birleşmiş</string>
     <string name="title_direct_messages">Direkt Mesajlar</string>
     <string name="title_tab_preferences">Sekmeler</string>
-    <string name="title_view_thread">Toot</string>
+    <string name="title_view_thread">Yayın</string>
     <string name="title_statuses">Gönderiler</string>
     <string name="title_statuses_with_replies">Yanıtlar ile</string>
     <string name="title_statuses_pinned">Sabitlenmiş</string>
@@ -39,7 +39,7 @@
     <string name="title_drafts">Taslaklar</string>
     <string name="title_licenses">Lisanslar</string>
     <string name="status_username_format">\@%s</string>
-    <string name="status_boosted_format">%s yineledi</string>
+    <string name="status_boosted_format">%s Tekrarlandı</string>
     <string name="status_sensitive_media_title">Hasas Medya</string>
     <string name="status_media_hidden_title">Gizlenmiş medya</string>
     <string name="status_sensitive_media_directions">Görüntülemek için dokunun</string>
@@ -49,30 +49,30 @@
     <string name="status_content_show_less">Daralt</string>
     <string name="message_empty">Burada hiçbir şey yok.</string>
     <string name="footer_empty">Henüz hiç ileti yoktur. Yenilemek için aşağıya çek!</string>
-    <string name="notification_reblog_format">%s tootunuzu boost etti</string>
-    <string name="notification_favourite_format">%s tootunuzu favorilerine ekledi</string>
+    <string name="notification_reblog_format">% s yayınınızı tekrarladı</string>
+    <string name="notification_favourite_format">% s yayınınızı favorilere ekledi</string>
     <string name="notification_follow_format">%s seni takip etti</string>
     <string name="report_username_format">\@%s bildir</string>
     <string name="report_comment_hint">Daha fazla yorum?</string>
     <string name="action_quick_reply">Hızlı Yanıt</string>
     <string name="action_reply">Yanıtla</string>
-    <string name="action_reblog">Yükselt</string>
+    <string name="action_reblog">Tekrarla</string>
     <string name="action_favourite">Favori</string>
     <string name="action_more">Daha fazla</string>
     <string name="action_compose">Oluştur</string>
-    <string name="action_login">Mastodon ile giriş yap</string>
+    <string name="action_login">Pleroma ile giriş yap</string>
     <string name="action_logout">Oturumu Kapat</string>
     <string name="action_logout_confirm">Bu %1$s oturumu sonlandırmak istediğinizden emin misiniz\?</string>
     <string name="action_follow">Takip et</string>
     <string name="action_unfollow">Takibi bırak</string>
     <string name="action_block">Engelle</string>
     <string name="action_unblock">Engeli kaldır</string>
-    <string name="action_hide_reblogs">Yükseltilenleri gizle</string>
-    <string name="action_show_reblogs">Boostları göster</string>
+    <string name="action_hide_reblogs">Tekrarlamaları Gizle</string>
+    <string name="action_show_reblogs">Tekrarlamaları Göster</string>
     <string name="action_report">Bildir</string>
     <string name="action_delete">Sil</string>
-    <string name="action_send">İLET</string>
-    <string name="action_send_public">İLET!</string>
+    <string name="action_send">YAYIN</string>
+    <string name="action_send_public">YAYIN!</string>
     <string name="action_retry">Tekrar dene</string>
     <string name="action_close">Kapat</string>
     <string name="action_view_profile">Profil</string>
@@ -100,7 +100,7 @@
     <string name="action_reject">Reddet</string>
     <string name="action_search">Ara</string>
     <string name="action_access_saved_toot">Taslaklar</string>
-    <string name="action_toggle_visibility">Toot görünürlüğü</string>
+    <string name="action_toggle_visibility">Yayın görünürlüğü</string>
     <string name="action_content_warning">İçerik uyarı</string>
     <string name="action_emoji_keyboard">İfade klavyesi</string>
     <string name="action_add_tab">Sekme Ekle</string>
@@ -108,8 +108,8 @@
     <string name="action_copy_link">Bağlantıyı kopyala</string>
     <string name="action_open_as">Farklı aç %s</string>
     <string name="action_share_as">Olarak paylaş …</string>
-    <string name="send_status_link_to">Durumun adresini paylaş…</string>
-    <string name="send_status_content_to">Durumu paylaş…</string>
+    <string name="send_status_link_to">Yayın Bağlantısını şurada paylaş…</string>
+    <string name="send_status_content_to">Yayınını şurada paylaş…</string>
     <string name="send_media_to">Medyayı paylaş…</string>
     <string name="confirmation_reported">Gönderildi!</string>
     <string name="confirmation_unblocked">Kullanıcının engeli kaldırıldı</string>
@@ -128,19 +128,19 @@
     <string name="label_header">Üstlük</string>
     <string name="link_whats_an_instance">Sunucu nedir\?</string>
     <string name="login_connection">Bağlantı kuruluyor…</string>
-    <string name="dialog_whats_an_instance">Burada her hangi bir Mastodon sunucusunun adresi (mastodon.social, icosahedron.website, social.tchncs.de, ve <a href="https://github.com/tootsuite/mastodon/blob/master/docs/Using-Mastodon/List-of-Mastodon-instances.md">daha fazla!</a>) girilebiliri. \u0020
+    <string name="dialog_whats_an_instance">Burada her hangi bir Mastodon sunucusunun adresi (shitposter.club, blob.cat, expired.mentality.rip, ve <a href="https://github.com/tootsuite/mastodon/blob/master/docs/Using-Mastodon/List-of-Mastodon-instances.md">daha fazla!</a>) girilebiliri.
 \n
-\nEğer hesabınız henüz yok ise katılmak istediğiniz sunucunun adresini girerek hesap yaratabilirsin. \u0020
+\nEğer hesabınız henüz yok ise katılmak istediğiniz sunucunun adresini girerek hesap yaratabilirsin.
 \n
-\nHer bir sunucu hesaplar ağırlayan bir yer olur ancak diğer sunucularda bulunan insanlarla aynı sitede olmuşcasına iletişime geçip takip edebilirsiniz. \u0020
+\nHer bir sunucu hesaplar ağırlayan bir yer olur ancak diğer sunucularda bulunan insanlarla aynı sitede olmuşcasına iletişime geçip takip edebilirsiniz.
 \n
-\nDaha fazla bilgi için <a href="https://mastodon.social/about">mastodon.social</a>. </string>
+\nDaha fazla bilgi için <a href="https://shitposter.club/about">shitposter.club</a>. </string>
     <string name="dialog_title_finishing_media_upload">Medya yüklemesi tamamlanıyor</string>
     <string name="dialog_message_uploading_media">Yükleniyor…</string>
     <string name="dialog_download_image">İndir</string>
     <string name="dialog_message_cancel_follow_request">Takip isteğini iptal et\?</string>
     <string name="dialog_unfollow_warning">Takibi bırakmak istiyor musun\?</string>
-    <string name="dialog_delete_toot_warning">Bu durumu silmek istiyor musunuz?</string>
+    <string name="dialog_delete_toot_warning">Yayını Silecekmisiniz\?</string>
     <string name="visibility_public">Kamu: Herkese açık ve sosyal çizelgelerinde çıkar</string>
     <string name="visibility_unlisted">Listelenmemiş: Genel zaman çizelgelerinde gösterme</string>
     <string name="visibility_private">Özel: Sadece takipçiler ve bahsedilenlere açık</string>
@@ -154,7 +154,7 @@
     <string name="pref_title_notification_filters">Beni bildir</string>
     <string name="pref_title_notification_filter_mentions">bahsedilince</string>
     <string name="pref_title_notification_filter_follows">Takip edilince</string>
-    <string name="pref_title_notification_filter_reblogs">iletilerim yüksetilince</string>
+    <string name="pref_title_notification_filter_reblogs">gönderilerim tekrarlandı</string>
     <string name="pref_title_notification_filter_favourites">gönderilerim favorilere eklenirse</string>
     <string name="pref_title_appearance_settings">Görünüş</string>
     <string name="pref_title_app_theme">Uygulama teması</string>
@@ -168,7 +168,7 @@
     <string name="pref_title_hide_follow_button">Kaydırırken takip düğmesi gizlensin</string>
     <string name="pref_title_status_filter">Zaman çizelgesi filtreleme</string>
     <string name="pref_title_status_tabs">Sekmeler</string>
-    <string name="pref_title_show_boosts">Yükseltilenleri göster</string>
+    <string name="pref_title_show_boosts">Gönderileri göster</string>
     <string name="pref_title_show_replies">Yanıtları göster</string>
     <string name="pref_title_show_media_preview">Medya önizlemelerini indir</string>
     <string name="pref_title_proxy_settings">Vekil</string>
@@ -193,10 +193,10 @@
     <string name="notification_mention_descriptions">Yeni bahsetmeler hakkında bildirim</string>
     <string name="notification_follow_name">Yeni Takipçiler</string>
     <string name="notification_follow_description">Yeni takipçiler hakkında bildirim</string>
-    <string name="notification_boost_name">Yükseltilenler</string>
-    <string name="notification_boost_description">Tootların yükseltildiğinde bildirimler</string>
+    <string name="notification_boost_name">Tekrarlamalar</string>
+    <string name="notification_boost_description">Gönderileriniz tekrarlandığında bildirimler</string>
     <string name="notification_favourite_name">Favoriler</string>
-    <string name="notification_favourite_description">Tootların favori olarak işaretlendiğinde</string>
+    <string name="notification_favourite_description">Yayınlarınız favori olarak işaretlendiğinde bildirim gelsin</string>
     <string name="notification_mention_format">%s senden bahsetti</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s ve %4$d diğer</string>
     <string name="notification_summary_medium">%1$s, %2$s ve %3$s</string>
@@ -213,12 +213,12 @@
          * the url can be changed to link to the localized version of the license.
     -->
     <string name="about_project_site">Projenin internet sitesi:
-\n https://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_bug_feature_request_site">&amp; özellik istekleri hata raporları:
 \n https://github.com/captainepoch/husky/issues</string>
     <string name="about_tusky_account">Husky\'nin Profili</string>
-    <string name="status_share_content">İletinin içeriğini paylaş</string>
-    <string name="status_share_link">İletinin adresini paylaş</string>
+    <string name="status_share_content">Yayının içeriğini paylaşma</string>
+    <string name="status_share_link">Yayının bağlantısını paylaş</string>
     <string name="status_media_images">Görseller</string>
     <string name="status_media_video">Video</string>
     <string name="state_follow_requested">Takip edebilme istendi</string>
@@ -238,7 +238,7 @@
     <string name="title_media">Medya</string>
     <string name="load_more_placeholder_text">daha fazla yükle</string>
     <string name="add_account_name">Hesap Ekle</string>
-    <string name="add_account_description">Yeni Mastodon hesabı ekle</string>
+    <string name="add_account_description">Yeni Pleroma hesabı ekle</string>
     <string name="action_lists">Listeler</string>
     <string name="title_lists">Listeler</string>
     <string name="title_list_timeline">Zaman çizelgesini listele</string>
@@ -250,11 +250,11 @@
     <string name="lock_account_label">Hesabı Kilitle</string>
     <string name="lock_account_label_description">Takipçileri elle onaylamanız gerekir</string>
     <string name="compose_save_draft">Taslaklara kaydedilsin mi\?</string>
-    <string name="send_toot_notification_title">Toot gönderiliyor…</string>
-    <string name="send_toot_notification_error_title">Toot gönderilirken hata oluştu</string>
-    <string name="send_toot_notification_channel_name">Toot Gönderiliyor</string>
+    <string name="send_toot_notification_title">Yayın gönderiliyor…</string>
+    <string name="send_toot_notification_error_title">Yayın gönderilirken bir hata oluştu</string>
+    <string name="send_toot_notification_channel_name">Gönderi gönderme</string>
     <string name="send_toot_notification_cancel_title">Gönderme iptal edildi</string>
-    <string name="send_toot_notification_saved_content">Tootun bir kopyası taslaklara kaydedildi</string>
+    <string name="send_toot_notification_saved_content">Yayının bir kopyası taslaklarınıza kaydedildi</string>
     <string name="action_compose_shortcut">Oluştur</string>
     <string name="error_no_custom_emojis">%s örneğinizin herhangi bir özel ifadesi yok</string>
     <string name="copy_to_clipboard_success">Panoya kopyalandı</string>
@@ -263,7 +263,7 @@
     <string name="download_fonts">Önce bu ifade paketini indirmeniz gerekecek</string>
     <string name="performing_lookup_title">Araştırılıyor…</string>
     <string name="expand_collapse_all_statuses">Tüm durumları Genişlet/Küçült</string>
-    <string name="action_open_toot">Durumu aç</string>
+    <string name="action_open_toot">Yayın aç</string>
     <string name="restart_required">Uygulamayı yeniden başlatmanız lazım</string>
     <string name="restart_emoji">Bu değişiklikleri uygulamak için Husky\'yi yeniden başlatmanız gerekecek</string>
     <string name="later">Sonra</string>
@@ -273,7 +273,7 @@
     <string name="caption_twemoji">Mastodon\'un standart ifade paketi</string>
     <string name="download_failed">İndirme başarısız</string>
     <string name="account_moved_description">%1$s buraya taşındı:</string>
-    <string name="unreblog_private">Yükseltmeyi geri çek</string>
+    <string name="unreblog_private">Tekrarlamaları Kaldır</string>
     <string name="license_description">Husky aşağıdakı açık kaynaklı projelerden kod ve materyal içeriyor:</string>
     <string name="license_apache_2">Apache Lisansı altında lisanslanmıştır (kopya aşağıda)</string>
     <string name="license_cc_by_4">CC-BY 4.0</string>
@@ -291,17 +291,17 @@
         <item quantity="other"><b>%1$s</b> Favoriler</item>
     </plurals>
     <plurals name="reblogs">
-        <item quantity="one"><b>%s</b> Yükseltilen</item>
-        <item quantity="other"><b>%s</b> Yükseltilenler</item>
+        <item quantity="one">&lt;/b&gt;&lt;b&gt;%s&lt;/b&gt; Tekrar</item>
+        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; Tekrarlar</item>
     </plurals>
-    <string name="title_reblogged_by">tarafından yinelendi</string>
+    <string name="title_reblogged_by">Şu kişi tarafından tekrarlandı</string>
     <string name="title_favourited_by">Tarafından favorilendi</string>
     <string name="conversation_1_recipients">%1$s</string>
     <string name="conversation_2_recipients">%1$s ve %2$s</string>
     <string name="conversation_more_recipients">%1$s, %2$s ve %3$d daha fazlası</string>
     <string name="max_tab_number_reached">%1$d maksimum sekme sayısına ulaşıldı</string>
     <string name="title_domain_mutes">Gizli alanadları</string>
-    <string name="action_unreblog">Boostu kaldır</string>
+    <string name="action_unreblog">Tekrarlamayı Kaldır</string>
     <string name="action_unfavourite">Favoriyi kaldır</string>
     <string name="action_view_domain_mutes">Gizli alanadları</string>
     <string name="action_mute_domain">%s alan adını sessize al</string>
@@ -343,7 +343,7 @@
     <string name="description_status_media">Medya: %s</string>
     <string name="description_status_cw">İçerik uyarısı: %s</string>
     <string name="description_status_media_no_description_placeholder">Açıklama yok</string>
-    <string name="description_status_reblogged">Yeniden blogladı</string>
+    <string name="description_status_reblogged">Tekrarlanmış</string>
     <string name="description_status_favourited">Favorilendi</string>
     <string name="description_visiblity_public">Herkese açık</string>
     <string name="description_visiblity_unlisted">Liste dışı</string>
@@ -355,7 +355,7 @@
     <string name="notifications_clear">Temizle</string>
     <string name="notifications_apply_filter">Filtrele</string>
     <string name="filter_apply">Uygula</string>
-    <string name="compose_shortcut_long_label">Toot Oluştur</string>
+    <string name="compose_shortcut_long_label">Yazı Oluştur</string>
     <string name="compose_shortcut_short_label">Oluştur</string>
     <string name="notification_clear_text">Tüm bildirimleri kalıcı olarak silmek istediğinizden emin misiniz\?</string>
     <string name="compose_preview_image_description">%s görüntüsü için eylemler</string>
@@ -395,21 +395,21 @@
     <string name="report_description_remote_instance">Hesap başka bir sunucudan. Raporun anonim bir kopyasını da oraya gönderilsin mi\?</string>
     <string name="pref_title_show_notifications_filter">Bildirim filtresini göster</string>
     <string name="action_mentions">Bahsedenler</string>
-    <string name="action_open_reblogger">Yineleyen yayıncıyı aç</string>
-    <string name="action_open_reblogged_by">Boostları göster</string>
+    <string name="action_open_reblogger">Tekrar yazarı aç</string>
+    <string name="action_open_reblogged_by">Tekrarlamaları Göster</string>
     <string name="title_mentions_dialog">Bahsedenler</string>
     <string name="action_open_media_n">#%d medyayı aç</string>
     <string name="title_bookmarks">Yer imleri</string>
-    <string name="title_scheduled_toot">Zamanlanmış iletiler</string>
+    <string name="title_scheduled_toot">Zamanlanmış yayınlar</string>
     <string name="action_bookmark">Yer imi</string>
     <string name="action_edit">Düzenle</string>
     <string name="action_delete_and_redraft">Sil ve düzenle</string>
     <string name="action_view_bookmarks">Yer imleri</string>
     <string name="action_add_poll">Anket ekle</string>
     <string name="action_access_scheduled_toot">Zamanlanmış tootlar</string>
-    <string name="action_schedule_toot">Tootu zamanla</string>
+    <string name="action_schedule_toot">Yayını zamanla</string>
     <string name="action_reset_schedule">Sıfırla</string>
-    <string name="dialog_redraft_toot_warning">Bu durumu silip yeniden düzenlemek istiyor musunuz?</string>
+    <string name="dialog_redraft_toot_warning">Bu gönderi silinsin mi ve taslağı yeniden çizilsin mi\?</string>
     <string name="pref_title_bot_overlay">Botlar için işaret göster</string>
     <string name="about_powered_by_tusky">Husky tarafından desteklenmektedir</string>
     <string name="description_status_bookmarked">Yerimine eklendi</string>
@@ -432,16 +432,16 @@
     <string name="profile_badge_bot_text">Alt Metin</string>
     <string name="confirmation_domain_unmuted">%s alan adını gizleme</string>
     <string name="mute_domain_warning_dialog_ok">Alan adından her şeyi gizle</string>
-    <string name="pref_title_alway_open_spoiler">Her zaman içerik uyarılarıyla işaretlenmiş alanları genişlet</string>
+    <string name="pref_title_alway_open_spoiler">Her zaman içerik uyarılarıyla işaretlenmiş yayınları genişletin</string>
     <string name="poll_info_time_absolute">%s içinde sona erecek</string>
     <string name="failed_report">Bildirilemedi</string>
     <string name="poll_new_choice_hint">Seçenek %d</string>
     <string name="post_lookup_error_format">%s gönderisi aranırken hata oluştu</string>
     <string name="no_saved_status">Hiç taslağınız yok.</string>
     <string name="no_scheduled_status">Zamanlanmış durumunuz yok.</string>
-    <string name="reblog_private">Kendi kitlenize yükseltin</string>
+    <string name="reblog_private">Orijinal kitleye tekrarlayın</string>
     <string name="hashtags">Hashtags\'ler</string>
-    <string name="pref_title_confirm_reblogs">Boost etmeden önce onay iletişim kutusunu göster</string>
+    <string name="pref_title_confirm_reblogs">Tekrarlamadan önce onay iletişim kutusunu göster</string>
     <string name="pref_title_show_cards_in_timelines">Bağlantı önizlemelerini zaman çizelgesinde göster</string>
     <string name="pref_title_enable_swipe_for_tabs">Sekmeler arasında geçiş yapmak için kaydırma hareketini etkinleştir</string>
     <plurals name="poll_info_people">
@@ -468,6 +468,29 @@
     <string name="pref_main_nav_position">Ana gezinti konumu</string>
     <string name="pref_title_gradient_for_media">Gizli medya için renkli gradyanlar göster</string>
     <string name="error_failed_set_caption">Başlık ayarlanamadı</string>
-    <string name="warning_scheduling_interval">Mastodon\'un minimum 5 dakikalık zamanlama aralığı vardır.</string>
+    <string name="warning_scheduling_interval">Pleroma\'un minimum 5 dakikalık zamanlama aralığı vardır.</string>
     <string name="pref_title_hide_top_toolbar">Üst araç çubuğunun başlığını gizle</string>
+    <string name="action_reply_to">Yanıtla</string>
+    <string name="action_emoji_react">Tepki</string>
+    <string name="action_emoji_unreact">Tepki Kaldır</string>
+    <string name="action_emoji_reacted_by">Kim tepki gösterdi</string>
+    <string name="action_enable_formatting_syntax">Etkinleştir</string>
+    <string name="action_sticker">Etiket</string>
+    <string name="title_emoji_reacted_by">tarafından tepki verildi</string>
+    <string name="hint_appname">Uygulama Adı</string>
+    <string name="hint_website">Uygulama Sitesi</string>
+    <string name="admin">Yönetici</string>
+    <string name="moderator">Moderatör</string>
+    <string name="error_media_upload_size">Dosya boyutu varsayılan sınırları aşıyor</string>
+    <string name="notification_emoji_format">%s tepki verdi %s paylaşımınıza</string>
+    <string name="notification_emoji_name">Emoji Tepkileri</string>
+    <string name="notification_emoji_description">Yeni emoji tepkileri hakkında bildirimler</string>
+    <string name="pref_title_notification_filter_emoji">gönderilerim emoji ile tepki verildi</string>
+    <string name="pref_title_hide_muted_users">Susturulmuş kullanıcıları gizle</string>
+    <string name="pref_title_enable_big_emojis">Daha büyük özel emojileri etkinleştir</string>
+    <string name="pref_title_enable_experimental_stickers">Deneysel Pleroma-FE etiketlerini etkinleştir (varsa)</string>
+    <string name="action_disable_formatting_syntax">Devre Dışı Bırak</string>
+    <string name="error_sticker_fetch">Çıkartma getirilirken bir hata oluştu</string>
+    <string name="pref_title_default_formatting">Varsayılan biçimlendirme sözdizimi (örnek tarafından destekleniyorsa)</string>
+
 </resources>
