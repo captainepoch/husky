@@ -165,23 +165,19 @@
         <item>604800</item>
     </integer-array>
 
-    <string name="poll_percent_format"><!-- 15% --> &lt;b>%1$d%%&lt;/b></string>
-
     <!-- CrashHandler strings -->
-    <string name="crashhandler_email">husky@nixnetmail.com</string>
-    <string name="crashhandler_email_subject">Husky crashed</string>
-    <string name="crashhandler_email_body">Please, explain the steps to reproduce the crash (english only):\n\n</string>
-    <string name="crashhandler_email_report_filename">husky_crash.txt</string>
-    <string name="crashhandler_notification_channel_title">CrashHandler Notifications</string>
-    <string name="crashhandler_notification_channel_body">This channel is used for push notifications related to crashes captured by the CrashHanlder.</string>
-    <string name="crashhandler_notification_title">Husky crashed</string>
-    <string name="crashhandler_notification_body">There was an error that crashed Husky. If you want, you can report via email this crash.</string>
-    <string name="crashhandler_notification_report">Report</string>
-    <string name="crashhandler_notification_discard">Discard</string>
+    <string name="crashhandler_email" translatable="false">husky@nixnetmail.com</string>
+    <string name="crashhandler_email_subject" translatable="false">Husky crashed</string>
+    <string name="crashhandler_email_body" translatable="false">Please, explain the steps to reproduce the crash (english only):\n\n</string>
+    <string name="crashhandler_email_report_filename" translatable="false">husky_crash.txt</string>
+    <string name="crashhandler_notification_channel_title" translatable="false">CrashHandler Notifications</string>
+    <string name="crashhandler_notification_channel_body" translatable="false">This channel is used for push notifications related to crashes captured by the CrashHanlder.</string>
+    <string name="crashhandler_notification_title" translatable="false">Husky crashed</string>
+    <string name="crashhandler_notification_body" translatable="false">There was an error that crashed Husky. If you want, you can report via email this crash.</string>
+    <string name="crashhandler_notification_report" translatable="false">Report</string>
+    <string name="crashhandler_notification_discard" translatable="false">Discard</string>
 
     <!-- REPLACEMENT FOR TUSKY STRINGS -->
-    <string name="tusky_website" translatable="false">https://husky.adol.pw</string>
-
     <string name="action_plaintext">Plaintext</string>
     <string name="action_markdown">Markdown</string>
     <string name="action_bbcode">BBCode</string>
