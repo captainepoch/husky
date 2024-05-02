@@ -50,7 +50,7 @@
     <string name="compose_preview_image_description">การกระทำสำหรับภาพ %s</string>
     <string name="notification_clear_text">ต้องการลบการแจ้งเตือนทั้งหมดอย่างสมบูรณ์\?</string>
     <string name="compose_shortcut_short_label">เขียน</string>
-    <string name="compose_shortcut_long_label">เขียน Toot</string>
+    <string name="compose_shortcut_long_label">เขียนโพสต์</string>
     <string name="filter_apply">ใช้งาน</string>
     <string name="notifications_apply_filter">คัดกรอง</string>
     <string name="notifications_clear">ล้างการแจ้งเตือน</string>
@@ -67,7 +67,7 @@
     <string name="description_visiblity_public">สาธารณะ</string>
     <string name="description_status_bookmarked">คั่นหน้า</string>
     <string name="description_status_favourited">ชื่นชอบ</string>
-    <string name="description_status_reblogged">ได้ถูกเขียนใหม่</string>
+    <string name="description_status_reblogged">รีพีตแล้ว</string>
     <string name="description_status_media_no_description_placeholder">ไม่มีคำอธิบาย</string>
     <string name="description_status_cw">เตือนเนื้อหา : %s</string>
     <string name="description_status_media">สื่อ: %s</string>
@@ -76,9 +76,9 @@
     <string name="conversation_2_recipients">%1$s และ %2$s</string>
     <string name="conversation_1_recipients">%1$s</string>
     <string name="title_favourited_by">ชื่นชอบโดย</string>
-    <string name="title_reblogged_by">บูสต์โดย</string>
+    <string name="title_reblogged_by">รีพีตโดย</string>
     <plurals name="reblogs">
-        <item quantity="other"><b>%1$s</b> บูสต์</item>
+        <item quantity="other">&lt;b&gt;%s&lt;/b&gt; รีพีต</item>
     </plurals>
     <plurals name="favs">
         <item quantity="other">&lt;b&gt;%1$s&lt;/b&gt; ชื่นชอบ</item>
@@ -95,8 +95,8 @@
     <string name="license_cc_by_4">CC-BY 4.0</string>
     <string name="license_apache_2">ภายใต้สัญญาอนุญาต Apache License (คัดลอกด้านล่าง)</string>
     <string name="license_description">Husky มีโค้ดและสินทรัพย์จากโครงการโอเพนซอร์สต่อไปนี้:</string>
-    <string name="unreblog_private">ยกเลิกบูสต์</string>
-    <string name="reblog_private">บูสต์โพสต์ต้นฉบับ</string>
+    <string name="unreblog_private">ลบรีพีต</string>
+    <string name="reblog_private">รีพีตโพสต์ต้นตอ</string>
     <string name="account_moved_description">%1$s ได้ย้ายไปที่ :</string>
     <string name="profile_badge_bot_text">บอต</string>
     <string name="download_failed">ดาวน์โหลดล้มเหลว</string>
@@ -108,7 +108,7 @@
     <string name="later">ภายหลัง</string>
     <string name="restart_emoji">จำเป็นต้องเริ่ม Husky ใหม่ เพื่อใช้การเปลี่ยนแปลงเหล่านี้</string>
     <string name="restart_required">จำเป็นต้องเริ่มแอปใหม่</string>
-    <string name="action_open_toot">เปิด Toot</string>
+    <string name="action_open_toot">เปิดโพสต์</string>
     <string name="expand_collapse_all_statuses">ขยาย/ย่อทั้งหมด</string>
     <string name="performing_lookup_title">กำลังค้นหา…</string>
     <string name="download_fonts">ต้องดาวน์โหลดชุดเอโมจิเหล่านี้ก่อน</string>
@@ -117,11 +117,11 @@
     <string name="copy_to_clipboard_success">คัดลอกไปยังคลิบบอร์ดแล้ว</string>
     <string name="error_no_custom_emojis">Instance %s ไม่มีเอโมจิแบบกำหนดเอง</string>
     <string name="action_compose_shortcut">เขียน</string>
-    <string name="send_toot_notification_saved_content">สำเนา Toot บันทึกเป็นฉบับร่างแล้ว</string>
+    <string name="send_toot_notification_saved_content">สำเนาโพสต์ได้บันทึกลงในฉบับร่างแล้ว</string>
     <string name="send_toot_notification_cancel_title">การส่งถูกยกเลิก</string>
-    <string name="send_toot_notification_channel_name">ส่ง Toot</string>
-    <string name="send_toot_notification_error_title">การส่ง Toot เกิดข้อผิดผลาด</string>
-    <string name="send_toot_notification_title">กำลังส่ง Toot…</string>
+    <string name="send_toot_notification_channel_name">กำลังส่งโพสต์</string>
+    <string name="send_toot_notification_error_title">เกิดข้อผิดพลาดในการส่งโพสต์</string>
+    <string name="send_toot_notification_title">กำลังส่งโพสต์…</string>
     <string name="compose_save_draft">บันทึกฉบับร่าง\?</string>
     <string name="lock_account_label_description">ต้องอนุมัติผู้ติดตามด้วยตัวเอง</string>
     <string name="lock_account_label">ล็อกบัญชี</string>
@@ -142,7 +142,7 @@
     <string name="error_rename_list">ไม่สามารถเปลี่ยนชื่อรายการได้</string>
     <string name="error_create_list">ไม่สามารถสร้างรายการได้</string>
     <string name="title_list_timeline">ไทม์ไลน์ในรายการ</string>
-    <string name="add_account_description">เพิ่มบัญชี Mastodon ใหม่</string>
+    <string name="add_account_description">เพิ่มบัญชี Pleroma ใหม่</string>
     <string name="add_account_name">เพิ่มบัญชี</string>
     <string name="filter_add_description">วลีที่ต้องการกรอง</string>
     <string name="filter_dialog_whole_word_description">ถ้าคำหลักหรือวลีเป็นอักษรผสมตัวเลข จะใช้ได้ผลเมื่อตรงทั้งคำเท่านั้น</string>
@@ -156,7 +156,7 @@
     <string name="load_more_placeholder_text">โหลดเพิ่ม</string>
     <string name="replying_to">ตอบกลับไป @%s</string>
     <string name="title_media">สื่อ</string>
-    <string name="pref_title_alway_open_spoiler">ขยาย Toot ที่มีเครื่องหมายเนื้อหาอ่อนไหวเสมอ</string>
+    <string name="pref_title_alway_open_spoiler">ขยายโพสต์ที่มีเครื่องหมายคำเตือนเนื้อหาเสมอ</string>
     <string name="pref_title_alway_show_sensitive_media">แสดงเนื้อหาอ่อนไหวเสมอ</string>
     <string name="follows_you">กำลังติดตามคุณ</string>
     <string name="abbreviated_seconds_ago">%d วินาทีที่แล้ว</string>
@@ -172,13 +172,13 @@
     <string name="state_follow_requested">กำลังขอติดตาม</string>
     <string name="status_media_video">วิดีทัศน์</string>
     <string name="status_media_images">ภาพ</string>
-    <string name="status_share_link">แบ่งปันลิงก์ Toot</string>
-    <string name="status_share_content">แบ่งปันเนื้อหา Toot</string>
+    <string name="status_share_link">แบ่งปันลิงก์ของโพสต์</string>
+    <string name="status_share_content">แบ่งปันเนื้อหาของโพสต์</string>
     <string name="about_tusky_account">บัญชีทางการของ Husky</string>
     <string name="about_bug_feature_request_site">รายงานช่องโหว่ และ ขอฟีเจอร์ (ภาษาอังกฤษ):
-\nhttps://github.com/captainepoch/husky/issues</string>
+\n https://github.com/captainepoch/husky/issues</string>
     <string name="about_project_site">เว็บไซต์โปรเจกต์:
-\nhttps://tusky.app</string>
+\n https://husky.adol.pw</string>
     <string name="about_tusky_license">Husky คือซอฟต์แวร์เสรีและโอเพนซอร์ส ภายใต้สัญญาอนุญาต GNU General Public License Version 3 ดูสัญญาที่ : https://www.gnu.org/licenses/gpl-3.0.ja.html</string>
     <string name="about_powered_by_tusky">ขับเคลื่อนด้วย Husky</string>
     <string name="about_tusky_version">Husky %s</string>
@@ -190,10 +190,10 @@
     <string name="notification_mention_format">%s ตอบกลับคุณ</string>
     <string name="notification_poll_description">การแจ้งเตือนเมื่อโพลได้สิ้นสุดลงแล้ว</string>
     <string name="notification_poll_name">โพล</string>
-    <string name="notification_favourite_description">การแจ้งเตือนเมื่อ Toot คุณถูกชื่นชอบ</string>
+    <string name="notification_favourite_description">การแจ้งเตือนเมื่อโพสต์ของคุณถูกชื่นชอบ</string>
     <string name="notification_favourite_name">ชื่นชอบ</string>
-    <string name="notification_boost_description">การแจ้งเตือนเมื่อ Toot คุณถูกบูสต์</string>
-    <string name="notification_boost_name">บูสต์</string>
+    <string name="notification_boost_description">การแจ้งเตือนเมื่อโพสต์คุณถูกรีพีต</string>
+    <string name="notification_boost_name">รีพีต</string>
     <string name="notification_follow_request_description">การแจ้งเตือนคำขอติดตามใหม่</string>
     <string name="notification_follow_request_name">คำขอติดตาม</string>
     <string name="notification_follow_description">การแจ้งเตือนเกี่ยวกับผู้ติดตามใหม่</string>
@@ -220,7 +220,7 @@
     <string name="pref_title_proxy_settings">พร็อกซี่</string>
     <string name="pref_title_show_media_preview">ดาวน์โหลดตัวอย่างสื่อ</string>
     <string name="pref_title_show_replies">แสดงการตอบกลับ</string>
-    <string name="pref_title_show_boosts">แสดงบูสต์</string>
+    <string name="pref_title_show_boosts">แสดงรีพีต</string>
     <string name="pref_title_status_tabs">แท็บ</string>
     <string name="pref_title_status_filter">คัดกรองไทม์ไลน์</string>
     <string name="pref_title_animate_gif_avatars">อวตาร GIF เคลื่อนไหวได้</string>
@@ -240,7 +240,7 @@
     <string name="pref_title_appearance_settings">ลักษณะ</string>
     <string name="pref_title_notification_filter_poll">โพลสิ้นสุดแล้ว</string>
     <string name="pref_title_notification_filter_favourites">โพสต์ถูกชื่นชอบ</string>
-    <string name="pref_title_notification_filter_reblogs">โพสต์ถูกบูสต์</string>
+    <string name="pref_title_notification_filter_reblogs">โพสต์ฉันถูกรีพีตแล้ว</string>
     <string name="pref_title_notification_filter_follow_requests">คำขอติดตาม</string>
     <string name="pref_title_notification_filter_follows">ติดตาม</string>
     <string name="pref_title_notification_filter_mentions">กล่าวถึง</string>
@@ -259,19 +259,19 @@
     <string name="dialog_block_warning">บล็อก @%s\?</string>
     <string name="mute_domain_warning_dialog_ok">ซ่อนทั้งโดเมน</string>
     <string name="mute_domain_warning">ต้องการบล็อกทุกอย่างจาก %s \? คุณจะไม่เห็นเนื้อหาจากโดเมนนั้นในไทม์ไลน์สาธารณะหรือในการแจ้งเตือน ผู้ติดตามของคุณจากโดเมนนั้นจะถูกลบออก</string>
-    <string name="dialog_redraft_toot_warning">ลบ แล้ว ร่าง Toot นี้ใหม่?</string>
-    <string name="dialog_delete_toot_warning">ลบ Toot นี้?</string>
+    <string name="dialog_redraft_toot_warning">ลบ แล้ว ร่างโพสต์นี้ใหม่ \?</string>
+    <string name="dialog_delete_toot_warning">ลบโพสต์นี้ \?</string>
     <string name="dialog_unfollow_warning">เลิกติดตามผู้ใช้นี้\?</string>
     <string name="dialog_message_cancel_follow_request">ยกเลิกคำขอติดตาม\?</string>
     <string name="dialog_download_image">ดาวน์โหลด</string>
     <string name="dialog_message_uploading_media">กำลังอัปโหลด…</string>
     <string name="dialog_title_finishing_media_upload">กำลังอัปโหลดสื่อใกล้เสร็จ</string>
-    <string name="dialog_whats_an_instance">ใส่ที่อยู่หรือโดเมนของ Instance ได้ที่นี่ เช่น mastodon.social icosahedron.website social.tchncs.de และ <a href="https://instances.social">อีกมากมาย!</a>
-\n \u0020
-\nถ้ายังไม่มีบัญชี สามารถใส่ชื่อ Instance ที่ต้องการจะร่วมแล้วสร้างบัญชีที่นั่น \u0020
-\n \u0020
-\nInstance คือที่ที่หนึ่งไว้โฮสต์บัญชีคุณ แต่คุณยังสามารถสื่อสาร ติดตามบุคคลบน Instance อื่นได้เหมือนอยู่บนไซต์เดียวกัน \u0020
-\n \u0020
+    <string name="dialog_whats_an_instance">ใส่ที่อยู่หรือโดเมนของ Instance ได้ที่นี่ เช่น shitposter.club blob.cat expired.mentality.rip และ <a href="https://fediverse.network/pleroma?count=peers">อีกมากมาย!</a>
+\n
+\nถ้ายังไม่มีบัญชี สามารถใส่ชื่อ Instance ที่ต้องการจะร่วมแล้วสร้างบัญชีที่นั่น
+\n
+\nInstance คือที่ที่หนึ่งไว้โฮสต์บัญชีคุณ แต่คุณยังสามารถสื่อสาร ติดตามบุคคลบน Instance อื่นได้เหมือนอยู่บนไซต์เดียวกัน
+\n
 \nพบข้อมูลเพิ่มเติมได้ที่ <a href="https://joinmastodon.org">joinmastodon.org</a> </string>
     <string name="label_header">ภาพหัวบน</string>
     <string name="login_connection">กำลังเชื่อมต่อ…</string>
@@ -291,8 +291,8 @@
     <string name="confirmation_unmuted">เลิกปิดเสียงผู้ใช้นี้แล้ว</string>
     <string name="confirmation_reported">ส่งแล้ว!</string>
     <string name="send_media_to">แบ่งปันสื่อไป…</string>
-    <string name="send_status_content_to">แบ่งปัน Toot ไป…</string>
-    <string name="send_status_link_to">แชร์ URL Toot ไป…</string>
+    <string name="send_status_content_to">แบ่งปันโพสต์ไป…</string>
+    <string name="send_status_link_to">แบ่งปัน URL โพสต์ไป…</string>
     <string name="downloading_media">กำลังดาวน์โหลดสื่อ</string>
     <string name="download_media">ดาวน์โหลดสื่อ</string>
     <string name="action_share_as">แบ่งปันโดย…</string>
@@ -304,17 +304,17 @@
     <string name="title_mentions_dialog">โต้ตอบ</string>
     <string name="title_hashtags_dialog">แฮชแท็ก</string>
     <string name="action_open_faved_by">ดูชื่นชอบ</string>
-    <string name="action_open_reblogged_by">ดูบสต์</string>
-    <string name="action_open_reblogger">ดูต้นตอบูสต์</string>
+    <string name="action_open_reblogged_by">แสดงรีพีต</string>
+    <string name="action_open_reblogger">เปิดดูผู้รีพีต</string>
     <string name="action_hashtags">แฮชแท็ก</string>
     <string name="action_mentions">โต้ตอบ</string>
     <string name="action_links">ลิงก์</string>
     <string name="action_add_tab">เพิ่มแท็บ</string>
-    <string name="action_schedule_toot">Toot แบบตั้งเวลา</string>
+    <string name="action_schedule_toot">โพสต์แบบกำหนดเวลา</string>
     <string name="action_emoji_keyboard">คีย์บอร์ดเอโมจิ</string>
     <string name="action_content_warning">เตือนเนื้อหา</string>
-    <string name="action_toggle_visibility">การมองเห็น Toot</string>
-    <string name="action_access_scheduled_toot">Toot แบบตั้งเวลา</string>
+    <string name="action_toggle_visibility">การมองเห็นโพสต์</string>
+    <string name="action_access_scheduled_toot">โพสต์แบบตั้งเวลา</string>
     <string name="action_access_saved_toot">ฉบับร่าง</string>
     <string name="action_reject">ปฏิเสธ</string>
     <string name="action_accept">ยอมรับ</string>
@@ -344,14 +344,14 @@
     <string name="action_view_profile">โปรไฟล์</string>
     <string name="action_close">ปิด</string>
     <string name="action_retry">ลองอีกครั้ง</string>
-    <string name="action_send_public">TOOT!</string>
-    <string name="action_send">TOOT</string>
+    <string name="action_send">โพสต์</string>
+    <string name="action_send_public">โพสต์!</string>
     <string name="action_delete_and_redraft">ลบ แล้ว ร่างใหม่</string>
     <string name="action_delete">ลบ</string>
     <string name="action_edit">แก้ไข</string>
     <string name="action_report">รายงาน</string>
-    <string name="action_show_reblogs">แสดงบูสต์</string>
-    <string name="action_hide_reblogs">ซ่อนบูสต์</string>
+    <string name="action_show_reblogs">แสดงรีพีต</string>
+    <string name="action_hide_reblogs">ซ่อนรีพีต</string>
     <string name="action_unblock">เลิกบล็อก</string>
     <string name="action_block">บล็อก</string>
     <string name="action_unfollow">เลิกติดตาม</string>
@@ -362,16 +362,16 @@
     <string name="action_unfavourite">เลิกชื่นชอบ</string>
     <string name="action_bookmark">คั่นหน้า</string>
     <string name="action_favourite">ชื่นชอบ</string>
-    <string name="action_unreblog">ลบบูสต์</string>
-    <string name="action_reblog">ดัน</string>
+    <string name="action_unreblog">ลบรีพีต</string>
+    <string name="action_reblog">รีพีต</string>
     <string name="action_reply">ตอบกลับ</string>
     <string name="action_quick_reply">ตอบกลับด่วน</string>
     <string name="report_comment_hint">ความคิดเห็นเพิ่มเติม\?</string>
     <string name="report_username_format">รายงาน @%s</string>
     <string name="notification_follow_request_format">%s ต้องการติดตามคุณ</string>
     <string name="notification_follow_format">%s ได้ติดตามคุณ</string>
-    <string name="notification_favourite_format">%s ได้ชื่นชอบโพสต์ของคุณ</string>
-    <string name="notification_reblog_format">%s ได้ดันโพสต์ของคุณ</string>
+    <string name="notification_favourite_format">%s ชื่นชอบโพสต์คุณ</string>
+    <string name="notification_reblog_format">%s รีพีตโพสต์คุณ</string>
     <string name="footer_empty">ไม่มีอะไรเลย ลากลงเพื่อรีเฟรช!</string>
     <string name="message_empty">ไม่มีอะไร</string>
     <string name="status_content_show_less">ย่อ</string>
@@ -381,10 +381,10 @@
     <string name="status_sensitive_media_directions">แตะเพื่อดู</string>
     <string name="status_media_hidden_title">ซ่อนสื่ออยู่</string>
     <string name="status_sensitive_media_title">เนื้อหาอ่อนไหว</string>
-    <string name="status_boosted_format">%s ได้ดัน</string>
+    <string name="status_boosted_format">%s ได้รีพีต</string>
     <string name="status_username_format">\@%s</string>
     <string name="title_licenses">สัญญาอนุญาต</string>
-    <string name="title_scheduled_toot">โพสต์แบบกำหนดเวลา</string>
+    <string name="title_scheduled_toot">โพสต์ที่กำหนดเวลา</string>
     <string name="title_edit_profile">แก้ไขโปรไฟล์</string>
     <string name="title_follow_requests">คำขอติดตาม</string>
     <string name="title_domain_mutes">โดเมนที่ซ่อนไว้</string>
@@ -396,14 +396,14 @@
     <string name="title_statuses_pinned">ปักหมุด</string>
     <string name="title_statuses_with_replies">โพสต์และตอบกลับ</string>
     <string name="title_statuses">โพสต์</string>
-    <string name="title_view_thread">เธรด</string>
+    <string name="title_view_thread">โพสต์</string>
     <string name="title_tab_preferences">แท็บ</string>
     <string name="title_direct_messages">ข้อความโดยตรง</string>
     <string name="title_public_federated">ที่ติดต่อกับภายนอก</string>
     <string name="title_public_local">ในเซิร์ฟเวอร์</string>
     <string name="title_notifications">แจ้งเตือน</string>
     <string name="title_home">หน้าหลัก</string>
-    <string name="error_sender_account_gone">การส่งโพสต์เกิดความผิดพลาด</string>
+    <string name="error_sender_account_gone">เกิดข้อผิดพลาดในการส่งโพสต์</string>
     <string name="error_media_upload_sending">อัปโหลดล้มเหลว</string>
     <string name="error_media_upload_image_or_video">ไม่สามารถแนบรูปภาพและวิดีทัศน์ในโพสต์เดียวกันได้</string>
     <string name="error_media_download_permission">ต้องมีสิทธิ์จัดเก็บสื่อ</string>
@@ -435,11 +435,11 @@
     <string name="title_favourites">ชื่นชอบ</string>
     <string name="error_failed_app_registration">การยืนยันตัวตนกับเซิร์ฟเวอร์นั้นล้มเหลว</string>
     <string name="link_whats_an_instance">Instance คือ\?</string>
-    <string name="action_login">เข้าสู่ระบบด้วย Mastodon</string>
+    <string name="action_login">เข้าสู่ระบบด้วย Pleroma</string>
     <string name="poll_allow_multiple_choices">เลือกได้หลายตัวเลือก</string>
-    <string name="pref_title_confirm_reblogs">แสดงข้อความยืนยันก่อนที่จะบูสต์</string>
+    <string name="pref_title_confirm_reblogs">แสดงข้อความยืนยันก่อนที่จะรีพีต</string>
     <string name="pref_title_show_cards_in_timelines">แสดงตัวอย่างลิงก์ในไทม์ไลน์</string>
-    <string name="warning_scheduling_interval">Mastodon กำหนดเวลาขั้นต่ำ 5 นาที</string>
+    <string name="warning_scheduling_interval">Pleroma กำหนดเวลาขั้นต่ำ 5 นาที</string>
     <string name="no_scheduled_status">ไม่มีสถานะแบบตั้งเวลาใด ๆ</string>
     <string name="no_saved_status">ไม่มีฉบับร่างใด ๆ</string>
     <string name="post_lookup_error_format">การค้นหาโพสต์ %s เกิดข้อผิดผลาด</string>
@@ -455,4 +455,26 @@
     <string name="dialog_mute_hide_notifications">ซ่อนการแจ้งเตือน</string>
     <string name="action_mute_notifications_desc">ปิดเสียงการแจ้งเตือนจาก %s</string>
     <string name="pref_title_hide_top_toolbar">ซ่อนหัวข้อของแถบเครื่องมือด้านบน</string>
+    <string name="pref_title_default_formatting">ค่าปริยายของไวยากรณ์การจัดรูปแบบ (ถ้ารองรับโดย Instance)</string>
+    <string name="pref_title_enable_big_emojis">เปิดใช้งานเอโมจิที่กำหนดเองขนาดใหญ่</string>
+    <string name="pref_title_hide_muted_users">ซ่อนผู้ใช้ที่ปิดเสียงไว้</string>
+    <string name="notification_emoji_name">การโต้ตอบเอโมจิ</string>
+    <string name="action_reply_to">ตอบกลับ</string>
+    <string name="notification_emoji_description">การแจ้งเตือนเกี่ยวกับการโต้ตอบเอโมจิใหม่</string>
+    <string name="pref_title_notification_filter_emoji">โพสต์ของฉันถูกโต้ตอบโดยเอโมจิ</string>
+    <string name="pref_title_enable_experimental_stickers">เปิดใช้งานสติกเกอร์ Pleroma-FE รุ่นทดลอง (ถ้ามี)</string>
+    <string name="action_emoji_react">โต้ตอบแบบเอโมจิ</string>
+    <string name="title_emoji_reacted_by">%s ถูกโต้ตอบโดย</string>
+    <string name="error_media_upload_size">ขนาดไฟล์เกินขีดจำกัดกว่าที่ Instance กำหนดไว้</string>
+    <string name="notification_emoji_format">%s โต้ตอบด้วย %s แก่โพสต์คุณ</string>
+    <string name="action_enable_formatting_syntax">เปิดใช้งาน %s</string>
+    <string name="action_disable_formatting_syntax">ปิดใช้งาน %s</string>
+    <string name="action_sticker">สติกเกอร์</string>
+    <string name="hint_appname">ชื่อแอป</string>
+    <string name="hint_website">เว็บไซต์ของแอป</string>
+    <string name="admin">ผู้ดูแล</string>
+    <string name="moderator">ผู้ควบคุม</string>
+    <string name="error_sticker_fetch">เกิดข้อผิดพลาดขณะดึงข้อมูลสติกเกอร์</string>
+    <string name="action_emoji_unreact">ลบโต้ตอบแบบเอโมจิ</string>
+    <string name="action_emoji_reacted_by">ผู้โต้ตอบ</string>
 </resources>
