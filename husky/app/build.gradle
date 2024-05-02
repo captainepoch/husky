@@ -50,6 +50,8 @@ android {
             shrinkResources false
 
             signingConfig signingConfigs.debug
+
+            getIsDefault().set(true)
         }
 
         release {
@@ -71,6 +73,8 @@ android {
         }
 
         dev {
+            getIsDefault().set(true)
+
             dimension buildVersions.flavorDimensions.release
 
             applicationId buildVersions.dev.applicationId
@@ -83,6 +87,12 @@ android {
             versionName buildVersions.dev.versionName
 
             versionNameSuffix = "-${buildVersions.dev.suffix}"
+        }
+
+        beta {
+            dimension buildVersions.flavorDimensions.release
+
+            versionNameSuffix = "-${buildVersions.beta.suffix}${buildVersions.beta.versionSuffix}"
         }
 
         stable {
