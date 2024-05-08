@@ -25,7 +25,7 @@
     <string name="title_public_federated">Federada</string>
     <string name="title_direct_messages">Mensajes Directos</string>
     <string name="title_tab_preferences">Pestañas</string>
-    <string name="title_view_thread">Publicación</string>
+    <string name="title_view_thread">Artículo</string>
     <string name="title_statuses">Estados</string>
     <string name="title_statuses_with_replies">Con respuestas</string>
     <string name="title_statuses_pinned">Fijado</string>
@@ -60,7 +60,7 @@
     <string name="action_favourite">Favorito</string>
     <string name="action_more">Más</string>
     <string name="action_compose">Redactar</string>
-    <string name="action_login">Iniciar sesión</string>
+    <string name="action_login">Iniciar sesión con Pleroma</string>
     <string name="action_logout">Cerrar sesión</string>
     <string name="action_logout_confirm">¿Seguro que quiere cerrar la sesión de %1$s?</string>
     <string name="action_follow">Seguir</string>
@@ -71,7 +71,7 @@
     <string name="action_show_reblogs">Mostrar repeticiones</string>
     <string name="action_report">Reportar</string>
     <string name="action_delete">Borrar</string>
-    <string name="action_send">Enviar</string>
+    <string name="action_send">ARTICULO</string>
     <string name="action_send_public">¡Publicado!</string>
     <string name="action_retry">Reintentar</string>
     <string name="action_close">Cerrar</string>
@@ -108,7 +108,7 @@
     <string name="action_copy_link">Copiar el enlace</string>
     <string name="action_open_as">Abrir como %s</string>
     <string name="action_share_as">Compartir como…</string>
-    <string name="send_status_link_to">Compartir URL…</string>
+    <string name="send_status_link_to">Compartir la URL del artículo a…</string>
     <string name="send_status_content_to">Compartir publicación con…</string>
     <string name="send_media_to">Compartir medios a…</string>
     <string name="confirmation_reported">¡Enviado!</string>
@@ -223,8 +223,8 @@
         https://github.com/captainepoch/husky/issues
     </string>
     <string name="about_tusky_account">Perfil de Husky</string>
-    <string name="status_share_content">Compartir contenido</string>
-    <string name="status_share_link">Compartir enlace</string>
+    <string name="status_share_content">Compartir contenido del artículo</string>
+    <string name="status_share_link">Compartir enlace al artículo</string>
     <string name="status_media_images">Imágenes</string>
     <string name="status_media_video">Video</string>
     <string name="state_follow_requested">Solicitud enviada</string>
@@ -257,11 +257,11 @@
     <string name="lock_account_label">Proteger cuenta</string>
     <string name="lock_account_label_description">Tendrá que admitir los seguidores manualmente</string>
     <string name="compose_save_draft">¿Guardar borrador?</string>
-    <string name="send_toot_notification_title">Enviando estado…</string>
+    <string name="send_toot_notification_title">Enviando el artículo…</string>
     <string name="send_toot_notification_error_title">Ha habido un error al enviar la publicación</string>
-    <string name="send_toot_notification_channel_name">Enviando estado</string>
+    <string name="send_toot_notification_channel_name">Enviando los artículos</string>
     <string name="send_toot_notification_cancel_title">Envío cancelado</string>
-    <string name="send_toot_notification_saved_content">Una copia del estado se ha guardado en borradores</string>
+    <string name="send_toot_notification_saved_content">Una copia del artículo se ha guardado en borradores</string>
     <string name="action_compose_shortcut">Redactar</string>
     <string name="error_no_custom_emojis">Su instancia %s no ofrece emojis personalizados</string>
     <string name="copy_to_clipboard_success">Copiado al portapapeles</string>
@@ -272,7 +272,7 @@
     <string name="expand_collapse_all_statuses">Expandir/ocultar todos los estados</string>
     <string name="action_open_toot">Abrir publicación</string>
     <string name="restart_required">Reinicio requerido</string>
-    <string name="restart_emoji">Tendrás que reiniciar la aplicación para aplicar estos cambios</string>
+    <string name="restart_emoji">Tendrás que reiniciar Husky para aplicar estos cambios</string>
     <string name="later">Más tarde</string>
     <string name="restart">Reiniciar</string>
     <string name="caption_systememoji">Conjunto de emoji predeterminado de su dispositivo</string>
@@ -429,8 +429,8 @@
     <string name="edit_poll">Editar</string>
     <string name="title_scheduled_toot">Publicaciones programadas</string>
     <string name="action_edit">Editar</string>
-    <string name="action_access_scheduled_toot">Estados programados</string>
-    <string name="action_schedule_toot">Programar estado</string>
+    <string name="action_access_scheduled_toot">Artículos programados</string>
+    <string name="action_schedule_toot">Programar artículo</string>
     <string name="action_reset_schedule">Reiniciar</string>
     <string name="post_lookup_error_format">Error al buscar el post %s</string>
     <string name="about_powered_by_tusky">Potenciado por Husky</string>
@@ -481,23 +481,23 @@
     <string name="wellbeing_hide_stats_posts">Esconder las estadísticas cuantitativas de las publicaciones</string>
     <string name="review_notifications">Revisar Notificaciones</string>
     <string name="pref_title_wellbeing_mode">Bienestar</string>
-    <string name="notification_subscription_description">Notificaciones cuando alguien al que estoy suscrito publicó un nuevo toot</string>
-    <string name="notification_subscription_name">Nuevos toots</string>
-    <string name="pref_title_notification_filter_subscriptions">alguien al que estoy suscrito publicó un nuevo toot</string>
-    <string name="wellbeing_mode_notice">Alguna información que podría afectar tu bienestar mental va a ser oculta. Esto incluye:
+    <string name="notification_subscription_description">Notificaciones cuando alguien al que estoy suscrito publicó un nuevo artículo</string>
+    <string name="notification_subscription_name">Suscripciones</string>
+    <string name="pref_title_notification_filter_subscriptions">alguien al que estoy suscrito publicó un nuevo artículo</string>
+    <string name="wellbeing_mode_notice">Se ocultará cierta información que podría afectar su bienestar mental. Esto incluye:
 \n
-\n- Favoritos/impulsar/Notificaciones de Follow
-\n- Favoritos/Conteo de Impulsos en toots
-\n- Seguidor/Publicar estadísticas en perfiles
+\n - Notificaciones de favoritos/impulsar/seguir
+\n - Favorito/Impulsar el recuento de los artículos
+\n - Estadísticas de seguidores/publicaciones en perfiles
 \n
-\nLas notificaciones Push no serán afectadas, pero puedes revisar manualmente tus referencias de notificaciones.</string>
-    <string name="drafts_toot_reply_removed">El toot al que redactaste una respuesta ha sido eliminado</string>
+\n Las notificaciones push no se verán afectadas, pero puedes revisar tus preferencias de notificación manualmente.</string>
+    <string name="drafts_toot_reply_removed">El artículo al que respondías ha sido eliminado</string>
     <string name="draft_deleted">Borrador eliminado</string>
     <string name="drafts_failed_loading_reply">Error al cargar la información de respuesta</string>
     <string name="old_drafts">Borradores antiguos</string>
     <string name="new_drafts_warning">La función de borrador en Husky se ha rediseñado por completo para que sea más rápida, más fácil de usar y con menos errores.
 \nAún puede acceder a sus borradores antiguos a través de un botón en la pantalla de borradores nuevos, ¡pero se eliminarán en una actualización futura!</string>
-    <string name="drafts_toot_failed_to_send">¡Este toot no se pudo enviar!</string>
+    <string name="drafts_toot_failed_to_send">¡Este artículo no se pudo enviar!</string>
     <string name="dialog_delete_list_warning">¿Realmente quieres eliminar la lista %s\?</string>
     <string name="duration_indefinite">Indefinido</string>
     <string name="label_duration">Duración</string>
@@ -541,4 +541,57 @@
         <item quantity="one"><b>%s</b> Repetir</item>
         <item quantity="other"><b>%s</b> Repeticiones</item>
     </plurals>
+    <string name="chats">Chats</string>
+    <string name="chat_our_last_message"><b>Tú</b></string>
+    <string name="error_chat_recipient_unavailable">El destinatario no admite chats</string>
+    <string name="action_mark_as_read">Marcar como leído</string>
+    <string name="action_open_in_external_app">Abrir en una aplicación externa</string>
+    <string name="action_chat">Abrir el chat</string>
+    <string name="action_expand_menu">Desplegar el menú</string>
+    <string name="notification_chat_message_format">%s te ha enviado un mensaje</string>
+    <string name="notification_chat_message_name">Mensajes del chat</string>
+    <string name="notification_chat_message_description">Notificaciones sobre nuevos mensajes del chat</string>
+    <string name="notification_move_format">%s migrado a</string>
+    <string name="notification_move_name">Mover</string>
+    <string name="notification_move_description">Notificaciones cuando alguien a quien sigues migra a otro perfil</string>
+    <string name="pref_title_other">Otro</string>
+    <string name="pref_title_privacy">Privacidad</string>
+    <string name="key_hide_live_notification_desc">hideLiveNotifDesc</string>
+    <string name="pref_videoplayer">Reproductor de vídeo</string>
+    <string name="pref_videoplayer_replay_title">Reproducir vídeos automáticamente</string>
+    <string name="pref_crashhandler_category">Ajustes de CrashHanlder</string>
+    <string name="pref_crashhandler_body">Habilitar la notificación por correo electrónico de errores</string>
+    <string name="pref_crashhandler_key">enableCrashHanlder</string>
+    <string name="pref_title_composing">Redactar</string>
+    <string name="pref_title_composing_title">Redactando con caracteres espaciales de ancho cero en emojis</string>
+    <string name="pref_title_anonymize_upload_filenames">Anonimizar los nombres de los archivos cargados</string>
+    <string name="pref_title_hide_live_notification_description_toast">Esto cambiará una vez que regrese a la línea de tiempo.</string>
+    <string name="pref_title_hide_live_notification_description">Ocultar nombre del usuario de notificación en tiempo real</string>
+    <string name="pref_title_live_notifications">Notificaciones en tiempo real</string>
+    <string name="pref_title_notification_filter_chat_messages">ha recibido un mensaje de chat</string>
+    <string name="pref_summary_live_notifications">Puede aumentar ligeramente el consumo de la batería</string>
+    <string name="pref_title_notification_filter_move">alguien a quien sigo migró a otro perfil</string>
+    <string name="pref_title_animate_custom_emojis">Animar emojis personalizados</string>
+    <string name="attachment_type_image">Imagen</string>
+    <string name="attachment_type_video">Vídeo</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="link">Enlace</string>
+    <string name="streaming_notification_name">Notificaciones en tiempo real</string>
+    <string name="streaming_notification_description">Ejecutando notificaciones en tiempo real para:</string>
+    <string name="action_expires_in_toot">El artículo caduca en</string>
+    <string name="description_status_edited">Editado</string>
+    <string name="description_visibility_local">Local</string>
+    <string name="post_privacy_direct">Directamente</string>
+    <string name="post_privacy_local">Local</string>
+    <string name="status_replied_to_format">Responder a %s</string>
+    <string name="status_edited">Editado %s</string>
+    <string name="add_account_error_loading_list">Se ha producido un error al cargar la lista. Por favor, inténtelo de nuevo.</string>
+    <string name="add_account_error_removing_from_list">Se ha producido un error al eliminar este usuario de la lista. Por favor, inténtelo de nuevo.</string>
+    <string name="add_account_network_error_loading_list">Se ha producido un error de red al cargar la lista. Por favor, inténtelo de nuevo.</string>
+    <string name="add_account_network_error_removing_from_list">Se ha producido un error de red al eliminar este usuario de la lista. Por favor, inténtelo de nuevo.</string>
+    <string name="visibility_local">Local: No unir este tema</string>
+    <string name="pref_title_render_subscriptions_as_statuses">Convertir las suscripciones en entradas normales</string>
+    <string name="attachment_type_unknown">Adjunto</string>
+    <string name="add_account_error_adding_to_list">Se ha producido un error al añadir este usuario a la lista. Por favor, inténtelo de nuevo.</string>
+    <string name="add_account_network_error_adding_to_list">Se ha producido un error de red al añadir este usuario a la lista. Por favor, inténtelo de nuevo.</string>
 </resources>
