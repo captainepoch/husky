@@ -8,14 +8,14 @@
     <string name="error_no_web_browser_found">No se ha encontrado ningún navegador web.</string>
     <string name="error_authorization_unknown">Ocurrió un error de autorización no identificado.</string>
     <string name="error_authorization_denied">La autorización falló.</string>
-    <string name="error_retrieving_oauth_token">Fallo al obtener identificador de login.</string>
+    <string name="error_retrieving_oauth_token">Fallo al obtener token de login.</string>
     <string name="error_compose_character_limit">¡El estado es demasiado largo!</string>
     <string name="error_image_upload_size">El archivo debe ser inferior a 8MB.</string>
-    <string name="error_video_upload_size">Los archivos de vídeo deben tener menos de 40MB.</string>
+    <string name="error_video_upload_size">Los archivos de vídeo deben ser de menos de 40MB.</string>
     <string name="error_media_upload_type">No se admite este tipo de archivo.</string>
-    <string name="error_media_upload_opening">No pudo abrirse el fichero.</string>
+    <string name="error_media_upload_opening">No se pudo abrir el fichero.</string>
     <string name="error_media_upload_permission">Se requiere permiso para acceder al almacenamiento.</string>
-    <string name="error_media_download_permission">Se requiere permiso para descargar al almacenamiento.</string>
+    <string name="error_media_download_permission">Se requiere permiso para guardar en el almacenamiento.</string>
     <string name="error_media_upload_image_or_video">No se pueden adjuntar imágenes y vídeos en el mismo estado.</string>
     <string name="error_media_upload_sending">La subida falló.</string>
     <string name="error_sender_account_gone">Error al enviar la publicación.</string>
@@ -25,7 +25,7 @@
     <string name="title_public_federated">Federada</string>
     <string name="title_direct_messages">Mensajes Directos</string>
     <string name="title_tab_preferences">Pestañas</string>
-    <string name="title_view_thread">Artículo</string>
+    <string name="title_view_thread">Publicación</string>
     <string name="title_statuses">Estados</string>
     <string name="title_statuses_with_replies">Con respuestas</string>
     <string name="title_statuses_pinned">Fijado</string>
@@ -427,7 +427,7 @@
     <string name="poll_allow_multiple_choices">Opciones múltiples</string>
     <string name="poll_new_choice_hint">Opción %d</string>
     <string name="edit_poll">Editar</string>
-    <string name="title_scheduled_toot">Publicaciones programadas</string>
+    <string name="title_scheduled_toot">Estados programadas</string>
     <string name="action_edit">Editar</string>
     <string name="action_access_scheduled_toot">Artículos programados</string>
     <string name="action_schedule_toot">Programar artículo</string>
@@ -440,7 +440,7 @@
     <string name="description_status_bookmarked">Marcado como favorito</string>
     <string name="select_list_title">Seleccionar lista</string>
     <string name="list">Lista</string>
-    <string name="error_audio_upload_size">Los ficheros de audio deben ser menores de 40MB.</string>
+    <string name="error_audio_upload_size">Los ficheros de audio deben de ser menores de 40MB.</string>
     <string name="no_saved_status">No tienes ningún borrador.</string>
     <string name="no_scheduled_status">No tienes ningún estado programado.</string>
     <string name="warning_scheduling_interval">Pleroma tiene un intervalo de programación mínimo de 5 minutos.</string>
