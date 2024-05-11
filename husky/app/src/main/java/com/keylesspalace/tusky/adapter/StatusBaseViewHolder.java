@@ -1101,7 +1101,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
     protected void setupCard(Concrete status, CardViewMode cardViewMode, StatusDisplayOptions statusDisplayOptions) {
         if (cardViewMode != CardViewMode.NONE &&
-                status.getAttachments().size() == 0 &&
+                status.getAttachments().isEmpty() &&
                 status.getCard() != null &&
                 !TextUtils.isEmpty(status.getCard().getUrl()) &&
                 (!status.isCollapsible() || !status.isCollapsed())) {
@@ -1125,8 +1125,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             // so let's blur the preview in that case
             // If media previews are disabled, show placeholder for cards as well
             if (statusDisplayOptions.mediaPreviewEnabled() && !status.isSensitive() && !TextUtils.isEmpty(card.getImage())) {
-
-                int topLeftRadius = 0;
+                int topLeftRadius;
                 int topRightRadius = 0;
                 int bottomRightRadius = 0;
                 int bottomLeftRadius = 0;
