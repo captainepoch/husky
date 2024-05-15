@@ -84,9 +84,9 @@
         android:maxLines="1"
         android:textColor="?android:textColorSecondary"
         android:textSize="?attr/status_text_medium"
+        app:layout_constraintBaseline_toBaselineOf="@id/status_display_name"
         app:layout_constraintEnd_toStartOf="@id/status_toggle_mute"
         app:layout_constraintStart_toEndOf="@id/status_display_name"
-        app:layout_constraintBaseline_toBaselineOf="@id/status_display_name"
         tools:text="\@Entenhausen@birbsarecooooooooooool.site" />
 
     <ImageButton
@@ -98,10 +98,10 @@
         android:contentDescription="@string/action_unmute"
         android:importantForAccessibility="no"
         android:padding="4dp"
-        tools:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/status_timestamp_info"
         app:layout_constraintTop_toTopOf="@id/status_timestamp_info"
-        app:srcCompat="@drawable/ic_hide_media_24dp" />
+        app:srcCompat="@drawable/ic_hide_media_24dp"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/status_timestamp_info"
@@ -111,8 +111,8 @@
         android:importantForAccessibility="no"
         android:textColor="?android:textColorSecondary"
         android:textSize="?attr/status_text_medium"
+        app:layout_constraintBaseline_toBaselineOf="@id/status_display_name"
         app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@id/status_display_name"
         tools:text="13:37" />
 
     <TextView
@@ -135,8 +135,8 @@
         android:id="@+id/status_content_warning_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hyphenationFrequency="full"
         android:breakStrategy="high_quality"
+        android:hyphenationFrequency="full"
         android:importantForAccessibility="no"
         android:lineSpacingMultiplier="1.1"
         android:textColor="?android:textColorPrimary"
@@ -177,9 +177,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:breakStrategy="high_quality"
         android:focusable="true"
         android:hyphenationFrequency="full"
-        android:breakStrategy="high_quality"
         android:importantForAccessibility="no"
         android:lineSpacingMultiplier="1.1"
         android:textColor="?android:textColorPrimary"
@@ -188,6 +188,25 @@
         app:layout_constraintStart_toStartOf="@id/status_content_warning_button"
         app:layout_constraintTop_toBottomOf="@id/status_content_warning_button"
         tools:text="This is a status" />
+
+    <com.keylesspalace.tusky.view.CustomEmojiTextView
+        android:id="@+id/status_content_quote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:breakStrategy="high_quality"
+        android:focusable="true"
+        android:hyphenationFrequency="full"
+        android:importantForAccessibility="no"
+        android:lineSpacingMultiplier="1.1"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="?attr/status_text_medium"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/status_content_warning_button"
+        app:layout_constraintTop_toBottomOf="@id/status_content"
+        tools:text="This is a quote"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/status_card_view"
@@ -253,7 +272,9 @@
                 android:lines="1"
                 android:textColor="?android:textColorTertiary"
                 android:textSize="?attr/status_text_medium" />
+
         </LinearLayout>
+
     </LinearLayout>
 
     <Button
@@ -274,7 +295,7 @@
         android:textSize="?attr/status_text_medium"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/status_display_name"
-        app:layout_constraintTop_toBottomOf="@id/status_content"
+        app:layout_constraintTop_toBottomOf="@id/status_content_quote"
         tools:text="@string/status_content_show_less"
         tools:visibility="visible" />
 

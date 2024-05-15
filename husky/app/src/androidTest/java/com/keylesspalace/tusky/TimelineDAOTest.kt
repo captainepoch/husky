@@ -246,7 +246,9 @@ class TimelineDAOTest {
             reblogAccountId = reblogAuthor?.serverId,
             poll = null,
             pleroma = null,
-            editedAt = 0L
+            editedAt = 0L,
+            quote = null,
+            quoteEmojis = null
         )
         return Triple(status, author, reblogAuthor)
     }
@@ -277,7 +279,9 @@ class TimelineDAOTest {
             reblogAccountId = null,
             poll = null,
             pleroma = null,
-            editedAt = 0L
+            editedAt = 0L,
+            quote = null,
+            quoteEmojis = null
         )
     }
 

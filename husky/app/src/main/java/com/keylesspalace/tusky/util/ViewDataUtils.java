@@ -31,6 +31,7 @@ import com.keylesspalace.tusky.viewdata.NotificationViewData;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
 import com.keylesspalace.tusky.viewdata.ChatViewData;
 import com.keylesspalace.tusky.viewdata.ChatMessageViewData;
+import com.keylesspalace.tusky.viewdata.StatusViewData.Builder;
 
 public final class ViewDataUtils {
     @Nullable
@@ -38,8 +39,9 @@ public final class ViewDataUtils {
                                                            boolean alwaysShowSensitiveMedia,
                                                            boolean alwaysOpenSpoiler) {
         if (status == null) return null;
-        Status visibleStatus = status.getReblog() == null ? status : status.getReblog();
-        return new StatusViewData.Builder().setId(status.getId())
+        Status visibleStatus = (status.getReblog() == null ? status : status.getReblog());
+        StatusViewData.Builder newStatus = new Builder();
+        newStatus.setId(status.getId())
                 .setAttachments(visibleStatus.getAttachments())
                 .setAvatar(visibleStatus.getAccount().getAvatar())
                 .setContent(visibleStatus.getContent())
@@ -81,6 +83,16 @@ public final class ViewDataUtils {
                 .setEmojiReactions(visibleStatus.getEmojiReactions())
                 .setParentVisible(visibleStatus.getParentVisible())
                 .createStatusViewData();
+
+        if (visibleStatus.getQuote() != null && visibleStatus.getQuote().getContent() != null) {
+            newStatus.setQuote(visibleStatus.getQuote().getContent());
+        }
+
+        if(visibleStatus.getQuote() != null && visibleStatus.getQuote().getQuoteEmojis() != null) {
+            newStatus.setQuoteEmojis(visibleStatus.getQuote().getQuoteEmojis());
+        }
+
+        return newStatus.createStatusViewData();
     }
 
     public static NotificationViewData.Concrete notificationToViewData(Notification notification,

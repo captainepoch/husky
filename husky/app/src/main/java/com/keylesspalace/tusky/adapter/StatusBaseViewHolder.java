@@ -113,6 +113,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     public ImageView avatar;
     public TextView timestampInfo;
     public TextView content;
+    public TextView quote;
 
     protected StatusBaseViewHolder(View itemView) {
         super(itemView);
@@ -120,6 +121,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         username = itemView.findViewById(R.id.status_username);
         timestampInfo = itemView.findViewById(R.id.status_timestamp_info);
         content = itemView.findViewById(R.id.status_content);
+        quote = itemView.findViewById(R.id.status_content_quote);
         avatar = itemView.findViewById(R.id.status_avatar);
         replyInfo = itemView.findViewById(R.id.reply_info);
         replyButton = itemView.findViewById(R.id.status_reply);
@@ -852,6 +854,8 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 setupCard(status, statusDisplayOptions.cardViewMode(), statusDisplayOptions);
             }
 
+            setupQuote(status.getQuote(), status.getQuoteEmojis());
+
             setupButtons(listener, status.getSenderId(), status.getContent().toString(),
                     statusDisplayOptions);
             setRebloggingEnabled(status.getRebloggingEnabled(), status.getVisibility());
@@ -875,6 +879,17 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                         setCreatedAt(status.getCreatedAt(), status.getEditedAt(), statusDisplayOptions);
                     }
                 }
+        }
+    }
+
+    private void setupQuote(@Nullable Spanned quote, List<Emoji> statusEmojis) {
+        if(quote != null && this.quote != null) {
+            CharSequence emojifiedText = CustomEmojiHelper.emojify(quote, statusEmojis, this.quote);
+            LinkHelper.setClickableText(this.quote, emojifiedText, null, null);
+
+            this.quote.setText(emojifiedText);
+
+            this.quote.setVisibility(View.VISIBLE);
         }
     }
 
