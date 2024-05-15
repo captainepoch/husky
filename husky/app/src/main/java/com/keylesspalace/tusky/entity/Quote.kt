@@ -1,4 +1,11 @@
 package com.keylesspalace.tusky.entity
 
-class Quote {
-}
+import android.text.Spanned
+import com.google.gson.annotations.SerializedName
+
+data class Quote(
+    @SerializedName("content")
+    val content: Spanned?,
+    @SerializedName("emojis")
+    val quoteEmojis: List<Emoji>?
+)

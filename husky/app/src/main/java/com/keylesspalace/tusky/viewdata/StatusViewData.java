@@ -23,6 +23,7 @@ package com.keylesspalace.tusky.viewdata;
 import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.keylesspalace.tusky.entity.Attachment;
 import com.keylesspalace.tusky.entity.Card;
@@ -38,8 +39,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Class to represent data required to display either a notification or a placeholder.
- * It is either a {@link StatusViewData.Concrete} or a {@link StatusViewData.Placeholder}.
+ * Class to represent data required to display either a notification or a placeholder. It is either
+ * a {@link StatusViewData.Concrete} or a {@link StatusViewData.Placeholder}.
  */
 public abstract class StatusViewData {
 
@@ -110,24 +111,61 @@ public abstract class StatusViewData {
         @Nullable
         private final List<EmojiReaction> emojiReactions;
         private final boolean parentVisible;
+        private final Spanned quote;
+        private final List<Emoji> quoteEmojis;
 
-        public Concrete(String id, Spanned content, boolean reblogged, boolean favourited, boolean bookmarked,
-                        @Nullable String spoilerText, Status.Visibility visibility, List<Attachment> attachments,
-                        @Nullable String rebloggedByUsername, @Nullable String rebloggedAvatar, boolean sensitive, boolean isExpanded,
-                        boolean isShowingContent, String userFullName, String nickname, String avatar,
-                        Date createdAt, Date editedAt, int reblogsCount, int favouritesCount, @Nullable String inReplyToId,
-                        @Nullable String inReplyToAccountAcct, @Nullable Status.Mention[] mentions, String senderId, boolean rebloggingEnabled,
-                        Status.Application application, List<Emoji> statusEmojis, List<Emoji> accountEmojis, List<Emoji> rebloggedByAccountEmojis, @Nullable Card card,
-                        boolean isCollapsible, boolean isCollapsed, @Nullable PollViewData poll, boolean isBot, boolean isMuted, boolean isThreadMuted,
-                        boolean isUserMuted, String conversationId, @Nullable List<EmojiReaction> emojiReactions, boolean parentVisible) {
-
+        public Concrete(
+                String id,
+                Spanned content,
+                boolean reblogged,
+                boolean favourited,
+                boolean bookmarked,
+                @Nullable String spoilerText,
+                Status.Visibility visibility,
+                List<Attachment> attachments,
+                @Nullable String rebloggedByUsername,
+                @Nullable String rebloggedAvatar,
+                boolean sensitive,
+                boolean isExpanded,
+                boolean isShowingContent,
+                String userFullName,
+                String nickname,
+                String avatar,
+                Date createdAt,
+                Date editedAt,
+                int reblogsCount,
+                int favouritesCount,
+                @Nullable String inReplyToId,
+                @Nullable String inReplyToAccountAcct,
+                @Nullable Status.Mention[] mentions,
+                String senderId,
+                boolean rebloggingEnabled,
+                Status.Application application,
+                List<Emoji> statusEmojis,
+                List<Emoji> accountEmojis,
+                List<Emoji> rebloggedByAccountEmojis,
+                @Nullable Card card,
+                boolean isCollapsible,
+                boolean isCollapsed,
+                @Nullable PollViewData poll,
+                boolean isBot,
+                boolean isMuted,
+                boolean isThreadMuted,
+                boolean isUserMuted,
+                String conversationId,
+                @Nullable List<EmojiReaction> emojiReactions,
+                boolean parentVisible,
+                @Nullable Spanned quote,
+                List<Emoji> quoteEmojis
+        ) {
             this.id = id;
-            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
                 // https://github.com/tuskyapp/Tusky/issues/563
                 this.content = replaceCrashingCharacters(content);
-                this.spoilerText = spoilerText == null ? null : replaceCrashingCharacters(spoilerText).toString();
+                this.spoilerText = spoilerText == null ? null : replaceCrashingCharacters(
+                        spoilerText).toString();
                 CharSequence nicknameReplaced = replaceCrashingCharacters(nickname);
-                if(nicknameReplaced != null) {
+                if (nicknameReplaced != null) {
                     this.nickname = nicknameReplaced.toString();
                 } else {
                     this.nickname = null;
@@ -173,6 +211,8 @@ public abstract class StatusViewData {
             this.conversationId = conversationId;
             this.emojiReactions = emojiReactions;
             this.parentVisible = parentVisible;
+            this.quote = quote;
+            this.quoteEmojis = quoteEmojis;
         }
 
         public String getId() {
@@ -268,7 +308,7 @@ public abstract class StatusViewData {
         }
 
         public String getInReplyToAccountAcct() {
-            if(inReplyToAccountAcct != null) {
+            if (inReplyToAccountAcct != null) {
                 return inReplyToAccountAcct;
             }
             return "";
@@ -313,8 +353,8 @@ public abstract class StatusViewData {
         }
 
         /**
-         * Specifies whether the content of this post is allowed to be collapsed or if it should show
-         * all content regardless.
+         * Specifies whether the content of this post is allowed to be collapsed or if it should
+         * show all content regardless.
          *
          * @return Whether the post is collapsible or never collapsed.
          */
@@ -323,8 +363,8 @@ public abstract class StatusViewData {
         }
 
         /**
-         * Specifies whether the content of this post is currently limited in visibility to the first
-         * 500 characters or not.
+         * Specifies whether the content of this post is currently limited in visibility to the
+         * first 500 characters or not.
          *
          * @return Whether the post is collapsed or fully expanded.
          */
@@ -360,9 +400,23 @@ public abstract class StatusViewData {
             return emojiReactions;
         }
 
+        @Nullable
+        public Spanned getQuote() {
+            return quote;
+        }
+
+        @NonNull
+        public List<Emoji> getQuoteEmojis() {
+            return quoteEmojis;
+        }
+
         public boolean deepEquals(StatusViewData o) {
-            if(this == o) return true;
-            if(o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             Concrete concrete = (Concrete) o;
             return reblogged == concrete.reblogged &&
                     favourited == concrete.favourited &&
@@ -376,6 +430,7 @@ public abstract class StatusViewData {
                     rebloggingEnabled == concrete.rebloggingEnabled &&
                     Objects.equals(id, concrete.id) &&
                     Objects.equals(content, concrete.content) &&
+                    Objects.equals(quote, concrete.quote) &&
                     Objects.equals(spoilerText, concrete.spoilerText) &&
                     visibility == concrete.visibility &&
                     Objects.equals(attachments, concrete.attachments) &&
@@ -402,7 +457,8 @@ public abstract class StatusViewData {
                     isUserMuted == concrete.isUserMuted &&
                     conversationId == concrete.conversationId &&
                     Objects.equals(emojiReactions, concrete.emojiReactions) &&
-                    parentVisible == concrete.parentVisible;
+                    parentVisible == concrete.parentVisible &&
+                    Objects.equals(quoteEmojis, concrete.quoteEmojis);
         }
 
         static Spanned replaceCrashingCharacters(Spanned content) {
@@ -411,7 +467,7 @@ public abstract class StatusViewData {
 
         @Nullable
         static CharSequence replaceCrashingCharacters(CharSequence content) {
-            if(content == null) {
+            if (content == null) {
                 return null;
             }
 
@@ -419,17 +475,17 @@ public abstract class StatusViewData {
             SpannableStringBuilder builder = null;
             int length = content.length();
 
-            for(int index = 0; index < length; ++index) {
+            for (int index = 0; index < length; ++index) {
                 char character = content.charAt(index);
 
                 // If there are more than one or two, switch to a map
-                if(character == SOFT_HYPHEN) {
-                    if(!replacing) {
+                if (character == SOFT_HYPHEN) {
+                    if (!replacing) {
                         replacing = true;
                         builder = new SpannableStringBuilder(content, 0, index);
                     }
                     builder.append(ASCII_HYPHEN);
-                } else if(replacing) {
+                } else if (replacing) {
                     builder.append(character);
                 }
             }
@@ -462,15 +518,21 @@ public abstract class StatusViewData {
 
         @Override
         public boolean deepEquals(StatusViewData other) {
-            if(!(other instanceof Placeholder)) return false;
+            if (!(other instanceof Placeholder)) {
+                return false;
+            }
             Placeholder that = (Placeholder) other;
             return isLoading == that.isLoading && id.equals(that.id);
         }
 
         @Override
         public boolean equals(Object o) {
-            if(this == o) return true;
-            if(o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             Placeholder that = (Placeholder) o;
 
@@ -532,6 +594,8 @@ public abstract class StatusViewData {
         private String conversationId;
         private List<EmojiReaction> emojiReactions;
         private boolean parentVisible;
+        private Spanned quote;
+        private List<Emoji> quoteEmojis;
 
         public Builder() {
         }
@@ -544,7 +608,8 @@ public abstract class StatusViewData {
             bookmarked = viewData.bookmarked;
             spoilerText = viewData.spoilerText;
             visibility = viewData.visibility;
-            attachments = viewData.attachments == null ? null : new ArrayList<>(viewData.attachments);
+            attachments =
+                    viewData.attachments == null ? null : new ArrayList<>(viewData.attachments);
             rebloggedByUsername = viewData.rebloggedByUsername;
             rebloggedAvatar = viewData.rebloggedAvatar;
             isSensitive = viewData.isSensitive;
@@ -575,6 +640,8 @@ public abstract class StatusViewData {
             isUserMuted = viewData.isUserMuted;
             emojiReactions = viewData.emojiReactions;
             parentVisible = viewData.parentVisible;
+            quote = viewData.quote;
+            quoteEmojis = viewData.quoteEmojis;
         }
 
         public Builder setId(String id) {
@@ -738,10 +805,11 @@ public abstract class StatusViewData {
         }
 
         /**
-         * Configure the {@link com.keylesspalace.tusky.viewdata.StatusViewData} to support collapsing
-         * its content limiting the visible length when collapsed at 500 characters,
+         * Configure the {@link com.keylesspalace.tusky.viewdata.StatusViewData} to support
+         * collapsing its content limiting the visible length when collapsed at 500 characters,
          *
          * @param collapsible Whether the status should support being collapsed or not.
+         *
          * @return This {@link com.keylesspalace.tusky.viewdata.StatusViewData.Builder} instance.
          */
         public Builder setCollapsible(boolean collapsible) {
@@ -750,10 +818,12 @@ public abstract class StatusViewData {
         }
 
         /**
-         * Configure the {@link com.keylesspalace.tusky.viewdata.StatusViewData} to start in a collapsed
-         * state, hiding partially the content of the post if it exceeds a certain amount of characters.
+         * Configure the {@link com.keylesspalace.tusky.viewdata.StatusViewData} to start in a
+         * collapsed state, hiding partially the content of the post if it exceeds a certain amount
+         * of characters.
          *
          * @param collapsed Whether to show the full content of the status or not.
+         *
          * @return This {@link com.keylesspalace.tusky.viewdata.StatusViewData.Builder} instance.
          */
         public Builder setCollapsed(boolean collapsed) {
@@ -791,17 +861,70 @@ public abstract class StatusViewData {
             return this;
         }
 
-        public StatusViewData.Concrete createStatusViewData() {
-            if(this.statusEmojis == null) statusEmojis = Collections.emptyList();
-            if(this.accountEmojis == null) accountEmojis = Collections.emptyList();
-            if(this.createdAt == null) createdAt = new Date();
+        public Builder setQuote(@Nullable Spanned quote) {
+            this.quote = quote;
+            return this;
+        }
 
-            return new StatusViewData.Concrete(id, content, reblogged, favourited, bookmarked, spoilerText,
-                    visibility, attachments, rebloggedByUsername, rebloggedAvatar, isSensitive, isExpanded,
-                    isShowingContent, userFullName, nickname, avatar, createdAt, editedAt, reblogsCount,
-                    favouritesCount, inReplyToId, inReplyToAccountAcct, mentions, senderId, rebloggingEnabled, application,
-                    statusEmojis, accountEmojis, rebloggedByAccountEmojis, card, isCollapsible, isCollapsed, poll, isBot, isMuted, isThreadMuted,
-                    isUserMuted, conversationId, emojiReactions, parentVisible);
+        public Builder setQuoteEmojis(List<Emoji> quoteEmojis) {
+            this.quoteEmojis = quoteEmojis;
+            return this;
+        }
+
+        public StatusViewData.Concrete createStatusViewData() {
+            if (this.statusEmojis == null) {
+                statusEmojis = Collections.emptyList();
+            }
+            if (this.accountEmojis == null) {
+                accountEmojis = Collections.emptyList();
+            }
+            if (this.createdAt == null) {
+                createdAt = new Date();
+            }
+
+            return new StatusViewData.Concrete(id,
+                    content,
+                    reblogged,
+                    favourited,
+                    bookmarked,
+                    spoilerText,
+                    visibility,
+                    attachments,
+                    rebloggedByUsername,
+                    rebloggedAvatar,
+                    isSensitive,
+                    isExpanded,
+                    isShowingContent,
+                    userFullName,
+                    nickname,
+                    avatar,
+                    createdAt,
+                    editedAt,
+                    reblogsCount,
+                    favouritesCount,
+                    inReplyToId,
+                    inReplyToAccountAcct,
+                    mentions,
+                    senderId,
+                    rebloggingEnabled,
+                    application,
+                    statusEmojis,
+                    accountEmojis,
+                    rebloggedByAccountEmojis,
+                    card,
+                    isCollapsible,
+                    isCollapsed,
+                    poll,
+                    isBot,
+                    isMuted,
+                    isThreadMuted,
+                    isUserMuted,
+                    conversationId,
+                    emojiReactions,
+                    parentVisible,
+                    quote,
+                    quoteEmojis
+            );
         }
     }
 }

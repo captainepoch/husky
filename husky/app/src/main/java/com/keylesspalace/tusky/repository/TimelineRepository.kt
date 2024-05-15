@@ -35,6 +35,7 @@ import com.keylesspalace.tusky.entity.Account
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.Poll
+import com.keylesspalace.tusky.entity.Quote
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.repository.TimelineRequestMode.DISK
@@ -261,6 +262,10 @@ class TimelineRepositoryImpl(
             status.emojis,
             object : TypeToken<List<Emoji>>() {}.type
         ) ?: listOf()
+        val quoteEmojis: List<Emoji> = gson.fromJson(
+            status.quoteEmojis,
+            object : TypeToken<List<Emoji>>() {}.type
+        ) ?: listOf()
         val poll: Poll? = gson.fromJson(status.poll, Poll::class.java)
         val pleroma = gson.fromJson(status.pleroma, Status.PleromaStatus::class.java)
 
@@ -274,6 +279,7 @@ class TimelineRepositoryImpl(
                 reblog = null,
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
+                quote = status.quote?.parseAsHtml()?.trimTrailingWhitespace()?.let { Quote(it, quoteEmojis) },
                 createdAt = Date(status.createdAt),
                 editedAt = status.editedAt?.let { Date(it) },
                 emojis = emojis,
@@ -291,7 +297,7 @@ class TimelineRepositoryImpl(
                 pinned = false,
                 poll = poll,
                 card = null,
-                pleroma = pleroma
+                pleroma = pleroma,
             )
         }
         val status = if (reblog != null) {
@@ -420,7 +426,9 @@ fun Placeholder.toEntity(timelineUserId: Long): TimelineStatusEntity {
         reblogServerId = null,
         reblogAccountId = null,
         poll = null,
-        pleroma = null
+        pleroma = null,
+        quote = null,
+        quoteEmojis = null
     )
 }
 
@@ -437,9 +445,11 @@ fun Status.toEntity(
         inReplyToId = actionable.inReplyToId,
         inReplyToAccountId = actionable.inReplyToAccountId,
         content = actionable.content.toHtml(),
+        quote = actionable.quote?.content?.toHtml(),
         createdAt = actionable.createdAt.time,
         editedAt = actionable.editedAt?.time,
         emojis = actionable.emojis.let(gson::toJson),
+        quoteEmojis = actionable.quote?.quoteEmojis?.let { gson.toJson(it) } ?: gson.toJson(listOf<Emoji>()),
         reblogsCount = actionable.reblogsCount,
         favouritesCount = actionable.favouritesCount,
         reblogged = actionable.reblogged,
