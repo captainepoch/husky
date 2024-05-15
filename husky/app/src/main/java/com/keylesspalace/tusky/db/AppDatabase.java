@@ -500,6 +500,8 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `quotePosting` INTEGER NOT NULL DEFAULT 0");
             database.execSQL("ALTER TABLE `TootEntity` ADD COLUMN `quoteId` TEXT");
             database.execSQL("ALTER TABLE `DraftEntity` ADD COLUMN `quoteId` TEXT");
+            database.execSQL("ALTER TABLE `TimelineStatusEntity` ADD COLUMN `quote` TEXT");
+            database.execSQL("ALTER TABLE `TimelineStatusEntity` ADD COLUMN `quoteEmojis` TEXT");
         }
     };
 }

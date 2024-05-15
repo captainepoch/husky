@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 32,
-    "identityHash": "d7aee4507b39c66718c2700803d3c67c",
+    "identityHash": "59cbe1940fe828ccf933089b2145aaa2",
     "entities": [
       {
         "tableName": "TootEntity",
@@ -493,7 +493,7 @@
       },
       {
         "tableName": "TimelineStatusEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serverId` TEXT NOT NULL, `url` TEXT, `timelineUserId` INTEGER NOT NULL, `authorServerId` TEXT, `inReplyToId` TEXT, `inReplyToAccountId` TEXT, `content` TEXT, `createdAt` INTEGER NOT NULL, `editedAt` INTEGER, `emojis` TEXT, `reblogsCount` INTEGER NOT NULL, `favouritesCount` INTEGER NOT NULL, `reblogged` INTEGER NOT NULL, `bookmarked` INTEGER NOT NULL, `favourited` INTEGER NOT NULL, `sensitive` INTEGER NOT NULL, `spoilerText` TEXT, `visibility` INTEGER, `attachments` TEXT, `mentions` TEXT, `application` TEXT, `reblogServerId` TEXT, `reblogAccountId` TEXT, `poll` TEXT, `pleroma` TEXT, PRIMARY KEY(`serverId`, `timelineUserId`), FOREIGN KEY(`authorServerId`, `timelineUserId`) REFERENCES `TimelineAccountEntity`(`serverId`, `timelineUserId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serverId` TEXT NOT NULL, `url` TEXT, `timelineUserId` INTEGER NOT NULL, `authorServerId` TEXT, `inReplyToId` TEXT, `inReplyToAccountId` TEXT, `content` TEXT, `createdAt` INTEGER NOT NULL, `editedAt` INTEGER, `emojis` TEXT, `reblogsCount` INTEGER NOT NULL, `favouritesCount` INTEGER NOT NULL, `reblogged` INTEGER NOT NULL, `bookmarked` INTEGER NOT NULL, `favourited` INTEGER NOT NULL, `sensitive` INTEGER NOT NULL, `spoilerText` TEXT, `visibility` INTEGER, `attachments` TEXT, `mentions` TEXT, `application` TEXT, `reblogServerId` TEXT, `reblogAccountId` TEXT, `poll` TEXT, `pleroma` TEXT, `quote` TEXT, `quoteEmojis` TEXT, PRIMARY KEY(`serverId`, `timelineUserId`), FOREIGN KEY(`authorServerId`, `timelineUserId`) REFERENCES `TimelineAccountEntity`(`serverId`, `timelineUserId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "serverId",
@@ -642,6 +642,18 @@
           {
             "fieldPath": "pleroma",
             "columnName": "pleroma",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quote",
+            "columnName": "quote",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quoteEmojis",
+            "columnName": "quoteEmojis",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -1033,7 +1045,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd7aee4507b39c66718c2700803d3c67c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '59cbe1940fe828ccf933089b2145aaa2')"
     ]
   }
 }

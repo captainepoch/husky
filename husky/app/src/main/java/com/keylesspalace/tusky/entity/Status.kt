@@ -53,7 +53,9 @@ data class Status(
     val card: Card?,
     var content_type: String? = null,
     val pleroma: PleromaStatus? = null,
-    var muted: Boolean = false /* set when either thread or user is muted */
+    var muted: Boolean = false /* set when either thread or user is muted */,
+    @SerializedName("quote")
+    val quote: Quote? = null
 ) {
 
     val actionableId: String
