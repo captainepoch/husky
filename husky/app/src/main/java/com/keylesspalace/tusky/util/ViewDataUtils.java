@@ -84,12 +84,20 @@ public final class ViewDataUtils {
                 .setParentVisible(visibleStatus.getParentVisible())
                 .createStatusViewData();
 
-        if (visibleStatus.getQuote() != null && visibleStatus.getQuote().getContent() != null) {
-            newStatus.setQuote(visibleStatus.getQuote().getContent());
-        }
+        if(visibleStatus.getQuote() != null) {
+            if (visibleStatus.getQuote().getContent() != null) {
+                newStatus = newStatus.setQuote(visibleStatus.getQuote().getContent());
+            }
+            if(visibleStatus.getQuote().getQuoteEmojis() != null) {
+                newStatus = newStatus.setQuoteEmojis(visibleStatus.getQuote().getQuoteEmojis());
+            }
 
-        if(visibleStatus.getQuote() != null && visibleStatus.getQuote().getQuoteEmojis() != null) {
-            newStatus.setQuoteEmojis(visibleStatus.getQuote().getQuoteEmojis());
+            newStatus = newStatus.setQuoteFullName(
+                    visibleStatus.getQuote().getAccount().getDisplayName()
+            );
+            newStatus = newStatus.setQuoteUsername(
+                    visibleStatus.getQuote().getAccount().getUsername()
+            );
         }
 
         return newStatus.createStatusViewData();
