@@ -7,5 +7,7 @@ data class Quote(
     @SerializedName("content")
     val content: Spanned?,
     @SerializedName("emojis")
-    val quoteEmojis: List<Emoji>?
+    val quoteEmojis: List<Emoji>?,
+    @SerializedName("account")
+    val account: Account?
 )

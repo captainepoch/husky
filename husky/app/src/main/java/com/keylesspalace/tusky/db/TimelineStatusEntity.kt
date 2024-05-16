@@ -61,7 +61,9 @@ data class TimelineStatusEntity(
     val poll: String?,
     val pleroma: String?,
     val quote: String?,
-    val quoteEmojis: String?
+    val quoteEmojis: String?,
+    val quoteFullName: String?,
+    val quoteUsername: String?
 )
 
 @Entity(
