@@ -248,7 +248,9 @@ class TimelineDAOTest {
             pleroma = null,
             editedAt = 0L,
             quote = null,
-            quoteEmojis = null
+            quoteEmojis = null,
+            quoteFullName = null,
+            quoteUsername = null
         )
         return Triple(status, author, reblogAuthor)
     }
@@ -281,7 +283,9 @@ class TimelineDAOTest {
             pleroma = null,
             editedAt = 0L,
             quote = null,
-            quoteEmojis = null
+            quoteEmojis = null,
+            quoteFullName = null,
+            quoteUsername = null
         )
     }
 

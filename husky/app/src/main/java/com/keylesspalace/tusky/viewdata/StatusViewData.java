@@ -113,6 +113,8 @@ public abstract class StatusViewData {
         private final boolean parentVisible;
         private final Spanned quote;
         private final List<Emoji> quoteEmojis;
+        private final String quoteFullName;
+        private final String quoteUsername;
 
         public Concrete(
                 String id,
@@ -156,7 +158,9 @@ public abstract class StatusViewData {
                 @Nullable List<EmojiReaction> emojiReactions,
                 boolean parentVisible,
                 @Nullable Spanned quote,
-                List<Emoji> quoteEmojis
+                List<Emoji> quoteEmojis,
+                String quoteFullName,
+                String quoteUsername
         ) {
             this.id = id;
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -213,6 +217,8 @@ public abstract class StatusViewData {
             this.parentVisible = parentVisible;
             this.quote = quote;
             this.quoteEmojis = quoteEmojis;
+            this.quoteFullName = quoteFullName;
+            this.quoteUsername = quoteUsername;
         }
 
         public String getId() {
@@ -410,6 +416,14 @@ public abstract class StatusViewData {
             return quoteEmojis;
         }
 
+        public String getQuoteFullName() {
+            return quoteFullName;
+        }
+
+        public String getQuoteUsername() {
+            return quoteUsername;
+        }
+
         public boolean deepEquals(StatusViewData o) {
             if (this == o) {
                 return true;
@@ -596,6 +610,8 @@ public abstract class StatusViewData {
         private boolean parentVisible;
         private Spanned quote;
         private List<Emoji> quoteEmojis;
+        private String quoteFullName;
+        private String quoteUsername;
 
         public Builder() {
         }
@@ -642,6 +658,8 @@ public abstract class StatusViewData {
             parentVisible = viewData.parentVisible;
             quote = viewData.quote;
             quoteEmojis = viewData.quoteEmojis;
+            quoteFullName = viewData.quoteFullName;
+            quoteUsername = viewData.quoteUsername;
         }
 
         public Builder setId(String id) {
@@ -871,6 +889,16 @@ public abstract class StatusViewData {
             return this;
         }
 
+        public Builder setQuoteFullName(String quoteFullName) {
+            this.quoteFullName = quoteFullName;
+            return this;
+        }
+
+        public Builder setQuoteUsername(String quoteUsername) {
+            this.quoteUsername = quoteUsername;
+            return this;
+        }
+
         public StatusViewData.Concrete createStatusViewData() {
             if (this.statusEmojis == null) {
                 statusEmojis = Collections.emptyList();
@@ -923,7 +951,9 @@ public abstract class StatusViewData {
                     emojiReactions,
                     parentVisible,
                     quote,
-                    quoteEmojis
+                    quoteEmojis,
+                    quoteFullName,
+                    quoteUsername
             );
         }
     }

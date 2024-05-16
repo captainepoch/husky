@@ -854,7 +854,12 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 setupCard(status, statusDisplayOptions.cardViewMode(), statusDisplayOptions);
             }
 
-            setupQuote(status.getQuote(), status.getQuoteEmojis());
+            setupQuote(
+                    status.getQuote(),
+                    status.getQuoteEmojis(),
+                    status.getQuoteFullName(),
+                    status.getQuoteUsername()
+            );
 
             setupButtons(listener, status.getSenderId(), status.getContent().toString(),
                     statusDisplayOptions);
@@ -882,8 +887,13 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setupQuote(@Nullable Spanned quote, List<Emoji> statusEmojis) {
-        if(quote != null && this.quote != null) {
+    private void setupQuote(
+            @Nullable Spanned quote,
+            List<Emoji> statusEmojis,
+            String quoteFullName,
+            String quoteUsername
+    ) {
+        if (quote != null && this.quote != null) {
             CharSequence emojifiedText = CustomEmojiHelper.emojify(quote, statusEmojis, this.quote);
             LinkHelper.setClickableText(this.quote, emojifiedText, null, null);
 

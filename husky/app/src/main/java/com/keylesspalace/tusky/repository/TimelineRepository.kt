@@ -20,6 +20,7 @@
 
 package com.keylesspalace.tusky.repository
 
+import android.text.Spanned
 import android.text.SpannedString
 import androidx.core.text.parseAsHtml
 import androidx.core.text.toHtml
@@ -279,7 +280,26 @@ class TimelineRepositoryImpl(
                 reblog = null,
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
-                quote = status.quote?.parseAsHtml()?.trimTrailingWhitespace()?.let { Quote(it, quoteEmojis) },
+                quote = status.quote?.parseAsHtml()?.trimTrailingWhitespace()?.let {
+                    val account =
+                        if (status.quoteFullName != null && status.quoteUsername != null) {
+                            Account(
+                                "",
+                                // Needed
+                                status.quoteFullName!!,
+                                // Needed
+                                status.quoteUsername!!,
+                                status.quoteFullName,
+                                SpannedString(""),
+                                "",
+                                "",
+                                ""
+                            )
+                        } else {
+                            null
+                        }
+                    Quote(it, quoteEmojis, account)
+                },
                 createdAt = Date(status.createdAt),
                 editedAt = status.editedAt?.let { Date(it) },
                 emojis = emojis,
@@ -428,7 +448,9 @@ fun Placeholder.toEntity(timelineUserId: Long): TimelineStatusEntity {
         poll = null,
         pleroma = null,
         quote = null,
-        quoteEmojis = null
+        quoteEmojis = null,
+        quoteFullName = null,
+        quoteUsername = null
     )
 }
 
@@ -446,6 +468,8 @@ fun Status.toEntity(
         inReplyToAccountId = actionable.inReplyToAccountId,
         content = actionable.content.toHtml(),
         quote = actionable.quote?.content?.toHtml(),
+        quoteFullName = actionable.quote?.account?.name,
+        quoteUsername = actionable.quote?.account?.username,
         createdAt = actionable.createdAt.time,
         editedAt = actionable.editedAt?.time,
         emojis = actionable.emojis.let(gson::toJson),
