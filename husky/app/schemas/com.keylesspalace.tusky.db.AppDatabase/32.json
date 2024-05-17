@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 32,
-    "identityHash": "c99c399b8737014f646b375a33edb49d",
+    "identityHash": "fbda624e94d16d656bad9763f57565d6",
     "entities": [
       {
         "tableName": "TootEntity",
@@ -493,7 +493,7 @@
       },
       {
         "tableName": "TimelineStatusEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serverId` TEXT NOT NULL, `url` TEXT, `timelineUserId` INTEGER NOT NULL, `authorServerId` TEXT, `inReplyToId` TEXT, `inReplyToAccountId` TEXT, `content` TEXT, `createdAt` INTEGER NOT NULL, `editedAt` INTEGER, `emojis` TEXT, `reblogsCount` INTEGER NOT NULL, `favouritesCount` INTEGER NOT NULL, `reblogged` INTEGER NOT NULL, `bookmarked` INTEGER NOT NULL, `favourited` INTEGER NOT NULL, `sensitive` INTEGER NOT NULL, `spoilerText` TEXT, `visibility` INTEGER, `attachments` TEXT, `mentions` TEXT, `application` TEXT, `reblogServerId` TEXT, `reblogAccountId` TEXT, `poll` TEXT, `pleroma` TEXT, `quote` TEXT, `quoteEmojis` TEXT, `quoteFullName` TEXT, `quoteUsername` TEXT, PRIMARY KEY(`serverId`, `timelineUserId`), FOREIGN KEY(`authorServerId`, `timelineUserId`) REFERENCES `TimelineAccountEntity`(`serverId`, `timelineUserId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serverId` TEXT NOT NULL, `url` TEXT, `timelineUserId` INTEGER NOT NULL, `authorServerId` TEXT, `inReplyToId` TEXT, `inReplyToAccountId` TEXT, `content` TEXT, `createdAt` INTEGER NOT NULL, `editedAt` INTEGER, `emojis` TEXT, `reblogsCount` INTEGER NOT NULL, `favouritesCount` INTEGER NOT NULL, `reblogged` INTEGER NOT NULL, `bookmarked` INTEGER NOT NULL, `favourited` INTEGER NOT NULL, `sensitive` INTEGER NOT NULL, `spoilerText` TEXT, `visibility` INTEGER, `attachments` TEXT, `mentions` TEXT, `application` TEXT, `reblogServerId` TEXT, `reblogAccountId` TEXT, `poll` TEXT, `pleroma` TEXT, `quote` TEXT, `quoteEmojis` TEXT, `quoteFullName` TEXT, `quoteUsername` TEXT, `quotedAccountEmojis` TEXT, PRIMARY KEY(`serverId`, `timelineUserId`), FOREIGN KEY(`authorServerId`, `timelineUserId`) REFERENCES `TimelineAccountEntity`(`serverId`, `timelineUserId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "serverId",
@@ -666,6 +666,12 @@
           {
             "fieldPath": "quoteUsername",
             "columnName": "quoteUsername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quotedAccountEmojis",
+            "columnName": "quotedAccountEmojis",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -1057,7 +1063,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c99c399b8737014f646b375a33edb49d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fbda624e94d16d656bad9763f57565d6')"
     ]
   }
 }
