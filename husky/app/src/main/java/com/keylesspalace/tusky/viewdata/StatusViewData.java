@@ -115,6 +115,7 @@ public abstract class StatusViewData {
         private final List<Emoji> quoteEmojis;
         private final String quoteFullName;
         private final String quoteUsername;
+        private final List<Emoji> quotedAccountEmojis;
 
         public Concrete(
                 String id,
@@ -160,7 +161,8 @@ public abstract class StatusViewData {
                 @Nullable Spanned quote,
                 List<Emoji> quoteEmojis,
                 String quoteFullName,
-                String quoteUsername
+                String quoteUsername,
+                List<Emoji> quotedAccountEmojis
         ) {
             this.id = id;
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -219,6 +221,7 @@ public abstract class StatusViewData {
             this.quoteEmojis = quoteEmojis;
             this.quoteFullName = quoteFullName;
             this.quoteUsername = quoteUsername;
+            this.quotedAccountEmojis = quotedAccountEmojis;
         }
 
         public String getId() {
@@ -424,6 +427,11 @@ public abstract class StatusViewData {
             return quoteUsername;
         }
 
+        @NonNull
+        public List<Emoji> getQuotedAccountEmojis() {
+            return quotedAccountEmojis;
+        }
+
         public boolean deepEquals(StatusViewData o) {
             if (this == o) {
                 return true;
@@ -612,6 +620,7 @@ public abstract class StatusViewData {
         private List<Emoji> quoteEmojis;
         private String quoteFullName;
         private String quoteUsername;
+        private List<Emoji> quotedAccountEmojis;
 
         public Builder() {
         }
@@ -660,6 +669,7 @@ public abstract class StatusViewData {
             quoteEmojis = viewData.quoteEmojis;
             quoteFullName = viewData.quoteFullName;
             quoteUsername = viewData.quoteUsername;
+            quotedAccountEmojis = viewData.quotedAccountEmojis;
         }
 
         public Builder setId(String id) {
@@ -899,6 +909,11 @@ public abstract class StatusViewData {
             return this;
         }
 
+        public Builder setQuotedAccountEmojis(List<Emoji> quotedAccountEmojis) {
+            this.quotedAccountEmojis = quotedAccountEmojis;
+            return this;
+        }
+
         public StatusViewData.Concrete createStatusViewData() {
             if (this.statusEmojis == null) {
                 statusEmojis = Collections.emptyList();
@@ -953,7 +968,8 @@ public abstract class StatusViewData {
                     quote,
                     quoteEmojis,
                     quoteFullName,
-                    quoteUsername
+                    quoteUsername,
+                    quotedAccountEmojis
             );
         }
     }

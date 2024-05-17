@@ -250,7 +250,8 @@ class TimelineDAOTest {
             quote = null,
             quoteEmojis = null,
             quoteFullName = null,
-            quoteUsername = null
+            quoteUsername = null,
+            quotedAccountEmojis = null
         )
         return Triple(status, author, reblogAuthor)
     }
@@ -285,7 +286,8 @@ class TimelineDAOTest {
             quote = null,
             quoteEmojis = null,
             quoteFullName = null,
-            quoteUsername = null
+            quoteUsername = null,
+            quotedAccountEmojis = null
         )
     }
 
