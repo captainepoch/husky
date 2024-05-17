@@ -906,8 +906,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             String quoteUsername
     ) {
         if (quote != null && this.quoteView != null) {
-            Timber.d(quote.toString());
-
             CharSequence emojifiedText =
                     CustomEmojiHelper.emojify(quote, statusEmojis, this.quoteText);
             LinkHelper.setClickableText(this.quoteText, emojifiedText, null, null);
