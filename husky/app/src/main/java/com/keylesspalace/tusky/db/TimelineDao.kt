@@ -34,7 +34,8 @@ a.emojis as 'a_emojis', a.bot as 'a_bot',
 rb.serverId as 'rb_serverId', rb.timelineUserId 'rb_timelineUserId',
 rb.localUsername as 'rb_localUsername', rb.username as 'rb_username',
 rb.displayName as 'rb_displayName', rb.url as 'rb_url', rb.avatar as 'rb_avatar',
-rb.emojis as'rb_emojis', rb.bot as 'rb_bot'
+rb.emojis as'rb_emojis', rb.bot as 'rb_bot', s.quote, s.quoteEmojis, s.quoteFullName,
+s.quoteUsername
 FROM TimelineStatusEntity s
 LEFT JOIN TimelineAccountEntity a ON (s.timelineUserId = a.timelineUserId AND s.authorServerId = a.serverId)
 LEFT JOIN TimelineAccountEntity rb ON (s.timelineUserId = rb.timelineUserId AND s.reblogAccountId = rb.serverId)
