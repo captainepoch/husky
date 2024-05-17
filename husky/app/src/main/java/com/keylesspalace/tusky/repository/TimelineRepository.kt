@@ -267,6 +267,10 @@ class TimelineRepositoryImpl(
             status.quoteEmojis,
             object : TypeToken<List<Emoji>>() {}.type
         ) ?: listOf()
+        val quotedAccountEmojis: List<Emoji> = gson.fromJson(
+            status.quotedAccountEmojis,
+            object : TypeToken<List<Emoji>>() {}.type
+        ) ?: listOf()
         val poll: Poll? = gson.fromJson(status.poll, Poll::class.java)
         val pleroma = gson.fromJson(status.pleroma, Status.PleromaStatus::class.java)
 
@@ -293,7 +297,8 @@ class TimelineRepositoryImpl(
                                 SpannedString(""),
                                 "",
                                 "",
-                                ""
+                                "",
+                                emojis = quotedAccountEmojis
                             )
                         } else {
                             null
@@ -450,7 +455,8 @@ fun Placeholder.toEntity(timelineUserId: Long): TimelineStatusEntity {
         quote = null,
         quoteEmojis = null,
         quoteFullName = null,
-        quoteUsername = null
+        quoteUsername = null,
+        quotedAccountEmojis = null
     )
 }
 
@@ -468,12 +474,13 @@ fun Status.toEntity(
         inReplyToAccountId = actionable.inReplyToAccountId,
         content = actionable.content.toHtml(),
         quote = actionable.quote?.content?.toHtml(),
+        quoteEmojis = actionable.quote?.quoteEmojis?.let { gson.toJson(it) } ?: gson.toJson(listOf<Emoji>()),
         quoteFullName = actionable.quote?.account?.name,
         quoteUsername = actionable.quote?.account?.username,
+        quotedAccountEmojis = actionable.quote?.account?.emojis?.let { gson.toJson(it) } ?: gson.toJson(listOf<Emoji>()),
         createdAt = actionable.createdAt.time,
         editedAt = actionable.editedAt?.time,
         emojis = actionable.emojis.let(gson::toJson),
-        quoteEmojis = actionable.quote?.quoteEmojis?.let { gson.toJson(it) } ?: gson.toJson(listOf<Emoji>()),
         reblogsCount = actionable.reblogsCount,
         favouritesCount = actionable.favouritesCount,
         reblogged = actionable.reblogged,

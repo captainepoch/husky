@@ -67,6 +67,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import kotlin.collections.CollectionsKt;
+import timber.log.Timber;
 
 public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
@@ -113,7 +114,11 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     public ImageView avatar;
     public TextView timestampInfo;
     public TextView content;
-    public TextView quote;
+    private final LinearLayout quoteView;
+    private final LinearLayout quoteInfo;
+    private final TextView quoteName;
+    private final TextView quoteUsername;
+    private final TextView quoteText;
 
     protected StatusBaseViewHolder(View itemView) {
         super(itemView);
@@ -121,7 +126,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         username = itemView.findViewById(R.id.status_username);
         timestampInfo = itemView.findViewById(R.id.status_timestamp_info);
         content = itemView.findViewById(R.id.status_content);
-        quote = itemView.findViewById(R.id.status_content_quote);
         avatar = itemView.findViewById(R.id.status_avatar);
         replyInfo = itemView.findViewById(R.id.reply_info);
         replyButton = itemView.findViewById(R.id.status_reply);
@@ -184,6 +188,12 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         pollOptions.setAdapter(pollAdapter);
         pollOptions.setLayoutManager(new LinearLayoutManager(pollOptions.getContext()));
         ((DefaultItemAnimator) pollOptions.getItemAnimator()).setSupportsChangeAnimations(false);
+
+        quoteView = itemView.findViewById(R.id.status_quote_view);
+        quoteInfo = itemView.findViewById(R.id.status_quote_info);
+        quoteName = itemView.findViewById(R.id.status_quote_name);
+        quoteUsername = itemView.findViewById(R.id.status_quote_username);
+        quoteText = itemView.findViewById(R.id.status_quote_text);
 
         this.shortSdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         this.longSdf = new SimpleDateFormat("MM/dd HH:mm:ss", Locale.getDefault());
@@ -857,6 +867,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             setupQuote(
                     status.getQuote(),
                     status.getQuoteEmojis(),
+                    status.getQuotedAccountEmojis(),
                     status.getQuoteFullName(),
                     status.getQuoteUsername()
             );
@@ -890,16 +901,33 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     private void setupQuote(
             @Nullable Spanned quote,
             List<Emoji> statusEmojis,
+            List<Emoji> accountEmojis,
             String quoteFullName,
             String quoteUsername
     ) {
-        if (quote != null && this.quote != null) {
-            CharSequence emojifiedText = CustomEmojiHelper.emojify(quote, statusEmojis, this.quote);
-            LinkHelper.setClickableText(this.quote, emojifiedText, null, null);
+        if (quote != null && this.quoteView != null) {
+            Timber.d(quote.toString());
 
-            this.quote.setText(emojifiedText);
+            CharSequence emojifiedText =
+                    CustomEmojiHelper.emojify(quote, statusEmojis, this.quoteText);
+            LinkHelper.setClickableText(this.quoteText, emojifiedText, null, null);
 
-            this.quote.setVisibility(View.VISIBLE);
+            CharSequence emojifiedName =
+                    CustomEmojiHelper.emojify(quoteFullName, accountEmojis, this.quoteName, true);
+            this.quoteName.setText(emojifiedName);
+
+            if (quoteUsername != null) {
+                Context context = this.quoteUsername.getContext();
+                this.quoteUsername.setText(
+                        context.getString(R.string.status_username_format, quoteUsername)
+                );
+            } else {
+                this.quoteUsername.setVisibility(View.GONE);
+            }
+
+            this.quoteText.setText(emojifiedText);
+
+            this.quoteView.setVisibility(View.VISIBLE);
         }
     }
 
