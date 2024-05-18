@@ -48,7 +48,9 @@ jobs:
         run: |
           TMP_KS_FILE_PATH="${RUNNER_TEMP}"/keystore
           mkdir "${TMP_KS_FILE_PATH}"
-          echo $ENCODED_STRING | base64 -di > "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks
+          echo $ENCODED_STRING > keystore-b64.txt
+          base64 -d keystore-b64.txt > "$TMP_KS_FILE_PATH/husky_beta_ks.jks"
+          #echo $ENCODED_STRING | base64 -di > "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks
 
       - name: Prepare Signing env
         run: |
@@ -62,9 +64,9 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.HUSKY_BETA_KS_ALIAS_PW }}
           SIGNING_STORE_PASSWORD: ${{ secrets.HUSKY_BETA_KS_PW }}
         run: |
-          TMP_KS_FILE_PATH="${RUNNER_TEMP}"/keystore
+          SIGNING_KEY_STORE_PATH="${RUNNER_TEMP}"/keystore/husky_beta_ks.jsk
           cd husky/app/build/outputs/apk/huskyBeta/debug/
-          apksigner sign --ks "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks \
+          apksigner sign --ks "$SIGNING_KEY_STORE_PATH" \
             --ks-key-alias $SIGNING_KEY_ALIAS \
             --ks-pass $SIGNING_STORE_PASSWORD \
             --key-pass $SIGNING_KEY_PASSWORD \
