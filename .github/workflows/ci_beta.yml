@@ -46,6 +46,8 @@ jobs:
         run: |
           cd husky
           ./gradlew clean assembleHuskyBetaDebug
+      - name: Check if APK exists
+        run: |
           if [ -f "app/build/outputs/apk/huskyBeta/debug/husky_${{ steps.vars.outputs.tag }}.apk" ]; then
             echo "APK exists."
           fi
