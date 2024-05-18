@@ -62,8 +62,8 @@ jobs:
           cd husky/app/build/outputs/apk/huskyBeta/debug/
           apksigner sign --ks "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks \
           	--ks-key-alias ${{ secrets.HUSKY_BETA_KS_ALIAS }} \
-          	--ks-pass ${{ secrets.HUSKY_BETA_KS_PW }} \
-            --key-pass ${{ secrets.HUSKY_BETA_KS_ALIAS_PW }} \
+          	--ks-pass "${{ secrets.HUSKY_BETA_KS_PW }}" \
+            --key-pass "${{ secrets.HUSKY_BETA_KS_ALIAS_PW }}" \
             --in "husky_${{ steps.vars.outputs.tag }}.apk" \
             --out "husky_${{ steps.vars.outputs.tag }}_signed.apk"
           mkdir signed
