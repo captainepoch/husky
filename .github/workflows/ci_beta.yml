@@ -27,13 +27,9 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Set output
+      - name: Set tag at the outputs
         id: vars
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-
-      - name: Check output
-        run: |
-          echo TAG: ${{ steps.vars.outputs.tag }}
 
       - name: Gradle Wrapper Validation
         uses: gradle/actions/wrapper-validation@v3
@@ -46,15 +42,31 @@ jobs:
           cd husky
           ./gradlew clean assembleHuskyBetaDebug
 
-      - name: Check if APK exists
+      - name: Decode Keystore
+        env:
+          ENCODED_STRING: ${{ secrets.HUSKY_KS }}
         run: |
-          if [ -f "husky/app/build/outputs/apk/huskyBeta/debug/husky_${{ steps.vars.outputs.tag }}.apk" ]; then
-            echo "APK exists."
-          fi
+          TMP_KS_FILE_PATH="${RUNNER_TEMP}"/keystore
+          mkdir "${TMP_KS_FILE_PATH}"
+          echo $ENCODED_STRING | base64 -di > "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks
 
-      #- name: Run ktlint
-      #  run: |
-      #    cd husky
-      #    ./gradlew ktlintCheck
+      - name: Sign APK
+        run: |
+            cd husky/app/build/outputs/apk/huskyBeta/debug/
+            apksigner sign --ks "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks \
+            	--ks-key-alias ${{ secrets.HUSKY_BETA_KS_ALIAS }} \
+            	--ks-pass ${{ secrets.HUSKY_BETA_KS_PW }} \
+              --key-pass ${{ secrets.HUSKY_BETA_KS_ALIAS_PW }} \
+              --in "husky_${{ steps.vars.outputs.tag }}.apk" \
+              --out "husky_${{ steps.vars.outputs.tag }}_signed.apk"
+            mkdir signed
+            mv "husky_${{ steps.vars.outputs.tag }}_signed.apk" \
+              signed/"husky_${{ steps.vars.outputs.tag }}.apk"
 
-# /husky/husky/app/build/outputs/apk/huskyBeta/debug/husky_{{tag}}.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build Artifacts
+          path: husky/app/build/outputs/apk/huskyBeta/debug/signed
+
+      #      "husky/app/build/outputs/apk/huskyBeta/debug/husky_${{ steps.vars.outputs.tag }}.apk"
