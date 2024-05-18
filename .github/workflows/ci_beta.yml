@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   check-style:
-    name: Ktlint check beta
+    name: Release Beta Version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,7 +42,7 @@ jobs:
       - name: Gradle Setup
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Assemble Unsigned APK
+      - name: Assemble debug APK
         run: |
           cd husky
           ./gradlew clean assembleHuskyBetaDebug
