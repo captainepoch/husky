@@ -57,13 +57,17 @@ jobs:
           sudo apt-get install apksigner fdroidserver --no-install-recommends
 
       - name: Sign APK
+        env:
+          SIGNING_KEY_ALIAS: ${{ secrets.HUSKY_BETA_KS_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.HUSKY_BETA_KS_ALIAS_PW }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.HUSKY_BETA_KS_PW }}
         run: |
           TMP_KS_FILE_PATH="${RUNNER_TEMP}"/keystore
           cd husky/app/build/outputs/apk/huskyBeta/debug/
           apksigner sign --ks "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks \
-          	--ks-key-alias ${{ secrets.HUSKY_BETA_KS_ALIAS }} \
-          	--ks-pass ${{ secrets.HUSKY_BETA_KS_PW }} \
-            --key-pass ${{ secrets.HUSKY_BETA_KS_ALIAS_PW }} \
+            --ks-key-alias $SIGNING_KEY_ALIAS \
+            --ks-pass $SIGNING_STORE_PASSWORD \
+            --key-pass $SIGNING_KEY_PASSWORD \
             --in "husky_${{ steps.vars.outputs.tag }}.apk" \
             --out "husky_${{ steps.vars.outputs.tag }}_signed.apk"
           mkdir signed
