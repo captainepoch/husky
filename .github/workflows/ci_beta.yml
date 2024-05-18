@@ -2,8 +2,6 @@ name: Build Beta
 
 on:
   push:
-    branches:
-      - "beta/*"
     tags:
       - "*-beta*"
 
@@ -32,6 +30,7 @@ jobs:
       - name: Set output
         id: vars
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
       - name: Check output
         run: |
           echo TAG: ${{ steps.vars.outputs.tag }}
@@ -46,6 +45,7 @@ jobs:
         run: |
           cd husky
           ./gradlew clean assembleHuskyBetaDebug
+
       - name: Check if APK exists
         run: |
           if [ -f "app/build/outputs/apk/huskyBeta/debug/husky_${{ steps.vars.outputs.tag }}.apk" ]; then
