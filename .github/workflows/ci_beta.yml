@@ -42,6 +42,14 @@ jobs:
       - name: Gradle Setup
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Assemble Unsigned APK
+        run: |
+          cd husky
+          ./gradlew clean assembleHuskyBetaDebug
+          if [ -f "app/build/outputs/apk/huskyBeta/debug/husky_${{ steps.vars.outputs.tag }}.apk" ]; then
+            echo "APK exists."
+          fi
+
       #- name: Run ktlint
       #  run: |
       #    cd husky
