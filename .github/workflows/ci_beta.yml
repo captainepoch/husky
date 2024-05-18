@@ -50,6 +50,12 @@ jobs:
           mkdir "${TMP_KS_FILE_PATH}"
           echo $ENCODED_STRING | base64 -di > "${TMP_KS_FILE_PATH}"/husky_beta_ks.jks
 
+      - name: Prepare Signing env
+        run: |
+          sudo add-apt-repository ppa:fdroid/fdroidserver
+          sudo apt-get update
+          sudo apt-get install apksigner fdroidserver --no-install-recommends
+
       - name: Sign APK
         run: |
           TMP_KS_FILE_PATH="${RUNNER_TEMP}"/keystore
