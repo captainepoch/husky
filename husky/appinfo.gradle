@@ -20,7 +20,7 @@ beta.suffix = "beta"
 beta.applicationId = "su.xash.husky.${beta.suffix}"
 beta.versionSuffix = "1"
 
-beta.versionCode = 1
+beta.versionCode = 2
 beta.versionName = "1.6.0"
 buildVersions.beta = beta
 
