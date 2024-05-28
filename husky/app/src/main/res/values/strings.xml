@@ -728,7 +728,7 @@
 
     <string name="reblog_action_dialog_message">Do you want to reblog this status?</string>
     <string name="reblog_quote_action_dialog_message">Do you want to reblog/quote this status?</string>
-    <string name="action_reblog_quote_OK">Do you want to reblog this status?</string>
-    <string name="action_reblog_quote_cancel">Do you want to reblog/quote this status?</string>
+    <string name="action_reblog_quote_OK">OK</string>
+    <string name="action_reblog_quote_cancel">Cancel</string>
 
 </resources>
