@@ -76,24 +76,27 @@ public final class TimelineAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        switch (viewType) {
-            default:
-            case VIEW_TYPE_STATUS: {
+        return switch (viewType) {
+            default -> {
                 View view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_status, viewGroup, false);
-                return new StatusViewHolder(view);
+                                          .inflate(R.layout.item_status, viewGroup, false);
+                yield new StatusViewHolder(view);
             }
-            case VIEW_TYPE_STATUS_MUTED: {
+            case VIEW_TYPE_STATUS_MUTED -> {
                 View view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_status_muted, viewGroup, false);
-                return new MutedStatusViewHolder(view);
+                                          .inflate(R.layout.item_status_muted, viewGroup, false);
+                yield new MutedStatusViewHolder(view);
             }
-            case VIEW_TYPE_PLACEHOLDER: {
+            case VIEW_TYPE_PLACEHOLDER -> {
                 View view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_status_placeholder, viewGroup, false);
-                return new PlaceholderViewHolder(view);
+                                          .inflate(
+                                                  R.layout.item_status_placeholder,
+                                                  viewGroup,
+                                                  false
+                                          );
+                yield new PlaceholderViewHolder(view);
             }
-        }
+        };
     }
 
     @Override
