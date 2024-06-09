@@ -115,7 +115,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     public TextView timestampInfo;
     public TextView content;
     private final LinearLayout quoteView;
-    private final LinearLayout quoteInfo;
     private final TextView quoteName;
     private final TextView quoteUsername;
     private final TextView quoteText;
@@ -190,7 +189,6 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         ((DefaultItemAnimator) pollOptions.getItemAnimator()).setSupportsChangeAnimations(false);
 
         quoteView = itemView.findViewById(R.id.status_quote_view);
-        quoteInfo = itemView.findViewById(R.id.status_quote_info);
         quoteName = itemView.findViewById(R.id.status_quote_name);
         quoteUsername = itemView.findViewById(R.id.status_quote_username);
         quoteText = itemView.findViewById(R.id.status_quote_text);
@@ -926,6 +924,8 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             this.quoteText.setText(emojifiedText);
 
             this.quoteView.setVisibility(View.VISIBLE);
+        } else if (this.quoteView != null) {
+            this.quoteView.setVisibility(View.GONE);
         }
     }
 
