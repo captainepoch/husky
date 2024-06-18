@@ -494,4 +494,40 @@
     <string name="error_sticker_fetch">Ocorreu um erro ao buscar a figurinha</string>
     <string name="pref_title_default_formatting">Sintaxe de formatação padrão (se suportada pela instância)</string>
     <string name="status_share_content">Compartilhar conteúdo do toot</string>
+    <string name="notification_subscription_description">Notificações quando uma pessoa que você está inscrito publica um novo post</string>
+    <string name="title_public_bubble">Bolha</string>
+    <string name="title_announcements">Anúncios</string>
+    <string name="notification_subscription_format">%s acabou de postar</string>
+    <string name="pref_title_notification_filter_subscriptions">uma pessoa em que eu estou inscrito publicou um novo post</string>
+    <string name="pref_default_post_expire_in">Definir um prazo de validade para todos os posts publicados</string>
+    <string name="pref_default_post_expire_in_summary">O valor mínimo é de 1 dia, 0 para desativar.</string>
+    <string name="pref_default_post_expire_in_explanation">Configure um mínimo de 1 dia para que os posts expirem e sejam excluídos automaticamente pelo servidor.
+\n
+\nIsso pode ser configurado nas \"Preferências da Conta\".</string>
+    <string name="notification_subscription_name">Inscrições</string>
+    <string name="status_media_audio">Áudio</string>
+    <string name="status_media_attachments">Anexos</string>
+    <string name="label_duration">Duração</string>
+    <string name="duration_indefinite">Indefinido</string>
+    <string name="no_announcements">Não há anúncios.</string>
+    <string name="pref_title_wellbeing_mode">Bem-estar</string>
+    <string name="account_note_hint">A sua nota privada sobre esta conta</string>
+    <string name="account_note_saved">Salvo!</string>
+    <string name="wellbeing_mode_notice">Algumas informações que podem afetar seu bem-estar mental serão ocultas. Isso inclui:
+\n
+\n- Notificações de favoritos/Boost/Seguidas
+\n- Contagem de favoritos / Boost em posts
+\n- Estatísticas de seguidores/Post em perfis
+\n
+\nAs notificações push não serão afetadas, mas você pode rever suas preferências de notificação manualmente.</string>
+    <string name="review_notifications">Revisar Notificações</string>
+    <string name="limit_notifications">Limitar notificações da linha do tempo</string>
+    <string name="wellbeing_hide_stats_profile">Ocultar estatísticas quantitativas em perfis</string>
+    <string name="error_upload_max_media_reached">Você não pode enviar mais do que %1$d anexos de mídia.</string>
+    <string name="wellbeing_hide_stats_posts">Ocultar estatísticas quantitativas em posts</string>
+    <string name="dialog_delete_list_warning">Você realmente quer excluir a lista %s?</string>
+    <string name="drafts_toot_failed_to_send">Este post não enviou!</string>
+    <string name="new_drafts_warning">O recurso de rascunho em Husky foi completamente redesenhado para ser mais rápido, mais amigável e menos bugado.
+\nVocê ainda pode acessar seus rascunhos antigos através de um botão na nova tela de rascunhos, mas eles serão removidos em uma atualização futura!</string>
+    <string name="old_drafts">Rascunhos antigos</string>
 </resources>
