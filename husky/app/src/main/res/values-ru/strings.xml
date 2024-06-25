@@ -533,6 +533,4 @@
     <string name="link">Ссылка</string>
     <string name="status_media_audio">Аудио</string>
     <string name="status_media_attachments">Вложения</string>
-    <string name="label_duration"></string>
-    <string name="duration_indefinite"></string>
 </resources>
