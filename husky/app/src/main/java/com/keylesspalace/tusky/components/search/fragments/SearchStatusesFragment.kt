@@ -188,7 +188,13 @@ class SearchStatusesFragment :
     }
 
     override fun onViewQuote(position: Int) {
-        // TODO: Navigate to quoted post
+        searchAdapter.getItem(position)?.first?.let { status ->
+            val actionableStatus = status.actionableStatus
+            bottomSheetActivity?.viewThread(
+                actionableStatus.quote?.quotedStatusId,
+                actionableStatus.quote?.quotedStatusUrl
+            )
+        }
     }
 
     override fun onOpenReblog(position: Int) {
