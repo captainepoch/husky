@@ -134,6 +134,10 @@ public abstract class SFragment extends BaseFragment {
         bottomSheetActivity.viewThread(actionableStatus.getId(), actionableStatus.getUrl());
     }
 
+    protected void viewQuote(final String quoteId, final String quoteUrl) {
+        bottomSheetActivity.viewThread(quoteId, quoteUrl);
+    }
+
     protected void viewAccount(String accountId) {
         bottomSheetActivity.viewAccount(accountId);
     }

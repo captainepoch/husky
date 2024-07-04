@@ -160,6 +160,10 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
         // there are no Reply to labels in conversations
     }
 
+    override fun onViewQuote(position: Int) {
+        // No quotes on chats
+    }
+
     override fun onOpenReblog(position: Int) {
         // there are no reblogs in search results
     }
