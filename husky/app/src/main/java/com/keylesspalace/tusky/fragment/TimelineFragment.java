@@ -20,6 +20,7 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import com.keylesspalace.tusky.entity.Quote;
 import static com.keylesspalace.tusky.util.MediaUtilsKt.deleteStaleCachedMedia;
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
@@ -933,6 +934,18 @@ public class TimelineFragment extends SFragment
             return;
         }
         super.onShowReplyTo(replyToId);
+    }
+
+    @Override
+    public void onViewQuote(int position) {
+        Status status = statuses.get(position).asRightOrNull();
+        if (status != null && status.getQuote() != null) {
+            String quoteId = status.getQuote().getQuotedStatusId();
+            String quoteUrl = status.getQuote().getQuotedStatusUrl();
+            if (quoteId != null && quoteUrl != null) {
+                super.viewQuote(quoteId, quoteUrl);
+            }
+        }
     }
 
     @Override

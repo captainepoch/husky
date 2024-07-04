@@ -32,8 +32,8 @@ import com.keylesspalace.tusky.entity.EmojiReaction
 import com.keylesspalace.tusky.interfaces.StatusActionListener
 import com.keylesspalace.tusky.util.createEmojiSpan
 
-class EmojiReactionsAdapter internal constructor(
-    private val reactions: List<EmojiReaction>,
+class EmojiReactionsAdapter(
+    private val reactions: MutableList<EmojiReaction>,
     private val listener: StatusActionListener,
     private val statusId: String
 ) : Adapter<SingleViewHolder>() {

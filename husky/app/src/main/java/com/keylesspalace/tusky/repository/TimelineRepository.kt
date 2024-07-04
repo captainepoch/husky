@@ -284,7 +284,7 @@ class TimelineRepositoryImpl(
                 reblog = null,
                 content = status.content?.parseAsHtml()?.trimTrailingWhitespace()
                     ?: SpannedString(""),
-                quote = status.quote?.parseAsHtml()?.trimTrailingWhitespace()?.let {
+                quote = status.quote?.parseAsHtml()?.trimTrailingWhitespace()?.let { quote ->
                     val account =
                         if (status.quoteFullName != null && status.quoteUsername != null) {
                             Account(
@@ -303,7 +303,13 @@ class TimelineRepositoryImpl(
                         } else {
                             null
                         }
-                    Quote(it, quoteEmojis, account)
+                    Quote(
+                        status.quotedStatusId,
+                        status.quotedStatusUrl,
+                        quote,
+                        quoteEmojis,
+                        account
+                    )
                 },
                 createdAt = Date(status.createdAt),
                 editedAt = status.editedAt?.let { Date(it) },
@@ -453,6 +459,8 @@ fun Placeholder.toEntity(timelineUserId: Long): TimelineStatusEntity {
         poll = null,
         pleroma = null,
         quote = null,
+        quotedStatusId = null,
+        quotedStatusUrl = null,
         quoteEmojis = null,
         quoteFullName = null,
         quoteUsername = null,
@@ -474,6 +482,8 @@ fun Status.toEntity(
         inReplyToAccountId = actionable.inReplyToAccountId,
         content = actionable.content.toHtml(),
         quote = actionable.quote?.content?.toHtml(),
+        quotedStatusId = actionable.quote?.quotedStatusId,
+        quotedStatusUrl = actionable.quote?.quotedStatusUrl,
         quoteEmojis = actionable.quote?.quoteEmojis?.let { gson.toJson(it) } ?: gson.toJson(listOf<Emoji>()),
         quoteFullName = actionable.quote?.account?.name,
         quoteUsername = actionable.quote?.account?.username,

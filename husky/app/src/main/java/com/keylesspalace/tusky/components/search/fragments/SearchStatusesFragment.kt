@@ -187,6 +187,10 @@ class SearchStatusesFragment :
         }
     }
 
+    override fun onViewQuote(position: Int) {
+        // TODO: Navigate to quoted post
+    }
+
     override fun onOpenReblog(position: Int) {
         searchAdapter.getItem(position)?.first?.let { status ->
             bottomSheetActivity?.viewAccount(status.account.id)

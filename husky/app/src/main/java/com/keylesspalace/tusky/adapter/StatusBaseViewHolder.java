@@ -67,7 +67,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import kotlin.collections.CollectionsKt;
-import timber.log.Timber;
 
 public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
@@ -867,7 +866,8 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                     status.getQuoteEmojis(),
                     status.getQuotedAccountEmojis(),
                     status.getQuoteFullName(),
-                    status.getQuoteUsername()
+                    status.getQuoteUsername(),
+                    listener
             );
 
             setupButtons(listener, status.getSenderId(), status.getContent().toString(),
@@ -897,31 +897,39 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupQuote(
-            @Nullable Spanned quote,
-            List<Emoji> statusEmojis,
-            List<Emoji> accountEmojis,
-            String quoteFullName,
-            String quoteUsername
+        @Nullable Spanned quote,
+        List<Emoji> statusEmojis,
+        List<Emoji> accountEmojis,
+        String quoteFullName,
+        String quoteUsername,
+        StatusActionListener listener
     ) {
         if (quote != null && this.quoteView != null) {
             CharSequence emojifiedText =
-                    CustomEmojiHelper.emojify(quote, statusEmojis, this.quoteText);
+                CustomEmojiHelper.emojify(quote, statusEmojis, this.quoteText);
             LinkHelper.setClickableText(this.quoteText, emojifiedText, null, null);
 
             CharSequence emojifiedName =
-                    CustomEmojiHelper.emojify(quoteFullName, accountEmojis, this.quoteName, true);
+                CustomEmojiHelper.emojify(quoteFullName, accountEmojis, this.quoteName, true);
             this.quoteName.setText(emojifiedName);
 
             if (quoteUsername != null) {
                 Context context = this.quoteUsername.getContext();
                 this.quoteUsername.setText(
-                        context.getString(R.string.status_username_format, quoteUsername)
+                    context.getString(R.string.status_username_format, quoteUsername)
                 );
             } else {
                 this.quoteUsername.setVisibility(View.GONE);
             }
 
             this.quoteText.setText(emojifiedText);
+
+            this.quoteView.setOnClickListener(v -> {
+                int position = getAbsoluteAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onViewQuote(position);
+                }
+            });
 
             this.quoteView.setVisibility(View.VISIBLE);
         } else if (this.quoteView != null) {

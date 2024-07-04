@@ -403,6 +403,11 @@ public final class ViewThreadFragment extends SFragment
     }
 
     @Override
+    public void onViewQuote(int position) {
+        // TODO: Navigate to quoted post
+    }
+
+    @Override
     public void onOpenReblog(int position) {
         // there should be no reblogs in the thread but let's implement it to be sure
         super.openReblog(statuses.get(position));
