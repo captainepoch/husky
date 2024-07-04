@@ -55,7 +55,7 @@ class StatusView @JvmOverloads constructor(
         override fun onViewMedia(position: Int, attachmentIndex: Int, view: View?) {}
         override fun onViewThread(position: Int) {}
         override fun onViewReplyTo(position: Int) {}
-        override fun onViewQuote(position: Int) {}
+        override fun onViewQuote(quotedStatusId: String?, quotedStatusUrl: String?) {}
         override fun onOpenReblog(position: Int) {}
         override fun onExpandedChange(expanded: Boolean, position: Int) {}
         override fun onContentHiddenChange(isShowing: Boolean, position: Int) {}
