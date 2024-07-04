@@ -865,6 +865,8 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                     status.getQuote(),
                     status.getQuoteEmojis(),
                     status.getQuotedAccountEmojis(),
+                    status.getQuotedStatusId(),
+                    status.getQuotedStatusUrl(),
                     status.getQuoteFullName(),
                     status.getQuoteUsername(),
                     listener
@@ -900,6 +902,8 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         @Nullable Spanned quote,
         List<Emoji> statusEmojis,
         List<Emoji> accountEmojis,
+        String quotedStatusId,
+        String quotedStatusUrl,
         String quoteFullName,
         String quoteUsername,
         StatusActionListener listener
@@ -927,7 +931,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
             this.quoteView.setOnClickListener(v -> {
                 int position = getAbsoluteAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    listener.onViewQuote(position);
+                    listener.onViewQuote(quotedStatusId, quotedStatusUrl);
                 }
             });
 
