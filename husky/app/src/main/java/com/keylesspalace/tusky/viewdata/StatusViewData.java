@@ -116,6 +116,8 @@ public abstract class StatusViewData {
         private final String quoteFullName;
         private final String quoteUsername;
         private final List<Emoji> quotedAccountEmojis;
+        private final String quotedStatusId;
+        private final String quotedStatusUrl;
 
         public Concrete(
                 String id,
@@ -162,7 +164,9 @@ public abstract class StatusViewData {
                 List<Emoji> quoteEmojis,
                 String quoteFullName,
                 String quoteUsername,
-                List<Emoji> quotedAccountEmojis
+                List<Emoji> quotedAccountEmojis,
+                String quotedStatusId,
+                String quotedStatusUrl
         ) {
             this.id = id;
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -222,6 +226,8 @@ public abstract class StatusViewData {
             this.quoteFullName = quoteFullName;
             this.quoteUsername = quoteUsername;
             this.quotedAccountEmojis = quotedAccountEmojis;
+            this.quotedStatusId = quotedStatusId;
+            this.quotedStatusUrl = quotedStatusUrl;
         }
 
         public String getId() {
@@ -432,6 +438,14 @@ public abstract class StatusViewData {
             return quotedAccountEmojis;
         }
 
+        public String getQuotedStatusId() {
+            return quotedStatusId;
+        }
+
+        public String getQuotedStatusUrl() {
+            return quotedStatusUrl;
+        }
+
         public boolean deepEquals(StatusViewData o) {
             if (this == o) {
                 return true;
@@ -480,7 +494,9 @@ public abstract class StatusViewData {
                     conversationId == concrete.conversationId &&
                     Objects.equals(emojiReactions, concrete.emojiReactions) &&
                     parentVisible == concrete.parentVisible &&
-                    Objects.equals(quoteEmojis, concrete.quoteEmojis);
+                    Objects.equals(quoteEmojis, concrete.quoteEmojis) &&
+                    Objects.equals(quotedStatusId, concrete.quotedStatusId) &&
+                    Objects.equals(quotedStatusUrl, concrete.quotedStatusUrl);
         }
 
         static Spanned replaceCrashingCharacters(Spanned content) {
@@ -621,6 +637,8 @@ public abstract class StatusViewData {
         private String quoteFullName;
         private String quoteUsername;
         private List<Emoji> quotedAccountEmojis;
+        private String quotedStatusId;
+        private String quotedStatusUrl;
 
         public Builder() {
         }
@@ -670,6 +688,8 @@ public abstract class StatusViewData {
             quoteFullName = viewData.quoteFullName;
             quoteUsername = viewData.quoteUsername;
             quotedAccountEmojis = viewData.quotedAccountEmojis;
+            quotedStatusId = viewData.quotedStatusId;
+            quotedStatusUrl = viewData.quotedStatusUrl;
         }
 
         public Builder setId(String id) {
@@ -914,6 +934,16 @@ public abstract class StatusViewData {
             return this;
         }
 
+        public Builder setQuotedStatusId(String quotedStatusId) {
+            this.quotedStatusId = quotedStatusId;
+            return this;
+        }
+
+        public Builder setQuotedStatusUrl(String quotedStatusUrl) {
+            this.quotedStatusUrl = quotedStatusUrl;
+            return this;
+        }
+
         public StatusViewData.Concrete createStatusViewData() {
             if (this.statusEmojis == null) {
                 statusEmojis = Collections.emptyList();
@@ -969,7 +999,9 @@ public abstract class StatusViewData {
                     quoteEmojis,
                     quoteFullName,
                     quoteUsername,
-                    quotedAccountEmojis
+                    quotedAccountEmojis,
+                    quotedStatusId,
+                    quotedStatusUrl
             );
         }
     }

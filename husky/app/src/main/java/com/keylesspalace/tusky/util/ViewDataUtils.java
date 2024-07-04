@@ -94,9 +94,12 @@ public final class ViewDataUtils {
 
             newStatus = newStatus.setQuoteFullName(
                     visibleStatus.getQuote().getAccount().getDisplayName()
-            );
-            newStatus = newStatus.setQuoteUsername(
-                    visibleStatus.getQuote().getAccount().getUsername()
+            ).setQuoteUsername(
+                visibleStatus.getQuote().getAccount().getUsername()
+            ).setQuotedStatusId(
+                visibleStatus.getQuote().getQuotedStatusId()
+            ).setQuotedStatusUrl(
+                visibleStatus.getQuote().getQuotedStatusUrl()
             );
 
             if (visibleStatus.getQuote().getAccount().getEmojis() != null) {

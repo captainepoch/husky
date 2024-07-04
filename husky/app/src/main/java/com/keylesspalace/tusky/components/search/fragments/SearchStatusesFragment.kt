@@ -187,13 +187,9 @@ class SearchStatusesFragment :
         }
     }
 
-    override fun onViewQuote(position: Int) {
-        searchAdapter.getItem(position)?.first?.let { status ->
-            val actionableStatus = status.actionableStatus
-            bottomSheetActivity?.viewThread(
-                actionableStatus.quote?.quotedStatusId,
-                actionableStatus.quote?.quotedStatusUrl
-            )
+    override fun onViewQuote(quotedStatusId: String?, quotedStatusUrl: String?) {
+        if (quotedStatusId != null && quotedStatusUrl != null) {
+            bottomSheetActivity?.viewThread(quotedStatusId, quotedStatusUrl)
         }
     }
 

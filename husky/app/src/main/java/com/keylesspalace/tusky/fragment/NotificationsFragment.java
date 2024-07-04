@@ -723,8 +723,13 @@ public class NotificationsFragment extends SFragment
     }
 
     @Override
-    public void onViewQuote(int position) {
-        // TODO: Navigate to quoted post
+    public void onViewQuote(
+        final String quotedStatusId,
+        final String quotedStatusUrl
+    ) {
+        if (quotedStatusId != null && quotedStatusUrl != null) {
+            super.viewQuote(quotedStatusId, quotedStatusUrl);
+        }
     }
 
     @Override
