@@ -160,7 +160,7 @@ class ConversationsFragment : SFragment(), StatusActionListener, ReselectableFra
         // there are no Reply to labels in conversations
     }
 
-    override fun onViewQuote(position: Int) {
+    override fun onViewQuote(quotedStatusId: String?, quotedStatusUrl: String?) {
         // No quotes on chats
     }
 
