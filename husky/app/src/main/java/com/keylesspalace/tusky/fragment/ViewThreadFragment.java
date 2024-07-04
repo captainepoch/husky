@@ -404,7 +404,14 @@ public final class ViewThreadFragment extends SFragment
 
     @Override
     public void onViewQuote(int position) {
-        // TODO: Navigate to quoted post
+        Status status = statuses.get(position);
+        if (status != null && status.getQuote() != null) {
+            String quoteId = status.getQuote().getQuotedStatusId();
+            String quoteUrl = status.getQuote().getQuotedStatusUrl();
+            if (quoteId != null && quoteUrl != null) {
+                super.viewQuote(quoteId, quoteUrl);
+            }
+        }
     }
 
     @Override

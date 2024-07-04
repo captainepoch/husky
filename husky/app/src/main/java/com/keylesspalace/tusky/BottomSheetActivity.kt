@@ -115,7 +115,7 @@ abstract class BottomSheetActivity : BaseActivity() {
         onBeginSearch(url)
     }
 
-    open fun viewThread(statusId: String, url: String?) {
+    open fun viewThread(statusId: String?, url: String?) {
         if (!isSearching()) {
             val intent = ViewThreadActivity.startIntent(this, statusId, url)
             startActivityWithSlideInAnimation(intent)
