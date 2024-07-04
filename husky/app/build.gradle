@@ -61,13 +61,13 @@ android {
             shrinkResources true
 
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                "proguard-rules.pro"
         }
     }
 
     flavorDimensions = [
-            buildVersions.flavorDimensions.husky,
-            buildVersions.flavorDimensions.release
+        buildVersions.flavorDimensions.husky,
+        buildVersions.flavorDimensions.release
     ]
 
     productFlavors {
@@ -114,12 +114,11 @@ android {
         }
     }
 
-    lintOptions {
-        //abortOnError false
-        disable "MissingTranslation"
-        disable "ExtraTranslation"
-        disable "AppCompatCustomView"
-        disable "UseRequireInsteadOfGet"
+    lint {
+        disable "MissingTranslation",
+            "ExtraTranslation",
+            "AppCompatCustomView",
+            "UseRequireInsteadOfGet"
     }
 
     compileOptions {
@@ -147,17 +146,12 @@ android {
     }
 
     packagingOptions {
-        exclude "META-INF/DEPENDENCIES"
-        exclude "META-INF/LICENSE"
-        exclude "META-INF/LICENSE.txt"
-        exclude "META-INF/license.txt"
-        exclude "META-INF/NOTICE"
-        exclude "META-INF/NOTICE.txt"
-        exclude "META-INF/notice.txt"
-        exclude "META-INF/ASL2.0"
-        exclude "META-INF/*.kotlin_module"
-        exclude "LICENSE_OFL"
-        exclude "LICENSE_UNICODE"
+        resources {
+            excludes += ["META-INF/DEPENDENCIES", "META-INF/LICENSE", "META-INF/LICENSE.txt",
+                         "META-INF/license.txt", "META-INF/NOTICE", "META-INF/NOTICE.txt",
+                         "META-INF/notice.txt", "META-INF/ASL2.0", "META-INF/*.kotlin_module", "LICENSE_OFL", "LICENSE_UNICODE"
+            ]
+        }
     }
 
     bundle {
