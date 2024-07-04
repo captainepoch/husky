@@ -723,6 +723,11 @@ public class NotificationsFragment extends SFragment
     }
 
     @Override
+    public void onViewQuote(int position) {
+        // TODO: Navigate to quoted post
+    }
+
+    @Override
     public void onOpenReblog(int position) {
         Notification notification = notifications.get(position).asRight();
         onViewAccount(notification.getAccount().getId());

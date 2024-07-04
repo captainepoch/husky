@@ -60,6 +60,8 @@ data class TimelineStatusEntity(
     val reblogAccountId: String?,
     val poll: String?,
     val pleroma: String?,
+    val quotedStatusId: String?,
+    val quotedStatusUrl: String?,
     val quote: String?,
     val quoteEmojis: String?,
     val quoteFullName: String?,
