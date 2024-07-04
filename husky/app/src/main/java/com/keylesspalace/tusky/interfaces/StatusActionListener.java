@@ -31,7 +31,10 @@ public interface StatusActionListener extends LinkListener {
     void onViewMedia(int position, int attachmentIndex, @Nullable View view);
     void onViewThread(int position);
     void onViewReplyTo(int position);
-    void onViewQuote(int position);
+    void onViewQuote(
+        final String quotedStatusId,
+        final String quotedStatusUrl
+    );
 
     /**
      * Open reblog author for the status.
