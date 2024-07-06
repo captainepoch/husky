@@ -1,5 +1,6 @@
 Husky 1.6.0 - 2024-XX-YY
-  - Add: Quotes and quoting support.
+  - Add: Quotes and quoting support, and navigating from quote to the
+    correspondent post.
   - Add: AVIF support.
   - Add: Expiring posts per account.
   - Add: Replay videos preference (Global).
