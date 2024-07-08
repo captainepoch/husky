@@ -117,7 +117,7 @@
     <string name="title_mentions_dialog">提及</string>
     <string name="title_links_dialog">链接</string>
     <string name="action_open_media_n">打开媒体文件 #%d</string>
-    <string name="download_image">正在下载 %1$s…</string>
+    <string name="download_image">正在下载 %1$s</string>
     <string name="action_copy_link">复制链接</string>
     <string name="action_open_as">打开为 %s</string>
     <string name="action_share_as">分享为 …</string>
@@ -147,7 +147,7 @@
         \n\n还没有 Mastodon 帐号？你也可以输入想注册的 Mastodon 站点的域名，然后在该服务器创建新的帐号并授权 Husky 登入。
         \n\n在 Mastodon 里，跨站互动和站内互动一样简单。可以前往 <a href="https://joinmastodon.org">https://joinmastodon.org</a> 了解更多信息。
     </string>
-    <string name="dialog_title_finishing_media_upload">正在结束上传…</string>
+    <string name="dialog_title_finishing_media_upload">正在结束上传</string>
     <string name="dialog_message_uploading_media">正在上传…</string>
     <string name="dialog_download_image">下载</string>
     <string name="dialog_message_cancel_follow_request">移除关注请求？</string>
