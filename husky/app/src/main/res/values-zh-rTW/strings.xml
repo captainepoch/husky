@@ -117,7 +117,7 @@
     <string name="title_mentions_dialog">提及</string>
     <string name="title_links_dialog">連結</string>
     <string name="action_open_media_n">打開媒體 #%d</string>
-    <string name="download_image">正在下載 %1$s…</string>
+    <string name="download_image">正在下載 %1$s</string>
     <string name="action_copy_link">複製連結</string>
     <string name="action_open_as">打開為 %s</string>
     <string name="action_share_as">分享為 …</string>
@@ -131,7 +131,7 @@
     <string name="confirmation_unmuted">已解除靜音</string>
     <string name="status_sent">已發送！</string>
     <string name="status_sent_long">成功送出回覆</string>
-    <string name="hint_domain">域名</string>
+    <string name="hint_domain">哪個伺服器？</string>
     <string name="hint_compose">有什麼新鮮事？</string>
     <string name="hint_content_warning">敏感內容警告</string>
     <string name="hint_display_name">暱稱</string>
@@ -144,7 +144,7 @@
     <string name="link_whats_an_instance">什麼是站點？</string>
     <string name="login_connection">正在連線…</string>
     <string name="dialog_whats_an_instance">請輸入你帳號所在的 Pleroma 站點的域名或地址</string>
-    <string name="dialog_title_finishing_media_upload">正在完成上傳…</string>
+    <string name="dialog_title_finishing_media_upload">正在完成上傳</string>
     <string name="dialog_message_uploading_media">正在上傳…</string>
     <string name="dialog_download_image">下載</string>
     <string name="dialog_message_cancel_follow_request">移除關注請求？</string>
