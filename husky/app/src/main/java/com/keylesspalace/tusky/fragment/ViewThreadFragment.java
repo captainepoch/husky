@@ -317,7 +317,7 @@ public final class ViewThreadFragment extends SFragment
                      .observeOn(AndroidSchedulers.mainThread())
                      .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
                      .subscribe(
-                             (newStatus) -> updateStatus(position, status),
+                             (newStatus) -> updateStatus(position, status, reblog),
                              (err) -> Timber.e(
                                      err,
                                      "Failed to reblog status %s, Error[%s]",
@@ -333,7 +333,7 @@ public final class ViewThreadFragment extends SFragment
 
         timelineCases.getValue().favourite(statuses.get(position), favourite)
             .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newStatus) -> updateStatus(position, newStatus),
+            .subscribe((newStatus) -> updateStatus(position, newStatus, false),
                 (t) -> Log.d(TAG, "Failed to favourite status: " + status.getId(), t));
     }
 
@@ -343,18 +343,21 @@ public final class ViewThreadFragment extends SFragment
 
         timelineCases.getValue().bookmark(statuses.get(position), bookmark)
             .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newStatus) -> updateStatus(position, newStatus),
+            .subscribe((newStatus) -> updateStatus(position, newStatus, false),
                 (t) -> Log.d(TAG, "Failed to bookmark status: " + status.getId(), t));
     }
 
-    private void updateStatus(int position, Status status) {
+    // TODO: remove boolean reblog because it's a nasty hack
+    private void updateStatus(int position, Status status, boolean reblog) {
         if(position >= 0 && position < statuses.size()) {
             Status actionableStatus = status.getActionableStatus();
 
-            if (!actionableStatus.getReblogged() && recyclerView != null) {
-                ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
-                if (holder instanceof StatusViewHolder || holder instanceof StatusDetailedViewHolder) {
-                    ((StatusBaseViewHolder) holder).reblogButtonAnimate();
+            if (reblog) {
+                if (!actionableStatus.getReblogged() && recyclerView != null) {
+                    ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
+                    if (holder instanceof StatusViewHolder || holder instanceof StatusDetailedViewHolder) {
+                        ((StatusBaseViewHolder) holder).reblogButtonAnimate();
+                    }
                 }
             }
 
