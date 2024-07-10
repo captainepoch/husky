@@ -686,23 +686,21 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                 if (position != RecyclerView.NO_POSITION) {
                     if (statusDisplayOptions.confirmReblogs()) {
                         showConfirmReblogDialog(
-                                listener,
-                                buttonState,
-                                position,
-                                statusDisplayOptions.canQuotePosts()
+                            listener,
+                            buttonState,
+                            position,
+                            statusDisplayOptions.canQuotePosts()
                         );
-                        return false;
                     } else {
                         listener.onReblog(
-                                !buttonState,
-                                position,
-                                statusDisplayOptions.canQuotePosts()
+                            !buttonState,
+                            position,
+                            statusDisplayOptions.canQuotePosts()
                         );
-                        return true;
                     }
-                } else {
-                    return false;
                 }
+
+                return false;
             });
         }
 
