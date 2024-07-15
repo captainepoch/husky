@@ -20,7 +20,7 @@ val repositoryModule = module {
         ChatRepositoryImpl(get<AppDatabase>().chatsDao(), get(), get(), get())
     } bind ChatRepository::class
 
-    single {
+    factory {
         ConversationsRepository(get(), get())
     }
 
@@ -28,7 +28,7 @@ val repositoryModule = module {
         ListsRepositoryImpl(get())
     } bind ListsRepository::class
 
-    single {
+    factory {
         StatusesRepository(get())
     }
 
@@ -40,7 +40,7 @@ val repositoryModule = module {
         EditProfileRepository(get())
     }
 
-    factory {
+    single {
         InstanceRepositoryImp(get(), get(), get())
     } bind InstanceRepository::class
 }
