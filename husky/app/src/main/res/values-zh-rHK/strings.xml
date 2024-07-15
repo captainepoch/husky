@@ -4,7 +4,7 @@
     <string name="error_network">網絡請求出錯，請檢查互聯網連接並重試</string>
     <string name="error_empty">內容不能為空</string>
     <string name="error_invalid_domain">該域名無效</string>
-    <string name="error_failed_app_registration">無法連接此伺服器</string>
+    <string name="error_failed_app_registration">無法連接此伺服器。</string>
     <string name="error_no_web_browser_found">沒有可用的瀏覽器</string>
     <string name="error_authorization_unknown">認證過程出現未知錯誤</string>
     <string name="error_authorization_denied">授權被拒絕</string>
@@ -117,7 +117,7 @@
     <string name="title_mentions_dialog">提及</string>
     <string name="title_links_dialog">連結</string>
     <string name="action_open_media_n">打開媒體 #%d</string>
-    <string name="download_image">正在下載 %1$s…</string>
+    <string name="download_image">正在下載 %1$s</string>
     <string name="action_copy_link">複製連結</string>
     <string name="action_open_as">打開為 %s</string>
     <string name="action_share_as">分享為 …</string>
@@ -131,7 +131,7 @@
     <string name="confirmation_unmuted">已解除靜音</string>
     <string name="status_sent">已檢舉！</string>
     <string name="status_sent_long">成功送出回覆</string>
-    <string name="hint_domain">域名</string>
+    <string name="hint_domain">哪個伺服器？</string>
     <string name="hint_compose">有什麼新鮮事？</string>
     <string name="hint_content_warning">敏感內容警告</string>
     <string name="hint_display_name">暱稱</string>
@@ -143,8 +143,14 @@
     <string name="label_header">標題</string>
     <string name="link_whats_an_instance">什麼是站點？</string>
     <string name="login_connection">正在連線…</string>
-    <string name="dialog_whats_an_instance">請輸入你帳號所在的 Pleroma 站點的域名或地址</string>
-    <string name="dialog_title_finishing_media_upload">正在完成上傳…</string>
+    <string name="dialog_whats_an_instance">請輸入你帳號所在的Mastodon 網站的域名，例如shitposter.club，blob.cat，expired.mentality.rip，<a href="https://fediverse.network/pleroma?count=peers">等等</a>。 
+\n
+\n還沒有 Mastodon 帳號？你也可以輸入想註冊的 Mastodon 網站的域名，然後在該伺服器建立新的帳號並授權 Husky 登錄。 
+\n
+\n在 Mastodon 裡，你的帳號資訊儲存在某一特定實例當中，但 Mastodon 可使跨站互動和站內互動一樣簡單。 
+\n
+\n可前往 <a href="https://joinmastodon.org">https://joinmastodon.org</a> 了解更多。 \u0020</string>
+    <string name="dialog_title_finishing_media_upload">正在完成上傳</string>
     <string name="dialog_message_uploading_media">正在上傳…</string>
     <string name="dialog_download_image">下載</string>
     <string name="dialog_message_cancel_follow_request">移除關注請求？</string>
