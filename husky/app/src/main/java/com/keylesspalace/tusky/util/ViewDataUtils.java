@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.keylesspalace.tusky.entity.Notification;
+import com.keylesspalace.tusky.entity.Quote;
 import com.keylesspalace.tusky.entity.Status;
 import com.keylesspalace.tusky.entity.Chat;
 import com.keylesspalace.tusky.entity.ChatMessage;
@@ -84,30 +85,37 @@ public final class ViewDataUtils {
                 .setParentVisible(visibleStatus.getParentVisible())
                 .createStatusViewData();
 
-        if(visibleStatus.getQuote() != null) {
-            if (visibleStatus.getQuote().getContent() != null) {
-                newStatus = newStatus.setQuote(visibleStatus.getQuote().getContent());
+        Quote quote = null;
+        if (visibleStatus.getPleroma() != null && visibleStatus.getPleroma().getQuote() != null) {
+            quote = visibleStatus.getPleroma().getQuote();
+        } else if (visibleStatus.getQuote() != null) {
+            quote = visibleStatus.getQuote();
+        }
+
+        if (quote != null) {
+            if (quote.getContent() != null) {
+                newStatus = newStatus.setQuote(quote.getContent());
             }
-            if(visibleStatus.getQuote().getQuoteEmojis() != null) {
-                newStatus = newStatus.setQuoteEmojis(visibleStatus.getQuote().getQuoteEmojis());
+            if (quote.getQuoteEmojis() != null) {
+                newStatus = newStatus.setQuoteEmojis(quote.getQuoteEmojis());
             }
 
             newStatus = newStatus.setQuoteFullName(
-                    visibleStatus.getQuote().getAccount().getDisplayName()
+                quote.getAccount().getDisplayName()
             ).setQuoteUsername(
-                visibleStatus.getQuote().getAccount().getUsername()
+                quote.getAccount().getUsername()
             ).setQuotedStatusId(
-                visibleStatus.getQuote().getQuotedStatusId()
+                quote.getQuotedStatusId()
             ).setQuotedStatusUrl(
-                visibleStatus.getQuote().getQuotedStatusUrl()
+                quote.getQuotedStatusUrl()
             );
 
-            if (visibleStatus.getQuote().getAccount().getEmojis() != null) {
+            if (quote.getAccount().getEmojis() != null) {
                 newStatus = newStatus.setQuotedAccountEmojis(
-                    visibleStatus.getQuote().getAccount().getEmojis()
+                    quote.getAccount().getEmojis()
                 );
             }
-         }
+        }
 
         return newStatus.createStatusViewData();
     }
