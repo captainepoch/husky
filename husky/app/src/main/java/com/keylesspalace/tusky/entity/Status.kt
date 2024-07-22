@@ -53,7 +53,8 @@ data class Status(
     val card: Card?,
     var content_type: String? = null,
     val pleroma: PleromaStatus? = null,
-    var muted: Boolean = false /* set when either thread or user is muted */,
+    // Set when either thread or user is muted
+    var muted: Boolean = false,
     @SerializedName("quote")
     val quote: Quote? = null
 ) {
@@ -207,11 +208,18 @@ data class Status(
     }
 
     data class PleromaStatus(
-        @SerializedName("thread_muted") var threadMuted: Boolean?,
-        @SerializedName("conversation_id") val conversationId: String?,
-        @SerializedName("emoji_reactions") val emojiReactions: List<EmojiReaction>?,
-        @SerializedName("in_reply_to_account_acct") val inReplyToAccountAcct: String?,
-        @SerializedName("parent_visible") val parentVisible: Boolean?
+        @SerializedName("thread_muted")
+        var threadMuted: Boolean?,
+        @SerializedName("conversation_id")
+        val conversationId: String?,
+        @SerializedName("emoji_reactions")
+        val emojiReactions: List<EmojiReaction>?,
+        @SerializedName("in_reply_to_account_acct")
+        val inReplyToAccountAcct: String?,
+        @SerializedName("parent_visible")
+        val parentVisible: Boolean?,
+        @SerializedName("quote")
+        val quote: Quote? = null
     )
 
     data class Mention(
