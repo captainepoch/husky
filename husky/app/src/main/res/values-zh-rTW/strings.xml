@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="error_generic">應用程式出現異常</string>
-    <string name="error_network">網絡請求出錯，請檢查互聯網連接並重試</string>
+    <string name="error_network">網絡請求出錯，請檢查互聯網連接並重試！</string>
     <string name="error_empty">內容不能為空</string>
     <string name="error_invalid_domain">該域名無效</string>
     <string name="error_failed_app_registration">無法連接此伺服器</string>
@@ -48,7 +48,7 @@
     <string name="status_content_show_more">展開</string>
     <string name="status_content_show_less">摺疊</string>
     <string name="message_empty">沒有內容</string>
-    <string name="footer_empty">還沒有內容，向下拉動即可重新整理</string>
+    <string name="footer_empty">還沒有內容，向下拉動即可重新整理！</string>
     <string name="notification_reblog_format">%s 轉嘟了你的嘟文</string>
     <string name="notification_favourite_format">%s 收藏了你的嘟文</string>
     <string name="notification_follow_format">%s 關注了你</string>
