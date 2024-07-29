@@ -1,0 +1,12 @@
+Husky 1.6.0
+
+Changelog:
+  - Add: Quotes and quoting support, and navigating from quote to the
+    correspondent post.
+  - Add: AVIF support.
+  - Add: Expiring posts per account.
+  - Add: Replay videos preference (Global).
+  - Fix: Emoji reactions not showing.
+  - Fix: Possible fix for null notifications.
+  - Updated translations.
+  - Update dependencies.
