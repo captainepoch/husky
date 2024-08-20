@@ -31,7 +31,7 @@ import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class InstanceRepositoryImp(
+internal class InstanceRepositoryImp(
     private val accountManager: AccountManager,
     private val service: MastodonService,
     private val db: AppDatabase
@@ -76,7 +76,8 @@ class InstanceRepositoryImp(
             maxBioFields = instanceRemote.pleroma?.metadata?.fieldsLimits?.maxFields,
             version = instanceRemote.version,
             chatLimit = instanceRemote.chatLimit,
-            quotePosting = features.contains(QUOTE_POSTING)
+            quotePosting = features.contains(QUOTE_POSTING),
+            maxMediaItems = instanceRemote.maxMediaAttachments
         )
     }
 

@@ -7,5 +7,6 @@ data class InstanceInfo(
     val maxTootLength: Int = InstanceConstants.DEFAULT_CHARACTER_LIMIT,
     val maxBioLength: Int = InstanceConstants.DEFAULT_BIO_LENGTH,
     val maxBioFields: Int = InstanceConstants.DEFAULT_BIO_MAX_FIELDS,
-    val quotePosting: Boolean = false
+    val quotePosting: Boolean = false,
+    val maxMediaAttachments: Int = InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS
 )
