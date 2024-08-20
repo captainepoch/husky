@@ -35,7 +35,8 @@ data class InstanceEntity(
     val maxBioFields: Int?,
     val version: String?,
     val chatLimit: Int?,
-    val quotePosting: Boolean = false
+    val quotePosting: Boolean = false,
+    val maxMediaAttachments: Int?
 ) {
 
     fun toInstanceInfo(): InstanceInfo {
@@ -43,7 +44,8 @@ data class InstanceEntity(
             maxTootLength = maximumTootCharacters ?: InstanceConstants.DEFAULT_CHARACTER_LIMIT,
             maxBioLength = maxBioLength ?: InstanceConstants.DEFAULT_BIO_LENGTH,
             maxBioFields = maxBioFields ?: InstanceConstants.DEFAULT_BIO_MAX_FIELDS,
-            quotePosting = quotePosting
+            quotePosting = quotePosting,
+            maxMediaAttachments = maxMediaAttachments ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS
         )
     }
 }

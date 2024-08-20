@@ -35,6 +35,7 @@ data class Instance(
     @SerializedName("languages") val languages: List<String>,
     @SerializedName("contact_account") val contactAccount: Account,
     @SerializedName("max_toot_chars") val maxTootChars: Int?,
+    @SerializedName("max_media_attachments") val maxMediaAttachments: Int = -1,
     @SerializedName("max_bio_chars") val maxBioChars: Int?,
     @SerializedName("poll_limits") val pollLimits: PollLimits?,
     @SerializedName("chat_limit") val chatLimit: Int?,
@@ -42,7 +43,9 @@ data class Instance(
     @SerializedName("banner_upload_limit") val bannerUploadLimit: Long?,
     @SerializedName("description_limit") val descriptionLimit: Int?,
     @SerializedName("upload_limit") val uploadLimit: Long?,
-    @SerializedName("pleroma") val pleroma: InstancePleroma?
+    @SerializedName("pleroma") val pleroma: InstancePleroma?,
+    // Needed for Mastodon instances
+    @SerializedName("configuration") val mastodonConfig: MstdnConfiguration?
 ) {
     override fun hashCode(): Int {
         return uri.hashCode()
