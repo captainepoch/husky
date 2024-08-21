@@ -35,7 +35,7 @@ data class Instance(
     @SerializedName("languages") val languages: List<String>,
     @SerializedName("contact_account") val contactAccount: Account,
     @SerializedName("max_toot_chars") val maxTootChars: Int?,
-    @SerializedName("max_media_attachments") val maxMediaAttachments: Int = -1,
+    @SerializedName("max_media_attachments") val maxMediaAttachments: Int?,
     @SerializedName("max_bio_chars") val maxBioChars: Int?,
     @SerializedName("poll_limits") val pollLimits: PollLimits?,
     @SerializedName("chat_limit") val chatLimit: Int?,
