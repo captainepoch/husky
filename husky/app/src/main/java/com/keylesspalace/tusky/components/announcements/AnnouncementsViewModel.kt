@@ -71,7 +71,8 @@ class AnnouncementsViewModel(
                     either.asRight().pleroma?.metadata?.fieldsLimits?.maxFields,
                     either.asRight().version,
                     either.asRight().chatLimit,
-                    false
+                    false,
+                    0
                 )
         }
             .doOnSuccess {
