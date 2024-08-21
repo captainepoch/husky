@@ -67,7 +67,8 @@ open class CommonComposeViewModel(
             pollMaxLength = instance?.maxPollOptionLength ?: DEFAULT_MAX_OPTION_LENGTH,
             supportsScheduled = instance?.version?.let {
                 VersionUtils(it).supportsScheduledToots()
-            } ?: false
+            } ?: false,
+            maxMediaAttachments = instance?.maxMediaAttachments ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS
         )
     }
     val instanceMetadata: LiveData<ComposeInstanceMetadata> = nodeinfo.map { nodeinfo ->
@@ -132,7 +133,8 @@ open class CommonComposeViewModel(
                 chatLimit = instance.chatLimit,
                 maxBioLength = instance.descriptionLimit,
                 maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
-                quotePosting = features.contains(QUOTE_POSTING)
+                quotePosting = features.contains(QUOTE_POSTING),
+                maxMediaAttachments = instance.maxMediaAttachments
             )
         }
             .doOnSuccess {
@@ -418,7 +420,8 @@ data class ComposeInstanceParams(
     val chatLimit: Int,
     val pollMaxOptions: Int,
     val pollMaxLength: Int,
-    val supportsScheduled: Boolean
+    val supportsScheduled: Boolean,
+    val maxMediaAttachments: Int
 )
 
 data class ComposeInstanceMetadata(
