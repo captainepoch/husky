@@ -147,6 +147,7 @@ data class ConversationStatusEntity(
         return Status(
             id = id,
             url = url,
+            uri = url,
             account = account.toAccount(),
             inReplyToId = inReplyToId,
             inReplyToAccountId = inReplyToAccountId,
