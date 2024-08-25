@@ -26,6 +26,7 @@ import androidx.core.text.parseAsHtml
 import androidx.core.text.toHtml
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.keylesspalace.tusky.core.extensions.empty
 import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.TimelineAccountEntity
@@ -278,6 +279,7 @@ class TimelineRepositoryImpl(
             Status(
                 id = id,
                 url = status.url,
+                uri = status.url,
                 account = account.toAccount(gson),
                 inReplyToId = status.inReplyToId,
                 inReplyToAccountId = status.inReplyToAccountId,
@@ -335,6 +337,7 @@ class TimelineRepositoryImpl(
             Status(
                 id = status.serverId,
                 url = null, // no url for reblogs
+                uri = null,
                 account = this.reblogAccount!!.toAccount(gson),
                 inReplyToId = null,
                 inReplyToAccountId = null,
@@ -363,6 +366,7 @@ class TimelineRepositoryImpl(
             Status(
                 id = status.serverId,
                 url = status.url,
+                uri = status.url,
                 account = account.toAccount(gson),
                 inReplyToId = status.inReplyToId,
                 inReplyToAccountId = status.inReplyToAccountId,
@@ -475,7 +479,7 @@ fun Status.toEntity(
     val actionable = actionableStatus
     return TimelineStatusEntity(
         serverId = this.id,
-        url = actionable.url!!,
+        url = (actionable.url ?: actionableStatus.uri),
         timelineUserId = timelineUserId,
         authorServerId = actionable.account.id,
         inReplyToId = actionable.inReplyToId,

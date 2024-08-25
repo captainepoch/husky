@@ -213,7 +213,8 @@ public abstract class SFragment extends BaseFragment {
         final String id = status.getActionableId();
         final String accountId = status.getActionableStatus().getAccount().getId();
         final String accountUsername = status.getActionableStatus().getAccount().getUsername();
-        final String statusUrl = status.getActionableStatus().getUrl();
+        final String statusUrl = (status.getActionableStatus().getUrl() != null) ?
+                status.getActionableStatus().getUrl() : status.getActionableStatus().getUri();
         List<AccountEntity> accounts = accountManager.getValue().getAllAccountsOrderedByActive();
         String openAsTitle = null;
 

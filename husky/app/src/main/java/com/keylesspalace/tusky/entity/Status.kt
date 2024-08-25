@@ -29,6 +29,7 @@ import java.util.Date
 data class Status(
     var id: String,
     var url: String?, // not present if it's reblog
+    var uri: String?, // Mitra fix (shouldn't happen)
     val account: Account,
     @SerializedName("in_reply_to_id") var inReplyToId: String?,
     @SerializedName("in_reply_to_account_id") val inReplyToAccountId: String?,

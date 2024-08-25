@@ -360,6 +360,7 @@ class TimelineRepositoryTest {
             pinned = false,
             reblog = null,
             url = "http://example.com/statuses/$id",
+            uri = "http://example.com/statuses/$id",
             poll = null,
             card = null
         )
