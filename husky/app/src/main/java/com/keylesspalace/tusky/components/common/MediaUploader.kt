@@ -68,6 +68,7 @@ interface MediaUploader {
         inUri: Uri,
         videoLimit: Long,
         imageLimit: Long,
+        audioLimit: Long,
         filename: String?
     ): Single<PreparedMedia>
 
@@ -123,6 +124,7 @@ class MediaUploaderImpl(
         inUri: Uri,
         videoLimit: Long,
         imageLimit: Long,
+        audioLimit: Long,
         filename: String?
     ): Single<PreparedMedia> {
         return Single.fromCallable {

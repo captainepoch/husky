@@ -31,9 +31,11 @@ import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Emoji
-import com.keylesspalace.tusky.entity.NodeInfo
 import com.keylesspalace.tusky.entity.StickerPack
 import com.keylesspalace.tusky.network.MastodonApi
+import com.keylesspalace.tusky.util.PostFormat
+import com.keylesspalace.tusky.util.PostFormat.Companion
+import com.keylesspalace.tusky.util.PostFormat.PLAIN
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.VersionUtils
 import com.keylesspalace.tusky.util.map
@@ -41,8 +43,8 @@ import com.keylesspalace.tusky.util.withoutFirstWhich
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Singles
-import retrofit2.Response
 import java.util.Locale
+import retrofit2.Response
 
 open class CommonComposeViewModel(
     private val api: MastodonApi,
@@ -52,7 +54,6 @@ open class CommonComposeViewModel(
 ) : RxAwareViewModel() {
 
     protected val instance: MutableLiveData<InstanceEntity?> = MutableLiveData(null)
-    protected val nodeinfo: MutableLiveData<NodeInfo?> = MutableLiveData(null)
     protected val stickers: MutableLiveData<Array<StickerPack>> = MutableLiveData(emptyArray())
     val haveStickers: MutableLiveData<Boolean> = MutableLiveData(false)
     var tryFetchStickers = false
@@ -68,45 +69,11 @@ open class CommonComposeViewModel(
             supportsScheduled = instance?.version?.let {
                 VersionUtils(it).supportsScheduledToots()
             } ?: false,
-            maxMediaAttachments = instance?.maxMediaAttachments ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS
+            maxMediaAttachments = instance?.maxMediaAttachments ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS,
+            postFormats = instance?.postFormats ?: emptyList()
         )
     }
-    val instanceMetadata: LiveData<ComposeInstanceMetadata> = nodeinfo.map { nodeinfo ->
-        val software = nodeinfo?.software?.name ?: "mastodon"
 
-        if (software.equals("pleroma") || software.equals("akkoma")) {
-            hasNoAttachmentLimits = true
-            ComposeInstanceMetadata(
-                software = "pleroma",
-                supportsMarkdown = nodeinfo?.metadata?.postFormats?.contains("text/markdown")
-                    ?: false,
-                supportsBBcode = nodeinfo?.metadata?.postFormats?.contains("text/bbcode") ?: false,
-                supportsHTML = nodeinfo?.metadata?.postFormats?.contains("text/html") ?: false,
-                videoLimit = nodeinfo?.metadata?.uploadLimits?.general ?: STATUS_VIDEO_SIZE_LIMIT,
-                imageLimit = nodeinfo?.metadata?.uploadLimits?.general ?: STATUS_IMAGE_SIZE_LIMIT
-            )
-        } else if (software.equals("pixelfed")) {
-            ComposeInstanceMetadata(
-                software = "pixelfed",
-                supportsMarkdown = false,
-                supportsBBcode = false,
-                supportsHTML = false,
-                videoLimit = nodeinfo?.metadata?.config?.uploader?.maxPhotoSize?.let { it * 1024 }
-                    ?: STATUS_VIDEO_SIZE_LIMIT,
-                imageLimit = nodeinfo?.metadata?.config?.uploader?.maxPhotoSize?.let { it * 1024 }
-                    ?: STATUS_IMAGE_SIZE_LIMIT
-            )
-        } else {
-            ComposeInstanceMetadata(
-                software = "mastodon",
-                supportsMarkdown = nodeinfo?.software?.version?.contains("+glitch") ?: false,
-                supportsBBcode = false,
-                supportsHTML = nodeinfo?.software?.version?.contains("+glitch") ?: false,
-                videoLimit = STATUS_VIDEO_SIZE_LIMIT,
-                imageLimit = STATUS_IMAGE_SIZE_LIMIT
-            )
-        }
-    }
     val instanceStickers: LiveData<Array<StickerPack>> =
         stickers // .map { stickers -> HashMap<String,String>(stickers) }
 
@@ -134,7 +101,8 @@ open class CommonComposeViewModel(
                 maxBioLength = instance.descriptionLimit,
                 maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
                 quotePosting = features.contains(QUOTE_POSTING),
-                maxMediaAttachments = instance.maxMediaAttachments
+                maxMediaAttachments = instance.maxMediaAttachments,
+                postFormats = instance.pleroma?.metadata?.postsFormats?.map { PostFormat.getFormat(it) }
             )
         }
             .doOnSuccess {
@@ -151,28 +119,17 @@ open class CommonComposeViewModel(
                 Log.w(TAG, "error loading instance data", throwable)
             })
             .autoDispose()
-
-        api.getNodeinfoLinks().subscribe({ links ->
-            if (links.links.isNotEmpty()) {
-                api.getNodeinfo(links.links[0].href).subscribe({ ni ->
-                    nodeinfo.postValue(ni)
-                }, { err ->
-                    Log.d(TAG, "Failed to get nodeinfo", err)
-                }).autoDispose()
-            }
-        }, { err ->
-            Log.d(TAG, "Failed to get nodeinfo links", err)
-        }).autoDispose()
     }
 
     fun pickMedia(uri: Uri, filename: String?): LiveData<Either<Throwable, QueuedMedia>> {
         // We are not calling .toLiveData() here because we don't want to stop the process when
         // the Activity goes away temporarily (like on screen rotation).
         val liveData = MutableLiveData<Either<Throwable, QueuedMedia>>()
-        val imageLimit = instanceMetadata.value?.videoLimit ?: STATUS_VIDEO_SIZE_LIMIT
-        val videoLimit = instanceMetadata.value?.imageLimit ?: STATUS_IMAGE_SIZE_LIMIT
+        val imageLimit = 0L
+        val videoLimit = 0L
+        val audioLimit = 0L
 
-        mediaUploader.prepareMedia(uri, videoLimit, imageLimit, filename)
+        mediaUploader.prepareMedia(uri, videoLimit, imageLimit, audioLimit, filename)
             .map { (type, uri, size) ->
                 val mediaItems = media.value!!
                 if (!hasNoAttachmentLimits &&
@@ -216,8 +173,8 @@ open class CommonComposeViewModel(
             hasNoAttachmentLimits,
             anonymizeNames
         )
-        val imageLimit = instanceMetadata.value?.videoLimit ?: STATUS_VIDEO_SIZE_LIMIT
-        val videoLimit = instanceMetadata.value?.imageLimit ?: STATUS_IMAGE_SIZE_LIMIT
+        val imageLimit = 0L
+        val videoLimit = 0L
 
         media.value = media.value!! + mediaItem
         mediaToDisposable[mediaItem.localId] = mediaUploader
@@ -421,7 +378,8 @@ data class ComposeInstanceParams(
     val pollMaxOptions: Int,
     val pollMaxLength: Int,
     val supportsScheduled: Boolean,
-    val maxMediaAttachments: Int
+    val maxMediaAttachments: Int,
+    val postFormats: List<PostFormat>
 )
 
 data class ComposeInstanceMetadata(
@@ -430,7 +388,8 @@ data class ComposeInstanceMetadata(
     val supportsBBcode: Boolean,
     val supportsHTML: Boolean,
     val videoLimit: Long,
-    val imageLimit: Long
+    val imageLimit: Long,
+    val audioLimit: Long
 )
 
 /**

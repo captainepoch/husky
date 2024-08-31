@@ -72,7 +72,8 @@ class AnnouncementsViewModel(
                     either.asRight().version,
                     either.asRight().chatLimit,
                     false,
-                    0
+                    0,
+                    emptyList()
                 )
         }
             .doOnSuccess {
