@@ -870,12 +870,22 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
                     listener
             );
 
-            setupButtons(listener, status.getSenderId(), status.getContent().toString(),
-                    statusDisplayOptions);
+            String content = (status.getContent() != null) ? status.getContent().toString() : "";
+            setupButtons(listener, status.getSenderId(), content, statusDisplayOptions);
             setRebloggingEnabled(status.getRebloggingEnabled(), status.getVisibility());
 
-            setSpoilerAndContent(status.isExpanded(), status.getContent(), status.getSpoilerText(), status.getMentions(), status.getStatusEmojis(), status.getPoll(), statusDisplayOptions, listener);
-
+            if(status.getContent() != null) {
+                setSpoilerAndContent(
+                        status.isExpanded(),
+                        status.getContent(),
+                        status.getSpoilerText(),
+                        status.getMentions(),
+                        status.getStatusEmojis(),
+                        status.getPoll(),
+                        statusDisplayOptions,
+                        listener
+                );
+            }
             setDescriptionForStatus(status, statusDisplayOptions);
 
             setEmojiReactions(status.getEmojiReactions(), listener, status.getId());
