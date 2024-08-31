@@ -179,7 +179,6 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             true
         }
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
         window.statusBarColor = Color.BLACK
         window.sharedElementEnterTransition.addListener(object : NoopTransitionListener {
             override fun onTransitionEnd(transition: Transition) {
