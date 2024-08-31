@@ -30,6 +30,7 @@ import com.keylesspalace.tusky.entity.NewPoll
 import com.keylesspalace.tusky.entity.Poll
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.json.SpannedTypeAdapter
+import com.keylesspalace.tusky.util.PostFormat
 import com.keylesspalace.tusky.util.trimTrailingWhitespace
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -188,6 +189,19 @@ class Converters {
         return gson.fromJson(
             draftAttachmentListJson,
             object : TypeToken<List<DraftAttachment>>() {}.type
+        )
+    }
+
+    @TypeConverter
+    fun formatListToJson(formatList: List<PostFormat>): String? {
+        return gson.toJson(formatList)
+    }
+
+    @TypeConverter
+    fun jsonToPostFormatList(formatList: String?): List<PostFormat>? {
+        return gson.fromJson(
+            formatList,
+            object : TypeToken<List<PostFormat>>() {}.type
         )
     }
 }

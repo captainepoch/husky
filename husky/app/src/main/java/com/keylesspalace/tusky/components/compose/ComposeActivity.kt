@@ -101,6 +101,10 @@ import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.BBCodeEdit
 import com.keylesspalace.tusky.util.ComposeTokenizer
 import com.keylesspalace.tusky.util.HTMLEdit
+import com.keylesspalace.tusky.util.PostFormat
+import com.keylesspalace.tusky.util.PostFormat.BBCODE
+import com.keylesspalace.tusky.util.PostFormat.HTML
+import com.keylesspalace.tusky.util.PostFormat.MARKDOWN
 import com.keylesspalace.tusky.util.ThemeUtils
 import com.keylesspalace.tusky.util.combineLiveData
 import com.keylesspalace.tusky.util.combineOptionalLiveData
@@ -425,17 +429,15 @@ class ComposeActivity :
                 binding.composeScheduleButton.visible(instanceData.supportsScheduled)
             }
 
-            viewModel.instanceMetadata.observe { instanceData ->
-                if (instanceData.supportsMarkdown) {
-                    supportedFormattingSyntax.add("text/markdown")
-                }
+            viewModel.instanceParams.observe { instanceData ->
+                if(instanceData.postFormats.isEmpty()) {
+                    binding.composeFormattingSyntax.isEnabled = false
+                } else {
+                    binding.composeFormattingSyntax.isEnabled = true
 
-                if (instanceData.supportsBBcode) {
-                    supportedFormattingSyntax.add("text/bbcode")
-                }
-
-                if (instanceData.supportsHTML) {
-                    supportedFormattingSyntax.add("text/html")
+                    instanceData.postFormats.forEach {
+                        supportedFormattingSyntax.add(it.formatValue)
+                    }
                 }
 
                 if (supportedFormattingSyntax.size != 0) {
@@ -456,10 +458,10 @@ class ComposeActivity :
                     }
                 }
 
-                if (instanceData.software == "pleroma") {
+                /*if (instanceData.software == "pleroma") {
                     binding.composePreviewButton.visibility = View.VISIBLE
                     reenableAttachments()
-                }
+                }*/
             }
 
             viewModel.haveStickers.observe { haveStickers ->
@@ -737,23 +739,23 @@ class ComposeActivity :
         val htmlId = 3
 
         menu.menu.add(0, plaintextId, 0, R.string.action_plaintext)
-        if (viewModel.instanceMetadata.value?.supportsMarkdown == true) {
+        if (viewModel.instanceParams.value?.postFormats?.contains(MARKDOWN) == true) {
             menu.menu.add(0, markdownId, 0, R.string.action_markdown)
         }
 
-        if (viewModel.instanceMetadata.value?.supportsBBcode == true) {
+        if (viewModel.instanceParams.value?.postFormats?.contains(BBCODE) == true) {
             menu.menu.add(0, bbcodeId, 0, R.string.action_bbcode)
         }
 
-        if (viewModel.instanceMetadata.value?.supportsHTML == true) {
+        if (viewModel.instanceParams.value?.postFormats?.contains(HTML) == true) {
             menu.menu.add(0, htmlId, 0, R.string.action_html)
         }
 
         menu.setOnMenuItemClickListener { menuItem ->
             val choose = when (menuItem.itemId) {
-                markdownId -> "text/markdown"
-                bbcodeId -> "text/bbcode"
-                htmlId -> "text/html"
+                markdownId -> MARKDOWN.formatValue
+                bbcodeId -> BBCODE.formatValue
+                htmlId -> HTML.formatValue
                 else -> ""
             }
             suggestFormattingSyntax = choose

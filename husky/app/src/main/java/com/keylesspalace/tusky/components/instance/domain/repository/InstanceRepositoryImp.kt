@@ -28,6 +28,8 @@ import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.network.MastodonService
+import com.keylesspalace.tusky.util.PostFormat
+import com.keylesspalace.tusky.util.PostFormat.Companion
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -67,8 +69,10 @@ internal class InstanceRepositoryImp(
                 InstanceFeatures.getInstanceFeature(it)
             } ?: listOf()
 
-        return InstanceEntity(
-            instance = accountManager.activeAccount?.domain!!,
+        val postFormats = (instanceRemote.pleroma?.metadata?.postsFormats
+            ?: instanceRemote.mastodonConfig?.statuses?.postFormats) ?: emptyList()
+
+        return InstanceEntity(instance = accountManager.activeAccount?.domain!!,
             emojiList = null,
             maximumTootCharacters = instanceRemote.maxTootChars,
             maxPollOptions = instanceRemote.pollLimits?.maxOptions,
@@ -78,11 +82,10 @@ internal class InstanceRepositoryImp(
             version = instanceRemote.version,
             chatLimit = instanceRemote.chatLimit,
             quotePosting = features.contains(QUOTE_POSTING),
-            maxMediaAttachments = instanceRemote.maxMediaAttachments ?: (
-                instanceRemote.mastodonConfig?.statuses?.maxMediaAttachments
-                    ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS
-                )
-        )
+            maxMediaAttachments = instanceRemote.maxMediaAttachments
+                ?: (instanceRemote.mastodonConfig?.statuses?.maxMediaAttachments
+                    ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS),
+            postFormats = postFormats.map { PostFormat.getFormat(it) })
     }
 
     override fun getInstanceInfoDb(): InstanceEntity {
