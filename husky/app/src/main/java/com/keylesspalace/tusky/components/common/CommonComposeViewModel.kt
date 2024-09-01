@@ -34,8 +34,6 @@ import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.StickerPack
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.util.PostFormat
-import com.keylesspalace.tusky.util.PostFormat.Companion
-import com.keylesspalace.tusky.util.PostFormat.PLAIN
 import com.keylesspalace.tusky.util.RxAwareViewModel
 import com.keylesspalace.tusky.util.VersionUtils
 import com.keylesspalace.tusky.util.map
@@ -102,6 +100,12 @@ open class CommonComposeViewModel(
                 maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
                 quotePosting = features.contains(QUOTE_POSTING),
                 maxMediaAttachments = instance.maxMediaAttachments,
+                imageSizeLimit = (instance.uploadLimit
+                    ?: instance.mastodonConfig?.mediaAttachments?.imageSizeLimit)
+                    ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
+                videoSizeLimit = (instance.uploadLimit
+                    ?: instance.mastodonConfig?.mediaAttachments?.videoSizeLimit)
+                    ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
                 postFormats = instance.pleroma?.metadata?.postsFormats?.map { PostFormat.getFormat(it) }
             )
         }
@@ -125,9 +129,9 @@ open class CommonComposeViewModel(
         // We are not calling .toLiveData() here because we don't want to stop the process when
         // the Activity goes away temporarily (like on screen rotation).
         val liveData = MutableLiveData<Either<Throwable, QueuedMedia>>()
-        val imageLimit = 0L
-        val videoLimit = 0L
-        val audioLimit = 0L
+        val imageLimit = instance.value?.imageSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE
+        val videoLimit = instance.value?.videoSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE
+        val audioLimit = instance.value?.videoSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE
 
         mediaUploader.prepareMedia(uri, videoLimit, imageLimit, audioLimit, filename)
             .map { (type, uri, size) ->
@@ -173,8 +177,8 @@ open class CommonComposeViewModel(
             hasNoAttachmentLimits,
             anonymizeNames
         )
-        val imageLimit = 0L
-        val videoLimit = 0L
+        val imageLimit = instance.value?.imageSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE
+        val videoLimit = instance.value?.videoSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE
 
         media.value = media.value!! + mediaItem
         mediaToDisposable[mediaItem.localId] = mediaUploader
@@ -369,8 +373,6 @@ fun <T> mutableLiveData(default: T) = MutableLiveData<T>().apply { value = defau
 
 const val DEFAULT_MAX_OPTION_COUNT = 4
 const val DEFAULT_MAX_OPTION_LENGTH = 25
-const val STATUS_VIDEO_SIZE_LIMIT: Long = 41943040 // 40MiB
-const val STATUS_IMAGE_SIZE_LIMIT: Long = 8388608 // 8MiB
 
 data class ComposeInstanceParams(
     val maxChars: Int,
@@ -380,16 +382,6 @@ data class ComposeInstanceParams(
     val supportsScheduled: Boolean,
     val maxMediaAttachments: Int,
     val postFormats: List<PostFormat>
-)
-
-data class ComposeInstanceMetadata(
-    val software: String,
-    val supportsMarkdown: Boolean,
-    val supportsBBcode: Boolean,
-    val supportsHTML: Boolean,
-    val videoLimit: Long,
-    val imageLimit: Long,
-    val audioLimit: Long
 )
 
 /**

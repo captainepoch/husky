@@ -10,5 +10,7 @@ data class InstanceInfo(
     val maxBioFields: Int = InstanceConstants.DEFAULT_BIO_MAX_FIELDS,
     val quotePosting: Boolean = false,
     val maxMediaAttachments: Int = InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS,
+    val imageSizeLimit: Long = InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
+    val videoSizeLimit: Long = InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
     val postFormats: List<PostFormat> = emptyList()
 )

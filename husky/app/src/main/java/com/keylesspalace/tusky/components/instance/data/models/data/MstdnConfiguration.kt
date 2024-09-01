@@ -18,7 +18,7 @@ data class MstdnConfigStatuses(
 
 data class MstdnStatusesMediaAttachment(
     @SerializedName("image_size_limit")
-    val imageSizeLimit: Int?,
+    val imageSizeLimit: Long?,
     @SerializedName("video_size_limit")
-    val videoSizeLimit: Int?
+    val videoSizeLimit: Long?
 )
