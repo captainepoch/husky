@@ -89,6 +89,7 @@ import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
+import com.keylesspalace.tusky.core.extensions.toMB
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.core.utils.InstanceConstants
@@ -807,26 +808,35 @@ class ChatActivity :
                 .observe { exceptionOrItem ->
                     contentInfoCompat?.releasePermission()
 
-                    if (exceptionOrItem.isLeft()) {
-                        val errorId = when (val exception = exceptionOrItem.asLeft()) {
+                    exceptionOrItem.asLeftOrNull()?.let {
+                        val errorId = when (it) {
                             is VideoSizeException -> {
-                                R.string.error_video_upload_size
-                            }
-                            is MediaSizeException -> {
-                                R.string.error_media_upload_size
+                                String.format(
+                                    getString(R.string.error_video_upload_size),
+                                    it.size.toMB().toString()
+                                )
                             }
                             is AudioSizeException -> {
-                                R.string.error_audio_upload_size
+                                String.format(
+                                    getString(R.string.error_audio_upload_size),
+                                    it.size.toMB().toString()
+                                )
                             }
                             is ImageSizeException -> {
-                                R.string.error_audio_upload_size
+                                String.format(
+                                    getString(R.string.error_image_upload_size),
+                                    it.size.toMB().toString()
+                                )
+                            }
+                            is MediaSizeException -> {
+                                "${getString(R.string.error_media_upload_size)}: ${it.size.toMB()}"
                             }
                             is VideoOrImageException -> {
-                                R.string.error_media_upload_image_or_video
+                                getString(R.string.error_media_upload_image_or_video)
                             }
                             else -> {
-                                Timber.e("That file could not be opened", exception)
-                                R.string.error_media_upload_opening
+                                Timber.d("That file could not be opened: $it")
+                                getString(R.string.error_media_upload_opening)
                             }
                         }
                         displayTransientError(errorId)
@@ -843,6 +853,13 @@ class ChatActivity :
 
     private fun displayTransientError(@StringRes stringId: Int) {
         val bar = Snackbar.make(binding.activityChat, stringId, Snackbar.LENGTH_LONG)
+        // necessary so snackbar is shown over everything
+        bar.view.elevation = resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
+        bar.show()
+    }
+
+    private fun displayTransientError(message: String) {
+        val bar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         // necessary so snackbar is shown over everything
         bar.view.elevation = resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
         bar.show()

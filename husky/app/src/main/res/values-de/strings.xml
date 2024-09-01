@@ -10,8 +10,8 @@
     <string name="error_authorization_denied">Autorisierung fehlgeschlagen.</string>
     <string name="error_retrieving_oauth_token">Es konnte kein Login-Token abgerufen werden.</string>
     <string name="error_compose_character_limit">Der Beitrag ist zu lang!</string>
-    <string name="error_image_upload_size">Die Datei muss kleiner als 8 MB sein.</string>
-    <string name="error_video_upload_size">Videodateien müssen kleiner als 40 MB sein.</string>
+    <string name="error_image_upload_size">Die Datei muss kleiner als %s MB sein.</string>
+    <string name="error_video_upload_size">Videodateien müssen kleiner als %s MB sein.</string>
     <string name="error_media_upload_type">Dieser Dateityp darf nicht hochgeladen werden.</string>
     <string name="error_media_upload_opening">Die Datei konnte nicht geöffnet werden.</string>
     <string name="error_media_upload_permission">Eine Leseberechtigung wird für das Hochladen der Mediendatei benötigt.</string>
@@ -419,7 +419,7 @@
     <string name="action_access_scheduled_toot">Geplante Beiträe</string>
     <string name="action_schedule_toot">Beitrag planen</string>
     <string name="action_reset_schedule">Zurücksetzen</string>
-    <string name="error_audio_upload_size">Audiodateien müssen kleiner als 40 MB sein.</string>
+    <string name="error_audio_upload_size">Audiodateien müssen kleiner als %s MB sein.</string>
     <string name="title_bookmarks">Lesezeichen</string>
     <string name="action_bookmark">Lesezeichen</string>
     <string name="action_view_bookmarks">Lesezeichen</string>

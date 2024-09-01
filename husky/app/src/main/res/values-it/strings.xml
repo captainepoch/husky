@@ -10,8 +10,8 @@
     <string name="error_authorization_denied">L\'autorizzazione è stata negata.</string>
     <string name="error_retrieving_oauth_token">Errore nell\'acquisizione del token di accesso.</string>
     <string name="error_compose_character_limit">Lo stato è troppo lungo!</string>
-    <string name="error_image_upload_size">La dimensione dei file immagine deve essere inferiore a 8 MB.</string>
-    <string name="error_video_upload_size">La dimensione dei file video deve essere inferiore a 40 MB.</string>
+    <string name="error_image_upload_size">La dimensione dei file immagine deve essere inferiore a %s MB.</string>
+    <string name="error_video_upload_size">La dimensione dei file video deve essere inferiore a %s MB.</string>
     <string name="error_media_upload_type">Questo tipo di file non può essere caricato.</string>
     <string name="error_media_upload_opening">Questo file non può essere aperto.</string>
     <string name="error_media_upload_permission">Il permesso di lettura della scheda sd è richiesto.</string>
@@ -461,7 +461,7 @@
     <string name="action_unmute_conversation">Smetti di silenziare conversazione</string>
     <string name="action_mute_conversation">Silenzia conversazione</string>
     <string name="notification_follow_request_format">%s ha chiesto di seguirti</string>
-    <string name="error_audio_upload_size">La dimensione dei file audio deve essere inferiore a 40 MB.</string>
+    <string name="error_audio_upload_size">La dimensione dei file audio deve essere inferiore a %s MB.</string>
     <string name="action_unmute_desc">Smetti di silenziare %s</string>
     <string name="notification_follow_request_name">Richieste di seguirti</string>
     <string name="account_note_saved">Salvato!</string>
