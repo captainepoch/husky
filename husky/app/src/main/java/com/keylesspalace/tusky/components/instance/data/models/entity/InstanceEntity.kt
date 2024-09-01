@@ -28,7 +28,8 @@ import com.keylesspalace.tusky.util.PostFormat.PLAIN
 @Entity
 @TypeConverters(Converters::class)
 data class InstanceEntity(
-    @field:PrimaryKey var instance: String,
+    @field:PrimaryKey
+    var instance: String,
     val emojiList: List<Emoji>?,
     val maximumTootCharacters: Int?,
     val maxPollOptions: Int?,
@@ -39,6 +40,8 @@ data class InstanceEntity(
     val chatLimit: Int?,
     val quotePosting: Boolean = false,
     val maxMediaAttachments: Int?,
+    val imageSizeLimit: Long?,
+    val videoSizeLimit: Long?,
     val postFormats: List<PostFormat>?
 ) {
 
@@ -49,6 +52,8 @@ data class InstanceEntity(
             maxBioFields = maxBioFields ?: InstanceConstants.DEFAULT_BIO_MAX_FIELDS,
             quotePosting = quotePosting,
             maxMediaAttachments = maxMediaAttachments ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS,
+            imageSizeLimit = imageSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
+            videoSizeLimit = videoSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
             postFormats = postFormats ?: emptyList()
         )
     }

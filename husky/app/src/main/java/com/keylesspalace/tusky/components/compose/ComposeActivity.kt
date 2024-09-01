@@ -77,6 +77,7 @@ import com.keylesspalace.tusky.appstore.Event
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.StatusPreviewEvent
 import com.keylesspalace.tusky.components.common.AudioSizeException
+import com.keylesspalace.tusky.components.common.ImageSizeException
 import com.keylesspalace.tusky.components.common.MediaSizeException
 import com.keylesspalace.tusky.components.common.VideoOrImageException
 import com.keylesspalace.tusky.components.common.VideoSizeException
@@ -1420,6 +1421,9 @@ class ComposeActivity :
                                 R.string.error_media_upload_size
                             }
                             is AudioSizeException -> {
+                                R.string.error_audio_upload_size
+                            }
+                            is ImageSizeException -> {
                                 R.string.error_audio_upload_size
                             }
                             is VideoOrImageException -> {

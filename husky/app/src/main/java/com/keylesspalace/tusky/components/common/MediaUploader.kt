@@ -37,12 +37,12 @@ import com.keylesspalace.tusky.util.randomAlphanumericString
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 
 sealed class UploadEvent {
     data class ProgressEvent(val percentage: Int) : UploadEvent()
@@ -76,8 +76,9 @@ interface MediaUploader {
         Observable<UploadEvent>
 }
 
-class AudioSizeException : Exception()
-class VideoSizeException : Exception()
+class AudioSizeException(val size: Long) : Exception()
+class VideoSizeException(val size: Long) : Exception()
+class ImageSizeException(val size: Long) : Exception()
 class MediaSizeException : Exception()
 class MediaTypeException : Exception()
 class CouldNotOpenFileException : Exception()
@@ -154,6 +155,7 @@ class MediaUploaderImpl(
                 Log.w(TAG, e)
                 uri = inUri
             }
+
             if (mediaSize == MEDIA_SIZE_UNKNOWN) {
                 throw CouldNotOpenFileException()
             }
@@ -163,16 +165,19 @@ class MediaUploaderImpl(
                 when (topLevelType) {
                     "video" -> {
                         if (mediaSize > videoLimit) {
-                            throw VideoSizeException()
+                            throw VideoSizeException(videoLimit)
                         }
                         PreparedMedia(QueuedMedia.VIDEO, uri, mediaSize)
                     }
                     "image" -> {
+                        if (mediaSize > imageLimit) {
+                            throw ImageSizeException(imageLimit)
+                        }
                         PreparedMedia(QueuedMedia.IMAGE, uri, mediaSize)
                     }
                     "audio" -> {
-                        if (mediaSize > videoLimit) { // TODO: CHANGE!!11
-                            throw AudioSizeException()
+                        if (mediaSize > videoLimit) {
+                            throw AudioSizeException(audioLimit)
                         }
                         PreparedMedia(QueuedMedia.AUDIO, uri, mediaSize)
                     }

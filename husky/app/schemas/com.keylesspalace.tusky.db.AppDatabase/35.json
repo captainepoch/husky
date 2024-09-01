@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 35,
-    "identityHash": "86d9a36f852ccadc79ed84a3450a95be",
+    "identityHash": "1b44ec393215fa874cdb1dacfe79905d",
     "entities": [
       {
         "tableName": "TootEntity",
@@ -419,7 +419,7 @@
       },
       {
         "tableName": "InstanceEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`instance` TEXT NOT NULL, `emojiList` TEXT, `maximumTootCharacters` INTEGER, `maxPollOptions` INTEGER, `maxPollOptionLength` INTEGER, `maxBioLength` INTEGER, `maxBioFields` INTEGER, `version` TEXT, `chatLimit` INTEGER, `quotePosting` INTEGER NOT NULL, `maxMediaAttachments` INTEGER, `postFormats` TEXT, PRIMARY KEY(`instance`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`instance` TEXT NOT NULL, `emojiList` TEXT, `maximumTootCharacters` INTEGER, `maxPollOptions` INTEGER, `maxPollOptionLength` INTEGER, `maxBioLength` INTEGER, `maxBioFields` INTEGER, `version` TEXT, `chatLimit` INTEGER, `quotePosting` INTEGER NOT NULL, `maxMediaAttachments` INTEGER, `imageSizeLimit` INTEGER, `videoSizeLimit` INTEGER, `postFormats` TEXT, PRIMARY KEY(`instance`))",
         "fields": [
           {
             "fieldPath": "instance",
@@ -484,6 +484,18 @@
           {
             "fieldPath": "maxMediaAttachments",
             "columnName": "maxMediaAttachments",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageSizeLimit",
+            "columnName": "imageSizeLimit",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "videoSizeLimit",
+            "columnName": "videoSizeLimit",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -1087,7 +1099,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '86d9a36f852ccadc79ed84a3450a95be')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1b44ec393215fa874cdb1dacfe79905d')"
     ]
   }
 }

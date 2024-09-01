@@ -23,6 +23,7 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.components.instance.data.models.data.Instance
 import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
 import com.keylesspalace.tusky.core.functional.Either
+import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Announcement
@@ -73,6 +74,8 @@ class AnnouncementsViewModel(
                     either.asRight().chatLimit,
                     false,
                     0,
+                    InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
+                    InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
                     emptyList()
                 )
         }

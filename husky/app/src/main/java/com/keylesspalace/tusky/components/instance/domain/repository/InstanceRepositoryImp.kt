@@ -85,6 +85,12 @@ internal class InstanceRepositoryImp(
             maxMediaAttachments = instanceRemote.maxMediaAttachments
                 ?: (instanceRemote.mastodonConfig?.statuses?.maxMediaAttachments
                     ?: InstanceConstants.DEFAULT_STATUS_MEDIA_ITEMS),
+            imageSizeLimit = (instanceRemote.uploadLimit
+                ?: instanceRemote.mastodonConfig?.mediaAttachments?.imageSizeLimit)
+                ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
+            videoSizeLimit = (instanceRemote.uploadLimit
+                ?: instanceRemote.mastodonConfig?.mediaAttachments?.videoSizeLimit)
+                ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
             postFormats = postFormats.map { PostFormat.getFormat(it) })
     }
 
