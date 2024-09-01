@@ -764,15 +764,16 @@ class ChatActivity :
                     view.elevation =
                         resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
                 }.show()
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             }
         }
     }
 
     private fun initiateMediaPicking() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-
-        intent.type = "*/*" // Pleroma allows anything
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+        }
         startActivityForResult(intent, MEDIA_PICK_RESULT)
     }
 
