@@ -79,7 +79,7 @@ interface MediaUploader {
 class AudioSizeException(val size: Long) : Exception()
 class VideoSizeException(val size: Long) : Exception()
 class ImageSizeException(val size: Long) : Exception()
-class MediaSizeException : Exception()
+class MediaSizeException(val size: Long) : Exception()
 class MediaTypeException : Exception()
 class CouldNotOpenFileException : Exception()
 
@@ -183,10 +183,9 @@ class MediaUploaderImpl(
                     }
                     else -> {
                         if (mediaSize > videoLimit) {
-                            throw MediaSizeException()
+                            throw MediaSizeException(videoLimit)
                         }
                         PreparedMedia(QueuedMedia.UNKNOWN, uri, mediaSize)
-                        // throw MediaTypeException()
                     }
                 }
             } else {

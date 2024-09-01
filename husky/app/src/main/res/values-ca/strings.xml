@@ -9,7 +9,7 @@
     <string name="error_authorization_denied">S\'ha denegat l\'autorització.</string>
     <string name="error_retrieving_oauth_token">L\'obtenció del token d\'inici de sessió ha fallat.</string>
     <string name="error_compose_character_limit">L\'estat és massa llarg!</string>
-    <string name="error_image_upload_size">El fitxer ha de ser inferior a 8MB.</string>
+    <string name="error_image_upload_size">El fitxer ha de ser inferior a %sMB.</string>
     <string name="error_media_upload_type">Aquest tipus de fitxer no es pot pujar.</string>
     <string name="error_media_upload_opening">Aquest tipus de fitxer no es pot obrir.</string>
     <string name="error_media_upload_permission">Cal permís d\'accés al emmagatzematge.</string>
@@ -203,7 +203,7 @@
     <string name="message_empty">No hi ha res aquí.</string>
     <string name="action_unreblog">Elimina l\'impuls</string>
     <string name="error_network">S\'ha produït un error de connexió! Comprova la connexió i torna-ho a provar!</string>
-    <string name="error_video_upload_size">Els fitxers de vídeo han de pesar menys de 40 MB.</string>
+    <string name="error_video_upload_size">Els fitxers de vídeo han de pesar menys de %s MB.</string>
     <string name="status_media_hidden_title">Multimèdia amagada</string>
     <string name="status_content_show_less">Amaga</string>
     <string name="action_logout_confirm">Estàs segur de tancar la sessió de %1$s\?</string>
@@ -422,7 +422,7 @@
     <string name="list">Llista</string>
     <string name="post_lookup_error_format">S\'ha produït un error en cercar la publicació %s</string>
     <string name="no_scheduled_status">No tens cap estat planificat.</string>
-    <string name="error_audio_upload_size">Els fitxers d\'àudio han de ser més petits que 40MB.</string>
+    <string name="error_audio_upload_size">Els fitxers d\'àudio han de ser més petits que %sMB.</string>
     <string name="no_saved_status">No tens cap esborrany</string>
     <string name="warning_scheduling_interval">L\'interval mínim de planificació a Pleroma és de 5 minuts.</string>
     <string name="notification_follow_request_name">Peticions de seguiment</string>

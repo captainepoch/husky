@@ -21,9 +21,9 @@
     <string name="error_media_upload_permission">Потрібен дозвіл на читання медіа.</string>
     <string name="error_media_upload_opening">Файл не вдається відкрити.</string>
     <string name="error_media_upload_type">Файл такого типу неможливо завантажити.</string>
-    <string name="error_audio_upload_size">Аудіофайли повинні бути менше 40 МБ.</string>
-    <string name="error_video_upload_size">Відео повинне бути менше 40 МБ.</string>
-    <string name="error_image_upload_size">Файл повинен бути менше 8 МБ.</string>
+    <string name="error_audio_upload_size">Аудіофайли повинні бути менше %s МБ.</string>
+    <string name="error_video_upload_size">Відео повинне бути менше %s МБ.</string>
+    <string name="error_image_upload_size">Файл повинен бути менше %s МБ.</string>
     <string name="error_compose_character_limit">Статус занадто довгий!</string>
     <string name="error_no_web_browser_found">Не вдалося знайти веб-браузер, який можна використати.</string>
     <string name="error_empty">Не може бути порожнім.</string>

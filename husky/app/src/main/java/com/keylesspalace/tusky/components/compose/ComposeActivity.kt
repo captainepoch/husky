@@ -89,6 +89,7 @@ import com.keylesspalace.tusky.components.compose.view.ComposeOptionsListener
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.composeWithZwsp
 import com.keylesspalace.tusky.core.extensions.onTextChanged
+import com.keylesspalace.tusky.core.extensions.toMB
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.databinding.ActivityComposeBinding
@@ -897,6 +898,13 @@ class ComposeActivity :
         bar.show()
     }
 
+    private fun displayTransientError(message: String) {
+        val bar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+        // necessary so snackbar is shown over everything
+        bar.view.elevation = resources.getDimension(R.dimen.compose_activity_snackbar_elevation)
+        bar.show()
+    }
+
     private fun toggleHideMedia() {
         this.viewModel.toggleMarkSensitive()
     }
@@ -1415,23 +1423,32 @@ class ComposeActivity :
                     exceptionOrItem.asLeftOrNull()?.let {
                         val errorId = when (it) {
                             is VideoSizeException -> {
-                                R.string.error_video_upload_size
-                            }
-                            is MediaSizeException -> {
-                                R.string.error_media_upload_size
+                                String.format(
+                                    getString(R.string.error_video_upload_size),
+                                    it.size.toMB().toString()
+                                )
                             }
                             is AudioSizeException -> {
-                                R.string.error_audio_upload_size
+                                String.format(
+                                    getString(R.string.error_audio_upload_size),
+                                    it.size.toMB().toString()
+                                )
                             }
                             is ImageSizeException -> {
-                                R.string.error_audio_upload_size
+                                String.format(
+                                    getString(R.string.error_image_upload_size),
+                                    it.size.toMB().toString()
+                                )
+                            }
+                            is MediaSizeException -> {
+                                "${getString(R.string.error_media_upload_size)}: ${it.size.toMB()}"
                             }
                             is VideoOrImageException -> {
-                                R.string.error_media_upload_image_or_video
+                                getString(R.string.error_media_upload_image_or_video)
                             }
                             else -> {
                                 Timber.d("That file could not be opened: $it")
-                                R.string.error_media_upload_opening
+                                getString(R.string.error_media_upload_opening)
                             }
                         }
                         displayTransientError(errorId)

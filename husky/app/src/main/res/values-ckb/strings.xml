@@ -141,9 +141,8 @@
     <string name="error_media_upload_permission">مۆڵەت بۆ خوێندنەوەی میدیا پێویستە.</string>
     <string name="error_media_upload_opening">ئەم فایلە ناتوانرێت بکرێتەوە.</string>
     <string name="error_media_upload_type">ناتوانرێت ئەو جۆرە فایلە باربکرێت.</string>
-    <string name="error_audio_upload_size">فایلەکانی دەنگ دەبێت کەمتر بێت لە ٤٠MB.</string>
-    <string name="error_video_upload_size">پێویستە فایلەکانی ڤیدیۆ کەمتر لە 40 مێگابایت بن.</string>
-    <string name="error_image_upload_size">فایلەکە دەبێت کەمتر بێت لە 8 مێگابایت.</string>
+    <string name="error_video_upload_size">پێویستە فایلەکانی ڤیدیۆ کەمتر لە %s مێگابایت بن.</string>
+    <string name="error_image_upload_size">فایلەکە دەبێت کەمتر بێت لە %s مێگابایت.</string>
     <string name="error_compose_character_limit">ڕەستە زۆر درێژە!</string>
     <string name="error_retrieving_oauth_token">سەرکەوتوو نەبوو لە بەدەستهێنانی نیشانەی چوونەژوورەوە.</string>
     <string name="error_authorization_denied">ڕێپێدان ڕەتکرایەوە.</string>
