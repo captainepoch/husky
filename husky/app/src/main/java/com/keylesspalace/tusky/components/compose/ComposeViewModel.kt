@@ -29,8 +29,8 @@ import com.keylesspalace.tusky.components.common.MediaUploader
 import com.keylesspalace.tusky.components.common.mutableLiveData
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
 import com.keylesspalace.tusky.components.drafts.DraftHelper
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository
 import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.entity.NewPoll
 import com.keylesspalace.tusky.entity.Status
@@ -52,8 +52,8 @@ class ComposeViewModel(
     private val serviceClient: ServiceClient,
     private val draftHelper: DraftHelper,
     private val saveTootHelper: SaveTootHelper,
-    db: AppDatabase
-) : CommonComposeViewModel(api, accountManager, mediaUploader, db) {
+    instanceRepository: InstanceRepository
+) : CommonComposeViewModel(api, mediaUploader, instanceRepository) {
 
     private var replyingStatusAuthor: String? = null
     private var replyingStatusContent: String? = null

@@ -26,11 +26,11 @@ val viewModelsModule = module {
     }
 
     viewModel {
-        AnnouncementsViewModel(get(), get(), get(), get())
+        AnnouncementsViewModel(get(), get(), get())
     }
 
     viewModel {
-        ChatViewModel(get(), get(), get(), get(), get(), get())
+        ChatViewModel(get(), get(), get())
     }
 
     viewModel {

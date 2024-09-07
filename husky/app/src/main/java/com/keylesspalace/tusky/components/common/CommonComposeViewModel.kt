@@ -20,16 +20,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
-import com.keylesspalace.tusky.components.instance.data.models.InstanceFeatures
-import com.keylesspalace.tusky.components.instance.data.models.InstanceFeatures.QUOTE_POSTING
 import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository
 import com.keylesspalace.tusky.components.search.SearchType
+import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.core.utils.InstanceConstants
-import com.keylesspalace.tusky.db.AccountManager
-import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.StickerPack
 import com.keylesspalace.tusky.network.MastodonApi
@@ -40,16 +39,20 @@ import com.keylesspalace.tusky.util.map
 import com.keylesspalace.tusky.util.withoutFirstWhich
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.Singles
 import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 open class CommonComposeViewModel(
     private val api: MastodonApi,
-    private val accountManager: AccountManager,
     private val mediaUploader: MediaUploader,
-    private val db: AppDatabase
+    private val instanceRepository: InstanceRepository,
 ) : RxAwareViewModel() {
+
+    private var job: Job? = null
 
     protected val instance: MutableLiveData<InstanceEntity?> = MutableLiveData(null)
     protected val stickers: MutableLiveData<Array<StickerPack>> = MutableLiveData(emptyArray())
@@ -83,46 +86,17 @@ open class CommonComposeViewModel(
     protected val mediaToDisposable = mutableMapOf<Long, Disposable>()
 
     init {
-        Singles.zip(api.getCustomEmojis(), api.getInstance()) { emojis, instance ->
-            val features = instance.pleroma?.metadata?.features?.mapNotNull {
-                InstanceFeatures.getInstanceFeature(it)
-            } ?: listOf()
+        getInstanceConfig()
+    }
 
-            InstanceEntity(
-                instance = accountManager.activeAccount?.domain!!,
-                emojiList = emojis,
-                maximumTootCharacters = instance.maxTootChars,
-                maxPollOptions = instance.pollLimits?.maxOptions,
-                maxPollOptionLength = instance.pollLimits?.maxOptionChars,
-                version = instance.version,
-                chatLimit = instance.chatLimit,
-                maxBioLength = instance.descriptionLimit,
-                maxBioFields = instance.pleroma?.metadata?.fieldsLimits?.maxFields,
-                quotePosting = features.contains(QUOTE_POSTING),
-                maxMediaAttachments = instance.maxMediaAttachments,
-                imageSizeLimit = (instance.uploadLimit
-                    ?: instance.mastodonConfig?.mediaAttachments?.imageSizeLimit)
-                    ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
-                videoSizeLimit = (instance.uploadLimit
-                    ?: instance.mastodonConfig?.mediaAttachments?.videoSizeLimit)
-                    ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
-                postFormats = instance.pleroma?.metadata?.postsFormats?.map { PostFormat.getFormat(it) }
-            )
-        }
-            .doOnSuccess {
-                db.instanceDao().insertOrReplace(it)
+    private fun getInstanceConfig() {
+        job?.cancelIfActive()
+        job = viewModelScope.launch(Dispatchers.IO) {
+            instanceRepository.getInstanceInfo().collectLatest { instanceInfo ->
+                emoji.postValue(instanceInfo.asRight().emojiList)
+                instance.postValue(instanceInfo.asRight())
             }
-            .onErrorResumeNext(
-                db.instanceDao().loadMetadataForInstance(accountManager.activeAccount?.domain!!)
-            )
-            .subscribe({ instanceEntity ->
-                emoji.postValue(instanceEntity.emojiList)
-                instance.postValue(instanceEntity)
-            }, { throwable ->
-                // this can happen on network error when no cached data is available
-                Log.w(TAG, "error loading instance data", throwable)
-            })
-            .autoDispose()
+        }
     }
 
     fun pickMedia(uri: Uri, filename: String?): LiveData<Either<Throwable, QueuedMedia>> {

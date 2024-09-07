@@ -27,6 +27,7 @@ import com.keylesspalace.tusky.core.functional.Either
 import com.keylesspalace.tusky.core.utils.InstanceConstants
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.db.AppDatabase
+import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.network.MastodonService
 import com.keylesspalace.tusky.util.PostFormat
 import com.keylesspalace.tusky.util.PostFormat.Companion
@@ -40,7 +41,7 @@ internal class InstanceRepositoryImp(
     private val db: AppDatabase
 ) : InstanceRepository {
 
-    override fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
+    override suspend fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
         service.getInstanceData().run {
             val instanceBody = body()
             val instance = if (isSuccessful && instanceBody != null) {
@@ -49,8 +50,7 @@ internal class InstanceRepositoryImp(
                 getInstanceInfoDb()
             }
 
-            // TODO: get CustomEmojis before saving the instance
-            //db.instanceDao().insertOrReplace(instance)
+            db.instanceDao().insertOrReplace(instance)
             emit(Either.Right(instance))
         }
     }
@@ -72,8 +72,9 @@ internal class InstanceRepositoryImp(
         val postFormats = (instanceRemote.pleroma?.metadata?.postsFormats
             ?: instanceRemote.mastodonConfig?.statuses?.postFormats) ?: emptyList()
 
-        return InstanceEntity(instance = accountManager.activeAccount?.domain!!,
-            emojiList = null,
+        return InstanceEntity(
+            instance = accountManager.activeAccount?.domain!!,
+            emojiList = getEmojis(),
             maximumTootCharacters = instanceRemote.maxTootChars,
             maxPollOptions = instanceRemote.pollLimits?.maxOptions,
             maxPollOptionLength = instanceRemote.pollLimits?.maxOptionChars,
@@ -91,10 +92,17 @@ internal class InstanceRepositoryImp(
             videoSizeLimit = (instanceRemote.uploadLimit
                 ?: instanceRemote.mastodonConfig?.mediaAttachments?.videoSizeLimit)
                 ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
-            postFormats = postFormats.map { PostFormat.getFormat(it) })
+            postFormats = postFormats.map { PostFormat.getFormat(it) }
+        )
     }
 
     override fun getInstanceInfoDb(): InstanceEntity {
         return db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain)
+    }
+
+    override fun getEmojis(): List<Emoji> {
+        return runCatching {
+            service.getCustomEmojis().blockingGet()
+        }.getOrElse { emptyList() }
     }
 }
