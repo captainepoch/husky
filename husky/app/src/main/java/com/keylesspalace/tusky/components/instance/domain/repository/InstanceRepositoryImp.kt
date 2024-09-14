@@ -30,10 +30,10 @@ import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.network.MastodonService
 import com.keylesspalace.tusky.util.PostFormat
-import com.keylesspalace.tusky.util.PostFormat.Companion
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 
 internal class InstanceRepositoryImp(
     private val accountManager: AccountManager,
@@ -41,7 +41,18 @@ internal class InstanceRepositoryImp(
     private val db: AppDatabase
 ) : InstanceRepository {
 
+    private lateinit var instanceSettings: InstanceEntity
+
     override suspend fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
+        if (::instanceSettings.isInitialized) {
+            Timber.d("Instance settings already cached")
+
+            emit(Either.Right(instanceSettings))
+            return@flow
+        }
+
+        Timber.d("Instance settings not cached")
+
         service.getInstanceData().run {
             val instanceBody = body()
             val instance = if (isSuccessful && instanceBody != null) {
@@ -56,11 +67,31 @@ internal class InstanceRepositoryImp(
     }
 
     override fun getInstanceInfoRx(): Single<InstanceEntity> {
-        return service.getInstance().map {
-            parseInstance(it)
-        }.onErrorReturn {
-            getInstanceInfoDb()
+        return if (::instanceSettings.isInitialized) {
+            Timber.d("Instance settings already cached")
+
+            Single.just(instanceSettings)
+        } else {
+            Timber.d("Instance settings not cached")
+
+            service.getInstance().map {
+                parseInstance(it)
+            }.onErrorReturn {
+                getInstanceInfoDb()
+            }
         }
+    }
+
+    override fun getInstanceInfoDb(): InstanceEntity {
+        Timber.d("Getting instance settings from the DB")
+
+        return db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain)
+    }
+
+    override fun getEmojis(): List<Emoji> {
+        return runCatching {
+            service.getCustomEmojis().blockingGet()
+        }.getOrElse { emptyList() }
     }
 
     private fun parseInstance(instanceRemote: Instance): InstanceEntity {
@@ -94,15 +125,5 @@ internal class InstanceRepositoryImp(
                 ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
             postFormats = postFormats.map { PostFormat.getFormat(it) }
         )
-    }
-
-    override fun getInstanceInfoDb(): InstanceEntity {
-        return db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain)
-    }
-
-    override fun getEmojis(): List<Emoji> {
-        return runCatching {
-            service.getCustomEmojis().blockingGet()
-        }.getOrElse { emptyList() }
     }
 }
