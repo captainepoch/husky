@@ -61,7 +61,8 @@ internal class InstanceRepositoryImp(
                 getInstanceInfoDb()
             }
 
-            db.instanceDao().insertOrReplace(instance)
+            instanceSettings = instance
+
             emit(Either.Right(instance))
         }
     }
@@ -75,7 +76,9 @@ internal class InstanceRepositoryImp(
             Timber.d("Instance settings not cached")
 
             service.getInstance().map {
-                parseInstance(it)
+                instanceSettings = parseInstance(it)
+
+                instanceSettings
             }.onErrorReturn {
                 getInstanceInfoDb()
             }
@@ -103,7 +106,7 @@ internal class InstanceRepositoryImp(
         val postFormats = (instanceRemote.pleroma?.metadata?.postsFormats
             ?: instanceRemote.mastodonConfig?.statuses?.postFormats) ?: emptyList()
 
-        return InstanceEntity(
+        val instance = InstanceEntity(
             instance = accountManager.activeAccount?.domain!!,
             emojiList = getEmojis(),
             maximumTootCharacters = instanceRemote.maxTootChars,
@@ -125,5 +128,9 @@ internal class InstanceRepositoryImp(
                 ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE,
             postFormats = postFormats.map { PostFormat.getFormat(it) }
         )
+
+        db.instanceDao().insertOrReplace(instance)
+
+        return instance
     }
 }
