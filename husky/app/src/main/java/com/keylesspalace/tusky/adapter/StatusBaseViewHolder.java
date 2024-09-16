@@ -919,7 +919,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
         if (quote != null && this.quoteView != null) {
             CharSequence emojifiedText =
                 CustomEmojiHelper.emojify(quote, statusEmojis, this.quoteText);
-            LinkHelper.setClickableText(this.quoteText, emojifiedText, null, null);
+            LinkHelper.setClickableText(this.quoteText, emojifiedText, null, listener);
 
             CharSequence emojifiedName =
                 CustomEmojiHelper.emojify(quoteFullName, accountEmojis, this.quoteName, true);
