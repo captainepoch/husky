@@ -35,7 +35,7 @@
         android:usesCleartextTraffic="false">
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".testingclasses.TestingActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
 
