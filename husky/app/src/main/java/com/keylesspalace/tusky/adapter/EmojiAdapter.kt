@@ -30,13 +30,8 @@ class EmojiAdapter(
     private val animateEmojis: Boolean
 ) : RecyclerView.Adapter<EmojiAdapter.EmojiHolder>() {
 
-    private val emojis: List<Emoji>
-
-    init {
-        this.emojis =
-            emojiList.filter { emoji -> emoji.visibleInPicker == null || emoji.visibleInPicker }
-                .sortedBy { it.shortcode.lowercase() }
-    }
+    private val emojis: List<Emoji> = emojiList.filter { emoji -> emoji.visibleInPicker == null || emoji.visibleInPicker }
+        .sortedBy { it.shortcode.lowercase() }
 
     override fun getItemCount(): Int {
         return emojis.size

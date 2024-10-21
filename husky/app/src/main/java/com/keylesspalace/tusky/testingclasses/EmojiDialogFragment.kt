@@ -9,15 +9,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.keylesspalace.tusky.databinding.LayoutEmojiBinding
+import com.keylesspalace.tusky.entity.Emoji
 
-class EmojiDialogFragment : DialogFragment() {
+class EmojiDialogFragment(
+    private val emojis: List<Emoji>?
+) : DialogFragment() {
 
     private lateinit var binding: LayoutEmojiBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = LayoutEmojiBinding.inflate(layoutInflater)
 
-        binding.dialogViewPager.adapter = DialogViewPagerAdapter(requireActivity())
+        binding.dialogViewPager.adapter = DialogViewPagerAdapter(requireActivity(), emojis)
 
         TabLayoutMediator(
             binding.dialogTabLayout,
@@ -31,13 +34,16 @@ class EmojiDialogFragment : DialogFragment() {
             .create()
     }
 
-    class DialogViewPagerAdapter(private val activity: FragmentActivity) : FragmentStateAdapter(activity) {
+    class DialogViewPagerAdapter(
+        activity: FragmentActivity,
+        private val emojis: List<Emoji>?
+    ) : FragmentStateAdapter(activity) {
 
         override fun getItemCount(): Int = 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> Fragment1()
+                0 -> Fragment1(emojis ?: emptyList())
                 1 -> Fragment2()
                 else -> throw Exception("Nope")
             }
