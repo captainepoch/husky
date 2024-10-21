@@ -16,7 +16,7 @@ class TestingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.showEmojis.setOnClickListener {
-            val dialog = EmojiDialogFragment()
+            val dialog = EmojiDialogFragment(accountManager.activeAccount?.emojis)
             dialog.show(supportFragmentManager, "MyDialog")
         }
     }
