@@ -88,12 +88,13 @@ class EditProfileActivity : BaseActivity() {
     private var currentlyPicking: PickType = NOTHING
     private val accountFieldEditAdapter = AccountFieldEditAdapter()
 
-    private val takeImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-        if (it.notNull()) {
+    private val takeImage = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri.notNull()) {
             cropImage.launch(
                 CropImageContractOptions(
-                    it,
-                    CropImageOptions(
+                    uri, CropImageOptions(
                         fixAspectRatio = (currentlyPicking == AVATAR)
                     )
                 )
@@ -345,11 +346,7 @@ class EditProfileActivity : BaseActivity() {
         currentlyPicking = pickType
 
         val askForPermissions = if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
-            arrayOf(
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO,
-                Manifest.permission.READ_MEDIA_AUDIO
-            )
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
         } else {
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
