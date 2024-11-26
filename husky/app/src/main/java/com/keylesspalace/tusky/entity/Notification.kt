@@ -57,13 +57,15 @@ data class Notification(
         FOLLOW_REQUEST("follow_request"),
         CHAT_MESSAGE("pleroma:chat_mention"),
         MOVE("move"),
-        STATUS("status"); /* Mastodon 3.3.0rc1 */
+        // Mastodon 3.3.0rc1
+        STATUS("status"),
+        UPDATE("update");
 
         companion object {
 
             @JvmStatic
             fun byString(s: String): Type {
-                values().forEach {
+                entries.forEach {
                     if (s == it.presentation) {
                         return it
                     }
@@ -81,7 +83,8 @@ data class Notification(
                 FOLLOW_REQUEST,
                 CHAT_MESSAGE,
                 MOVE,
-                STATUS
+                STATUS,
+                UPDATE
             )
 
             val asStringList = asList.map { it.presentation }
@@ -118,7 +121,7 @@ data class Notification(
 
     companion object {
 
-        // for Pleroma compatibility that uses Mention type
+        // For Pleroma compatibility that uses Mention type
         @JvmStatic
         fun rewriteToStatusTypeIfNeeded(body: Notification, accountId: String): Notification {
             if (body.type == Type.MENTION && body.status != null) {
