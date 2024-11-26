@@ -261,6 +261,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
                         holder.setupActionListener(accountActionListener);
                     }
                 }
+
                 default:
             }
         }
@@ -297,7 +298,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
             NotificationViewData.Concrete concrete = ((NotificationViewData.Concrete) notification);
             switch (concrete.getType()) {
                 case MENTION:
-                case POLL: {
+                case POLL:
+                case UPDATE: {
                     if (concrete.getStatusViewData() != null && concrete.getStatusViewData().isMuted())
                         return VIEW_TYPE_MUTED_STATUS;
                     return VIEW_TYPE_STATUS;
