@@ -20,12 +20,11 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.ImageButton;
-
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
+import at.connyduck.sparkbutton.helpers.Utils;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.util.CustomEmojiHelper;
@@ -33,8 +32,6 @@ import com.keylesspalace.tusky.util.SmartLengthInputFilter;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
 import com.keylesspalace.tusky.util.StringUtils;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-
-import at.connyduck.sparkbutton.helpers.Utils;
 
 public class StatusViewHolder extends StatusBaseViewHolder {
     private static final InputFilter[] COLLAPSE_INPUT_FILTER = new InputFilter[]{SmartLengthInputFilter.INSTANCE};
@@ -97,6 +94,21 @@ public class StatusViewHolder extends StatusBaseViewHolder {
         statusInfo.setText(ownPoll ? R.string.poll_ended_created : R.string.poll_ended_voted);
         statusInfo.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_poll_24dp, 0, 0, 0);
         statusInfo.setCompoundDrawablePadding(Utils.dpToPx(statusInfo.getContext(), 10));
+        statusInfo.setPaddingRelative(Utils.dpToPx(statusInfo.getContext(), 28), 0, 0, 0);
+        statusInfo.setVisibility(View.VISIBLE);
+    }
+
+    void setEditInfo(String accountName) {
+        Context context = statusInfo.getContext();
+
+        statusInfo.setText(
+            context.getString(
+                R.string.notification_user_edited,
+                StringUtils.unicodeWrap(accountName)
+            )
+        );
+        statusInfo.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_edit_24, 0, 0, 0);
+        statusInfo.setCompoundDrawablePadding(Utils.dpToPx(statusInfo.getContext(), 16));
         statusInfo.setPaddingRelative(Utils.dpToPx(statusInfo.getContext(), 28), 0, 0, 0);
         statusInfo.setVisibility(View.VISIBLE);
     }
