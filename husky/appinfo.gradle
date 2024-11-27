@@ -11,8 +11,8 @@ buildVersions.encoding = "UTF-8"
 
 buildVersions.testinstrunner = "androidx.test.runner.AndroidJUnitRunner"
 
-buildVersions.versionCode = 203
-buildVersions.versionName = "1.6.0"
+buildVersions.versionCode = 204
+buildVersions.versionName = "1.6.1"
 
 // Beta version info
 def beta = [:]

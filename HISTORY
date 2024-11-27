@@ -1,3 +1,15 @@
+Husky 1.6.1 - 2024-11-27
+  - Updated to API 35 (Android 15).
+  - Updated dependencies and Gradle.
+  - Fix: Fix NPE when opening links from quoted statuses
+    (thanks mr64bit).
+  - Fix: Mitra crash on provided null URL.
+  - Fix: Not hide system toolbar icons.
+  - Fix: Notifications with 'update' type.
+  - Add: Post formats from instance endpoint.
+  - Add: Media file size limits to upload per instance config.
+  - Add: Cache instance settings to avoid multiple service calls.
+
 Husky 1.6.0 - 2024-07-29
   - Add: Quotes and quoting support, and navigating from quote to the
     correspondent post.
