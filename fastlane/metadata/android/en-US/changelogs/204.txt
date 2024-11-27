@@ -1,0 +1,13 @@
+Husky 1.6.1
+
+Changelog:
+  - Updated to API 35 (Android 15).
+  - Updated dependencies and Gradle.
+  - Fix: Fix NPE when opening links from quoted statuses
+    (thanks mr64bit).
+  - Fix: Mitra crash on provided null URL.
+  - Fix: Not hide system toolbar icons.
+  - Fix: Notifications with 'update' type.
+  - Add: Post formats from instance endpoint.
+  - Add: Media file size limits to upload per instance config.
+  - Add: Cache instance settings to avoid multiple service calls.
