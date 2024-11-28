@@ -529,6 +529,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("UPDATE `InstanceEntity` SET `maxMediaAttachments` = -1 WHERE `maxMediaAttachments` IS NULL");
+
+            // Create a temporal InstanceEntityTemp table (set maxMediaAttachments as INTEGER NOT NULL)
+            // Migrate from InstanceEntity table
+            // Rename InstanceEntityTemp to InstanceEntity
+
+            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `imageSizeLimit` INTEGER NOT NULL DEFAULT -1");
+            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `videoSizeLimit` INTEGER NOT NULL DEFAULT -1");
             database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `postFormats` TEXT");
         }
     };

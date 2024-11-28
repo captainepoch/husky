@@ -39,9 +39,9 @@ data class InstanceEntity(
     val version: String?,
     val chatLimit: Int?,
     val quotePosting: Boolean = false,
-    val maxMediaAttachments: Int?,
-    val imageSizeLimit: Long?,
-    val videoSizeLimit: Long?,
+    val maxMediaAttachments: Int? = -1,
+    val imageSizeLimit: Long? = -1,
+    val videoSizeLimit: Long? = -1,
     val postFormats: List<PostFormat>?
 ) {
 
