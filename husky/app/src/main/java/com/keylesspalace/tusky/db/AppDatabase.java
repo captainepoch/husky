@@ -528,16 +528,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final Migration MIGRATION_34_35 = new Migration(34, 35) {
 
         @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("UPDATE `InstanceEntity` SET `maxMediaAttachments` = -1 WHERE `maxMediaAttachments` IS NULL");
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE InstanceEntity ADD COLUMN postFormats TEXT");
 
-            // Create a temporal InstanceEntityTemp table (set maxMediaAttachments as INTEGER NOT NULL)
-            // Migrate from InstanceEntity table
-            // Rename InstanceEntityTemp to InstanceEntity
+            database.execSQL("CREATE TABLE InstanceEntity_temp (instance TEXT NOT NULL PRIMARY KEY, emojiList TEXT, maximumTootCharacters INTEGER, maxPollOptions INTEGER, maxPollOptionLength INTEGER, maxBioLength INTEGER, maxBioFields INTEGER, version TEXT, chatLimit INTEGER, quotePosting INTEGER NOT NULL, maxMediaAttachments INTEGER, imageSizeLimit INTEGER, videoSizeLimit INTEGER, postFormats TEXT)");
 
-            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `imageSizeLimit` INTEGER NOT NULL DEFAULT -1");
-            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `videoSizeLimit` INTEGER NOT NULL DEFAULT -1");
-            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `postFormats` TEXT");
+            database.execSQL("INSERT INTO InstanceEntity_temp (instance, emojiList, maximumTootCharacters, maxPollOptions, maxPollOptionLength, maxBioLength, maxBioFields, version, chatLimit, quotePosting, maxMediaAttachments, imageSizeLimit, videoSizeLimit, postFormats) SELECT instance, emojiList, maximumTootCharacters, maxPollOptions, maxPollOptionLength, maxBioLength, maxBioFields, version, chatLimit, quotePosting, COALESCE(maxMediaAttachments, -1), -1, -1, postFormats FROM InstanceEntity");
+            database.execSQL("DROP TABLE InstanceEntity");
+            database.execSQL("ALTER TABLE InstanceEntity_temp RENAME TO InstanceEntity");
         }
     };
 }
