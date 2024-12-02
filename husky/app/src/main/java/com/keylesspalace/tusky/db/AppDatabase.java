@@ -528,8 +528,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public static final Migration MIGRATION_34_35 = new Migration(34, 35) {
 
         @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE `InstanceEntity` ADD COLUMN `postFormats` TEXT");
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE InstanceEntity ADD COLUMN postFormats TEXT");
+
+            database.execSQL("CREATE TABLE InstanceEntity_temp (instance TEXT NOT NULL PRIMARY KEY, emojiList TEXT, maximumTootCharacters INTEGER, maxPollOptions INTEGER, maxPollOptionLength INTEGER, maxBioLength INTEGER, maxBioFields INTEGER, version TEXT, chatLimit INTEGER, quotePosting INTEGER NOT NULL, maxMediaAttachments INTEGER, imageSizeLimit INTEGER, videoSizeLimit INTEGER, postFormats TEXT)");
+
+            database.execSQL("INSERT INTO InstanceEntity_temp (instance, emojiList, maximumTootCharacters, maxPollOptions, maxPollOptionLength, maxBioLength, maxBioFields, version, chatLimit, quotePosting, maxMediaAttachments, imageSizeLimit, videoSizeLimit, postFormats) SELECT instance, emojiList, maximumTootCharacters, maxPollOptions, maxPollOptionLength, maxBioLength, maxBioFields, version, chatLimit, quotePosting, COALESCE(maxMediaAttachments, -1), -1, -1, postFormats FROM InstanceEntity");
+            database.execSQL("DROP TABLE InstanceEntity");
+            database.execSQL("ALTER TABLE InstanceEntity_temp RENAME TO InstanceEntity");
         }
     };
 }
