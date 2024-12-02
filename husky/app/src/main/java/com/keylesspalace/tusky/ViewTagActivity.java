@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky;
 
@@ -24,12 +29,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import com.keylesspalace.tusky.databinding.ActivityViewTagBinding;
 import com.keylesspalace.tusky.fragment.TimelineFragment;
 import java.util.Collections;
 
 public class ViewTagActivity extends BottomSheetActivity {
 
     private static final String HASHTAG = "hashtag";
+    private ActivityViewTagBinding binding;
 
     public static Intent getIntent(Context context, String tag) {
         Intent intent = new Intent(context, ViewTagActivity.class);
@@ -40,11 +47,12 @@ public class ViewTagActivity extends BottomSheetActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_tag);
+        binding = ActivityViewTagBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         String hashtag = getIntent().getStringExtra(HASHTAG);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = binding.includedToolbar.toolbar;
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
 
@@ -56,7 +64,7 @@ public class ViewTagActivity extends BottomSheetActivity {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = TimelineFragment.newHashtagInstance(Collections.singletonList(hashtag));
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
         fragmentTransaction.commit();
     }
 

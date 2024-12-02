@@ -20,6 +20,7 @@
 
 package com.keylesspalace.tusky;
 
+import static org.koin.java.KoinJavaComponent.inject;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +51,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import kotlin.Lazy;
-import static org.koin.java.KoinJavaComponent.inject;
 import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -90,6 +90,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         requesters = new HashMap<>();
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+
+        view.setFitsSystemWindows(true);
     }
 
     @Override
