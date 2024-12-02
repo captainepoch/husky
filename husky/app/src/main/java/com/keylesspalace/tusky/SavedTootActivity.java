@@ -39,6 +39,7 @@ import com.keylesspalace.tusky.appstore.EventHub;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.components.compose.ComposeActivity;
 import static com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
+import com.keylesspalace.tusky.databinding.ActivitySavedTootBinding;
 import com.keylesspalace.tusky.db.AppDatabase;
 import com.keylesspalace.tusky.db.TootDao;
 import com.keylesspalace.tusky.db.TootEntity;
@@ -56,7 +57,9 @@ import static org.koin.java.KoinJavaComponent.inject;
 public final class SavedTootActivity extends BaseActivity
     implements SavedTootAdapter.SavedTootAction
 {
-    // ui
+
+    // UI
+    private ActivitySavedTootBinding binding;
     private SavedTootAdapter adapter;
     private BackgroundMessageView errorMessageView;
     private List<TootEntity> toots = new ArrayList<>();
@@ -76,9 +79,10 @@ public final class SavedTootActivity extends BaseActivity
             .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
             .subscribe((__) -> this.fetchToots());
 
-        setContentView(R.layout.activity_saved_toot);
+        binding = ActivitySavedTootBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = binding.includedToolbar.toolbar;
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
         if(bar != null) {
@@ -87,8 +91,8 @@ public final class SavedTootActivity extends BaseActivity
             bar.setDisplayShowHomeEnabled(true);
         }
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        errorMessageView = findViewById(R.id.errorMessageView);
+        RecyclerView recyclerView = binding.recyclerView;
+        errorMessageView = binding.errorMessageView;
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
