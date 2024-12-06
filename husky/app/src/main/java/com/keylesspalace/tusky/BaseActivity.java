@@ -93,13 +93,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-
-        view.setFitsSystemWindows(true);
-    }
-
-    @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(HuskyApplication.getLocaleManager().setLocale(base));
     }
@@ -112,9 +105,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         return switch(name) {
             case "smallest" -> R.style.TextSizeSmallest;
             case "small" -> R.style.TextSizeSmall;
-            default -> R.style.TextSizeMedium;
             case "large" -> R.style.TextSizeLarge;
             case "largest" -> R.style.TextSizeLargest;
+            default -> R.style.TextSizeMedium;
         };
     }
 
