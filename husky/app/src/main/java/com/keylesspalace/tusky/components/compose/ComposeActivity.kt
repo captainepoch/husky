@@ -275,48 +275,50 @@ class ComposeActivity :
 
     private fun applyShareIntent(intent: Intent, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            /* Get incoming images being sent through a share action from another app. Only do this
-             * when savedInstanceState is null, otherwise both the images from the intent and the
-             * instance state will be re-queued. */
-            intent.type?.also { type ->
-                if (type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
-                    when (intent.action) {
-                        Intent.ACTION_SEND -> {
-                            intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.let { uri ->
-                                pickMedia(uri)
-                            }
-                        }
-                        Intent.ACTION_SEND_MULTIPLE -> {
-                            intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
-                                ?.forEach { uri ->
+            // Hack: Instance values are needed before sharing content
+            // TODO: Better way to make this flow
+            viewModel.instanceParams.observe(this) {
+                /* Get incoming images being sent through a share action from another app. Only do this
+                 * when savedInstanceState is null, otherwise both the images from the intent and the
+                 * instance state will be re-queued.
+                 */
+                intent.type?.also { type ->
+                    if (type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
+                        when (intent.action) {
+                            Intent.ACTION_SEND -> {
+                                intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.let { uri ->
                                     pickMedia(uri)
                                 }
-                        }
-                    }
-                } else if (type == "text/plain" && intent.action == Intent.ACTION_SEND) {
-                    val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
-                    val text = intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
-                    val shareBody = if (!subject.isNullOrBlank() && subject !in text) {
-                        subject + '\n' + text
-                    } else {
-                        text
-                    }
+                            }
 
-                    if (shareBody.isNotBlank()) {
-                        val start = binding.composeEditField.selectionStart.coerceAtLeast(0)
-                        val end = binding.composeEditField.selectionEnd.coerceAtLeast(0)
-                        val left = min(start, end)
-                        val right = max(start, end)
-                        binding.composeEditField.text.replace(
-                            left,
-                            right,
-                            shareBody,
-                            0,
-                            shareBody.length
-                        )
-                        // move edittext cursor to first when shareBody parsed
-                        binding.composeEditField.text.insert(0, "\n")
-                        binding.composeEditField.setSelection(0)
+                            Intent.ACTION_SEND_MULTIPLE -> {
+                                intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
+                                    ?.forEach { uri ->
+                                        pickMedia(uri)
+                                    }
+                            }
+                        }
+                    } else if (type == "text/plain" && intent.action == Intent.ACTION_SEND) {
+                        val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
+                        val text = intent.getStringExtra(Intent.EXTRA_TEXT).orEmpty()
+                        val shareBody = if (!subject.isNullOrBlank() && subject !in text) {
+                            subject + '\n' + text
+                        } else {
+                            text
+                        }
+
+                        if (shareBody.isNotBlank()) {
+                            val start = binding.composeEditField.selectionStart.coerceAtLeast(0)
+                            val end = binding.composeEditField.selectionEnd.coerceAtLeast(0)
+                            val left = min(start, end)
+                            val right = max(start, end)
+                            binding.composeEditField.text.replace(
+                                left, right, shareBody, 0, shareBody.length
+                            )
+                            // move edittext cursor to first when shareBody parsed
+                            binding.composeEditField.text.insert(0, "\n")
+                            binding.composeEditField.setSelection(0)
+                        }
                     }
                 }
             }
