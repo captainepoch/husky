@@ -1,5 +1,4 @@
 Husky 1.6.1 - 2024-11-27
-  - Updated to API 35 (Android 15).
   - Updated dependencies and Gradle.
   - Fix: Fix NPE when opening links from quoted statuses
     (thanks mr64bit).
