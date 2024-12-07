@@ -20,6 +20,7 @@
 
 package com.keylesspalace.tusky;
 
+import static org.koin.java.KoinJavaComponent.inject;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +51,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import kotlin.Lazy;
-import static org.koin.java.KoinJavaComponent.inject;
 import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -105,9 +105,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         return switch(name) {
             case "smallest" -> R.style.TextSizeSmallest;
             case "small" -> R.style.TextSizeSmall;
-            default -> R.style.TextSizeMedium;
             case "large" -> R.style.TextSizeLarge;
             case "largest" -> R.style.TextSizeLargest;
+            default -> R.style.TextSizeMedium;
         };
     }
 

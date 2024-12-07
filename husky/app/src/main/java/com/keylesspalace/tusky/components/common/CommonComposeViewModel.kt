@@ -42,8 +42,11 @@ import io.reactivex.disposables.Disposable
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
 open class CommonComposeViewModel(
@@ -92,16 +95,30 @@ open class CommonComposeViewModel(
     private fun getInstanceConfig() {
         job?.cancelIfActive()
         job = viewModelScope.launch(Dispatchers.IO) {
-            instanceRepository.getInstanceInfo().collectLatest { instanceInfo ->
-                emoji.postValue(instanceInfo.asRight().emojiList)
-                instance.postValue(instanceInfo.asRight())
-            }
+            val instanceInfo = getInstanceInfo()
+            emoji.postValue(instanceInfo.emojiList)
+            instance.postValue(instanceInfo)
         }
+    }
+
+    suspend fun getInstanceInfo(): InstanceEntity {
+        return instanceRepository.getInstanceInfo().last().asRight()
     }
 
     fun pickMedia(uri: Uri, filename: String?): LiveData<Either<Throwable, QueuedMedia>> {
         // We are not calling .toLiveData() here because we don't want to stop the process when
         // the Activity goes away temporarily (like on screen rotation).
+
+        // Needed to get the instance config before uploading anything
+        // TODO: nasty hack, improve
+        if (instance.value == null) {
+            instance.value = runBlocking {
+                async {
+                    getInstanceInfo()
+                }.await()
+            }
+        }
+
         val liveData = MutableLiveData<Either<Throwable, QueuedMedia>>()
         val imageLimit = instance.value?.imageSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE
         val videoLimit = instance.value?.videoSizeLimit ?: InstanceConstants.DEFAULT_STATUS_MEDIA_SIZE

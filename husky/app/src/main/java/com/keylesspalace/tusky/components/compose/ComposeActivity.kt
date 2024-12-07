@@ -274,10 +274,10 @@ class ComposeActivity :
     }
 
     private fun applyShareIntent(intent: Intent, savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            /* Get incoming images being sent through a share action from another app. Only do this
-             * when savedInstanceState is null, otherwise both the images from the intent and the
-             * instance state will be re-queued. */
+        if (savedInstanceState == null) {/* Get incoming images being sent through a share action from another app. Only do this
+                 * when savedInstanceState is null, otherwise both the images from the intent and the
+                 * instance state will be re-queued.
+                 */
             intent.type?.also { type ->
                 if (type.startsWith("image/") || type.startsWith("video/") || type.startsWith("audio/")) {
                     when (intent.action) {
@@ -286,6 +286,7 @@ class ComposeActivity :
                                 pickMedia(uri)
                             }
                         }
+
                         Intent.ACTION_SEND_MULTIPLE -> {
                             intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
                                 ?.forEach { uri ->
@@ -308,11 +309,7 @@ class ComposeActivity :
                         val left = min(start, end)
                         val right = max(start, end)
                         binding.composeEditField.text.replace(
-                            left,
-                            right,
-                            shareBody,
-                            0,
-                            shareBody.length
+                            left, right, shareBody, 0, shareBody.length
                         )
                         // move edittext cursor to first when shareBody parsed
                         binding.composeEditField.text.insert(0, "\n")

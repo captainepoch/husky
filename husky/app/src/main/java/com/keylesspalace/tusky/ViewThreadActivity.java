@@ -1,17 +1,22 @@
-/* Copyright 2017 Andrew Dawson
+/*
+ * Husky -- A Pleroma client for Android
  *
- * This file is a part of Tusky.
+ * Copyright (C) 2022  The Husky Developers
+ * Copyright (C) 2017  Andrew Dawson
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Tusky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
- * Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with Tusky; if not,
- * see <http://www.gnu.org/licenses>. */
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.keylesspalace.tusky;
 
@@ -24,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import com.keylesspalace.tusky.databinding.ActivityViewThreadBinding;
 import com.keylesspalace.tusky.fragment.ViewThreadFragment;
 
 public class ViewThreadActivity extends BottomSheetActivity {
@@ -44,15 +50,16 @@ public class ViewThreadActivity extends BottomSheetActivity {
     private static final String FRAGMENT_TAG = "ViewThreadFragment_";
 
     private int revealButtonState = REVEAL_BUTTON_HIDDEN;
-
+    private ActivityViewThreadBinding binding;
     private ViewThreadFragment fragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_thread);
+        binding = ActivityViewThreadBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = binding.includedToolbar.toolbar;
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
@@ -70,7 +77,7 @@ public class ViewThreadActivity extends BottomSheetActivity {
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment, FRAGMENT_TAG + id);
+        fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment, FRAGMENT_TAG + id);
         fragmentTransaction.commit();
     }
 
