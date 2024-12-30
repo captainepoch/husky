@@ -41,6 +41,7 @@ import android.transition.Transition
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -156,6 +157,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.toolbar.title = getPageTitle(position)
+                adjustScreenWakefulness()
             }
         })
 
@@ -186,6 +188,8 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                 window.sharedElementEnterTransition.removeListener(this)
             }
         })
+
+        adjustScreenWakefulness()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -456,6 +460,15 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                 "No app available to open images",
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    // Prevent this activity from dimming or sleeping the screen if, and only if, it is playing video or audio
+    private fun adjustScreenWakefulness() {
+        if (attachments!![binding.viewPager.currentItem].attachment.type == Attachment.Type.IMAGE) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 }
