@@ -38,6 +38,7 @@ import com.github.piasy.biv.loader.ImageLoader
 import com.github.piasy.biv.view.BigImageView
 import com.github.piasy.biv.view.GlideImageViewFactory
 import com.google.android.material.snackbar.Snackbar
+import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewImageBinding
 import com.keylesspalace.tusky.entity.Attachment
@@ -101,7 +102,7 @@ class ViewImageFragment : ViewMediaFragment() {
 
                     Snackbar.make(
                         binding.root,
-                        "Text copied to clipboard",
+                        R.string.description_media_description_copy_clipboard,
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
