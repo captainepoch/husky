@@ -18,6 +18,8 @@ package com.keylesspalace.tusky.fragment
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -26,6 +28,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -34,6 +37,7 @@ import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.ImageLoader
 import com.github.piasy.biv.view.BigImageView
 import com.github.piasy.biv.view.GlideImageViewFactory
+import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewImageBinding
 import com.keylesspalace.tusky.entity.Attachment
@@ -41,6 +45,7 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.visible
 import java.io.File
 import kotlin.math.abs
+import timber.log.Timber
 
 class ViewImageFragment : ViewMediaFragment() {
 
@@ -82,13 +87,35 @@ class ViewImageFragment : ViewMediaFragment() {
         binding.mediaDescription.text = description
         binding.captionSheet.visible(showingDescription)
 
+        if(showingDescription) {
+            binding.mediaDescription.setOnLongClickListener { view ->
+                ContextCompat.getSystemService(
+                    requireContext(),
+                    ClipboardManager::class.java
+                )?.let { clipboardManager ->
+                    Timber.d("Copying media description to clipboard")
+
+                    clipboardManager.setPrimaryClip(
+                        ClipData.newPlainText("mediaDescriptionLabel", description)
+                    )
+
+                    Snackbar.make(
+                        binding.root,
+                        "Text copied to clipboard",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+
+                true
+            }
+        }
         binding.photoView.setOnClickListener {
             onMediaTap()
         }
 
         startedTransition = false
         uri = Uri.parse(url)
-        if (previewUrl != null && !previewUrl.equals(url)) {
+        if (previewUrl != null && previewUrl != url) {
             previewUri = Uri.parse(previewUrl)
         }
         loadImageFromNetwork()
@@ -203,7 +230,7 @@ class ViewImageFragment : ViewMediaFragment() {
         binding.captionSheet.animate().alpha(alpha)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    binding.captionSheet?.visible(isDescriptionVisible)
+                    binding.captionSheet.visible(isDescriptionVisible)
                     animation.removeListener(this)
                 }
             }).start()
@@ -260,7 +287,7 @@ class ViewImageFragment : ViewMediaFragment() {
                 .load(uri)
                 .onlyRetrieveFromCache(true)
                 .dontAnimate()
-                .into(DummyCacheTarget(context!!, false))
+                .into(DummyCacheTarget(requireContext(), false))
         } else {
             // no need in cache lookup, just load full image
             showingPreview = false
@@ -280,7 +307,7 @@ class ViewImageFragment : ViewMediaFragment() {
     private val imageLoaderCallback = object : ImageLoader.Callback {
         override fun onSuccess(image: File?) {
             if (!showingPreview) {
-                binding.progressBar?.hide()
+                binding.progressBar.hide()
 
                 binding.photoView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE)
                 binding.photoView.ssiv?.orientation = SubsamplingScaleImageView.ORIENTATION_USE_EXIF
@@ -289,7 +316,7 @@ class ViewImageFragment : ViewMediaFragment() {
         }
 
         override fun onFail(error: Exception?) {
-            binding.progressBar?.hide()
+            binding.progressBar.hide()
         }
 
         override fun onCacheHit(imageType: Int, image: File?) {
