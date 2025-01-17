@@ -469,6 +469,7 @@
     <string name="description_status_media_no_description_placeholder">
         No description
     </string>
+    <string name="description_media_description_copy_clipboard">Description copied to the clipboard</string>
     <string name="description_status_reblogged">
         Repeated
     </string>
