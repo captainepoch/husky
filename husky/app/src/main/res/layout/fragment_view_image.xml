@@ -51,11 +51,11 @@
             <View
                 android:layout_width="24dp"
                 android:layout_height="3dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center_horizontal"
-                android:importantForAccessibility="no"
-                android:background="@drawable/ic_drag_indicator_horiz_24dp" />
+                android:background="@drawable/ic_drag_indicator_horiz_24dp"
+                android:importantForAccessibility="no" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -65,6 +65,7 @@
                     android:id="@+id/mediaDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
                     android:hyphenationFrequency="full"
                     android:lineSpacingMultiplier="1.1"
                     android:paddingLeft="8dp"
@@ -74,7 +75,11 @@
                     android:textColor="#eee"
                     android:textSize="?attr/status_text_medium"
                     tools:text="Some media description which might get quite long so that it won't easily fit in one line" />
+
             </androidx.core.widget.NestedScrollView>
+
         </LinearLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
