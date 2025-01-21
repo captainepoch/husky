@@ -470,4 +470,14 @@
     <string name="notification_emoji_name">絵文字反応</string>
     <string name="title_emoji_reacted_by">%s 誰が反応したか</string>
     <string name="pref_title_hide_muted_users">ミュートされたユーザーを隠す</string>
+    <string name="title_public_bubble">バブル</string>
+    <string name="title_announcements">お知らせ</string>
+    <string name="confirmation_domain_unmuted">%sの非表示を解除しました</string>
+    <string name="mute_domain_warning_dialog_ok">ドメイン全体を非表示にする</string>
+    <string name="pref_title_notification_filter_subscriptions">購読中の何人かが新しいポストを公開しました</string>
+    <string name="pref_default_post_expire_in">すべての公開ポストに期限を設定する</string>
+    <string name="pref_default_post_expire_in_summary">最小は1日で、0で無効になります。</string>
+    <string name="mute_domain_warning">本当に%sのすべてをブロックしますか？このドメインのコンテンツをあらゆる公開タイムラインや通知で見ることが無くなります。このドメインのフォロワーは削除されます。</string>
+    <string name="notification_subscription_format">%sがポストしました</string>
+    <string name="pref_default_post_expire_in_explanation">ポストの期限を最小で1日に設定することで、サーバーにより自動的に削除されるようになります。\n\nこれは\"アカウント設定\"から設定できます。</string>
 </resources>
