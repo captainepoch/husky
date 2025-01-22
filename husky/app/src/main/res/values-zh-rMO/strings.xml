@@ -18,14 +18,14 @@
     <string name="error_media_download_permission">需要授予 Husky 寫入儲存空間的權限</string>
     <string name="error_media_upload_image_or_video">無法在嘟文中同時插入影片和圖片</string>
     <string name="error_media_upload_sending">媒體檔案上傳失敗</string>
-    <string name="error_sender_account_gone">嘟文發送時出錯</string>
+    <string name="error_sender_account_gone">发送帖子时出错。</string>
     <string name="title_home">主頁</string>
     <string name="title_notifications">通知</string>
     <string name="title_public_local">本站時間軸</string>
     <string name="title_public_federated">跨站公開時間軸</string>
     <string name="title_direct_messages">私信</string>
     <string name="title_tab_preferences">標籤頁</string>
-    <string name="title_view_thread">嘟文</string>
+    <string name="title_view_thread">推文</string>
     <string name="title_statuses">嘟文</string>
     <string name="title_statuses_with_replies">嘟文和回覆</string>
     <string name="title_statuses_pinned">已置頂</string>
@@ -39,7 +39,7 @@
     <string name="title_drafts">草稿</string>
     <string name="title_licenses">開源授權</string>
     <string name="status_username_format">\@%s</string>
-    <string name="status_boosted_format">%s 轉嘟了</string>
+    <string name="status_boosted_format">%s 重复的</string>
     <string name="status_sensitive_media_title">敏感內容</string>
     <string name="status_media_hidden_title">已隱藏的照片或影片</string>
     <string name="status_sensitive_media_directions">點一下顯示</string>
@@ -49,8 +49,8 @@
     <string name="status_content_show_less">摺疊</string>
     <string name="message_empty">沒有內容</string>
     <string name="footer_empty">還沒有內容，向下拉動即可重新整理</string>
-    <string name="notification_reblog_format">%s 轉嘟了你的嘟文</string>
-    <string name="notification_favourite_format">%s 收藏了你的嘟文</string>
+    <string name="notification_reblog_format">%s 重复你的推送</string>
+    <string name="notification_favourite_format">%s 收藏你的发布</string>
     <string name="notification_follow_format">%s 關注了你</string>
     <string name="report_username_format">檢舉使用者 @%s 的濫用行為</string>
     <string name="report_comment_hint">更多評論？</string>
@@ -394,4 +394,11 @@
     <string name="hashtags">話題</string>
     <string name="edit_poll">編輯</string>
     <string name="action_edit">編輯</string>
+    <string name="error_audio_upload_size">音频文件必须小于40MB。</string>
+    <string name="title_public_bubble">泡泡</string>
+    <string name="title_bookmarks">书签</string>
+    <string name="title_domain_mutes">隐藏域</string>
+    <string name="title_scheduled_toot">预约发出</string>
+    <string name="title_announcements">通知</string>
+    <string name="notification_follow_request_format">%s 需要关注你</string>
 </resources>
