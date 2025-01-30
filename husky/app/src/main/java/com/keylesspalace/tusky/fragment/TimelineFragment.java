@@ -20,11 +20,6 @@
 
 package com.keylesspalace.tusky.fragment;
 
-import com.keylesspalace.tusky.entity.Quote;
-import static com.keylesspalace.tusky.util.MediaUtilsKt.deleteStaleCachedMedia;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
-import static org.koin.java.KoinJavaComponent.inject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,7 +47,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import at.connyduck.sparkbutton.SparkButton;
 import at.connyduck.sparkbutton.helpers.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.keylesspalace.tusky.AccountListActivity;
@@ -74,6 +68,7 @@ import com.keylesspalace.tusky.appstore.ReblogEvent;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent;
 import com.keylesspalace.tusky.appstore.UnfollowEvent;
+import com.keylesspalace.tusky.appstore.UnpinStatus;
 import com.keylesspalace.tusky.components.compose.ComposeActivity;
 import com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
 import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository;
@@ -102,10 +97,10 @@ import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -113,11 +108,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.functions.Function1;
+import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -468,7 +463,8 @@ public class TimelineFragment extends SFragment
                 break;
             }
         }
-        if(statuses.size() == 0) {
+
+        if(statuses.isEmpty()) {
             showNothing();
         }
     }
@@ -578,6 +574,8 @@ public class TimelineFragment extends SFragment
                         onPreferenceChanged(((PreferenceChangedEvent) event).getPreferenceKey());
                     } else if(event instanceof EmojiReactEvent) {
                         handleEmojiReactEvent((EmojiReactEvent) event);
+                    } else if(event instanceof UnpinStatus) {
+                        handleUnpinStatus((UnpinStatus) event);
                     }
                 });
             eventRegistered = true;
@@ -1288,7 +1286,7 @@ public class TimelineFragment extends SFragment
             progressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
             swipeRefreshLayout.setEnabled(true);
-            if(this.statuses.size() == 0) {
+            if(this.statuses.isEmpty()) {
                 this.showNothing();
             } else {
                 this.statusView.setVisibility(View.GONE);
@@ -1734,6 +1732,28 @@ public class TimelineFragment extends SFragment
         }
         Status status = statuses.get(pos).asRight();
         setEmojiReactForStatus(pos, status, event.getNewStatus());
+    }
+
+    private void handleUnpinStatus(UnpinStatus event) {
+        // Only delete the status if the user is at the "Pinned" tab
+        if (kind != Kind.USER_PINNED) {
+            return;
+        }
+
+        int pos = findStatusOrReblogPositionById(event.getStatus().getActionableId());
+
+        if (pos < 0) {
+            return;
+        }
+
+        Timber.d("Status at %d found", pos);
+
+        statuses.remove(pos);
+        updateAdapter();
+
+        if (statuses.isEmpty()) {
+            showNothing();
+        }
     }
 
     @Override
