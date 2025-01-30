@@ -26,3 +26,4 @@ data class DomainMuteEvent(val instance: String) : Dispatchable
 data class ChatMessageDeliveredEvent(val chatMsg: ChatMessage) : Dispatchable
 data class ChatMessageReceivedEvent(val chatMsg: ChatMessage) : Dispatchable
 data class AnnouncementReadEvent(val announcementId: String) : Dispatchable
+data class UnpinStatus(val status: Status) : Dispatchable
