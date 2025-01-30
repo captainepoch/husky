@@ -26,12 +26,15 @@ import com.keylesspalace.tusky.appstore.MuteEvent
 import com.keylesspalace.tusky.appstore.PollVoteEvent
 import com.keylesspalace.tusky.appstore.ReblogEvent
 import com.keylesspalace.tusky.appstore.StatusDeletedEvent
+import com.keylesspalace.tusky.appstore.UnpinStatus
 import com.keylesspalace.tusky.entity.DeletedStatus
 import com.keylesspalace.tusky.entity.Poll
 import com.keylesspalace.tusky.entity.Status
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
+import timber.log.Timber.Forest
 
 /**
  * Created by charlag on 3/24/18.
@@ -147,6 +150,10 @@ class TimelineCasesImpl(
         (if (pin) mastodonApi.pinStatus(status.id) else mastodonApi.unpinStatus(status.id))
             .subscribe({ updatedStatus ->
                 status.pinned = updatedStatus.pinned
+
+                if (pin.not()) {
+                    eventHub.dispatch(UnpinStatus(status))
+                }
             }, {})
             .addTo(this.cancelDisposable)
     }
