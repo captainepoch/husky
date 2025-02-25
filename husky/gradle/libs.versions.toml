@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.1"
 androidSvg = "1.4"
 androidx-appcompat = "1.7.0"
 androidx-browser = "1.8.0"
@@ -31,11 +31,11 @@ glide-image = "1.8.1"
 # Do not update: https://codeberg.org/husky/husky/pulls/121
 #noinspection GradleDependency
 glide-plugin-animation = "2.23.0"
-gradle-ktlint = "12.1.0"
+gradle-ktlint = "12.1.2"
 koin = "4.0.0"
-kotlin = "2.0.21"
-kotlinx = "1.9.0"
-ksp = "2.0.21-1.0.26"
+kotlin = "2.1.10"
+kotlinx = "1.10.1"
+ksp = "2.1.10-1.0.30"
 imageCropper = "4.6.0"
 markdownEdit = "1.0.0"
 material = "1.12.0"

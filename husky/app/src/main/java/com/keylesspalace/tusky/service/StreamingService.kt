@@ -42,6 +42,7 @@ import com.keylesspalace.tusky.entity.Notification
 import com.keylesspalace.tusky.entity.StreamEvent
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.isLessThan
+import java.util.concurrent.atomic.AtomicBoolean
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -62,9 +63,7 @@ class StreamingService : Service(), KoinComponent {
 
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent?): IBinder? { return null }
 
     private fun stopStreamingForId(id: Long) {
         if (id in sockets) {
@@ -83,10 +82,10 @@ class StreamingService : Service(), KoinComponent {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
         }
 
-        notificationManager.cancel(1337)
+        notificationManager.cancel(NOTIFICATION_ID)
 
         synchronized(serviceRunning) {
-            serviceRunning = false
+            serviceRunning.set(false)
         }
     }
 
@@ -97,7 +96,7 @@ class StreamingService : Service(), KoinComponent {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.getBooleanExtra(KEY_STOP_STREAMING, false)) {
-            Timber.d("Stream goes suya..")
+            Timber.d("Stream goes suya...")
             stopStreaming()
             stopSelfResult(startId)
             return START_NOT_STICKY
@@ -163,24 +162,26 @@ class StreamingService : Service(), KoinComponent {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_DETACH)
-            startForeground(1337, builder.build())
+            startForeground(NOTIFICATION_ID, builder.build())
         } else {
-            notificationManager.notify(1337, builder.build())
+            notificationManager.notify(NOTIFICATION_ID, builder.build())
         }
 
         synchronized(serviceRunning) {
-            serviceRunning = true
+            serviceRunning.set(true)
         }
 
         return START_NOT_STICKY
     }
 
     companion object {
+        private const val NOTIFICATION_ID = 1337
+
         const val CHANNEL_ID = "streaming"
         const val KEY_STOP_STREAMING = "stop_streaming"
 
         @JvmStatic
-        var serviceRunning = false
+        var serviceRunning = AtomicBoolean(false)
 
         @JvmStatic
         private fun startForegroundService(ctx: Context, intent: Intent) {
@@ -204,7 +205,7 @@ class StreamingService : Service(), KoinComponent {
         @JvmStatic
         fun stopStreaming(context: Context) {
             synchronized(serviceRunning) {
-                if (!serviceRunning) {
+                if (!serviceRunning.get()) {
                     return
                 }
 
@@ -213,7 +214,7 @@ class StreamingService : Service(), KoinComponent {
 
                 Timber.d("Stopping notifications streaming service...")
 
-                serviceRunning = false
+                serviceRunning.set(false)
 
                 startForegroundService(context, intent)
             }
