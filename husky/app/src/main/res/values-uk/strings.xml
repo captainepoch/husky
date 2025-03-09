@@ -204,4 +204,11 @@
     <string name="dialog_block_warning">Заблокувати @%s?</string>
     <string name="action_schedule_toot">Запланувати допис</string>
     <string name="dialog_whats_an_instance">Тут можна ввести адресу чи домен будь-якого екземпляра, наприклад shitposter.club, blob.cat, expired.mentality.rip і <a href="https://fediverse.network/pleroma?count=peers">інших!</a>\n\nЯкщо у вас ще немає облікового запису, ви можете ввести назву екземпляра, до якого хочете приєднатися, і створити там обліковий запис.\n\nЕкземпляр — це єдине місце, де розміщено ваш обліковий запис, але ви можете легко спілкуватися з іншими користувачами та стежити за ними, ніби ви перебуваєте на тому самому сайті.\n\nБільше інформації можна знайти на <a href="https://joinmastodon.org">joinmastodon.org</a>. \u0020</string>
+    <string name="mute_domain_warning">Ви впевнені, що хочете заблокувати всіх з %s? Ви не бачитимете вмісту з цього домену в публічних стрічках або в сповіщеннях. Ваші підписники з цього домену будуть видалені.</string>
+    <string name="dialog_mute_warning">Заглушити @%s?</string>
+    <string name="visibility_public">Публічний: опублікувати в загальнодоступній стрічці</string>
+    <string name="visibility_unlisted">Непублічний: не відображатиметься у публічних стрічках</string>
+    <string name="dialog_mute_hide_notifications">Приховати сповіщення</string>
+    <string name="visibility_private">Тільки підписники: допис тільки для ваших читачів</string>
+    <string name="visibility_direct">Приватний: тільки для згаданих користувачів</string>
 </resources>
