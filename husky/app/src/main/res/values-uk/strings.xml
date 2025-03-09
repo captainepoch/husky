@@ -145,7 +145,7 @@
     <string name="error_retrieving_oauth_token">Не вдалося отримати токін авторизації.</string>
     <string name="error_authorization_denied">Авторизація була відхилина.</string>
     <string name="error_authorization_unknown">Сталася помилка неопізнаної авторизації.</string>
-    <string name="error_failed_app_registration">Помилка входу з цією інстанцією.</string>
+    <string name="error_failed_app_registration">Помилка входу в цей екземпляр.</string>
     <string name="error_invalid_domain">Введено недійсний домен</string>
     <string name="action_reply_to">Відповісти</string>
     <string name="action_emoji_react">Відреагувати</string>
@@ -162,8 +162,8 @@
     <string name="action_enable_formatting_syntax">Ввімкнути %s</string>
     <string name="action_disable_formatting_syntax">Вимкнути %s</string>
     <string name="title_emoji_reacted_by">%s відреагував</string>
-    <string name="error_media_upload_size">Розмір файлу перевищує обмеження інстанції</string>
-    <string name="pref_title_default_formatting">Синтакс форматування за замовчуванням (якщо підтримується інстанцією)</string>
+    <string name="error_media_upload_size">Розмір файлу перевищує обмеження екземпляра</string>
+    <string name="pref_title_default_formatting">Синтакс форматування за замовчуванням (якщо підтримується екземпляром)</string>
     <string name="pref_title_notification_filter_emoji">мої дописи мають емодзі реакції</string>
     <string name="action_open_reblogger">Відкрити автора поширення</string>
     <string name="action_open_reblogged_by">Показати поширення</string>
@@ -236,4 +236,25 @@
     <string name="pref_title_bot_overlay">Відображати індикатор для ботів</string>
     <string name="pref_title_animate_gif_avatars">Анімувати GIF аватари</string>
     <string name="pref_title_gradient_for_media">Відображати кольоровий градієнт для прихованих медіа</string>
+    <string name="about_tusky_license">Husky це вільне та відкрите програмне забезпечення. Поширюється під ліцензією GNU General Public License версії 3. Ви можете переглянути ліцензію тут: https://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="pref_title_status_tabs">Вкладки</string>
+    <string name="pref_title_show_boosts">Відображати поширення</string>
+    <string name="pref_title_show_replies">Відображати відповіді</string>
+    <string name="pref_title_show_media_preview">Завантажувати перед перегляд медіа</string>
+    <string name="pref_title_proxy_settings">Проксі</string>
+    <string name="pref_title_http_proxy_settings">HTTP проксі</string>
+    <string name="pref_title_http_proxy_enable">Увімкнути HTTP проксі</string>
+    <string name="pref_title_http_proxy_server">Сервер HTTP проксі</string>
+    <string name="pref_title_http_proxy_port">Порт HTTP проксі</string>
+    <string name="pref_default_post_expire_in">Установити термін дії для всіх опублікованих дописів</string>
+    <string name="pref_publishing">Публікація (синхронізовано з сервером)</string>
+    <string name="pref_default_post_privacy">Стандартна видимість допису</string>
+    <string name="pref_default_media_sensitivity">Завжди позначати медіа чутливим</string>
+    <string name="pref_default_post_expire_in_summary">Мінімальне значення 1 день, 0 для вимкнення.</string>
+    <string name="pref_failed_to_sync">Не вдалось синхронізувати налаштування</string>
+    <string name="pref_main_nav_position">Розташування навігаційної панелі</string>
+    <string name="pref_main_nav_position_option_top">Зверху</string>
+    <string name="pref_main_nav_position_option_bottom">Внизу</string>
+    <string name="post_privacy_public">Публічний</string>
+    <string name="description_visiblity_public">Публічне</string>
 </resources>
