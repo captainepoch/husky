@@ -257,4 +257,27 @@
     <string name="pref_main_nav_position_option_bottom">Внизу</string>
     <string name="post_privacy_public">Публічний</string>
     <string name="description_visiblity_public">Публічне</string>
+    <string name="notification_boost_description">Сповіщення коли ваші дописи поширюються</string>
+    <string name="notification_favourite_description">Сповіщення коли ваші дописи вподобуються</string>
+    <string name="notification_subscription_description">Сповіщення, коли хтось, на кого ви підписані, публікує новий допис</string>
+    <string name="pref_default_post_expire_in_explanation">Встановіть мінімум 1 день для закінчення терміну дії дописів і їх автоматичного видалення сервером.\n\nЦе можна налаштувати в «Налаштування облікового запису».</string>
+    <string name="post_privacy_unlisted">Не публічний</string>
+    <string name="post_privacy_followers_only">Тільки для підписників</string>
+    <string name="pref_status_text_size">Розмір шрифту статусу</string>
+    <string name="status_text_size_smallest">Найменший</string>
+    <string name="status_text_size_small">Маленький</string>
+    <string name="status_text_size_medium">Середній</string>
+    <string name="status_text_size_large">Великий</string>
+    <string name="status_text_size_largest">Гігантський</string>
+    <string name="notification_mention_name">Нові згадки</string>
+    <string name="notification_mention_descriptions">Сповіщення про нові згадки</string>
+    <string name="notification_follow_name">Нові підписники</string>
+    <string name="notification_follow_description">Сповіщення про нових підписників</string>
+    <string name="notification_follow_request_description">Сповіщення про нові запити підписки</string>
+    <string name="notification_boost_name">Поширення</string>
+    <string name="notification_poll_name">Опитування</string>
+    <string name="notification_poll_description">Сповіщення про завершення опитувань</string>
+    <string name="notification_mention_format">%s згадав(ла) вас</string>
+    <string name="notification_summary_large">%1$s, %2$s, %3$s та ще %4$d інших</string>
+    <string name="notification_summary_medium">%1$s, %2$s, та %3$s</string>
 </resources>
