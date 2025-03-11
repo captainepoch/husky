@@ -339,7 +339,6 @@
     <string name="compose_active_account_description">Опублікувати з обліковки %1$s</string>
     <string name="notifications_apply_filter">Фільтр</string>
     <string name="filter_apply">Застосувати</string>
-    <string name="about_tusky_version"></string>
     <string name="license_description">Husky містить код та ресурси з таких проєктів з відкритим кодом:</string>
     <string name="send_toot_notification_saved_content">Копію допису збережено до ваших чернеток</string>
     <string name="pref_title_confirm_reblogs">Відображати діалог підтвердження перед поширенням</string>
