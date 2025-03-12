@@ -426,4 +426,24 @@
     <string name="pref_title_hide_top_toolbar">Приховати назву верхньої панелі інструментів</string>
     <string name="account_note_saved">Збережено!</string>
     <string name="duration_1_hour">1 година</string>
+    <string name="title_reblogged_by">Поширено</string>
+    <plurals name="reblogs">
+        <item quantity="one"><b>%s</b> поширення</item>
+        <item quantity="few"><b>%s</b> поширення</item>
+        <item quantity="many"><b>%s</b> поширень</item>
+        <item quantity="other"><b>%s</b> поширень</item>
+    </plurals>
+    <string name="title_list_timeline">Стрічка списку</string>
+    <string name="caption_blobmoji">Емодзі Blob, відомі з Android 4.4–7.1</string>
+    <string name="caption_twemoji">Стандартний Mastodon набір емодзі</string>
+    <string name="caption_notoemoji">Поточний набір емодзі Google</string>
+    <string name="title_favourited_by">Вподобано</string>
+    <string name="conversation_1_recipients">%1$s</string>
+    <string name="conversation_more_recipients">%1$s, %2$s та ще %3$d</string>
+    <string name="conversation_2_recipients">%1$s та %2$s</string>
+    <string name="description_visiblity_unlisted">Не публічне</string>
+    <string name="description_visiblity_direct">Приватне</string>
+    <string name="description_poll">Опитування з варіантами: %1$s, %2$s, %3$s, %4$s; %5$s</string>
+    <string name="compose_shortcut_long_label">Написати допис</string>
+    <string name="compose_preview_image_description">Дії для зображення %s</string>
 </resources>
