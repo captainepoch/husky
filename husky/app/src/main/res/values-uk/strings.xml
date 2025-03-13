@@ -446,7 +446,6 @@
     <string name="description_poll">Опитування з варіантами: %1$s, %2$s, %3$s, %4$s; %5$s</string>
     <string name="compose_shortcut_long_label">Написати допис</string>
     <string name="compose_preview_image_description">Дії для зображення %s</string>
-    <string name="about_tusky_version"></string>
     <string name="chats">Чати</string>
     <string name="chat_our_last_message"><b>Ви</b></string>
     <string name="error_chat_recipient_unavailable">Одержувач не підтримує Чати</string>
