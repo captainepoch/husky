@@ -548,4 +548,14 @@
     <string name="streaming_notification_description">Запущено живі сповіщення для:</string>
     <string name="action_expires_in_toot">Термін дії допису закінчується</string>
     <string name="description_status_edited">Відредаговано</string>
+    <string name="post_privacy_local">Локальна</string>
+    <string name="status_replied_to_format">Відповідь для %s</string>
+    <string name="status_edited">Відредаговано %s</string>
+    <string name="visibility_local">Місцевий: не федерувати цей допис</string>
+    <string name="add_account_error_loading_list">Під час завантаження списку сталася помилка. Будь ласка, спробуйте ще раз.</string>
+    <string name="add_account_error_adding_to_list">Під час додавання цього користувача до списку сталася помилка. Будь ласка, спробуйте ще раз.</string>
+    <string name="add_account_error_removing_from_list">Під час вилучення цього користувача зі списку сталася помилка. Будь ласка, спробуйте ще раз.</string>
+    <string name="post_privacy_direct">Приватне</string>
+    <string name="description_visibility_local">Локальне</string>
+    <string name="add_account_network_error_loading_list">Під час завантаження списку сталася помилка мережі. Будь ласка, спробуйте ще раз.</string>
 </resources>
