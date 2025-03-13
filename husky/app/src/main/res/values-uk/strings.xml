@@ -538,4 +538,14 @@
     <string name="pref_title_hide_live_notification_description">Приховати ім\'я користувача сповіщень у реальному часі</string>
     <string name="add_account_network_error_removing_from_list">Під час вилучення цього користувача зі списку сталася помилка мережі. Будь ласка, спробуйте ще раз.</string>
     <string name="add_account_network_error_adding_to_list">Під час додавання цього користувача до списку сталася помилка мережі. Будь ласка, спробуйте ще раз.</string>
+    <string name="pref_title_render_subscriptions_as_statuses">Відображати підписки як звичайні дописи</string>
+    <string name="attachment_type_image">Зображення</string>
+    <string name="attachment_type_video">Відео</string>
+    <string name="attachment_type_audio">Аудіо</string>
+    <string name="attachment_type_unknown">Вкладення</string>
+    <string name="link">Посилання</string>
+    <string name="streaming_notification_name">Сповіщення в реальному часі</string>
+    <string name="streaming_notification_description">Запущено живі сповіщення для:</string>
+    <string name="action_expires_in_toot">Термін дії допису закінчується</string>
+    <string name="description_status_edited">Відредаговано</string>
 </resources>
