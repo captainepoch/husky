@@ -536,4 +536,6 @@
     <string name="new_drafts_warning">Функцію чернеток в Husky було повністю перероблено, щоб вона стала швидшою, зручнішою для користувача та з меншою кількістю помилок.\n Ви все ще можете отримати доступ до своїх старих чернеток за допомогою кнопки на новому екрані чернеток, але їх буде видалено в майбутньому оновленні!</string>
     <string name="pref_title_anonymize_upload_filenames">Анонімізувати назви вивантажуваних файлів</string>
     <string name="pref_title_hide_live_notification_description">Приховати ім\'я користувача сповіщень у реальному часі</string>
+    <string name="add_account_network_error_removing_from_list">Під час вилучення цього користувача зі списку сталася помилка мережі. Будь ласка, спробуйте ще раз.</string>
+    <string name="add_account_network_error_adding_to_list">Під час додавання цього користувача до списку сталася помилка мережі. Будь ласка, спробуйте ще раз.</string>
 </resources>
