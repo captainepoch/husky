@@ -263,7 +263,7 @@
     <string name="pref_default_post_expire_in_explanation">Встановіть мінімум 1 день для закінчення терміну дії дописів і їх автоматичного видалення сервером.\n\nЦе можна налаштувати в «Налаштування облікового запису».</string>
     <string name="post_privacy_unlisted">Не публічний</string>
     <string name="post_privacy_followers_only">Тільки для підписників</string>
-    <string name="pref_status_text_size">Розмір шрифту статусу</string>
+    <string name="pref_status_text_size">Розмір шрифту допису</string>
     <string name="status_text_size_smallest">Найменший</string>
     <string name="status_text_size_small">Маленький</string>
     <string name="status_text_size_medium">Середній</string>
@@ -403,7 +403,7 @@
     <string name="title_accounts">Обліковки</string>
     <string name="failed_search">Помилка пошуку</string>
     <string name="pref_title_show_notifications_filter">Відображати фільтри сповіщень</string>
-    <string name="pref_title_enable_swipe_for_tabs">Увімкнути свайп для перемикання між вкладками</string>
+    <string name="pref_title_enable_swipe_for_tabs">Увімкнути змахування для перемикання між вкладками</string>
     <string name="create_poll_title">Опитування</string>
     <string name="label_duration">Тривалість</string>
     <string name="duration_indefinite">Невизначено</string>
@@ -558,4 +558,15 @@
     <string name="post_privacy_direct">Приватне</string>
     <string name="description_visibility_local">Локальне</string>
     <string name="add_account_network_error_loading_list">Під час завантаження списку сталася помилка мережі. Будь ласка, спробуйте ще раз.</string>
+    <string name="wellbeing_mode_notice">Деяка інформація, що може впливати на ваш емоційний стан, буде прихована. Це включає: \n\n- Сповіщення про вподобання, поширення та підписки\n- Кількість вподобань і поширень у дописах\n- Статистику підписників і дописів у профілях\n\nPush-сповіщення не зазнають змін, але ви можете вручну переглянути свої налаштування сповіщень.</string>
+    <string name="pref_title_hide_live_notification_description_toast">Це зміниться коли ви повернетесь до стрічки.</string>
+    <string name="pref_summary_live_notifications">Може незначно збільшити енергоспоживання</string>
+    <string name="pref_title_notification_filter_chat_messages">отримано повідомлення в чаті</string>
+    <string name="pref_title_notification_filter_move">хтось, за ким я стежу, перейшов до іншого профілю</string>
+    <string name="pref_title_enable_big_emojis">Увімкнути збільшені користувацькі емодзі</string>
+    <string name="pref_title_enable_experimental_stickers">Увімкнути експериментальні наліпки Pleroma-FE (при наявності)</string>
+    <string name="pref_title_wellbeing_mode">Емоційний стан</string>
+    <string name="drafts_toot_reply_removed">Допис на який ви створили відповідь, було видалено</string>
+    <string name="pref_title_animate_custom_emojis">Анімувати користувацкі емодзі</string>
+    <string name="debug_status_message">Налагоджувальна збірка увімкнула ведення журналів та налагоджувальну інформацію для застосунку. Можливий витік даних. Будь ласка, використовуйте її обережно.</string>
 </resources>
