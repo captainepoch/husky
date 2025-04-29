@@ -247,7 +247,7 @@
     <string name="pref_title_http_proxy_server">Сервер HTTP проксі</string>
     <string name="pref_title_http_proxy_port">Порт HTTP проксі</string>
     <string name="pref_default_post_expire_in">Установити термін дії для всіх опублікованих дописів</string>
-    <string name="pref_publishing">Публікація (синхронізовано з сервером)</string>
+    <string name="pref_publishing">Публікування (синхронізовано з сервером)</string>
     <string name="pref_default_post_privacy">Стандартна видимість допису</string>
     <string name="pref_default_media_sensitivity">Завжди позначати медіа делікатним</string>
     <string name="pref_default_post_expire_in_summary">Мінімальне значення 1 день, 0 для вимкнення.</string>
