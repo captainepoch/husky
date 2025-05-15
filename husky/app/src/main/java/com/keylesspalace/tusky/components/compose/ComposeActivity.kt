@@ -28,13 +28,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
@@ -56,10 +55,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsCompat.Type.ime
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionManager
@@ -87,6 +91,7 @@ import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.components.compose.dialog.showAddPollDialog
 import com.keylesspalace.tusky.components.compose.view.ComposeOptionsListener
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
+import com.keylesspalace.tusky.core.extensions.bottomSheetBehaviorWithIntents
 import com.keylesspalace.tusky.core.extensions.composeWithZwsp
 import com.keylesspalace.tusky.core.extensions.onTextChanged
 import com.keylesspalace.tusky.core.extensions.toMB
@@ -103,7 +108,6 @@ import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.BBCodeEdit
 import com.keylesspalace.tusky.util.ComposeTokenizer
 import com.keylesspalace.tusky.util.HTMLEdit
-import com.keylesspalace.tusky.util.PostFormat
 import com.keylesspalace.tusky.util.PostFormat.BBCODE
 import com.keylesspalace.tusky.util.PostFormat.HTML
 import com.keylesspalace.tusky.util.PostFormat.MARKDOWN
@@ -271,6 +275,14 @@ class ComposeActivity :
                     is StatusPreviewEvent -> onStatusPreviewReady(event.status)
                 }
             }
+
+        applyForcedIntents(binding.root) { windowInsets ->
+            val insets = windowInsets.getInsets(systemBars() or ime())
+            binding.composeOptionsBottomSheet.updatePadding(bottom = insets.bottom + binding.composeBottomBar.measuredHeight)
+            binding.addMediaBottomSheet.updatePadding(bottom = insets.bottom + binding.composeBottomBar.measuredHeight)
+            binding.emojiView.updatePadding(bottom = insets.bottom + binding.composeBottomBar.measuredHeight)
+            binding.composeScheduleView.updatePadding(bottom = insets.bottom + binding.composeBottomBar.measuredHeight)
+        }
     }
 
     private fun applyShareIntent(intent: Intent, savedInstanceState: Bundle?) {
@@ -400,8 +412,8 @@ class ComposeActivity :
         }
 
         // work around Android platform bug -> https://issuetracker.google.com/issues/67102093
-        if (VERSION.SDK_INT == VERSION_CODES.O ||
-            VERSION.SDK_INT == VERSION_CODES.O_MR1
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O ||
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1
         ) {
             binding.composeEditField.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         }
@@ -569,10 +581,10 @@ class ComposeActivity :
     private fun setupButtons() {
         binding.composeOptionsBottomSheet.listener = this
 
-        composeOptionsBehavior = BottomSheetBehavior.from(binding.composeOptionsBottomSheet)
-        addMediaBehavior = BottomSheetBehavior.from(binding.addMediaBottomSheet)
-        scheduleBehavior = BottomSheetBehavior.from(binding.composeScheduleView)
-        emojiBehavior = BottomSheetBehavior.from(binding.emojiView)
+        composeOptionsBehavior = binding.composeOptionsBottomSheet.bottomSheetBehaviorWithIntents()
+        addMediaBehavior = binding.addMediaBottomSheet.bottomSheetBehaviorWithIntents()
+        emojiBehavior = binding.emojiView.bottomSheetBehaviorWithIntents()
+        scheduleBehavior = binding.composeScheduleView.bottomSheetBehaviorWithIntents()
         stickerBehavior = BottomSheetBehavior.from(binding.stickerKeyboard)
         previewBehavior = BottomSheetBehavior.from(binding.previewScroll)
 
@@ -1046,7 +1058,7 @@ class ComposeActivity :
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // Wait until bottom sheet is not collapsed and show next screen after
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    val askForPermissions = if (VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+                    val askForPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         arrayOf(
                             Manifest.permission.READ_MEDIA_IMAGES,
                             Manifest.permission.READ_MEDIA_VIDEO,

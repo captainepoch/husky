@@ -53,6 +53,8 @@ class SearchActivity : BottomSheetActivity() {
 
         setupPages()
         handleIntent(intent)
+
+        applyForcedIntents(binding.root, null)
     }
 
     private fun setupPages() {

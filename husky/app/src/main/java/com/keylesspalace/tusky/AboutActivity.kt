@@ -23,6 +23,8 @@ package com.keylesspalace.tusky
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.core.extensions.setClickableTextWithoutUnderlines
 import com.keylesspalace.tusky.core.extensions.viewBinding
@@ -65,6 +67,8 @@ class AboutActivity : BottomSheetActivity() {
         binding.aboutLicensesButton.setOnClickListener {
             startActivityWithSlideInAnimation(Intent(this, LicenseActivity::class.java))
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

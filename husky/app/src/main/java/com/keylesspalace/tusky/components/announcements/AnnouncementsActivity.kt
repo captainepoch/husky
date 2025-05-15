@@ -136,6 +136,8 @@ class AnnouncementsActivity :
 
         viewModel.load()
         binding.progressBar.show()
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

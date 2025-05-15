@@ -79,6 +79,8 @@ public class ViewThreadActivity extends BottomSheetActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment, FRAGMENT_TAG + id);
         fragmentTransaction.commit();
+
+        applyForcedIntents(binding.getRoot(), null);
     }
 
     @Override

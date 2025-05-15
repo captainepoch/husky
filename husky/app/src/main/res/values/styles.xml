@@ -88,6 +88,9 @@
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Choice</item>
 
         <item name="preferenceTheme">@style/TuskyPreferenceTheme</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
     <style name="ViewMediaActivity.AppBarLayout" parent="ThemeOverlay.AppCompat">

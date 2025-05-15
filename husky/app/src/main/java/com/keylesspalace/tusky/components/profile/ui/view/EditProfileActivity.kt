@@ -159,6 +159,8 @@ class EditProfileActivity : BaseActivity() {
                 binding.scrollView.smoothScrollTo(0, it.bottom)
             }
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     private fun setupObservers() {

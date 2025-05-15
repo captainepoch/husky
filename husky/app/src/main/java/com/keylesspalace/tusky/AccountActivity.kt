@@ -41,6 +41,8 @@ import androidx.annotation.Px
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.emoji2.text.EmojiCompat
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
@@ -161,6 +163,8 @@ class AccountActivity :
         } else {
             binding.saveNoteInfo.visibility = View.INVISIBLE
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     /**

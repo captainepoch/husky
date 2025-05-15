@@ -66,6 +66,8 @@ public class ViewTagActivity extends BottomSheetActivity {
         Fragment fragment = TimelineFragment.newHashtagInstance(Collections.singletonList(hashtag));
         fragmentTransaction.replace(binding.fragmentContainer.getId(), fragment);
         fragmentTransaction.commit();
+
+        applyForcedIntents(binding.getRoot(), null);
     }
 
     @Override

@@ -87,6 +87,8 @@ class DraftsActivity : BaseActivity(), DraftActionListener {
                 adapter.submitList(draftList)
             }
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

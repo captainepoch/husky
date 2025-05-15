@@ -101,6 +101,8 @@ public final class SavedTootActivity extends BaseActivity
         recyclerView.addItemDecoration(divider);
         adapter = new SavedTootAdapter(this);
         recyclerView.setAdapter(adapter);
+
+        applyForcedIntents(binding.getRoot(), null);
     }
 
     @Override

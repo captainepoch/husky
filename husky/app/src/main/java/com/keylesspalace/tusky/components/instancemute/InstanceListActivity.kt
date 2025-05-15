@@ -27,6 +27,8 @@ class InstanceListActivity : BaseActivity() {
             .beginTransaction()
             .replace(R.id.fragment_container, InstanceListFragment())
             .commit()
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -28,10 +28,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -39,6 +39,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.keylesspalace.tusky.adapter.AccountSelectionAdapter;
@@ -50,6 +54,7 @@ import com.keylesspalace.tusky.util.ThemeUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 import kotlin.Lazy;
 import timber.log.Timber;
 
@@ -90,11 +95,81 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         requesters = new HashMap<>();
+
+        applyEdgeToEdge();
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(HuskyApplication.getLocaleManager().setLocale(base));
+    }
+
+    private void applyEdgeToEdge() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            Timber.d("Applying edge to edge...");
+
+            EdgeToEdge.enable(this);
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        }
+    }
+
+    protected void applyForcedIntents(
+            View view,
+            @Nullable Consumer<WindowInsetsCompat> windowsInsetsCallback
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            Timber.d("Applying insets...");
+
+            ViewCompat.setOnApplyWindowInsetsListener(
+                    view,
+                    (v, insets) -> {
+                        Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                        Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+
+                        int bottomInsets = Integer.max(systemBars.bottom, imeInsets.bottom);
+                        v.setPadding(
+                                systemBars.left,
+                                systemBars.top,
+                                systemBars.right,
+                                bottomInsets
+                        );
+
+                        if (windowsInsetsCallback != null) {
+                            windowsInsetsCallback.accept(insets);
+                        }
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+            );
+        } else {
+            Timber.d("No need for insets");
+        }
+    }
+
+    protected void applyInsetsForKeyboardViews(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            Timber.d("Applying insets for a keyboard view...");
+
+            ViewCompat.setOnApplyWindowInsetsListener(
+                    view,
+                    (v, insets) -> {
+                        Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                        Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+
+                        int bottomInsets = Integer.max(systemBars.bottom, imeInsets.bottom);
+                        v.setPadding(
+                                systemBars.left,
+                                systemBars.top,
+                                systemBars.right,
+                                bottomInsets
+                        );
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+            );
+        } else {
+            Timber.d("No need for insets");
+        }
     }
 
     protected boolean requiresLogin() {
@@ -113,7 +188,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void startActivityWithSlideInAnimation(Intent intent) {
         super.startActivity(intent);
-        if(VERSION.SDK_INT < VERSION_CODES.TIRAMISU) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             Timber.d("Execute enter transition");
 
             overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
@@ -123,7 +198,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        if(VERSION.SDK_INT < VERSION_CODES.TIRAMISU) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             Timber.d("Execute exit transition");
 
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
