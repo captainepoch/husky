@@ -1,5 +1,6 @@
 package com.keylesspalace.tusky.util;
 
+import static org.koin.java.KoinJavaComponent.inject;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -11,7 +12,6 @@ import com.keylesspalace.tusky.db.TootDao;
 import com.keylesspalace.tusky.db.TootEntity;
 import java.util.ArrayList;
 import kotlin.Lazy;
-import static org.koin.java.KoinJavaComponent.inject;
 
 public final class SaveTootHelper {
 

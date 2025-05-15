@@ -21,6 +21,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 @Dao
@@ -36,5 +37,5 @@ interface DraftDao {
     fun delete(id: Int): Completable
 
     @Query("SELECT * FROM DraftEntity WHERE id = :id")
-    fun find(id: Int): Single<DraftEntity?>
+    fun find(id: Int): Maybe<DraftEntity>
 }
