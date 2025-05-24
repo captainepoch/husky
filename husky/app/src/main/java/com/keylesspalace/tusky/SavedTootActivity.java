@@ -20,6 +20,10 @@
 
 package com.keylesspalace.tusky;
 
+import static com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import static org.koin.java.KoinJavaComponent.inject;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,21 +42,17 @@ import com.keylesspalace.tusky.adapter.SavedTootAdapter;
 import com.keylesspalace.tusky.appstore.EventHub;
 import com.keylesspalace.tusky.appstore.StatusComposedEvent;
 import com.keylesspalace.tusky.components.compose.ComposeActivity;
-import static com.keylesspalace.tusky.components.compose.ComposeActivity.ComposeOptions;
 import com.keylesspalace.tusky.databinding.ActivitySavedTootBinding;
 import com.keylesspalace.tusky.db.AppDatabase;
 import com.keylesspalace.tusky.db.TootDao;
 import com.keylesspalace.tusky.db.TootEntity;
 import com.keylesspalace.tusky.util.SaveTootHelper;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import static org.koin.java.KoinJavaComponent.inject;
 
 public final class SavedTootActivity extends BaseActivity
     implements SavedTootAdapter.SavedTootAction
@@ -101,6 +101,8 @@ public final class SavedTootActivity extends BaseActivity
         recyclerView.addItemDecoration(divider);
         adapter = new SavedTootAdapter(this);
         recyclerView.setAdapter(adapter);
+
+        applyForcedIntents(binding.getRoot(), null);
     }
 
     @Override

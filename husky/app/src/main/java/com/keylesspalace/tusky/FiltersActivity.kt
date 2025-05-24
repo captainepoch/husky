@@ -78,6 +78,8 @@ class FiltersActivity : BaseActivity() {
             context = intentContext
             loadFilters()
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     private fun updateFilter(filter: Filter, itemIndex: Int) {

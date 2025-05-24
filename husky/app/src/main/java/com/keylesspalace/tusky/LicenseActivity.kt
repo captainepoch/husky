@@ -49,6 +49,8 @@ class LicenseActivity : BaseActivity() {
         setTitle(R.string.title_licenses)
 
         loadFileIntoTextView(R.raw.apache, binding.licenseApacheTextView)
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

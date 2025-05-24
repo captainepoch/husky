@@ -76,6 +76,8 @@ class AccountListActivity : BaseActivity() {
             .beginTransaction()
             .replace(R.id.fragment_container, AccountListFragment.newInstance(type, id, emoji))
             .commit()
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

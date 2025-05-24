@@ -123,6 +123,8 @@ class ListsActivity : BaseActivity() {
                     DELETE_ERROR -> showMessage(R.string.error_delete_list)
                 }
             }
+
+        applyForcedIntents(binding.root, null)
     }
 
     private fun showlistNameDialog(list: MastoList?) {

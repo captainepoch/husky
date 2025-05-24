@@ -20,6 +20,9 @@
 package com.keylesspalace.tusky.core.extensions
 
 import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 fun View.isVisible(): Boolean {
     return (this.visibility == View.VISIBLE)
@@ -43,4 +46,14 @@ fun View.invisible() {
 
 fun View.gone() {
     this.visibility = View.GONE
+}
+
+// Add insets to the BottomSheetBehavior views
+fun View.bottomSheetBehaviorWithIntents(): BottomSheetBehavior<View> {
+    val bottomSheetBehavior = BottomSheetBehavior.from(this)
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        bottomSheetBehavior.peekHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom + view.height
+        insets
+    }
+    return bottomSheetBehavior
 }

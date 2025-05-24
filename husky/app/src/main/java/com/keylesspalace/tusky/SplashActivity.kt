@@ -22,6 +22,7 @@ package com.keylesspalace.tusky
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
 import com.keylesspalace.tusky.db.AccountManager
@@ -32,6 +33,8 @@ class SplashActivity : AppCompatActivity() {
     private val accountManager: AccountManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
+
         super.onCreate(savedInstanceState)
 
         /** delete old notification channels */

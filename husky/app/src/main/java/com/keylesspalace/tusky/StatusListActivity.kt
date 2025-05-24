@@ -57,6 +57,8 @@ class StatusListActivity : BottomSheetActivity() {
             val fragment = TimelineFragment.newInstance(kind)
             replace(R.id.fragment_container, fragment)
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

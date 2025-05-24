@@ -107,6 +107,8 @@ class ScheduledTootActivity : BaseActivity(), ScheduledTootActionListener {
                 }
             }
         )
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

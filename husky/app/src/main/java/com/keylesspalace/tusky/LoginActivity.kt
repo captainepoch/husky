@@ -32,6 +32,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.keylesspalace.tusky.core.extensions.getNonNullString
 import com.keylesspalace.tusky.core.extensions.gone
@@ -113,6 +115,8 @@ class LoginActivity : BaseActivity() {
         } else {
             binding.toolbar.gone()
         }
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun requiresLogin(): Boolean {

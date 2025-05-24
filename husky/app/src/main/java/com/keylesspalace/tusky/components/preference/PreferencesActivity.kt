@@ -107,6 +107,8 @@ class PreferencesActivity :
             .commit()
 
         restartActivitiesOnExit = intent.getBooleanExtra("restart", false)
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onResume() {

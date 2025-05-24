@@ -184,6 +184,8 @@ class TabPreferenceActivity : BaseActivity(), ItemInteractionListener {
         binding.maxTabsInfo.text = getString(R.string.max_tab_number_reached, MAX_TAB_COUNT)
 
         updateAvailableTabs()
+
+        applyForcedIntents(binding.root, null)
     }
 
     override fun onTabAdded(tab: TabData) {
