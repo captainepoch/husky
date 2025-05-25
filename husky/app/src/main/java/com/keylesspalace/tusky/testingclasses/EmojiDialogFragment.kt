@@ -58,10 +58,10 @@ class EmojiDialogFragment(
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> Fragment1(emojis ?: emptyList()) { shortcode ->
+                0 -> CustomEmojiPickerPage(emojis ?: emptyList()) { shortcode ->
                     onReactionCallback(shortcode)
                 }
-                1 -> Fragment2()
+                1 -> UnicodeEmojiPickerPage()
                 else -> throw Exception("Nope")
             }
         }
