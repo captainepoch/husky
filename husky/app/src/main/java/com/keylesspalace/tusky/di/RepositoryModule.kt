@@ -12,6 +12,8 @@ import com.keylesspalace.tusky.repository.ChatRepository
 import com.keylesspalace.tusky.repository.ChatRepositoryImpl
 import com.keylesspalace.tusky.repository.TimelineRepository
 import com.keylesspalace.tusky.repository.TimelineRepositoryImpl
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -40,7 +42,5 @@ val repositoryModule = module {
         EditProfileRepository(get())
     }
 
-    single {
-        InstanceRepositoryImp(get(), get(), get())
-    } bind InstanceRepository::class
+    singleOf(::InstanceRepositoryImp) { bind<InstanceRepository>() }
 }
