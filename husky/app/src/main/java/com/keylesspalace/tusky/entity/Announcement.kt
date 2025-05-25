@@ -22,11 +22,16 @@ import java.util.Date
 data class Announcement(
     val id: String,
     val content: Spanned,
-    @SerializedName("starts_at") val startsAt: Date?,
-    @SerializedName("ends_at") val endsAt: Date?,
-    @SerializedName("all_day") val allDay: Boolean,
-    @SerializedName("published_at") val publishedAt: Date,
-    @SerializedName("updated_at") val updatedAt: Date,
+    @SerializedName("starts_at")
+    val startsAt: Date?,
+    @SerializedName("ends_at")
+    val endsAt: Date?,
+    @SerializedName("all_day")
+    val allDay: Boolean,
+    @SerializedName("published_at")
+    val publishedAt: Date,
+    @SerializedName("updated_at")
+    val updatedAt: Date,
     val read: Boolean,
     val mentions: List<Status.Mention>,
     val statuses: List<Status>,
@@ -48,10 +53,12 @@ data class Announcement(
     }
 
     data class Reaction(
+        val category: String,
         val name: String,
         var count: Int,
         var me: Boolean,
         val url: String?,
-        @SerializedName("static_url") val staticUrl: String?
+        @SerializedName("static_url")
+        val staticUrl: String?
     )
 }
