@@ -107,6 +107,7 @@ class AnnouncementAdapter(
                     text = ("$emojiText ${reaction.count}").emojify(
                         listOf(
                             Emoji(
+                                reaction.category,
                                 reaction.name,
                                 reaction.url ?: "",
                                 reaction.staticUrl ?: "",

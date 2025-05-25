@@ -116,6 +116,7 @@ class AnnouncementsViewModel(
                                             emojis.value!!.find { emoji -> emoji.shortcode == name }!!
                                                 .run {
                                                     Announcement.Reaction(
+                                                        category,
                                                         name,
                                                         1,
                                                         true,
