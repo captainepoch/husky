@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.keylesspalace.tusky.databinding.LayoutEmojiDialog2Binding
 
-class Fragment2 : Fragment() {
+class UnicodeEmojiPickerPage : Fragment() {
 
     private lateinit var binding: LayoutEmojiDialog2Binding
 

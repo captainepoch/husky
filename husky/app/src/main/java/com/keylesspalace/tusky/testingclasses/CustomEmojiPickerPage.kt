@@ -11,7 +11,7 @@ import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
 import com.keylesspalace.tusky.databinding.LayoutEmojiDialog1Binding
 import com.keylesspalace.tusky.entity.Emoji
 
-class Fragment1(
+class CustomEmojiPickerPage(
     private val emojis: List<Emoji>,
     private val onReactionCallback: (String) -> Unit
 ) : Fragment() {
