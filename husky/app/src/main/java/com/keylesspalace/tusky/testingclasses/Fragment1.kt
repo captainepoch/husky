@@ -12,7 +12,8 @@ import com.keylesspalace.tusky.databinding.LayoutEmojiDialog1Binding
 import com.keylesspalace.tusky.entity.Emoji
 
 class Fragment1(
-    private val emojis: List<Emoji>
+    private val emojis: List<Emoji>,
+    private val onReactionCallback: (String) -> Unit
 ) : Fragment() {
 
     private lateinit var binding: LayoutEmojiDialog1Binding
@@ -36,7 +37,7 @@ class Fragment1(
                 emojis,
                 object : OnEmojiSelectedListener {
                     override fun onEmojiSelected(shortcode: String) {
-
+                        onReactionCallback(shortcode)
                     }
                 },
                 false // TODO
