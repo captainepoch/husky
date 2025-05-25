@@ -13,59 +13,23 @@ import com.keylesspalace.tusky.components.search.SearchViewModel
 import com.keylesspalace.tusky.viewmodel.AccountViewModel
 import com.keylesspalace.tusky.viewmodel.AccountsInListViewModel
 import com.keylesspalace.tusky.viewmodel.ListsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import com.keylesspalace.tusky.viewmodel.SplashViewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelsModule = module {
-    viewModel {
-        AccountsInListViewModel(get())
-    }
-
-    viewModel {
-        AccountViewModel(get(), get(), get())
-    }
-
-    viewModel {
-        AnnouncementsViewModel(get(), get(), get())
-    }
-
-    viewModel {
-        ChatViewModel(get(), get(), get())
-    }
-
-    viewModel {
-        ComposeViewModel(get(), get(), get(), get(), get(), get(), get())
-    }
-
-    viewModel {
-        ConversationsViewModel(get(), get(), get(), get())
-    }
-
-    viewModel {
-        DraftsViewModel(get(), get(), get(), get())
-    }
-
-    viewModel {
-        EditProfileViewModel(get(), get(), get(), get())
-    }
-
-    viewModel {
-        ListsViewModel(get())
-    }
-
-    viewModel {
-        ListsForAccountViewModel(get())
-    }
-
-    viewModel {
-        ReportViewModel(get(), get(), get())
-    }
-
-    viewModel {
-        SearchViewModel(get(), get(), get())
-    }
-
-    viewModel {
-        ScheduledTootViewModel(get(), get())
-    }
+    viewModelOf(::AccountsInListViewModel)
+    viewModelOf(::AccountViewModel)
+    viewModelOf(::AnnouncementsViewModel)
+    viewModelOf(::ChatViewModel)
+    viewModelOf(::ComposeViewModel)
+    viewModelOf(::ConversationsViewModel)
+    viewModelOf(::DraftsViewModel)
+    viewModelOf(::EditProfileViewModel)
+    viewModelOf(::ListsViewModel)
+    viewModelOf(::ListsForAccountViewModel)
+    viewModelOf(::ReportViewModel)
+    viewModelOf(::SearchViewModel)
+    viewModelOf(::ScheduledTootViewModel)
+    viewModelOf(::SplashViewModel)
 }

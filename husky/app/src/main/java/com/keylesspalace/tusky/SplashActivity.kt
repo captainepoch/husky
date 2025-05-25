@@ -23,29 +23,50 @@ package com.keylesspalace.tusky
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
-import com.keylesspalace.tusky.db.AccountManager
-import org.koin.android.ext.android.inject
+import com.keylesspalace.tusky.viewmodel.SplashViewModel
+import com.keylesspalace.tusky.viewmodel.viewstate.SplashViewState
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashActivity : AppCompatActivity() {
 
-    private val accountManager: AccountManager by inject()
+    private val viewModel by viewModel<SplashViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /** delete old notification channels */
-        NotificationHelper.deleteLegacyNotificationChannels(this, accountManager)
+        // Delete old notification channels
+        NotificationHelper.deleteLegacyNotificationChannels(this, viewModel.accountManager)
 
-        /** Determine whether the user is currently logged in, and if so go ahead and load the
-         *  timeline. Otherwise, start the activity_login screen. */
+        collectStates()
+    }
 
-        val intent = if (accountManager.activeAccount != null) {
-            Intent(this, MainActivity::class.java)
-        } else {
-            LoginActivity.getIntent(this, false)
+    private fun collectStates() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.splashViewState.collect { state ->
+                    val intent = when (state) {
+                        SplashViewState.USER -> {
+                            Intent(this@SplashActivity, MainActivity::class.java)
+                        }
+
+                        SplashViewState.NO_USER -> {
+                            LoginActivity.getIntent(this@SplashActivity, false)
+                        }
+
+                        else -> null
+                    }
+
+                    intent?.let {
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }
         }
-        startActivity(intent)
-        finish()
     }
 }
