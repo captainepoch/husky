@@ -85,6 +85,7 @@ import com.keylesspalace.tusky.repository.Placeholder;
 import com.keylesspalace.tusky.repository.TimelineRepository;
 import com.keylesspalace.tusky.repository.TimelineRequestMode;
 import com.keylesspalace.tusky.settings.PrefKeys;
+import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment;
 import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.HttpHeaderLink;
 import com.keylesspalace.tusky.util.LinkHelper;
@@ -1758,7 +1759,7 @@ public class TimelineFragment extends SFragment
 
     @Override
     public void onEmojiReact(final boolean react, final String emoji, final String statusId) {
-        int position = findStatusOrReblogPositionById(statusId);
+        /*int position = findStatusOrReblogPositionById(statusId);
         if(position < 0) {
             return;
         }
@@ -1766,8 +1767,13 @@ public class TimelineFragment extends SFragment
         timelineCases.getValue().react(emoji, statusId, react)
             .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
             .subscribe((newStatus) -> setEmojiReactionForStatus(position, newStatus),
-                (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
+                (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));*/
 
+        EmojiDialogFragment dialog = new EmojiDialogFragment(
+                instanceRepo.getInstanceInfoDb().getEmojiList(),
+                s -> null
+        );
+        dialog.show(getParentFragmentManager(), "MY_DIALOG");
     }
 
     @Override
