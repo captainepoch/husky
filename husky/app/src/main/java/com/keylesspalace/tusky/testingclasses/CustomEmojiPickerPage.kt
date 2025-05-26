@@ -32,7 +32,7 @@ class CustomEmojiPickerPage(
 
         binding.emojiGrid.apply {
             layoutManager =
-                GridLayoutManager(context, 3, GridLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(context, 4, GridLayoutManager.HORIZONTAL, false)
             adapter = EmojiAdapter(
                 emojis,
                 object : OnEmojiSelectedListener {

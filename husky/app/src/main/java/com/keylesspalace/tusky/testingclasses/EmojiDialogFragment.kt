@@ -13,8 +13,7 @@ import com.keylesspalace.tusky.databinding.LayoutEmojiBinding
 import com.keylesspalace.tusky.entity.Emoji
 
 class EmojiDialogFragment(
-    private val emojis: List<Emoji>?,
-    private val onReactionCallback: (String) -> Unit
+    private val emojis: List<Emoji>?, private val onReactionCallback: (String) -> Unit
 ) : DialogFragment() {
 
     private lateinit var binding: LayoutEmojiBinding
@@ -31,11 +30,10 @@ class EmojiDialogFragment(
         }
 
         TabLayoutMediator(
-            binding.dialogTabLayout,
-            viewPager
+            binding.dialogTabLayout, viewPager
         ) { tab, position ->
             tab.setIcon(
-                when(position) {
+                when (position) {
                     0 -> R.drawable.arrows_clockwise
                     1 -> R.drawable.ic_alert_circle
                     else -> throw Exception("Nope")
@@ -43,9 +41,7 @@ class EmojiDialogFragment(
             )
         }.attach()
 
-        return AlertDialog.Builder(requireContext())
-            .setView(binding.root)
-            .create()
+        return AlertDialog.Builder(requireContext()).setView(binding.root).create()
     }
 
     class DialogViewPagerAdapter(
@@ -61,6 +57,7 @@ class EmojiDialogFragment(
                 0 -> CustomEmojiPickerPage(emojis ?: emptyList()) { shortcode ->
                     onReactionCallback(shortcode)
                 }
+
                 1 -> UnicodeEmojiPickerPage()
                 else -> throw Exception("Nope")
             }

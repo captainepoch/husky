@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,7 @@ import com.keylesspalace.tusky.entity.Status;
 import com.keylesspalace.tusky.entity.Status.Mention;
 import com.keylesspalace.tusky.entity.Status.Visibility;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
+import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment;
 import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.CustomEmojiHelper;
 import com.keylesspalace.tusky.util.ImageLoadingHelper;
@@ -63,10 +65,13 @@ import com.keylesspalace.tusky.viewdata.PollViewDataKt;
 import com.keylesspalace.tusky.viewdata.StatusViewData.Concrete;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
+import kotlin.jvm.functions.Function1;
 
 public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
 
@@ -782,9 +787,11 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     private void setEmojiReactions(@Nullable List<EmojiReaction> reactions, final StatusActionListener listener, final String statusId) {
         if(reactButton != null) {
             reactButton.setOnClickListener(v -> {
-                EmojiKeyboard.show(reactButton.getContext(), statusId, EmojiKeyboard.UNICODE_MODE, (id, emoji) -> {
+                listener.onEmojiReact(true, "emoji", "id");
+
+                /*EmojiKeyboard.show(reactButton.getContext(), statusId, EmojiKeyboard.UNICODE_MODE, (id, emoji) -> {
                     listener.onEmojiReact(true, emoji, id);
-                });
+                });*/
             });
         }
 
