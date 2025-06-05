@@ -475,4 +475,35 @@
     <string name="title_announcements">公告</string>
     <string name="account_note_saved">已保存！</string>
     <string name="account_note_hint">此账号的备注</string>
+    <string name="action_open_in_external_app">在外部应用中打开</string>
+    <string name="action_emoji_react">反应</string>
+    <string name="action_emoji_unreact">移除反应</string>
+    <string name="admin">管理员</string>
+    <string name="notification_emoji_name">表情反应</string>
+    <string name="notification_move_name">迁移</string>
+    <string name="pref_title_other">其他</string>
+    <string name="pref_title_privacy">隐私</string>
+    <string name="pref_videoplayer">视频播放器</string>
+    <string name="pref_videoplayer_replay_title">自动重播视频</string>
+    <string name="pref_title_anonymize_upload_filenames">匿名化上传的文件名</string>
+    <string name="pref_title_hide_muted_users">隐藏静音用户</string>
+    <string name="attachment_type_image">图像</string>
+    <string name="attachment_type_video">视频</string>
+    <string name="attachment_type_audio">音频</string>
+    <string name="attachment_type_unknown">附件</string>
+    <string name="link">链接</string>
+    <string name="description_status_edited">已编辑</string>
+    <string name="description_visibility_local">本地</string>
+    <string name="post_privacy_local">本地</string>
+    <string name="status_edited">已编辑 %s</string>
+    <string name="title_public_bubble">泡泡</string>
+    <string name="pref_default_post_expire_in_summary">最小值为 1 天，设为 0 以禁用。</string>
+    <string name="status_media_audio">音频</string>
+    <string name="status_media_attachments">附件</string>
+    <string name="debug_status_message_close">关闭</string>
+    <string name="new_drafts_warning">Husky 的草稿功能已经完全重新设计，变得更快，更用户友好，更少错误。\n你仍然可以通过新草稿页面上的按钮访问旧草稿，但它们将在未来的更新中被删除！</string>
+    <plurals name="poll_info_people">
+        <item quantity="other">%s 人</item>
+    </plurals>
+    <string name="error_upload_max_media_reached">上传的媒体附件不能超过 %1$d 个。</string>
 </resources>
