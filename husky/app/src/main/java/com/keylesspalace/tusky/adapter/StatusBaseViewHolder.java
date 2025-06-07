@@ -787,7 +787,7 @@ public abstract class StatusBaseViewHolder extends RecyclerView.ViewHolder {
     private void setEmojiReactions(@Nullable List<EmojiReaction> reactions, final StatusActionListener listener, final String statusId) {
         if(reactButton != null) {
             reactButton.setOnClickListener(v -> {
-                listener.onEmojiReact(true, "emoji", "id");
+                listener.onEmojiReact(true, "null", statusId);
 
                 /*EmojiKeyboard.show(reactButton.getContext(), statusId, EmojiKeyboard.UNICODE_MODE, (id, emoji) -> {
                     listener.onEmojiReact(true, emoji, id);
