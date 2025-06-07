@@ -19,12 +19,6 @@ class UnicodeEmojiPickerPage : Fragment() {
         return binding.root
     }
 
-    /**
-    EmojiKeyboard.show(reactButton.getContext(), statusId, EmojiKeyboard.UNICODE_MODE, (id, emoji) -> {
-    listener.onEmojiReact(true, emoji, id);
-    });
-
-     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -13,7 +13,8 @@ import com.keylesspalace.tusky.databinding.LayoutEmojiBinding
 import com.keylesspalace.tusky.entity.Emoji
 
 class EmojiDialogFragment(
-    private val emojis: List<Emoji>?, private val onReactionCallback: (String) -> Unit
+    private val emojis: List<Emoji>?,
+    private val onReactionCallback: (String) -> Unit
 ) : DialogFragment() {
 
     private lateinit var binding: LayoutEmojiBinding
