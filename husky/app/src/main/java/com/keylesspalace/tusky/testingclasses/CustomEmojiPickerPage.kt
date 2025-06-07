@@ -1,5 +1,6 @@
 package com.keylesspalace.tusky.testingclasses
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,8 +32,7 @@ class CustomEmojiPickerPage(
         super.onViewCreated(view, savedInstanceState)
 
         binding.emojiGrid.apply {
-            layoutManager =
-                GridLayoutManager(context, 4, GridLayoutManager.HORIZONTAL, false)
+            layoutManager = GridLayoutManager(context, calculateSpanCount(context), GridLayoutManager.VERTICAL, false)
             adapter = EmojiAdapter(
                 emojis,
                 object : OnEmojiSelectedListener {
@@ -43,5 +43,20 @@ class CustomEmojiPickerPage(
                 false // TODO
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.post {
+            binding.emojiGrid.requestLayout()
+            binding.emojiGrid.invalidate()
+        }
+    }
+
+    private fun calculateSpanCount(context: Context): Int {
+        val displayMetrics = context.resources.displayMetrics
+        val screenWidthPx = displayMetrics.widthPixels
+        val itemWidthPx = (40 * displayMetrics.density).toInt()
+        return maxOf(1, ((screenWidthPx / itemWidthPx) - 2))
     }
 }

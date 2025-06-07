@@ -28,6 +28,11 @@ class EmojiDialogFragment(
                 onReactionCallback(shortcode)
             }
             isUserInputEnabled = false
+
+            val heightInPixels = (300 * resources.displayMetrics.density).toInt()
+            layoutParams = layoutParams.apply {
+                height = heightInPixels
+            }
         }
 
         TabLayoutMediator(
@@ -51,7 +56,17 @@ class EmojiDialogFragment(
         private val onReactionCallback: (String) -> Unit
     ) : FragmentStateAdapter(activity) {
 
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int {
+            return 2
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun containsItem(itemId: Long): Boolean {
+            return itemId in 0 until itemCount
+        }
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
