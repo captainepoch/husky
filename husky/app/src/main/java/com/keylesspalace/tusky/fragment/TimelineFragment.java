@@ -1758,20 +1758,22 @@ public class TimelineFragment extends SFragment
     }
 
     @Override
-    public void onEmojiReact(final boolean react, final String emoji, final String statusId) {
-        /*int position = findStatusOrReblogPositionById(statusId);
+    public void onEmojiReact(final boolean react, @NonNull final String emoji, @NonNull final String statusId) {
+        int position = findStatusOrReblogPositionById(statusId);
         if(position < 0) {
             return;
         }
 
-        timelineCases.getValue().react(emoji, statusId, react)
-            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newStatus) -> setEmojiReactionForStatus(position, newStatus),
-                (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));*/
-
         EmojiDialogFragment dialog = new EmojiDialogFragment(
                 instanceRepo.getInstanceInfoDb().getEmojiList(),
-                s -> null
+                s -> {
+                    timelineCases.getValue().react(s, statusId, react)
+                                 .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+                                 .subscribe((newStatus) -> setEmojiReactionForStatus(position, newStatus),
+                                         (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
+
+                    return null;
+                }
         );
         dialog.show(getParentFragmentManager(), "MY_DIALOG");
     }
