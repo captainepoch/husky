@@ -123,7 +123,7 @@
     <string name="action_unmute">Відмінити приглушення</string>
     <string name="action_view_domain_mutes">Приховані домени</string>
     <string name="action_view_mutes">Список глушіння</string>
-    <string name="action_send_public">Опублікувати!</string>
+    <string name="action_send_public">ПОСТ!</string>
     <string name="action_send">Опублікувати</string>
     <string name="action_show_reblogs">Показати поширення</string>
     <string name="action_hide_reblogs">Приховати поширення</string>
@@ -183,7 +183,7 @@
     <string name="action_open_media_n">Відкрити медіа №%d</string>
     <string name="download_media">Завантажити медіа</string>
     <string name="downloading_media">Завантаження медіа</string>
-    <string name="send_status_link_to">Поділитись посиланням допису в…</string>
+    <string name="send_status_link_to">Поділитися URL-адресою публікації з…</string>
     <string name="confirmation_unblocked">Користувача розблоковано</string>
     <string name="confirmation_unmuted">Користувача розглушено</string>
     <string name="status_sent_long">Відповідь успішно надіслано.</string>
@@ -280,14 +280,14 @@
     <string name="notification_mention_format">%s згадав(ла) вас</string>
     <string name="notification_summary_large">%1$s, %2$s, %3$s та ще %4$d інших</string>
     <string name="notification_summary_medium">%1$s, %2$s, та %3$s</string>
-    <string name="send_status_content_to">Надіслати допис до…</string>
+    <string name="send_status_content_to">Поділитися публікацією з…</string>
     <string name="notification_subscription_name">Підписки</string>
     <string name="title_public_bubble">Булька</string>
-    <string name="send_media_to">Надіслати медіа до…</string>
+    <string name="send_media_to">Поділитися медіафайлами з…</string>
     <string name="label_quick_reply">Відповісти…</string>
     <string name="pref_title_notification_alerts">Оповіщення</string>
     <string name="pref_title_notification_alert_sound">Сповіщати звуком</string>
-    <string name="pref_title_custom_tabs">Використовувати спеціальні вкладки Chrome</string>
+    <string name="pref_title_custom_tabs">Використання користувацьких вкладок Chrome</string>
     <string name="pref_title_status_filter">Фільтрування стрічок</string>
     <string name="notification_summary_small">%1$s та %2$s</string>
     <string name="notification_title_summary">%d нових реакцій</string>
@@ -303,7 +303,7 @@
     <string name="status_media_video">Відео</string>
     <string name="status_media_audio">Аудіо</string>
     <string name="status_media_attachments">Вкладення</string>
-    <string name="state_follow_requested">Підписку запитано</string>
+    <string name="state_follow_requested">Запит на підписку</string>
     <string name="abbreviated_in_years">%dр</string>
     <string name="abbreviated_in_days">%dд</string>
     <string name="abbreviated_in_hours">%dг</string>
@@ -464,7 +464,7 @@
     <string name="pref_title_other">Інше</string>
     <string name="pref_title_privacy">Приватність</string>
     <string name="pref_title_composing">Складання</string>
-    <string name="pref_title_composing_title">Створення композицій із використанням пробілів із нульовою шириною в емодзі</string>
+    <string name="pref_title_composing_title">Використання пробілів нульової ширини в емодзі</string>
     <string name="pref_videoplayer">Відтворювач відео</string>
     <string name="pref_videoplayer_replay_title">Автоматично відтворювати відео</string>
     <string name="pref_crashhandler_body">Увімкнути неконтрольоване повідомлення електронною поштою про збої</string>
@@ -551,7 +551,7 @@
     <string name="post_privacy_local">Локальна</string>
     <string name="status_replied_to_format">Відповідь для %s</string>
     <string name="status_edited">Відредаговано %s</string>
-    <string name="visibility_local">Місцевий: не федерувати цей допис</string>
+    <string name="visibility_local">Локальне: Не об’єднувати цю публікацію</string>
     <string name="add_account_error_loading_list">Під час завантаження списку сталася помилка. Будь ласка, спробуйте ще раз.</string>
     <string name="add_account_error_adding_to_list">Під час додавання цього користувача до списку сталася помилка. Будь ласка, спробуйте ще раз.</string>
     <string name="add_account_error_removing_from_list">Під час вилучення цього користувача зі списку сталася помилка. Будь ласка, спробуйте ще раз.</string>
@@ -569,4 +569,13 @@
     <string name="drafts_toot_reply_removed">Допис на який ви створили відповідь, було видалено</string>
     <string name="pref_title_animate_custom_emojis">Анімувати користувацкі емодзі</string>
     <string name="debug_status_message">Налагоджувальна збірка увімкнула ведення журналів та налагоджувальну інформацію для застосунку. Можливий витік даних. Будь ласка, використовуйте її обережно.</string>
+    <string name="about_tusky_version">Husky %s</string>
+    <string name="about_powered_by_tusky">Працює на базі Husky</string>
+    <string name="license_cc_by_4">CC-BY 4.0</string>
+    <string name="license_cc_by_sa_4">CC-BY-SA 4.0</string>
+    <string name="max_tab_number_reached">Досягнуто максимальної кількості вкладок %1$d</string>
+    <string name="poll_info_format"> \u0020<!-- 15 votes • 1 hour left --> \u0020%1$s • %2$s</string>
+    <string name="key_hide_live_notification_desc">hideLiveNotifDesc</string>
+    <string name="pref_crashhandler_key">enableCrashHanlder</string>
+    <string name="pref_title_live_notifications">Сповіщення в реальному часі</string>
 </resources>
