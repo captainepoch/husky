@@ -115,21 +115,22 @@ public final class ViewDataUtils {
                 newStatus = newStatus.setQuoteEmojis(quote.getQuoteEmojis());
             }
 
-            newStatus = newStatus.setQuoteFullName(
-                    quote.getAccount().getDisplayName()
-            ).setQuoteUsername(
-                    quote.getAccount().getUsername()
-            ).setQuotedStatusId(
-                    quote.getQuotedStatusId()
-            ).setQuotedStatusUrl(
-                    quote.getQuotedStatusUrl()
-            );
+            if (quote.getAccount() != null) {
+                newStatus = newStatus.setQuoteFullName(quote.getAccount().getDisplayName())
+                    .setQuoteUsername(quote.getAccount().getUsername());
 
-            if (quote.getAccount().getEmojis() != null) {
-                newStatus = newStatus.setQuotedAccountEmojis(
+                if (quote.getAccount().getEmojis() != null) {
+                    newStatus = newStatus.setQuotedAccountEmojis(
                         quote.getAccount().getEmojis()
-                );
+                    );
+                }
             }
+
+            newStatus = newStatus.setQuotedStatusId(
+                quote.getQuotedStatusId()
+            ).setQuotedStatusUrl(
+                quote.getQuotedStatusUrl()
+            );
         }
 
         return newStatus.createStatusViewData();
