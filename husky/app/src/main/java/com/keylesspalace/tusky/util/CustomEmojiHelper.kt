@@ -68,11 +68,11 @@ fun CharSequence.emojify(
     val smallEmojis = forceSmallEmoji || !pm.getBoolean(PrefKeys.BIG_EMOJIS, true)
     val animate = pm.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
 
-    emojis.forEach { (shortcode, url) ->
-        val matcher = Pattern.compile(":$shortcode:", Pattern.LITERAL).matcher(this)
+    emojis.forEach { emoji ->
+        val matcher = Pattern.compile(":${emoji.shortcode}:", Pattern.LITERAL).matcher(this)
 
         while (matcher.find()) {
-            val span = createEmojiSpan(url, view, smallEmojis, animate)
+            val span = createEmojiSpan(emoji.url, view, smallEmojis, animate)
             builder.setSpan(span, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
