@@ -77,11 +77,6 @@ public final class TimelineAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         return switch (viewType) {
-            default -> {
-                View view = LayoutInflater.from(viewGroup.getContext())
-                                          .inflate(R.layout.item_status, viewGroup, false);
-                yield new StatusViewHolder(view);
-            }
             case VIEW_TYPE_STATUS_MUTED -> {
                 View view = LayoutInflater.from(viewGroup.getContext())
                                           .inflate(R.layout.item_status_muted, viewGroup, false);
@@ -95,6 +90,11 @@ public final class TimelineAdapter extends RecyclerView.Adapter {
                                                   false
                                           );
                 yield new PlaceholderViewHolder(view);
+            }
+            default -> {
+                View view = LayoutInflater.from(viewGroup.getContext())
+                                          .inflate(R.layout.item_status, viewGroup, false);
+                yield new StatusViewHolder(view);
             }
         };
     }

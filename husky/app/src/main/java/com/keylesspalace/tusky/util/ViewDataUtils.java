@@ -45,10 +45,10 @@ public final class ViewDataUtils {
         if (status == null) {
             return null;
         }
-        Status visibleStatus = (status.getReblog() == null ? status : status.getReblog());
+        Status visibleStatus = ((status.getReblog() == null) ? status : status.getReblog());
         Spanned statusContent = visibleStatus.getContent();
         StatusViewData.Builder newStatus = new Builder();
-        newStatus.setId(status.getId())
+        newStatus = newStatus.setId(status.getId())
                  .setAttachments(visibleStatus.getAttachments())
                  .setAvatar(visibleStatus.getAccount().getAvatar())
                  .setContent(statusContent)
@@ -85,10 +85,10 @@ public final class ViewDataUtils {
 
         // Needed in some cases
         if (statusContent != null) {
-            newStatus.setCollapsible(SmartLengthInputFilterKt.shouldTrimStatus(statusContent));
+            newStatus = newStatus.setCollapsible(SmartLengthInputFilterKt.shouldTrimStatus(statusContent));
         }
 
-        newStatus.setCollapsed(true)
+        newStatus = newStatus.setCollapsed(true)
                  .setPoll(visibleStatus.getPoll())
                  .setCard(visibleStatus.getCard())
                  .setIsBot(visibleStatus.getAccount().getBot())
@@ -97,8 +97,7 @@ public final class ViewDataUtils {
                  .setThreadMuted(visibleStatus.isThreadMuted())
                  .setConversationId(visibleStatus.getConversationId())
                  .setEmojiReactions(visibleStatus.getEmojiReactions())
-                 .setParentVisible(visibleStatus.getParentVisible())
-                 .createStatusViewData();
+                 .setParentVisible(visibleStatus.getParentVisible());
 
         Quote quote = null;
         if (visibleStatus.getPleroma() != null && visibleStatus.getPleroma().getQuote() != null) {
