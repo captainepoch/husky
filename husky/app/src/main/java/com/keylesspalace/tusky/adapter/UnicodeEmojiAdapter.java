@@ -54,6 +54,8 @@ public class UnicodeEmojiAdapter
         if(position == 0) {
             recentsView = ((RecyclerView)holder.itemView);
             recentsView.setAdapter(new UnicodeEmojiPageAdapter(recents, id, listener));
+
+            recentsView.post(recentsView::requestLayout);
         } else {
             ((RecyclerView)holder.itemView).setAdapter(
                 new UnicodeEmojiPageAdapter(Arrays.asList(Emojis.EMOJIS[position - 1]), id, listener));
@@ -76,10 +78,11 @@ public class UnicodeEmojiAdapter
 
     @Override
     public void onRecentsUpdate(Set<String> set) {
-        recents = new ArrayList<String>(set);
+        recents = new ArrayList<>(set);
         Collections.reverse(recents);
-        if(recentsView != null)
+        if(recentsView != null) {
             recentsView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     private abstract class UnicodeEmojiBasePageAdapter extends RecyclerView.Adapter<SingleViewHolder> {
