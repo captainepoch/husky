@@ -3,8 +3,12 @@ package com.keylesspalace.tusky.components.search
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
+import com.keylesspalace.tusky.components.instance.data.models.entity.InstanceEntity
+import com.keylesspalace.tusky.components.instance.domain.repository.InstanceRepository
 import com.keylesspalace.tusky.components.search.adapter.SearchRepository
+import com.keylesspalace.tusky.core.extensions.cancelIfActive
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Account
@@ -22,11 +26,16 @@ import com.keylesspalace.tusky.util.switchMap
 import com.keylesspalace.tusky.viewdata.StatusViewData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     mastodonApi: MastodonApi,
     private val timelineCases: TimelineCases,
-    private val accountManager: AccountManager
+    private val accountManager: AccountManager,
+    private val instanceRepository: InstanceRepository
 ) : RxAwareViewModel() {
 
     var currentQuery: String = ""
@@ -71,6 +80,27 @@ class SearchViewModel(
         repoResultHashTag.switchMap { it.refreshState }
 
     private val loadedStatuses = ArrayList<Pair<Status, StatusViewData.Concrete>>()
+
+    private var job: Job? = null
+    private val _instance: MutableLiveData<InstanceEntity?> = MutableLiveData(null)
+    val instance: LiveData<InstanceEntity?>
+        get() = _instance
+
+    init {
+        getInstanceConfig()
+    }
+
+    private fun getInstanceConfig() {
+        job?.cancelIfActive()
+        job = viewModelScope.launch(Dispatchers.IO) {
+            _instance.postValue(getInstanceInfo())
+        }
+    }
+
+    suspend fun getInstanceInfo(): InstanceEntity {
+        return instanceRepository.getInstanceInfo().last().asRight()
+    }
+
     fun search(query: String) {
         loadedStatuses.clear()
         repoResultStatus.value = statusesRepository.getSearchData(

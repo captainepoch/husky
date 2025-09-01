@@ -61,6 +61,7 @@ import com.keylesspalace.tusky.entity.Status.Mention
 import com.keylesspalace.tusky.interfaces.AccountSelectionListener
 import com.keylesspalace.tusky.interfaces.StatusActionListener
 import com.keylesspalace.tusky.settings.PrefKeys
+import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment
 import com.keylesspalace.tusky.util.CardViewMode
 import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.NetworkState
@@ -79,11 +80,11 @@ class SearchStatusesFragment :
     StatusActionListener {
 
     override val networkStateRefresh: LiveData<NetworkState>
-        get() = viewModel.networkStateStatusRefresh
+        get() = searchViewModel.networkStateStatusRefresh
     override val networkState: LiveData<NetworkState>
-        get() = viewModel.networkStateStatus
+        get() = searchViewModel.networkStateStatus
     override val data: LiveData<PagedList<Pair<Status, StatusViewData.Concrete>>>
-        get() = viewModel.statuses
+        get() = searchViewModel.statuses
 
     private val searchAdapter
         get() = super.adapter as SearchStatusesAdapter
@@ -92,7 +93,7 @@ class SearchStatusesFragment :
         val preferences by inject<SharedPreferences>()
         val statusDisplayOptions = StatusDisplayOptions(
             animateAvatars = preferences.getBoolean("animateGifAvatars", false),
-            mediaPreviewEnabled = viewModel.mediaPreviewEnabled,
+            mediaPreviewEnabled = searchViewModel.mediaPreviewEnabled,
             useAbsoluteTime = preferences.getBoolean("absoluteTimeView", false),
             showBotOverlay = preferences.getBoolean("showBotOverlay", true),
             useBlurhash = preferences.getBoolean("useBlurhash", true),
@@ -115,7 +116,7 @@ class SearchStatusesFragment :
 
     override fun onContentHiddenChange(isShowing: Boolean, position: Int) {
         searchAdapter.getItem(position)?.let {
-            viewModel.contentHiddenChange(it, isShowing)
+            searchViewModel.contentHiddenChange(it, isShowing)
         }
     }
 
@@ -127,13 +128,13 @@ class SearchStatusesFragment :
 
     override fun onFavourite(favourite: Boolean, position: Int) {
         searchAdapter.getItem(position)?.let { status ->
-            viewModel.favorite(status, favourite)
+            searchViewModel.favorite(status, favourite)
         }
     }
 
     override fun onBookmark(bookmark: Boolean, position: Int) {
         searchAdapter.getItem(position)?.let { status ->
-            viewModel.bookmark(status, bookmark)
+            searchViewModel.bookmark(status, bookmark)
         }
     }
 
@@ -201,7 +202,7 @@ class SearchStatusesFragment :
 
     override fun onExpandedChange(expanded: Boolean, position: Int) {
         searchAdapter.getItem(position)?.let {
-            viewModel.expandedChange(it, expanded)
+            searchViewModel.expandedChange(it, expanded)
         }
     }
 
@@ -211,25 +212,25 @@ class SearchStatusesFragment :
 
     override fun onContentCollapsedChange(isCollapsed: Boolean, position: Int) {
         searchAdapter.getItem(position)?.let {
-            viewModel.collapsedChange(it, isCollapsed)
+            searchViewModel.collapsedChange(it, isCollapsed)
         }
     }
 
     override fun onVoteInPoll(position: Int, choices: MutableList<Int>) {
         searchAdapter.getItem(position)?.let {
-            viewModel.voteInPoll(it, choices)
+            searchViewModel.voteInPoll(it, choices)
         }
     }
 
     private fun removeItem(position: Int) {
         searchAdapter.getItem(position)?.let {
-            viewModel.removeItem(it)
+            searchViewModel.removeItem(it)
         }
     }
 
     override fun onReblog(reblog: Boolean, position: Int, canQuote: Boolean) {
         searchAdapter.getItem(position)?.let { status ->
-            viewModel.reblog(status, reblog)
+            searchViewModel.reblog(status, reblog)
         }
     }
 
@@ -243,7 +244,7 @@ class SearchStatusesFragment :
             .toMutableSet()
             .apply {
                 add(actionableStatus.account.username)
-                remove(viewModel.activeAccount?.username)
+                remove(searchViewModel.activeAccount?.username)
             }
 
         val intent = ComposeActivity.startIntent(
@@ -265,10 +266,10 @@ class SearchStatusesFragment :
         val accountId = status.actionableStatus.account.id
         val accountUsername = status.actionableStatus.account.username
         val statusUrl = status.actionableStatus.url
-        val accounts = viewModel.getAllAccountsOrderedByActive()
+        val accounts = searchViewModel.getAllAccountsOrderedByActive()
         var openAsTitle: String? = null
 
-        val loggedInAccountId = viewModel.activeAccount?.accountId
+        val loggedInAccountId = searchViewModel.activeAccount?.accountId
 
         val popup = PopupMenu(view.context, view)
         // Give a different menu depending on whether this is the user's own toot or not.
@@ -301,7 +302,7 @@ class SearchStatusesFragment :
         when (accounts.size) {
             0, 1 -> openAsItem.isVisible = false
             2 -> for (account in accounts) {
-                if (account !== viewModel.activeAccount) {
+                if (account !== searchViewModel.activeAccount) {
                     openAsTitle =
                         String.format(getString(R.string.action_open_as), account.fullName)
                     break
@@ -368,7 +369,7 @@ class SearchStatusesFragment :
                 }
                 R.id.status_mute_conversation -> {
                     searchAdapter.getItem(position)?.let { foundStatus ->
-                        viewModel.muteConversation(foundStatus.first, status.muted != true)
+                        searchViewModel.muteConversation(foundStatus.first, status.muted != true)
                     }
                     return@setOnMenuItemClickListener true
                 }
@@ -397,7 +398,7 @@ class SearchStatusesFragment :
                     return@setOnMenuItemClickListener true
                 }
                 R.id.pin -> {
-                    viewModel.pinAccount(status, !status.isPinned())
+                    searchViewModel.pinAccount(status, !status.isPinned())
                     return@setOnMenuItemClickListener true
                 }
             }
@@ -409,7 +410,7 @@ class SearchStatusesFragment :
     private fun onBlock(accountId: String, accountUsername: String) {
         AlertDialog.Builder(requireContext())
             .setMessage(getString(R.string.dialog_block_warning, accountUsername))
-            .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.blockAccount(accountId) }
+            .setPositiveButton(android.R.string.ok) { _, _ -> searchViewModel.blockAccount(accountId) }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
@@ -419,7 +420,7 @@ class SearchStatusesFragment :
             this.requireActivity(),
             accountUsername
         ) { notifications, duration ->
-            viewModel.muteAccount(accountId, notifications, duration)
+            searchViewModel.muteAccount(accountId, notifications, duration)
         }
     }
 
@@ -442,7 +443,7 @@ class SearchStatusesFragment :
     }
 
     private fun openAsAccount(statusUrl: String, account: AccountEntity) {
-        viewModel.activeAccount = account
+        searchViewModel.activeAccount = account
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra(MainActivity.STATUS_URL, statusUrl)
@@ -495,7 +496,7 @@ class SearchStatusesFragment :
             AlertDialog.Builder(it)
                 .setMessage(R.string.dialog_delete_toot_warning)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    viewModel.deleteStatus(id)
+                    searchViewModel.deleteStatus(id)
                     removeItem(position)
                 }
                 .setNegativeButton(android.R.string.cancel, null)
@@ -508,7 +509,7 @@ class SearchStatusesFragment :
             AlertDialog.Builder(it)
                 .setMessage(R.string.dialog_redraft_toot_warning)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    viewModel.deleteStatus(id)
+                    searchViewModel.deleteStatus(id)
                         .observeOn(AndroidSchedulers.mainThread())
                         .autoDispose(from(this, Lifecycle.Event.ON_DESTROY))
                         .subscribe({ deletedStatus ->
@@ -545,7 +546,16 @@ class SearchStatusesFragment :
     }
 
     override fun onEmojiReact(react: Boolean, emoji: String, statusId: String) {
-        viewModel.emojiReact(react, emoji, statusId)
+        if (!react) {
+            searchViewModel.emojiReact(react, emoji, statusId)
+        } else {
+            EmojiDialogFragment(
+                searchViewModel.instance.value?.emojiList,
+                onReactionCallback = { emojiReact ->
+                    searchViewModel.emojiReact(react, emojiReact, statusId)
+                }
+            ).show(parentFragmentManager, EmojiDialogFragment.DIALOG_TAG)
+        }
     }
 
     override fun onEmojiReactMenu(view: View, reaction: EmojiReaction, statusId: String) {

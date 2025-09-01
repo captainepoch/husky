@@ -27,11 +27,11 @@ class SearchAccountsFragment : SearchFragment<Account>() {
     override fun createAdapter(): PagedListAdapter<Account, *> = SearchAccountsAdapter(this)
 
     override val networkStateRefresh: LiveData<NetworkState>
-        get() = viewModel.networkStateAccountRefresh
+        get() = searchViewModel.networkStateAccountRefresh
     override val networkState: LiveData<NetworkState>
-        get() = viewModel.networkStateAccount
+        get() = searchViewModel.networkStateAccount
     override val data: LiveData<PagedList<Account>>
-        get() = viewModel.accounts
+        get() = searchViewModel.accounts
 
     companion object {
         fun newInstance() = SearchAccountsFragment()

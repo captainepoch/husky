@@ -20,10 +20,6 @@
 
 package com.keylesspalace.tusky.fragment;
 
-import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
-import static org.koin.java.KoinJavaComponent.inject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -89,6 +85,7 @@ import com.keylesspalace.tusky.interfaces.ActionButtonActivity;
 import com.keylesspalace.tusky.interfaces.ReselectableFragment;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.settings.PrefKeys;
+import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment;
 import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.HttpHeaderLink;
 import com.keylesspalace.tusky.util.ListStatusAccessibilityDelegate;
@@ -96,11 +93,14 @@ import com.keylesspalace.tusky.util.ListUtils;
 import com.keylesspalace.tusky.util.NotificationTypeConverterKt;
 import com.keylesspalace.tusky.util.PairedList;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
+import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
 import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
 import com.keylesspalace.tusky.viewdata.NotificationViewData;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -116,6 +116,7 @@ import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.functions.Function1;
 import okhttp3.ResponseBody;
+import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -1599,19 +1600,32 @@ public class NotificationsFragment extends SFragment
         setEmojiReactForStatus(posAndNotification.first, event.getNewStatus());
     }
 
-
     @Override
-    public void onEmojiReact(final boolean react, final String emoji, final String statusId) {
+    public void onEmojiReact(final boolean react, @NonNull final String emoji, @NonNull final String statusId) {
         Pair<Integer, Notification> posAndNotification = findReplyPosition(statusId);
-        if(posAndNotification == null) {
+        if (posAndNotification == null) {
             return;
         }
 
-        timelineCases.getValue().react(emoji, statusId, react)
-            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
-                (t) -> Log.d(TAG, "Failed to react with " + emoji + " on status: " + statusId, t));
+        if (!react) {
+            timelineCases.getValue().react(emoji, statusId, false)
+                .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+                .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
+                    (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
+        } else {
+            EmojiDialogFragment dialog = new EmojiDialogFragment(
+                instanceRepo.getInstanceInfoDb().getEmojiList(),
+                emojiReact -> {
+                    timelineCases.getValue().react(emojiReact, statusId, true)
+                        .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+                        .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
+                            (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
 
+                    return Unit.INSTANCE;
+                }
+            );
+            dialog.show(getParentFragmentManager(), EmojiDialogFragment.DIALOG_TAG);
+        }
     }
 
     @Override
