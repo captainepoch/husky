@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
-internal class InstanceRepositoryImp(
+internal class InstanceRepositoryImpl(
     private val accountManager: AccountManager,
     private val service: MastodonService,
     private val db: AppDatabase
