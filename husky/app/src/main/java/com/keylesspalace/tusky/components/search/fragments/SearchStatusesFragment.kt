@@ -61,7 +61,7 @@ import com.keylesspalace.tusky.entity.Status.Mention
 import com.keylesspalace.tusky.interfaces.AccountSelectionListener
 import com.keylesspalace.tusky.interfaces.StatusActionListener
 import com.keylesspalace.tusky.settings.PrefKeys
-import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment
+import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment
 import com.keylesspalace.tusky.util.CardViewMode
 import com.keylesspalace.tusky.util.LinkHelper
 import com.keylesspalace.tusky.util.NetworkState

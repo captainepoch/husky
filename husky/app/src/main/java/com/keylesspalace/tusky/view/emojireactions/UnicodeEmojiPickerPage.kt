@@ -1,4 +1,4 @@
-package com.keylesspalace.tusky.testingclasses
+package com.keylesspalace.tusky.view.emojireactions
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -15,7 +15,7 @@
 
 package com.keylesspalace.tusky.fragment;
 
-import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment;
+import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment;
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import kotlin.Unit;
@@ -83,7 +83,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
