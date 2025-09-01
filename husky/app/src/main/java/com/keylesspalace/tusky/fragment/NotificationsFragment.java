@@ -85,7 +85,7 @@ import com.keylesspalace.tusky.interfaces.ActionButtonActivity;
 import com.keylesspalace.tusky.interfaces.ReselectableFragment;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.settings.PrefKeys;
-import com.keylesspalace.tusky.testingclasses.EmojiDialogFragment;
+import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment;
 import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.HttpHeaderLink;
 import com.keylesspalace.tusky.util.ListStatusAccessibilityDelegate;
