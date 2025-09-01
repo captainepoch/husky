@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import com.keylesspalace.tusky.databinding.LayoutEmojiDialog2Binding
 import com.keylesspalace.tusky.view.EmojiKeyboard
 
-class UnicodeEmojiPickerPage : Fragment() {
+class UnicodeEmojiPickerPage(
+    private val onReactionCallback: (String) -> Unit
+) : Fragment() {
 
     private lateinit var binding: LayoutEmojiDialog2Binding
 
@@ -23,7 +25,9 @@ class UnicodeEmojiPickerPage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.dialogEmojiKeyboard.setupKeyboard(
-            "POST_ID", EmojiKeyboard.UNICODE_MODE
-        ) { id, emoji -> }
+            "CustomEmojiKeyboard", EmojiKeyboard.UNICODE_MODE
+        ) { _, emoji ->
+            onReactionCallback(emoji)
+        }
     }
 }
