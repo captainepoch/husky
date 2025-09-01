@@ -17,6 +17,10 @@ class EmojiDialogFragment(
     private val onReactionCallback: (String) -> Unit
 ) : DialogFragment() {
 
+    companion object {
+        const val DIALOG_TAG = "CUSTOM_EMOJI_DIALOG"
+    }
+
     private lateinit var binding: LayoutEmojiBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
