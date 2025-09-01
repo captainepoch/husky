@@ -31,7 +31,7 @@ glide-image = "1.8.1"
 # Do not update: https://codeberg.org/husky/husky/pulls/121
 #noinspection GradleDependency
 glide-plugin-animation = "2.23.0"
-gradle-ktlint = "12.1.2"
+gradle-ktlint = "13.1.0"
 koin = "4.0.4"
 kotlin = "2.1.10"
 kotlinx = "1.10.2"

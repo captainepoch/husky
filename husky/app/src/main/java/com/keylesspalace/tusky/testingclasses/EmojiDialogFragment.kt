@@ -44,9 +44,15 @@ class EmojiDialogFragment(
         ) { tab, position ->
             tab.setIcon(
                 when (position) {
-                    0 -> R.drawable.arrows_clockwise
-                    1 -> R.drawable.ic_alert_circle
-                    else -> throw Exception("Nope")
+                    0 -> {
+                        R.drawable.arrows_clockwise
+                    }
+                    1 -> {
+                        R.drawable.ic_alert_circle
+                    }
+                    else -> {
+                        throw Exception("It shouldn't be more than two items")
+                    }
                 }
             )
         }.attach()
@@ -74,12 +80,20 @@ class EmojiDialogFragment(
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> CustomEmojiPickerPage(emojis ?: emptyList()) { shortcode ->
-                    onReactionCallback(shortcode)
+                0 -> {
+                    CustomEmojiPickerPage(emojis ?: emptyList()) { shortcode ->
+                        onReactionCallback(shortcode)
+                    }
                 }
 
-                1 -> UnicodeEmojiPickerPage()
-                else -> throw Exception("Nope")
+                1 -> {
+                    UnicodeEmojiPickerPage { emoji ->
+                        onReactionCallback(emoji)
+                    }
+                }
+                else -> {
+                    throw Exception("It shouldn't be more than two items")
+                }
             }
         }
     }
