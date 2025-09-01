@@ -24,11 +24,11 @@ import com.keylesspalace.tusky.util.NetworkState
 
 class SearchHashtagsFragment : SearchFragment<HashTag>() {
     override val networkStateRefresh: LiveData<NetworkState>
-        get() = viewModel.networkStateHashTagRefresh
+        get() = searchViewModel.networkStateHashTagRefresh
     override val networkState: LiveData<NetworkState>
-        get() = viewModel.networkStateHashTag
+        get() = searchViewModel.networkStateHashTag
     override val data: LiveData<PagedList<HashTag>>
-        get() = viewModel.hashtags
+        get() = searchViewModel.hashtags
 
     override fun createAdapter(): PagedListAdapter<HashTag, *> = SearchHashtagsAdapter(this)
 
