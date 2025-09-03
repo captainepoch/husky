@@ -18,6 +18,7 @@ class EmojiDialogFragment(
 ) : DialogFragment() {
 
     companion object {
+        private const val EMOJI_DIALOG_ITEM_COUNT = 2
         const val DIALOG_TAG = "CUSTOM_EMOJI_DIALOG"
     }
 
@@ -45,10 +46,10 @@ class EmojiDialogFragment(
             tab.setIcon(
                 when (position) {
                     0 -> {
-                        R.drawable.arrows_clockwise
+                        R.drawable.neocat_aww
                     }
                     1 -> {
-                        R.drawable.ic_alert_circle
+                        R.drawable.neocat_confused
                     }
                     else -> {
                         throw Exception("It shouldn't be more than two items")
@@ -67,7 +68,7 @@ class EmojiDialogFragment(
     ) : FragmentStateAdapter(activity) {
 
         override fun getItemCount(): Int {
-            return 2
+            return EMOJI_DIALOG_ITEM_COUNT
         }
 
         override fun getItemId(position: Int): Long {
