@@ -44,14 +44,14 @@ internal class InstanceRepositoryImpl(
     private lateinit var instanceSettings: InstanceEntity
 
     override suspend fun getInstanceInfo(): Flow<Either<Nothing, InstanceEntity>> = flow {
-        if (::instanceSettings.isInitialized) {
-            Timber.d("Instance settings already cached")
+        if (::instanceSettings.isInitialized && (instanceSettings.instance == accountManager.activeAccount?.domain)) {
+            Timber.d("Instance settings already cached for ${instanceSettings.instance}")
 
             emit(Either.Right(instanceSettings))
             return@flow
         }
 
-        Timber.d("Instance settings not cached")
+        Timber.d("Instance settings not cached for ${accountManager.activeAccount?.domain}")
 
         service.getInstanceData().run {
             val instanceBody = body()
@@ -68,12 +68,12 @@ internal class InstanceRepositoryImpl(
     }
 
     override fun getInstanceInfoRx(): Single<InstanceEntity> {
-        return if (::instanceSettings.isInitialized) {
-            Timber.d("Instance settings already cached")
+        return if (::instanceSettings.isInitialized && (instanceSettings.instance == accountManager.activeAccount?.domain)) {
+            Timber.d("Instance settings already cached for ${instanceSettings.instance}")
 
             Single.just(instanceSettings)
         } else {
-            Timber.d("Instance settings not cached")
+            Timber.d("Instance settings not cached for ${accountManager.activeAccount?.domain}")
 
             service.getInstance().map {
                 instanceSettings = parseInstance(it)
@@ -86,7 +86,7 @@ internal class InstanceRepositoryImpl(
     }
 
     override fun getInstanceInfoDb(): InstanceEntity {
-        Timber.d("Getting instance settings from the DB")
+        Timber.d("Getting instance settings from the DB for ${accountManager.activeAccount!!.domain}")
 
         return db.instanceDao().loadFromCache(accountManager.activeAccount!!.domain)
     }
