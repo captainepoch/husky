@@ -6,18 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.keylesspalace.tusky.adapter.EmojiAdapter
 import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
 import com.keylesspalace.tusky.databinding.LayoutEmojiDialog1Binding
 import com.keylesspalace.tusky.entity.Emoji
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CustomEmojiPickerPage(
-    private val emojis: List<Emoji>,
+    private val emojiList: List<Emoji>,
     private val onReactionCallback: (String) -> Unit
 ) : Fragment() {
 
     private lateinit var binding: LayoutEmojiDialog1Binding
+    private val customEmojiViewModel by viewModel<CustomEmojiPickerViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,26 +37,25 @@ class CustomEmojiPickerPage(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.emojiGrid.apply {
-            layoutManager = GridLayoutManager(context, calculateSpanCount(context), GridLayoutManager.VERTICAL, false)
-            adapter = EmojiAdapter(
-                emojis,
-                object : OnEmojiSelectedListener {
-                    override fun onEmojiSelected(shortcode: String) {
-                        onReactionCallback(shortcode)
-                    }
-                },
-                false // TODO
-            )
-        }
-    }
+        binding.emojiGrid.layoutManager = GridLayoutManager(context, calculateSpanCount(requireContext()))
 
-    override fun onResume() {
-        super.onResume()
-        view?.post {
-            binding.emojiGrid.requestLayout()
-            binding.emojiGrid.invalidate()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                customEmojiViewModel.emojis.collect { emojis ->
+                    binding.emojiGrid.adapter = EmojiAdapter(
+                        emojis,
+                        object : OnEmojiSelectedListener {
+                            override fun onEmojiSelected(shortcode: String) {
+                                onReactionCallback(shortcode)
+                            }
+                        },
+                        animateEmojis = false // TODO
+                    )
+                }
+            }
         }
+
+        customEmojiViewModel.setEmojis(emojiList)
     }
 
     private fun calculateSpanCount(context: Context): Int {

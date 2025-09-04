@@ -10,6 +10,7 @@ import com.keylesspalace.tusky.components.profile.ui.viewmodel.EditProfileViewMo
 import com.keylesspalace.tusky.components.report.ReportViewModel
 import com.keylesspalace.tusky.components.scheduled.ScheduledTootViewModel
 import com.keylesspalace.tusky.components.search.SearchViewModel
+import com.keylesspalace.tusky.view.emojireactions.CustomEmojiPickerViewModel
 import com.keylesspalace.tusky.viewmodel.AccountViewModel
 import com.keylesspalace.tusky.viewmodel.AccountsInListViewModel
 import com.keylesspalace.tusky.viewmodel.ListsViewModel
@@ -24,6 +25,7 @@ val viewModelsModule = module {
     viewModelOf(::ChatViewModel)
     viewModelOf(::ComposeViewModel)
     viewModelOf(::ConversationsViewModel)
+    viewModelOf(::CustomEmojiPickerViewModel)
     viewModelOf(::DraftsViewModel)
     viewModelOf(::EditProfileViewModel)
     viewModelOf(::ListsViewModel)
