@@ -12,7 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.keylesspalace.tusky.adapter.EmojiAdapter
 import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
-import com.keylesspalace.tusky.databinding.LayoutEmojiDialog1Binding
+import com.keylesspalace.tusky.core.extensions.afterTextChanged
+import com.keylesspalace.tusky.databinding.LayoutEmojiCustomBinding
 import com.keylesspalace.tusky.entity.Emoji
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,7 +23,7 @@ class CustomEmojiPickerPage(
     private val onReactionCallback: (String) -> Unit
 ) : Fragment() {
 
-    private lateinit var binding: LayoutEmojiDialog1Binding
+    private lateinit var binding: LayoutEmojiCustomBinding
     private val customEmojiViewModel by viewModel<CustomEmojiPickerViewModel>()
 
     override fun onCreateView(
@@ -30,7 +31,7 @@ class CustomEmojiPickerPage(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = LayoutEmojiDialog1Binding.inflate(inflater, container, false)
+        binding = LayoutEmojiCustomBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,6 +42,10 @@ class CustomEmojiPickerPage(
 
         binding.searchBox.setOnClickListener {
             binding.searchBox.requestFocus()
+        }
+
+        binding.searchBox.afterTextChanged { text ->
+            customEmojiViewModel.updateQuery(text.toString())
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
