@@ -2,6 +2,7 @@ package com.keylesspalace.tusky.view.emojireactions
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -58,7 +59,22 @@ class EmojiDialogFragment(
             )
         }.attach()
 
-        return AlertDialog.Builder(requireContext()).setView(binding.root).create()
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(binding.root)
+            .create()
+
+        dialog.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
+
+        return dialog
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
     }
 
     class DialogViewPagerAdapter(
@@ -86,7 +102,6 @@ class EmojiDialogFragment(
                         onReactionCallback(shortcode)
                     }
                 }
-
                 1 -> {
                     UnicodeEmojiPickerPage { emoji ->
                         onReactionCallback(emoji)
