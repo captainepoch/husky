@@ -39,6 +39,10 @@ class CustomEmojiPickerPage(
 
         binding.emojiGrid.layoutManager = GridLayoutManager(context, calculateSpanCount(requireContext()))
 
+        binding.searchBox.setOnClickListener {
+            binding.searchBox.requestFocus()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 customEmojiViewModel.emojis.collect { emojis ->
