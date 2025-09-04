@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -15,8 +16,9 @@
         android:id="@+id/searchBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Buscar emoji…"
+        android:hint="@string/custom_emoji_page__placeholder"
         android:imeOptions="actionDone"
+        android:importantForAutofill="no"
         android:inputType="text" />
 
 </LinearLayout>

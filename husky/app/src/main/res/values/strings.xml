@@ -734,4 +734,5 @@
     <string name="action_reblog_quote_OK">OK</string>
     <string name="action_reblog_quote_cancel">Cancel</string>
 
+    <string name="custom_emoji_page__placeholder">Search for emojis…</string>
 </resources>
