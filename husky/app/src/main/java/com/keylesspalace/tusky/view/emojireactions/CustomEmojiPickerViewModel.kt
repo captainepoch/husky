@@ -36,7 +36,9 @@ class CustomEmojiPickerViewModel : ViewModel() {
         )
 
     fun setEmojis(list: List<Emoji>) {
-        allEmojis.value = list
+        allEmojis.value = list.filter { emoji ->
+            emoji.visibleInPicker == null || emoji.visibleInPicker
+        }.sortedBy { it.shortcode.lowercase() }
     }
 
     fun updateQuery(newQuery: String) {
