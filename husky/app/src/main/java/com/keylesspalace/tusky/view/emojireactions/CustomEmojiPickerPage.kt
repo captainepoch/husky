@@ -10,9 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import com.keylesspalace.tusky.adapter.EmojiAdapter
 import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
+import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.databinding.LayoutEmojiCustomBinding
 import com.keylesspalace.tusky.entity.Emoji
 import kotlinx.coroutines.launch
@@ -25,6 +25,16 @@ class CustomEmojiPickerPage(
 
     private lateinit var binding: LayoutEmojiCustomBinding
     private val customEmojiViewModel by viewModel<CustomEmojiPickerViewModel>()
+    private val adapter by lazy {
+        ListEmojiAdapter(
+            object : OnEmojiSelectedListener {
+                override fun onEmojiSelected(shortcode: String) {
+                    onReactionCallback(shortcode)
+                }
+            },
+            animateEmojis = false
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,15 +61,12 @@ class CustomEmojiPickerPage(
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 customEmojiViewModel.emojis.collect { emojis ->
-                    binding.emojiGrid.adapter = EmojiAdapter(
-                        emojis,
-                        object : OnEmojiSelectedListener {
-                            override fun onEmojiSelected(shortcode: String) {
-                                onReactionCallback(shortcode)
-                            }
-                        },
-                        animateEmojis = false // TODO
-                    )
+                    adapter.setAnimateEmojis(false)
+
+                    binding.emojiGrid.adapter = adapter
+                    adapter.submitList(emojis)
+
+                    binding.loadingOverlay.gone()
                 }
             }
         }
