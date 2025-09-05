@@ -1,6 +1,7 @@
 package com.keylesspalace.tusky.view.emojireactions
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,9 @@ import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.databinding.LayoutEmojiCustomBinding
 import com.keylesspalace.tusky.entity.Emoji
+import com.keylesspalace.tusky.settings.PrefKeys
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CustomEmojiPickerPage(
@@ -24,6 +27,7 @@ class CustomEmojiPickerPage(
 ) : Fragment() {
 
     private lateinit var binding: LayoutEmojiCustomBinding
+    private val preferences: SharedPreferences by inject()
     private val customEmojiViewModel by viewModel<CustomEmojiPickerViewModel>()
     private val adapter by lazy {
         ListEmojiAdapter(
@@ -32,7 +36,7 @@ class CustomEmojiPickerPage(
                     onReactionCallback(shortcode)
                 }
             },
-            animateEmojis = false
+            animateEmojis = preferences.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
         )
     }
 
@@ -61,8 +65,6 @@ class CustomEmojiPickerPage(
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 customEmojiViewModel.emojis.collect { emojis ->
-                    adapter.setAnimateEmojis(false)
-
                     binding.emojiGrid.adapter = adapter
                     adapter.submitList(emojis)
 
