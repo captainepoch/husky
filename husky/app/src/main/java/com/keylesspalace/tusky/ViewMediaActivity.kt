@@ -44,10 +44,14 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
+import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.UnstableApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -244,28 +248,81 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         return String.format(Locale.getDefault(), "%d/%d", position + 1, attachments?.size)
     }
 
+    @OptIn(UnstableApi::class)
     private fun downloadMedia() {
         val url = avatarUrl ?: attachments!![binding.viewPager.currentItem].attachment.url
-        val filename = Uri.parse(url).lastPathSegment
+        val originalFilename = url.toUri().lastPathSegment ?: "image_${System.currentTimeMillis()}.png"
+        val uniqueFilename = generateUniqueFilename(originalFilename)
+        val mimeTypeMap = MimeTypeMap.getSingleton()
+        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
+        val mimeType = if (!extension.isNullOrEmpty()) {
+            mimeTypeMap.getMimeTypeFromExtension(extension) ?: MimeTypes.IMAGE_PNG
+        } else {
+            MimeTypes.IMAGE_PNG
+        }
+
         Toast.makeText(
             applicationContext,
-            resources.getString(R.string.download_image, filename),
+            resources.getString(R.string.download_image, uniqueFilename),
             Toast.LENGTH_SHORT
         ).show()
 
         val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        downloadManager.enqueue(
-            DownloadManager.Request(Uri.parse(url)).apply {
-                setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_PICTURES,
-                    "${getString(R.string.app_name)}/$filename"
-                )
-            }
+        val request = DownloadManager.Request(url.toUri()).apply {
+            setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_PICTURES,
+                "${getString(R.string.app_name)}/$uniqueFilename"
+            )
+            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            setTitle(uniqueFilename)
+            setDescription("Downloaded file at the filesystem for ${getString(R.string.app_name)}")
+            setVisibleInDownloadsUi(true)
+            setMimeType(mimeType)
+            setAllowedNetworkTypes(
+                DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE
+            )
+            setAllowedOverRoaming(true)
+            setAllowedOverMetered(true)
+        }
+
+        downloadManager.enqueue(request)
+    }
+
+    private fun generateUniqueFilename(originalFilename: String): String {
+        val picturesDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            getString(R.string.app_name)
         )
+
+        val lastDotIndex = originalFilename.lastIndexOf('.')
+        val baseName = if (lastDotIndex != -1) {
+            originalFilename.substring(0, lastDotIndex)
+        } else {
+            originalFilename
+        }
+        val extension = if (lastDotIndex != -1) {
+            originalFilename.substring(lastDotIndex)
+        } else {
+            ".png"
+        }
+
+        var counter = 1
+        var filename = originalFilename
+        var file = File(picturesDir, filename)
+
+        while (file.exists()) {
+            counter++
+            filename = "${baseName}_${counter}${extension}"
+            file = File(picturesDir, filename)
+        }
+
+        return filename
     }
 
     private fun requestDownloadMedia() {
-        if (VERSION.SDK_INT < VERSION_CODES.Q) {
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+            downloadMedia()
+        } else {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)) { _, grantResults ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     downloadMedia()
@@ -277,8 +334,6 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     ) { requestDownloadMedia() }
                 }
             }
-        } else {
-            downloadMedia()
         }
     }
 
@@ -375,7 +430,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
         invalidateOptionsMenu()
         val file = File(directory, getTemporaryMediaFilename("png"))
         val futureTask: FutureTarget<Bitmap> =
-            Glide.with(applicationContext).asBitmap().load(Uri.parse(url)).submit()
+            Glide.with(applicationContext).asBitmap().load(url.toUri()).submit()
         Single.fromCallable {
             val bitmap = futureTask.get()
             try {
@@ -414,7 +469,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     isCreating = false
                     invalidateOptionsMenu()
                     binding.progressBarShare.visibility = View.GONE
-                    Timber.e("Failed to download image", error)
+                    Timber.e(error, "Failed to download image")
                 }
             )
     }
@@ -453,7 +508,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                 }
             )
         } catch (e: ActivityNotFoundException) {
-            Timber.e("Not app available: ${e.message}", e)
+            Timber.e(e, "Not app available: ${e.message}")
 
             Toast.makeText(
                 this,
