@@ -63,9 +63,5 @@ class ListEmojiAdapter(
         holder.layout.composeEmojiButton.contentDescription = emoji.shortcode
     }
 
-    fun setAnimateEmojis(animate: Boolean) {
-        animateEmojis = animate
-    }
-
     inner class ListEmojiHolder(val layout: ItemEmojiButtonBinding) : RecyclerView.ViewHolder(layout.composeEmojiButton)
 }
