@@ -1,3 +1,12 @@
+Husky 1.7.0-beta1 - 2025-09-06
+  - Updated dependencies and Gradle.
+  - Fix: Reload instance settings when changing an account.
+  - Fix: Potential crash when showing the notifications tab.
+  - Fix: Potential crash with null account.
+  - Fix: Attempt to stop downloaded files being deleted by Android.
+  - Add: Custom emoji reactions for statuses.
+  - Add: Keep screen on during video playback.
+
 Husky 1.6.1 - 2024-11-27
   - Updated dependencies and Gradle.
   - Fix: Fix NPE when opening links from quoted statuses
