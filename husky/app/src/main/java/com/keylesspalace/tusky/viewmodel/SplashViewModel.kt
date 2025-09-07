@@ -8,6 +8,7 @@ import com.keylesspalace.tusky.viewmodel.viewstate.SplashViewState
 import com.keylesspalace.tusky.viewmodel.viewstate.SplashViewState.NO_USER
 import com.keylesspalace.tusky.viewmodel.viewstate.SplashViewState.USER
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -25,7 +26,10 @@ class SplashViewModel(
 
     private fun loadInstanceSettings() {
         viewModelScope.launch {
-            instanceRepository.getInstanceInfo().collect {
+            instanceRepository.getInstanceInfo()
+                .catch {
+                    _splashViewState.update { NO_USER }
+                }.collect {
                 _splashViewState.update {
                     accountManager.activeAccount?.let { USER } ?: NO_USER
                 }
