@@ -20,6 +20,10 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import static org.koin.java.KoinJavaComponent.inject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,7 +89,6 @@ import com.keylesspalace.tusky.interfaces.ActionButtonActivity;
 import com.keylesspalace.tusky.interfaces.ReselectableFragment;
 import com.keylesspalace.tusky.interfaces.StatusActionListener;
 import com.keylesspalace.tusky.settings.PrefKeys;
-import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment;
 import com.keylesspalace.tusky.util.CardViewMode;
 import com.keylesspalace.tusky.util.HttpHeaderLink;
 import com.keylesspalace.tusky.util.ListStatusAccessibilityDelegate;
@@ -93,14 +96,12 @@ import com.keylesspalace.tusky.util.ListUtils;
 import com.keylesspalace.tusky.util.NotificationTypeConverterKt;
 import com.keylesspalace.tusky.util.PairedList;
 import com.keylesspalace.tusky.util.StatusDisplayOptions;
-import static com.keylesspalace.tusky.util.StringUtils.isLessThan;
 import com.keylesspalace.tusky.util.ViewDataUtils;
 import com.keylesspalace.tusky.view.BackgroundMessageView;
 import com.keylesspalace.tusky.view.EndlessOnScrollListener;
+import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment;
 import com.keylesspalace.tusky.viewdata.NotificationViewData;
 import com.keylesspalace.tusky.viewdata.StatusViewData;
-import static com.uber.autodispose.AutoDispose.autoDisposable;
-import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -116,7 +117,6 @@ import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.functions.Function1;
 import okhttp3.ResponseBody;
-import static org.koin.java.KoinJavaComponent.inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,8 +126,6 @@ public class NotificationsFragment extends SFragment
     implements SwipeRefreshLayout.OnRefreshListener, StatusActionListener,
     NotificationsAdapter.NotificationActionListener, AccountActionListener, ReselectableFragment
 {
-
-    private static final String TAG = "NotificationF"; // logging tag
 
     private static final int LOAD_AT_ONCE = 30;
     private int maxPlaceholderId = 0;
@@ -603,8 +601,7 @@ public class NotificationsFragment extends SFragment
         timelineCases.getValue().favourite(status, favourite)
             .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
             .subscribe((newStatus) -> setFavouriteForStatus(position, status, favourite),
-                (t) -> Log.d(getClass().getSimpleName(),
-                    "Failed to favourite status: " + status.getId(), t));
+                (t) -> Timber.e(t, "Failed to favourite status: %s", status.getId()));
     }
 
     private void setFavouriteForStatus(int position, Status status, boolean favourite) {
@@ -636,10 +633,11 @@ public class NotificationsFragment extends SFragment
         final Status status = notification.getStatus();
 
         timelineCases.getValue().bookmark(status, bookmark)
-            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newStatus) -> setBookmarkForStatus(position, status, bookmark),
-                (t) -> Log.d(getClass().getSimpleName(),
-                    "Failed to bookmark status: " + status.getId(), t));
+                     .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+                     .subscribe(
+                             (newStatus) -> setBookmarkForStatus(position, status, bookmark),
+                             (t) -> Timber.e(t, "Failed to bookmark status: %s", status.getId())
+                     );
     }
 
     private void setBookmarkForStatus(int position, Status status, boolean bookmark) {
@@ -670,9 +668,11 @@ public class NotificationsFragment extends SFragment
         final Status status = notification.getStatus();
 
         timelineCases.getValue().voteInPoll(status, choices)
-            .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-            .subscribe((newPoll) -> setVoteForPoll(position, newPoll),
-                (t) -> Log.d(TAG, "Failed to vote in poll: " + status.getId(), t));
+                     .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
+                     .subscribe(
+                             (newPoll) -> setVoteForPoll(position, newPoll),
+                             (t) -> Timber.e(t, "Failed to vote in poll: %s", status.getId())
+                     );
     }
 
     private void setVoteForPoll(int position, Poll poll) {
@@ -805,12 +805,13 @@ public class NotificationsFragment extends SFragment
 
     @Override
     public void onLoadMore(int position) {
-        //check bounds before accessing list,
+        // Check bounds before accessing list,
         if(notifications.size() >= position && position > 0) {
             Notification previous = notifications.get(position - 1).asRightOrNull();
             Notification next = notifications.get(position + 1).asRightOrNull();
             if(previous == null || next == null) {
-                Log.e(TAG, "Failed to load more, invalid placeholder position: " + position);
+                Timber.e("Failed to load more, invalid placeholder position: %s", position);
+
                 return;
             }
             sendFetchNotificationsRequest(previous.getId(), next.getId(), FetchEnd.MIDDLE,
@@ -821,25 +822,29 @@ public class NotificationsFragment extends SFragment
             notifications.setPairedItem(position, notificationViewData);
             updateAdapter();
         } else {
-            Log.d(TAG, "error loading more");
+            Timber.e("Error loading more");
         }
     }
 
     @Override
     public void onContentCollapsedChange(boolean isCollapsed, int position) {
-        if(position < 0 || position >= notifications.size()) {
-            Log.e(TAG,
-                String.format("Tried to access out of bounds status position: %d of %d", position,
-                    notifications.size() - 1));
+        if (position < 0 || position >= notifications.size()) {
+            Timber.e(
+                    "Tried to access out of bounds status position: %d of %d", position,
+                    notifications.size() - 1
+            );
+
             return;
         }
 
         NotificationViewData notification = notifications.getPairedItem(position);
-        if(!(notification instanceof NotificationViewData.Concrete)) {
-            Log.e(TAG, String.format(
-                "Expected NotificationViewData.Concrete, got %s instead at position: %d of %d",
-                notification == null ? "null" : notification.getClass().getSimpleName(), position,
-                notifications.size() - 1));
+        if (!(notification instanceof NotificationViewData.Concrete)) {
+            Timber.e(
+                    "Expected NotificationViewData.Concrete, got %s instead at position: %d of %d",
+                    notification == null ? "null" : notification.getClass().getSimpleName(),
+                    position,
+                    notifications.size() - 1
+            );
             return;
         }
 
@@ -1055,12 +1060,17 @@ public class NotificationsFragment extends SFragment
     @Override
     public void onRespondToFollowRequest(boolean accept, String id, int position) {
         Single<Relationship> request =
-            accept ? mastodonApi.getValue().authorizeFollowRequestObservable(id) :
-                mastodonApi.getValue().rejectFollowRequestObservable(id);
+                accept ? mastodonApi.getValue().authorizeFollowRequestObservable(id) :
+                        mastodonApi.getValue().rejectFollowRequestObservable(id);
         request.observeOn(AndroidSchedulers.mainThread())
-            .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
-            .subscribe((relationship) -> fullyRefreshWithProgressBar(true), (error) -> Log.e(TAG,
-                String.format("Failed to %s account id %s", accept ? "accept" : "reject", id)));
+               .as(autoDisposable(from(this, Lifecycle.Event.ON_DESTROY)))
+               .subscribe(
+                       (relationship) -> fullyRefreshWithProgressBar(true), (error) -> Timber.e(
+                               "Failed to %s account id %s",
+                               accept ? "accept" : "reject",
+                               id
+                       )
+               );
     }
 
     @Override
@@ -1072,7 +1082,7 @@ public class NotificationsFragment extends SFragment
                 return;
             }
         }
-        Log.w(TAG, "Didn't find a notification for ID: " + notificationId);
+        Timber.w("Didn't find a notification for ID: %s", notificationId);
     }
 
     private void onPreferenceChanged(String key) {
@@ -1306,7 +1316,8 @@ public class NotificationsFragment extends SFragment
             }
             updateFilterVisibility();
         }
-        Log.e(TAG, "Fetch failure: " + exception.getMessage());
+
+        Timber.e(exception, "Fetch failure: %s", exception.getMessage());
 
         if(fetchEnd == FetchEnd.TOP) {
             topLoading = false;
@@ -1331,7 +1342,8 @@ public class NotificationsFragment extends SFragment
             }
 
             if(!account.getLastNotificationId().equals(lastNotificationId)) {
-                Log.d(TAG, "saving newest noti id: " + lastNotificationId);
+                Timber.d("Saving newest notification id: %s", lastNotificationId);
+
                 account.setLastNotificationId(lastNotificationId);
                 accountManager.getValue().saveAccount(account);
             }
