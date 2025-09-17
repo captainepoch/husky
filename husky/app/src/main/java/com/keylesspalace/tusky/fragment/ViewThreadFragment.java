@@ -18,6 +18,7 @@ package com.keylesspalace.tusky.fragment;
 import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment;
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
+import java.util.Collections;
 import kotlin.Unit;
 import static org.koin.java.KoinJavaComponent.inject;
 import android.content.Context;
@@ -913,16 +914,29 @@ public final class ViewThreadFragment extends SFragment
                 .subscribe((newStatus) -> setEmojiReactionForStatus(position, newStatus),
                     (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
         } else {
-            EmojiDialogFragment dialog = new EmojiDialogFragment(
-                instanceRepo.getInstanceInfoDb().getEmojiList(),
-                (isCustomEmoji, shortcode) -> {
-                    timelineCases.getValue().react(shortcode, statusId, true)
-                        .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-                        .subscribe((newStatus) -> setEmojiReactionForStatus(position, newStatus),
-                            (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
+            EmojiDialogFragment dialog = EmojiDialogFragment.Companion.newInstance(
+                    (instanceRepo.getInstanceInfoDb().getEmojiList() !=
+                            null) ? instanceRepo.getInstanceInfoDb()
+                                                .getEmojiList() : Collections.emptyList(),
+                    (isCustomEmoji, shortcode) -> {
+                        timelineCases.getValue()
+                                     .react(shortcode, statusId, true)
+                                     .observeOn(AndroidSchedulers.mainThread())
+                                     .as(autoDisposable(from(this)))
+                                     .subscribe(
+                                             (newStatus) -> setEmojiReactionForStatus(
+                                                     position,
+                                                     newStatus
+                                             ),
+                                             (t) -> Timber.e(
+                                                     t,
+                                                     "Failed to react with " + emoji +
+                                                             " on status: " + statusId
+                                             )
+                                     );
 
-                    return Unit.INSTANCE;
-                }
+                        return Unit.INSTANCE;
+                    }
             );
             dialog.show(getParentFragmentManager(), EmojiDialogFragment.DIALOG_TAG);
         }

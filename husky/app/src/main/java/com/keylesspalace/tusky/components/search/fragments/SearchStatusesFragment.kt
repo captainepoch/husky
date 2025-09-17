@@ -549,12 +549,11 @@ class SearchStatusesFragment :
         if (!react) {
             searchViewModel.emojiReact(react, emoji, statusId)
         } else {
-            EmojiDialogFragment(
-                searchViewModel.instance.value?.emojiList,
+            EmojiDialogFragment.newInstance(
+                searchViewModel.instance.value?.emojiList ?: emptyList(),
                 onEmojiClick = { _, shortcode ->
                     searchViewModel.emojiReact(react, shortcode, statusId)
-                }
-            ).show(parentFragmentManager, EmojiDialogFragment.DIALOG_TAG)
+                }).show(parentFragmentManager, EmojiDialogFragment.DIALOG_TAG)
         }
     }
 

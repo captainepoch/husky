@@ -1625,16 +1625,29 @@ public class NotificationsFragment extends SFragment
                 .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
                     (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
         } else {
-            EmojiDialogFragment dialog = new EmojiDialogFragment(
-                instanceRepo.getInstanceInfoDb().getEmojiList(),
-                (isCustomEmoji, shortcode) -> {
-                    timelineCases.getValue().react(shortcode, statusId, true)
-                        .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
-                        .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
-                            (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
+            EmojiDialogFragment dialog = EmojiDialogFragment.Companion.newInstance(
+                    (instanceRepo.getInstanceInfoDb().getEmojiList() !=
+                            null) ? instanceRepo.getInstanceInfoDb()
+                                                .getEmojiList() : Collections.emptyList(),
+                    (isCustomEmoji, shortcode) -> {
+                        timelineCases.getValue()
+                                     .react(shortcode, statusId, true)
+                                     .observeOn(AndroidSchedulers.mainThread())
+                                     .as(autoDisposable(from(this)))
+                                     .subscribe(
+                                             (newStatus) -> setEmojiReactForStatus(
+                                                     posAndNotification.first,
+                                                     newStatus
+                                             ),
+                                             (t) -> Timber.e(
+                                                     t,
+                                                     "Failed to react with " + emoji +
+                                                             " on status: " + statusId
+                                             )
+                                     );
 
-                    return Unit.INSTANCE;
-                }
+                        return Unit.INSTANCE;
+                    }
             );
             dialog.show(getParentFragmentManager(), EmojiDialogFragment.DIALOG_TAG);
         }
