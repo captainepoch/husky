@@ -551,8 +551,8 @@ class SearchStatusesFragment :
         } else {
             EmojiDialogFragment(
                 searchViewModel.instance.value?.emojiList,
-                onReactionCallback = { emojiReact ->
-                    searchViewModel.emojiReact(react, emojiReact, statusId)
+                onEmojiClick = { _, shortcode ->
+                    searchViewModel.emojiReact(react, shortcode, statusId)
                 }
             ).show(parentFragmentManager, EmojiDialogFragment.DIALOG_TAG)
         }

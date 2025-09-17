@@ -1627,8 +1627,8 @@ public class NotificationsFragment extends SFragment
         } else {
             EmojiDialogFragment dialog = new EmojiDialogFragment(
                 instanceRepo.getInstanceInfoDb().getEmojiList(),
-                emojiReact -> {
-                    timelineCases.getValue().react(emojiReact, statusId, true)
+                (isCustomEmoji, shortcode) -> {
+                    timelineCases.getValue().react(shortcode, statusId, true)
                         .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
                         .subscribe((newStatus) -> setEmojiReactForStatus(posAndNotification.first, newStatus),
                             (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
