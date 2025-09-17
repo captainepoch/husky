@@ -32,7 +32,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
@@ -71,8 +70,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.BaseActivity
 import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
-import com.keylesspalace.tusky.adapter.EmojiAdapter
-import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
 import com.keylesspalace.tusky.appstore.Event
 import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.StatusPreviewEvent
@@ -96,14 +93,12 @@ import com.keylesspalace.tusky.databinding.ActivityComposeBinding
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.DraftAttachment
 import com.keylesspalace.tusky.entity.Attachment
-import com.keylesspalace.tusky.entity.Emoji
 import com.keylesspalace.tusky.entity.NewPoll
 import com.keylesspalace.tusky.entity.Status
 import com.keylesspalace.tusky.settings.PrefKeys
 import com.keylesspalace.tusky.util.BBCodeEdit
 import com.keylesspalace.tusky.util.ComposeTokenizer
 import com.keylesspalace.tusky.util.HTMLEdit
-import com.keylesspalace.tusky.util.PostFormat
 import com.keylesspalace.tusky.util.PostFormat.BBCODE
 import com.keylesspalace.tusky.util.PostFormat.HTML
 import com.keylesspalace.tusky.util.PostFormat.MARKDOWN
@@ -118,6 +113,7 @@ import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.util.visible
 import com.keylesspalace.tusky.util.withLifecycleContext
 import com.keylesspalace.tusky.view.EmojiKeyboard
+import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial
 import com.mikepenz.iconics.utils.colorInt
@@ -139,7 +135,6 @@ class ComposeActivity :
     BaseActivity(),
     ComposeOptionsListener,
     ComposeAutoCompleteAdapter.AutocompletionProvider,
-    OnEmojiSelectedListener,
     InputConnectionCompat.OnCommitContentListener,
     TimePickerDialog.OnTimeSetListener,
     EmojiKeyboard.OnEmojiSelectedListener {
@@ -150,7 +145,6 @@ class ComposeActivity :
 
     private lateinit var composeOptionsBehavior: BottomSheetBehavior<*>
     private lateinit var addMediaBehavior: BottomSheetBehavior<*>
-    private lateinit var emojiBehavior: BottomSheetBehavior<*>
     private lateinit var scheduleBehavior: BottomSheetBehavior<*>
     private lateinit var stickerBehavior: BottomSheetBehavior<*>
     private lateinit var previewBehavior: BottomSheetBehavior<*>
@@ -170,14 +164,12 @@ class ComposeActivity :
             // Acting like a teen: deliberately ignoring parent.
             if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
                 addMediaBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
-                emojiBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
                 scheduleBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
                 stickerBehavior.state == BottomSheetBehavior.STATE_EXPANDED ||
                 previewBehavior.state == BottomSheetBehavior.STATE_EXPANDED
             ) {
                 composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -236,7 +228,7 @@ class ComposeActivity :
         val composeOptions = intent.getParcelableExtra<ComposeOptions?>(COMPOSE_OPTIONS_EXTRA)
 
         suggestFormattingSyntax = if (!composeOptions?.formattingSyntax.isNullOrEmpty()) {
-            composeOptions?.formattingSyntax!!
+            composeOptions.formattingSyntax!!
         } else {
             activeAccount.defaultFormattingSyntax
         }
@@ -249,7 +241,7 @@ class ComposeActivity :
         }
 
         if (!composeOptions?.scheduledAt.isNullOrEmpty()) {
-            binding.composeScheduleView.setDateTime(composeOptions?.scheduledAt)
+            binding.composeScheduleView.setDateTime(composeOptions.scheduledAt)
         }
 
         viewModel.composeWithZwsp.value =
@@ -481,7 +473,11 @@ class ComposeActivity :
                 }
             }
 
-            viewModel.emoji.observe { emoji -> setEmojiList(emoji) }
+            viewModel.emoji.observe { emojis ->
+                val emojiListIsEmpty = emojis.isNullOrEmpty()
+                enableButton(binding.composeEmojiButton, !emojiListIsEmpty, !emojiListIsEmpty)
+            }
+
             combineLiveData(
                 viewModel.markMediaAsSensitive,
                 viewModel.showContentWarning
@@ -572,7 +568,6 @@ class ComposeActivity :
         composeOptionsBehavior = BottomSheetBehavior.from(binding.composeOptionsBottomSheet)
         addMediaBehavior = BottomSheetBehavior.from(binding.addMediaBottomSheet)
         scheduleBehavior = BottomSheetBehavior.from(binding.composeScheduleView)
-        emojiBehavior = BottomSheetBehavior.from(binding.emojiView)
         stickerBehavior = BottomSheetBehavior.from(binding.stickerKeyboard)
         previewBehavior = BottomSheetBehavior.from(binding.previewScroll)
 
@@ -974,7 +969,6 @@ class ComposeActivity :
         if (composeOptionsBehavior.state == BottomSheetBehavior.STATE_HIDDEN || composeOptionsBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -996,7 +990,6 @@ class ComposeActivity :
             scheduleBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {
@@ -1005,25 +998,20 @@ class ComposeActivity :
     }
 
     private fun showEmojis() {
-        binding.emojiView.adapter?.let {
-            if (it.itemCount == 0) {
-                val errorMessage = getString(
-                    R.string.error_no_custom_emojis,
-                    accountManager.value.activeAccount!!.domain
-                )
-                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-            } else {
-                if (emojiBehavior.state == BottomSheetBehavior.STATE_HIDDEN || emojiBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-                    emojiBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                } else {
-                    emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                }
-            }
+        if (viewModel.emoji.value.isNullOrEmpty()) {
+            val errorMessage = getString(
+                R.string.error_no_custom_emojis, accountManager.value.activeAccount!!.domain
+            )
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        } else {
+            EmojiDialogFragment(
+                viewModel.emoji.value, onEmojiClick = { isCustomEmoji, shortcode ->
+                    if (isCustomEmoji) {
+                        replaceTextAtCaret(":$shortcode: ")
+                    } else {
+                        replaceTextAtCaret("$shortcode ")
+                    }
+                }).show(supportFragmentManager, EmojiDialogFragment.DIALOG_TAG)
         }
     }
 
@@ -1031,7 +1019,6 @@ class ComposeActivity :
         if (addMediaBehavior.state == BottomSheetBehavior.STATE_HIDDEN || addMediaBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             addMediaBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -1204,7 +1191,6 @@ class ComposeActivity :
             previewBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             stickerBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
@@ -1529,27 +1515,11 @@ class ComposeActivity :
         return viewModel.searchAutocompleteSuggestions(token)
     }
 
-    override fun onEmojiSelected(shortcode: String) {
-        replaceTextAtCaret(":$shortcode: ")
-    }
-
-    private fun setEmojiList(emojiList: List<Emoji>?) {
-        if (emojiList != null) {
-            binding.emojiView.adapter = EmojiAdapter(
-                emojiList,
-                this@ComposeActivity,
-                preferences.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
-            )
-            enableButton(binding.composeEmojiButton, true, emojiList.isNotEmpty())
-        }
-    }
-
     private fun showStickers() {
         if (stickerBehavior.state == BottomSheetBehavior.STATE_HIDDEN || stickerBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
             stickerBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             addMediaBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             composeOptionsBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            emojiBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             scheduleBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             previewBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         } else {

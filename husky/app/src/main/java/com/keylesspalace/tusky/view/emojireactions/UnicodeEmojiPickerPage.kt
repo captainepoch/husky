@@ -9,7 +9,7 @@ import com.keylesspalace.tusky.databinding.LayoutEmojiUnicodeBinding
 import com.keylesspalace.tusky.view.EmojiKeyboard
 
 class UnicodeEmojiPickerPage(
-    private val onReactionCallback: (String) -> Unit
+    private val onEmojiClick: (String) -> Unit
 ) : Fragment() {
 
     private lateinit var binding: LayoutEmojiUnicodeBinding
@@ -27,7 +27,7 @@ class UnicodeEmojiPickerPage(
         binding.dialogEmojiKeyboard.setupKeyboard(
             "CustomEmojiKeyboard", EmojiKeyboard.UNICODE_MODE
         ) { _, emoji ->
-            onReactionCallback(emoji)
+            onEmojiClick(emoji)
         }
     }
 }

@@ -15,7 +15,7 @@ import com.keylesspalace.tusky.entity.Emoji
 
 class EmojiDialogFragment(
     private val emojis: List<Emoji>?,
-    private val onReactionCallback: (String) -> Unit
+    private val onEmojiClick: (isCustomEmoji: Boolean, shortcode: String) -> Unit
 ) : DialogFragment() {
 
     companion object {
@@ -29,9 +29,9 @@ class EmojiDialogFragment(
         binding = LayoutEmojiBinding.inflate(layoutInflater)
 
         val viewPager = binding.dialogViewPager.apply {
-            adapter = DialogViewPagerAdapter(requireActivity(), emojis) { shortcode ->
+            adapter = DialogViewPagerAdapter(requireActivity(), emojis) { isCustomEmoji, shortcode ->
                 dismissAllowingStateLoss()
-                onReactionCallback(shortcode)
+                onEmojiClick(isCustomEmoji, shortcode)
             }
             isUserInputEnabled = false
 
@@ -64,7 +64,8 @@ class EmojiDialogFragment(
             .create()
 
         dialog.window?.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or
+                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         )
 
         return dialog
@@ -80,7 +81,7 @@ class EmojiDialogFragment(
     class DialogViewPagerAdapter(
         activity: FragmentActivity,
         private val emojis: List<Emoji>?,
-        private val onReactionCallback: (String) -> Unit
+        private val onEmojiClick: (isCustomEmoji: Boolean, shortcode: String) -> Unit
     ) : FragmentStateAdapter(activity) {
 
         override fun getItemCount(): Int {
@@ -99,12 +100,12 @@ class EmojiDialogFragment(
             return when (position) {
                 0 -> {
                     CustomEmojiPickerPage(emojis ?: emptyList()) { shortcode ->
-                        onReactionCallback(shortcode)
+                        onEmojiClick(true, shortcode)
                     }
                 }
                 1 -> {
                     UnicodeEmojiPickerPage { emoji ->
-                        onReactionCallback(emoji)
+                        onEmojiClick(false, emoji)
                     }
                 }
                 else -> {

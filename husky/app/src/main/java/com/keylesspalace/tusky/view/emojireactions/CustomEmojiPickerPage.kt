@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CustomEmojiPickerPage(
     private val emojiList: List<Emoji>,
-    private val onReactionCallback: (String) -> Unit
+    private val onEmojiClick: (String) -> Unit
 ) : Fragment() {
 
     private lateinit var binding: LayoutEmojiCustomBinding
@@ -33,7 +33,7 @@ class CustomEmojiPickerPage(
         ListEmojiAdapter(
             object : OnEmojiSelectedListener {
                 override fun onEmojiSelected(shortcode: String) {
-                    onReactionCallback(shortcode)
+                    onEmojiClick(shortcode)
                 }
             },
             animateEmojis = preferences.getBoolean(PrefKeys.ANIMATE_CUSTOM_EMOJIS, false)
