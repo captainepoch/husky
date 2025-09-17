@@ -1,7 +1,9 @@
 package com.keylesspalace.tusky.view.emojireactions
 
 import android.app.Dialog
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -20,6 +22,7 @@ class EmojiDialogFragment(
 
     companion object {
         private const val EMOJI_DIALOG_ITEM_COUNT = 2
+        private const val DIALOG_SELECTED_TAB = "selected_tab"
         const val DIALOG_TAG = "CUSTOM_EMOJI_DIALOG"
     }
 
@@ -29,29 +32,25 @@ class EmojiDialogFragment(
         binding = LayoutEmojiBinding.inflate(layoutInflater)
 
         val viewPager = binding.dialogViewPager.apply {
-            adapter = DialogViewPagerAdapter(requireActivity(), emojis) { isCustomEmoji, shortcode ->
-                dismissAllowingStateLoss()
-                onEmojiClick(isCustomEmoji, shortcode)
-            }
+            adapter =
+                DialogViewPagerAdapter(requireActivity(), emojis) { isCustomEmoji, shortcode ->
+                    dismissAllowingStateLoss()
+                    onEmojiClick(isCustomEmoji, shortcode)
+                }
             isUserInputEnabled = false
-
-            val heightInPixels = (300 * resources.displayMetrics.density).toInt()
-            layoutParams = layoutParams.apply {
-                height = heightInPixels
-            }
         }
 
-        TabLayoutMediator(
-            binding.dialogTabLayout, viewPager
-        ) { tab, position ->
+        TabLayoutMediator(binding.dialogTabLayout, viewPager) { tab, position ->
             tab.setIcon(
                 when (position) {
                     0 -> {
                         R.drawable.neocat_aww
                     }
+
                     1 -> {
                         R.drawable.neocat_confused
                     }
+
                     else -> {
                         throw Exception("It shouldn't be more than two items")
                     }
@@ -59,16 +58,34 @@ class EmojiDialogFragment(
             )
         }.attach()
 
+        val selected = savedInstanceState?.getInt(DIALOG_SELECTED_TAB) ?: 0
+        viewPager.post { viewPager.setCurrentItem(selected, false) }
+
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .create()
 
         dialog.window?.setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or
-                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         )
 
+        binding.dialogViewPager.post {
+            calculateHeight()
+        }
+
         return dialog
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        calculateHeight()
+
+        binding.dialogViewPager.post {
+            binding.dialogViewPager.setCurrentItem(binding.dialogViewPager.currentItem, false)
+        }
+
+        binding.dialogTabLayout.requestLayout()
+        binding.dialogViewPager.requestLayout()
     }
 
     override fun onResume() {
@@ -76,6 +93,25 @@ class EmojiDialogFragment(
 
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(DIALOG_SELECTED_TAB, binding.dialogViewPager.currentItem)
+    }
+
+    private fun calculateHeight() {
+        val dialogHeight =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                ViewGroup.LayoutParams.MATCH_PARENT
+            } else {
+                (300 * resources.displayMetrics.density).toInt()
+            }
+
+        binding.dialogViewPager.layoutParams = binding.dialogViewPager.layoutParams.apply {
+            height = dialogHeight
+        }
     }
 
     class DialogViewPagerAdapter(
@@ -103,11 +139,13 @@ class EmojiDialogFragment(
                         onEmojiClick(true, shortcode)
                     }
                 }
+
                 1 -> {
                     UnicodeEmojiPickerPage { emoji ->
                         onEmojiClick(false, emoji)
                     }
                 }
+
                 else -> {
                     throw Exception("It shouldn't be more than two items")
                 }

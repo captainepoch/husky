@@ -1,14 +1,15 @@
 package com.keylesspalace.tusky.view;
 
+import static org.koin.java.KoinJavaComponent.inject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Window;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
@@ -29,7 +30,7 @@ public class EmojiKeyboard extends LinearLayout {
     private ViewPager2 pager;
     private TabLayoutMediator currentMediator;
     private String preferenceKey;
-    private SharedPreferences pref;
+    private final SharedPreferences pref = (SharedPreferences) inject(SharedPreferences.class).getValue();
     private Set<String> recents;
     private final String RECENTS_DELIM = "; ";
     private int MAX_RECENTS_ITEMS = 50;
@@ -54,7 +55,6 @@ public class EmojiKeyboard extends LinearLayout {
     void init(Context context) {
         inflate(context, R.layout.item_emoji_picker, this);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(context);
         tabs = findViewById(R.id.picker_tabs);
         pager = findViewById(R.id.picker_pager);
     }
@@ -77,11 +77,22 @@ public class EmojiKeyboard extends LinearLayout {
             currentMediator.detach();
         }
 
-        currentMediator = new TabLayoutMediator(tabs, pager, (TabLayoutMediator.TabConfigurationStrategy)adapter);
-        currentMediator.attach();
+        currentMediator = new TabLayoutMediator(tabs, pager,
+                (tab, position) -> ((TabLayoutMediator.TabConfigurationStrategy) adapter).onConfigureTab(tab, position)
+        );
+        pager.post(() -> {
+            currentMediator.attach();
+        });
     }
 
-    public void setupStickerKeyboard(OnEmojiSelectedListener listener, StickerPack packs[]) {
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        invalidateGridConfig();
+    }
+
+    public void setupStickerKeyboard(OnEmojiSelectedListener listener, StickerPack[] packs) {
         MAX_RECENTS_ITEMS = 20;
         setupKeyboardWithAdapter(new StickerAdapter(packs, (_id, _emoji) -> {
             this.appendToRecents(_emoji);
@@ -104,6 +115,24 @@ public class EmojiKeyboard extends LinearLayout {
                     listener.onEmojiSelected(_id, _emoji);
                 }), "UNICODE_RECENTS");
         }
+
+        invalidateGridConfig();
+    }
+
+    private void invalidateGridConfig() {
+        pager.post(() -> {
+            pager.invalidate();
+            pager.requestLayout();
+            pager.invalidateItemDecorations();
+
+            pager.setAdapter(adapter);
+            pager.setCurrentItem(pager.getCurrentItem(), false);
+        });
+
+        tabs.post(() -> {
+            tabs.invalidate();
+            tabs.requestLayout();
+        });
     }
 
     private void appendToRecents(String id) {
