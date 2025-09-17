@@ -1004,8 +1004,8 @@ class ComposeActivity :
             )
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         } else {
-            EmojiDialogFragment(
-                viewModel.emoji.value, onEmojiClick = { isCustomEmoji, shortcode ->
+            EmojiDialogFragment.newInstance(
+                viewModel.emoji.value ?: emptyList(), onEmojiClick = { isCustomEmoji, shortcode ->
                     if (isCustomEmoji) {
                         replaceTextAtCaret(":$shortcode: ")
                     } else {

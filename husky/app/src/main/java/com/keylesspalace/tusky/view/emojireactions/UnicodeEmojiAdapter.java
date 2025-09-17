@@ -1,16 +1,17 @@
-package com.keylesspalace.tusky.adapter;
+package com.keylesspalace.tusky.view.emojireactions;
 
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.emoji2.widget.EmojiButton;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.keylesspalace.tusky.R;
+import com.keylesspalace.tusky.adapter.SingleViewHolder;
 import com.keylesspalace.tusky.util.Emojis;
+import com.keylesspalace.tusky.view.CustomGridLayoutManager;
 import com.keylesspalace.tusky.view.EmojiKeyboard;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,15 +20,13 @@ import java.util.List;
 import java.util.Set;
 
 public class UnicodeEmojiAdapter
-    extends RecyclerView.Adapter<SingleViewHolder>
-    implements TabLayoutMediator.TabConfigurationStrategy, EmojiKeyboard.EmojiKeyboardAdapter {
+        extends RecyclerView.Adapter<SingleViewHolder>
+        implements TabLayoutMediator.TabConfigurationStrategy, EmojiKeyboard.EmojiKeyboardAdapter {
 
-    private String id;
-    private List<String> recents;
-    private EmojiKeyboard.OnEmojiSelectedListener listener;
-    private RecyclerView recentsView;
-
-    private final static float BUTTON_WIDTH_DP = 65.0f; // empirically found value :(
+    private final String id;
+    private final EmojiKeyboard.OnEmojiSelectedListener listener;
+    private List<String> recents = new ArrayList<>();
+    private UnicodeEmojiPageAdapter recentsAdapter;
 
     public UnicodeEmojiAdapter(String id, EmojiKeyboard.OnEmojiSelectedListener listener) {
         super();
@@ -37,7 +36,7 @@ public class UnicodeEmojiAdapter
 
     @Override
     public void onConfigureTab(TabLayout.Tab tab, int position) {
-        if(position == 0) {
+        if (position == 0) {
             tab.setIcon(R.drawable.ic_access_time);
         } else {
             tab.setText(Emojis.EMOJIS[position - 1][0]);
@@ -51,37 +50,43 @@ public class UnicodeEmojiAdapter
 
     @Override
     public void onBindViewHolder(SingleViewHolder holder, int position) {
-        if(position == 0) {
-            recentsView = ((RecyclerView)holder.itemView);
-            recentsView.setAdapter(new UnicodeEmojiPageAdapter(recents, id, listener));
+        RecyclerView recyclerView = (RecyclerView) holder.itemView;
+        UnicodeEmojiPageAdapter pageAdapter = (UnicodeEmojiPageAdapter) recyclerView.getAdapter();
 
-            recentsView.post(recentsView::requestLayout);
-        } else {
-            ((RecyclerView)holder.itemView).setAdapter(
-                new UnicodeEmojiPageAdapter(Arrays.asList(Emojis.EMOJIS[position - 1]), id, listener));
+        if (pageAdapter != null) {
+            if (position == 0) {
+                pageAdapter.updateData(recents);
+            } else {
+                pageAdapter.updateData(Arrays.asList(Emojis.EMOJIS[position - 1]));
+            }
         }
     }
 
+    @NonNull
     @Override
     public SingleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item_emoji_keyboard_page, parent, false);
-        SingleViewHolder holder = new SingleViewHolder(view);
+                                  .inflate(R.layout.item_emoji_keyboard_page, parent, false);
+        RecyclerView recyclerView = (RecyclerView) view;
 
-        DisplayMetrics dm = parent.getContext().getResources().getDisplayMetrics();
-        float wdp = dm.widthPixels / dm.density;
-        int rows = (int) (wdp / BUTTON_WIDTH_DP + 0.5);
+        final float density = parent.getContext().getResources().getDisplayMetrics().density;
+        final int emojiSizePx = (int) (48.0f * density);
 
-        ((RecyclerView)view).setLayoutManager(new GridLayoutManager(view.getContext(), rows));
-        return holder;
+        CustomGridLayoutManager layoutManager = new CustomGridLayoutManager(parent.getContext(), emojiSizePx);
+        recyclerView.setLayoutManager(layoutManager);
+
+        UnicodeEmojiPageAdapter pageAdapter = new UnicodeEmojiPageAdapter(new ArrayList<>(), id, listener);
+        recyclerView.setAdapter(pageAdapter);
+
+        return new SingleViewHolder(view);
     }
 
     @Override
     public void onRecentsUpdate(Set<String> set) {
         recents = new ArrayList<>(set);
         Collections.reverse(recents);
-        if(recentsView != null) {
-            recentsView.getAdapter().notifyDataSetChanged();
+        if (recentsAdapter != null) {
+            recentsAdapter.updateData(recents);
         }
     }
 
@@ -100,7 +105,6 @@ public class UnicodeEmojiAdapter
         public void onBindViewHolder(SingleViewHolder holder, int position) {
             String emoji = getEmoji(position);
             EmojiButton btn = (EmojiButton)holder.itemView;
-
             btn.setText(emoji);
             btn.setOnClickListener(v -> listener.onEmojiSelected(id, emoji));
         }
@@ -108,17 +112,28 @@ public class UnicodeEmojiAdapter
         @Override
         public SingleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_emoji_keyboard_emoji, parent, false);
+                                      .inflate(R.layout.item_emoji_keyboard_emoji, parent, false);
             return new SingleViewHolder(view);
         }
     }
 
     private class UnicodeEmojiPageAdapter extends UnicodeEmojiBasePageAdapter {
-        private final List<String> emojis;
+
+        private List<String> emojis;
 
         public UnicodeEmojiPageAdapter(List<String> emojis, String id, EmojiKeyboard.OnEmojiSelectedListener listener) {
             super(id, listener);
-            this.emojis = emojis;
+            this.emojis = emojis == null ? new ArrayList<>() : emojis;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return 1;
+        }
+
+        public void updateData(List<String> newEmojis) {
+            this.emojis = newEmojis;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -131,6 +146,4 @@ public class UnicodeEmojiAdapter
             return emojis.get(position);
         }
     }
-
 }
-

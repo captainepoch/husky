@@ -1,5 +1,6 @@
 package com.keylesspalace.tusky.view;
 
+import static org.koin.java.KoinJavaComponent.inject;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,14 +9,13 @@ import android.util.AttributeSet;
 import android.view.Window;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.adapter.StickerAdapter;
-import com.keylesspalace.tusky.adapter.UnicodeEmojiAdapter;
+import com.keylesspalace.tusky.view.emojireactions.UnicodeEmojiAdapter;
 import com.keylesspalace.tusky.entity.StickerPack;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,16 +25,19 @@ import java.util.Set;
 
 public class EmojiKeyboard extends LinearLayout {
 
+    private final SharedPreferences pref = (SharedPreferences) inject(SharedPreferences.class).getValue();
+    private final String RECENTS_DELIM = "; ";
     private TabLayout tabs;
     private ViewPager2 pager;
     private TabLayoutMediator currentMediator;
     private String preferenceKey;
-    private SharedPreferences pref;
     private Set<String> recents;
-    private final String RECENTS_DELIM = "; ";
     private int MAX_RECENTS_ITEMS = 50;
     private RecyclerView.Adapter adapter;
     public boolean isSticky = false; // TODO
+    public static final int UNICODE_MODE = 0;
+    public static final int CUSTOM_MODE  = 1;
+    public static final int STICKER_MODE = 2;
 
     public EmojiKeyboard(Context context) {
         super(context);
@@ -54,14 +57,9 @@ public class EmojiKeyboard extends LinearLayout {
     void init(Context context) {
         inflate(context, R.layout.item_emoji_picker, this);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(context);
         tabs = findViewById(R.id.picker_tabs);
         pager = findViewById(R.id.picker_pager);
     }
-
-    public static final int UNICODE_MODE = 0;
-    public static final int CUSTOM_MODE  = 1;
-    public static final int STICKER_MODE = 2;
 
     private void setupKeyboardWithAdapter(RecyclerView.Adapter adapter, String preferenceKey) {
         this.preferenceKey = preferenceKey;
@@ -77,11 +75,13 @@ public class EmojiKeyboard extends LinearLayout {
             currentMediator.detach();
         }
 
-        currentMediator = new TabLayoutMediator(tabs, pager, (TabLayoutMediator.TabConfigurationStrategy)adapter);
-        currentMediator.attach();
+        currentMediator = new TabLayoutMediator(tabs, pager,
+                (tab, position) -> ((TabLayoutMediator.TabConfigurationStrategy) adapter).onConfigureTab(tab, position)
+        );
+        pager.post(() -> currentMediator.attach());
     }
 
-    public void setupStickerKeyboard(OnEmojiSelectedListener listener, StickerPack packs[]) {
+    public void setupStickerKeyboard(OnEmojiSelectedListener listener, StickerPack[] packs) {
         MAX_RECENTS_ITEMS = 20;
         setupKeyboardWithAdapter(new StickerAdapter(packs, (_id, _emoji) -> {
             this.appendToRecents(_emoji);
