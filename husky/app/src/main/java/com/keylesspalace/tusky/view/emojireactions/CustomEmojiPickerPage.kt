@@ -1,6 +1,5 @@
 package com.keylesspalace.tusky.view.emojireactions
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.keylesspalace.tusky.adapter.OnEmojiSelectedListener
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.gone
@@ -52,7 +52,15 @@ class CustomEmojiPickerPage(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.emojiGrid.layoutManager = GridLayoutManager(context, calculateSpanCount(requireContext()))
+        val layoutManager = GridLayoutManager(context, 1)
+        binding.emojiGrid.layoutManager = layoutManager
+
+        binding.emojiGrid.viewTreeObserver.addOnGlobalLayoutListener {
+            val totalWidth = binding.emojiGrid.width
+            val itemWidthPx = (48) * resources.displayMetrics.density
+            val spanCount = maxOf(1, (totalWidth / itemWidthPx).toInt())
+            (binding.emojiGrid.layoutManager as GridLayoutManager).spanCount = spanCount
+        }
 
         binding.searchBox.setOnClickListener {
             binding.searchBox.requestFocus()
@@ -74,12 +82,5 @@ class CustomEmojiPickerPage(
         }
 
         customEmojiViewModel.setEmojis(emojiList)
-    }
-
-    private fun calculateSpanCount(context: Context): Int {
-        val displayMetrics = context.resources.displayMetrics
-        val screenWidthPx = displayMetrics.widthPixels
-        val itemWidthPx = (40 * displayMetrics.density).toInt()
-        return maxOf(1, ((screenWidthPx / itemWidthPx) - 2))
     }
 }
