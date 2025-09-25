@@ -530,4 +530,6 @@
     <string name="new_drafts_warning">O recurso de rascunho em Husky foi completamente redesenhado para ser mais rápido, mais amigável e menos bugado.
 \nVocê ainda pode acessar seus rascunhos antigos através de um botão na nova tela de rascunhos, mas eles serão removidos em uma atualização futura!</string>
     <string name="old_drafts">Rascunhos antigos</string>
+    <string name="debug_status_message_close">Fechar</string>
+    <string name="chat_our_last_message"><b> Você </b></string>
 </resources>
