@@ -223,7 +223,7 @@ class ViewImageFragment : ViewMediaFragment() {
     }
 
     override fun onToolbarVisibilityChange(visible: Boolean) {
-        if (binding.photoView == null || !userVisibleHint || binding.captionSheet == null) {
+        if (!userVisibleHint) {
             return
         }
         isDescriptionVisible = showingDescription && visible
@@ -332,7 +332,10 @@ class ViewImageFragment : ViewMediaFragment() {
             // so in case of cache miss, onStart is used
         }
 
-        override fun onFinish() {}
+        override fun onFinish() {
+            binding.progressBar.hide()
+        }
+
         override fun onProgress(progress: Int) {
             // TODO: make use of it :)
         }
