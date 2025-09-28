@@ -23,6 +23,7 @@ import com.keylesspalace.tusky.entity.HashTag
 import com.keylesspalace.tusky.util.NetworkState
 
 class SearchHashtagsFragment : SearchFragment<HashTag>() {
+
     override val networkStateRefresh: LiveData<NetworkState>
         get() = searchViewModel.networkStateHashTagRefresh
     override val networkState: LiveData<NetworkState>

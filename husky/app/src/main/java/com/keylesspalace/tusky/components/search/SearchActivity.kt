@@ -72,8 +72,7 @@ class SearchActivity : BottomSheetActivity() {
         super.onCreateOptionsMenu(menu)
 
         menuInflater.inflate(R.menu.search_toolbar, menu)
-        val searchView = menu.findItem(R.id.action_search)
-            .actionView as SearchView
+        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
         setupSearchView(searchView)
 
         searchView.setQuery(viewModel.currentQuery, false)
