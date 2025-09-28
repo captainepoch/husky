@@ -44,7 +44,7 @@ import com.keylesspalace.tusky.util.hide
 import com.keylesspalace.tusky.util.show
 import com.keylesspalace.tusky.util.visible
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 abstract class SearchFragment<T> :
     Fragment(R.layout.fragment_search),
@@ -52,7 +52,7 @@ abstract class SearchFragment<T> :
     SwipeRefreshLayout.OnRefreshListener {
 
     private val binding by viewBinding(FragmentSearchBinding::bind)
-    protected val searchViewModel: SearchViewModel by viewModel<SearchViewModel>()
+    protected val searchViewModel: SearchViewModel by activityViewModel<SearchViewModel>()
 
     private var snackbarErrorRetry: Snackbar? = null
 
