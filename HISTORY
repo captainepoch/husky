@@ -1,3 +1,12 @@
+Husky 1.7.0-beta2 - 2025-09-28
+  - Fix: Startup crash.
+  - Fix: Searching on the instance.
+  - Fix: Adjust emoji dialog when rotating
+  - Fix: Hide progress bar when images finished loading.
+  - Fix: Fix media height for not putting it under the toolbar.
+  - Improvement: Clean NotificationsFragment logs.
+  - Add: New emoji dialog picker when composing a status.
+
 Husky 1.7.0-beta1 - 2025-09-06
   - Updated dependencies and Gradle.
   - Fix: Reload instance settings when changing an account.

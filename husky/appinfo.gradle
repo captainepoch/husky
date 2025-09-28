@@ -18,9 +18,9 @@ buildVersions.versionName = "1.6.1"
 def beta = [:]
 beta.suffix = "beta"
 beta.applicationId = "su.xash.husky.${beta.suffix}"
-beta.versionSuffix = "1"
+beta.versionSuffix = "2"
 
-beta.versionCode = 7
+beta.versionCode = 8
 beta.versionName = "1.7.0"
 buildVersions.beta = beta
 
