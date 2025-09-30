@@ -1764,8 +1764,8 @@ public class TimelineFragment extends SFragment
             return;
         }
 
-        if (!react) {
-            timelineCases.getValue().react(emoji, statusId, false)
+        if (!react || !emoji.isBlank()) {
+            timelineCases.getValue().react(emoji, statusId, react)
                 .observeOn(AndroidSchedulers.mainThread()).as(autoDisposable(from(this)))
                 .subscribe((newStatus) -> setEmojiReactionForStatus(position, newStatus),
                     (t) -> Timber.e(t, "Failed to react with " + emoji + " on status: " + statusId));
@@ -1799,8 +1799,8 @@ public class TimelineFragment extends SFragment
     }
 
     @Override
-    public void onEmojiReactMenu(@NonNull View view, final EmojiReaction emoji,
-        final String statusId)
+    public void onEmojiReactMenu(@NonNull View view, @NonNull final EmojiReaction emoji,
+        @NonNull final String statusId)
     {
         super.emojiReactMenu(statusId, emoji, view, this);
     }

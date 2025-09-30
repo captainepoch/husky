@@ -943,8 +943,8 @@ public final class ViewThreadFragment extends SFragment
     }
 
     @Override
-    public void onEmojiReactMenu(@NonNull View view, final EmojiReaction emoji,
-        final String statusId)
+    public void onEmojiReactMenu(@NonNull View view, @NonNull final EmojiReaction emoji,
+        @NonNull final String statusId)
     {
         super.emojiReactMenu(statusId, emoji, view, this);
     }

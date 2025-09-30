@@ -546,7 +546,7 @@ class SearchStatusesFragment :
     }
 
     override fun onEmojiReact(react: Boolean, emoji: String, statusId: String) {
-        if (!react) {
+        if (!react || emoji.isNotBlank()) {
             searchViewModel.emojiReact(react, emoji, statusId)
         } else {
             EmojiDialogFragment.newInstance(
