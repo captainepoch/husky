@@ -341,7 +341,7 @@
         <item quantity="one">%d segundo restante</item>
         <item quantity="other">%d segundos restante</item>
     </plurals>
-    <string name="poll_info_format"> <!-- 15 votos • queda 1 hora --> %1$s • %2$s</string>
+    <string name="poll_info_format"> \u0020<!-- 15 votos • queda 1 hora --> \u0020 %1$s • %2$s</string>
     <plurals name="poll_info_votes">
         <item quantity="one">%s voto</item>
         <item quantity="other">%s votos</item>
@@ -475,7 +475,7 @@
     <string name="account_note_hint">Tu nota privada acerca de esta cuenta</string>
     <string name="no_announcements">No hay anuncios.</string>
     <string name="title_announcements">Anuncios</string>
-    <string name="notification_subscription_format">% recién publicado</string>
+    <string name="notification_subscription_format">%s recién publicado</string>
     <string name="error_upload_max_media_reached">No puedes cargar más de %1$d archivos adjuntos multimedia.</string>
     <string name="wellbeing_hide_stats_profile">Esconder las estadísticas cuantitativas de los perfiles</string>
     <string name="wellbeing_hide_stats_posts">Esconder las estadísticas cuantitativas de las publicaciones</string>
