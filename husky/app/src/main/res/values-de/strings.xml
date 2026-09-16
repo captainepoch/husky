@@ -492,4 +492,6 @@
     <string name="pref_title_enable_big_emojis">Große eigene Emoji aktivieren</string>
     <string name="pref_title_enable_experimental_stickers">Experimentelle Pleroma-FE Sticker aktiveren (wenn verfügbar)</string>
     <string name="error_sticker_fetch">Es passierte ein Fehler bei dem Empfang des Stickers</string>
+    <string name="title_public_bubble">Sprechblase</string>
+    <string name="notification_subscription_format">%s gerade gepostet</string>
 </resources>
