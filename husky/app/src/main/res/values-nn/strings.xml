@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_reply_to">Svar på</string>
+    <string name="error_generic">Ein feil har oppstått.</string>
+    <string name="error_network">Ein nettverksfeil har oppstått! Sjekk tilkoplinga og prøv igjen!</string>
+    <string name="error_empty">Denne kan ikkje vere tom.</string>
+    <string name="error_invalid_domain">Ugyldig domene</string>
+    <string name="error_failed_app_registration">Autentisering feila på denne instansen.</string>
 </resources>
