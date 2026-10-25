@@ -33,6 +33,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import com.bumptech.glide.Glide
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.extensions.getNonNullString
 import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.core.extensions.isGone
@@ -56,11 +57,12 @@ class LoginActivity : BaseActivity() {
     private val binding by viewBinding(ActivityLoginBinding::inflate)
     private val mastodonApi: MastodonApi by inject()
     private lateinit var preferences: SharedPreferences
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     private val oauthRedirectUri: String
         get() {
             val scheme = getString(R.string.oauth_scheme)
-            val host = BuildConfig.APPLICATION_ID
+            val host = huskyAppConfig.applicationId
             return "$scheme://$host/"
         }
 
@@ -70,9 +72,9 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
-            if (BuildConfig.CUSTOM_INSTANCE.isNotBlank() && !isAdditionalLogin()) {
-                binding.domainEditText.setText(BuildConfig.CUSTOM_INSTANCE)
-                binding.domainEditText.setSelection(BuildConfig.CUSTOM_INSTANCE.length)
+            if (huskyAppConfig.customInstance.isNotBlank() && !isAdditionalLogin()) {
+                binding.domainEditText.setText(huskyAppConfig.customInstance)
+                binding.domainEditText.setSelection(huskyAppConfig.customInstance.length)
             }
 
             binding.appNameEditText.setText(getString(R.string.app_name))
@@ -82,9 +84,9 @@ class LoginActivity : BaseActivity() {
             binding.websiteEditText.setSelection(getString(R.string.tusky_website).length)
         }
 
-        if (BuildConfig.CUSTOM_LOGO_URL.isNotBlank()) {
+        if (huskyAppConfig.customLogoUrl.isNotBlank()) {
             Glide.with(this)
-                .load(BuildConfig.CUSTOM_LOGO_URL)
+                .load(huskyAppConfig.customLogoUrl)
                 .placeholder(null)
                 .into(binding.loginLogo)
         }
@@ -114,6 +116,8 @@ class LoginActivity : BaseActivity() {
             binding.toolbar.gone()
         }
     }
+
+    override fun padsTopInset() = true
 
     override fun requiresLogin(): Boolean {
         return false

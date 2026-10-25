@@ -675,7 +675,7 @@
     <string name="pref_videoplayer">Video Player</string>
     <string name="pref_videoplayer_replay_title">Replay videos automatically</string>
 
-    <string name="pref_crashhandler_category">CrashHanlder Settings</string>
+    <string name="pref_crashhandler_category">CrashHandler Settings</string>
     <string name="pref_crashhandler_body">Enable uncontrolled crash email reporting</string>
     <string name="pref_crashhandler_key">enableCrashHanlder</string>
 

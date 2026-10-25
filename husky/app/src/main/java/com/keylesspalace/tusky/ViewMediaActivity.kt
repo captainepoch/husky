@@ -31,7 +31,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
@@ -48,6 +47,11 @@ import androidx.annotation.OptIn
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MimeTypes
@@ -57,13 +61,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
 import com.google.android.material.snackbar.Snackbar
-import com.keylesspalace.tusky.BuildConfig.APPLICATION_ID
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityViewMediaBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.fragment.ViewImageFragment
 import com.keylesspalace.tusky.pager.AvatarImagePagerAdapter
 import com.keylesspalace.tusky.pager.ImagePagerAdapter
+import com.keylesspalace.tusky.util.actionBarSizePx
 import com.keylesspalace.tusky.util.getTemporaryMediaFilename
 import com.keylesspalace.tusky.viewdata.AttachmentViewData
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
@@ -76,6 +81,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 typealias ToolbarVisibilityListener = (isVisible: Boolean) -> Unit
@@ -119,6 +125,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
 
     private val binding by viewBinding(ActivityViewMediaBinding::inflate)
 
+    private val huskyAppConfig: HuskyAppConfig by inject()
     private var attachments: ArrayList<AttachmentViewData>? = null
     private val toolbarVisibilityListeners = mutableListOf<ToolbarVisibilityListener>()
     private var avatarUrl: String? = null
@@ -135,6 +142,19 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+        controller.isAppearanceLightStatusBars = false
+        controller.isAppearanceLightNavigationBars = false
+        val toolbarHeight = actionBarSizePx()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar) { v, insets ->
+            val top = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            ).top
+            v.updatePadding(top = top)
+            v.updateLayoutParams { height = toolbarHeight + top }
+            insets
+        }
 
         supportPostponeEnterTransition()
 
@@ -185,7 +205,6 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
             true
         }
 
-        window.statusBarColor = Color.BLACK
         window.sharedElementEnterTransition.addListener(object : NoopTransitionListener {
             override fun onTransitionEnd(transition: Transition) {
                 adapter.onTransitionEnd(binding.viewPager.currentItem)
@@ -195,6 +214,8 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
 
         adjustScreenWakefulness()
     }
+
+    override fun handlesInsetsItself() = true
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.view_media_toolbar, menu)
@@ -391,11 +412,12 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
     private fun shareFile(file: File, mimeType: String?) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         sendIntent.putExtra(
             Intent.EXTRA_STREAM,
             FileProvider.getUriForFile(
                 applicationContext,
-                "$APPLICATION_ID.fileprovider",
+                huskyAppConfig.fileProviderAuthority,
                 file
             )
         )
@@ -499,7 +521,7 @@ class ViewMediaActivity : BaseActivity(), ViewImageFragment.PhotoActionsListener
                     setDataAndType(
                         FileProvider.getUriForFile(
                             applicationContext,
-                            "$APPLICATION_ID.fileprovider",
+                            huskyAppConfig.fileProviderAuthority,
                             file
                         ),
                         "image/png"

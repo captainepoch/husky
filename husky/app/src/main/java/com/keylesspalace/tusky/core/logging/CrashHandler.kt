@@ -28,21 +28,24 @@ import android.os.Bundle
 import android.os.Process
 import android.os.Process.killProcess
 import androidx.core.content.FileProvider
-import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.ui.callbacks.ActivityCallback
-import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import timber.log.Timber
 
-class CrashHandler(private val huskyApp: Application) : UncaughtExceptionHandler {
+class CrashHandler(private val huskyApp: Application) : UncaughtExceptionHandler, KoinComponent {
 
     private val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
     private var activityCounter = 0
     private var lastActivity: Activity? = null
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     private val activityCallbacks = object : ActivityCallback() {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
@@ -78,8 +81,8 @@ class CrashHandler(private val huskyApp: Application) : UncaughtExceptionHandler
 
     private fun getDeviceInfo(): String {
         return StringBuilder().apply {
-            this.appendLine("Version name: ${BuildConfig.VERSION_NAME}")
-                .appendLine("Version code: ${BuildConfig.VERSION_CODE}")
+            this.appendLine("Version name: ${huskyAppConfig.versionName}")
+                .appendLine("Version code: ${huskyAppConfig.versionCode}")
                 .appendLine("OS Version: ${VERSION.RELEASE}")
                 .appendLine("SDK: ${VERSION.SDK_INT}")
         }.toString()
@@ -110,7 +113,7 @@ class CrashHandler(private val huskyApp: Application) : UncaughtExceptionHandler
                     Intent.EXTRA_EMAIL,
                     arrayOf(activity.getString(R.string.crashhandler_email))
                 )
-                putExtra(Intent.EXTRA_SUBJECT, "Husky ${BuildConfig.VERSION_NAME} crash")
+                putExtra(Intent.EXTRA_SUBJECT, "Husky ${huskyAppConfig.versionName} crash")
                 putExtra(Intent.EXTRA_TEXT, formattedLog)
                 putExtra(Intent.EXTRA_STREAM, getCrashFileUri(activity, stacktrace))
                 flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -138,7 +141,7 @@ class CrashHandler(private val huskyApp: Application) : UncaughtExceptionHandler
         }
         return FileProvider.getUriForFile(
             activity,
-            "${BuildConfig.APPLICATION_ID}.fileprovider",
+            huskyAppConfig.fileProviderAuthority,
             file
         )
     }

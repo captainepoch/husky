@@ -678,16 +678,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.notification_container:
-                case R.id.notification_content:
-                    if (notificationActionListener != null)
-                        notificationActionListener.onViewStatusForNotificationId(notificationId);
-                    break;
-                case R.id.notification_top_text:
-                    if (notificationActionListener != null)
-                        notificationActionListener.onViewAccount(accountId);
-                    break;
+            int id = v.getId();
+            if (id == R.id.notification_container || id == R.id.notification_content) {
+                if (notificationActionListener != null)
+                    notificationActionListener.onViewStatusForNotificationId(notificationId);
+            } else if (id == R.id.notification_top_text) {
+                if (notificationActionListener != null)
+                    notificationActionListener.onViewAccount(accountId);
             }
         }
 

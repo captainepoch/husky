@@ -48,7 +48,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -116,12 +115,6 @@ class AccountActivity :
     @ColorInt
     private var toolbarColor: Int = 0
 
-    @ColorInt
-    private var statusBarColorTransparent: Int = 0
-
-    @ColorInt
-    private var statusBarColorOpaque: Int = 0
-
     private var avatarSize: Float = 0f
 
     @Px
@@ -139,7 +132,6 @@ class AccountActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadResources()
-        makeNotificationBarTransparent()
         setContentView(binding.root)
 
         // Obtain information to fill out the profile.
@@ -168,9 +160,6 @@ class AccountActivity :
      */
     private fun loadResources() {
         toolbarColor = ThemeUtils.getColor(this, R.attr.colorSurface)
-        statusBarColorTransparent =
-            ContextCompat.getColor(this, R.color.transparent_statusbar_background)
-        statusBarColorOpaque = ThemeUtils.getColor(this, R.attr.colorPrimaryDark)
         avatarSize = resources.getDimension(R.dimen.account_activity_avatar_size)
         titleVisibleHeight =
             resources.getDimensionPixelSize(R.dimen.account_activity_scroll_title_visible_height)
@@ -270,17 +259,6 @@ class AccountActivity :
     }
 
     private fun setupToolbar() {
-        // set toolbar top margin according to system window insets
-        binding.accountCoordinatorLayout.setOnApplyWindowInsetsListener { _, insets ->
-            val top = insets.systemWindowInsetTop
-
-            val toolbarParams =
-                binding.accountToolbar.layoutParams as CollapsingToolbarLayout.LayoutParams
-            toolbarParams.topMargin = top
-
-            insets.consumeSystemWindowInsets()
-        }
-
         // Setup the toolbar.
         setSupportActionBar(binding.accountToolbar)
         supportActionBar?.run {
@@ -345,12 +323,6 @@ class AccountActivity :
                 val transparencyPercent =
                     (abs(verticalOffset) / titleVisibleHeight.toFloat()).coerceAtMost(1f)
 
-                window.statusBarColor = argbEvaluator.evaluate(
-                    transparencyPercent,
-                    statusBarColorTransparent,
-                    statusBarColorOpaque
-                ) as Int
-
                 val evaluatedToolbarColor = argbEvaluator.evaluate(
                     transparencyPercent,
                     Color.TRANSPARENT,
@@ -362,13 +334,6 @@ class AccountActivity :
                 binding.swipeToRefreshLayout.isEnabled = verticalOffset == 0
             }
         })
-    }
-
-    private fun makeNotificationBarTransparent() {
-        val decorView = window.decorView
-        decorView.systemUiVisibility =
-            decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        window.statusBarColor = statusBarColorTransparent
     }
 
     /**

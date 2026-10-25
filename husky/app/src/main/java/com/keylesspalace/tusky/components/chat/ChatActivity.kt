@@ -21,6 +21,7 @@
 package com.keylesspalace.tusky.components.chat
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
@@ -65,7 +66,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.BottomSheetActivity
-import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.ViewTagActivity
@@ -88,6 +88,7 @@ import com.keylesspalace.tusky.components.common.toFileName
 import com.keylesspalace.tusky.components.compose.ComposeActivity
 import com.keylesspalace.tusky.components.compose.ComposeAutoCompleteAdapter
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.toMB
 import com.keylesspalace.tusky.core.extensions.viewBinding
@@ -147,6 +148,8 @@ class ChatActivity :
     private val api: MastodonApi by inject()
     private val chatsRepo: ChatRepository by inject()
     private val serviceClient: ServiceClient by inject()
+    private val huskyAppConfig: HuskyAppConfig by inject()
+
     val viewModel: ChatViewModel by viewModel()
     private lateinit var adapter: ChatMessagesAdapter
 
@@ -699,6 +702,7 @@ class ChatActivity :
         // android.permission.WRITE_EXTERNAL_STORAGE only on SDKs *older* than Kitkat, which was
         // way before permission dialogues have been introduced.
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         if (intent.resolveActivity(packageManager) != null) {
             val photoFile: File = try {
                 createNewImageFile(this)
@@ -710,7 +714,7 @@ class ChatActivity :
             // Continue only if the File was successfully created
             photoUploadUri = FileProvider.getUriForFile(
                 this,
-                BuildConfig.APPLICATION_ID + ".fileprovider",
+                huskyAppConfig.fileProviderAuthority,
                 photoFile
             )
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUploadUri)
@@ -1201,6 +1205,7 @@ class ChatActivity :
         }
     }
 
+    @SuppressLint("GestureBackNavigation")
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Timber.d(event.toString())
         if (event.action == KeyEvent.ACTION_DOWN) {

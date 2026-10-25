@@ -24,9 +24,9 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.components.compose.ComposeActivity.QueuedMedia
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.network.MastodonApi
 import com.keylesspalace.tusky.network.ProgressRequestBody
@@ -43,6 +43,8 @@ import java.io.IOException
 import java.util.Date
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 sealed class UploadEvent {
     data class ProgressEvent(val percentage: Int) : UploadEvent()
@@ -86,7 +88,9 @@ class CouldNotOpenFileException : Exception()
 class MediaUploaderImpl(
     private val context: Context,
     private val mastodonApi: MastodonApi
-) : MediaUploader {
+) : MediaUploader, KoinComponent {
+
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     override fun uploadMedia(
         media: QueuedMedia,
@@ -145,7 +149,7 @@ class MediaUploaderImpl(
                         input.copyTo(out)
                         uri = FileProvider.getUriForFile(
                             context,
-                            BuildConfig.APPLICATION_ID + ".fileprovider",
+                            huskyAppConfig.fileProviderAuthority,
                             file
                         )
                         mediaSize = getMediaSize(contentResolver, uri)

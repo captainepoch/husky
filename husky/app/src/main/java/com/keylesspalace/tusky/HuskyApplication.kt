@@ -29,9 +29,9 @@ import androidx.work.WorkManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.github.piasy.biv.BigImageViewer
 import com.github.piasy.biv.loader.glide.GlideCustomImageLoader
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.logging.CrashHandler
 import com.keylesspalace.tusky.core.logging.HyperlinkDebugTree
-import com.keylesspalace.tusky.core.utils.ApplicationUtils
 import com.keylesspalace.tusky.di.appComponentModule
 import com.keylesspalace.tusky.di.appModule
 import com.keylesspalace.tusky.di.networkModule
@@ -47,6 +47,7 @@ import com.uber.autodispose.AutoDisposePlugins
 import de.c1710.filemojicompat_defaults.DefaultEmojiPackList
 import de.c1710.filemojicompat_ui.helpers.EmojiPackHelper
 import io.reactivex.plugins.RxJavaPlugins
+import java.security.Security
 import org.conscrypt.Conscrypt
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
@@ -54,11 +55,11 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
-import java.security.Security
 
 class HuskyApplication : Application() {
 
     private val crashHandler: CrashHandler by inject()
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -71,7 +72,7 @@ class HuskyApplication : Application() {
 
         setLocaleManager()
 
-        if (ApplicationUtils.isDebug()) {
+        if (huskyAppConfig.isDebug) {
             Timber.plant(HyperlinkDebugTree())
         }
 

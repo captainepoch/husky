@@ -21,7 +21,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import com.keylesspalace.tusky.BuildConfig
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.db.DraftAttachment
 import com.keylesspalace.tusky.db.DraftEntity
@@ -35,10 +35,13 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class DraftHelper(private val context: Context, private val db: AppDatabase) {
+class DraftHelper(private val context: Context, private val db: AppDatabase) : KoinComponent {
 
     private val draftDao = db.draftDao()
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     fun saveDraft(
         draftId: Int,
@@ -151,9 +154,7 @@ class DraftHelper(private val context: Context, private val db: AppDatabase) {
         val file = File(folder, filename)
         IOUtils.copyToFile(contentResolver, this, file)
         return FileProvider.getUriForFile(
-            context,
-            BuildConfig.APPLICATION_ID + ".fileprovider",
-            file
+            context, huskyAppConfig.fileProviderAuthority, file
         )
     }
 }

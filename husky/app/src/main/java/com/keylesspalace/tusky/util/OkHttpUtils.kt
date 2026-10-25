@@ -23,8 +23,10 @@ package com.keylesspalace.tusky.util
 import android.content.Context
 import android.os.Build.VERSION
 import androidx.preference.PreferenceManager
-import com.keylesspalace.tusky.BuildConfig
-import com.keylesspalace.tusky.core.utils.ApplicationUtils.isDebug
+import com.keylesspalace.tusky.core.HuskyAppConfig
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.util.concurrent.TimeUnit.SECONDS
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -32,13 +34,10 @@ import okhttp3.OkHttpClient
 import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.util.concurrent.TimeUnit.SECONDS
 
 object OkHttpUtils {
 
-    fun getCompatibleClientBuilder(context: Context): OkHttpClient.Builder {
+    fun getCompatibleClientBuilder(context: Context, huskyAppConfig: HuskyAppConfig): OkHttpClient.Builder {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val httpProxyEnabled = preferences.getBoolean("httpProxyEnabled", false)
@@ -52,14 +51,14 @@ object OkHttpUtils {
         val cacheSize: Long = 25 * (1024 * 1024)
 
         val builder = OkHttpClient.Builder()
-            .addInterceptor(getUserAgentInterceptor())
+            .addInterceptor(getUserAgentInterceptor(huskyAppConfig.userAgent))
             // .addInterceptor(getDebugInformation())
             .addInterceptor(BrotliInterceptor)
             .readTimeout(60, SECONDS)
             .writeTimeout(60, SECONDS)
             .cache(Cache(context.cacheDir, cacheSize))
 
-        if (isDebug()) {
+        if (huskyAppConfig.isDebug) {
             builder.addInterceptor(getDebugInformation())
         }
 
@@ -80,12 +79,12 @@ object OkHttpUtils {
      * Example:
      * User-Agent: Tusky/1.1.2 Android/5.0.2
      */
-    private fun getUserAgentInterceptor(): Interceptor {
+    private fun getUserAgentInterceptor(userAgent: String): Interceptor {
         return Interceptor { chain: Chain ->
             val requestWithUserAgent = chain.request().newBuilder()
                 .header(
                     "User-Agent",
-                    "${BuildConfig.APPLICATION_NAME}/${BuildConfig.VERSION_NAME} Android/${VERSION.RELEASE}"
+                    "${userAgent}"
                 )
                 .build()
             chain.proceed(requestWithUserAgent)

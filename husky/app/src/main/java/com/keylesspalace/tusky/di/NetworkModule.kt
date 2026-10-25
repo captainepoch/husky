@@ -37,16 +37,14 @@ val networkModule = module {
     } bind MastodonApi::class
 
     single {
-        OkHttpUtils.getCompatibleClientBuilder(get()).apply {
+        OkHttpUtils.getCompatibleClientBuilder(get(), get()).apply {
             addInterceptor(InstanceSwitchAuthInterceptor(get()))
         }.build()
     } bind OkHttpClient::class
 
     single {
-        Retrofit.Builder().baseUrl("https://" + MastodonApi.PLACEHOLDER_DOMAIN)
-            .client(get())
+        Retrofit.Builder().baseUrl("https://" + MastodonApi.PLACEHOLDER_DOMAIN).client(get())
             .addConverterFactory(GsonConverterFactory.create(get()))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
-            .build()
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync()).build()
     } bind Retrofit::class
 }
