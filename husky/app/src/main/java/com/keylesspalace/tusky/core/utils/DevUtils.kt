@@ -29,14 +29,11 @@ object DevUtils {
     /**
      * Enable StrictMode on the application.
      */
-    fun enableStrictMode() {
-        if (ApplicationUtils.isDebug()) {
+    fun enableStrictMode(isDebug: Boolean) {
+        if (isDebug) {
             val threadPolicyBuilder =
-                StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyLog()
+                StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
+                    .detectNetwork().penaltyLog()
 
             if (VERSION.SDK_INT >= VERSION_CODES.O) {
                 threadPolicyBuilder.detectUnbufferedIo()
@@ -46,10 +43,7 @@ object DevUtils {
             Timber.tag("StrictMode").i("setThreadPolicy")
 
             StrictMode.setVmPolicy(
-                StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-                    .build()
+                StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build()
             )
             Timber.tag("StrictMode").i("setVmPolicy")
         }

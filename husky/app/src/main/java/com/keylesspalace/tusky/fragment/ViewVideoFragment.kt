@@ -33,6 +33,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.media3.common.MediaItem.Builder
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -45,6 +50,7 @@ import com.keylesspalace.tusky.ViewMediaActivity
 import com.keylesspalace.tusky.databinding.FragmentViewVideoBinding
 import com.keylesspalace.tusky.entity.Attachment
 import com.keylesspalace.tusky.settings.PrefKeys
+import com.keylesspalace.tusky.util.actionBarSizePx
 import com.keylesspalace.tusky.util.visible
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -97,6 +103,18 @@ class ViewVideoFragment : ViewMediaFragment() {
     override fun setupMediaView(
         url: String, previewUrl: String?, description: String?, showingDescription: Boolean
     ) {
+        val toolbarHeight = requireContext().actionBarSizePx()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            binding.mediaDescription.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                topMargin = toolbarHeight + bars.top
+            }
+            binding.videoControls.updatePadding(bottom = bars.bottom)
+            insets
+        }
+
         binding.mediaDescription.text = description
         binding.mediaDescription.visible(showingDescription)
 

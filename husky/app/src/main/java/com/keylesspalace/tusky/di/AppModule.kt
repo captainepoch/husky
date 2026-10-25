@@ -31,12 +31,17 @@ import com.keylesspalace.tusky.components.notifications.NotificationFetcher
 import com.keylesspalace.tusky.components.notifications.NotificationWorkerFactory
 import com.keylesspalace.tusky.components.notifications.Notifier
 import com.keylesspalace.tusky.components.notifications.SystemNotifier
+import com.keylesspalace.tusky.core.HuskyAppConfig
+import com.keylesspalace.tusky.core.RuntimeAppConfig
 import com.keylesspalace.tusky.db.AppDatabase
 import com.keylesspalace.tusky.util.LocaleManager
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val appModule = module {
+    single<HuskyAppConfig> { RuntimeAppConfig(androidContext()) }
+
     factory {
         LocalBroadcastManager.getInstance(get())
     } bind LocalBroadcastManager::class

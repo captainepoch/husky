@@ -24,7 +24,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.AccountListActivity
 import com.keylesspalace.tusky.AccountListActivity.Type.BLOCKS
 import com.keylesspalace.tusky.AccountListActivity.Type.MUTES
-import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.FiltersActivity
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.TabPreferenceActivity
@@ -32,6 +31,7 @@ import com.keylesspalace.tusky.appstore.EventHub
 import com.keylesspalace.tusky.appstore.PreferenceChangedEvent
 import com.keylesspalace.tusky.components.instancemute.InstanceListActivity
 import com.keylesspalace.tusky.components.notifications.NotificationHelper
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.db.AccountEntity
 import com.keylesspalace.tusky.db.AccountManager
 import com.keylesspalace.tusky.entity.Account
@@ -63,6 +63,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
     private val accountManager: AccountManager by inject()
     private val mastodonApi: MastodonApi by inject()
     private val eventHub: EventHub by inject()
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = requireContext()
@@ -334,7 +335,7 @@ class AccountPreferencesFragment : PreferenceFragmentCompat() {
         if (NotificationHelper.NOTIFICATION_USE_CHANNELS) {
             val intent = Intent()
             intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-            intent.putExtra("android.provider.extra.APP_PACKAGE", BuildConfig.APPLICATION_ID)
+            intent.putExtra("android.provider.extra.APP_PACKAGE", huskyAppConfig.applicationId)
             startActivity(intent)
         } else {
             activity?.let {

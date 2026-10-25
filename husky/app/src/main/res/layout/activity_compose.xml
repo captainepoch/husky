@@ -216,7 +216,12 @@
         android:paddingBottom="52dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:gestureInsetBottomIgnored="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
+        app:paddingLeftSystemWindowInsets="false"
+        app:paddingRightSystemWindowInsets="false"
+        app:paddingTopSystemWindowInsets="false">
 
         <TextView
             android:id="@+id/actionPhotoTake"
@@ -258,7 +263,12 @@
         android:paddingBottom="@dimen/compose_activity_bottom_bar_height"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+        app:gestureInsetBottomIgnored="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
+        app:paddingLeftSystemWindowInsets="false"
+        app:paddingRightSystemWindowInsets="false"
+        app:paddingTopSystemWindowInsets="false" />
 
     <com.keylesspalace.tusky.components.compose.view.ComposeOptionsView
         android:id="@+id/composeOptionsBottomSheet"
@@ -272,7 +282,12 @@
         android:paddingBottom="@dimen/compose_activity_bottom_bar_height"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+        app:gestureInsetBottomIgnored="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
+        app:paddingLeftSystemWindowInsets="false"
+        app:paddingRightSystemWindowInsets="false"
+        app:paddingTopSystemWindowInsets="false" />
 
     <com.keylesspalace.tusky.components.compose.view.ComposeScheduleView
         android:id="@+id/composeScheduleView"
@@ -286,7 +301,12 @@
         android:paddingBottom="@dimen/compose_activity_bottom_bar_height"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+        app:gestureInsetBottomIgnored="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
+        app:paddingLeftSystemWindowInsets="false"
+        app:paddingRightSystemWindowInsets="false"
+        app:paddingTopSystemWindowInsets="false" />
 
     <com.keylesspalace.tusky.view.EmojiKeyboard
         android:id="@+id/stickerKeyboard"
@@ -297,7 +317,12 @@
         android:paddingBottom="@dimen/compose_activity_bottom_bar_height"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+        app:gestureInsetBottomIgnored="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
+        app:paddingLeftSystemWindowInsets="false"
+        app:paddingRightSystemWindowInsets="false"
+        app:paddingTopSystemWindowInsets="false" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/previewScroll"
@@ -309,7 +334,12 @@
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
         app:behavior_skipCollapsed="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:gestureInsetBottomIgnored="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:paddingBottomSystemWindowInsets="false"
+        app:paddingLeftSystemWindowInsets="false"
+        app:paddingRightSystemWindowInsets="false"
+        app:paddingTopSystemWindowInsets="false">
 
         <com.keylesspalace.tusky.view.StatusView
             android:id="@+id/previewView"

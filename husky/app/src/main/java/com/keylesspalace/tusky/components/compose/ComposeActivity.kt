@@ -21,6 +21,7 @@
 package com.keylesspalace.tusky.components.compose
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.app.TimePickerDialog
@@ -68,7 +69,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.keylesspalace.tusky.BaseActivity
-import com.keylesspalace.tusky.BuildConfig
 import com.keylesspalace.tusky.R
 import com.keylesspalace.tusky.appstore.Event
 import com.keylesspalace.tusky.appstore.EventHub
@@ -83,6 +83,7 @@ import com.keylesspalace.tusky.components.common.toFileName
 import com.keylesspalace.tusky.components.compose.dialog.makeCaptionDialog
 import com.keylesspalace.tusky.components.compose.dialog.showAddPollDialog
 import com.keylesspalace.tusky.components.compose.view.ComposeOptionsListener
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.extensions.afterTextChanged
 import com.keylesspalace.tusky.core.extensions.composeWithZwsp
 import com.keylesspalace.tusky.core.extensions.onTextChanged
@@ -142,6 +143,7 @@ class ComposeActivity :
     private val binding by viewBinding(ActivityComposeBinding::inflate)
     private val viewModel: ComposeViewModel by viewModel()
     private val eventHub: EventHub by inject()
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     private lateinit var composeOptionsBehavior: BottomSheetBehavior<*>
     private lateinit var addMediaBehavior: BottomSheetBehavior<*>
@@ -264,6 +266,8 @@ class ComposeActivity :
                 }
             }
     }
+
+    override fun padsTopInset() = true
 
     private fun applyShareIntent(intent: Intent, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {/* Get incoming images being sent through a share action from another app. Only do this
@@ -1293,6 +1297,7 @@ class ComposeActivity :
         // android.permission.WRITE_EXTERNAL_STORAGE only on SDKs *older* than Kitkat, which was
         // way before permission dialogues have been introduced.
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         if (intent.resolveActivity(packageManager) != null) {
             val photoFile: File = try {
                 createNewImageFile(this)
@@ -1304,7 +1309,7 @@ class ComposeActivity :
             // Continue only if the File was successfully created
             photoUploadUri = FileProvider.getUriForFile(
                 this,
-                BuildConfig.APPLICATION_ID + ".fileprovider",
+                huskyAppConfig.fileProviderAuthority,
                 photoFile
             )
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUploadUri)
@@ -1465,6 +1470,7 @@ class ComposeActivity :
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("GestureBackNavigation")
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         Timber.d(event.toString())
 

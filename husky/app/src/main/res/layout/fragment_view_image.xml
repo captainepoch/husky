@@ -31,6 +31,7 @@
             2. We don't want sheet to overlap with appbar but the only way to do it with autosizing
             is to gibe parent some margin. -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/captionSheetContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="70dp"

@@ -1,10 +1,9 @@
 def buildVersions = [:]
 buildVersions.applicationId = "su.xash.husky"
-buildVersions.compileSdk = 34
+buildVersions.compileSdk = 37
 buildVersions.minSdk = 23
-buildVersions.targetSdk = 34
-buildVersions.buildTools = "35.0.0"
-buildVersions.javaCompat = JavaVersion.VERSION_17
+buildVersions.targetSdk = 37
+buildVersions.javaCompat = JavaVersion.VERSION_21
 buildVersions.jdkVersion = "${buildVersions.javaCompat}"
 
 buildVersions.encoding = "UTF-8"

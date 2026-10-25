@@ -16,20 +16,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
-          java-version: "17"
+          java-version: "21"
           distribution: "temurin"
           cache: gradle
 
       - name: Gradle Wrapper Validation
-        uses: gradle/actions/wrapper-validation@v3
+        uses: gradle/actions/wrapper-validation@v6
 
       - name: Gradle Setup
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Run ktlint
         run: |
@@ -42,22 +42,22 @@ jobs:
     needs: [check-style]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
-          java-version: "17"
+          java-version: "21"
           distribution: "temurin"
           cache: gradle
 
       - name: Gradle Wrapper Validation
-        uses: gradle/actions/wrapper-validation@v3
+        uses: gradle/actions/wrapper-validation@v6
 
       - name: Gradle Setup
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
-      - name: Run stable tests
+      - name: Run tests
         run: |
           cd husky
-          ./gradlew testHuskyStableReleaseUnitTest
+          ./gradlew testHuskyStableDebugUnitTest

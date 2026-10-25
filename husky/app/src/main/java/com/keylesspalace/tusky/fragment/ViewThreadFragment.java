@@ -15,6 +15,7 @@
 
 package com.keylesspalace.tusky.fragment;
 
+import com.keylesspalace.tusky.core.HuskyAppConfig;
 import com.keylesspalace.tusky.view.emojireactions.EmojiDialogFragment;
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 import static com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider.from;
@@ -46,7 +47,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.keylesspalace.tusky.AccountListActivity;
 import com.keylesspalace.tusky.BaseActivity;
-import com.keylesspalace.tusky.BuildConfig;
 import com.keylesspalace.tusky.R;
 import com.keylesspalace.tusky.ViewThreadActivity;
 import com.keylesspalace.tusky.adapter.StatusBaseViewHolder;
@@ -84,6 +84,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import org.koin.java.KoinJavaComponent;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,6 +99,7 @@ public final class ViewThreadFragment extends SFragment
     private final EventHub eventHub = (EventHub) inject(EventHub.class).getValue();
     private final InstanceRepository instanceRepo = (InstanceRepository) inject(InstanceRepository.class).getValue();
     private final SharedPreferences preferences = (SharedPreferences) inject(SharedPreferences.class).getValue();
+    private HuskyAppConfig huskyAppConfig = (HuskyAppConfig) inject(HuskyAppConfig.class).getValue();
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ThreadAdapter adapter;
@@ -659,7 +661,7 @@ public final class ViewThreadFragment extends SFragment
         statuses.addAll(0, ancestors);
         List<StatusViewData.Concrete> ancestorsViewDatas =
             statuses.getPairedCopy().subList(0, statusIndex);
-        if(BuildConfig.DEBUG && ancestors.size() != ancestorsViewDatas.size()) {
+        if(huskyAppConfig.isDebug() && ancestors.size() != ancestorsViewDatas.size()) {
             String error = String.format(Locale.getDefault(),
                 "Incorrectly got statusViewData sublist." +
                 " ancestors.size == %d ancestorsViewDatas.size == %d," + " statuses.size == %d",
@@ -690,7 +692,7 @@ public final class ViewThreadFragment extends SFragment
         List<StatusViewData.Concrete> descendantsViewData;
         descendantsViewData =
             statuses.getPairedCopy().subList(statuses.size() - descendants.size(), statuses.size());
-        if(BuildConfig.DEBUG && descendants.size() != descendantsViewData.size()) {
+        if(huskyAppConfig.isDebug() && descendants.size() != descendantsViewData.size()) {
             String error = String.format(Locale.getDefault(),
                 "Incorrectly got statusViewData sublist." +
                 " descendants.size == %d descendantsViewData.size == %d," + " statuses.size == %d",

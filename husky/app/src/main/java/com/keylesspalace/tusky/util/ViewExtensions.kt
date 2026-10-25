@@ -16,6 +16,7 @@
 
 package com.keylesspalace.tusky.util
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
 import android.util.TypedValue
@@ -80,4 +81,10 @@ fun View.increaseHitArea(vdp: Float, hdp: Float) {
             parent.touchDelegate = mtd
         }
     }
+}
+
+fun Context.actionBarSizePx(): Int {
+    val tv = TypedValue()
+    theme.resolveAttribute(androidx.appcompat.R.attr.actionBarSize, tv, true)
+    return TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
 }

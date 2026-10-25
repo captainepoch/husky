@@ -23,14 +23,17 @@ package com.keylesspalace.tusky
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import com.keylesspalace.tusky.core.HuskyAppConfig
 import com.keylesspalace.tusky.core.extensions.gone
 import com.keylesspalace.tusky.core.extensions.setClickableTextWithoutUnderlines
 import com.keylesspalace.tusky.core.extensions.viewBinding
 import com.keylesspalace.tusky.databinding.ActivityAboutBinding
+import org.koin.android.ext.android.inject
 
 class AboutActivity : BottomSheetActivity() {
 
     private val binding by viewBinding(ActivityAboutBinding::inflate)
+    private val huskyAppConfig: HuskyAppConfig by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +50,10 @@ class AboutActivity : BottomSheetActivity() {
         binding.versionTextView.text = getString(
             R.string.about_app_version,
             getString(R.string.app_name),
-            BuildConfig.VERSION_NAME
+            huskyAppConfig.versionName
         )
 
-        if (BuildConfig.CUSTOM_INSTANCE.isBlank()) {
+        if (huskyAppConfig.customInstance.isBlank()) {
             binding.aboutPoweredByTusky.gone()
         }
 
@@ -59,7 +62,7 @@ class AboutActivity : BottomSheetActivity() {
         binding.aboutBugsFeaturesInfoTextView.setClickableTextWithoutUnderlines(R.string.about_bug_feature_request_site)
 
         binding.tuskyProfileButton.setOnClickListener {
-            viewUrl(BuildConfig.SUPPORT_ACCOUNT_URL)
+            viewUrl(huskyAppConfig.supportAccountUrl)
         }
 
         binding.aboutLicensesButton.setOnClickListener {

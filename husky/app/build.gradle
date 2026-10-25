@@ -1,3 +1,5 @@
+import com.android.build.api.variant.ResValue
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.ksp)
@@ -8,24 +10,23 @@ plugins {
 android {
     namespace "com.keylesspalace.tusky"
 
-    compileSdkVersion buildVersions.compileSdk
-    buildToolsVersion buildVersions.buildTools
+    compileSdk = buildVersions.compileSdk
 
     defaultConfig {
         applicationId buildVersions.applicationId
 
-        minSdkVersion buildVersions.minSdk
-        targetSdkVersion buildVersions.targetSdk
+        minSdk buildVersions.minSdk
+        targetSdk buildVersions.targetSdk
 
         versionCode buildVersions.versionCode
         versionName buildVersions.versionName
 
         testInstrumentationRunner buildVersions.testinstrunner
 
-        buildConfigField("String", "APPLICATION_NAME", "\"$APP_NAME\"")
-        buildConfigField("String", "CUSTOM_LOGO_URL", "\"$CUSTOM_LOGO_URL\"")
-        buildConfigField("String", "CUSTOM_INSTANCE", "\"$CUSTOM_INSTANCE\"")
-        buildConfigField("String", "SUPPORT_ACCOUNT_URL", "\"$SUPPORT_ACCOUNT_URL\"")
+        resValue "string", "config_app_name", APP_NAME
+        resValue "string", "config_custom_logo_url", CUSTOM_LOGO_URL
+        resValue "string", "config_custom_instance", CUSTOM_INSTANCE
+        resValue "string", "config_support_account_url", SUPPORT_ACCOUNT_URL
     }
 
     ksp {
@@ -61,13 +62,13 @@ android {
             shrinkResources true
 
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    "proguard-rules.pro"
         }
     }
 
     flavorDimensions = [
-        buildVersions.flavorDimensions.husky,
-        buildVersions.flavorDimensions.release
+            buildVersions.flavorDimensions.husky,
+            buildVersions.flavorDimensions.release
     ]
 
     productFlavors {
@@ -116,9 +117,9 @@ android {
 
     lint {
         disable "MissingTranslation",
-            "ExtraTranslation",
-            "AppCompatCustomView",
-            "UseRequireInsteadOfGet"
+                "ExtraTranslation",
+                "AppCompatCustomView",
+                "UseRequireInsteadOfGet"
     }
 
     compileOptions {
@@ -132,6 +133,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        resValues true
     }
 
     testOptions {
@@ -145,7 +147,7 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += ["META-INF/DEPENDENCIES", "META-INF/LICENSE", "META-INF/LICENSE.txt",
                          "META-INF/license.txt", "META-INF/NOTICE", "META-INF/NOTICE.txt",
@@ -160,6 +162,19 @@ android {
             enableSplit = false
         }
     }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.resValues.put(
+                variant.makeResValueKey("string", "config_flavor"),
+                new ResValue(variant.flavorName, null)
+        )
+    }
+}
+
+tasks.withType(Test).configureEach {
+    jvmArgs "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED"
 }
 
 dependencies {
@@ -253,7 +268,7 @@ dependencies {
     // Testing dependencies
     testImplementation(libs.testing.androidx.junit)
     testImplementation(libs.testing.junit)
-    testImplementation(libs.testing.mockito.inline)
+    testImplementation(libs.testing.mockito.core)
     testImplementation(libs.testing.mockito.kotlin)
     testImplementation(libs.testing.robolectric)
 

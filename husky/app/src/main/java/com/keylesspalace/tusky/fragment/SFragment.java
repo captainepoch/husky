@@ -40,6 +40,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.Lifecycle;
 import com.keylesspalace.tusky.AccountListActivity;
+import com.keylesspalace.tusky.AccountListActivity.Type;
 import com.keylesspalace.tusky.BaseActivity;
 import com.keylesspalace.tusky.BottomSheetActivity;
 import com.keylesspalace.tusky.MainActivity;
@@ -190,19 +191,21 @@ public abstract class SFragment extends BaseFragment {
         menu.findItem(R.id.emoji_unreact).setVisible(reaction.getMe());
 
         popup.setOnMenuItemClickListener(item -> {
-            switch(item.getItemId()) {
-                case R.id.emoji_react:
-                    listener.onEmojiReact(true, reaction.getName(), statusId);
-                    return true;
-                case R.id.emoji_unreact:
-                    listener.onEmojiReact(false, reaction.getName(), statusId);
-                    return true;
-                case R.id.emoji_reacted_by:
-                    Intent intent = AccountListActivity.newIntent(getContext(),
-                        AccountListActivity.Type.REACTED, statusId, reaction.getName());
-                    ((BaseActivity) getActivity()).startActivityWithSlideInAnimation(intent);
+            int itemId = item.getItemId();
+            if (itemId == R.id.emoji_react) {
+                listener.onEmojiReact(true, reaction.getName(), statusId);
+                return true;
+            } else if (itemId == R.id.emoji_unreact) {
+                listener.onEmojiReact(false, reaction.getName(), statusId);
+                return true;
+            } else if (itemId == R.id.emoji_reacted_by) {
+                Intent intent = AccountListActivity.newIntent(
+                        getContext(),
+                        Type.REACTED, statusId, reaction.getName()
+                );
+                ((BaseActivity) getActivity()).startActivityWithSlideInAnimation(intent);
 
-                    return true;
+                return true;
             }
             return false;
         });
@@ -291,89 +294,78 @@ public abstract class SFragment extends BaseFragment {
         }
 
         popup.setOnMenuItemClickListener(item -> {
-            switch(item.getItemId()) {
-                case R.id.status_share_content: {
-                    Status statusToShare = status;
-                    if(statusToShare.getReblog() != null) {
-                        statusToShare = statusToShare.getReblog();
-                    }
-
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-
-                    String stringToShare = statusToShare.getAccount().getUsername() + " - " +
-                                           statusToShare.getContent().toString();
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, stringToShare);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, statusUrl);
-                    sendIntent.setType("text/plain");
-                    startActivity(Intent.createChooser(sendIntent,
-                        getResources().getText(R.string.send_status_content_to)));
-                    return true;
+            int itemId = item.getItemId();
+            if (itemId == R.id.status_share_content) {
+                Status statusToShare = status;
+                if (statusToShare.getReblog() != null) {
+                    statusToShare = statusToShare.getReblog();
                 }
-                case R.id.status_share_link: {
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, statusUrl);
-                    sendIntent.setType("text/plain");
-                    startActivity(Intent.createChooser(sendIntent,
-                        getResources().getText(R.string.send_status_link_to)));
-                    return true;
-                }
-                case R.id.status_copy_link: {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+
+                String stringToShare = statusToShare.getAccount().getUsername() + " - " +
+                        statusToShare.getContent().toString();
+                sendIntent.putExtra(Intent.EXTRA_TEXT, stringToShare);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, statusUrl);
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(
+                        sendIntent,
+                        getResources().getText(R.string.send_status_content_to)
+                ));
+                return true;
+            } else if (itemId == R.id.status_share_link) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, statusUrl);
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(
+                        sendIntent,
+                        getResources().getText(R.string.send_status_link_to)
+                ));
+                return true;
+            } else if (itemId == R.id.status_copy_link) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(
                         Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(null, statusUrl);
-                    clipboard.setPrimaryClip(clip);
-                    return true;
-                }
-                case R.id.status_open_in_web: {
-                    LinkHelper.openLinkInBrowser(Uri.parse(statusUrl), getContext());
-                    return true;
-                }
-                case R.id.status_open_as: {
-                    showOpenAsDialog(statusUrl, item.getTitle());
-                    return true;
-                }
-                case R.id.status_download_media: {
-                    requestDownloadAllMedia(status);
-                    return true;
-                }
-                case R.id.status_mute: {
-                    onMute(accountId, accountUsername);
-                    return true;
-                }
-                case R.id.status_block: {
-                    onBlock(accountId, accountUsername);
-                    return true;
-                }
-                case R.id.status_report: {
-                    openReportPage(accountId, accountUsername, id);
-                    return true;
-                }
-                case R.id.status_mute_conversation: {
-                    timelineCases.getValue().muteConversation(status, true);
-                    return true;
-                }
-                case R.id.status_unmute_conversation: {
-                    timelineCases.getValue().muteConversation(status, false);
-                    return true;
-                }
-                case R.id.status_unreblog_private: {
-                    onMenuReblog(false, position);
-                    return true;
-                }
-                case R.id.status_reblog_private: {
-                    onMenuReblog(true, position);
-                    return true;
-                }
-                case R.id.status_delete: {
-                    showConfirmDeleteDialog(id, position);
-                    return true;
-                }
-                case R.id.pin: {
-                    timelineCases.getValue().pin(status, !status.isPinned());
-                    return true;
-                }
+                ClipData clip = ClipData.newPlainText(null, statusUrl);
+                clipboard.setPrimaryClip(clip);
+                return true;
+            } else if (itemId == R.id.status_open_in_web) {
+                LinkHelper.openLinkInBrowser(Uri.parse(statusUrl), getContext());
+                return true;
+            } else if (itemId == R.id.status_open_as) {
+                showOpenAsDialog(statusUrl, item.getTitle());
+                return true;
+            } else if (itemId == R.id.status_download_media) {
+                requestDownloadAllMedia(status);
+                return true;
+            } else if (itemId == R.id.status_mute) {
+                onMute(accountId, accountUsername);
+                return true;
+            } else if (itemId == R.id.status_block) {
+                onBlock(accountId, accountUsername);
+                return true;
+            } else if (itemId == R.id.status_report) {
+                openReportPage(accountId, accountUsername, id);
+                return true;
+            } else if (itemId == R.id.status_mute_conversation) {
+                timelineCases.getValue().muteConversation(status, true);
+                return true;
+            } else if (itemId == R.id.status_unmute_conversation) {
+                timelineCases.getValue().muteConversation(status, false);
+                return true;
+            } else if (itemId == R.id.status_unreblog_private) {
+                onMenuReblog(false, position);
+                return true;
+            } else if (itemId == R.id.status_reblog_private) {
+                onMenuReblog(true, position);
+                return true;
+            } else if (itemId == R.id.status_delete) {
+                showConfirmDeleteDialog(id, position);
+                return true;
+            } else if (itemId == R.id.pin) {
+                timelineCases.getValue().pin(status, !status.isPinned());
+                return true;
             }
             return false;
         });

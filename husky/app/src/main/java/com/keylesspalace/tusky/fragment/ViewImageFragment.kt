@@ -28,7 +28,11 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -79,20 +83,16 @@ class ViewImageFragment : ViewMediaFragment() {
     }
 
     override fun setupMediaView(
-        url: String,
-        previewUrl: String?,
-        description: String?,
-        showingDescription: Boolean
+        url: String, previewUrl: String?, description: String?, showingDescription: Boolean
     ) {
         binding.photoView.transitionName = url
         binding.mediaDescription.text = description
         binding.captionSheet.visible(showingDescription)
 
-        if(showingDescription) {
+        if (showingDescription) {
             binding.mediaDescription.setOnLongClickListener { view ->
                 ContextCompat.getSystemService(
-                    requireContext(),
-                    ClipboardManager::class.java
+                    requireContext(), ClipboardManager::class.java
                 )?.let { clipboardManager ->
                     Timber.d("Copying media description to clipboard")
 
@@ -123,9 +123,7 @@ class ViewImageFragment : ViewMediaFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         toolbar = (requireActivity() as ViewMediaActivity).getToolbar()
         binding = FragmentViewImageBinding.inflate(inflater, container, false)
@@ -158,12 +156,7 @@ class ViewImageFragment : ViewMediaFragment() {
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    if (swipeStartedWithOneFinger &&
-                        (
-                            binding.photoView.ssiv == null ||
-                                (binding.photoView.ssiv.scale <= binding.photoView.ssiv.minScale)
-                            )
-                    ) {
+                    if (swipeStartedWithOneFinger && (binding.photoView.ssiv == null || (binding.photoView.ssiv.scale <= binding.photoView.ssiv.minScale))) {
                         val diff = event.rawY - lastY
                         // This code is to prevent transformations during page scrolling
                         // If we are already translating or we reached the threshold,
@@ -187,6 +180,17 @@ class ViewImageFragment : ViewMediaFragment() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val density = resources.displayMetrics.density
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            binding.captionSheetContainer.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                topMargin = (70 * density).toInt() + bars.top
+            }
+            insets
+        }
 
         binding.photoView.setImageLoaderCallback(imageLoaderCallback)
         binding.photoView.setImageViewFactory(GlideImageViewFactory())
@@ -228,8 +232,7 @@ class ViewImageFragment : ViewMediaFragment() {
         }
         isDescriptionVisible = showingDescription && visible
         val alpha = if (isDescriptionVisible) 1.0f else 0.0f
-        binding.captionSheet.animate().alpha(alpha)
-            .setListener(object : AnimatorListenerAdapter() {
+        binding.captionSheet.animate().alpha(alpha).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     binding.captionSheet.visible(isDescriptionVisible)
                     animation.removeListener(this)
@@ -259,10 +262,7 @@ class ViewImageFragment : ViewMediaFragment() {
                 BigImageViewer.prefetch(uri)
 
                 // meanwhile poke cache about preview image
-                Glide.with(ctx).asFile()
-                    .load(previewUri)
-                    .dontAnimate()
-                    .onlyRetrieveFromCache(true)
+                Glide.with(ctx).asFile().load(previewUri).dontAnimate().onlyRetrieveFromCache(true)
                     .into(DummyCacheTarget(ctx, true))
             }
         }
@@ -284,10 +284,7 @@ class ViewImageFragment : ViewMediaFragment() {
             // check if we have full image in the cache, if yes, use it
             // if not, look for preview in cache and use it if available
             // if not, load full image anyway
-            Glide.with(this).asFile()
-                .load(uri)
-                .onlyRetrieveFromCache(true)
-                .dontAnimate()
+            Glide.with(this).asFile().load(uri).onlyRetrieveFromCache(true).dontAnimate()
                 .into(DummyCacheTarget(requireContext(), false))
         } else {
             // no need in cache lookup, just load full image
